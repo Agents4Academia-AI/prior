@@ -4,6 +4,42 @@
 
 ---
 
+## 2026-06-17 — session 2: SciFact harness + credit-saving backend
+
+**Goal:** Add the headline Navigator eval (SciFact) and a way to run the pipeline
+without burning the hackathon's metered API credits.
+
+**Done (verified):**
+- Pluggable LLM backend in `llm.py` (`PRIOR_LLM_BACKEND`): `api` (forced-tool
+  JSON, metered) and `claude-code` (Agent SDK → Claude Code login / Max plan, no
+  API credits; JSON parsed from text via `extract_json`). All agents inherit it.
+- SciFact harness (`evals/scifact/`): `dataset.py` (load/download, gold-label
+  derivation), `harness.py` (BM25 corpus retrieval → per-claim atlas → Navigator
+  → verdict→label mapping → accuracy/macro-F1/abstention + confusion matrix),
+  `run.py` (`--mock`/`--limit`/`--backend`/`--model`/`--cache`/`--download`).
+- Credit thrift: `--mock` runs the entire harness with no model; `ask_fn` is
+  injectable; predictions cache to JSONL and reruns resume.
+
+**Verified by:**
+- `pytest -q` → 20 passed (added SciFact loader/retrieval/atlas/mapping/metrics/
+  cache + `extract_json`), still no API key needed.
+- End-to-end `python evals/scifact/run.py --data <synthetic> --mock` → full report
+  + confusion matrix, zero API calls.
+
+**Not done / blocked:**
+- `claude-code` backend not live-tested here (no Agent SDK installed, no Claude
+  Code session in this shell). Logic + lazy import are in; needs a real run.
+- SciFact not downloaded yet; `--download` pulls the AllenAI tarball.
+
+**Next session — start here:**
+1. `pip install claude-agent-sdk`; `unset ANTHROPIC_API_KEY`;
+   `PRIOR_LLM_BACKEND=claude-code` then a 5-claim `prior build` to confirm the
+   subscription backend returns valid JSON.
+2. `python evals/scifact/run.py --data data/scifact --download --limit 20
+   --backend claude-code` and record numbers in `evals/results.md`.
+3. If JSON parsing from the Agent SDK is flaky, tighten the JSON-only prompt /
+   add a one-shot example in `_structured_claude_code`.
+
 ## 2026-06-17 — session 1: scaffold + end-to-end pipeline
 
 **Goal:** Stand up Prior — sources + Reader/Cartographer/Navigator + CLI + evals

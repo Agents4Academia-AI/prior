@@ -1,12 +1,27 @@
-"""Thin wrapper over the Anthropic SDK.
+"""Thin wrapper over the model, with a pluggable backend.
 
-One job: get *structured* output back reliably. We do that by giving the model a
-single tool whose input_schema is the shape we want, and forcing that tool — so
-the model must return JSON matching the schema instead of prose.
+Two backends, selected by `PRIOR_LLM_BACKEND`:
+
+  "api"          (default) — the Anthropic API via the SDK. Forces a single tool
+                 so structured output is guaranteed valid JSON. Costs metered
+                 API credits (the hackathon's ANTHROPIC_API_KEY).
+
+  "claude-code"  — routes through the Claude Agent SDK, which runs on your
+                 Claude Code login (e.g. a Max subscription) when no API key is
+                 set. Lets the whole Prior pipeline run on a flat-rate plan
+                 instead of burning API credits. The Agent SDK has no forced-tool
+                 knob, so we ask for JSON-only and parse it (with retries).
+
+Everything downstream (Reader/Cartographer/Navigator) calls `structured()` /
+`text()` and is backend-agnostic.
 """
 
 from __future__ import annotations
 
+import asyncio
+import json
+import os
+import re
 import time
 from typing import Any, Optional
 
@@ -22,6 +37,11 @@ def client() -> anthropic.Anthropic:
     return _client
 
 
+def backend() -> str:
+    return os.environ.get("PRIOR_LLM_BACKEND", "api").lower()
+
+
+# ── public API ────────────────────────────────────────────────────────────────
 def structured(
     *,
     model: str,
@@ -32,11 +52,29 @@ def structured(
     max_tokens: int = 4096,
     retries: int = 3,
 ) -> dict[str, Any]:
-    """Return a dict matching `schema` (a JSON-Schema object).
+    """Return a dict matching `schema` (a JSON-Schema object). Raises on
+    persistent failure rather than returning malformed data."""
+    if backend() == "claude-code":
+        return _structured_claude_code(
+            model=model, system=system, user=user, schema=schema, retries=retries)
+    return _structured_api(
+        model=model, system=system, user=user, schema=schema,
+        tool_name=tool_name, max_tokens=max_tokens, retries=retries)
 
-    Raises on persistent failure rather than returning malformed data — callers
-    decide how to degrade.
-    """
+
+def text(*, model: str, system: str, user: str, max_tokens: int = 4096) -> str:
+    """A plain prose completion (used by Navigator for the final answer)."""
+    if backend() == "claude-code":
+        return _run_claude_code(system=system, prompt=user, model=model)
+    resp = client().messages.create(
+        model=model, max_tokens=max_tokens, system=system,
+        messages=[{"role": "user", "content": user}],
+    )
+    return "".join(b.text for b in resp.content if b.type == "text")
+
+
+# ── API backend ──────────────────────────────────────────────────────────────
+def _structured_api(*, model, system, user, schema, tool_name, max_tokens, retries):
     tool = {
         "name": tool_name,
         "description": "Return the result in exactly this structure.",
@@ -66,12 +104,68 @@ def structured(
     raise RuntimeError(f"structured() failed after {retries} attempts: {last_err}")
 
 
-def text(*, model: str, system: str, user: str, max_tokens: int = 4096) -> str:
-    """A plain prose completion (used by Navigator for the final answer)."""
-    resp = client().messages.create(
-        model=model,
-        max_tokens=max_tokens,
-        system=system,
-        messages=[{"role": "user", "content": user}],
+# ── Claude Code (Agent SDK) backend ────────────────────────────────────────────
+def _structured_claude_code(*, model, system, user, schema, retries):
+    sys_json = (
+        system
+        + "\n\nRespond with ONLY a single JSON object that conforms to this "
+        "JSON Schema. No prose, no markdown fences, no commentary:\n"
+        + json.dumps(schema)
     )
-    return "".join(b.text for b in resp.content if b.type == "text")
+    last_err: Optional[Exception] = None
+    for _ in range(retries):
+        raw = _run_claude_code(system=sys_json, prompt=user, model=model)
+        try:
+            return extract_json(raw)
+        except Exception as e:  # noqa: BLE001
+            last_err = e
+    raise RuntimeError(f"structured() (claude-code) failed: {last_err}")
+
+
+def _run_claude_code(*, system: str, prompt: str, model: str) -> str:
+    """Run one turn through the Agent SDK and return the concatenated text."""
+    try:
+        from claude_agent_sdk import (  # imported lazily; only this backend needs it
+            query, ClaudeAgentOptions, AssistantMessage, TextBlock,
+        )
+    except ImportError as e:  # pragma: no cover - environment-dependent
+        raise RuntimeError(
+            "PRIOR_LLM_BACKEND=claude-code needs the Agent SDK: "
+            "`pip install claude-agent-sdk` and be logged in to Claude Code."
+        ) from e
+
+    async def _go() -> str:
+        opts = ClaudeAgentOptions(
+            system_prompt=system,
+            allowed_tools=[],   # pure generation; no file/bash/web tools
+            max_turns=1,
+            model=model,
+        )
+        chunks: list[str] = []
+        async for msg in query(prompt=prompt, options=opts):
+            if isinstance(msg, AssistantMessage):
+                for block in msg.content:
+                    if isinstance(block, TextBlock):
+                        chunks.append(block.text)
+        return "".join(chunks)
+
+    return asyncio.run(_go())
+
+
+# ── helpers ──────────────────────────────────────────────────────────────────
+_FENCE = re.compile(r"```(?:json)?\s*(.*?)\s*```", re.S)
+
+
+def extract_json(raw: str) -> dict[str, Any]:
+    """Best-effort parse of a JSON object out of a model's text response."""
+    s = (raw or "").strip()
+    m = _FENCE.search(s)
+    if m:
+        s = m.group(1).strip()
+    try:
+        return json.loads(s)
+    except json.JSONDecodeError:
+        start, end = s.find("{"), s.rfind("}")
+        if 0 <= start < end:
+            return json.loads(s[start:end + 1])
+        raise

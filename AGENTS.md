@@ -10,7 +10,15 @@ Prior turns primary literature into a queryable atlas of claims via three agents
 - Env:     `export ANTHROPIC_API_KEY=...` ; optionally `PRIOR_CONTACT_EMAIL=...`
 - Build:   `prior build "<topic>"`     (ingest → read → map → `data/atlas/atlas.json`)
 - Query:   `prior ask "<q>"` / `prior origin "<concept>"` / `prior info`
-- Test:    `pytest -q`   (the suite runs without an API key — source/graph layers only)
+- Test:    `pytest -q`   (the whole suite runs without an API key — 20 tests, all backends mocked)
+- Eval:    `python evals/scifact/run.py --data data/scifact --mock`  (SciFact, zero credits)
+
+## Credits
+
+- `prior.llm` has two backends via `PRIOR_LLM_BACKEND`: `api` (metered) and
+  `claude-code` (Agent SDK → your Claude Code login, no API credits). The SciFact
+  runner also takes `--backend`. Use `--mock` / mocked `ask_fn` to develop evals
+  for free; spend credits only on the final run.
 
 ## Architecture (one line each)
 

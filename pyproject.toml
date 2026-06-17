@@ -14,6 +14,11 @@ dependencies = [
     "rank-bm25>=0.2.2",
 ]
 
+[project.optional-dependencies]
+# Run the pipeline on a Claude Code login (Max plan) instead of API credits:
+#   pip install -e ".[claude-code]"  ;  export PRIOR_LLM_BACKEND=claude-code
+claude-code = ["claude-agent-sdk>=0.1"]
+
 [project.scripts]
 prior = "prior.cli:main"
 

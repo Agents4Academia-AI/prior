@@ -92,6 +92,22 @@ Environment variables (all optional except the API key):
 | `PRIOR_NAVIGATOR_MODEL` | `claude-opus-4-8` | user-facing reasoning |
 | `PRIOR_MAX_PAPERS` | `25` | papers per topic |
 | `PRIOR_RELATION_NEIGHBORS` | `6` | candidate neighbours per claim |
+| `PRIOR_LLM_BACKEND` | `api` | `api` (metered credits) or `claude-code` (runs on your Claude Code login) |
+
+### Running on a Claude Code subscription instead of API credits
+
+Prior calls the model through one wrapper (`src/prior/llm.py`) with a pluggable
+backend. Set `PRIOR_LLM_BACKEND=claude-code` to route every Reader / Cartographer
+/ Navigator call through the [Claude Agent SDK](https://github.com/Agents4Academia-AI/example-agents/tree/main/03-claude-agent-sdk),
+which runs on your Claude Code login (e.g. a Max plan) rather than burning the
+hackathon's API credits:
+
+```bash
+pip install claude-agent-sdk      # and have Claude Code installed + logged in
+unset ANTHROPIC_API_KEY           # else the SDK may fall back to the metered API
+export PRIOR_LLM_BACKEND=claude-code
+prior build "<topic>"
+```
 
 ## Acknowledgements
 
