@@ -6,6 +6,7 @@
 > (origins of an idea), grounded in primary sources rather than black-box web search.
 
 **Team 6** (merged with Team 4): Klara · Harit · Iacopo · Elle · Arya · Luke
+
 **Hackathon:** [Agents4Academia](https://agents4academia.github.io), 14–26 Jun 2026
 
 Most "research agents" answer literature questions by Googling and summarising
