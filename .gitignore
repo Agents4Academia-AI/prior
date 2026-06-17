@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# Secrets
+.env
+.env.*
+*.key
+secrets/
+
+# Local agent settings
+.claude/settings.local.json
+
+# Built data (regenerable; not the golden inputs)
+data/raw/
+data/atlas/
+!data/raw/.gitkeep
+!data/atlas/.gitkeep
+
+# OS
+.DS_Store

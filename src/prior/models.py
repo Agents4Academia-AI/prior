@@ -1,0 +1,77 @@
+"""Core data types and (de)serialisation. Plain dataclasses + JSON, no ORM."""
+
+from __future__ import annotations
+
+from dataclasses import dataclass, field, asdict
+from typing import Optional
+
+CLAIM_TYPES = ("empirical", "theoretical", "methodological", "definitional")
+RELATIONS = ("supports", "contradicts", "refines", "extends")
+
+
+@dataclass
+class Paper:
+    """A primary source. `referenced_works` are the IDs this paper cites —
+    that citation structure is what lets Navigator trace origins backward."""
+
+    id: str                              # canonical id, e.g. "openalex:W123" / "arxiv:2401.00001"
+    source: str                          # "openalex" | "arxiv"
+    title: str
+    abstract: str
+    url: str
+    year: Optional[int] = None
+    authors: list[str] = field(default_factory=list)
+    venue: Optional[str] = None
+    doi: Optional[str] = None
+    referenced_works: list[str] = field(default_factory=list)
+    cited_by_count: int = 0
+
+    def short_cite(self) -> str:
+        first = self.authors[0].split()[-1] if self.authors else "Anon"
+        etal = " et al." if len(self.authors) > 1 else ""
+        return f"{first}{etal} ({self.year or 'n.d.'})"
+
+    def to_dict(self) -> dict:
+        return asdict(self)
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "Paper":
+        return cls(**{k: d.get(k) for k in cls.__dataclass_fields__})  # type: ignore[attr-defined]
+
+
+@dataclass
+class Claim:
+    """An atomic, verifiable statement extracted from one paper."""
+
+    id: str                  # "<paper_id>::c<NN>"
+    paper_id: str
+    text: str                # self-contained claim, no dangling pronouns
+    claim_type: str          # one of CLAIM_TYPES
+    evidence: str = ""       # short quote / span from the source supporting it
+    location: str = "abstract"
+    confidence: float = 0.5  # the Reader's confidence it is a genuine claim
+
+    def to_dict(self) -> dict:
+        return asdict(self)
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "Claim":
+        return cls(**{k: d.get(k) for k in cls.__dataclass_fields__})  # type: ignore[attr-defined]
+
+
+@dataclass
+class Edge:
+    """A typed, directed relation in the atlas. `evidence` records *why*."""
+
+    src: str
+    dst: str
+    relation: str            # RELATIONS, or "stated_in" / "cites"
+    evidence: str = ""
+    confidence: float = 0.5
+
+    def to_dict(self) -> dict:
+        return asdict(self)
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "Edge":
+        return cls(**{k: d.get(k) for k in cls.__dataclass_fields__})  # type: ignore[attr-defined]

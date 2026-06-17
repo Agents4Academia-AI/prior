@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "prior"
+version = "0.1.0"
+description = "Turn primary literature into a queryable atlas of claims (Reader / Cartographer / Navigator)."
+requires-python = ">=3.11"
+dependencies = [
+    "anthropic>=0.40",
+    "requests>=2.31",
+    "networkx>=3.0",
+    "rank-bm25>=0.2.2",
+]
+
+[project.scripts]
+prior = "prior.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]

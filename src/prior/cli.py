@@ -1,0 +1,87 @@
+"""Command-line interface for Prior.
+
+    prior build "<topic>"      ingest + read + map -> data/atlas/atlas.json
+    prior ingest "<topic>"     fetch papers only
+    prior read                 run Reader over cached papers
+    prior map                  run Cartographer over cached papers + claims
+    prior ask "<question>"     Navigator, forward (state of evidence)
+    prior origin "<concept>"   Navigator, backward (trace to origin)
+    prior info                 summarise the current atlas
+"""
+
+from __future__ import annotations
+
+import argparse
+import sys
+
+from . import cartographer, config, navigator, pipeline
+from .atlas import Atlas
+
+
+def _load_atlas() -> Atlas:
+    path = config.ATLAS / "atlas.json"
+    if not path.exists():
+        sys.exit("No atlas found. Run `prior build \"<topic>\"` first.")
+    return Atlas.load(path)
+
+
+def main(argv: list[str] | None = None) -> int:
+    ap = argparse.ArgumentParser(prog="prior", description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    sub = ap.add_subparsers(dest="cmd", required=True)
+
+    p_build = sub.add_parser("build", help="ingest + read + map")
+    p_build.add_argument("topic")
+    p_build.add_argument("--max-papers", type=int, default=None)
+    p_build.add_argument("--no-relate", action="store_true",
+                         help="skip LLM claim-relation finding (fast first pass)")
+
+    p_ing = sub.add_parser("ingest", help="fetch papers only")
+    p_ing.add_argument("topic")
+    p_ing.add_argument("--max-papers", type=int, default=None)
+
+    sub.add_parser("read", help="run Reader over cached papers")
+
+    p_map = sub.add_parser("map", help="run Cartographer over cached papers+claims")
+    p_map.add_argument("--no-relate", action="store_true")
+
+    p_ask = sub.add_parser("ask", help="forward: state of evidence")
+    p_ask.add_argument("question")
+
+    p_org = sub.add_parser("origin", help="backward: trace to origin")
+    p_org.add_argument("concept")
+
+    sub.add_parser("info", help="summarise the current atlas")
+
+    args = ap.parse_args(argv)
+
+    if args.cmd == "build":
+        pipeline.build(args.topic, max_papers=args.max_papers,
+                       relate=not args.no_relate)
+    elif args.cmd == "ingest":
+        papers = pipeline.ingest(args.topic, max_papers=args.max_papers)
+        print(f"{len(papers)} papers cached.")
+    elif args.cmd == "read":
+        papers = pipeline.load_papers()
+        if not papers:
+            sys.exit("No cached papers. Run `prior ingest` first.")
+        claims = pipeline.read_all(papers)
+        print(f"{len(claims)} claims extracted.")
+    elif args.cmd == "map":
+        papers, claims = pipeline.load_papers(), pipeline.load_claims()
+        if not papers or not claims:
+            sys.exit("Need cached papers and claims. Run `prior ingest` + `prior read`.")
+        atlas = cartographer.build(papers, claims, relate=not args.no_relate)
+        atlas.save()
+        print(atlas.summary())
+    elif args.cmd == "ask":
+        print(navigator.ask(_load_atlas(), args.question).render())
+    elif args.cmd == "origin":
+        print(navigator.origin(_load_atlas(), args.concept).render())
+    elif args.cmd == "info":
+        print(_load_atlas().summary())
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

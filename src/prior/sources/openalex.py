@@ -1,0 +1,103 @@
+"""OpenAlex adapter — https://docs.openalex.org
+
+OpenAlex is fully open, needs no API key, and crucially exposes citation edges
+(`referenced_works`) and `cited_by_count`. That bibliographic structure is what
+powers Navigator's backward / origin-tracing mode.
+"""
+
+from __future__ import annotations
+
+import requests
+
+from .. import config
+from ..models import Paper
+
+API = "https://api.openalex.org/works"
+
+
+def _headers() -> dict:
+    return {"User-Agent": config.USER_AGENT}
+
+
+def _params() -> dict:
+    p: dict = {}
+    if config.CONTACT_EMAIL:
+        p["mailto"] = config.CONTACT_EMAIL
+    return p
+
+
+def _norm_id(openalex_url: str | None) -> str:
+    """'https://openalex.org/W123' -> 'openalex:W123'."""
+    if not openalex_url:
+        return ""
+    return "openalex:" + openalex_url.rstrip("/").split("/")[-1]
+
+
+def _abstract_from_index(inv: dict | None) -> str:
+    """OpenAlex stores abstracts as an inverted index {word: [positions]}."""
+    if not inv:
+        return ""
+    positions: list[tuple[int, str]] = []
+    for word, idxs in inv.items():
+        for i in idxs:
+            positions.append((i, word))
+    positions.sort()
+    return " ".join(word for _, word in positions)
+
+
+def _to_paper(w: dict) -> Paper:
+    authors = [
+        a.get("author", {}).get("display_name", "")
+        for a in w.get("authorships", [])
+    ]
+    venue = (w.get("primary_location") or {}).get("source") or {}
+    return Paper(
+        id=_norm_id(w.get("id")),
+        source="openalex",
+        title=w.get("title") or "(untitled)",
+        abstract=_abstract_from_index(w.get("abstract_inverted_index")),
+        url=w.get("id") or "",
+        year=w.get("publication_year"),
+        authors=[a for a in authors if a],
+        venue=venue.get("display_name"),
+        doi=w.get("doi"),
+        referenced_works=[_norm_id(r) for r in w.get("referenced_works", [])],
+        cited_by_count=w.get("cited_by_count", 0),
+    )
+
+
+def search(query: str, *, max_papers: int = config.DEFAULT_MAX_PAPERS,
+           require_abstract: bool = True) -> list[Paper]:
+    """Search works by relevance; keep those with usable abstracts."""
+    params = _params() | {
+        "search": query,
+        "per_page": min(max_papers * 2, 200),
+        "sort": "relevance_score:desc",
+        "select": (
+            "id,title,publication_year,authorships,primary_location,doi,"
+            "abstract_inverted_index,referenced_works,cited_by_count"
+        ),
+    }
+    r = requests.get(API, params=params, headers=_headers(),
+                     timeout=config.HTTP_TIMEOUT)
+    r.raise_for_status()
+    papers: list[Paper] = []
+    for w in r.json().get("results", []):
+        p = _to_paper(w)
+        if require_abstract and not p.abstract:
+            continue
+        papers.append(p)
+        if len(papers) >= max_papers:
+            break
+    return papers
+
+
+def fetch(openalex_id: str) -> Paper | None:
+    """Fetch a single work by id ('openalex:W123' or bare 'W123')."""
+    wid = openalex_id.split(":")[-1]
+    r = requests.get(f"{API}/{wid}", params=_params(), headers=_headers(),
+                     timeout=config.HTTP_TIMEOUT)
+    if r.status_code == 404:
+        return None
+    r.raise_for_status()
+    return _to_paper(r.json())
