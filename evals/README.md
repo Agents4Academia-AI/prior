@@ -9,7 +9,11 @@ hard to game.
 | Reader | **groundedness** — fraction of claims whose evidence span actually appears in the source text | no | `groundedness.py` |
 | Reader | claim-type distribution, claims/paper | no | `groundedness.py` |
 | Cartographer | graph stats: relations found, density, contradiction rate | no | `graph_stats.py` |
-| Navigator | **citation validity** — every id a Navigator answer cites exists in the atlas (no fabricated citations) | for live runs | `citation_check.py` |
+| Navigator (forward) | **citation validity** — every id a Navigator answer cites exists in the atlas (no fabricated citations) | for live runs | `citation_check.py` |
+| Navigator (forward) | **SciFact** — SUPPORT/CONTRADICT/NOINFO accuracy + abstention | for live runs | `scifact/` |
+| Navigator (backward) | **origin grounding** — is a traced origin a real citation ancestor of the matched papers? | for live runs | `origin_check.py` |
+
+Results template for the Friday slide: [`results.md`](results.md).
 
 ```bash
 # After `prior build "<topic>"`:

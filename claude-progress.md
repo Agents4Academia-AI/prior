@@ -19,10 +19,15 @@ without burning the hackathon's metered API credits.
   `run.py` (`--mock`/`--limit`/`--backend`/`--model`/`--cache`/`--download`).
 - Credit thrift: `--mock` runs the entire harness with no model; `ask_fn` is
   injectable; predictions cache to JSONL and reruns resume.
+- Backward/origin eval (`evals/origin_check.py`, key-free): citation-graph
+  ancestor check — a traced origin is "grounded" if it's an ancestor of/within
+  the matched frontier; plus a no-LLM `structural_origin` baseline. Completes the
+  per-agent eval story (Reader/Cartographer/Navigator-fwd/Navigator-bwd).
+- `evals/results.md` template for the Friday slide.
 
 **Verified by:**
-- `pytest -q` → 20 passed (added SciFact loader/retrieval/atlas/mapping/metrics/
-  cache + `extract_json`), still no API key needed.
+- `pytest -q` → 25 passed (added SciFact + origin-eval suites; `extract_json`),
+  still no API key needed.
 - End-to-end `python evals/scifact/run.py --data <synthetic> --mock` → full report
   + confusion matrix, zero API calls.
 
