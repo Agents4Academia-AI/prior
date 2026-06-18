@@ -70,7 +70,7 @@ def _nodes_edges(atlas: Atlas, contributions_only: bool = False
         if p.id not in keep_papers:
             continue
         nodes.append({
-            "id": p.id, "group": "paper", "shape": "box",
+            "id": p.id,  "shape": "box",
             "label": p.short_cite(), "color": _fill(PAPER_COLOR),
             "title": f"{p.title} ({p.year})\ncited_by={p.cited_by_count}",
             "detail": {"kind": "paper", "title": p.title, "cite": p.short_cite(),
@@ -81,7 +81,7 @@ def _nodes_edges(atlas: Atlas, contributions_only: bool = False
             continue
         src = atlas.papers.get(c.paper_id)
         nodes.append({
-            "id": c.id, "group": "claim", "shape": "dot",
+            "id": c.id,  "shape": "dot",
             "label": _truncate(c.text, 40), "color": _fill(CLAIM_COLOR),
             "title": f"[{c.claim_type}] {c.text}\nconfidence={c.confidence}",
             "detail": {"kind": "claim", "text": c.text, "type": c.claim_type,
@@ -174,8 +174,8 @@ def render(atlas_path: Path | None = None, out_path: Path | None = None,
     atlas_path = atlas_path or (config.ATLAS / "atlas.json")
     atlas = Atlas.load(atlas_path)
     nodes, edges = _nodes_edges(atlas, contributions_only=contributions_only)
-    n_claims = sum(1 for n in nodes if n["group"] == "claim")
-    n_papers = sum(1 for n in nodes if n["group"] == "paper")
+    n_claims = sum(1 for n in nodes if n["shape"] == "dot")
+    n_papers = sum(1 for n in nodes if n["shape"] == "box")
     topic = atlas.topic or "—"
     if contributions_only:
         topic += "  ·  contributions only (definitional/background filtered)"
@@ -205,7 +205,7 @@ def render_contributions(out_path: Path | None = None) -> Path:
     for pid in paper_ids:
         p = atlas.papers.get(pid)
         nodes.append({
-            "id": pid, "group": "paper", "shape": "box",
+            "id": pid,  "shape": "box",
             "label": p.short_cite() if p else pid, "color": _fill(PAPER_COLOR),
             "title": (p.title if p else pid),
             "detail": {"kind": "paper", "title": (p.title if p else pid),
@@ -217,7 +217,7 @@ def render_contributions(out_path: Path | None = None) -> Path:
         p = atlas.papers.get(c["paper_id"])
         src = f"{p.short_cite()} — {p.title}" if p else c["paper_id"]
         nodes.append({
-            "id": c["id"], "group": "contribution", "shape": "dot",
+            "id": c["id"],  "shape": "dot",
             "label": _truncate(c["statement"], 42),
             "color": _fill(KIND_COLOR.get(c["kind"], "#c2c7d0")),
             "title": f"[{c['kind']}] " + _truncate(c["statement"], 55),
@@ -338,7 +338,7 @@ def render_evolution(out_path: Path | None = None) -> Path:
     for pid in paper_ids:                       # stage 1
         p = atlas.papers.get(pid)
         cite = p.short_cite() if p else pid
-        nodes.append({"id": pid, "stage": 1, "group": "paper", "shape": "box",
+        nodes.append({"id": pid, "stage": 1,  "shape": "box",
                       "label": cite, "color": _fill(PAPER_COLOR),
                       "title": (p.title if p else pid),
                       "detail": {"kind": "paper", "title": (p.title if p else pid),
@@ -347,7 +347,7 @@ def render_evolution(out_path: Path | None = None) -> Path:
     for c in cs:                                # stage 2
         p = atlas.papers.get(c["paper_id"])
         src = (f"{p.short_cite()} — {p.title}" if p else c["paper_id"])
-        nodes.append({"id": c["id"], "stage": 2, "group": "contribution",
+        nodes.append({"id": c["id"], "stage": 2, 
                       "shape": "dot", "label": _truncate(c["statement"], 38),
                       "color": _fill(KIND_COLOR.get(c["kind"], "#c2c7d0")),
                       "title": f"[{c['kind']}] " + _truncate(c["statement"], 55),
