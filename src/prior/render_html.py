@@ -107,7 +107,7 @@ def _nodes_edges(atlas: Atlas, contributions_only: bool = False
 
 _HTML = """<!doctype html>
 <html><head><meta charset="utf-8"><title>Prior — atlas: %TOPIC%</title>
-<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
 <style>
   body{margin:0;font:14px/1.4 system-ui,sans-serif;display:flex;height:100vh;
        background:#f5f6f8;color:#3b4252}
@@ -142,7 +142,8 @@ const net = new vis.Network(document.getElementById('graph'),
   {nodes, edges},
   {physics:{stabilization:true,barnesHut:{springLength:140}},
    interaction:{hover:true,tooltipDelay:120},
-   nodes:{font:{size:11,color:'#3b4252'},borderWidth:1},
+   groups:{useDefaultGroups:false},
+   nodes:{font:{size:11,color:'#3b4252'},borderWidth:1,shapeProperties:{useBorderWithImage:false}},
    edges:{font:{size:9,color:'#8a909c',strokeWidth:3,strokeColor:'#f5f6f8'},
           smooth:{type:'continuous'}}});
 const D = document.getElementById('detail');
@@ -252,7 +253,7 @@ def render_contributions(out_path: Path | None = None) -> Path:
 
 _EVO_HTML = """<!doctype html>
 <html><head><meta charset="utf-8"><title>Prior — atlas evolution</title>
-<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
 <style>
   body{margin:0;font:14px system-ui,sans-serif;display:flex;height:100vh;
        background:#f5f6f8;color:#3b4252}
@@ -294,6 +295,7 @@ const edges = new vis.DataSet(%EDGES%);
 const net = new vis.Network(document.getElementById('graph'), {nodes, edges},
   {physics:{stabilization:true,barnesHut:{springLength:130}},
    interaction:{hover:true,tooltipDelay:150},
+   groups:{useDefaultGroups:false},
    nodes:{font:{size:11,color:'#3b4252'},borderWidth:1},
    edges:{font:{size:9,color:'#8a909c',strokeWidth:3,strokeColor:'#f5f6f8'},
           smooth:{type:'continuous'}}});
