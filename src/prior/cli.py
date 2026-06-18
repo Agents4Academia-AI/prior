@@ -35,10 +35,14 @@ def main(argv: list[str] | None = None) -> int:
     p_build.add_argument("--max-papers", type=int, default=None)
     p_build.add_argument("--no-relate", action="store_true",
                          help="skip LLM claim-relation finding (fast first pass)")
+    p_build.add_argument("--cite-hops", type=int, default=0,
+                         help="expand backward along citations N hops (reaches origins)")
 
     p_ing = sub.add_parser("ingest", help="fetch papers only")
     p_ing.add_argument("topic")
     p_ing.add_argument("--max-papers", type=int, default=None)
+    p_ing.add_argument("--cite-hops", type=int, default=0,
+                       help="expand backward along citations N hops (reaches origins)")
 
     sub.add_parser("read", help="run Reader over cached papers")
 
@@ -57,9 +61,10 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.cmd == "build":
         pipeline.build(args.topic, max_papers=args.max_papers,
-                       relate=not args.no_relate)
+                       relate=not args.no_relate, cite_hops=args.cite_hops)
     elif args.cmd == "ingest":
-        papers = pipeline.ingest(args.topic, max_papers=args.max_papers)
+        papers = pipeline.ingest(args.topic, max_papers=args.max_papers,
+                                 cite_hops=args.cite_hops)
         print(f"{len(papers)} papers cached.")
     elif args.cmd == "read":
         papers = pipeline.load_papers()

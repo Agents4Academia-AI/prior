@@ -23,9 +23,38 @@ def _claims_path() -> Path:
     return config.ATLAS / "claims.jsonl"
 
 
+def expand_references(papers: list[Paper], *, hops: int = 1, cap: int = 200,
+                      progress=print) -> list[Paper]:
+    """Walk citation edges backward: fetch the OpenAlex works the given papers
+    reference, adding them to the corpus. This is how the atlas reaches an idea's
+    true origins (e.g. 1989) that keyword search — bound by current terminology —
+    never surfaces. Expanded papers enrich the citation graph; those without
+    abstracts are simply skipped by the Reader."""
+    have: dict[str, Paper] = {p.id: p for p in papers}
+    frontier = list(papers)
+    for hop in range(hops):
+        wanted = [ref for p in frontier for ref in p.referenced_works
+                  if ref.startswith("openalex:") and ref not in have]
+        wanted = list(dict.fromkeys(wanted))
+        if not wanted:
+            break
+        room = cap - len(have)
+        if room <= 0:
+            break
+        fetched = openalex.fetch_many(wanted[:room])
+        new = [p for pid, p in fetched.items() if pid not in have]
+        for p in new:
+            have[p.id] = p
+        progress(f"  hop {hop + 1}: +{len(new)} cited works (corpus now {len(have)})")
+        frontier = new
+    return list(have.values())
+
+
 def ingest(topic: str, *, max_papers: int | None = None,
-           use_arxiv: bool = True) -> list[Paper]:
-    """Fetch papers for a topic from primary sources and cache them."""
+           use_arxiv: bool = True, cite_hops: int = 0,
+           cap: int = 200, progress=print) -> list[Paper]:
+    """Fetch papers for a topic from primary sources and cache them.
+    `cite_hops > 0` expands backward along citations to reach origins."""
     config.ensure_dirs()
     n = max_papers or config.DEFAULT_MAX_PAPERS
     papers: dict[str, Paper] = {}
@@ -35,6 +64,8 @@ def ingest(topic: str, *, max_papers: int | None = None,
         for p in arxiv.search(topic, max_papers=max(4, n // 4)):
             papers.setdefault(p.id, p)
     out = list(papers.values())
+    if cite_hops > 0:
+        out = expand_references(out, hops=cite_hops, cap=cap, progress=progress)
     with _papers_path().open("w") as f:
         for p in out:
             f.write(json.dumps(p.to_dict()) + "\n")
@@ -75,15 +106,26 @@ def load_claims() -> list[Claim]:
 
 
 def build(topic: str, *, max_papers: int | None = None, relate: bool = True,
-          progress=print) -> Atlas:
-    """Full pipeline: ingest -> read -> map -> save."""
-    progress(f"[1/3] ingesting '{topic}' ...")
-    papers = ingest(topic, max_papers=max_papers)
-    progress(f"      {len(papers)} papers")
+          cite_hops: int = 0, progress=print) -> Atlas:
+    """Full pipeline: ingest -> read (seeds only) -> expand citations -> map -> save.
 
-    progress("[2/3] reading (paper -> claims) ...")
-    claims = read_all(papers, progress=progress)
+    Reader runs on the seed papers only; citation expansion enriches the graph for
+    origin tracing without paying to extract claims from every cited ancestor."""
+    progress(f"[1/3] ingesting '{topic}' ...")
+    seeds = ingest(topic, max_papers=max_papers, cite_hops=0, progress=progress)
+    progress(f"      {len(seeds)} seed papers")
+
+    progress("[2/3] reading (seed papers -> claims) ...")
+    claims = read_all(seeds, progress=progress)
     progress(f"      {len(claims)} claims")
+
+    papers = seeds
+    if cite_hops > 0:
+        progress(f"      expanding citations {cite_hops} hop(s) for lineage ...")
+        papers = expand_references(seeds, hops=cite_hops, progress=progress)
+        with _papers_path().open("w") as f:   # cache full set so `map` stays consistent
+            for p in papers:
+                f.write(json.dumps(p.to_dict()) + "\n")
 
     progress("[3/3] mapping (claims -> atlas) ...")
     atlas = cartographer.build(papers, claims, topic=topic, relate=relate,

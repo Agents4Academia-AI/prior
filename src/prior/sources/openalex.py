@@ -92,6 +92,30 @@ def search(query: str, *, max_papers: int = config.DEFAULT_MAX_PAPERS,
     return papers
 
 
+def fetch_many(ids: list[str], *, batch: int = 50) -> dict[str, Paper]:
+    """Resolve many OpenAlex ids in batched requests (for reference expansion).
+    Accepts 'openalex:W..' or bare 'W..'. Returns {id: Paper}."""
+    clean = [i.split(":")[-1] for i in dict.fromkeys(ids) if i]
+    out: dict[str, Paper] = {}
+    for k in range(0, len(clean), batch):
+        chunk = clean[k:k + batch]
+        params = _params() | {
+            "filter": "ids.openalex:" + "|".join(chunk),
+            "per_page": batch,
+            "select": (
+                "id,title,publication_year,authorships,primary_location,doi,"
+                "abstract_inverted_index,referenced_works,cited_by_count"
+            ),
+        }
+        r = requests.get(API, params=params, headers=_headers(),
+                         timeout=config.HTTP_TIMEOUT)
+        r.raise_for_status()
+        for w in r.json().get("results", []):
+            p = _to_paper(w)
+            out[p.id] = p
+    return out
+
+
 def fetch(openalex_id: str) -> Paper | None:
     """Fetch a single work by id ('openalex:W123' or bare 'W123')."""
     wid = openalex_id.split(":")[-1]

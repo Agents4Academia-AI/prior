@@ -16,6 +16,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 
+import networkx as nx
 from rank_bm25 import BM25Okapi
 
 from . import config, llm
@@ -173,26 +174,58 @@ class OriginAnswer:
         return "\n".join(lines)
 
 
-def origin(atlas: Atlas, concept: str, *, n: int = 15,
-           model: str | None = None) -> OriginAnswer:
-    """Find papers whose claims match the concept, then order them by citation
-    foundational-ness: in-atlas citations received, then age, then global cites."""
+def _cites_descendants(atlas: Atlas, paper_ids: set[str]) -> set[str]:
+    """Citation ancestors of the given papers — the older works they (transitively)
+    build on, reachable by following `cites` edges. These are where origins live,
+    so they must be candidates even though their claims may not match the concept."""
+    g = nx.DiGraph()
+    for e in atlas.edges:
+        if e.relation == "cites":
+            g.add_edge(e.src, e.dst)
+    anc: set[str] = set()
+    for pid in paper_ids:
+        if pid in g:
+            anc |= nx.descendants(g, pid)
+    return {a for a in anc if a in atlas.papers}
+
+
+def origin_candidates(atlas: Atlas, concept: str, *, n: int = 15,
+                      limit: int = 25) -> list[str]:
+    """Papers to consider as the origin: those whose claims match the concept,
+    PLUS their citation ancestors, ordered foundational-first (most cited within
+    the atlas, then oldest, then most globally cited)."""
     hits = _retrieve(atlas, concept, n)
-    paper_ids = list(dict.fromkeys(c.paper_id for c, _ in hits))
-    if not paper_ids:
-        return OriginAnswer("(none)", "No papers in the atlas match this concept.",
-                            [], "Ingest more literature on this topic.")
+    matched = list(dict.fromkeys(c.paper_id for c, _ in hits))
+    if not matched:
+        return []
+    candidates = set(matched) | _cites_descendants(atlas, set(matched))
 
     g = atlas.graph()
     def in_atlas_citations(pid: str) -> int:
-        return sum(1 for _, dst, d in g.in_edges(pid, data=True)
+        return sum(1 for _, _, d in g.in_edges(pid, data=True)
                    if d.get("relation") == "cites")
 
     def sort_key(pid: str):
         p = atlas.papers[pid]
         return (-in_atlas_citations(pid), p.year or 9999, -p.cited_by_count)
 
-    ordered = sorted(paper_ids, key=sort_key)
+    return sorted(candidates, key=sort_key)[:limit]
+
+
+def origin(atlas: Atlas, concept: str, *, n: int = 15,
+           model: str | None = None) -> OriginAnswer:
+    """Find papers whose claims match the concept (and their citation ancestors),
+    then order them by foundational-ness and let the model name the origin."""
+    ordered = origin_candidates(atlas, concept, n=n)
+    if not ordered:
+        return OriginAnswer("(none)", "No papers in the atlas match this concept.",
+                            [], "Ingest more literature on this topic.")
+
+    g = atlas.graph()
+    def in_atlas_citations(pid: str) -> int:
+        return sum(1 for _, _, d in g.in_edges(pid, data=True)
+                   if d.get("relation") == "cites")
+
     listing = "\n".join(
         f"[{pid}] {atlas.papers[pid].short_cite()} "
         f"(year={atlas.papers[pid].year}, cited_by={atlas.papers[pid].cited_by_count}, "
