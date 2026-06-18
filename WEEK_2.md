@@ -26,9 +26,12 @@ Four stages:
    anchored on intro language ("we propose / introduce / present", "our
    contributions are", "in this work we …"). High precision; distinct task from
    Reader (which extracts ALL claims incl. background/survey/future-work).
-   - Full text de-risked: OpenAlex exposes OA PDFs (`best_oa_location.pdf_url`;
-     ACL/arXiv/MDPI all worked), arXiv via `arxiv.org/pdf/<id>`, extract with
-     `pypdf`. Add `pdf_url` to `Paper`; focus the agent on abstract + intro.
+   - Full text de-risked. **HTML-first**: `arxiv.org/html/<id>` (→ `ar5iv.org`
+     fallback) gives clean text and surfaces the explicit contribution list
+     verbatim ("The contributions of our work can be summarized as follows: • We
+     propose …") — no PDF parsing. Fall back to PDF (`pypdf`) only for non-arXiv
+     OA sources (ACL/MDPI), via OpenAlex `best_oa_location.pdf_url`. Add a
+     `fulltext` field/fetch to `Paper`; focus the agent on abstract + intro.
 2. **Merge / canonicalize** (atlas-wide). Cluster equivalent claims across papers
    into **canonical nodes** (similarity via embeddings or an LLM judge). The
    canonical claim is the node; papers attach as evidence. THIS is "global graph
