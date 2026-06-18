@@ -33,9 +33,26 @@ def _truncate(s: str, n: int) -> str:
     return s if len(s) <= n else s[: n - 1] + "…"
 
 
-def _nodes_edges(atlas: Atlas) -> tuple[list[dict], list[dict]]:
+# Claim types that represent a paper's contribution (vs. definitional framing /
+# background restatement). Heuristic proxy for "contribution" until the global
+# canonical layer lands.
+CONTRIBUTION_TYPES = {"methodological", "empirical", "theoretical"}
+
+
+def _nodes_edges(atlas: Atlas, contributions_only: bool = False
+                 ) -> tuple[list[dict], list[dict]]:
+    if contributions_only:
+        keep_claims = {c.id for c in atlas.claims.values()
+                       if c.claim_type in CONTRIBUTION_TYPES}
+        keep_papers = {atlas.claims[cid].paper_id for cid in keep_claims}
+    else:
+        keep_claims = set(atlas.claims)
+        keep_papers = set(atlas.papers)
+
     nodes: list[dict] = []
     for p in atlas.papers.values():
+        if p.id not in keep_papers:
+            continue
         nodes.append({
             "id": p.id, "group": "paper", "shape": "box",
             "label": p.short_cite(), "color": PAPER_COLOR,
@@ -44,6 +61,8 @@ def _nodes_edges(atlas: Atlas) -> tuple[list[dict], list[dict]]:
                        "year": p.year, "url": p.url},
         })
     for c in atlas.claims.values():
+        if c.id not in keep_claims:
+            continue
         src = atlas.papers.get(c.paper_id)
         nodes.append({
             "id": c.id, "group": "claim", "shape": "dot",
@@ -53,12 +72,16 @@ def _nodes_edges(atlas: Atlas) -> tuple[list[dict], list[dict]]:
                        "confidence": c.confidence, "evidence": c.evidence,
                        "source": src.short_cite() if src else c.paper_id},
         })
+    keep = keep_claims | keep_papers
     edges: list[dict] = []
     for e in atlas.edges:
+        dst = e.to if hasattr(e, "to") else e.dst
+        if e.src not in keep or dst not in keep:   # drop edges to filtered nodes
+            continue
         st = EDGE_STYLE.get(e.relation, {"color": "#bbb", "dashes": False,
                                          "label": e.relation})
         edges.append({
-            "from": e.src, "to": e.to if hasattr(e, "to") else e.dst,
+            "from": e.src, "to": dst,
             "arrows": "to", "color": {"color": st["color"]},
             "dashes": st["dashes"], "label": st["label"], "font": {"size": 9},
             "title": e.evidence or st["label"],
@@ -121,18 +144,26 @@ net.on('click', p => {
 </script></body></html>"""
 
 
-def render(atlas_path: Path | None = None, out_path: Path | None = None) -> Path:
+def render(atlas_path: Path | None = None, out_path: Path | None = None,
+           contributions_only: bool = False) -> Path:
     atlas_path = atlas_path or (config.ATLAS / "atlas.json")
     atlas = Atlas.load(atlas_path)
-    nodes, edges = _nodes_edges(atlas)
+    nodes, edges = _nodes_edges(atlas, contributions_only=contributions_only)
+    n_claims = sum(1 for n in nodes if n["group"] == "claim")
+    n_papers = sum(1 for n in nodes if n["group"] == "paper")
+    topic = atlas.topic or "—"
+    if contributions_only:
+        topic += "  ·  contributions only (definitional/background filtered)"
     html = (_HTML
-            .replace("%TOPIC%", atlas.topic or "—")
-            .replace("%NP%", str(len(atlas.papers)))
-            .replace("%NC%", str(len(atlas.claims)))
+            .replace("%TOPIC%", topic)
+            .replace("%NP%", str(n_papers))
+            .replace("%NC%", str(n_claims))
             .replace("%CLAIMC%", CLAIM_COLOR).replace("%PAPERC%", PAPER_COLOR)
             .replace("%NODES%", json.dumps(nodes))
             .replace("%EDGES%", json.dumps(edges)))
-    out_path = out_path or (config.ATLAS / "view.html")
+    if out_path is None:
+        out_path = config.ATLAS / ("view_contributions.html" if contributions_only
+                                   else "view.html")
     out_path.write_text(html)
     return out_path
 
