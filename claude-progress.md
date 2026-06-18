@@ -4,6 +4,48 @@
 
 ---
 
+## 2026-06-18 — session 3: Friday MVP shipped (live run, web view, baseline, skill)
+
+**Goal:** Ship the Friday demo deliverables — a real end-to-end run, a web view,
+a vanilla baseline, and real numbers. Use case (a). No refactors.
+
+**Done (verified):**
+- **Live build on real data** via the `claude-code` backend (Max login, no API
+  credits): "retrieval augmented generation reduces hallucination" → 19 papers,
+  111 claims, 191 relations (107 supports / 49 extends / 29 refines / 6
+  contradicts), 11 citations.
+- **Forward** (`ask`): grounded, cited "EMERGING" verdict on the RAG/hallucination
+  question. **Graceful "no"**: protein-structure-prediction question → NOT_FOUND
+  with closest + gap, no fabrication. **Backward** (`origin`): traces in-atlas and
+  flags it misses the true (Lewis 2020) origin.
+- **Web view**: `prior view` / `src/prior/render_html.py` → self-contained
+  interactive HTML graph (vis-network), claims/papers nodes, typed edges,
+  click-to-detail. → data/atlas/view.html.
+- **Baseline**: `evals/baseline_vanilla.py` → `evals/baseline_comparison.md` —
+  vanilla Claude answers confidently / invents citations; Prior is calibrated,
+  grounded, and abstains honestly.
+- **Agent artifact**: `.claude/skills/prior/SKILL.md` (Prior as a Claude Code
+  skill driving the CLI tools).
+- **Real numbers** pasted into `evals/results.md`. `WEEK_2.md` holds deferred work.
+- Fixed `claude-code` backend for open prompts: `setting_sources=[]` (don't load
+  project skills → bare baseline) + salvage text on SDK "max turns".
+
+**Verified by:**
+- `pytest -q` → 30 passed.
+- `evals/groundedness.py` → 100% groundedness; `evals/graph_stats.py` → 191 relations.
+- `evals/baseline_comparison.md` + `evals/results.md` written from the real run.
+
+**Not done / blocked:**
+- SciFact not run (dataset not downloaded) — no held-out accuracy number tonight.
+- Built at --max-papers 15 (not 25) to fit the Max-plan time budget.
+- Web view shows the single-layer atlas; local/global split is README-only.
+
+**Next session — start here (Friday AM demo prep):**
+1. Open `data/atlas/view.html` in a browser; rehearse the click-through.
+2. Dry-run the three queries from the cached atlas (forward / graceful-no /
+   origin) — do NOT live-build on stage.
+3. Pull `evals/results.md` numbers + the baseline contrast onto the slide.
+
 ## 2026-06-17 — session 2: SciFact harness + credit-saving backend
 
 **Goal:** Add the headline Navigator eval (SciFact) and a way to run the pipeline

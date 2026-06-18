@@ -137,16 +137,23 @@ def _run_claude_code(*, system: str, prompt: str, model: str) -> str:
     async def _go() -> str:
         opts = ClaudeAgentOptions(
             system_prompt=system,
-            allowed_tools=[],   # pure generation; no file/bash/web tools
-            max_turns=1,
+            allowed_tools=[],     # pure generation; no file/bash/web tools
+            setting_sources=[],   # don't load project skills/settings (bare model)
+            max_turns=6,          # ceiling, not a target; open prompts may want >1 turn
             model=model,
         )
         chunks: list[str] = []
-        async for msg in query(prompt=prompt, options=opts):
-            if isinstance(msg, AssistantMessage):
-                for block in msg.content:
-                    if isinstance(block, TextBlock):
-                        chunks.append(block.text)
+        try:
+            async for msg in query(prompt=prompt, options=opts):
+                if isinstance(msg, AssistantMessage):
+                    for block in msg.content:
+                        if isinstance(block, TextBlock):
+                            chunks.append(block.text)
+        except Exception:
+            # The Agent SDK raises on e.g. "max turns reached" even after the
+            # model has already produced its answer — salvage that text.
+            if not chunks:
+                raise
         return "".join(chunks)
 
     return asyncio.run(_go())
