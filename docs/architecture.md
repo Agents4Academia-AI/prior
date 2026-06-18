@@ -31,13 +31,35 @@ structured output is forced via a single tool whose schema is the shape we want
 | **Cartographer** | `cartographer.py` | claims → typed relations (supports/contradicts/refines/extends) | BM25 proposes candidate pairs; one structured call per claim labels them (avoids O(n²)) |
 | **Navigator** | `navigator.py` | question + atlas → grounded answer | BM25 retrieves relevant claims; one call returns verdict + supporting/contradicting/open, or `not_found` |
 
-(A fourth agent, **Auditor** — claim-fidelity + citation honesty — is designed
-but deferred to Week 2; see `WEEK_2.md`.)
+A fourth agent, the **Contribution agent** (`contributor.py`), is implemented as
+step 1 of the contribution pipeline: a distinct task from Reader, it extracts
+each paper's *self-declared* contributions from **full text** (the intro's "we
+propose / our contributions are…"), excluding background, definitions, surveys
+of open problems, and descriptions of others' work. Run with `prior
+contributions`. The atlas-aware **novelty** assessment (merge equivalent claims
+across papers, flag overstated novelty against chronology) is the deferred next
+step — see `WEEK_2.md`, alongside the designed **Auditor** agent (claim-fidelity
++ citation honesty real/relevant/fair).
 
 The shared **atlas** (`atlas.py`) is a property graph persisted as JSON
 (`data/atlas/atlas.json`) — papers and claims are nodes; `stated_in`, `cites`,
 and the four semantic relations are edges. That JSON is the **hand-off API**:
 other teams load it and build on a grounded, structured corpus.
+
+## Sources, primary-literature filtering & full text
+
+- **Adapters** (`sources/openalex.py`, `sources/arxiv.py`) fetch papers by
+  relevance; OpenAlex also supplies the citation graph (`referenced_works`) and
+  open-access PDF URLs.
+- **Primary literature only.** Reviews/surveys are excluded
+  (`sources/_filters.py: looks_like_review` — OpenAlex `type` + title signals),
+  so the atlas holds primary research, not survey restatements of the field.
+- **Full text** (`fulltext.py`): **HTML-first** — `arxiv.org/html/<id>`
+  (→ `ar5iv` fallback), then a *real*-PDF fallback (content-sniffed, `pypdf`) for
+  other OA sources. The Contribution agent uses this; papers without accessible
+  full text are **skipped, never degraded to abstract-only**.
+- **Citation expansion.** `build --cite-hops N` walks `referenced_works` backward
+  to reach an idea's origins (keyword search alone stops at recent terminology).
 
 ## Tools (the CLI)
 
@@ -47,7 +69,8 @@ Each command is a tool an agent or person can call:
 prior build "<topic>" [--max-papers N] [--cite-hops N]   # ingest → read → map → atlas
 prior ask "<question>"                                    # forward: state of evidence (cited)
 prior origin "<concept>"                                  # backward: trace to origin
-prior view [--contributions]                              # interactive HTML graph
+prior contributions [--limit N]                           # papers' self-declared contributions (full text)
+prior view [--contributions]                              # interactive HTML graph (real contributions if extracted)
 prior info                                                # one-line atlas summary
 # lower-level: prior ingest / read / map
 ```
@@ -108,12 +131,15 @@ graph stats: [`graph_stats.md`](graph_stats.md).
 
 ```
 src/prior/
-  sources/{openalex,arxiv}.py   primary-source adapters (citation graph)
-  reader.py cartographer.py navigator.py   the three agents
+  sources/{openalex,arxiv}.py   primary-source adapters (citation graph + OA PDFs)
+  sources/_filters.py           review/survey detection (primary-lit only)
+  reader.py cartographer.py navigator.py   the three core agents
+  contributor.py                Contribution agent (self-declared contributions)
+  fulltext.py                   HTML-first full-text fetch (arXiv html → ar5iv → PDF)
   atlas.py models.py            the graph + data types
   llm.py                        pluggable backend (api / claude-code)
   pipeline.py cli.py            orchestration + tools
-  render_html.py                the web view
+  render_html.py                the web views (atlas / contributions)
 .claude/skills/prior/SKILL.md   the Claude Code skill
-evals/                          per-agent evals + baselines
+evals/                          per-agent evals + baselines (vanilla / web-search)
 ```

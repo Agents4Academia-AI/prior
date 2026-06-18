@@ -102,7 +102,10 @@ def main(argv: list[str] | None = None) -> int:
         from . import render_html
         if not (config.ATLAS / "atlas.json").exists():
             sys.exit("No atlas found. Run `prior build \"<topic>\"` first.")
-        path = render_html.render(contributions_only=args.contributions)
+        if args.contributions and (config.ATLAS / "contributions.json").exists():
+            path = render_html.render_contributions()   # real self-declared contributions
+        else:
+            path = render_html.render(contributions_only=args.contributions)
         print(f"atlas view → {path}\n  open in a browser:  file://{path}")
     return 0
 

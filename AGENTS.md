@@ -1,15 +1,19 @@
 # AGENTS.md — what Claude Code reads at session start
 
-Prior turns primary literature into a queryable atlas of claims via three agents:
-**Reader** (paper → claims), **Cartographer** (claims → graph), **Navigator**
-(question → grounded answer, forward & backward). Read `README.md` for the why.
+Prior turns primary literature into a queryable atlas of claims via three core
+agents: **Reader** (paper → claims), **Cartographer** (claims → graph),
+**Navigator** (question → grounded answer, forward & backward). A fourth,
+**Contribution agent** (`contributor.py`), extracts papers' *self-declared,
+standalone* contributions from full text. Sources are filtered to primary
+literature (reviews/surveys excluded). Read `README.md` for the why.
 
 ## How to run
 
 - Install: `pip install -e .`  (or `pip install -r requirements.txt`)
 - Env:     `export ANTHROPIC_API_KEY=...` ; optionally `PRIOR_CONTACT_EMAIL=...`
-- Build:   `prior build "<topic>"`     (ingest → read → map → `data/atlas/atlas.json`)
+- Build:   `prior build "<topic>" [--cite-hops N]`  (ingest → read → map → `data/atlas/atlas.json`)
 - Query:   `prior ask "<q>"` / `prior origin "<concept>"` / `prior info`
+- Extras:  `prior contributions` (self-declared contributions, full text) · `prior view [--contributions]`
 - Test:    `pytest -q`   (the whole suite runs without an API key — 20 tests, all backends mocked)
 - Eval:    `python evals/scifact/run.py --data data/scifact --mock`  (SciFact, zero credits)
 
@@ -22,13 +26,16 @@ Prior turns primary literature into a queryable atlas of claims via three agents
 
 ## Architecture (one line each)
 
-- `sources/openalex.py` — search + citation edges (`referenced_works`); no key needed
-- `sources/arxiv.py` — abstracts for recent preprints; Atom XML via stdlib
+- `sources/openalex.py` — search + citation edges + OA PDF urls; no key needed
+- `sources/arxiv.py` — recent preprints; Atom XML via stdlib
+- `sources/_filters.py` — `looks_like_review` (primary-lit only; reviews excluded)
 - `reader.py` — forces JSON via a single tool; atomic, typed, evidence-bearing claims
 - `cartographer.py` — BM25 proposes candidate claim pairs; LLM labels only those (avoids O(n²))
 - `navigator.py` — `ask` (forward: verdict + supporting/contradicting/open) and `origin` (backward)
+- `contributor.py` — Contribution agent; standalone self-declared contributions (full text)
+- `fulltext.py` — HTML-first full text (arxiv html → ar5iv → real-PDF); skip, never abstract-fallback
 - `atlas.py` — the graph + JSON persistence; `atlas.json` is the hand-off API
-- `llm.py` — `structured()` (forced tool-call JSON) and `text()`; retries on rate limits
+- `llm.py` — `structured()` (forced tool-call JSON) and `text()`; api / claude-code backends
 
 ## Conventions
 

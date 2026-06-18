@@ -31,7 +31,8 @@ Set a backend once: `export ANTHROPIC_API_KEY=...` **or**
 | build | `python -m prior.cli build "<topic>" --max-papers 15` | ingest → read → map → `data/atlas/atlas.json` |
 | ask | `python -m prior.cli ask "<question>"` | forward: supporting / contradicting / open, all cited; honest `not_found` |
 | origin | `python -m prior.cli origin "<concept>"` | backward: trace a concept to its origin paper |
-| view | `python -m prior.cli view` | render the atlas to an interactive HTML graph |
+| contributions | `python -m prior.cli contributions` | each primary paper's self-declared, standalone contributions (full text) |
+| view | `python -m prior.cli view [--contributions]` | render the atlas (or contributions) to an interactive HTML graph |
 | info | `python -m prior.cli info` | one-line atlas summary |
 
 (If installed with `pip install -e .`, `prior <cmd>` works too.)

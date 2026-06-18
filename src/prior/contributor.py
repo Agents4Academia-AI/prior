@@ -18,21 +18,30 @@ KINDS = ("method", "model", "dataset", "benchmark", "framework",
          "empirical_finding", "analysis", "resource", "other")
 
 SYSTEM = """You are the Contribution agent. You read a paper's title, abstract,
-and the start of its full text (where the introduction and any explicit
-contribution list live) and extract ONLY the contributions the paper claims for
-ITSELF — what it proposes, introduces, builds, or demonstrates as new.
+and the start of its full text and extract the contributions it claims as new.
 
-Anchor on the paper's own self-declaration: "we propose / introduce / present /
-develop", "our contributions are", "in this work/paper we …", "(1) … (2) …".
+Phrase each contribution as a STANDALONE, source-agnostic statement of the
+contribution ITSELF — the method, system, capability, dataset, or finding —
+written so it could stand on its own and be supported by multiple papers. Do NOT
+write "the paper / the authors / we propose / this work introduces …"; the
+supporting paper is recorded separately. Name the method/system if the paper
+names it.
+  GOOD: "A small, standalone retriever enables low-latency retrieval-augmented
+         generation for structured outputs."
+  GOOD: "Chain-of-Verification — draft, independently verify, then revise —
+         reduces hallucination in long-form generation."
+  BAD:  "The authors propose a small retriever that enables …"
+  BAD:  "The paper introduces Chain-of-Verification …"
 
-EXCLUDE, even if stated as findings:
-- background, definitions, motivation;
-- surveys/lists of open problems, challenges, or future directions;
-- descriptions of prior work or others' methods.
-A review/survey paper usually has NO contributions of its own — return [].
+Anchor your extraction on the paper's self-declaration ("we propose / our
+contributions are / in this work we …") but REWRITE it into the standalone form.
 
-Return 1–5 contributions for a primary paper (fewer is fine), each with a
-one-sentence statement, a kind, and the quoted self-declaration span it came from."""
+EXCLUDE: background, definitions, motivation, surveys of open problems or future
+directions, and descriptions of others' prior work. A review/survey paper has NO
+contributions of its own — return [].
+
+Return 1–5 contributions, each with: the standalone `statement`, a `kind`, and
+the `quote` (the paper's own self-declaration span it was drawn from)."""
 
 _SCHEMA = {
     "type": "object",

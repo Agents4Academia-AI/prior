@@ -27,6 +27,13 @@ EDGE_STYLE = {
 CLAIM_COLOR = "#e8a13a"
 PAPER_COLOR = "#5b8def"
 
+# Contribution nodes, coloured by kind.
+KIND_COLOR = {
+    "method": "#e8a13a", "framework": "#8430ce", "empirical_finding": "#2e9e4f",
+    "dataset": "#1a73e8", "model": "#d93025", "analysis": "#00897b",
+    "resource": "#b5179e", "other": "#9aa0a6",
+}
+
 
 def _truncate(s: str, n: int) -> str:
     s = " ".join((s or "").split())
@@ -130,7 +137,12 @@ const D = document.getElementById('detail');
 net.on('click', p => {
   if(!p.nodes.length){D.innerHTML='<span class="muted">Click a node for details.</span>';return;}
   const n = nodes.get(p.nodes[0]).detail;
-  if(n.kind==='claim'){
+  if(n.kind==='contribution'){
+    D.innerHTML = `<span class="pill">${n.ckind}</span>
+      <p><b>Contribution.</b> ${n.statement}</p>
+      <p><b>Stated as.</b> <i>${n.quote||'—'}</i></p>
+      <p><b>Paper.</b> ${n.source}</p>`;
+  } else if(n.kind==='claim'){
     D.innerHTML = `<span class="pill">${n.type}</span> <span class="pill">conf ${n.confidence}</span>
       <p><b>Claim.</b> ${n.text}</p>
       <p><b>Evidence.</b> <i>${n.evidence||'—'}</i></p>
@@ -164,6 +176,51 @@ def render(atlas_path: Path | None = None, out_path: Path | None = None,
     if out_path is None:
         out_path = config.ATLAS / ("view_contributions.html" if contributions_only
                                    else "view.html")
+    out_path.write_text(html)
+    return out_path
+
+
+def render_contributions(out_path: Path | None = None) -> Path:
+    """Render the REAL contributions (data/atlas/contributions.json) as a graph:
+    each contribution is a node (coloured by kind) attached to its paper."""
+    contribs = json.loads((config.ATLAS / "contributions.json").read_text())
+    atlas = Atlas.load(config.ATLAS / "atlas.json")
+    cs = contribs.get("contributions", [])
+    paper_ids = list(dict.fromkeys(c["paper_id"] for c in cs))
+
+    nodes: list[dict] = []
+    for pid in paper_ids:
+        p = atlas.papers.get(pid)
+        nodes.append({
+            "id": pid, "group": "paper", "shape": "box",
+            "label": p.short_cite() if p else pid, "color": PAPER_COLOR,
+            "title": (p.title if p else pid),
+            "detail": {"kind": "paper", "title": (p.title if p else pid),
+                       "cite": p.short_cite() if p else pid,
+                       "year": p.year if p else None, "url": p.url if p else ""},
+        })
+    edges: list[dict] = []
+    for c in cs:
+        p = atlas.papers.get(c["paper_id"])
+        nodes.append({
+            "id": c["id"], "group": "contribution", "shape": "dot",
+            "label": _truncate(c["statement"], 42),
+            "color": KIND_COLOR.get(c["kind"], "#9aa0a6"),
+            "title": f"[{c['kind']}] {c['statement']}",
+            "detail": {"kind": "contribution", "ckind": c["kind"],
+                       "statement": c["statement"], "quote": c.get("quote", ""),
+                       "source": p.short_cite() if p else c["paper_id"]},
+        })
+        edges.append({"from": c["id"], "to": c["paper_id"], "arrows": "to",
+                      "color": {"color": "#c4c4c4"}, "label": "stated_in",
+                      "font": {"size": 9}})
+
+    topic = f"{atlas.topic or '—'}  ·  {len(cs)} self-declared contributions from {len(paper_ids)} papers"
+    html = (_HTML.replace("%TOPIC%", topic)
+            .replace("%NP%", str(len(paper_ids))).replace("%NC%", str(len(cs)))
+            .replace("%CLAIMC%", CLAIM_COLOR).replace("%PAPERC%", PAPER_COLOR)
+            .replace("%NODES%", json.dumps(nodes)).replace("%EDGES%", json.dumps(edges)))
+    out_path = out_path or (config.ATLAS / "view_contributions.html")
     out_path.write_text(html)
     return out_path
 
