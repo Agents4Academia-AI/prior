@@ -115,17 +115,25 @@ def extract_contributions(papers: list[Paper], *, limit: int | None = None,
         todo = todo[:limit]
     progress(f"  {len(todo)} primary papers ({skipped} reviews skipped)")
     out: list[dict] = []
+    no_fulltext: list[str] = []
     for i, p in enumerate(todo, 1):
         try:
             ft = fulltext.fetch(p)
+            if not ft:                     # full-text-only: never use the abstract
+                no_fulltext.append(p.id)
+                progress(f"  [{i}/{len(todo)}] {p.short_cite()}: SKIPPED (no full text)")
+                continue
             cs = contributor.extract(p, ft, model=model)
         except Exception as e:  # noqa: BLE001 — one paper shouldn't sink the run
             progress(f"  [{i}/{len(todo)}] {p.short_cite()}: ERROR {e}")
             continue
         out.extend(cs)
-        progress(f"  [{i}/{len(todo)}] {p.short_cite()}: {len(cs)} contributions "
-                 f"({'full text' if ft else 'abstract-only'})")
-    _contributions_path().write_text(json.dumps({"contributions": out}, indent=2))
+        progress(f"  [{i}/{len(todo)}] {p.short_cite()}: {len(cs)} contributions")
+    _contributions_path().write_text(json.dumps(
+        {"contributions": out, "skipped_no_fulltext": no_fulltext}, indent=2))
+    if no_fulltext:
+        progress(f"  {len(no_fulltext)} papers skipped (no full text): "
+                 f"{', '.join(no_fulltext)}")
     return out
 
 

@@ -57,8 +57,11 @@ _SCHEMA = {
 def extract(paper: Paper, fulltext: str | None = None, *,
             model: str | None = None) -> list[dict]:
     """Return the paper's self-declared contributions as dicts
-    {id, paper_id, statement, kind, quote}."""
-    body = (fulltext or paper.abstract or "")[:9000]   # intro lives near the top
+    {id, paper_id, statement, kind, quote}. Requires full text — we do NOT fall
+    back to the abstract (the contribution list lives in the intro)."""
+    if not fulltext:
+        return []
+    body = fulltext[:12000]   # intro + contribution list live near the top
     out = llm.structured(
         model=model or config.READER_MODEL,
         system=SYSTEM,

@@ -40,10 +40,17 @@ def _arxiv_html(arxiv_id: str) -> str | None:
     return None
 
 
-def _pdf_text(url: str, max_pages: int = 12) -> str | None:
+def _oa_text(url: str, max_pages: int = 14) -> str | None:
+    """Full text from an OA URL — only if it's a *real* PDF. Many `pdf_url`s are
+    HTML landing/paywall pages; those return None (we skip, never use abstract)."""
     try:
-        from pypdf import PdfReader  # lazy: only the PDF fallback needs it
         r = requests.get(url, headers=_UA, timeout=config.HTTP_TIMEOUT)
+    except requests.RequestException:
+        return None
+    if not r.content[:5].startswith(b"%PDF"):       # landing page, not a PDF
+        return None
+    try:
+        from pypdf import PdfReader  # lazy: only the PDF path needs it
         reader = PdfReader(io.BytesIO(r.content))
         text = "\n".join((p.extract_text() or "") for p in reader.pages[:max_pages])
         return text.strip() or None
@@ -71,4 +78,4 @@ def fetch(paper) -> str | None:
         url = fresh.pdf_url if fresh else ""
         if (m := _ARXIV_IN_URL.search(url)) and (text := _arxiv_html(m.group(1))):
             return text
-    return _pdf_text(url) if url else None
+    return _oa_text(url) if url else None
