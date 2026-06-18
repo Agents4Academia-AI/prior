@@ -13,6 +13,7 @@ import requests
 
 from .. import config
 from ..models import Paper
+from ._filters import looks_like_review
 
 API = "http://export.arxiv.org/api/query"
 NS = {"atom": "http://www.w3.org/2005/Atom"}
@@ -34,26 +35,32 @@ def _to_paper(entry: ET.Element) -> Paper:
     published = txt("published")
     if len(published) >= 4 and published[:4].isdigit():
         year = int(published[:4])
+    title = " ".join(txt("title").split())
     return Paper(
         id=f"arxiv:{arxiv_id}",
         source="arxiv",
-        title=" ".join(txt("title").split()),
+        title=title,
         abstract=" ".join(txt("summary").split()),
         url=raw_id,
         year=year,
         authors=authors,
+        is_review=looks_like_review(title),
     )
 
 
-def search(query: str, *, max_papers: int = config.DEFAULT_MAX_PAPERS) -> list[Paper]:
+def search(query: str, *, max_papers: int = config.DEFAULT_MAX_PAPERS,
+           exclude_reviews: bool = True) -> list[Paper]:
     params = {
         "search_query": f"all:{query}",
         "start": 0,
-        "max_results": max_papers,
+        "max_results": max_papers * 2,   # over-fetch: reviews get filtered
         "sortBy": "relevance",
     }
     r = requests.get(API, params=params, headers={"User-Agent": config.USER_AGENT},
                      timeout=config.HTTP_TIMEOUT)
     r.raise_for_status()
     root = ET.fromstring(r.text)
-    return [_to_paper(e) for e in root.findall("atom:entry", NS)]
+    papers = [_to_paper(e) for e in root.findall("atom:entry", NS)]
+    if exclude_reviews:
+        papers = [p for p in papers if not p.is_review]
+    return papers[:max_papers]

@@ -55,6 +55,10 @@ def main(argv: list[str] | None = None) -> int:
     p_org = sub.add_parser("origin", help="backward: trace to origin")
     p_org.add_argument("concept")
 
+    p_con = sub.add_parser("contributions",
+                           help="extract papers' self-declared contributions (full text)")
+    p_con.add_argument("--limit", type=int, default=None)
+
     sub.add_parser("info", help="summarise the current atlas")
     p_view = sub.add_parser("view", help="render the atlas to an interactive HTML graph")
     p_view.add_argument("--contributions", action="store_true",
@@ -86,6 +90,12 @@ def main(argv: list[str] | None = None) -> int:
         print(navigator.ask(_load_atlas(), args.question).render())
     elif args.cmd == "origin":
         print(navigator.origin(_load_atlas(), args.concept).render())
+    elif args.cmd == "contributions":
+        papers = pipeline.load_papers()
+        if not papers:
+            sys.exit("No cached papers. Run `prior build \"<topic>\"` first.")
+        cs = pipeline.extract_contributions(papers, limit=args.limit)
+        print(f"\n{len(cs)} contributions → {pipeline._contributions_path()}")
     elif args.cmd == "info":
         print(_load_atlas().summary())
     elif args.cmd == "view":

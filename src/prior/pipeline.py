@@ -98,6 +98,37 @@ def read_all(papers: list[Paper], *, model: str | None = None,
     return claims
 
 
+def _contributions_path() -> Path:
+    return config.ATLAS / "contributions.json"
+
+
+def extract_contributions(papers: list[Paper], *, limit: int | None = None,
+                          model: str | None = None, progress=print) -> list[dict]:
+    """Run the Contribution agent over primary papers (reviews skipped), using
+    full text. Caches to data/atlas/contributions.json."""
+    from . import contributor, fulltext
+    from .sources import looks_like_review
+    config.ensure_dirs()
+    todo = [p for p in papers if not (p.is_review or looks_like_review(p.title))]
+    skipped = len(papers) - len(todo)
+    if limit:
+        todo = todo[:limit]
+    progress(f"  {len(todo)} primary papers ({skipped} reviews skipped)")
+    out: list[dict] = []
+    for i, p in enumerate(todo, 1):
+        try:
+            ft = fulltext.fetch(p)
+            cs = contributor.extract(p, ft, model=model)
+        except Exception as e:  # noqa: BLE001 — one paper shouldn't sink the run
+            progress(f"  [{i}/{len(todo)}] {p.short_cite()}: ERROR {e}")
+            continue
+        out.extend(cs)
+        progress(f"  [{i}/{len(todo)}] {p.short_cite()}: {len(cs)} contributions "
+                 f"({'full text' if ft else 'abstract-only'})")
+    _contributions_path().write_text(json.dumps({"contributions": out}, indent=2))
+    return out
+
+
 def load_claims() -> list[Claim]:
     path = _claims_path()
     if not path.exists():

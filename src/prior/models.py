@@ -25,6 +25,8 @@ class Paper:
     doi: Optional[str] = None
     referenced_works: list[str] = field(default_factory=list)
     cited_by_count: int = 0
+    pdf_url: str = ""          # open-access full-text PDF, when known
+    is_review: bool = False    # survey/review — excluded as non-primary literature
 
     def short_cite(self) -> str:
         first = self.authors[0].split()[-1] if self.authors else "Anon"
@@ -36,7 +38,8 @@ class Paper:
 
     @classmethod
     def from_dict(cls, d: dict) -> "Paper":
-        return cls(**{k: d.get(k) for k in cls.__dataclass_fields__})  # type: ignore[attr-defined]
+        # only pass present keys so new fields fall back to their defaults
+        return cls(**{k: d[k] for k in cls.__dataclass_fields__ if k in d})  # type: ignore[attr-defined]
 
 
 @dataclass
