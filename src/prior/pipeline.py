@@ -129,12 +129,36 @@ def extract_contributions(papers: list[Paper], *, limit: int | None = None,
             continue
         out.extend(cs)
         progress(f"  [{i}/{len(todo)}] {p.short_cite()}: {len(cs)} contributions")
+    progress("  relating contributions across papers ...")
+    edges = _relate_contribs(out, model=model)
+    progress(f"  {len(edges)} cross-contribution relations")
     _contributions_path().write_text(json.dumps(
-        {"contributions": out, "skipped_no_fulltext": no_fulltext}, indent=2))
+        {"contributions": out, "edges": edges, "skipped_no_fulltext": no_fulltext},
+        indent=2))
     if no_fulltext:
         progress(f"  {len(no_fulltext)} papers skipped (no full text): "
                  f"{', '.join(no_fulltext)}")
     return out
+
+
+def _relate_contribs(contribs: list[dict], *, model: str | None = None) -> list[dict]:
+    """Typed relations between contributions across papers (reuses Cartographer).
+    This is what gives the contributions graph cross-paper 'cross-talk'."""
+    from . import cartographer
+    claims = [Claim(id=c["id"], paper_id=c["paper_id"], text=c["statement"],
+                    claim_type=c.get("kind", "other")) for c in contribs]
+    return [e.to_dict() for e in cartographer.relate_claims(claims, model=model)]
+
+
+def relate_contributions(*, model: str | None = None, progress=print) -> list[dict]:
+    """Add cross-contribution relations to an existing contributions.json (no
+    re-extraction)."""
+    data = json.loads(_contributions_path().read_text())
+    edges = _relate_contribs(data.get("contributions", []), model=model)
+    data["edges"] = edges
+    _contributions_path().write_text(json.dumps(data, indent=2))
+    progress(f"{len(edges)} cross-contribution relations")
+    return edges
 
 
 def load_claims() -> list[Claim]:

@@ -212,15 +212,109 @@ def render_contributions(out_path: Path | None = None) -> Path:
                        "source": p.short_cite() if p else c["paper_id"]},
         })
         edges.append({"from": c["id"], "to": c["paper_id"], "arrows": "to",
-                      "color": {"color": "#c4c4c4"}, "label": "stated_in",
-                      "font": {"size": 9}})
+                      "color": {"color": "#dcdcdc"}, "label": "stated_in",
+                      "font": {"size": 8}})
 
-    topic = f"{atlas.topic or '—'}  ·  {len(cs)} self-declared contributions from {len(paper_ids)} papers"
+    # cross-contribution relations (the cross-paper "cross-talk")
+    rels = 0
+    for e in contribs.get("edges", []):
+        st = EDGE_STYLE.get(e["relation"], {"color": "#bbb", "dashes": False,
+                                            "label": e["relation"]})
+        edges.append({"from": e["src"], "to": e["dst"], "arrows": "to",
+                      "color": {"color": st["color"]}, "dashes": st["dashes"],
+                      "label": st["label"], "font": {"size": 9},
+                      "title": e.get("evidence", "")})
+        rels += 1
+
+    topic = (f"{atlas.topic or '—'}  ·  {len(cs)} contributions from {len(paper_ids)} "
+             f"papers  ·  {rels} cross-paper relations")
     html = (_HTML.replace("%TOPIC%", topic)
             .replace("%NP%", str(len(paper_ids))).replace("%NC%", str(len(cs)))
             .replace("%CLAIMC%", CLAIM_COLOR).replace("%PAPERC%", PAPER_COLOR)
             .replace("%NODES%", json.dumps(nodes)).replace("%EDGES%", json.dumps(edges)))
     out_path = out_path or (config.ATLAS / "view_contributions.html")
+    out_path.write_text(html)
+    return out_path
+
+
+_EVO_HTML = """<!doctype html>
+<html><head><meta charset="utf-8"><title>Prior — atlas evolution</title>
+<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<style>
+  body{margin:0;font:14px system-ui,sans-serif} #graph{height:100vh}
+  .bar{position:absolute;top:10px;left:10px;z-index:10;background:#fffd;
+       padding:8px 12px;border:1px solid #ddd;border-radius:8px}
+  .bar button{font:13px system-ui;margin:0 3px;padding:4px 9px;cursor:pointer;
+       border:1px solid #ccc;border-radius:6px;background:#fff}
+  .bar button.on{background:#1a73e8;color:#fff;border-color:#1a73e8}
+  #cap{margin-left:10px;color:#555}
+</style></head><body>
+<div id="graph"></div>
+<div class="bar"><b>Atlas evolution</b>&nbsp;
+  <button id="s1" onclick="setStage(1)">1 · Papers</button>
+  <button id="s2" onclick="setStage(2)">2 · + Contributions</button>
+  <button id="s3" onclick="setStage(3)">3 · + Relations</button>
+  <span id="cap"></span></div>
+<script>
+const nodes = new vis.DataSet(%NODES%);
+const edges = new vis.DataSet(%EDGES%);
+const net = new vis.Network(document.getElementById('graph'), {nodes, edges},
+  {physics:{stabilization:true,barnesHut:{springLength:130}},
+   interaction:{hover:true,tooltipDelay:120}, nodes:{font:{size:11}}});
+const CAP = ['','%N1% papers','+ their %N2% self-declared contributions',
+             '+ %N3% cross-paper relations (the cross-talk)'];
+function setStage(s){
+  nodes.forEach(n => nodes.update({id:n.id, hidden: n.stage>s}));
+  edges.forEach(e => edges.update({id:e.id, hidden: e.stage>s}));
+  for(const i of [1,2,3]) document.getElementById('s'+i).className = (i<=s?'on':'');
+  document.getElementById('cap').textContent = CAP[s];
+}
+setStage(1);
+</script></body></html>"""
+
+
+def render_evolution(out_path: Path | None = None) -> Path:
+    """Staged-reveal view telling the pipeline story: papers → contributions →
+    relations. One HTML with stage buttons."""
+    contribs = json.loads((config.ATLAS / "contributions.json").read_text())
+    atlas = Atlas.load(config.ATLAS / "atlas.json")
+    cs = contribs.get("contributions", [])
+    rels = contribs.get("edges", [])
+    paper_ids = list(dict.fromkeys(c["paper_id"] for c in cs))
+
+    nodes: list[dict] = []
+    for pid in paper_ids:                       # stage 1
+        p = atlas.papers.get(pid)
+        nodes.append({"id": pid, "stage": 1, "group": "paper", "shape": "box",
+                      "label": p.short_cite() if p else pid, "color": PAPER_COLOR,
+                      "title": p.title if p else pid})
+    for c in cs:                                # stage 2
+        nodes.append({"id": c["id"], "stage": 2, "group": "contribution",
+                      "shape": "dot", "label": _truncate(c["statement"], 38),
+                      "color": KIND_COLOR.get(c["kind"], "#9aa0a6"),
+                      "title": f"[{c['kind']}] {c['statement']}"})
+
+    edges: list[dict] = []
+    eid = 0
+    for c in cs:                                # stage 2: provenance
+        eid += 1
+        edges.append({"id": eid, "stage": 2, "from": c["id"], "to": c["paper_id"],
+                      "arrows": "to", "color": {"color": "#dcdcdc"}, "label": "stated_in",
+                      "font": {"size": 8}})
+    for e in rels:                              # stage 3: cross-talk
+        eid += 1
+        st = EDGE_STYLE.get(e["relation"], {"color": "#bbb", "dashes": False,
+                                            "label": e["relation"]})
+        edges.append({"id": eid, "stage": 3, "from": e["src"], "to": e["dst"],
+                      "arrows": "to", "color": {"color": st["color"]},
+                      "dashes": st["dashes"], "label": st["label"],
+                      "font": {"size": 9}, "title": e.get("evidence", "")})
+
+    html = (_EVO_HTML.replace("%NODES%", json.dumps(nodes))
+            .replace("%EDGES%", json.dumps(edges))
+            .replace("%N1%", str(len(paper_ids))).replace("%N2%", str(len(cs)))
+            .replace("%N3%", str(len(rels))))
+    out_path = out_path or (config.ATLAS / "view_evolution.html")
     out_path.write_text(html)
     return out_path
 

@@ -118,19 +118,33 @@ def build(papers: list[Paper], claims: list[Claim], *, topic: str = "",
         atlas.add_claim(c)
     atlas.link_citations()
 
-    if relate and len(claims) > 1:
-        cand_map = _candidates(claims, k)
-        seen: set[frozenset[str]] = set()
-        by_id = {c.id: c for c in claims}
-        for c in claims:
-            cands = cand_map.get(c.id, [])
-            fresh = [d for d in cands if frozenset({c.id, d.id}) not in seen]
-            if not fresh:
-                continue
-            for e in _label(c, fresh, model):
-                pair = frozenset({e.src, e.dst})
-                if pair in seen:
-                    continue
-                seen.add(pair)
-                atlas.add_edge(e)
+    if relate:
+        for e in relate_claims(claims, model=model, neighbors=k):
+            atlas.add_edge(e)
     return atlas
+
+
+def relate_claims(claims: list[Claim], *, model: str | None = None,
+                  neighbors: int | None = None) -> list[Edge]:
+    """Find typed relations (supports/contradicts/refines/extends) among a set of
+    claims across different papers. Reusable for any claim-like nodes — including
+    contributions — so a graph of them connects across papers."""
+    model = model or config.CARTOGRAPHER_MODEL
+    k = neighbors or config.RELATION_NEIGHBORS
+    if len(claims) <= 1:
+        return []
+    cand_map = _candidates(claims, k)
+    seen: set[frozenset[str]] = set()
+    edges: list[Edge] = []
+    for c in claims:
+        fresh = [d for d in cand_map.get(c.id, [])
+                 if frozenset({c.id, d.id}) not in seen]
+        if not fresh:
+            continue
+        for e in _label(c, fresh, model):
+            pair = frozenset({e.src, e.dst})
+            if pair in seen:
+                continue
+            seen.add(pair)
+            edges.append(e)
+    return edges

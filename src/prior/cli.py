@@ -63,6 +63,8 @@ def main(argv: list[str] | None = None) -> int:
     p_view = sub.add_parser("view", help="render the atlas to an interactive HTML graph")
     p_view.add_argument("--contributions", action="store_true",
                         help="show only contribution claims (filter definitional/background)")
+    p_view.add_argument("--evolution", action="store_true",
+                        help="staged reveal: papers → contributions → relations")
 
     args = ap.parse_args(argv)
 
@@ -102,7 +104,11 @@ def main(argv: list[str] | None = None) -> int:
         from . import render_html
         if not (config.ATLAS / "atlas.json").exists():
             sys.exit("No atlas found. Run `prior build \"<topic>\"` first.")
-        if args.contributions and (config.ATLAS / "contributions.json").exists():
+        if args.evolution:
+            if not (config.ATLAS / "contributions.json").exists():
+                sys.exit("Run `prior contributions` first (needs contributions + relations).")
+            path = render_html.render_evolution()
+        elif args.contributions and (config.ATLAS / "contributions.json").exists():
             path = render_html.render_contributions()   # real self-declared contributions
         else:
             path = render_html.render(contributions_only=args.contributions)
