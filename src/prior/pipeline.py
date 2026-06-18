@@ -161,6 +161,66 @@ def relate_contributions(*, model: str | None = None, progress=print) -> list[di
     return edges
 
 
+_RELATE_SYS = """You relate research contributions. Given a numbered list of
+standalone contributions (each tagged with its source paper), find typed
+relations BETWEEN contributions from DIFFERENT papers:
+  supports     — one provides evidence for / agrees with another
+  contradicts  — the two are incompatible
+  extends      — one builds on / generalizes the other
+  refines      — one adds conditions / narrows the scope of the other
+Only assert relations you can defend from the statements themselves. Skip pairs
+from the same paper. Refer to contributions by their numbers."""
+
+_RELATE_SCHEMA = {
+    "type": "object",
+    "properties": {"relations": {"type": "array", "items": {
+        "type": "object",
+        "properties": {
+            "a": {"type": "integer"}, "b": {"type": "integer"},
+            "relation": {"type": "string",
+                         "enum": ["supports", "contradicts", "extends", "refines"]},
+            "reason": {"type": "string"},
+        },
+        "required": ["a", "b", "relation", "reason"]}}},
+    "required": ["relations"],
+}
+
+
+def relate_contributions_fast(*, model: str | None = None, progress=print) -> list[dict]:
+    """One-shot cross-contribution relations: a single LLM call over the whole
+    (small) contribution set. Seconds instead of ~one call per contribution."""
+    from . import llm
+    data = json.loads(_contributions_path().read_text())
+    cs = data.get("contributions", [])
+    listing = "\n".join(f"[{i}] ({c['paper_id']}) {c['statement']}"
+                        for i, c in enumerate(cs))
+    out = llm.structured(
+        model=model or config.CARTOGRAPHER_MODEL, system=_RELATE_SYS,
+        user=f"CONTRIBUTIONS:\n{listing}", schema=_RELATE_SCHEMA,
+        tool_name="emit_relations", max_tokens=4000)
+    edges: list[dict] = []
+    seen: set = set()
+    for r in out.get("relations", []):
+        a, b = r.get("a"), r.get("b")
+        if not (isinstance(a, int) and isinstance(b, int)):
+            continue
+        if not (0 <= a < len(cs) and 0 <= b < len(cs)) or a == b:
+            continue
+        if cs[a]["paper_id"] == cs[b]["paper_id"]:
+            continue
+        key = frozenset({a, b})
+        if key in seen:
+            continue
+        seen.add(key)
+        edges.append({"src": cs[a]["id"], "dst": cs[b]["id"],
+                      "relation": r["relation"], "evidence": r.get("reason", ""),
+                      "confidence": 0.6})
+    data["edges"] = edges
+    _contributions_path().write_text(json.dumps(data, indent=2))
+    progress(f"{len(edges)} cross-contribution relations (one-shot)")
+    return edges
+
+
 def load_claims() -> list[Claim]:
     path = _claims_path()
     if not path.exists():
