@@ -134,8 +134,7 @@ const net = new vis.Network(document.getElementById('graph'),
   {nodes, edges},
   {physics:{stabilization:true,barnesHut:{springLength:140}},
    interaction:{hover:true,tooltipDelay:120},
-   nodes:{font:{size:11,color:'#3b4252'},borderWidth:1,
-          color:{border:'#c7ccd6'}},
+   nodes:{font:{size:11,color:'#3b4252'},borderWidth:1},
    edges:{font:{size:9,color:'#8a909c',strokeWidth:3,strokeColor:'#f5f6f8'},
           smooth:{type:'continuous'}}});
 const D = document.getElementById('detail');
@@ -207,17 +206,18 @@ def render_contributions(out_path: Path | None = None) -> Path:
     edges: list[dict] = []
     for c in cs:
         p = atlas.papers.get(c["paper_id"])
+        src = f"{p.short_cite()} — {p.title}" if p else c["paper_id"]
         nodes.append({
             "id": c["id"], "group": "contribution", "shape": "dot",
             "label": _truncate(c["statement"], 42),
-            "color": KIND_COLOR.get(c["kind"], "#9aa0a6"),
-            "title": f"[{c['kind']}] {c['statement']}",
+            "color": KIND_COLOR.get(c["kind"], "#c2c7d0"),
+            "title": f"[{c['kind']}] " + _truncate(c["statement"], 55),
             "detail": {"kind": "contribution", "ckind": c["kind"],
                        "statement": c["statement"], "quote": c.get("quote", ""),
-                       "source": p.short_cite() if p else c["paper_id"]},
+                       "source": src},
         })
         edges.append({"from": c["id"], "to": c["paper_id"], "arrows": "to",
-                      "color": {"color": "#dcdcdc"}, "label": "stated_in",
+                      "color": {"color": "#dde2ea"}, "label": "stated_in",
                       "font": {"size": 8}})
 
     # cross-contribution relations (the cross-paper "cross-talk")
@@ -246,32 +246,66 @@ _EVO_HTML = """<!doctype html>
 <html><head><meta charset="utf-8"><title>Prior — atlas evolution</title>
 <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 <style>
-  body{margin:0;font:14px system-ui,sans-serif;color:#3b4252}
-  #graph{height:100vh;background:#f5f6f8}
+  body{margin:0;font:14px system-ui,sans-serif;display:flex;height:100vh;
+       background:#f5f6f8;color:#3b4252}
+  #graph{flex:1;height:100%;background:#f5f6f8;position:relative}
+  #side{width:340px;border-left:1px solid #e2e5ea;padding:14px;overflow:auto;background:#fbfcfd}
   .bar{position:absolute;top:10px;left:10px;z-index:10;background:#fbfcfdee;
        padding:8px 12px;border:1px solid #e2e5ea;border-radius:8px}
   .bar button{font:13px system-ui;margin:0 3px;padding:4px 9px;cursor:pointer;
        border:1px solid #d3d8e0;border-radius:6px;background:#fff;color:#4c566a}
   .bar button.on{background:#81a1c1;color:#fff;border-color:#81a1c1}
-  #cap{margin-left:10px;color:#8a909c}
+  h1{font-size:15px;margin:0 0 4px} .muted{color:#8a909c;font-size:12px}
+  .legend span{display:inline-block;margin:2px 8px 2px 0;font-size:12px}
+  .sw{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:middle;margin-right:3px}
+  #detail{margin-top:12px;font-size:13px} #detail b{color:#4c566a}
+  .pill{display:inline-block;padding:1px 6px;border-radius:9px;background:#eceff4;font-size:11px}
 </style></head><body>
-<div id="graph"></div>
-<div class="bar"><b>Atlas evolution</b>&nbsp;
-  <button id="s1" onclick="setStage(1)">1 · Papers</button>
-  <button id="s2" onclick="setStage(2)">2 · + Contributions</button>
-  <button id="s3" onclick="setStage(3)">3 · + Relations</button>
-  <span id="cap"></span></div>
+<div id="graph">
+  <div class="bar"><b>Atlas evolution</b>&nbsp;
+    <button id="s1" onclick="setStage(1)">1 · Papers</button>
+    <button id="s2" onclick="setStage(2)">2 · + Contributions</button>
+    <button id="s3" onclick="setStage(3)">3 · + Relations</button></div>
+</div>
+<div id="side">
+  <h1>Prior — atlas evolution</h1>
+  <div class="muted" id="cap"></div>
+  <div class="legend" style="margin-top:8px">
+    <span><span class="sw" style="background:%PAPERC%"></span>paper</span>
+    <span class="muted">· node colour = contribution kind</span><br>
+    <span><span class="sw" style="background:#a3be8c"></span>supports</span>
+    <span><span class="sw" style="background:#bf828a"></span>contradicts</span>
+    <span><span class="sw" style="background:#81a1c1"></span>refines</span>
+    <span><span class="sw" style="background:#b48ead"></span>extends</span>
+    <span><span class="sw" style="background:#dde2ea"></span>stated_in</span>
+  </div>
+  <div id="detail" class="muted">Click a node for details.</div>
+</div>
 <script>
 const nodes = new vis.DataSet(%NODES%);
 const edges = new vis.DataSet(%EDGES%);
 const net = new vis.Network(document.getElementById('graph'), {nodes, edges},
   {physics:{stabilization:true,barnesHut:{springLength:130}},
-   interaction:{hover:true,tooltipDelay:120},
-   nodes:{font:{size:11,color:'#3b4252'},borderWidth:1,color:{border:'#c7ccd6'}},
+   interaction:{hover:true,tooltipDelay:150},
+   nodes:{font:{size:11,color:'#3b4252'},borderWidth:1},
    edges:{font:{size:9,color:'#8a909c',strokeWidth:3,strokeColor:'#f5f6f8'},
           smooth:{type:'continuous'}}});
-const CAP = ['','%N1% papers','+ their %N2% self-declared contributions',
-             '+ %N3% cross-paper relations (the cross-talk)'];
+const CAP = ['','%N1% papers','%N1% papers + their %N2% contributions',
+             '%N1% papers · %N2% contributions · %N3% cross-paper relations'];
+const D = document.getElementById('detail');
+net.on('click', p => {
+  if(!p.nodes.length){D.innerHTML='<span class="muted">Click a node for details.</span>';return;}
+  const n = nodes.get(p.nodes[0]).detail;
+  if(n.kind==='contribution'){
+    D.innerHTML = `<span class="pill">${n.ckind}</span>
+      <p><b>Contribution.</b> ${n.statement}</p>
+      <p><b>Stated as.</b> <i>${n.quote||'—'}</i></p>
+      <p><b>Source.</b> ${n.source}</p>`;
+  } else {
+    D.innerHTML = `<p><b>Paper.</b> ${n.title}</p><p>${n.cite}${n.year?' · '+n.year:''}</p>
+      ${n.url?`<p><a href="${n.url}" target="_blank">open source ↗</a></p>`:''}`;
+  }
+});
 function setStage(s){
   nodes.forEach(n => nodes.update({id:n.id, hidden: n.stage>s}));
   edges.forEach(e => edges.update({id:e.id, hidden: e.stage>s}));
@@ -294,14 +328,23 @@ def render_evolution(out_path: Path | None = None) -> Path:
     nodes: list[dict] = []
     for pid in paper_ids:                       # stage 1
         p = atlas.papers.get(pid)
+        cite = p.short_cite() if p else pid
         nodes.append({"id": pid, "stage": 1, "group": "paper", "shape": "box",
-                      "label": p.short_cite() if p else pid, "color": PAPER_COLOR,
-                      "title": p.title if p else pid})
+                      "label": cite, "color": PAPER_COLOR,
+                      "title": (p.title if p else pid),
+                      "detail": {"kind": "paper", "title": (p.title if p else pid),
+                                 "cite": cite, "year": p.year if p else None,
+                                 "url": p.url if p else ""}})
     for c in cs:                                # stage 2
+        p = atlas.papers.get(c["paper_id"])
+        src = (f"{p.short_cite()} — {p.title}" if p else c["paper_id"])
         nodes.append({"id": c["id"], "stage": 2, "group": "contribution",
                       "shape": "dot", "label": _truncate(c["statement"], 38),
-                      "color": KIND_COLOR.get(c["kind"], "#9aa0a6"),
-                      "title": f"[{c['kind']}] {c['statement']}"})
+                      "color": KIND_COLOR.get(c["kind"], "#c2c7d0"),
+                      "title": f"[{c['kind']}] " + _truncate(c["statement"], 55),
+                      "detail": {"kind": "contribution", "ckind": c["kind"],
+                                 "statement": c["statement"],
+                                 "quote": c.get("quote", ""), "source": src}})
 
     edges: list[dict] = []
     eid = 0
@@ -321,6 +364,7 @@ def render_evolution(out_path: Path | None = None) -> Path:
 
     html = (_EVO_HTML.replace("%NODES%", json.dumps(nodes))
             .replace("%EDGES%", json.dumps(edges))
+            .replace("%PAPERC%", PAPER_COLOR)
             .replace("%N1%", str(len(paper_ids))).replace("%N2%", str(len(cs)))
             .replace("%N3%", str(len(rels))))
     out_path = out_path or (config.ATLAS / "view_evolution.html")
