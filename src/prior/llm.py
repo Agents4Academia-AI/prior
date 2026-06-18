@@ -1,16 +1,20 @@
 """Thin wrapper over the model, with a pluggable backend.
 
-Two backends, selected by `PRIOR_LLM_BACKEND`:
+Three backends, selected by `PRIOR_LLM_BACKEND`:
 
   "api"          (default) — the Anthropic API via the SDK. Forces a single tool
                  so structured output is guaranteed valid JSON. Costs metered
                  API credits (the hackathon's ANTHROPIC_API_KEY).
 
-  "claude-code"  — routes through the Claude Agent SDK, which runs on your
-                 Claude Code login (e.g. a Max subscription) when no API key is
-                 set. Lets the whole Prior pipeline run on a flat-rate plan
-                 instead of burning API credits. The Agent SDK has no forced-tool
-                 knob, so we ask for JSON-only and parse it (with retries).
+  "claude-code"  — routes through the Claude Agent SDK. NOTE: the SDK (like
+                 `-p/--print`) now meters against API credits, so this no longer
+                 saves credits — kept for compatibility. Asks for JSON-only and
+                 parses it (with retries).
+
+  "claude-cli"   — drives the *interactive* Claude Code TUI through a PTY (see
+                 `claude_cli.py`). This is the only path that runs on the Claude
+                 Code login (Max plan) WITHOUT metering API credits. The model
+                 writes its JSON to a file we then read.
 
 Everything downstream (Reader/Cartographer/Navigator) calls `structured()` /
 `text()` and is backend-agnostic.
@@ -23,16 +27,18 @@ import json
 import os
 import re
 import time
-from typing import Any, Optional
+from typing import TYPE_CHECKING, Any, Optional
 
-import anthropic
+if TYPE_CHECKING:  # only the "api" backend needs the SDK; keep import lazy
+    import anthropic
 
-_client: Optional[anthropic.Anthropic] = None
+_client: "Optional[anthropic.Anthropic]" = None
 
 
-def client() -> anthropic.Anthropic:
+def client() -> "anthropic.Anthropic":
     global _client
     if _client is None:
+        import anthropic  # lazy: the credit-free claude-cli backend doesn't need it
         _client = anthropic.Anthropic()  # reads ANTHROPIC_API_KEY from env
     return _client
 
@@ -54,6 +60,9 @@ def structured(
 ) -> dict[str, Any]:
     """Return a dict matching `schema` (a JSON-Schema object). Raises on
     persistent failure rather than returning malformed data."""
+    if backend() == "claude-cli":
+        return _structured_claude_cli(
+            model=model, system=system, user=user, schema=schema, retries=retries)
     if backend() == "claude-code":
         return _structured_claude_code(
             model=model, system=system, user=user, schema=schema, retries=retries)
@@ -75,6 +84,7 @@ def text(*, model: str, system: str, user: str, max_tokens: int = 4096) -> str:
 
 # ── API backend ──────────────────────────────────────────────────────────────
 def _structured_api(*, model, system, user, schema, tool_name, max_tokens, retries):
+    import anthropic  # lazy; only the api backend needs the SDK
     tool = {
         "name": tool_name,
         "description": "Return the result in exactly this structure.",
@@ -102,6 +112,18 @@ def _structured_api(*, model, system, user, schema, tool_name, max_tokens, retri
             last_err = e
             time.sleep(1)
     raise RuntimeError(f"structured() failed after {retries} attempts: {last_err}")
+
+
+# ── Claude CLI (interactive PTY, no metered credits) backend ────────────────────
+def _structured_claude_cli(*, model, system, user, schema, retries):
+    from . import claude_cli  # lazy: only this backend needs pexpect
+    last_err: Optional[Exception] = None
+    for _ in range(retries):
+        try:
+            return claude_cli.run_json(system=system, user=user, schema=schema)
+        except Exception as e:  # noqa: BLE001 — surface after retries
+            last_err = e
+    raise RuntimeError(f"structured() (claude-cli) failed: {last_err}")
 
 
 # ── Claude Code (Agent SDK) backend ────────────────────────────────────────────
