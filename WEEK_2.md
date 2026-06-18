@@ -2,6 +2,39 @@
 
 Captured so they're not lost. None of these are in the Friday MVP.
 
+## Evaluation: IPBES-style evidence-status assessment (the *right* eval)
+Prior's benefit is NOT answering broad questions better than web search — it
+abstains on recall (see the QA round). The benefit is **calibrated assessment of
+whether a finding is established / contested / emerging / unsupported** — the
+IPCC/IPBES task, which is exactly what Navigator's forward verdict already emits.
+Crucially, this is evaluable because **true labels exist** (unlike open Q&A).
+
+- **Task.** Given a scientific claim, Prior builds/queries an atlas and returns a
+  verdict (established / contested / emerging / not_found) + confidence. Score
+  against the claim's ground-truth evidential status.
+- **Why it's the right eval.** Tests the actual differentiator (calibrated
+  evidence assessment + honest abstention), not recall; matches the system's
+  design and the IPCC/IPBES framing. Reframes Prior as an *automated IPBES-style
+  assessor* — a claim worth making only if measured against real labels.
+- **Sources of true labels.**
+  - **SciFact / SciFact-Open** (already wired, `evals/scifact/`): claim →
+    SUPPORT / CONTRADICT / NOINFO + evidence sentences. Maps directly to the
+    verdict — the headline starting point.
+  - **PubMedQA / BioASQ** — yes / no / **maybe**; the "maybe" class tests
+    calibrated abstention.
+  - **Consensus / replication datasets** — replicated vs. failed-to-replicate
+    findings, meta-analysed claims, retracted/overturned results → ground-truth
+    "established vs. contested/overturned."
+  - **IPCC / IPBES assessment findings themselves** — each finding carries a
+    calibrated confidence (very low → very high): a gold standard for the task.
+- **Metrics.** Verdict accuracy (4-way); abstention calibration (does not_found
+  fire only when evidence is genuinely insufficient?); **confidence calibration**
+  (does Prior's confidence track true evidential strength? — reliability diagram / ECE).
+- **Weekend run plan.** Start with SciFact over a freshly built atlas per claim;
+  then a small hand-labelled set of established-vs-contested findings in an area
+  we know; report per-verdict accuracy + calibration. (Needs: build atlas per
+  claim's topic — full-text + reviews-as-evidence decisions from below apply.)
+
 ## Agent decomposition: relations / use cases as agents & skills
 Split agents by **task**, not by edge label.
 - Keep ONE relation-classifier agent for `supports` / `refines` / `extends`
