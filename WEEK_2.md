@@ -35,6 +35,32 @@ Crucially, this is evaluable because **true labels exist** (unlike open Q&A).
   we know; report per-verdict accuracy + calibration. (Needs: build atlas per
   claim's topic — full-text + reviews-as-evidence decisions from below apply.)
 
+- **Other evidence-calibration frameworks & label sources (optional).** Every
+  serious evidence field has reinvented IPCC-style calibration — useful as both
+  framing ("not niche") and label sources:
+  - **GRADE** (evidence-based medicine): certainty High/Moderate/Low/Very-Low —
+    the IPCC of medicine. **Cochrane** Summary-of-Findings tables = thousands of
+    gold certainty labels. Best label source after SciFact.
+  - **Replication labels:** DARPA **SCORE** / **Replication Markets** (confidence
+    + actual replication outcome), Reproducibility Projects (Psych, Cancer Bio).
+  - **Fact-verification datasets (FEVER family):** FEVER, **Climate-FEVER**
+    (on-theme), HealthVer, PubHealth, COVID-Fact, SciTab — Supported/Refuted/NEI.
+  - **scite.ai Smart Citations:** supporting/contrasting/mentioning at scale
+    (structurally = Prior's supports/contradicts edges).
+  - Other frameworks: USPSTF grades, Oxford CEBM levels, IUCN Red List
+    (biodiversity), ICD-203 / Words of Estimative Probability (intelligence),
+    ENFSI likelihood ratios (forensics), Evidence-Based Software Engineering.
+  - **ML-specific (this is mostly a GAP Prior could fill):** no GRADE/IPCC
+    equivalent exists for ML. But label material does: **ML Reproducibility
+    Challenge / ReScience** (did it reproduce?), **Papers with Code** leaderboards
+    (SOTA corroborated vs. superseded), "reality-check" meta-eval papers (curated
+    contested findings, e.g. metric-learning / GAN / deep-RL reproducibility
+    critiques), **rliable** (stratified-bootstrap CIs — statistical calibration
+    tooling), **OpenReview** (reviewer confidence + accept/reject + later
+    citations). ML also owns the *calibration machinery* itself (model
+    calibration: ECE, reliability diagrams, temperature scaling) — reuse it to
+    score Prior's confidence.
+
 ## Agent decomposition: relations / use cases as agents & skills
 Split agents by **task**, not by edge label.
 - Keep ONE relation-classifier agent for `supports` / `refines` / `extends`
