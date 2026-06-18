@@ -41,6 +41,14 @@ def _truncate(s: str, n: int) -> str:
     return s if len(s) <= n else s[: n - 1] + "…"
 
 
+def _fill(c: str) -> dict:
+    """Explicit color object so vis-network can't fall back to its default group
+    palette (whose group-1 default is neon yellow)."""
+    return {"background": c, "border": "#c5cbd6",
+            "highlight": {"background": c, "border": "#9aa0b0"},
+            "hover": {"background": c, "border": "#9aa0b0"}}
+
+
 # Claim types that represent a paper's contribution (vs. definitional framing /
 # background restatement). Heuristic proxy for "contribution" until the global
 # canonical layer lands.
@@ -63,7 +71,7 @@ def _nodes_edges(atlas: Atlas, contributions_only: bool = False
             continue
         nodes.append({
             "id": p.id, "group": "paper", "shape": "box",
-            "label": p.short_cite(), "color": PAPER_COLOR,
+            "label": p.short_cite(), "color": _fill(PAPER_COLOR),
             "title": f"{p.title} ({p.year})\ncited_by={p.cited_by_count}",
             "detail": {"kind": "paper", "title": p.title, "cite": p.short_cite(),
                        "year": p.year, "url": p.url},
@@ -74,7 +82,7 @@ def _nodes_edges(atlas: Atlas, contributions_only: bool = False
         src = atlas.papers.get(c.paper_id)
         nodes.append({
             "id": c.id, "group": "claim", "shape": "dot",
-            "label": _truncate(c.text, 40), "color": CLAIM_COLOR,
+            "label": _truncate(c.text, 40), "color": _fill(CLAIM_COLOR),
             "title": f"[{c.claim_type}] {c.text}\nconfidence={c.confidence}",
             "detail": {"kind": "claim", "text": c.text, "type": c.claim_type,
                        "confidence": c.confidence, "evidence": c.evidence,
@@ -197,7 +205,7 @@ def render_contributions(out_path: Path | None = None) -> Path:
         p = atlas.papers.get(pid)
         nodes.append({
             "id": pid, "group": "paper", "shape": "box",
-            "label": p.short_cite() if p else pid, "color": PAPER_COLOR,
+            "label": p.short_cite() if p else pid, "color": _fill(PAPER_COLOR),
             "title": (p.title if p else pid),
             "detail": {"kind": "paper", "title": (p.title if p else pid),
                        "cite": p.short_cite() if p else pid,
@@ -210,7 +218,7 @@ def render_contributions(out_path: Path | None = None) -> Path:
         nodes.append({
             "id": c["id"], "group": "contribution", "shape": "dot",
             "label": _truncate(c["statement"], 42),
-            "color": KIND_COLOR.get(c["kind"], "#c2c7d0"),
+            "color": _fill(KIND_COLOR.get(c["kind"], "#c2c7d0")),
             "title": f"[{c['kind']}] " + _truncate(c["statement"], 55),
             "detail": {"kind": "contribution", "ckind": c["kind"],
                        "statement": c["statement"], "quote": c.get("quote", ""),
@@ -329,7 +337,7 @@ def render_evolution(out_path: Path | None = None) -> Path:
         p = atlas.papers.get(pid)
         cite = p.short_cite() if p else pid
         nodes.append({"id": pid, "stage": 1, "group": "paper", "shape": "box",
-                      "label": cite, "color": PAPER_COLOR,
+                      "label": cite, "color": _fill(PAPER_COLOR),
                       "title": (p.title if p else pid),
                       "detail": {"kind": "paper", "title": (p.title if p else pid),
                                  "cite": cite, "year": p.year if p else None,
@@ -339,7 +347,7 @@ def render_evolution(out_path: Path | None = None) -> Path:
         src = (f"{p.short_cite()} — {p.title}" if p else c["paper_id"])
         nodes.append({"id": c["id"], "stage": 2, "group": "contribution",
                       "shape": "dot", "label": _truncate(c["statement"], 38),
-                      "color": KIND_COLOR.get(c["kind"], "#c2c7d0"),
+                      "color": _fill(KIND_COLOR.get(c["kind"], "#c2c7d0")),
                       "title": f"[{c['kind']}] " + _truncate(c["statement"], 55),
                       "detail": {"kind": "contribution", "ckind": c["kind"],
                                  "statement": c["statement"],
