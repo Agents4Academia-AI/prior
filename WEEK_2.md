@@ -17,6 +17,24 @@ Split agents by **task**, not by edge label.
     not an edge type).
 - Frame each as an *operation on the shared graph*; other teams' agents slot in.
 
+## Contribution agent (the global-graph node extractor)
+A dedicated agent — distinct task from Reader. Reader extracts *all* claims
+(incl. background, definitions, surveys of open problems, others' work, future
+directions). The **Contribution agent** isolates a paper's *own novel,
+self-declared* offering.
+- **Key signal:** papers name their contributions explicitly ("we propose /
+  introduce / present", "our contributions are", "in this work we …"). Anchor on
+  that self-declaration — high precision — rather than inferring from claim_type
+  (the type heuristic produced false positives, e.g. a "four open challenges"
+  survey claim slipping into the contributions view).
+- **Output:** 1–4 contributions per paper, each linked to supporting claim(s)
+  via `contributes_to`. These are the **global graph's nodes** ("global graph
+  lists contributions, not claims").
+- **Caveat:** the explicit contribution list is usually in the intro; abstract-
+  only ingestion catches most but not all → full-text ingestion raises recall.
+- Until then, `prior view --contributions` uses a claim_type heuristic (drops
+  definitional) — a rough proxy, not real contribution extraction.
+
 ## Other deferred items (from the team scope decision)
 - Auditor agent + its two modes (claim-fidelity, citation real/relevant/fair) —
   Team 2 folds in.
