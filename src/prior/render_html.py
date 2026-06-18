@@ -15,23 +15,24 @@ from . import config
 from .atlas import Atlas
 
 # Edge styling by relation type.
+# Muted, low-saturation palette (Nord-inspired) — easy on the eyes.
 EDGE_STYLE = {
-    "stated_in":     {"color": "#c4c4c4", "dashes": True,  "label": "stated_in"},
-    "cites":         {"color": "#9aa0a6", "dashes": True,  "label": "cites"},
-    "supports":      {"color": "#2e9e4f", "dashes": False, "label": "supports"},
-    "contradicts":   {"color": "#d93025", "dashes": False, "label": "contradicts"},
-    "refines":       {"color": "#1a73e8", "dashes": False, "label": "refines"},
-    "extends":       {"color": "#8430ce", "dashes": False, "label": "extends"},
-    "contributes_to":{"color": "#00897b", "dashes": False, "label": "contributes_to"},
+    "stated_in":     {"color": "#dde2ea", "dashes": True,  "label": "stated_in"},
+    "cites":         {"color": "#cdd3de", "dashes": True,  "label": "cites"},
+    "supports":      {"color": "#a3be8c", "dashes": False, "label": "supports"},
+    "contradicts":   {"color": "#bf828a", "dashes": False, "label": "contradicts"},
+    "refines":       {"color": "#81a1c1", "dashes": False, "label": "refines"},
+    "extends":       {"color": "#b48ead", "dashes": False, "label": "extends"},
+    "contributes_to":{"color": "#8fbcbb", "dashes": False, "label": "contributes_to"},
 }
-CLAIM_COLOR = "#e8a13a"
-PAPER_COLOR = "#5b8def"
+CLAIM_COLOR = "#9db8d6"   # soft blue dot
+PAPER_COLOR = "#dfe3ea"   # light grey-blue box (dark text stays readable)
 
-# Contribution nodes, coloured by kind.
+# Contribution nodes, coloured by kind (muted).
 KIND_COLOR = {
-    "method": "#e8a13a", "framework": "#8430ce", "empirical_finding": "#2e9e4f",
-    "dataset": "#1a73e8", "model": "#d93025", "analysis": "#00897b",
-    "resource": "#b5179e", "other": "#9aa0a6",
+    "method": "#9db8d6", "framework": "#c2a8c9", "empirical_finding": "#aecf99",
+    "dataset": "#93c4c2", "model": "#dba98e", "analysis": "#9fcad4",
+    "resource": "#e3cd97", "other": "#c2c7d0",
 }
 
 
@@ -100,14 +101,15 @@ _HTML = """<!doctype html>
 <html><head><meta charset="utf-8"><title>Prior — atlas: %TOPIC%</title>
 <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 <style>
-  body{margin:0;font:14px/1.4 system-ui,sans-serif;display:flex;height:100vh}
-  #graph{flex:1;height:100%}
-  #side{width:340px;border-left:1px solid #ddd;padding:14px;overflow:auto}
-  h1{font-size:15px;margin:0 0 4px} .muted{color:#777;font-size:12px}
+  body{margin:0;font:14px/1.4 system-ui,sans-serif;display:flex;height:100vh;
+       background:#f5f6f8;color:#3b4252}
+  #graph{flex:1;height:100%;background:#f5f6f8}
+  #side{width:340px;border-left:1px solid #e2e5ea;padding:14px;overflow:auto;background:#fbfcfd}
+  h1{font-size:15px;margin:0 0 4px} .muted{color:#8a909c;font-size:12px}
   .legend span{display:inline-block;margin:2px 8px 2px 0;font-size:12px}
-  .sw{display:inline-block;width:12px;height:12px;border-radius:2px;vertical-align:middle;margin-right:3px}
-  #detail{margin-top:12px;font-size:13px} #detail b{color:#333}
-  .pill{display:inline-block;padding:1px 6px;border-radius:9px;background:#eee;font-size:11px}
+  .sw{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:middle;margin-right:3px}
+  #detail{margin-top:12px;font-size:13px} #detail b{color:#4c566a}
+  .pill{display:inline-block;padding:1px 6px;border-radius:9px;background:#eceff4;font-size:11px}
 </style></head>
 <body>
 <div id="graph"></div>
@@ -117,11 +119,11 @@ _HTML = """<!doctype html>
   <div class="legend" style="margin-top:8px">
     <span><span class="sw" style="background:%CLAIMC%"></span>claim</span>
     <span><span class="sw" style="background:%PAPERC%"></span>paper</span><br>
-    <span><span class="sw" style="background:#2e9e4f"></span>supports</span>
-    <span><span class="sw" style="background:#d93025"></span>contradicts</span>
-    <span><span class="sw" style="background:#1a73e8"></span>refines</span>
-    <span><span class="sw" style="background:#8430ce"></span>extends</span>
-    <span><span class="sw" style="background:#9aa0a6"></span>cites/stated_in</span>
+    <span><span class="sw" style="background:#a3be8c"></span>supports</span>
+    <span><span class="sw" style="background:#bf828a"></span>contradicts</span>
+    <span><span class="sw" style="background:#81a1c1"></span>refines</span>
+    <span><span class="sw" style="background:#b48ead"></span>extends</span>
+    <span><span class="sw" style="background:#cdd3de"></span>cites/stated_in</span>
   </div>
   <div id="detail" class="muted">Click a node for details.</div>
 </div>
@@ -132,7 +134,10 @@ const net = new vis.Network(document.getElementById('graph'),
   {nodes, edges},
   {physics:{stabilization:true,barnesHut:{springLength:140}},
    interaction:{hover:true,tooltipDelay:120},
-   nodes:{font:{size:11}}});
+   nodes:{font:{size:11,color:'#3b4252'},borderWidth:1,
+          color:{border:'#c7ccd6'}},
+   edges:{font:{size:9,color:'#8a909c',strokeWidth:3,strokeColor:'#f5f6f8'},
+          smooth:{type:'continuous'}}});
 const D = document.getElementById('detail');
 net.on('click', p => {
   if(!p.nodes.length){D.innerHTML='<span class="muted">Click a node for details.</span>';return;}
@@ -241,13 +246,14 @@ _EVO_HTML = """<!doctype html>
 <html><head><meta charset="utf-8"><title>Prior — atlas evolution</title>
 <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 <style>
-  body{margin:0;font:14px system-ui,sans-serif} #graph{height:100vh}
-  .bar{position:absolute;top:10px;left:10px;z-index:10;background:#fffd;
-       padding:8px 12px;border:1px solid #ddd;border-radius:8px}
+  body{margin:0;font:14px system-ui,sans-serif;color:#3b4252}
+  #graph{height:100vh;background:#f5f6f8}
+  .bar{position:absolute;top:10px;left:10px;z-index:10;background:#fbfcfdee;
+       padding:8px 12px;border:1px solid #e2e5ea;border-radius:8px}
   .bar button{font:13px system-ui;margin:0 3px;padding:4px 9px;cursor:pointer;
-       border:1px solid #ccc;border-radius:6px;background:#fff}
-  .bar button.on{background:#1a73e8;color:#fff;border-color:#1a73e8}
-  #cap{margin-left:10px;color:#555}
+       border:1px solid #d3d8e0;border-radius:6px;background:#fff;color:#4c566a}
+  .bar button.on{background:#81a1c1;color:#fff;border-color:#81a1c1}
+  #cap{margin-left:10px;color:#8a909c}
 </style></head><body>
 <div id="graph"></div>
 <div class="bar"><b>Atlas evolution</b>&nbsp;
@@ -260,7 +266,10 @@ const nodes = new vis.DataSet(%NODES%);
 const edges = new vis.DataSet(%EDGES%);
 const net = new vis.Network(document.getElementById('graph'), {nodes, edges},
   {physics:{stabilization:true,barnesHut:{springLength:130}},
-   interaction:{hover:true,tooltipDelay:120}, nodes:{font:{size:11}}});
+   interaction:{hover:true,tooltipDelay:120},
+   nodes:{font:{size:11,color:'#3b4252'},borderWidth:1,color:{border:'#c7ccd6'}},
+   edges:{font:{size:9,color:'#8a909c',strokeWidth:3,strokeColor:'#f5f6f8'},
+          smooth:{type:'continuous'}}});
 const CAP = ['','%N1% papers','+ their %N2% self-declared contributions',
              '+ %N3% cross-paper relations (the cross-talk)'];
 function setStage(s){
