@@ -56,6 +56,7 @@ def main(argv: list[str] | None = None) -> int:
     p_org.add_argument("concept")
 
     sub.add_parser("info", help="summarise the current atlas")
+    sub.add_parser("view", help="render the atlas to an interactive HTML graph")
 
     args = ap.parse_args(argv)
 
@@ -85,6 +86,12 @@ def main(argv: list[str] | None = None) -> int:
         print(navigator.origin(_load_atlas(), args.concept).render())
     elif args.cmd == "info":
         print(_load_atlas().summary())
+    elif args.cmd == "view":
+        from . import render_html
+        if not (config.ATLAS / "atlas.json").exists():
+            sys.exit("No atlas found. Run `prior build \"<topic>\"` first.")
+        path = render_html.render()
+        print(f"atlas view → {path}\n  open in a browser:  file://{path}")
     return 0
 
 
