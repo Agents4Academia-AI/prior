@@ -261,12 +261,11 @@ _EVO_HTML = """<!doctype html>
   #detail{margin-top:12px;font-size:13px} #detail b{color:#4c566a}
   .pill{display:inline-block;padding:1px 6px;border-radius:9px;background:#eceff4;font-size:11px}
 </style></head><body>
-<div id="graph">
-  <div class="bar"><b>Atlas evolution</b>&nbsp;
-    <button id="s1" onclick="setStage(1)">1 · Papers</button>
-    <button id="s2" onclick="setStage(2)">2 · + Contributions</button>
-    <button id="s3" onclick="setStage(3)">3 · + Relations</button></div>
-</div>
+<div class="bar"><b>Atlas evolution</b>&nbsp;
+  <button id="s1" onclick="setStage(1)">1 · Papers</button>
+  <button id="s2" onclick="setStage(2)">2 · + Contributions</button>
+  <button id="s3" onclick="setStage(3)">3 · + Relations</button></div>
+<div id="graph"></div>
 <div id="side">
   <h1>Prior — atlas evolution</h1>
   <div class="muted" id="cap"></div>
