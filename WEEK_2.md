@@ -44,6 +44,20 @@ Four stages:
 
 This is the IDEAS-deck **Reviewer-0 / Novelty Due Diligence** idea; serves use
 case (b) novelty/gaps and (c) duplicate/competing claims.
+
+**Agent granularity** (the "merge step = its own agent?" question):
+- **Merge / Canonicalize = its own agent.** Decides *equivalence* and collapses
+  contributions across papers into canonical nodes (collapses nodes, not labels
+  edges) — genuinely distinct.
+- **Relate (supports/extends/contradicts between contributions) = reuse
+  Cartographer**, not a new agent — same task it does for claims.
+- **Novelty = its own agent** (judges new-vs-overstated using merge + chronology).
+
+This implies a **two-tier roster**:
+- *Local / per-paper:* Reader (claims), Contributor (contributions).
+- *Global / per-graph, iterative:* Cartographer (relate), Merge (canonicalize),
+  Novelty (assess), Auditor (verify), Navigator (query) — run over the whole
+  atlas and re-run as it grows.
 - **Caveats:** novelty is corpus-bounded ("novel relative to what we ingested");
   chronology is messy (preprint v1 vs publication dates).
 - **Until built:** `prior view --contributions` uses a claim_type heuristic
