@@ -7,6 +7,7 @@
     prior ask "<question>"     Navigator, forward (state of evidence)
     prior origin "<concept>"   Navigator, backward (trace to origin)
     prior info                 summarise the current atlas
+    prior serve                launch the web API (for the React UI)
 """
 
 from __future__ import annotations
@@ -53,6 +54,10 @@ def main(argv: list[str] | None = None) -> int:
 
     sub.add_parser("info", help="summarise the current atlas")
 
+    p_srv = sub.add_parser("serve", help="launch the web API")
+    p_srv.add_argument("--host", default="127.0.0.1")
+    p_srv.add_argument("--port", type=int, default=8077)
+
     args = ap.parse_args(argv)
 
     if args.cmd == "build":
@@ -65,13 +70,14 @@ def main(argv: list[str] | None = None) -> int:
         papers = pipeline.load_papers()
         if not papers:
             sys.exit("No cached papers. Run `prior ingest` first.")
-        claims = pipeline.read_all(papers)
-        print(f"{len(claims)} claims extracted.")
+        r = pipeline.read_all(papers)
+        print(f"{len(r.contributions)} contributions, {len(r.claims)} claims, "
+              f"{len(r.local_edges)} local edges.")
     elif args.cmd == "map":
-        papers, claims = pipeline.load_papers(), pipeline.load_claims()
-        if not papers or not claims:
-            sys.exit("Need cached papers and claims. Run `prior ingest` + `prior read`.")
-        atlas = cartographer.build(papers, claims, relate=not args.no_relate)
+        papers, reading = pipeline.load_papers(), pipeline.load_reading()
+        if not papers or not reading.contributions:
+            sys.exit("Need cached papers and reading. Run `prior ingest` + `prior read`.")
+        atlas = cartographer.build(papers, reading, relate=not args.no_relate)
         atlas.save()
         print(atlas.summary())
     elif args.cmd == "ask":
@@ -80,6 +86,9 @@ def main(argv: list[str] | None = None) -> int:
         print(navigator.origin(_load_atlas(), args.concept).render())
     elif args.cmd == "info":
         print(_load_atlas().summary())
+    elif args.cmd == "serve":
+        import uvicorn
+        uvicorn.run("prior.web.api:app", host=args.host, port=args.port)
     return 0
 
 
