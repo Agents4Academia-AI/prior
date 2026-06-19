@@ -43,13 +43,23 @@ def propose_queries(topic_def: str, *, model: str | None = None) -> list[str]:
 # ── stage 2: gather candidates (recall) ──────────────────────────────────────
 def gather_candidates(queries: list[str], *, per_query: int = 25,
                       use_arxiv: bool = True, progress=print) -> list[Paper]:
+    """Resilient: a source that errors (rate-limit, timeout) on one query is
+    skipped, not fatal. arXiv is paced to avoid 429s."""
+    import time
     papers: dict[str, Paper] = {}
     for q in queries:
-        for p in openalex.search(q, max_papers=per_query):
-            papers.setdefault(p.id, p)
-        if use_arxiv:
-            for p in arxiv.search(q, max_papers=max(4, per_query // 5)):
+        try:
+            for p in openalex.search(q, max_papers=per_query):
                 papers.setdefault(p.id, p)
+        except Exception as e:  # noqa: BLE001
+            progress(f"  openalex error on '{q[:40]}': {e}")
+        if use_arxiv:
+            try:
+                for p in arxiv.search(q, max_papers=max(4, per_query // 5)):
+                    papers.setdefault(p.id, p)
+                time.sleep(1.0)   # be polite to arXiv
+            except Exception as e:  # noqa: BLE001
+                progress(f"  arxiv skip '{q[:40]}': {e}")
         progress(f"  query '{q[:50]}' → pool now {len(papers)}")
     return list(papers.values())
 
