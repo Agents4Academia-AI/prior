@@ -61,6 +61,15 @@ def main(argv: list[str] | None = None) -> int:
     p_srv.add_argument("--host", default="127.0.0.1")
     p_srv.add_argument("--port", type=int, default=8077)
 
+    p_dmn = sub.add_parser("daemon", help="continuous ingestion into the live graph")
+    p_dmn.add_argument("--topic", action="append", required=True, dest="topics",
+                       help="watch this topic (repeatable)")
+    p_dmn.add_argument("--rounds", type=int, default=1)
+    p_dmn.add_argument("--per-topic", type=int, default=10)
+    p_dmn.add_argument("--workers", type=int, default=None)
+    p_dmn.add_argument("--watch", action="store_true", help="loop forever")
+    p_dmn.add_argument("--interval", type=int, default=300)
+
     args = ap.parse_args(argv)
 
     if args.cmd == "build":
@@ -113,6 +122,10 @@ def main(argv: list[str] | None = None) -> int:
     elif args.cmd == "serve":
         import uvicorn
         uvicorn.run("prior.web.api:app", host=args.host, port=args.port)
+    elif args.cmd == "daemon":
+        from . import daemon
+        daemon.run(args.topics, rounds=args.rounds, per_topic=args.per_topic,
+                   workers=args.workers, watch=args.watch, interval=args.interval)
     return 0
 
 
