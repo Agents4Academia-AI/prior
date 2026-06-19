@@ -237,10 +237,12 @@ def render_contributions(out_path: Path | None = None) -> Path:
                                             "label": e["relation"]})
         # supports/contradicts are symmetric corroboration → undirected;
         # extends/refines are directional (newer → the earlier work it builds on)
-        arrow = "" if e["relation"] in ("supports", "contradicts") else "to"
+        arrow = "" if e["relation"] in ("supports", "contradicts") \
+            else {"to": {"scaleFactor": 1.4}}
         edges.append({"from": e["src"], "to": e["dst"], "arrows": arrow,
-                      "color": {"color": st["color"]}, "dashes": st["dashes"],
-                      "label": st["label"], "font": {"size": 9},
+                      "width": 3.5, "color": {"color": st["color"]},
+                      "dashes": st["dashes"], "label": st["label"],
+                      "font": {"size": 11, "color": st["color"]},
                       "title": e.get("evidence", "")})
         rels += 1
 
@@ -370,11 +372,13 @@ def render_evolution(out_path: Path | None = None) -> Path:
         eid += 1
         st = EDGE_STYLE.get(e["relation"], {"color": "#bbb", "dashes": False,
                                             "label": e["relation"]})
-        arrow = "" if e["relation"] in ("supports", "contradicts") else "to"
+        arrow = "" if e["relation"] in ("supports", "contradicts") \
+            else {"to": {"scaleFactor": 1.4}}
         edges.append({"id": eid, "stage": 3, "from": e["src"], "to": e["dst"],
-                      "arrows": arrow, "color": {"color": st["color"]},
+                      "arrows": arrow, "width": 3.5, "color": {"color": st["color"]},
                       "dashes": st["dashes"], "label": st["label"],
-                      "font": {"size": 9}, "title": e.get("evidence", "")})
+                      "font": {"size": 11, "color": st["color"]},
+                      "title": e.get("evidence", "")})
 
     html = (_EVO_HTML.replace("%NODES%", json.dumps(nodes))
             .replace("%EDGES%", json.dumps(edges))
