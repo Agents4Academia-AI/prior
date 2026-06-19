@@ -57,12 +57,15 @@ def structured(
     tool_name: str = "emit",
     max_tokens: int = 4096,
     retries: int = 3,
+    timeout: int | None = None,
 ) -> dict[str, Any]:
     """Return a dict matching `schema` (a JSON-Schema object). Raises on
-    persistent failure rather than returning malformed data."""
+    persistent failure rather than returning malformed data. `timeout` (seconds)
+    bounds a single claude-cli call; ignored by the other backends."""
     if backend() == "claude-cli":
         return _structured_claude_cli(
-            model=model, system=system, user=user, schema=schema, retries=retries)
+            model=model, system=system, user=user, schema=schema,
+            retries=retries, timeout=timeout)
     if backend() == "claude-code":
         return _structured_claude_code(
             model=model, system=system, user=user, schema=schema, retries=retries)
@@ -115,12 +118,13 @@ def _structured_api(*, model, system, user, schema, tool_name, max_tokens, retri
 
 
 # ── Claude CLI (interactive PTY, no metered credits) backend ────────────────────
-def _structured_claude_cli(*, model, system, user, schema, retries):
+def _structured_claude_cli(*, model, system, user, schema, retries, timeout=None):
     from . import claude_cli  # lazy: only this backend needs pexpect
+    kw = {"timeout": timeout} if timeout else {}
     last_err: Optional[Exception] = None
-    for _ in range(retries):
+    for _ in range(max(1, min(retries, 2))):  # cap retries — a hung call is costly
         try:
-            return claude_cli.run_json(system=system, user=user, schema=schema)
+            return claude_cli.run_json(system=system, user=user, schema=schema, **kw)
         except Exception as e:  # noqa: BLE001 — surface after retries
             last_err = e
     raise RuntimeError(f"structured() (claude-cli) failed: {last_err}")

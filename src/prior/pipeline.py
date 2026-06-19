@@ -7,6 +7,8 @@ network-bound; read/map are LLM-bound and the expensive part).
 from __future__ import annotations
 
 import json
+import os
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 from . import cartographer, config, reader
@@ -17,31 +19,32 @@ from .sources import arxiv, fulltext, openalex
 
 
 def sink_to_neo4j(atlas, *, progress=print) -> dict:
-    """Push a built atlas into Neo4j with embeddings. Idempotent (MERGE), so it
-    doubles as the incremental-merge primitive for continuous ingestion."""
+    """Push a built atlas into Neo4j with embeddings via batched (UNWIND) writes.
+    Idempotent (MERGE), so it also serves as the incremental-merge primitive for
+    continuous ingestion."""
     from . import embeddings, graph
     graph.setup_schema()
 
-    for p in atlas.papers.values():
-        graph.upsert_paper(p.to_dict())
-
     contribs = list(atlas.contributions.values())
     cvecs = embeddings.embed([f"{k.problem} {k.method} {k.result}" for k in contribs])
-    for k, v in zip(contribs, cvecs):
-        graph.upsert_contribution(k.to_dict(), embedding=v)
+    contrib_rows = [{**k.to_dict(), "embedding": v} for k, v in zip(contribs, cvecs)]
 
     claims = list(atlas.claims.values())
     clvecs = embeddings.embed([c.text for c in claims])
-    for c, v in zip(claims, clvecs):
-        graph.upsert_claim(c.to_dict(), embedding=v)
+    claim_rows = [{**c.to_dict(), "embedding": v} for c, v in zip(claims, clvecs)]
 
+    edge_rows = []
     for e in atlas.edges:
-        if e.level == "global" or e.level == "local":
-            graph.add_edge(e.src, e.dst, e.relation, evidence=e.evidence,
-                           confidence=e.confidence, source=e.source)
+        if e.level in ("global", "local"):
+            edge_rows.append({"src": e.src, "dst": e.dst, "rel": e.relation,
+                              "evidence": e.evidence, "confidence": e.confidence,
+                              "source": e.source})
         elif e.relation == "cites":
-            graph.add_edge(e.src, e.dst, "CITES", confidence=e.confidence)
+            edge_rows.append({"src": e.src, "dst": e.dst, "rel": "CITES",
+                              "evidence": "", "confidence": e.confidence, "source": "citation"})
 
+    graph.bulk_load([p.to_dict() for p in atlas.papers.values()],
+                    contrib_rows, claim_rows, edge_rows)
     s = graph.summary()
     progress(f"      neo4j: {s}")
     return s
@@ -107,18 +110,36 @@ def load_papers() -> list[Paper]:
 
 def read_all(papers: list[Paper], *, model: str | None = None,
              progress=print) -> ReadResult:
-    """Run Reader over every paper, caching contributions/claims/local edges as
-    we go. Returns one aggregate ReadResult across all papers."""
+    """Run Reader over every paper (in parallel — PRIOR_READ_WORKERS at a time),
+    caching contributions/claims/local edges. Returns one aggregate ReadResult."""
     config.ensure_dirs()
+    workers = int(os.environ.get("PRIOR_READ_WORKERS", "6"))
+    results: dict[int, ReadResult] = {}
+    done = 0
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        futs = {pool.submit(reader.read, p, model=model): (i, p)
+                for i, p in enumerate(papers)}
+        for f in as_completed(futs):
+            i, p = futs[f]
+            done += 1
+            try:
+                r = f.result()
+            except Exception as e:  # noqa: BLE001 — one bad paper shouldn't sink the run
+                progress(f"  read [{done}/{len(papers)}] {p.short_cite()}: ERROR {e}")
+                continue
+            results[i] = r
+            progress(f"  read [{done}/{len(papers)}] {p.short_cite()}: "
+                     f"{len(r.contributions)} contribs, {len(r.claims)} claims, "
+                     f"{len(r.local_edges)} edges")
+
+    # Write caches + aggregate in stable paper order.
     agg = ReadResult()
     with _contributions_path().open("w") as kf, \
             _claims_path().open("w") as cf, \
             _local_edges_path().open("w") as ef:
-        for i, p in enumerate(papers, 1):
-            try:
-                r = reader.read(p, model=model)
-            except Exception as e:  # noqa: BLE001 — one bad paper shouldn't sink the run
-                progress(f"  [{i}/{len(papers)}] {p.short_cite()}: ERROR {e}")
+        for i in range(len(papers)):
+            r = results.get(i)
+            if not r:
                 continue
             for k in r.contributions:
                 kf.write(json.dumps(k.to_dict()) + "\n")
@@ -129,9 +150,6 @@ def read_all(papers: list[Paper], *, model: str | None = None,
             agg.contributions.extend(r.contributions)
             agg.claims.extend(r.claims)
             agg.local_edges.extend(r.local_edges)
-            progress(f"  [{i}/{len(papers)}] {p.short_cite()}: "
-                     f"{len(r.contributions)} contribs, {len(r.claims)} claims, "
-                     f"{len(r.local_edges)} edges")
     return agg
 
 

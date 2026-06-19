@@ -18,7 +18,9 @@ BM25 proposes a handful of candidates per contribution so we avoid O(n^2) LLM ca
 
 from __future__ import annotations
 
+import os
 import re
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from rank_bm25 import BM25Okapi
 
@@ -106,6 +108,7 @@ def _label(source: Contribution, cands: list[Contribution], cited: set[str],
         schema=_SCHEMA,
         tool_name="emit_relations",
         max_tokens=1024,
+        timeout=int(os.environ.get("PRIOR_MAP_CALL_TIMEOUT", "90")),
     )
     edges: list[Edge] = []
     for r in out.get("relations", []):
@@ -155,34 +158,50 @@ def build(papers: list[Paper], reading: ReadResult, *, topic: str = "",
 def _relate_global(atlas: Atlas, contribs: list[Contribution], k: int,
                    model: str) -> None:
     """Add typed contribution→contribution edges via the citations-propose,
-    text-disposes hybrid."""
+    text-disposes hybrid. The per-contribution LLM labelling calls are
+    independent (each spawns its own isolated backend call), so we run them in a
+    thread pool — PRIOR_MAP_WORKERS at a time."""
     by_paper: dict[str, list[Contribution]] = {}
     for c in contribs:
         by_paper.setdefault(c.paper_id, []).append(c)
 
     text_cands = _candidates(contribs, k)
     held = set(atlas.papers)
-    seen: set[frozenset[str]] = set()
 
+    # 1) Build each contribution's candidate list, deduping pairs so every pair
+    #    is labelled exactly once (single-threaded; cheap).
+    seen: set[frozenset[str]] = set()
+    tasks: list[tuple[Contribution, list[Contribution], set[str]]] = []
     for c in contribs:
         paper = atlas.papers.get(c.paper_id)
         cited_papers = {r for r in (paper.referenced_works if paper else []) if r in held}
-        # citation-derived candidates ∪ text neighbours
         cite_cands = [k2 for pid in cited_papers for k2 in by_paper.get(pid, [])]
         cands: list[Contribution] = []
         ids: set[str] = set()
         for cand in cite_cands + text_cands.get(c.id, []):
             if cand.id == c.id or cand.paper_id == c.paper_id or cand.id in ids:
                 continue
-            if frozenset({c.id, cand.id}) in seen:
-                continue
-            cands.append(cand)
-            ids.add(cand.id)
-        if not cands:
-            continue
-        for e in _label(c, cands, cited_papers, model):
-            pair = frozenset({e.src, e.dst})
+            pair = frozenset({c.id, cand.id})
             if pair in seen:
                 continue
             seen.add(pair)
-            atlas.add_edge(e)
+            cands.append(cand)
+            ids.add(cand.id)
+        if cands:
+            tasks.append((c, cands, cited_papers))
+
+    # 2) Label candidate sets in parallel.
+    workers = int(os.environ.get("PRIOR_MAP_WORKERS", "6"))
+    done = 0
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        futs = [pool.submit(_label, c, cands, cited, model) for c, cands, cited in tasks]
+        for f in as_completed(futs):
+            done += 1
+            try:
+                edges = f.result()
+            except Exception as e:  # noqa: BLE001 — one bad call shouldn't sink the map
+                print(f"  map [{done}/{len(tasks)}] ERROR {e}", flush=True)
+                continue
+            for e in edges:
+                atlas.add_edge(e)
+            print(f"  map [{done}/{len(tasks)}] +{len(edges)} edges", flush=True)

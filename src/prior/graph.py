@@ -119,6 +119,57 @@ def add_edge(src: str, dst: str, rel: str, *, evidence: str = "",
               src=src, dst=dst, ev=evidence, conf=confidence, source=source)
 
 
+# ── bulk writes (single transactions — fast vector-index inserts) ───────────────
+def bulk_load(papers: list[dict], contributions: list[dict], claims: list[dict],
+              edges: list[dict]) -> None:
+    """Load a whole atlas in a few batched transactions. Per-node transactions
+    flush the HNSW vector index on every commit (~5s each); UNWIND batches amortize
+    that to one flush per stage. Each `contributions`/`claims` row carries an
+    `embedding` key; `edges` rows have src/dst/rel/evidence/confidence/source."""
+    with session() as s:
+        s.run("UNWIND $rows AS r MERGE (p:Paper {id:r.id}) SET p += r.props",
+              rows=[{"id": p["id"], "props": {k: p.get(k) for k in
+                    ("title", "year", "venue", "doi", "url", "cited_by_count",
+                     "is_review", "abstract")}} for p in papers])
+
+        s.run("""UNWIND $rows AS r
+                 MERGE (n:Contribution {id:r.id}) SET n += r.props
+                 WITH n, r MATCH (p:Paper {id:r.props.paper_id})
+                 MERGE (p)-[:HAS_CONTRIBUTION]->(n)""",
+              rows=[{"id": k["id"], "props": {**{x: k.get(x) for x in
+                    ("paper_id", "statement", "kind", "problem", "method",
+                     "result", "quote", "confidence")}, "embedding": k.get("embedding")}}
+                    for k in contributions])
+
+        s.run("""UNWIND $rows AS r
+                 MERGE (n:Claim {id:r.id}) SET n += r.props
+                 WITH n, r MATCH (p:Paper {id:r.props.paper_id})
+                 MERGE (n)-[:STATED_IN]->(p)""",
+              rows=[{"id": c["id"], "props": {**{x: c.get(x) for x in
+                    ("paper_id", "text", "claim_type", "evidence", "confidence")},
+                    "embedding": c.get("embedding")}} for c in claims])
+
+        bridge = [{"cid": c["id"], "kid": c["contribution_id"]}
+                  for c in claims if c.get("contribution_id")]
+        if bridge:
+            s.run("""UNWIND $rows AS r
+                     MATCH (cl:Claim {id:r.cid}), (k:Contribution {id:r.kid})
+                     MERGE (cl)-[:SUPPORTS_CONTRIB]->(k)""", rows=bridge)
+
+        by_rel: dict[str, list[dict]] = {}
+        for e in edges:
+            by_rel.setdefault(e["rel"].upper(), []).append(e)
+        allowed = set(LOCAL_RELS) | set(GLOBAL_RELS) | {"CITES"}
+        for rel, rows in by_rel.items():
+            if rel not in allowed:
+                continue
+            s.run(f"""UNWIND $rows AS r
+                      MATCH (a {{id:r.src}}), (b {{id:r.dst}})
+                      MERGE (a)-[e:{rel}]->(b)
+                      SET e.evidence=r.evidence, e.confidence=r.confidence,
+                          e.source=r.source""", rows=rows)
+
+
 # ── reads (the agent's graph tools) ─────────────────────────────────────────────
 def ann(query_vec: list[float], *, label: str = "Contribution", k: int = 10) -> list[dict]:
     """Vector k-NN over node embeddings — the entry point for exploration."""
