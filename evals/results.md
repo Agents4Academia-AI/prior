@@ -14,7 +14,14 @@ Real run for the Friday demo. Reproduce with the command shown per section.
 
 ---
 
-## Reader — groundedness (`python evals/groundedness.py`)
+> **Two layers — match the numbers to the artifact.** The Reader/Cartographer
+> numbers below are the **CLAIM layer** (`atlas.json`) — that's also what the
+> `ask`/`origin` demos answer from. The **evolution view** you *show* is the
+> **CONTRIBUTION layer** (`contributions.json`), a different, smaller artifact —
+> its numbers are in their own section. Don't put "191 relations" next to a
+> screenshot of the 17-relation contribution graph.
+
+## Reader — groundedness (`python evals/groundedness.py`)  · CLAIM layer
 
 | Metric | Value |
 |--------|-------|
@@ -24,7 +31,7 @@ Real run for the Friday demo. Reproduce with the command shown per section.
 | Mean confidence | 0.93 |
 | Type distribution | methodological 44 · empirical 40 · definitional 26 · theoretical 1 |
 
-## Cartographer — graph stats (`python evals/graph_stats.py`)
+## Cartographer — graph stats (`python evals/graph_stats.py`)  · CLAIM layer
 
 | Metric | Value |
 |--------|-------|
@@ -32,6 +39,24 @@ Real run for the Friday demo. Reproduce with the command shown per section.
 | Semantic relations | **191** — supports 107 · extends 49 · refines 29 · **contradicts 6** |
 | Contradiction rate | 3.1% |
 | Linked-claim rate | 87.4% (14 isolated) |
+
+## Contribution layer — the evolution view (`contributions.json`)
+
+Primary literature only (3 reviews excluded), full-text extraction, standalone
+self-declared contributions. **This is what the `prior view --evolution` /
+`--contributions` graphs show.**
+
+| Metric | Value |
+|--------|-------|
+| Papers / contributions | 12 / **39** (4 papers skipped — no accessible full text) |
+| Kinds | empirical_finding 15 · method 14 · framework 4 · analysis 3 · dataset/model/other 3 |
+| Cross-paper relations | **17** — supports 8 · extends 5 · refines 4 · contradicts 0 |
+| Linked contributions | 23 / 39 (clusters of ≤4; not yet one connected component) |
+
+Note the honest gaps vs. the claim layer: smaller (reviews excluded + 4 no-full-text
+papers, incl. the clinical ones), and **0 contradictions** — at the contribution
+level papers mostly *extend/support* (everyone proposes their own method); the
+6 contradictions live in the claim layer (where review syntheses surface tension).
 
 ## Navigator (forward) — use case (a), state of the art
 
