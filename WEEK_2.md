@@ -61,6 +61,43 @@ Crucially, this is evaluable because **true labels exist** (unlike open Q&A).
     calibration: ECE, reliability diagrams, temperature scaling) — reuse it to
     score Prior's confidence.
 
+## Assessor agent (the calibrated-evidence-assessment core)
+Replaces Navigator's *holistic* verdict with a *derived, inspectable* one. This
+is the piece that turns Prior into a calibrated assessor; the rest is plumbing
+we already have.
+
+Input: a target claim + the atlas. Per claim:
+1. Gather bearing claims/contributions (supports/contradicts/refines edges +
+   semantic match).
+2. Classify each: stance (support/contradict/refine); **evidence quality**
+   (measured-empirical ≫ asserted ≫ theoretical — use claim type); **independence**
+   (distinct papers/groups; discount mutual-citation clusters via the citation graph).
+3. **evidence_level** (limited/medium/robust) = f(independent count × quality).
+4. **agreement_level** (low/medium/high) = f(support-vs-contradict balance, weighted).
+5. **confidence** = Mastrandrea(evidence_level, agreement_level).
+Output: {claim, confidence, evidence_level, agreement_level, supporting[],
+contradicting[], gaps[]} — *derived*, not vibed.
+
+ML wrinkles: up-weight reproduced / benchmarked / statistically-significant
+results (rliable-style CIs); down-weight **superseded** claims (recency via
+`cites`); independence is sneaky (shared codebases/benchmarks ≠ independent).
+
+## Calibration harness (weekend — `evals/calibration/`)
+"Calibrated" is an empirical claim, so this loop is what earns the word.
+- **Gold set:** claims with known status. Start with SciFact (wired) + Climate-FEVER;
+  add a small hand-labelled **ML** set with a spread: established (e.g. "residual
+  connections enable training very deep nets"), **contested/overturned** (e.g.
+  "batch norm works by reducing internal covariate shift" — refuted by Santurkar
+  et al.), emerging/thin.
+- **Per claim:** build a *representative* atlas (multi-seed queries + `--cite-hops`),
+  run the Assessor, map confidence/verdict → the gold label.
+- **Metrics:** verdict accuracy; abstention calibration; **confidence calibration**
+  (reliability diagram / ECE).
+- **MVP first:** just the 3–5 known ML claims. If the batch-norm-via-ICS claim
+  comes out **contested** (Santurkar's contribution contradicts Ioffe-Szegedy's),
+  that's the first real evidence the assessment works on a case we *know* — a far
+  stronger result than the open-QA comparison.
+
 ## Agent decomposition: relations / use cases as agents & skills
 Split agents by **task**, not by edge label.
 - Keep ONE relation-classifier agent for `supports` / `refines` / `extends`
