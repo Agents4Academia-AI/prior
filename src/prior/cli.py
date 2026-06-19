@@ -46,8 +46,11 @@ def main(argv: list[str] | None = None) -> int:
     p_map = sub.add_parser("map", help="run Cartographer over cached papers+claims")
     p_map.add_argument("--no-relate", action="store_true")
 
-    p_ask = sub.add_parser("ask", help="forward: state of evidence")
+    p_ask = sub.add_parser("ask", help="forward: state of evidence (over the graph)")
     p_ask.add_argument("question")
+
+    p_solved = sub.add_parser("solved", help="has this problem/hypothesis been solved?")
+    p_solved.add_argument("problem")
 
     p_org = sub.add_parser("origin", help="backward: trace to origin")
     p_org.add_argument("concept")
@@ -61,8 +64,12 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
 
     if args.cmd == "build":
-        pipeline.build(args.topic, max_papers=args.max_papers,
-                       relate=not args.no_relate)
+        atlas = pipeline.build(args.topic, max_papers=args.max_papers,
+                               relate=not args.no_relate)
+        try:
+            pipeline.sink_to_neo4j(atlas)   # push into the live graph store
+        except Exception as e:  # noqa: BLE001 — atlas.json still written
+            print(f"(neo4j sink skipped: {e})")
     elif args.cmd == "ingest":
         papers = pipeline.ingest(args.topic, max_papers=args.max_papers)
         print(f"{len(papers)} papers cached.")
@@ -81,7 +88,24 @@ def main(argv: list[str] | None = None) -> int:
         atlas.save()
         print(atlas.summary())
     elif args.cmd == "ask":
-        print(navigator.ask(_load_atlas(), args.question).render())
+        from . import agent
+        a = agent.ask(args.question)
+        print(f"VERDICT: {a.verdict.upper()}\n\n{a.answer}\n")
+        for s in a.supporting:
+            print(f"  + {s}")
+        for s in a.contradicting:
+            print(f"  - {s}")
+        for s in a.open_questions:
+            print(f"  ? {s}")
+        if a.verdict == "not_found":
+            print(f"\nClosest: {a.closest}\nGap: {a.gap}")
+    elif args.cmd == "solved":
+        from . import agent
+        s = agent.has_been_solved(args.problem)
+        print(f"VERDICT: {s.verdict.upper()}\n\n{s.summary}\n")
+        print(f"Addressed by: {', '.join(s.addressed_by) or '(none)'}")
+        print(f"Consensus: {s.consensus}")
+        print(f"\nClosest: {s.closest}\nGap: {s.gap}")
     elif args.cmd == "origin":
         print(navigator.origin(_load_atlas(), args.concept).render())
     elif args.cmd == "info":

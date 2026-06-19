@@ -11,6 +11,9 @@ from __future__ import annotations
 import os
 from functools import lru_cache
 
+# We embed inside thread pools (parallel read/map); silence the fork warning.
+os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
+
 _MODEL = os.environ.get("PRIOR_EMBED_MODEL", "mixedbread-ai/mxbai-embed-large-v1")
 
 

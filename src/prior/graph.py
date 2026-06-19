@@ -75,7 +75,7 @@ def upsert_paper(p: dict) -> None:
                  SET n += $props""",
               id=p["id"], props={k: p.get(k) for k in
                   ("title", "year", "venue", "doi", "url", "cited_by_count",
-                   "is_review", "abstract")})
+                   "is_review", "abstract", "authors")})
 
 
 def upsert_contribution(k: dict, embedding: Optional[list[float]] = None) -> None:
@@ -130,7 +130,7 @@ def bulk_load(papers: list[dict], contributions: list[dict], claims: list[dict],
         s.run("UNWIND $rows AS r MERGE (p:Paper {id:r.id}) SET p += r.props",
               rows=[{"id": p["id"], "props": {k: p.get(k) for k in
                     ("title", "year", "venue", "doi", "url", "cited_by_count",
-                     "is_review", "abstract")}} for p in papers])
+                     "is_review", "abstract", "authors")}} for p in papers])
 
         s.run("""UNWIND $rows AS r
                  MERGE (n:Contribution {id:r.id}) SET n += r.props
@@ -232,6 +232,71 @@ def claims_of(contrib_id: str) -> list[dict]:
         return [r["c"] for r in res]
 
 
+def list_papers() -> list[dict]:
+    with session() as s:
+        res = s.run("""MATCH (p:Paper)
+                       OPTIONAL MATCH (p)-[:HAS_CONTRIBUTION]->(k:Contribution)
+                       OPTIONAL MATCH (c:Claim)-[:STATED_IN]->(p)
+                       RETURN p{.*} AS p, count(DISTINCT k) AS nk, count(DISTINCT c) AS nc
+                       ORDER BY p.year DESC""")
+        return [{**r["p"], "n_contributions": r["nk"], "n_claims": r["nc"]} for r in res]
+
+
+def global_graph() -> dict:
+    """Contribution nodes + contribution→contribution edges, for the top level."""
+    with session() as s:
+        nodes = [r["n"] for r in s.run(
+            """MATCH (k:Contribution) OPTIONAL MATCH (p:Paper)-[:HAS_CONTRIBUTION]->(k)
+               RETURN k{.id, .paper_id, .problem, .method, .result,
+                       paper_year:p.year, paper_title:p.title} AS n""")]
+        rels = set(GLOBAL_RELS)
+        edges = []
+        for i, r in enumerate(s.run(
+            """MATCH (a:Contribution)-[e]->(b:Contribution)
+               RETURN a.id AS src, b.id AS dst, type(e) AS rel,
+                      e.source AS prov, e.confidence AS conf, e.evidence AS ev""")):
+            if r["rel"] in rels:
+                edges.append({"id": f"g{i}", "source": r["src"], "target": r["dst"],
+                              "relation": r["rel"].lower(), "provenance": r["prov"],
+                              "confidence": r["conf"], "evidence": r["ev"]})
+    return {"nodes": nodes, "edges": edges}
+
+
+def paper_local_graph(paper_id: str) -> Optional[dict]:
+    with session() as s:
+        p = s.run("MATCH (p:Paper {id:$id}) RETURN p{.*} AS p", id=paper_id).single()
+        if not p:
+            return None
+        contribs = [r["k"] for r in s.run(
+            "MATCH (:Paper {id:$id})-[:HAS_CONTRIBUTION]->(k:Contribution) "
+            "RETURN k{.id, .problem, .method, .result} AS k", id=paper_id)]
+        nodes = [r["c"] for r in s.run(
+            "MATCH (c:Claim)-[:STATED_IN]->(:Paper {id:$id}) "
+            "RETURN c{.id, .text, .claim_type, .confidence, .evidence} AS c", id=paper_id)]
+        loc = set(LOCAL_RELS)
+        edges = []
+        for i, r in enumerate(s.run(
+            """MATCH (a:Claim)-[e]->(b:Claim)
+               WHERE (a)-[:STATED_IN]->(:Paper {id:$id})
+               RETURN a.id AS src, b.id AS dst, type(e) AS rel, e.evidence AS ev""",
+            id=paper_id)):
+            if r["rel"] in loc:
+                edges.append({"id": f"l{i}", "source": r["src"], "target": r["dst"],
+                              "relation": r["rel"].lower(), "evidence": r["ev"]})
+        return {"paper": p["p"], "contributions": contribs, "nodes": nodes, "edges": edges}
+
+
+def contribution_detail(contrib_id: str) -> Optional[dict]:
+    k = get(contrib_id)
+    if not k or "Contribution" not in k.get("_labels", []):
+        return None
+    return {**{x: k.get(x) for x in ("id", "paper_id", "problem", "method", "result")},
+            "claims": claims_of(contrib_id),
+            "neighbours": [{"src": e["node"]["id"] if False else contrib_id,
+                            "rel": e["rel"], **e["props"], "other": e["node"]}
+                           for e in neighbours(contrib_id, rels=GLOBAL_RELS)]}
+
+
 def summary() -> dict:
     with session() as s:
         def one(q): return s.run(q).single()[0]
@@ -239,8 +304,9 @@ def summary() -> dict:
             "papers": one("MATCH (n:Paper) RETURN count(n)"),
             "contributions": one("MATCH (n:Contribution) RETURN count(n)"),
             "claims": one("MATCH (n:Claim) RETURN count(n)"),
-            "global_edges": one(f"MATCH (:Contribution)-[r]->(:Contribution) RETURN count(r)"),
-            "local_edges": one(f"MATCH (:Claim)-[r]->(:Claim) RETURN count(r)"),
+            "global_edges": one("MATCH (:Contribution)-[r]->(:Contribution) RETURN count(r)"),
+            "local_edges": one("MATCH (:Claim)-[r]->(:Claim) RETURN count(r)"),
+            "citations": one("MATCH (:Paper)-[r:CITES]->(:Paper) RETURN count(r)"),
         }
 
 
