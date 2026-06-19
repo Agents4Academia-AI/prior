@@ -17,17 +17,17 @@ from .atlas import Atlas
 # Edge styling by relation type.
 # Muted, low-saturation palette (Nord-inspired) — easy on the eyes.
 EDGE_STYLE = {
-    "stated_in":     {"color": "#e3d9c6", "dashes": True,  "label": "stated_in"},
-    "cites":         {"color": "#e3d9c6", "dashes": True,  "label": "cites"},
-    "supports":      {"color": "#2a9d8f", "dashes": False, "label": "supports"},
-    "contradicts":   {"color": "#e76f51", "dashes": False, "label": "contradicts"},
-    "refines":       {"color": "#e9c46a", "dashes": False, "label": "refines"},
-    "extends":       {"color": "#f4a261", "dashes": False, "label": "extends"},
+    "stated_in":     {"color": "#d8cdb5", "dashes": True,  "label": "stated_in"},
+    "cites":         {"color": "#d8cdb5", "dashes": True,  "label": "cites"},
+    "supports":      {"color": "#0a9396", "dashes": False, "label": "supports"},
+    "contradicts":   {"color": "#ae2012", "dashes": False, "label": "contradicts"},
+    "refines":       {"color": "#ca6702", "dashes": False, "label": "refines"},
+    "extends":       {"color": "#ee9b00", "dashes": False, "label": "extends"},
     "contributes_to":{"color": "#8fbcbb", "dashes": False, "label": "contributes_to"},
 }
-CLAIM_COLOR = "#264653"     # muted amber dot (distinct from the cool edge palette)
-CONTRIB_COLOR = "#264653"   # contributions: ONE warm colour (kind is in the detail panel)
-PAPER_COLOR = "#efe6d6"     # neutral light-grey box (dark text stays readable)
+CLAIM_COLOR = "#94d2bd"     # muted amber dot (distinct from the cool edge palette)
+CONTRIB_COLOR = "#94d2bd"   # contributions: ONE warm colour (kind is in the detail panel)
+PAPER_COLOR = "#e9d8a6"     # neutral light-grey box (dark text stays readable)
 
 # Contribution nodes, coloured by kind (muted).
 KIND_COLOR = {
@@ -111,8 +111,8 @@ _HTML = """<!doctype html>
 <script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
 <style>
   body{margin:0;font:14px/1.4 system-ui,sans-serif;display:flex;height:100vh;
-       background:#fbf7f0;color:#3b4252}
-  #graph{flex:1;height:100%;background:#fbf7f0}
+       background:#faf6ec;color:#3b4252}
+  #graph{flex:1;height:100%;background:#faf6ec}
   #side{width:340px;border-left:1px solid #e2e5ea;padding:14px;overflow:auto;background:#fbfcfd}
   h1{font-size:15px;margin:0 0 4px} .muted{color:#8a909c;font-size:12px}
   .legend span{display:inline-block;margin:2px 8px 2px 0;font-size:12px}
@@ -128,11 +128,11 @@ _HTML = """<!doctype html>
   <div class="legend" style="margin-top:8px">
     <span><span class="sw" style="background:%CLAIMC%"></span>claim</span>
     <span><span class="sw" style="background:%PAPERC%"></span>paper</span><br>
-    <span><span class="sw" style="background:#2a9d8f"></span>supports</span>
-    <span><span class="sw" style="background:#e76f51"></span>contradicts</span>
-    <span><span class="sw" style="background:#e9c46a"></span>refines</span>
-    <span><span class="sw" style="background:#f4a261"></span>extends</span>
-    <span><span class="sw" style="background:#e3d9c6"></span>cites/stated_in</span>
+    <span><span class="sw" style="background:#0a9396"></span>supports</span>
+    <span><span class="sw" style="background:#ae2012"></span>contradicts</span>
+    <span><span class="sw" style="background:#ca6702"></span>refines</span>
+    <span><span class="sw" style="background:#ee9b00"></span>extends</span>
+    <span><span class="sw" style="background:#d8cdb5"></span>cites/stated_in</span>
   </div>
   <div id="detail" class="muted">Click a node for details.</div>
 </div>
@@ -145,7 +145,7 @@ const net = new vis.Network(document.getElementById('graph'),
    interaction:{hover:true,tooltipDelay:120},
    groups:{useDefaultGroups:false},
    nodes:{font:{size:11,color:'#3b4252'},borderWidth:1,shapeProperties:{useBorderWithImage:false}},
-   edges:{font:{size:9,color:'#8a909c',strokeWidth:3,strokeColor:'#fbf7f0'},
+   edges:{font:{size:9,color:'#8a909c',strokeWidth:3,strokeColor:'#faf6ec'},
           smooth:{type:'continuous'}}});
 const D = document.getElementById('detail');
 net.on('click', p => {
@@ -227,7 +227,7 @@ def render_contributions(out_path: Path | None = None) -> Path:
                        "source": src},
         })
         edges.append({"from": c["id"], "to": c["paper_id"], "arrows": "to",
-                      "color": {"color": "#e3d9c6"}, "label": "stated_in",
+                      "color": {"color": "#d8cdb5"}, "label": "stated_in",
                       "font": {"size": 8}})
 
     # cross-contribution relations (the cross-paper "cross-talk")
@@ -262,14 +262,14 @@ _EVO_HTML = """<!doctype html>
 <script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
 <style>
   body{margin:0;font:14px system-ui,sans-serif;display:flex;height:100vh;
-       background:#fbf7f0;color:#3b4252}
-  #graph{flex:1;height:100%;background:#fbf7f0;position:relative}
+       background:#faf6ec;color:#3b4252}
+  #graph{flex:1;height:100%;background:#faf6ec;position:relative}
   #side{width:340px;border-left:1px solid #e2e5ea;padding:14px;overflow:auto;background:#fbfcfd}
   .bar{position:absolute;top:10px;left:10px;z-index:10;background:#fbfcfdee;
        padding:8px 12px;border:1px solid #e2e5ea;border-radius:8px}
   .bar button{font:13px system-ui;margin:0 3px;padding:4px 9px;cursor:pointer;
        border:1px solid #d3d8e0;border-radius:6px;background:#fff;color:#4c566a}
-  .bar button.on{background:#e9c46a;color:#fff;border-color:#e9c46a}
+  .bar button.on{background:#ca6702;color:#fff;border-color:#ca6702}
   h1{font-size:15px;margin:0 0 4px} .muted{color:#8a909c;font-size:12px}
   .legend span{display:inline-block;margin:2px 8px 2px 0;font-size:12px}
   .sw{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:middle;margin-right:3px}
@@ -287,11 +287,11 @@ _EVO_HTML = """<!doctype html>
   <div class="legend" style="margin-top:8px">
     <span><span class="sw" style="background:%CONTRIBC%"></span>contribution</span>
     <span><span class="sw" style="background:%PAPERC%"></span>paper</span><br>
-    <span><span class="sw" style="background:#2a9d8f"></span>supports</span>
-    <span><span class="sw" style="background:#e76f51"></span>contradicts</span>
-    <span><span class="sw" style="background:#e9c46a"></span>refines ▸</span>
-    <span><span class="sw" style="background:#f4a261"></span>extends ▸</span>
-    <span><span class="sw" style="background:#e3d9c6"></span>stated_in</span>
+    <span><span class="sw" style="background:#0a9396"></span>supports</span>
+    <span><span class="sw" style="background:#ae2012"></span>contradicts</span>
+    <span><span class="sw" style="background:#ca6702"></span>refines ▸</span>
+    <span><span class="sw" style="background:#ee9b00"></span>extends ▸</span>
+    <span><span class="sw" style="background:#d8cdb5"></span>stated_in</span>
   </div>
   <div id="detail" class="muted">Click a node for details.</div>
 </div>
@@ -303,7 +303,7 @@ const net = new vis.Network(document.getElementById('graph'), {nodes, edges},
    interaction:{hover:true,tooltipDelay:150},
    groups:{useDefaultGroups:false},
    nodes:{font:{size:11,color:'#3b4252'},borderWidth:1},
-   edges:{font:{size:9,color:'#8a909c',strokeWidth:3,strokeColor:'#fbf7f0'},
+   edges:{font:{size:9,color:'#8a909c',strokeWidth:3,strokeColor:'#faf6ec'},
           smooth:{type:'continuous'}}});
 const CAP = ['','%N1% papers','%N1% papers + their %N2% contributions',
              '%N1% papers · %N2% contributions · %N3% cross-paper relations'];
