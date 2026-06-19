@@ -26,7 +26,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parents[0] / "src"))
 sys.path.insert(0, str(HERE))
 
-from prior import config, pipeline, scoper        # noqa: E402
+from prior import completeness, config, pipeline, scoper  # noqa: E402
 from prior.atlas import Atlas                      # noqa: E402
 from prior.models import Paper                     # noqa: E402
 from prior.sources import arxiv                    # noqa: E402
@@ -106,6 +106,8 @@ def main():
     # ── [1] citation snowball (no caps) ──────────────────────────────────────
     sc = json.loads(scope_json.read_text())
     if "snowball_added" not in sc:
+        search_ids = {p.id for p in papers}          # the SEARCH channel (method A)
+
         anchors = _gold_anchors()
         if anchors:
             before = len(papers)
@@ -115,9 +117,15 @@ def main():
             papers = list(cur.values())
             _log(f"    folded {len(anchors)} gold anchors (+{len(papers) - before} "
                  f"new) → corpus {len(papers)}")
-        _log("[1] snowball (forward cited-by + backward refs) ...")
-        cands = scoper.snowball(papers, progress=lambda m: _log("    " + m))
-        _log(f"    {len(cands)} new candidates; scoping (cache-aware) ...")
+
+        _log("[1a] OpenAlex snowball (backward refs + forward cited-by) ...")
+        new_oa, reached_oa = scoper.snowball(papers, progress=lambda m: _log("    " + m))
+        _log("[1b] Semantic Scholar snowball (recent frontier) ...")
+        new_s2, reached_s2 = scoper.snowball_s2(papers, progress=lambda m: _log("    " + m))
+
+        cands = scoper._dedup_cross_source(new_oa + new_s2)
+        _log(f"    {len(cands)} new candidates ({len(new_oa)} OA + {len(new_s2)} S2); "
+             f"scoping (cache-aware) ...")
         kept, _ = scoper.scope(TOPIC, cands, cache_path=cache, progress=_log)
         new = [p for p, _ in kept]
         merged = {p.id: p for p in papers}
@@ -125,9 +133,21 @@ def main():
             merged.setdefault(p.id, p)
         papers = list(merged.values())
         _write_corpus(papers)
-        sc = json.loads(scope_json.read_text()); sc["snowball_added"] = len(new)
+
+        # completeness — SEARCH channel vs CITATION (snowball) channel
+        overlap = len((reached_oa | reached_s2) & search_ids)
+        comp = completeness.capture_recapture(len(search_ids), overlap + len(new), overlap)
+        sc = json.loads(scope_json.read_text())
+        sc["snowball_added"] = len(new)
+        sc["completeness"] = comp
         scope_json.write_text(json.dumps(sc, indent=2))
         _log(f"    snowball added {len(new)} → corpus {len(papers)}")
+        if comp.get("recall") is not None:
+            _log(f"    completeness: est. total relevant ≈ {comp['estimate_total']} "
+                 f"(95% CI {comp['estimate_ci95']}), recall ≈ {comp['recall']:.0%}, "
+                 f"~{comp['missing_estimate']:.0f} likely unseen")
+        else:
+            _log(f"    completeness: {comp.get('note')}")
     else:
         _log(f"[1] snowball already done (+{sc['snowball_added']}); "
              f"corpus {len(papers)}")

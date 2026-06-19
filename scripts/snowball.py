@@ -31,7 +31,7 @@ def main():
     print(f"seed corpus: {len(seeds)} papers", flush=True)
 
     print("[1/3] snowballing (forward cited-by + backward refs) ...", flush=True)
-    cands = scoper.snowball(seeds, progress=lambda m: print("   " + m, flush=True))
+    cands, _reached = scoper.snowball(seeds, progress=lambda m: print("   " + m, flush=True))
     print(f"      {len(cands)} new candidates", flush=True)
 
     print("[2/3] scoping new candidates ...", flush=True)

@@ -20,7 +20,8 @@ from .. import config
 from ..models import Paper
 from ._filters import looks_like_review
 
-SEARCH = "https://api.semanticscholar.org/graph/v1/paper/search"
+GRAPH = "https://api.semanticscholar.org/graph/v1/paper"
+SEARCH = GRAPH + "/search"
 FIELDS = ("title,abstract,year,authors,externalIds,citationCount,"
           "openAccessPdf,publicationTypes,venue")
 
@@ -58,13 +59,13 @@ def _to_paper(it: dict) -> Paper:
     )
 
 
-def _get(params: dict, *, tries: int = 5):
+def _get(url: str, params: dict, *, tries: int = 5):
     """GET with backoff — the keyless S2 pool 429s readily; a patient retry
     (fine for an unattended run) recovers most requests without a key."""
     delay = 3.0
     last = None
     for _ in range(tries):
-        last = requests.get(SEARCH, params=params, headers=_headers(),
+        last = requests.get(url, params=params, headers=_headers(),
                             timeout=config.HTTP_TIMEOUT)
         if last.status_code == 429:
             time.sleep(delay)
@@ -76,10 +77,49 @@ def _get(params: dict, *, tries: int = 5):
     return last
 
 
+def _neighbors(s2_id: str, kind: str, *, max_results: int) -> list[Paper]:
+    """Paginate a citation edge list. kind='citations' (forward, papers citing
+    s2_id) or 'references' (backward, papers s2_id cites). These endpoints sit in
+    S2's 10 req/s tier, so with a key the snowball is cheap."""
+    sub = "citingPaper" if kind == "citations" else "citedPaper"
+    out: list[Paper] = []
+    offset = 0
+    while len(out) < max_results:
+        params = {"fields": FIELDS, "limit": min(100, max_results - len(out)),
+                  "offset": offset}
+        try:
+            body = _get(f"{GRAPH}/{s2_id}/{kind}", params).json()
+        except requests.RequestException:
+            break
+        data = body.get("data") or []
+        if not data:
+            break
+        for it in data:
+            p = it.get(sub)
+            if p and p.get("title"):
+                out.append(_to_paper(p))
+        nxt = body.get("next")
+        if not nxt:
+            break
+        offset = nxt
+    return out
+
+
+def citations(s2_id: str, *, max_results: int = 60) -> list[Paper]:
+    """Forward citations (papers that cite s2_id) — the recent-frontier signal
+    OpenAlex lacks for fresh preprints."""
+    return _neighbors(s2_id, "citations", max_results=max_results)
+
+
+def references(s2_id: str, *, max_results: int = 60) -> list[Paper]:
+    """Backward references (papers s2_id cites)."""
+    return _neighbors(s2_id, "references", max_results=max_results)
+
+
 def search(query: str, *, max_papers: int = config.DEFAULT_MAX_PAPERS,
            require_abstract: bool = True, exclude_reviews: bool = True) -> list[Paper]:
     params = {"query": query, "limit": min(max_papers * 3, 100), "fields": FIELDS}
-    r = _get(params)
+    r = _get(SEARCH, params)
     out: list[Paper] = []
     for it in r.json().get("data", []) or []:
         p = _to_paper(it)

@@ -99,32 +99,77 @@ def gather_candidates(queries: list[str], *, per_query: int = 25,
 
 # ── stage 2b: citation snowball (recall, the high-leverage step) ─────────────
 def snowball(seeds: list[Paper], *, anchor_k: int = 25, per_paper: int = 40,
-             progress=print) -> list[Paper]:
+             progress=print) -> tuple[list[Paper], set[str]]:
     """One-hop citation expansion of a seed set (OpenAlex): backward references
     of all seeds + forward cited-by of the most-cited anchors. Finds the
-    connected cluster that keyword search misses. Returns NEW candidate papers
-    (not already among the seeds)."""
+    connected cluster that keyword search misses.
+
+    Returns (new_candidates, reached_known) where reached_known is the set of
+    SEED ids the snowball re-reached — the capture-recapture overlap between the
+    search channel and the citation channel, used by the completeness model."""
     have = {p.id for p in seeds}
     new: dict[str, Paper] = {}
+    reached_known: set[str] = set()
 
     # backward — union of references (they overlap heavily, so the set is bounded)
-    refs = list(dict.fromkeys(
-        r for p in seeds for r in p.referenced_works
-        if r.startswith("openalex:") and r not in have))
-    for pid, p in openalex.fetch_many(refs).items():
+    all_refs = list(dict.fromkeys(
+        r for p in seeds for r in p.referenced_works if r.startswith("openalex:")))
+    reached_known |= {r for r in all_refs if r in have}      # seed cited by a seed
+    for pid, p in openalex.fetch_many([r for r in all_refs if r not in have]).items():
         if pid not in have:
             new.setdefault(pid, p)
-    progress(f"  backward: {len(refs)} refs → +{len(new)} new")
+    progress(f"  backward: {len(all_refs)} refs → +{len(new)} new")
 
     # forward — cited-by of the most-cited anchors (catches newer connected work)
     anchors = sorted((p for p in seeds if p.id.startswith("openalex:")),
                      key=lambda p: -p.cited_by_count)[:anchor_k]
     for p in anchors:
         for cp in openalex.cited_by(p.id, max_results=per_paper):
-            if cp.id not in have and cp.id not in new:
+            if cp.id in have:
+                reached_known.add(cp.id)
+            elif cp.id not in new:
                 new[cp.id] = cp
         progress(f"  forward cited-by {p.short_cite()} → pool {len(new)}")
-    return list(new.values())
+    return list(new.values()), reached_known
+
+
+def _s2_id(p: Paper) -> str | None:
+    """A Semantic-Scholar-resolvable id for a Paper, preferring arXiv/DOI."""
+    if p.id.startswith("arxiv:"):
+        return "ARXIV:" + p.id.split(":", 1)[1].split("v")[0]
+    if p.id.startswith("s2:"):
+        return p.id.split(":", 1)[1]
+    if p.doi:
+        return "DOI:" + p.doi.rsplit("doi.org/", 1)[-1]
+    return None
+
+
+def snowball_s2(seeds: list[Paper], *, anchor_k: int = 40, per_paper: int = 40,
+                recent_year: int = 2024, progress=print
+                ) -> tuple[list[Paper], set[str]]:
+    """Citation snowball via Semantic Scholar — the path for the RECENT frontier,
+    where OpenAlex has no citation edges yet. Anchors on recent / arXiv-keyed
+    seeds and pulls S2 backward references + forward citations. Returns
+    (new_candidates, reached_known) like snowball()."""
+    have = {p.id for p in seeds}
+    new: dict[str, Paper] = {}
+    reached_known: set[str] = set()
+    anchors = [p for p in seeds
+               if (p.year or 0) >= recent_year or p.id.startswith(("arxiv:", "s2:"))]
+    anchors = sorted(anchors, key=lambda p: -(p.year or 0))[:anchor_k]
+    for p in anchors:
+        sid = _s2_id(p)
+        if not sid:
+            continue
+        neighbours = (semanticscholar.references(sid, max_results=per_paper)
+                      + semanticscholar.citations(sid, max_results=per_paper))
+        for cp in neighbours:
+            if cp.id in have:
+                reached_known.add(cp.id)
+            elif cp.id not in new:
+                new[cp.id] = cp
+        progress(f"  s2 cites {p.short_cite()} → pool {len(new)}")
+    return list(new.values()), reached_known
 
 
 # ── stage 3: relevance filter (precision) ────────────────────────────────────
