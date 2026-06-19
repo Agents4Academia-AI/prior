@@ -98,6 +98,35 @@ results (rliable-style CIs); down-weight **superseded** claims (recency via
   that's the first real evidence the assessment works on a case we *know* — a far
   stronger result than the open-QA comparison.
 
+## Verification-stamp schema (the interface for the cohort)
+Prior is the shared substrate; the other teams are enrichers (write stamps) and
+consumers (read). Prior's job is to expose the **interface**, not build every
+verifier. Each claim/contribution carries an **open set of verification stamps**,
+one per enricher. (See `docs/shared-substrate.md` for the team mapping.)
+
+Claim record gains:
+```
+verifications: {
+  extraction_fidelity:  {verdict, score, by, evidence, ts}   # Prior/groundedness — HAVE
+  citation_honesty:     {verdict, real, relevant, fair, by, ts}   # Team 2
+  reproducibility:      {verdict, by, ts, link}              # Team 1 (benchmark replicator)
+  internal_consistency: {verdict, by, ts}                    # Wittgenstein / Reviewer #2
+  novelty:              {verdict, by, ts}                    # Reviewer-0
+  ...open: a team registers a new check type; Prior need not know each
+}
+```
+Each **stamp** = `{check, verdict (pass/fail/uncertain), confidence, by (agent/team
+id), evidence/notes, timestamp, link?}`. Generalises the already-specced Auditor
+fields (`audited`, `citation_check_pass`, `method_attribution_check_pass`).
+
+API (formalise `atlas.json`):
+- **read** — get a claim + its stamps; **write** — append a stamp (idempotent per
+  check×agent); **query** — claims by topic / verification status / stance.
+
+The **Assessor** reads the stamps: evidence weight = base quality × **verification
+depth** (which checks passed, by whom). So the calibrated confidence is aggregated
+from the cohort's verification work — not citations.
+
 ## Agent decomposition: relations / use cases as agents & skills
 Split agents by **task**, not by edge label.
 - Keep ONE relation-classifier agent for `supports` / `refines` / `extends`

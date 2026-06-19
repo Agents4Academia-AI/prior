@@ -89,51 +89,64 @@ which is what lets us walk *backward* to an idea's origin.
 
 ---
 
-## 3. Prior as the shared output that joins everyone's agents
+## 3. Prior as the shared substrate the cohort plugs into
 
 Luke's observation: the teams are each building a *different agent over the same
-underlying object* — claims, citations, and their relations. If that object is a
-shared graph, the agents compose instead of duplicating. Each team becomes a
-**reader and/or writer of the atlas**.
+underlying object* — claims, contributions, citations, and their relations. Make
+that object a shared graph and the agents **compose instead of duplicating**.
+They sort into two roles around the atlas:
+
+- **Enrichers** — *write* verification stamps onto claims (each team = one stamp).
+- **Consumers** — *read* the atlas (query, surface, review).
 
 ```mermaid
 flowchart TB
-  SRC["Primary sources<br/>OpenAlex + arXiv"] -->|Reader → Cartographer| ATLAS
-  ATLAS(["PRIOR shared atlas<br/>— typed claim graph —<br/>claims · papers · supports/contradicts/refines/extends<br/>citations · confidence · contradictions · gaps · lineage"])
-  ATLAS -->|Auditor: real / relevant / fair| ATLAS
+  SRC["Primary sources<br/>OpenAlex + arXiv"] -->|Reader · Cartographer · Contributor| ATLAS
+  ATLAS(["PRIOR shared atlas<br/>claims · contributions · relations<br/>+ open VERIFICATION SLOTS per claim"])
 
-  CITE["Citation Verification team"] <-->|reads citation+provenance edges<br/>writes pass/fail| ATLAS
-  CLAIMV["Claims Verification (now Auditor)"] <-->|writes fidelity checks| ATLAS
-  REVIEW["Paper Review / Reviewer #2"] -->|reads contradictions + gaps| ATLAS
-  NOVELTY["Novelty / Reviewer-0"] -->|reads origin + extends edges| ATLAS
-  KM["Knowledge Mgmt / PKM"] <-->|stores / queries| ATLAS
-  BENCH["Benchmarking / Replicator"] -->|reads methodological claims| ATLAS
-  IDEA["Ideation / Harness"] -->|reads knowledge gaps as seeds| ATLAS
+  subgraph ENRICH["Enrichers — write verification stamps"]
+    CITE["Citation verification (Team 2)<br/>→ real / relevant / fair"]
+    REPRO["Benchmark replicator / evaluator (Team 1)<br/>→ reproducibility"]
+    INT["Paper-error / Wittgenstein · Reviewer #2<br/>→ internal consistency"]
+    NOV["Novelty / Reviewer-0<br/>→ novelty"]
+  end
+  subgraph CONSUME["Consumers — read the atlas"]
+    KM["Knowledge management (Team 3)<br/>store / query"]
+    LIT["Personal assistant / Lit Buddy<br/>surface by interest"]
+    REV["Paper review (Team 5)<br/>contradictions + gaps → feedback"]
+  end
 
-  ATLAS --> NAV["Navigator → IP-X report<br/>(Executive Summary · Findings+confidence · Gaps · FAQs)"]
-  NAV --> SURVEY["Survey paper:<br/>AI that autonomously produces papers<br/>(Luke + ALL)"]
+  ENRICH -->|stamp claims| ATLAS
+  ATLAS -->|read| CONSUME
+  ATLAS --> ASSESS["Assessor → calibrated assessment<br/>weights evidence by VERIFICATION depth"]
+  ASSESS --> SURVEY["Survey: AI that autonomously<br/>produces papers (Luke + ALL)"]
 ```
 
-ASCII fallback (hub-and-spoke):
+ASCII fallback:
 
 ```
-   Citation Verif. ─┐        ┌─ Paper Review / Reviewer #2   (read: contradictions, gaps)
-   Claims Verif. ───┤        ├─ Novelty / Reviewer-0         (read: origin, extends)
-   (→ Auditor)      │        │
-                    ▼        ▼
-            ┌───────────────────────────┐
-   sources ─▶│   PRIOR shared atlas      │──▶ Navigator ──▶ IP-X report ──▶ Survey paper
-   (OpenAlex │   = typed CLAIM GRAPH     │                                  (Luke + ALL)
-    + arXiv) │  claims·papers·relations  │
-            └───────────────────────────┘
-                    ▲        ▲
-   Knowledge Mgmt ──┘        └─ Benchmarking / Ideation      (read: methods, gaps)
+  ENRICHERS (write verification stamps)         CONSUMERS (read)
+  ───────────────────────────────────          ────────────────
+  Citation verif. (T2)  → real/relevant/fair    Knowledge mgmt (T3) → store/query
+  Benchmark replic.(T1) → reproducibility       Lit Buddy / PKA     → surface by interest
+  Wittgenstein/Rev#2    → internal consistency   Paper review (T5)  → contradictions+gaps
+  Novelty/Reviewer-0    → novelty
+            │  stamp                                        ▲  read
+            ▼                                               │
+   sources ─▶┌──────────────────────────────────────────┐──┘
+   (OA+arXiv)│  PRIOR atlas: claims · contributions ·    │
+             │  relations  + open VERIFICATION SLOTS     │──▶ Assessor (weights by verification)
+             └──────────────────────────────────────────┘        └─▶ IP-X report ─▶ survey
 ```
 
-**Why this is the right shape:** today each agent re-reads PDFs and re-extracts
-its own private claims. With a shared graph, extraction happens once; everyone
-else consumes structured, audited claims and writes their verdicts back as new
-edges/attributes. The graph is the interchange format.
+**Why this is the right shape.** Today each agent re-reads PDFs and re-extracts
+its own private claims. With a shared graph, **extraction happens once**; everyone
+else stamps or reads the same object. And the payoff compounds: each team's stamp
+is a verification in the stack, so Prior's **Assessor weights evidence by
+*verification depth*, not citations** — the calibrated confidence is literally
+aggregated from the cohort's verification work. Prior's job is to expose the
+**interface** (the verification slots + a query API); the teams fill the stack.
+See the verification-stamp schema in [`WEEK_2.md`](../WEEK_2.md).
 
 ---
 
