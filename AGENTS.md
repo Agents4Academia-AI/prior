@@ -1,5 +1,10 @@
 # AGENTS.md — what Claude Code reads at session start
 
+> ⚠️ **BRANCHING — `main` is the Friday-demo snapshot.** Do **not** commit to
+> `main`. All subsequent work goes on a feature branch (`name/feature`, e.g.
+> `harit/local-graph`, `klara/merge`), then opens a PR for a teammate to review
+> and merge. One Claude Code session per branch.
+
 Prior turns primary literature into a queryable atlas of claims via three core
 agents: **Reader** (paper → claims), **Cartographer** (claims → graph),
 **Navigator** (question → grounded answer, forward & backward). A fourth,

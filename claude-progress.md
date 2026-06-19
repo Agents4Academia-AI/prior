@@ -4,6 +4,32 @@
 
 ---
 
+## 2026-06-20 — demo shipped; `main` frozen, work moves to branches
+
+**Goal:** Friday demo + clean handoff.
+
+**Done (verified):** Demo went well. Shipped the contributions graph + evolution
+view (Reader → Cartographer → Contributor → relate), `ask`/`origin` over the
+contributions graph (`--contributions`), reveal.js deck (`docs/slides.html`),
+"Sunny Beach"-style palette, and the full-text/review-filter pipeline. All on
+`main`, pushed.
+
+**Branching (new convention):** `main` is the demo snapshot — **do NOT commit to
+`main`.** All subsequent work on feature branches (`name/feature`) + PR. See the
+banner in `AGENTS.md`.
+
+**Next session — start here (post-demo, see `WEEK_2.md` "NOW"):**
+1. Branch (`name/merge`), then prototype **iterative contribution merging** on the
+   existing 39 RAG contributions (embeddings + LLM-confirm). YWT-endorsed.
+2. Build the **Scoper** + a clean corpus for the hackathon topic ("agents in
+   academic tasks…"); naive search is noisy (see WEEK_2 finding).
+3. **Shared snapshot committed:** `data/atlas/atlas.json` (19 papers / 111 claims)
+   + `data/atlas/contributions.json` (39 contributions + relations) are on `main`,
+   so Harit starts from our exact data — no rebuild. `prior view --evolution`,
+   `prior ask --contributions`, and the merge prototype all read these directly.
+
+---
+
 ## 2026-06-18 — session 3: Friday MVP shipped (live run, web view, baseline, skill)
 
 **Goal:** Ship the Friday demo deliverables — a real end-to-end run, a web view,

@@ -17,9 +17,12 @@ secrets/
 
 # Built data (regenerable; not the golden inputs)
 data/raw/
-data/atlas/
+data/atlas/*
 !data/raw/.gitkeep
 !data/atlas/.gitkeep
+# shared snapshot so collaborators can start without rebuilding (the demo atlas)
+!data/atlas/atlas.json
+!data/atlas/contributions.json
 
 # OS
 .DS_Store
