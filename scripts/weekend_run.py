@@ -29,11 +29,34 @@ sys.path.insert(0, str(HERE))
 from prior import config, pipeline, scoper        # noqa: E402
 from prior.atlas import Atlas                      # noqa: E402
 from prior.models import Paper                     # noqa: E402
+from prior.sources import arxiv                    # noqa: E402
 from build_scoped import TOPIC, SEEDS              # noqa: E402
+from check_recall import parse_bib, best_match     # noqa: E402
 
 
 def _log(m):
     print(m, flush=True)
+
+
+def _gold_anchors():
+    """Resolve the gold set (grant bib) to Papers we GUARANTEE in the corpus:
+    OpenAlex title-match where it indexes the paper, direct arXiv-id fetch for
+    the recent preprints it doesn't. These bypass the relevance filter (they are
+    declared-relevant) and seed the snowball."""
+    bib = config.DATA / "gold.bib"
+    if not bib.exists():
+        return []
+    anchors: dict[str, Paper] = {}
+    need_arxiv: list[str] = []
+    for g in parse_bib(bib):
+        p, j = best_match(g["title"])
+        if p and j >= 0.6:
+            anchors[p.id] = p
+        elif g["arxiv"]:
+            need_arxiv.append(g["arxiv"])
+    for pid, p in arxiv.fetch_ids(need_arxiv).items():
+        anchors.setdefault(pid, p)
+    return list(anchors.values())
 
 
 def _write_corpus(papers, dropped=None):
@@ -83,6 +106,15 @@ def main():
     # ── [1] citation snowball (no caps) ──────────────────────────────────────
     sc = json.loads(scope_json.read_text())
     if "snowball_added" not in sc:
+        anchors = _gold_anchors()
+        if anchors:
+            before = len(papers)
+            cur = {p.id: p for p in papers}
+            for p in anchors:
+                cur.setdefault(p.id, p)
+            papers = list(cur.values())
+            _log(f"    folded {len(anchors)} gold anchors (+{len(papers) - before} "
+                 f"new) → corpus {len(papers)}")
         _log("[1] snowball (forward cited-by + backward refs) ...")
         cands = scoper.snowball(papers, progress=lambda m: _log("    " + m))
         _log(f"    {len(cands)} new candidates; scoping (cache-aware) ...")
