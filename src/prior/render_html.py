@@ -17,17 +17,17 @@ from .atlas import Atlas
 # Edge styling by relation type.
 # Muted, low-saturation palette (Nord-inspired) — easy on the eyes.
 EDGE_STYLE = {
-    "stated_in":     {"color": "#dde2ea", "dashes": True,  "label": "stated_in"},
-    "cites":         {"color": "#cdd3de", "dashes": True,  "label": "cites"},
-    "supports":      {"color": "#a3be8c", "dashes": False, "label": "supports"},
-    "contradicts":   {"color": "#bf828a", "dashes": False, "label": "contradicts"},
-    "refines":       {"color": "#81a1c1", "dashes": False, "label": "refines"},
-    "extends":       {"color": "#b48ead", "dashes": False, "label": "extends"},
+    "stated_in":     {"color": "#d3cdc2", "dashes": True,  "label": "stated_in"},
+    "cites":         {"color": "#cbc5ba", "dashes": True,  "label": "cites"},
+    "supports":      {"color": "#6a994e", "dashes": False, "label": "supports"},
+    "contradicts":   {"color": "#bc4749", "dashes": False, "label": "contradicts"},
+    "refines":       {"color": "#2a7f9e", "dashes": False, "label": "refines"},
+    "extends":       {"color": "#8459a6", "dashes": False, "label": "extends"},
     "contributes_to":{"color": "#8fbcbb", "dashes": False, "label": "contributes_to"},
 }
-CLAIM_COLOR = "#d4a95e"     # muted amber dot (distinct from the cool edge palette)
-CONTRIB_COLOR = "#d4a95e"   # contributions: ONE warm colour (kind is in the detail panel)
-PAPER_COLOR = "#dfe2e8"     # neutral light-grey box (dark text stays readable)
+CLAIM_COLOR = "#4c5b6a"     # muted amber dot (distinct from the cool edge palette)
+CONTRIB_COLOR = "#4c5b6a"   # contributions: ONE warm colour (kind is in the detail panel)
+PAPER_COLOR = "#e7e3da"     # neutral light-grey box (dark text stays readable)
 
 # Contribution nodes, coloured by kind (muted).
 KIND_COLOR = {
@@ -128,11 +128,11 @@ _HTML = """<!doctype html>
   <div class="legend" style="margin-top:8px">
     <span><span class="sw" style="background:%CLAIMC%"></span>claim</span>
     <span><span class="sw" style="background:%PAPERC%"></span>paper</span><br>
-    <span><span class="sw" style="background:#a3be8c"></span>supports</span>
-    <span><span class="sw" style="background:#bf828a"></span>contradicts</span>
-    <span><span class="sw" style="background:#81a1c1"></span>refines</span>
-    <span><span class="sw" style="background:#b48ead"></span>extends</span>
-    <span><span class="sw" style="background:#cdd3de"></span>cites/stated_in</span>
+    <span><span class="sw" style="background:#6a994e"></span>supports</span>
+    <span><span class="sw" style="background:#bc4749"></span>contradicts</span>
+    <span><span class="sw" style="background:#2a7f9e"></span>refines</span>
+    <span><span class="sw" style="background:#8459a6"></span>extends</span>
+    <span><span class="sw" style="background:#cbc5ba"></span>cites/stated_in</span>
   </div>
   <div id="detail" class="muted">Click a node for details.</div>
 </div>
@@ -227,7 +227,7 @@ def render_contributions(out_path: Path | None = None) -> Path:
                        "source": src},
         })
         edges.append({"from": c["id"], "to": c["paper_id"], "arrows": "to",
-                      "color": {"color": "#dde2ea"}, "label": "stated_in",
+                      "color": {"color": "#d3cdc2"}, "label": "stated_in",
                       "font": {"size": 8}})
 
     # cross-contribution relations (the cross-paper "cross-talk")
@@ -269,7 +269,7 @@ _EVO_HTML = """<!doctype html>
        padding:8px 12px;border:1px solid #e2e5ea;border-radius:8px}
   .bar button{font:13px system-ui;margin:0 3px;padding:4px 9px;cursor:pointer;
        border:1px solid #d3d8e0;border-radius:6px;background:#fff;color:#4c566a}
-  .bar button.on{background:#81a1c1;color:#fff;border-color:#81a1c1}
+  .bar button.on{background:#2a7f9e;color:#fff;border-color:#2a7f9e}
   h1{font-size:15px;margin:0 0 4px} .muted{color:#8a909c;font-size:12px}
   .legend span{display:inline-block;margin:2px 8px 2px 0;font-size:12px}
   .sw{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:middle;margin-right:3px}
@@ -287,11 +287,11 @@ _EVO_HTML = """<!doctype html>
   <div class="legend" style="margin-top:8px">
     <span><span class="sw" style="background:%CONTRIBC%"></span>contribution</span>
     <span><span class="sw" style="background:%PAPERC%"></span>paper</span><br>
-    <span><span class="sw" style="background:#a3be8c"></span>supports</span>
-    <span><span class="sw" style="background:#bf828a"></span>contradicts</span>
-    <span><span class="sw" style="background:#81a1c1"></span>refines ▸</span>
-    <span><span class="sw" style="background:#b48ead"></span>extends ▸</span>
-    <span><span class="sw" style="background:#dde2ea"></span>stated_in</span>
+    <span><span class="sw" style="background:#6a994e"></span>supports</span>
+    <span><span class="sw" style="background:#bc4749"></span>contradicts</span>
+    <span><span class="sw" style="background:#2a7f9e"></span>refines ▸</span>
+    <span><span class="sw" style="background:#8459a6"></span>extends ▸</span>
+    <span><span class="sw" style="background:#d3cdc2"></span>stated_in</span>
   </div>
   <div id="detail" class="muted">Click a node for details.</div>
 </div>
