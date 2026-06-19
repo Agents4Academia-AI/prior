@@ -25,9 +25,9 @@ EDGE_STYLE = {
     "extends":       {"color": "#b48ead", "dashes": False, "label": "extends"},
     "contributes_to":{"color": "#8fbcbb", "dashes": False, "label": "contributes_to"},
 }
-CLAIM_COLOR = "#9db8d6"     # soft blue dot
-CONTRIB_COLOR = "#9db8d6"   # contributions: ONE colour (kind is in the detail panel)
-PAPER_COLOR = "#e3e6ec"     # neutral light-grey box (dark text stays readable)
+CLAIM_COLOR = "#d4a95e"     # muted amber dot (distinct from the cool edge palette)
+CONTRIB_COLOR = "#d4a95e"   # contributions: ONE warm colour (kind is in the detail panel)
+PAPER_COLOR = "#dfe2e8"     # neutral light-grey box (dark text stays readable)
 
 # Contribution nodes, coloured by kind (muted).
 KIND_COLOR = {
@@ -238,7 +238,7 @@ def render_contributions(out_path: Path | None = None) -> Path:
         # supports/contradicts are symmetric corroboration → undirected;
         # extends/refines are directional (newer → the earlier work it builds on)
         arrow = "" if e["relation"] in ("supports", "contradicts") \
-            else {"to": {"scaleFactor": 1.4}}
+            else {"to": {"enabled": True, "scaleFactor": 1.6}}
         edges.append({"from": e["src"], "to": e["dst"], "arrows": arrow,
                       "width": 3.5, "color": {"color": st["color"]},
                       "dashes": st["dashes"], "label": st["label"],
@@ -373,7 +373,7 @@ def render_evolution(out_path: Path | None = None) -> Path:
         st = EDGE_STYLE.get(e["relation"], {"color": "#bbb", "dashes": False,
                                             "label": e["relation"]})
         arrow = "" if e["relation"] in ("supports", "contradicts") \
-            else {"to": {"scaleFactor": 1.4}}
+            else {"to": {"enabled": True, "scaleFactor": 1.6}}
         edges.append({"id": eid, "stage": 3, "from": e["src"], "to": e["dst"],
                       "arrows": arrow, "width": 3.5, "color": {"color": st["color"]},
                       "dashes": st["dashes"], "label": st["label"],
