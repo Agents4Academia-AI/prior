@@ -52,6 +52,32 @@
 </section>
 
 <section>
+  <h2>Two layers: <em>local</em> (per paper) → <em>global</em> (across the literature)</h2>
+  <div style="display:flex;gap:16px;align-items:stretch;font-size:.6em;text-align:left">
+    <div style="flex:1;border:2px solid #cdd3de;border-radius:12px;padding:16px;background:#fbfcfd">
+      <b style="color:#5e81ac">LOCAL GRAPH — per paper</b>
+      <ul style="font-size:.95em">
+        <li>Paper P → claims C1, C2, …</li>
+        <li>typed edges: <em>extends</em> · <em>refines</em></li>
+        <li>stated_in (C→P) · cites (P→P) · contributes_to</li>
+      </ul>
+      <span class="muted">what one paper says internally</span>
+    </div>
+    <div style="align-self:center;color:#7b818c">— canonicalize ▶</div>
+    <div style="flex:1.25;border:2px solid #cdd3de;border-radius:12px;padding:16px;background:#fbfcfd">
+      <b style="color:#5e81ac">GLOBAL GRAPH — across the literature</b>
+      <ul style="font-size:.95em">
+        <li><em>Canonical claims</em> + aggregated confidence</li>
+        <li><em>contradicts</em> · <em>supersedes</em> (chronological)</li>
+        <li><em>equivalent_to</em> (cross-field)</li>
+        <li>citation graph · contributing / contradicting papers</li>
+      </ul>
+    </div>
+  </div>
+  <p class="pipe" style="margin-top:14px">▼ <b>Navigator</b> — forward: state of the field · backward: trace to origin · render: web view · structured corpus · IP-X report</p>
+</section>
+
+<section>
   <h2>The output: a graph of <em>contributions</em>, not documents</h2>
   <p>papers → their self-declared contributions → <em>typed cross-paper relations</em><br>
      <span class="tag">supports</span><span class="tag">extends</span><span class="tag">refines</span></p>
@@ -105,6 +131,31 @@
     <li>The <em>shared substrate</em> the cohort plugs into — citation verification, replication, review all enrich &amp; read one graph</li>
     <li>Measurable: a real eval with <em>true labels</em> (SciFact) to prove the calibration</li>
   </ul>
+</section>
+
+<section>
+  <h2>One graph the whole cohort plugs into</h2>
+  <div style="display:flex;gap:18px;font-size:.6em;text-align:left">
+    <div style="flex:1">
+      <b style="color:#5f8a4f">Enrichers — <em>write</em> verification stamps</b>
+      <ul>
+        <li>Citation verification → real / relevant / fair</li>
+        <li>Benchmark replicator → reproducibility</li>
+        <li>Wittgenstein / Reviewer&nbsp;#2 → internal consistency</li>
+        <li>Novelty / Reviewer-0 → novelty</li>
+      </ul>
+    </div>
+    <div style="flex:1">
+      <b style="color:#8a5a99">Consumers — <em>read</em> the atlas</b>
+      <ul>
+        <li>Knowledge management → store / query</li>
+        <li>Personal assistant / Lit Buddy → surface by interest</li>
+        <li>Paper review → contradictions + gaps → feedback</li>
+      </ul>
+    </div>
+  </div>
+  <p class="muted" style="margin-top:12px">Each team = one stamp or one reader on <em>one</em> shared graph.<br>
+     The assessment weights evidence by <em>verification depth</em> — not citations.</p>
 </section>
 
 <section data-auto-animate>
