@@ -4,6 +4,47 @@
 
 ---
 
+## 2026-06-19 — session 3: two-level graph + full text + web app
+
+**Goal:** Reshape Prior into a two-level knowledge graph, run it credit-free on a
+Claude Code subscription, ingest full text, and ship an interactive web UI.
+
+**Done (verified):**
+- **Credit-free `claude-cli` backend** (`claude_cli.py` + `llm.py`): the headless
+  `-p` path / Agent SDK now meter API credits, so we drive the *interactive* TUI
+  through a PTY with a file-in/file-out protocol (model writes JSON to a file we
+  read; `--ax-screen-reader` + fence-tolerant `extract_json`). Runs on the Max
+  plan, no credits. `anthropic` import made lazy. `PRIOR_LLM_BACKEND=claude-cli`.
+- **Two-level graph** (`models.py`, `reader.py`, `cartographer.py`, `atlas.py`):
+  Reader now emits *contributions* (ORKG-style problem/method/result, global
+  nodes) + *claims* (local nodes) + *local edges* (entails/contradicts/supports/
+  depends_on). Cartographer builds global contribution→contribution edges via the
+  hybrid (citations propose ∪ BM25 neighbours; LLM labels; `source`=both|text).
+  Every edge carries an explicit `level` (local|global|meta) so same-named
+  relations across levels never conflate. See `docs/design.md`.
+- **Full-text ingestion** (`sources/fulltext.py`): arXiv HTML (arxiv.org/html →
+  ar5iv) directly or via title match for OpenAlex papers; head+tail window
+  (`FULLTEXT_CHARS`). Reader reads full text when present, else abstract.
+- **Web app**: FastAPI backend (`web/api.py`, `prior serve`) serving the
+  two-level graph + `/ask` + `/origin`; React UI (`frontend/`, Vite + React Flow)
+  visualizing global/local graphs with a question box.
+- `docs/landscape.md`: prior-art scan (ORKG/scite/GoAI/OpenNovelty/…) — the
+  whitespace is the integrated two-level graph + agent-callable serving.
+
+**Verified by:**
+- `pytest -q` → 25 passed (no API key needed).
+- Live two-level build via `claude-cli`: 7 papers → 15 contributions, 47 claims,
+  global graph with provenance-tagged edges. Full-text read yields body-only
+  concepts the abstract lacked.
+- API + Vite dev server both serving live (`:8077` / `:5173`), data flows.
+
+**Not done / next:**
+- Throughput: each LLM call spawns a fresh `claude` PTY (~30s). 100 papers ≈ 2.5h
+  serially — parallelize PTY sessions (file-in/out is already isolated).
+- Reader on full text is single-call (head+tail window); add real chunking.
+- Navigator/Auditor not yet upgraded to reason over contributions/global edges.
+- Browser-verify the UI visually (stack is up; not yet eyeballed in a browser).
+
 ## 2026-06-17 — session 2: SciFact harness + credit-saving backend
 
 **Goal:** Add the headline Navigator eval (SciFact) and a way to run the pipeline

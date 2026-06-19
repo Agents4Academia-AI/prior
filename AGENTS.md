@@ -1,8 +1,12 @@
 # AGENTS.md — what Claude Code reads at session start
 
-Prior turns primary literature into a queryable atlas of claims via three agents:
-**Reader** (paper → claims), **Cartographer** (claims → graph), **Navigator**
-(question → grounded answer, forward & backward). Read `README.md` for the why.
+Prior turns primary literature into a **two-level knowledge graph**: a GLOBAL
+graph of *contributions* across papers (builds_on/refines/contradicts…) and a
+LOCAL graph of *claims* within each paper (entails/contradicts/supports/
+depends_on). Agents: **Reader** (paper → contributions + claims + local edges),
+**Cartographer** (→ global graph), **Navigator** (grounded Q&A). A FastAPI +
+React web app visualizes both levels and answers questions. See `docs/design.md`
+for the data model and `docs/landscape.md` for prior art.
 
 ## How to run
 
@@ -10,15 +14,18 @@ Prior turns primary literature into a queryable atlas of claims via three agents
 - Env:     `export ANTHROPIC_API_KEY=...` ; optionally `PRIOR_CONTACT_EMAIL=...`
 - Build:   `prior build "<topic>"`     (ingest → read → map → `data/atlas/atlas.json`)
 - Query:   `prior ask "<q>"` / `prior origin "<concept>"` / `prior info`
-- Test:    `pytest -q`   (the whole suite runs without an API key — 20 tests, all backends mocked)
+- Serve:   `prior serve`   then `cd frontend && npm install && npm run dev`  (web UI)
+- Test:    `pytest -q`   (the whole suite runs without an API key — 25 tests, all backends mocked)
 - Eval:    `python evals/scifact/run.py --data data/scifact --mock`  (SciFact, zero credits)
 
 ## Credits
 
-- `prior.llm` has two backends via `PRIOR_LLM_BACKEND`: `api` (metered) and
-  `claude-code` (Agent SDK → your Claude Code login, no API credits). The SciFact
-  runner also takes `--backend`. Use `--mock` / mocked `ask_fn` to develop evals
-  for free; spend credits only on the final run.
+- `prior.llm` has three backends via `PRIOR_LLM_BACKEND`: `api` (metered),
+  `claude-code` (Agent SDK), and `claude-cli`. IMPORTANT: `-p/--print` and the
+  Agent SDK now meter API credits even on a Max plan — only `claude-cli` (drives
+  the *interactive* Claude TUI through a PTY, see `claude_cli.py`) is truly
+  credit-free. Set `PRIOR_LLM_BACKEND=claude-cli` for free runs on the
+  subscription. Use `--mock` / mocked `ask_fn` to develop evals for free.
 
 ## Architecture (one line each)
 
