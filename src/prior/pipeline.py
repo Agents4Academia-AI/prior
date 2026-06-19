@@ -104,9 +104,13 @@ def _contributions_path() -> Path:
 
 def extract_contributions(papers: list[Paper], *, limit: int | None = None,
                           model: str | None = None, relate: bool = True,
-                          progress=print) -> list[dict]:
+                          resume: bool = True, progress=print) -> list[dict]:
     """Run the Contribution agent over primary papers (reviews skipped), using
-    full text. Caches to data/atlas/contributions.json."""
+    full text. Caches to data/atlas/contributions.json.
+
+    Resumable: each paper's result is flushed to contributions.partial.jsonl as
+    it completes, and a restart skips papers already processed — so a long
+    unattended run that crashes loses at most one paper, not the whole batch."""
     from . import contributor, fulltext
     from .sources import looks_like_review
     config.ensure_dirs()
@@ -115,21 +119,43 @@ def extract_contributions(papers: list[Paper], *, limit: int | None = None,
     if limit:
         todo = todo[:limit]
     progress(f"  {len(todo)} primary papers ({skipped} reviews skipped)")
+
+    partial = _contributions_path().parent / "contributions.partial.jsonl"
+    done: dict[str, object] = {}
+    if resume and partial.exists():
+        for line in partial.read_text().splitlines():
+            if line:
+                r = json.loads(line)
+                done[r["paper_id"]] = r["result"]
+        progress(f"  resuming: {len(done)} papers already processed")
+
     out: list[dict] = []
     no_fulltext: list[str] = []
-    for i, p in enumerate(todo, 1):
-        try:
-            ft = fulltext.fetch(p)
-            if not ft:                     # full-text-only: never use the abstract
-                no_fulltext.append(p.id)
-                progress(f"  [{i}/{len(todo)}] {p.short_cite()}: SKIPPED (no full text)")
+    with partial.open("a") as fh:
+        for i, p in enumerate(todo, 1):
+            if p.id in done:                       # already processed — reuse
+                res = done[p.id]
+                if res == "NO_FULLTEXT":
+                    no_fulltext.append(p.id)
+                else:
+                    out.extend(res)                # type: ignore[arg-type]
                 continue
-            cs = contributor.extract(p, ft, model=model)
-        except Exception as e:  # noqa: BLE001 — one paper shouldn't sink the run
-            progress(f"  [{i}/{len(todo)}] {p.short_cite()}: ERROR {e}")
-            continue
-        out.extend(cs)
-        progress(f"  [{i}/{len(todo)}] {p.short_cite()}: {len(cs)} contributions")
+            try:
+                ft = fulltext.fetch(p)
+                if not ft:                 # full-text-only: never use the abstract
+                    no_fulltext.append(p.id)
+                    fh.write(json.dumps({"paper_id": p.id, "result": "NO_FULLTEXT"}) + "\n")
+                    fh.flush()
+                    progress(f"  [{i}/{len(todo)}] {p.short_cite()}: SKIPPED (no full text)")
+                    continue
+                cs = contributor.extract(p, ft, model=model)
+            except Exception as e:  # noqa: BLE001 — one paper shouldn't sink the run
+                progress(f"  [{i}/{len(todo)}] {p.short_cite()}: ERROR {e}")
+                continue                            # not flushed → retried next run
+            out.extend(cs)
+            fh.write(json.dumps({"paper_id": p.id, "result": cs}) + "\n")
+            fh.flush()
+            progress(f"  [{i}/{len(todo)}] {p.short_cite()}: {len(cs)} contributions")
     edges: list[dict] = []
     if relate:
         progress("  relating contributions across papers ...")

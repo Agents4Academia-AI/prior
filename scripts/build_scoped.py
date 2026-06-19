@@ -75,6 +75,14 @@ SEEDS = [
     "scientific knowledge graph claims contributions extraction",
     "open research knowledge graph structured contributions",
     "evidence synthesis automated systematic review LLM",
+    # the SEARCH/SCOPING problem itself — query formulation, recall-oriented
+    # systematic search, iterative retrieval (relevant to the Scoper / THIS
+    # project; in scope as literature management / synthesis methodology)
+    "boolean query formulation systematic review large language models",
+    "query reformulation expansion large language models retrieval",
+    "technology assisted review continuous active learning systematic review",
+    "evaluating search strategy recall precision systematic literature review",
+    "LLM agent iterative literature search retrieval scientific",
 ]
 
 def main():

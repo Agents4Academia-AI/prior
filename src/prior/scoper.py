@@ -16,6 +16,9 @@ that do research tasks".
 
 from __future__ import annotations
 
+import json
+from pathlib import Path
+
 from . import config, llm
 from .models import Paper
 from .sources import arxiv, openalex
@@ -123,26 +126,59 @@ _S_SCHEMA = {
 
 
 def scope(topic_def: str, candidates: list[Paper], *, model: str | None = None,
-          batch: int = 12, progress=print) -> tuple[list[tuple[Paper, str]],
-                                                     list[tuple[Paper, str]]]:
-    """Return (kept, dropped), each a list of (paper, reason)."""
+          batch: int = 12, cache_path: str | Path | None = None,
+          progress=print) -> tuple[list[tuple[Paper, str]], list[tuple[Paper, str]]]:
+    """Return (kept, dropped), each a list of (paper, reason).
+
+    If cache_path is given, each decision is recorded (keyed by paper id) and a
+    restart skips already-judged candidates — so re-scoping after a snowball, or
+    resuming a crashed run, never re-spends LLM calls on papers already seen."""
+    cache: dict[str, dict] = {}
+    cp = Path(cache_path) if cache_path else None
+    if cp and cp.exists():
+        for line in cp.read_text().splitlines():
+            if line:
+                d = json.loads(line)
+                cache[d["id"]] = d
+
     kept: list[tuple[Paper, str]] = []
     dropped: list[tuple[Paper, str]] = []
-    for i in range(0, len(candidates), batch):
-        chunk = candidates[i:i + batch]
-        listing = "\n".join(
-            f"[{j}] {p.title}\n    {p.abstract[:320]}" for j, p in enumerate(chunk))
-        out = llm.structured(
-            model=model or config.READER_MODEL, system=_S_SYSTEM,
-            user=f"TOPIC:\n{topic_def}\n\nCANDIDATES:\n{listing}",
-            schema=_S_SCHEMA, tool_name="emit_scope", max_tokens=2000)
-        dec = {d["index"]: d for d in out.get("decisions", [])
-               if isinstance(d.get("index"), int)}
-        for j, p in enumerate(chunk):
-            d = dec.get(j, {"in_scope": False, "reason": "no decision returned"})
-            (kept if d.get("in_scope") else dropped).append((p, d.get("reason", "")))
-        progress(f"  scored {min(i + batch, len(candidates))}/{len(candidates)} "
-                 f"— kept {len(kept)}")
+    pending: list[Paper] = []
+    for p in candidates:                           # replay cached decisions first
+        d = cache.get(p.id)
+        if d is None:
+            pending.append(p)
+        else:
+            (kept if d["in_scope"] else dropped).append((p, d.get("reason", "")))
+    if cache:
+        progress(f"  {len(cache)} cached decisions reused — {len(pending)} to score")
+
+    fh = cp.open("a") if cp else None
+    try:
+        for i in range(0, len(pending), batch):
+            chunk = pending[i:i + batch]
+            listing = "\n".join(
+                f"[{j}] {p.title}\n    {p.abstract[:320]}" for j, p in enumerate(chunk))
+            out = llm.structured(
+                model=model or config.READER_MODEL, system=_S_SYSTEM,
+                user=f"TOPIC:\n{topic_def}\n\nCANDIDATES:\n{listing}",
+                schema=_S_SCHEMA, tool_name="emit_scope", max_tokens=2000)
+            dec = {d["index"]: d for d in out.get("decisions", [])
+                   if isinstance(d.get("index"), int)}
+            for j, p in enumerate(chunk):
+                d = dec.get(j, {"in_scope": False, "reason": "no decision returned"})
+                in_scope = bool(d.get("in_scope"))
+                reason = d.get("reason", "")
+                (kept if in_scope else dropped).append((p, reason))
+                if fh:
+                    fh.write(json.dumps(
+                        {"id": p.id, "in_scope": in_scope, "reason": reason}) + "\n")
+                    fh.flush()
+            progress(f"  scored {min(i + batch, len(pending))}/{len(pending)} "
+                     f"— kept {len(kept)}")
+    finally:
+        if fh:
+            fh.close()
     return kept, dropped
 
 
