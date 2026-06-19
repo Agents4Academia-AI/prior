@@ -4,6 +4,60 @@
 
 ---
 
+## 2026-06-19 — session 4: Neo4j live graph + continuous daemon + agent + speed
+
+**Goal:** Move off one-shot `atlas.json` to a live graph DB with embeddings;
+make the pipeline fast; add a graph-backed agent, continuous ingestion, evals,
+and point the web app at the live graph.
+
+**Done (verified):**
+- **Neo4j store** (`graph.py`): two-level graph (Paper/Contribution/Claim nodes;
+  level implied by labels) with **native vector index** (1024-dim). Idempotent
+  `MERGE` upserts + batched `UNWIND` `bulk_load`; the agent's read tools
+  (`ann`/`neighbours`/`traverse`/`aggregate`). Runs from the Neo4j 5 tarball on
+  Java 21 (this box has no subuid → no rootless containers).
+- **Local embeddings** (`embeddings.py`): fastembed `mxbai-embed-large-v1`
+  (1024-dim, CPU/ONNX) — free, ~42ms/text.
+- **Speed**: parallel Reader + Cartographer (thread pools, `PRIOR_*_WORKERS`);
+  per-call timeout + capped retries so a hung call can't stall a build. Root
+  cause of the 30-min builds was the sink — one-node-per-tx vector writes flush
+  HNSW each commit (~5.7s/node); `bulk_load` UNWIND → 12-paper sink 8min→37s.
+  12-paper build now ~3 min total.
+- **Graph-backed agent** (`agent.py`): `ask()` (forward, grounded, honest
+  not_found) and `has_been_solved()` (vector-seed contributions → expand global
+  neighbours → aggregate consensus → grounded verdict + gap). CLI `prior ask` /
+  `prior solved`.
+- **Continuous daemon** (`daemon.py`, `prior daemon`): discover (topic search) →
+  dedup vs Neo4j → worker pool → per-paper enrich + MERGE + **incremental** global
+  relate (new contribution vs vector-nearest existing). `--watch` loops.
+- **Web app on Neo4j** (`web/api.py`): reads the live graph (no atlas.json),
+  same shapes so the React UI is unchanged; adds agent-tool endpoints
+  (`/api/search`, `/neighbours`, `/traverse`, `/ask`, `/solved`).
+- **Evals** (`evals/graph_eval.py`): groundedness (key-free), abstention, novelty.
+
+**Verified by:**
+- 12-paper graph in Neo4j: 12 papers, 26 contributions, 87 claims, 98 global +
+  49 local edges, 18 citations. Every API endpoint correct.
+- Groundedness: **100%** of 87 claims grounded (mean overlap 0.997).
+- agent: grounded "open" verdict w/ cited contributions + gap; graceful not_found.
+- daemon: ingested 9 new papers incrementally with new global edges.
+- `pytest -q` → 31 passed (no API key / Neo4j needed).
+
+**Design decisions made (user away):**
+- Storage: **Neo4j 5** (graph-native + native vectors) over Postgres/Kùzu.
+- Embeddings: local open-weight (Anthropic has none; Voyage is paid) — fast model
+  over the 7B leaders (no GPU here).
+- Two parallel implementations now exist (this branch vs team `main`); see "Not done".
+
+**Not done / next:**
+- **Reconcile with `main`** — `main` advanced ~35 commits (its own contributions/
+  full-text/views). Unique here: credit-free `claude-cli`, Neo4j+vectors, the
+  continuous daemon, interactive React app. Recommended: port these onto `main`
+  rather than a conflicting merge. NOT pushed; no PR opened.
+- Cartographer is mentions-heavy (conservative prompt) — tune for builds_on/refines.
+- Full temporal-holdout novelty eval (current is a recall proxy).
+- Citation-frontier expansion in the daemon (topics drive discovery for now).
+
 ## 2026-06-19 — session 3: two-level graph + full text + web app
 
 **Goal:** Reshape Prior into a two-level knowledge graph, run it credit-free on a

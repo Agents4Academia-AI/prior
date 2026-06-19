@@ -1,22 +1,30 @@
 # AGENTS.md — what Claude Code reads at session start
 
-Prior turns primary literature into a **two-level knowledge graph**: a GLOBAL
-graph of *contributions* across papers (builds_on/refines/contradicts…) and a
-LOCAL graph of *claims* within each paper (entails/contradicts/supports/
-depends_on). Agents: **Reader** (paper → contributions + claims + local edges),
-**Cartographer** (→ global graph), **Navigator** (grounded Q&A). A FastAPI +
-React web app visualizes both levels and answers questions. See `docs/design.md`
-for the data model and `docs/landscape.md` for prior art.
+Prior turns primary literature into a **two-level knowledge graph**, stored live
+in **Neo4j**: a GLOBAL graph of *contributions* across papers (builds_on/refines/
+contradicts…) and a LOCAL graph of *claims* within each paper (entails/contradicts/
+supports/depends_on), joined by bridge edges. Agents: **Reader** (paper →
+contributions + claims + local edges), **Cartographer** (→ global graph),
+**Navigator/agent** (grounded Q&A + "has this been solved?"). Ingestion runs
+**continuously** (`prior daemon`), MERGE-ing each paper into the graph. A FastAPI +
+React app visualizes both levels and answers questions. See `docs/design.md`
+(data model), `docs/architecture.md` (full pipeline), `docs/landscape.md` (prior art).
 
 ## How to run
 
-- Install: `pip install -e .`  (or `pip install -r requirements.txt`)
-- Env:     `export ANTHROPIC_API_KEY=...` ; optionally `PRIOR_CONTACT_EMAIL=...`
-- Build:   `prior build "<topic>"`     (ingest → read → map → `data/atlas/atlas.json`)
-- Query:   `prior ask "<q>"` / `prior origin "<concept>"` / `prior info`
+- Install: `pip install -e ".[graph,web]"`   (core + Neo4j/embeddings + web API)
+- Neo4j:   `docker compose up -d`  — or, where containers can't run, the Neo4j 5
+           tarball on Java 21 (see docs/architecture.md). Bolt: `bolt://localhost:7687`.
+- Backend: `export PRIOR_LLM_BACKEND=claude-cli`  (credit-free; see Credits)
+- Build:   `prior build "<topic>"`      (ingest → read → map → sink to Neo4j)
+- Stream:  `prior daemon --topic "<t>" [--watch]`   (continuous ingestion)
+- Query:   `prior ask "<q>"` / `prior solved "<problem>"` / `prior info`
 - Serve:   `prior serve`   then `cd frontend && npm install && npm run dev`  (web UI)
-- Test:    `pytest -q`   (the whole suite runs without an API key — 25 tests, all backends mocked)
-- Eval:    `python evals/scifact/run.py --data data/scifact --mock`  (SciFact, zero credits)
+- Test:    `pytest -q`   (whole suite runs without an API key / Neo4j — 31 tests, mocked)
+- Eval:    `python evals/graph_eval.py groundedness`  (key-free) ; `... abstention|novelty` (LLM)
+
+Embeddings are local + free (fastembed, `mxbai-embed-large-v1`, 1024-dim); the
+Neo4j vector index dimension (`PRIOR_EMBED_DIM`) must match the embedder.
 
 ## Credits
 
