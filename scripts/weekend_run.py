@@ -31,7 +31,7 @@ sys.path.insert(0, str(HERE))
 from prior import completeness, config, pipeline, scoper  # noqa: E402
 from prior.atlas import Atlas                      # noqa: E402
 from prior.models import Paper                     # noqa: E402
-from prior.sources import arxiv                    # noqa: E402
+from prior.sources import arxiv, openalex          # noqa: E402
 from check_recall import parse_bib, best_match     # noqa: E402
 
 # Topic is pluggable: PRIOR_TOPIC names a module exposing TOPIC + SEEDS
@@ -45,23 +45,28 @@ def _log(m):
 
 
 def _gold_anchors():
-    """Resolve the gold set (grant bib) to Papers we GUARANTEE in the corpus:
-    OpenAlex title-match where it indexes the paper, direct arXiv-id fetch for
-    the recent preprints it doesn't. These bypass the relevance filter (they are
-    declared-relevant) and seed the snowball."""
-    bib = config.DATA / "gold.bib"
-    if not bib.exists():
+    """Resolve ALL gold .bib files in the data dir to Papers we GUARANTEE in the
+    corpus (grant bib + any Zotero exports dropped in). Exact-first resolution:
+    arXiv id, then DOI (OpenAlex), then fuzzy title — so an export with DOIs/IDs
+    resolves precisely. These bypass the relevance filter (declared-relevant) and
+    seed the snowball."""
+    entries: list[dict] = []
+    for bib in sorted(config.DATA.glob("*.bib")):
+        entries += parse_bib(bib)
+    if not entries:
         return []
     anchors: dict[str, Paper] = {}
-    need_arxiv: list[str] = []
-    for g in parse_bib(bib):
-        p, j = best_match(g["title"])
-        if p and j >= 0.6:
-            anchors[p.id] = p
-        elif g["arxiv"]:
-            need_arxiv.append(g["arxiv"])
-    for pid, p in arxiv.fetch_ids(need_arxiv).items():
-        anchors.setdefault(pid, p)
+    for pid, p in arxiv.fetch_ids([g["arxiv"] for g in entries if g.get("arxiv")]).items():
+        anchors[pid] = p
+    for g in entries:
+        if g.get("arxiv"):
+            continue
+        p = openalex.fetch_doi(g["doi"]) if g.get("doi") else None
+        if p is None:
+            cand, j = best_match(g["title"])
+            p = cand if (cand and j >= 0.6) else None
+        if p is not None:
+            anchors.setdefault(p.id, p)
     return list(anchors.values())
 
 

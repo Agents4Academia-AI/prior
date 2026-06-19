@@ -144,6 +144,21 @@ def cited_by(openalex_id: str, *, max_results: int = 50) -> list[Paper]:
     return [_to_paper(w) for w in r.json().get("results", [])][:max_results]
 
 
+def fetch_doi(doi: str) -> Paper | None:
+    """Fetch a single work by DOI (exact) — the resolution path for journal
+    papers in a reference export that carry no arXiv id."""
+    doi = doi.strip().replace("https://doi.org/", "").replace("doi:", "")
+    try:
+        r = requests.get(f"{API}/doi:{doi}", params=_params() | {"select": _SELECT},
+                         headers=_headers(), timeout=config.HTTP_TIMEOUT)
+        if r.status_code == 404:
+            return None
+        r.raise_for_status()
+    except requests.RequestException:
+        return None
+    return _to_paper(r.json())
+
+
 def fetch(openalex_id: str) -> Paper | None:
     """Fetch a single work by id ('openalex:W123' or bare 'W123')."""
     wid = openalex_id.split(":")[-1]

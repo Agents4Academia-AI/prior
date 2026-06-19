@@ -28,20 +28,50 @@ def norm(s: str) -> set:
     return set(re.sub(r"[^a-z0-9 ]", " ", s.lower()).split())
 
 
+def _field(entry: str, name: str):
+    """Extract a bibtex field value, brace-balanced so nested {} in titles work.
+    Handles both one-entry-per-line files and standard multi-line exports."""
+    m = re.search(name + r"\s*=\s*", entry, re.I)
+    if not m:
+        return None
+    i = m.end()
+    if i < len(entry) and entry[i] == "{":
+        depth = 0
+        for j in range(i, len(entry)):
+            if entry[j] == "{":
+                depth += 1
+            elif entry[j] == "}":
+                depth -= 1
+                if depth == 0:
+                    return entry[i + 1:j]
+        return None
+    mq = re.match(r'"([^"]*)"|([\w.\-/:]+)', entry[i:])      # quoted or bare (year)
+    return (mq.group(1) or mq.group(2)) if mq else None
+
+
 def parse_bib(path: Path):
+    """Parse a .bib into [{title, year, arxiv, doi}] — tolerant of single-line
+    and multi-line entries, nested braces, and Zotero exports."""
     out = []
-    for line in path.read_text().splitlines():
-        line = line.strip()
-        if not line.startswith("@"):
+    for entry in re.split(r"\n@", "\n" + Path(path).read_text()):
+        if "{" not in entry:
             continue
-        mt = re.search(r"title=\{(.+?)\}", line)
-        if not mt:
+        title = _field(entry, "title")
+        if not title:
             continue
-        title = mt.group(1)
-        my = re.search(r"year=\{(\d{4})\}", line)
-        ma = re.search(r"arXiv:(\d{4}\.\d{4,5})", line)
-        out.append({"title": title, "year": int(my.group(1)) if my else None,
-                    "arxiv": ma.group(1) if ma else None})
+        title = " ".join(re.sub(r"[{}]", "", title).split())
+        yr = _field(entry, "year")
+        doi = _field(entry, "doi")
+        ma = (re.search(r"arXiv:(\d{4}\.\d{4,5})", entry, re.I)
+              or re.search(r"arxiv\.org/abs/(\d{4}\.\d{4,5})", entry, re.I))
+        # an arXiv DOI (10.48550/arXiv.XXXX) is just the arXiv id, not a journal DOI
+        if doi and doi.lower().startswith("10.48550/arxiv."):
+            ma = ma or re.search(r"(\d{4}\.\d{4,5})", doi)
+            doi = None
+        out.append({"title": title,
+                    "year": int(yr) if (yr and yr.isdigit()) else None,
+                    "arxiv": ma.group(1) if ma else None,
+                    "doi": doi})
     return out
 
 
