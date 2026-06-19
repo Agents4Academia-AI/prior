@@ -34,6 +34,7 @@ class Paper:
     doi: Optional[str] = None
     referenced_works: list[str] = field(default_factory=list)
     cited_by_count: int = 0
+    full_text: str = ""                  # body text when available (else abstract-only)
 
     def short_cite(self) -> str:
         first = self.authors[0].split()[-1] if self.authors else "Anon"

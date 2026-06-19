@@ -98,14 +98,31 @@ class ReadResult:
     local_edges: list[Edge] = field(default_factory=list)
 
 
+def _windowed(text: str, cap: int) -> str:
+    """Fit long body text into `cap` chars by keeping the head and tail — intro
+    and conclusion carry most of the contributions/claims."""
+    if len(text) <= cap:
+        return text
+    head = int(cap * 0.7)
+    tail = cap - head
+    return text[:head] + "\n\n[... middle elided ...]\n\n" + text[-tail:]
+
+
 def read(paper: Paper, *, model: str | None = None) -> ReadResult:
-    if not paper.abstract:
+    body = paper.full_text or paper.abstract
+    if not body:
         return ReadResult()
+    if paper.full_text:
+        kind = "full text"
+        content = _windowed(paper.full_text, config.FULLTEXT_CHARS)
+    else:
+        kind = "abstract"
+        content = paper.abstract
     user = (
         f"PAPER TITLE: {paper.title}\n"
         f"YEAR: {paper.year}\n"
         f"AUTHORS: {', '.join(paper.authors[:8])}\n\n"
-        f"TEXT (abstract):\n{paper.abstract}"
+        f"TEXT ({kind}):\n{content}"
     )
     out = llm.structured(
         model=model or config.READER_MODEL,
@@ -136,7 +153,7 @@ def read(paper: Paper, *, model: str | None = None) -> ReadResult:
             text=str(c["text"]).strip(),
             claim_type=c.get("claim_type", "empirical"),
             evidence=str(c.get("evidence", "")).strip(),
-            location="abstract",
+            location=kind,
             confidence=float(c.get("confidence", 0.5)),
             contribution_id=contrib_id,
         )

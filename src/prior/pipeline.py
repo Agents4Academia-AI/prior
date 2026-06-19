@@ -13,7 +13,7 @@ from . import cartographer, config, reader
 from .atlas import Atlas
 from .models import Claim, Contribution, Edge, Paper
 from .reader import ReadResult
-from .sources import arxiv, openalex
+from .sources import arxiv, fulltext, openalex
 
 
 def _papers_path() -> Path:
@@ -33,8 +33,9 @@ def _local_edges_path() -> Path:
 
 
 def ingest(topic: str, *, max_papers: int | None = None,
-           use_arxiv: bool = True) -> list[Paper]:
-    """Fetch papers for a topic from primary sources and cache them."""
+           use_arxiv: bool = True, full_text: bool = True, progress=print) -> list[Paper]:
+    """Fetch papers for a topic from primary sources and cache them. When
+    `full_text` is set, also fetch body text where available (else abstract)."""
     config.ensure_dirs()
     n = max_papers or config.DEFAULT_MAX_PAPERS
     papers: dict[str, Paper] = {}
@@ -47,6 +48,19 @@ def ingest(topic: str, *, max_papers: int | None = None,
                 break
             papers.setdefault(p.id, p)
     out = list(papers.values())[:n]
+
+    if full_text:
+        got = 0
+        for p in out:
+            try:
+                body = fulltext.fetch(p)
+            except Exception:  # noqa: BLE001 — full text is best-effort
+                body = ""
+            if body:
+                p.full_text = body
+                got += 1
+        progress(f"      full text for {got}/{len(out)} papers")
+
     with _papers_path().open("w") as f:
         for p in out:
             f.write(json.dumps(p.to_dict()) + "\n")
