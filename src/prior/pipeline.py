@@ -150,6 +150,27 @@ def _relate_contribs(contribs: list[dict], *, model: str | None = None) -> list[
     return [e.to_dict() for e in cartographer.relate_claims(claims, model=model)]
 
 
+def contributions_atlas() -> Atlas:
+    """An atlas whose nodes are the standalone *contributions* (primary lit only)
+    + their cross-paper relations — so Navigator can answer over the final
+    contributions graph rather than the raw claims atlas."""
+    from .models import Claim, Edge
+    base = Atlas.load(config.ATLAS / "atlas.json")
+    data = json.loads(_contributions_path().read_text())
+    a = Atlas()
+    a.topic = (base.topic or "") + " — contributions"
+    for pid in {c["paper_id"] for c in data["contributions"]}:
+        if pid in base.papers:
+            a.add_paper(base.papers[pid])
+    for c in data["contributions"]:
+        a.add_claim(Claim(id=c["id"], paper_id=c["paper_id"], text=c["statement"],
+                          claim_type=c.get("kind", "other"), evidence=c.get("quote", "")))
+    for e in data.get("edges", []):
+        a.add_edge(Edge(e["src"], e["dst"], e["relation"], e.get("evidence", ""),
+                        e.get("confidence", 0.6)))
+    return a
+
+
 def relate_contributions(*, model: str | None = None, progress=print) -> list[dict]:
     """Add cross-contribution relations to an existing contributions.json (no
     re-extraction)."""

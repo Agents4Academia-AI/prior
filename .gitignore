@@ -23,3 +23,6 @@ data/atlas/
 
 # OS
 .DS_Store
+
+# Downloaded eval datasets (regenerable via --download)
+data/scifact/

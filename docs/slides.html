@@ -1,0 +1,119 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<title>Prior — demo</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/white.min.css">
+<style>
+  :root{--b:#5e81ac;--g:#5f8a4f;--r:#bf616a;--p:#8a5a99;--ink:#3b4252;--mut:#7b818c}
+  .reveal{font-family:system-ui,-apple-system,sans-serif;color:var(--ink);font-size:30px}
+  .reveal h1{font-size:1.9em;color:var(--b);font-weight:700}
+  .reveal h2{font-size:1.25em;color:var(--b);font-weight:650;text-transform:none}
+  .reveal h3{color:var(--ink);text-transform:none;font-size:1em}
+  .reveal em{color:var(--b);font-style:normal;font-weight:600}
+  .reveal .muted{color:var(--mut);font-size:.7em}
+  .reveal .big{font-size:1.5em;font-weight:700}
+  .reveal ul{display:block}
+  .reveal li{margin:.35em 0}
+  .reveal .pipe{font-size:.62em;color:var(--mut);letter-spacing:.5px}
+  .reveal .num{color:var(--b);font-weight:700}
+  .reveal .tag{display:inline-block;background:#eceff4;border-radius:8px;padding:2px 12px;font-size:.6em;color:var(--mut);margin:2px}
+  .reveal .live{position:fixed;bottom:14px;right:18px;font-size:.5em;color:#a3a8b2}
+  .reveal table{font-size:.8em}
+  .reveal .estab{color:var(--g);font-weight:700}
+  .reveal .nf{color:var(--r);font-weight:700}
+</style></head>
+<body><div class="reveal"><div class="slides">
+
+<section data-auto-animate>
+  <h1>Prior</h1>
+  <p class="big">An open-source, <em>auditable map</em> of what the literature actually claims.</p>
+  <p class="muted">Grounded in primary sources — not web search. · Team 6 · Agents4Academia</p>
+</section>
+
+<section>
+  <h2>Keeping up is impossible</h2>
+  <ul>
+    <li>The paper firehose — nobody reads it all.</li>
+    <li>LLMs &amp; web search <em>hallucinate citations</em> — confident, unverifiable.</li>
+    <li>No calibrated sense of what's <em>established</em> vs. <em>contested</em>.</li>
+  </ul>
+  <p class="muted">Researchers need to know what's been done, and whether to trust it.</p>
+</section>
+
+<section>
+  <h2>Three agents over one shared graph</h2>
+  <ul>
+    <li><em>Reader</em> — paper → atomic claims (with evidence)</li>
+    <li><em>Cartographer</em> — claims → typed relations</li>
+    <li><em>Contributor</em> — paper → standalone <em>contributions</em> (full text)</li>
+    <li><em>Navigator</em> — question → grounded, cited answer</li>
+  </ul>
+  <p class="pipe">OpenAlex + arXiv ▶ Reader ▶ Cartographer ▶ Contributor ▶ ATLAS ▶ Navigator</p>
+</section>
+
+<section>
+  <h2>The output: a graph of <em>contributions</em>, not documents</h2>
+  <p>papers → their self-declared contributions → <em>typed cross-paper relations</em><br>
+     <span class="tag">supports</span><span class="tag">extends</span><span class="tag">refines</span></p>
+  <p><span class="num">12</span> papers · <span class="num">39</span> contributions · <span class="num">17</span> cross-paper relations</p>
+  <p class="muted">Primary literature only · extracted from full text · every node traceable to a quote + citation</p>
+  <p class="live">▶ live: evolution view (stages 1·2·3)</p>
+</section>
+
+<section>
+  <h2>Use case: is this <em>established</em>?</h2>
+  <p>"Does retrieval-augmented generation reduce hallucination?"</p>
+  <p class="big estab">VERDICT: ESTABLISHED</p>
+  <ul>
+    <li><em>Supporting</em> + <em>contradicting</em> + open questions — every claim <em>cited</em></li>
+    <li>Flags that most support is <em>definitional, not measured</em></li>
+  </ul>
+  <p class="muted">Calibrated and honest — not a confident blob.</p>
+  <p class="live">▶ live: prior ask "…" --contributions</p>
+</section>
+
+<section>
+  <h2>…and an honest "no"</h2>
+  <p>"Has anyone used RAG for protein structure prediction?"</p>
+  <p class="big nf">VERDICT: NOT_FOUND</p>
+  <ul>
+    <li>Names the <em>closest work</em> + the exact <em>gap</em></li>
+    <li>Abstains instead of fabricating</li>
+  </ul>
+  <p class="muted">Vanilla Claude, asked this, invents specific papers. Prior says "I don't have it."</p>
+</section>
+
+<section>
+  <h2>Why not just ChatGPT / web / Obsidian?</h2>
+  <ul>
+    <li>vs. an <em>ungrounded LLM</em> → won't hallucinate citations</li>
+    <li>vs. <em>web search</em> → structure, provenance, a <em>reusable</em> graph (we trade breadth for auditability)</li>
+    <li>vs. <em>Obsidian / Notion</em> → understands <em>claims &amp; disagreement</em>, not just links you drew</li>
+  </ul>
+  <p class="muted">"Obsidian stores notes; Prior understands claims."</p>
+</section>
+
+<section>
+  <h2>The vision: calibrated evidence assessment — for ML</h2>
+  <table>
+    <tr><td>Medicine</td><td class="muted">→ GRADE</td></tr>
+    <tr><td>Climate</td><td class="muted">→ IPCC</td></tr>
+    <tr><td>Biodiversity</td><td class="muted">→ IPBES</td></tr>
+    <tr><td><em>ML</em></td><td class="estab">→ nothing. Prior is that.</td></tr>
+  </table>
+  <ul>
+    <li>The <em>shared substrate</em> the cohort plugs into — citation verification, replication, review all enrich &amp; read one graph</li>
+    <li>Measurable: a real eval with <em>true labels</em> (SciFact) to prove the calibration</li>
+  </ul>
+</section>
+
+<section data-auto-animate>
+  <h1>Prior</h1>
+  <p>Open source · runs on a Claude Code subscription (no API credits) · hand-off API ready</p>
+  <p class="muted">github.com/Agents4Academia-AI/prior · Team 6</p>
+</section>
+
+</div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+<script>Reveal.initialize({hash:true, transition:'fade', controls:true, progress:true});</script>
+</body></html>

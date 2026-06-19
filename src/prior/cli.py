@@ -51,9 +51,13 @@ def main(argv: list[str] | None = None) -> int:
 
     p_ask = sub.add_parser("ask", help="forward: state of evidence")
     p_ask.add_argument("question")
+    p_ask.add_argument("--contributions", action="store_true",
+                       help="assess over the contributions graph (not raw claims)")
 
     p_org = sub.add_parser("origin", help="backward: trace to origin")
     p_org.add_argument("concept")
+    p_org.add_argument("--contributions", action="store_true",
+                       help="trace over the contributions graph (not raw claims)")
 
     p_con = sub.add_parser("contributions",
                            help="extract papers' self-declared contributions (full text)")
@@ -89,9 +93,11 @@ def main(argv: list[str] | None = None) -> int:
         atlas.save()
         print(atlas.summary())
     elif args.cmd == "ask":
-        print(navigator.ask(_load_atlas(), args.question).render())
+        atlas = pipeline.contributions_atlas() if args.contributions else _load_atlas()
+        print(navigator.ask(atlas, args.question).render())
     elif args.cmd == "origin":
-        print(navigator.origin(_load_atlas(), args.concept).render())
+        atlas = pipeline.contributions_atlas() if args.contributions else _load_atlas()
+        print(navigator.origin(atlas, args.concept).render())
     elif args.cmd == "contributions":
         papers = pipeline.load_papers()
         if not papers:
