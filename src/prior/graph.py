@@ -1,0 +1,198 @@
+"""Neo4j repository — the live two-level graph store.
+
+This is the single graph-access layer. The pipeline writes through the upsert_*
+functions (idempotent MERGE, so continuous ingestion dedups for free); agents
+read through the access functions (ann / neighbours / traverse / aggregate). The
+agent never writes Cypher — it calls these functions.
+
+Config (env):
+  NEO4J_URI       default bolt://localhost:7687
+  NEO4J_USER      default neo4j
+  NEO4J_PASSWORD  default priorpass123
+  PRIOR_EMBED_DIM default 384   (must match the embedder; see embeddings.py)
+"""
+
+from __future__ import annotations
+
+import os
+from contextlib import contextmanager
+from typing import Any, Iterable, Optional
+
+from neo4j import GraphDatabase
+
+# Relationship types by level (node labels disambiguate shared names).
+LOCAL_RELS = ("ENTAILS", "CONTRADICTS", "SUPPORTS", "DEPENDS_ON")
+GLOBAL_RELS = ("BUILDS_ON", "REFINES", "CONTRADICTS", "CONTRAST", "SUPPORTS", "MENTIONS")
+
+_driver = None
+
+
+def _cfg() -> tuple[str, str, str]:
+    return (os.environ.get("NEO4J_URI", "bolt://localhost:7687"),
+            os.environ.get("NEO4J_USER", "neo4j"),
+            os.environ.get("NEO4J_PASSWORD", "priorpass123"))
+
+
+def driver():
+    global _driver
+    if _driver is None:
+        uri, user, pwd = _cfg()
+        _driver = GraphDatabase.driver(uri, auth=(user, pwd))
+    return _driver
+
+
+@contextmanager
+def session():
+    with driver().session() as s:
+        yield s
+
+
+def embed_dim() -> int:
+    return int(os.environ.get("PRIOR_EMBED_DIM", "1024"))  # mxbai-embed-large-v1
+
+
+# ── schema ──────────────────────────────────────────────────────────────────────
+def setup_schema() -> None:
+    """Constraints (unique ids → also the lookup index for MERGE) + vector
+    indexes on contribution/claim embeddings. Idempotent."""
+    dim = embed_dim()
+    with session() as s:
+        for label in ("Paper", "Contribution", "Claim"):
+            s.run(f"CREATE CONSTRAINT {label.lower()}_id IF NOT EXISTS "
+                  f"FOR (n:{label}) REQUIRE n.id IS UNIQUE")
+        for label in ("Contribution", "Claim"):
+            s.run(f"""CREATE VECTOR INDEX {label.lower()}_vec IF NOT EXISTS
+                      FOR (n:{label}) ON (n.embedding)
+                      OPTIONS {{indexConfig: {{
+                        `vector.dimensions`: {dim},
+                        `vector.similarity_function`: 'cosine' }}}}""")
+
+
+# ── writes (idempotent; continuous-ingestion safe) ──────────────────────────────
+def upsert_paper(p: dict) -> None:
+    with session() as s:
+        s.run("""MERGE (n:Paper {id:$id})
+                 SET n += $props""",
+              id=p["id"], props={k: p.get(k) for k in
+                  ("title", "year", "venue", "doi", "url", "cited_by_count",
+                   "is_review", "abstract")})
+
+
+def upsert_contribution(k: dict, embedding: Optional[list[float]] = None) -> None:
+    props = {x: k.get(x) for x in ("paper_id", "statement", "kind",
+                                   "problem", "method", "result", "quote", "confidence")}
+    if embedding is not None:
+        props["embedding"] = embedding
+    with session() as s:
+        s.run("""MERGE (n:Contribution {id:$id}) SET n += $props
+                 WITH n MATCH (p:Paper {id:$pid}) MERGE (p)-[:HAS_CONTRIBUTION]->(n)""",
+              id=k["id"], pid=k["paper_id"], props=props)
+
+
+def upsert_claim(c: dict, embedding: Optional[list[float]] = None) -> None:
+    props = {x: c.get(x) for x in ("paper_id", "text", "claim_type",
+                                   "evidence", "confidence")}
+    if embedding is not None:
+        props["embedding"] = embedding
+    with session() as s:
+        s.run("""MERGE (n:Claim {id:$id}) SET n += $props
+                 WITH n MATCH (p:Paper {id:$pid}) MERGE (n)-[:STATED_IN]->(p)""",
+              id=c["id"], pid=c["paper_id"], props=props)
+        if c.get("contribution_id"):
+            s.run("""MATCH (cl:Claim {id:$cid}), (k:Contribution {id:$kid})
+                     MERGE (cl)-[:SUPPORTS_CONTRIB]->(k)""",
+                  cid=c["id"], kid=c["contribution_id"])
+
+
+def add_edge(src: str, dst: str, rel: str, *, evidence: str = "",
+             confidence: float = 0.5, source: str = "text") -> None:
+    """Typed relationship. rel must be a LOCAL_/GLOBAL_REL or CITES; we whitelist
+    to keep the relationship type safe to interpolate."""
+    rel = rel.upper()
+    allowed = set(LOCAL_RELS) | set(GLOBAL_RELS) | {"CITES"}
+    if rel not in allowed:
+        raise ValueError(f"unknown relation {rel}")
+    with session() as s:
+        s.run(f"""MATCH (a {{id:$src}}), (b {{id:$dst}})
+                  MERGE (a)-[r:{rel}]->(b)
+                  SET r.evidence=$ev, r.confidence=$conf, r.source=$source""",
+              src=src, dst=dst, ev=evidence, conf=confidence, source=source)
+
+
+# ── reads (the agent's graph tools) ─────────────────────────────────────────────
+def ann(query_vec: list[float], *, label: str = "Contribution", k: int = 10) -> list[dict]:
+    """Vector k-NN over node embeddings — the entry point for exploration."""
+    idx = f"{label.lower()}_vec"
+    with session() as s:
+        res = s.run("""CALL db.index.vector.queryNodes($idx, $k, $vec)
+                       YIELD node, score
+                       RETURN node{.*, embedding:null} AS node, score
+                       ORDER BY score DESC""",
+                    idx=idx, k=k, vec=query_vec)
+        return [{**r["node"], "_score": r["score"]} for r in res]
+
+
+def neighbours(node_id: str, *, rels: Iterable[str] | None = None,
+               direction: str = "both") -> list[dict]:
+    """1-hop neighbours, optionally filtered by relationship type."""
+    arrow = {"out": "-[r]->", "in": "<-[r]-", "both": "-[r]-"}[direction]
+    rel_filter = "WHERE type(r) IN $rels" if rels else ""
+    with session() as s:
+        res = s.run(f"""MATCH (n {{id:$id}}){arrow}(m) {rel_filter}
+                        RETURN type(r) AS rel, properties(r) AS props,
+                               m{{.*, embedding:null}} AS node""",
+                    id=node_id, rels=list(rels) if rels else None)
+        return [{"rel": r["rel"], "props": r["props"], "node": r["node"]} for r in res]
+
+
+def traverse(node_id: str, *, rel: str = "BUILDS_ON", max_depth: int = 5,
+             direction: str = "out") -> list[list[dict]]:
+    """Bounded variable-length traversal along one relation (e.g. lineage)."""
+    rel = rel.upper()
+    arrow = f"-[:{rel}*1..{int(max_depth)}]->" if direction == "out" else f"<-[:{rel}*1..{int(max_depth)}]-"
+    with session() as s:
+        res = s.run(f"""MATCH path=(n {{id:$id}}){arrow}(m)
+                        RETURN [x IN nodes(path) | x{{.*, embedding:null}}] AS chain
+                        ORDER BY length(path) DESC""", id=node_id)
+        return [r["chain"] for r in res]
+
+
+def aggregate_relations(node_ids: list[str], *, among: str = "Contribution") -> dict:
+    """Count edge types within a node set — e.g. supports vs contradicts in a
+    problem cluster, to read consensus."""
+    with session() as s:
+        res = s.run(f"""MATCH (a:{among})-[r]->(b:{among})
+                        WHERE a.id IN $ids AND b.id IN $ids
+                        RETURN type(r) AS rel, count(*) AS n""", ids=node_ids)
+        return {r["rel"]: r["n"] for r in res}
+
+
+def get(node_id: str) -> Optional[dict]:
+    with session() as s:
+        res = s.run("MATCH (n {id:$id}) RETURN n{.*, embedding:null} AS node, labels(n) AS labels",
+                    id=node_id).single()
+        return {**res["node"], "_labels": res["labels"]} if res else None
+
+
+def claims_of(contrib_id: str) -> list[dict]:
+    with session() as s:
+        res = s.run("""MATCH (c:Claim)-[:SUPPORTS_CONTRIB]->(:Contribution {id:$id})
+                       RETURN c{.*, embedding:null} AS c""", id=contrib_id)
+        return [r["c"] for r in res]
+
+
+def summary() -> dict:
+    with session() as s:
+        def one(q): return s.run(q).single()[0]
+        return {
+            "papers": one("MATCH (n:Paper) RETURN count(n)"),
+            "contributions": one("MATCH (n:Contribution) RETURN count(n)"),
+            "claims": one("MATCH (n:Claim) RETURN count(n)"),
+            "global_edges": one(f"MATCH (:Contribution)-[r]->(:Contribution) RETURN count(r)"),
+            "local_edges": one(f"MATCH (:Claim)-[r]->(:Claim) RETURN count(r)"),
+        }
+
+
+def wipe() -> None:
+    with session() as s:
+        s.run("MATCH (n) DETACH DELETE n")

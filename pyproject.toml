@@ -21,6 +21,8 @@ dependencies = [
 claude-code = ["claude-agent-sdk>=0.1"]
 # The web API (prior serve), consumed by the React UI in frontend/:
 web = ["fastapi>=0.110", "uvicorn[standard]>=0.27"]
+# The live two-level graph store (Neo4j) + local credit-free embeddings:
+graph = ["neo4j>=5.20", "fastembed>=0.3"]
 
 [project.scripts]
 prior = "prior.cli:main"

@@ -16,6 +16,37 @@ from .reader import ReadResult
 from .sources import arxiv, fulltext, openalex
 
 
+def sink_to_neo4j(atlas, *, progress=print) -> dict:
+    """Push a built atlas into Neo4j with embeddings. Idempotent (MERGE), so it
+    doubles as the incremental-merge primitive for continuous ingestion."""
+    from . import embeddings, graph
+    graph.setup_schema()
+
+    for p in atlas.papers.values():
+        graph.upsert_paper(p.to_dict())
+
+    contribs = list(atlas.contributions.values())
+    cvecs = embeddings.embed([f"{k.problem} {k.method} {k.result}" for k in contribs])
+    for k, v in zip(contribs, cvecs):
+        graph.upsert_contribution(k.to_dict(), embedding=v)
+
+    claims = list(atlas.claims.values())
+    clvecs = embeddings.embed([c.text for c in claims])
+    for c, v in zip(claims, clvecs):
+        graph.upsert_claim(c.to_dict(), embedding=v)
+
+    for e in atlas.edges:
+        if e.level == "global" or e.level == "local":
+            graph.add_edge(e.src, e.dst, e.relation, evidence=e.evidence,
+                           confidence=e.confidence, source=e.source)
+        elif e.relation == "cites":
+            graph.add_edge(e.src, e.dst, "CITES", confidence=e.confidence)
+
+    s = graph.summary()
+    progress(f"      neo4j: {s}")
+    return s
+
+
 def _papers_path() -> Path:
     return config.RAW / "papers.jsonl"
 
