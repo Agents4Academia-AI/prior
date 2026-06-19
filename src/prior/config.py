@@ -3,6 +3,23 @@
 import os
 from pathlib import Path
 
+
+def _load_dotenv() -> None:
+    """Load a local, gitignored .env so secrets (e.g. PRIOR_S2_API_KEY) apply to
+    every run without re-exporting. Real environment variables take precedence."""
+    env_path = Path(__file__).resolve().parents[2] / ".env"
+    if not env_path.exists():
+        return
+    for line in env_path.read_text().splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        k, v = line.split("=", 1)
+        os.environ.setdefault(k.strip(), v.strip())
+
+
+_load_dotenv()
+
 # ── Models ────────────────────────────────────────────────────────────────────
 # Extraction/mapping is high-volume → a fast, cheap model. Navigation is the
 # user-facing reasoning step → allow a stronger model.
