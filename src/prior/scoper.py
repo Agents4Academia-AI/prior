@@ -238,10 +238,14 @@ def scope(topic_def: str, candidates: list[Paper], *, model: str | None = None,
             chunk = pending[i:i + batch]
             listing = "\n".join(
                 f"[{j}] {p.title}\n    {p.abstract[:320]}" for j, p in enumerate(chunk))
-            out = llm.structured(
-                model=model or config.READER_MODEL, system=_S_SYSTEM,
-                user=f"TOPIC:\n{topic_def}\n\nCANDIDATES:\n{listing}",
-                schema=_S_SCHEMA, tool_name="emit_scope", max_tokens=2000)
+            try:
+                out = llm.structured(
+                    model=model or config.READER_MODEL, system=_S_SYSTEM,
+                    user=f"TOPIC:\n{topic_def}\n\nCANDIDATES:\n{listing}",
+                    schema=_S_SCHEMA, tool_name="emit_scope", max_tokens=2000)
+            except Exception as e:  # noqa: BLE001 — skip; uncached batch retries on resume
+                progress(f"  scope batch error (will retry on resume): {e}")
+                continue
             dec = {d["index"]: d for d in out.get("decisions", [])
                    if isinstance(d.get("index"), int)}
             for j, p in enumerate(chunk):

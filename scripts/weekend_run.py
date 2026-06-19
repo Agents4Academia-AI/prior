@@ -17,7 +17,9 @@ Run:
         PYTHONPATH=src python3 scripts/weekend_run.py
 """
 
+import importlib
 import json
+import os
 import sys
 from collections import Counter
 from pathlib import Path
@@ -30,8 +32,12 @@ from prior import completeness, config, pipeline, scoper  # noqa: E402
 from prior.atlas import Atlas                      # noqa: E402
 from prior.models import Paper                     # noqa: E402
 from prior.sources import arxiv                    # noqa: E402
-from build_scoped import TOPIC, SEEDS              # noqa: E402
 from check_recall import parse_bib, best_match     # noqa: E402
+
+# Topic is pluggable: PRIOR_TOPIC names a module exposing TOPIC + SEEDS
+# (default = the main "agents for the scientific process" corpus).
+_topic = importlib.import_module(os.environ.get("PRIOR_TOPIC", "build_scoped"))
+TOPIC, SEEDS = _topic.TOPIC, _topic.SEEDS
 
 
 def _log(m):
@@ -94,7 +100,12 @@ def main():
         _log(f"[0] base corpus exists: {len(papers)} papers (skip scope)")
     else:
         _log("[0] base scope — proposing queries ...")
-        queries = list(dict.fromkeys(SEEDS + scoper.propose_queries(TOPIC)))
+        try:
+            extra = scoper.propose_queries(TOPIC)
+        except Exception as e:  # noqa: BLE001
+            _log(f"    propose_queries failed ({e}); using seeds only")
+            extra = []
+        queries = list(dict.fromkeys(SEEDS + extra))
         _log(f"    {len(queries)} seed queries; gathering candidates ...")
         cands = scoper.gather_candidates(queries, per_query=20, progress=lambda m: None)
         _log(f"    {len(cands)} candidates; scoping ...")
