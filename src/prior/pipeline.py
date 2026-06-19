@@ -124,9 +124,13 @@ def extract_contributions(papers: list[Paper], *, limit: int | None = None,
     done: dict[str, object] = {}
     if resume and partial.exists():
         for line in partial.read_text().splitlines():
-            if line:
+            if not line:
+                continue
+            try:                                   # tolerate a torn final line
                 r = json.loads(line)
                 done[r["paper_id"]] = r["result"]
+            except (ValueError, KeyError):
+                continue
         progress(f"  resuming: {len(done)} papers already processed")
 
     out: list[dict] = []

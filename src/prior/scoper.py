@@ -17,11 +17,12 @@ that do research tasks".
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 from . import config, llm
 from .models import Paper
-from .sources import arxiv, openalex
+from .sources import arxiv, openalex, semanticscholar
 
 # ── stage 1: propose search queries ──────────────────────────────────────────
 _Q_SYSTEM = """You design literature-search queries. Given a research topic with
@@ -44,10 +45,32 @@ def propose_queries(topic_def: str, *, model: str | None = None) -> list[str]:
 
 
 # ── stage 2: gather candidates (recall) ──────────────────────────────────────
+def _dedup_cross_source(papers: list[Paper]) -> list[Paper]:
+    """Collapse the same paper arriving from different sources (OpenAlex / arXiv /
+    S2) by normalised title, preferring OpenAlex (it carries the citation graph
+    the snowball needs), then arXiv, then S2. Papers with no usable title pass
+    through untouched. This avoids double-processing without capping recall."""
+    rank = {"openalex": 0, "arxiv": 1, "semanticscholar": 2}
+    by_title: dict[str, Paper] = {}
+    out: list[Paper] = []
+    for p in papers:
+        key = " ".join(re.sub(r"[^a-z0-9]", " ", (p.title or "").lower()).split())
+        if len(key) < 8:
+            out.append(p)
+            continue
+        cur = by_title.get(key)
+        if cur is None or rank.get(p.source, 9) < rank.get(cur.source, 9):
+            by_title[key] = p
+    return out + list(by_title.values())
+
+
 def gather_candidates(queries: list[str], *, per_query: int = 25,
-                      use_arxiv: bool = True, progress=print) -> list[Paper]:
-    """Resilient: a source that errors (rate-limit, timeout) on one query is
-    skipped, not fatal. arXiv is paced to avoid 429s."""
+                      use_arxiv: bool = True, use_s2: bool = True,
+                      progress=print) -> list[Paper]:
+    """Resilient multi-source recall: OpenAlex + arXiv + Semantic Scholar. A
+    source that errors (rate-limit, timeout) on one query is skipped, not fatal;
+    arXiv and S2 are paced to respect their public limits. Cross-source
+    duplicates are collapsed by title at the end."""
     import time
     papers: dict[str, Paper] = {}
     for q in queries:
@@ -63,8 +86,15 @@ def gather_candidates(queries: list[str], *, per_query: int = 25,
                 time.sleep(1.0)   # be polite to arXiv
             except Exception as e:  # noqa: BLE001
                 progress(f"  arxiv skip '{q[:40]}': {e}")
+        if use_s2:
+            try:
+                for p in semanticscholar.search(q, max_papers=max(6, per_query // 2)):
+                    papers.setdefault(p.id, p)
+                time.sleep(1.1)   # S2 public pool is throttled
+            except Exception as e:  # noqa: BLE001
+                progress(f"  s2 skip '{q[:40]}': {e}")
         progress(f"  query '{q[:50]}' → pool now {len(papers)}")
-    return list(papers.values())
+    return _dedup_cross_source(list(papers.values()))
 
 
 # ── stage 2b: citation snowball (recall, the high-leverage step) ─────────────
@@ -137,9 +167,13 @@ def scope(topic_def: str, candidates: list[Paper], *, model: str | None = None,
     cp = Path(cache_path) if cache_path else None
     if cp and cp.exists():
         for line in cp.read_text().splitlines():
-            if line:
+            if not line:
+                continue
+            try:                                   # tolerate a torn final line
                 d = json.loads(line)
                 cache[d["id"]] = d
+            except (ValueError, KeyError):
+                continue
 
     kept: list[tuple[Paper, str]] = []
     dropped: list[tuple[Paper, str]] = []
