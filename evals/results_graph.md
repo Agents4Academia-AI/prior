@@ -23,14 +23,24 @@ noted). Reproduce with `evals/graph_eval.py`.
 
 Faithfulness guard: extracted claims' evidence spans are present in the source.
 
-## Navigator/agent — abstention & headline (LLM)
+## Navigator/agent — abstention & novelty (LLM, on the 21-paper graph)
 
-| Check | Result |
-|-------|--------|
-| `ask` off-topic ("data-center energy") | `not_found` (graceful, no confabulation) |
-| `has_been_solved` "regularization prevents forgetting?" | `open` — correctly notes it appears only in survey taxonomies; cites contributions; states the gap |
+`python evals/graph_eval.py abstention` / `novelty`
 
-`python evals/graph_eval.py abstention` / `novelty` for the batch runs.
+| Check | Metric | Value |
+|-------|--------|-------|
+| Abstention (3 off-topic questions) | returned `not_found` | **3/3 = 1.00** |
+| Novelty recall proxy (5 sampled contributions) | found related work (not falsely `not_addressed`) | **5/5 = 1.00** |
+
+Abstention: every off-topic question (energy, mortgages, tardigrades) → graceful
+`not_found`, no confabulation. Novelty: for each sampled contribution's problem,
+`has_been_solved` correctly surfaced sibling contributions (verdicts
+solved / partially_solved with 2–5 `addressed_by` ids) — it never claimed a
+problem was unaddressed when related work exists in the graph.
+
+Spot check: `has_been_solved("regularization prevents forgetting?")` → `open` —
+correctly notes regularization appears only inside survey taxonomies, not as a
+directly-evaluated contribution, and states the gap.
 
 ## Performance
 
