@@ -64,6 +64,36 @@ def gather_candidates(queries: list[str], *, per_query: int = 25,
     return list(papers.values())
 
 
+# ── stage 2b: citation snowball (recall, the high-leverage step) ─────────────
+def snowball(seeds: list[Paper], *, anchor_k: int = 25, per_paper: int = 40,
+             progress=print) -> list[Paper]:
+    """One-hop citation expansion of a seed set (OpenAlex): backward references
+    of all seeds + forward cited-by of the most-cited anchors. Finds the
+    connected cluster that keyword search misses. Returns NEW candidate papers
+    (not already among the seeds)."""
+    have = {p.id for p in seeds}
+    new: dict[str, Paper] = {}
+
+    # backward — union of references (they overlap heavily, so the set is bounded)
+    refs = list(dict.fromkeys(
+        r for p in seeds for r in p.referenced_works
+        if r.startswith("openalex:") and r not in have))
+    for pid, p in openalex.fetch_many(refs).items():
+        if pid not in have:
+            new.setdefault(pid, p)
+    progress(f"  backward: {len(refs)} refs → +{len(new)} new")
+
+    # forward — cited-by of the most-cited anchors (catches newer connected work)
+    anchors = sorted((p for p in seeds if p.id.startswith("openalex:")),
+                     key=lambda p: -p.cited_by_count)[:anchor_k]
+    for p in anchors:
+        for cp in openalex.cited_by(p.id, max_results=per_paper):
+            if cp.id not in have and cp.id not in new:
+                new[cp.id] = cp
+        progress(f"  forward cited-by {p.short_cite()} → pool {len(new)}")
+    return list(new.values())
+
+
 # ── stage 3: relevance filter (precision) ────────────────────────────────────
 _S_SYSTEM = """You are the Scoper. Decide whether each candidate paper is IN SCOPE
 for the given topic, judging only from its title + abstract. Honour the topic's

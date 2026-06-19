@@ -77,9 +77,6 @@ SEEDS = [
     "evidence synthesis automated systematic review LLM",
 ]
 
-CAP = 60  # cap kept papers for a tractable first build
-
-
 def main():
     config.ensure_dirs()
     print(f"data dir: {config.DATA}\n[1/5] proposing extra queries ...", flush=True)
@@ -120,9 +117,8 @@ def main():
               flush=True)
         return
 
-    # build phase — cap by RECENCY (this field is recent), not citations
-    papers = sorted(papers, key=lambda p: (p.year or 0), reverse=True)[:CAP]
-    print(f"\n[build] contributions over {len(papers)} most-recent papers ...", flush=True)
+    # build phase — NO capping; contributions over the full scoped corpus
+    print(f"\n[build] contributions over all {len(papers)} papers ...", flush=True)
     pipeline.extract_contributions(papers, relate=False,
                                    progress=lambda m: print("   "+m, flush=True))
     pipeline.relate_contributions_fast(progress=lambda m: print("   "+m, flush=True))

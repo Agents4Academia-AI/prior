@@ -125,6 +125,25 @@ def fetch_many(ids: list[str], *, batch: int = 50) -> dict[str, Paper]:
     return out
 
 
+def cited_by(openalex_id: str, *, max_results: int = 50) -> list[Paper]:
+    """Forward citations: works that CITE the given paper, most-recent first —
+    the key signal for snowballing toward newer connected work."""
+    wid = openalex_id.split(":")[-1]
+    params = _params() | {
+        "filter": f"cites:{wid}",
+        "per_page": min(max_results, 200),
+        "sort": "publication_date:desc",
+        "select": _SELECT,
+    }
+    try:
+        r = requests.get(API, params=params, headers=_headers(),
+                         timeout=config.HTTP_TIMEOUT)
+        r.raise_for_status()
+    except requests.RequestException:
+        return []
+    return [_to_paper(w) for w in r.json().get("results", [])][:max_results]
+
+
 def fetch(openalex_id: str) -> Paper | None:
     """Fetch a single work by id ('openalex:W123' or bare 'W123')."""
     wid = openalex_id.split(":")[-1]
