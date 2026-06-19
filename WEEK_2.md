@@ -2,6 +2,32 @@
 
 Captured so they're not lost. None of these are in the Friday MVP.
 
+## NOW — post-demo priorities (endorsed by YWT + Luke Ong)
+Demo went well. Two senior steers — both already below, promoted to next up:
+
+1. **Iterative contribution merging** (Yee Whye Teh seconded Klara's idea). The
+   global-layer merge: cluster *equivalent* contributions across papers into
+   canonical nodes; novelty falls out (merge into an earlier node = overstated).
+   **Test FIRST on the existing 39 RAG contributions** — clear merge candidates,
+   e.g. Ayala 2024 ≈ Béchard 2024 ("RAG for structured output reduces
+   hallucination" + "a small dense retriever suffices"). Use **embeddings**
+   (local sentence-transformers preferred — keeps the no-API ethos) for
+   equivalence + an LLM to confirm/synthesise the canonical statement. See the
+   "Contribution + Novelty pipeline" and "Assessor" sections below.
+
+2. **Fix a topic + find all relevant papers** (Luke Ong). Target = the hackathon's
+   own topic: *"agents in academic tasks — to help researchers or produce
+   publishable papers."* Finding (2026-06-20): naive multi-seed search → 180
+   papers but NOISY — top-cited are NumPy / PRISMA / STRING; even a 2022+
+   LLM/agent-topical filter → 94, still polluted with ChatGPT-in-education. So
+   **corpus construction is itself an agent task** → build a **Scoper**: seed from
+   a few *known* key papers (AI Scientist, ResearchAgent, Boiko's autonomous
+   chemistry, …) + `--cite-hops` + an LLM relevance filter against a one-line topic
+   definition. Target a clean ~50–100 paper corpus.
+
+   **Combine:** Scoper → clean corpus → contributions → iterative merge → a
+   canonical map of agents-for-academia (also feeds Luke's survey).
+
 ## Evaluation: IPBES-style evidence-status assessment (the *right* eval)
 Prior's benefit is NOT answering broad questions better than web search — it
 abstains on recall (see the QA round). The benefit is **calibrated assessment of
