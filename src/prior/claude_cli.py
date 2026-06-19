@@ -99,9 +99,10 @@ def run_json(
         time.sleep(0.5)
         child.send("\r")
 
-        result = _poll_json(outfile, timeout=timeout)
-        if result is not None:
-            return result
+        text = _poll_text(outfile, timeout=timeout)
+        if text is not None:
+            # extract_json tolerates ```json fences / trailing prose in the file.
+            return extract_json(text)
 
         # Fallback: model printed instead of writing — try to scrape the screen.
         raw = (child.before or "") + _drain(child)
@@ -119,17 +120,22 @@ def run_json(
                 pass
 
 
-def _poll_json(path: str, *, timeout: int) -> Optional[dict[str, Any]]:
+def _poll_text(path: str, *, timeout: int) -> Optional[str]:
+    """Wait for the output file to appear and stop growing, then return its
+    text. Returns None if it never appears within `timeout`."""
     deadline = time.time() + timeout
+    last = -1
     while time.time() < deadline:
-        if os.path.exists(path) and os.path.getsize(path) > 0:
-            try:
-                with open(path) as fh:
-                    return json.load(fh)
-            except (json.JSONDecodeError, OSError):
-                # File may still be mid-write; give it a beat and retry.
-                time.sleep(0.5)
-        time.sleep(1)
+        if os.path.exists(path):
+            size = os.path.getsize(path)
+            if size > 0 and size == last:        # non-empty and stable => done
+                try:
+                    with open(path) as fh:
+                        return fh.read()
+                except OSError:
+                    pass
+            last = size
+        time.sleep(0.6)
     return None
 
 

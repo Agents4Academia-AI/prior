@@ -155,6 +155,7 @@ def read(paper: Paper, *, model: str | None = None) -> ReadResult:
                 relation=e.get("relation", "supports"),
                 evidence=str(e.get("evidence", "")).strip(),
                 source="text",
+                level="local",
             ))
 
     return ReadResult(contributions=contribs, claims=claims, local_edges=local_edges)

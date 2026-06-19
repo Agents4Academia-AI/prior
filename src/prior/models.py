@@ -107,6 +107,7 @@ class Edge:
     evidence: str = ""
     confidence: float = 0.5
     source: str = "text"     # one of EDGE_SOURCES (meaningful for global edges)
+    level: str = "meta"      # "local" (claim↔claim) | "global" (contrib↔contrib) | "meta"
 
     def to_dict(self) -> dict:
         return asdict(self)
