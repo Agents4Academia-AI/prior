@@ -25,8 +25,9 @@ EDGE_STYLE = {
     "extends":       {"color": "#b48ead", "dashes": False, "label": "extends"},
     "contributes_to":{"color": "#8fbcbb", "dashes": False, "label": "contributes_to"},
 }
-CLAIM_COLOR = "#9db8d6"   # soft blue dot
-PAPER_COLOR = "#dfe3ea"   # light grey-blue box (dark text stays readable)
+CLAIM_COLOR = "#9db8d6"     # soft blue dot
+CONTRIB_COLOR = "#9db8d6"   # contributions: ONE colour (kind is in the detail panel)
+PAPER_COLOR = "#e3e6ec"     # neutral light-grey box (dark text stays readable)
 
 # Contribution nodes, coloured by kind (muted).
 KIND_COLOR = {
@@ -219,7 +220,7 @@ def render_contributions(out_path: Path | None = None) -> Path:
         nodes.append({
             "id": c["id"],  "shape": "dot",
             "label": _truncate(c["statement"], 42),
-            "color": _fill(KIND_COLOR.get(c["kind"], "#c2c7d0")),
+            "color": _fill(CONTRIB_COLOR),
             "title": f"[{c['kind']}] " + _truncate(c["statement"], 55),
             "detail": {"kind": "contribution", "ckind": c["kind"],
                        "statement": c["statement"], "quote": c.get("quote", ""),
@@ -234,7 +235,10 @@ def render_contributions(out_path: Path | None = None) -> Path:
     for e in contribs.get("edges", []):
         st = EDGE_STYLE.get(e["relation"], {"color": "#bbb", "dashes": False,
                                             "label": e["relation"]})
-        edges.append({"from": e["src"], "to": e["dst"], "arrows": "to",
+        # supports/contradicts are symmetric corroboration → undirected;
+        # extends/refines are directional (newer → the earlier work it builds on)
+        arrow = "" if e["relation"] in ("supports", "contradicts") else "to"
+        edges.append({"from": e["src"], "to": e["dst"], "arrows": arrow,
                       "color": {"color": st["color"]}, "dashes": st["dashes"],
                       "label": st["label"], "font": {"size": 9},
                       "title": e.get("evidence", "")})
@@ -279,12 +283,12 @@ _EVO_HTML = """<!doctype html>
   <h1>Prior — atlas evolution</h1>
   <div class="muted" id="cap"></div>
   <div class="legend" style="margin-top:8px">
-    <span><span class="sw" style="background:%PAPERC%"></span>paper</span>
-    <span class="muted">· node colour = contribution kind</span><br>
+    <span><span class="sw" style="background:%CONTRIBC%"></span>contribution</span>
+    <span><span class="sw" style="background:%PAPERC%"></span>paper</span><br>
     <span><span class="sw" style="background:#a3be8c"></span>supports</span>
     <span><span class="sw" style="background:#bf828a"></span>contradicts</span>
-    <span><span class="sw" style="background:#81a1c1"></span>refines</span>
-    <span><span class="sw" style="background:#b48ead"></span>extends</span>
+    <span><span class="sw" style="background:#81a1c1"></span>refines ▸</span>
+    <span><span class="sw" style="background:#b48ead"></span>extends ▸</span>
     <span><span class="sw" style="background:#dde2ea"></span>stated_in</span>
   </div>
   <div id="detail" class="muted">Click a node for details.</div>
@@ -349,7 +353,7 @@ def render_evolution(out_path: Path | None = None) -> Path:
         src = (f"{p.short_cite()} — {p.title}" if p else c["paper_id"])
         nodes.append({"id": c["id"], "stage": 2, 
                       "shape": "dot", "label": _truncate(c["statement"], 38),
-                      "color": _fill(KIND_COLOR.get(c["kind"], "#c2c7d0")),
+                      "color": _fill(CONTRIB_COLOR),
                       "title": f"[{c['kind']}] " + _truncate(c["statement"], 55),
                       "detail": {"kind": "contribution", "ckind": c["kind"],
                                  "statement": c["statement"],
@@ -366,14 +370,15 @@ def render_evolution(out_path: Path | None = None) -> Path:
         eid += 1
         st = EDGE_STYLE.get(e["relation"], {"color": "#bbb", "dashes": False,
                                             "label": e["relation"]})
+        arrow = "" if e["relation"] in ("supports", "contradicts") else "to"
         edges.append({"id": eid, "stage": 3, "from": e["src"], "to": e["dst"],
-                      "arrows": "to", "color": {"color": st["color"]},
+                      "arrows": arrow, "color": {"color": st["color"]},
                       "dashes": st["dashes"], "label": st["label"],
                       "font": {"size": 9}, "title": e.get("evidence", "")})
 
     html = (_EVO_HTML.replace("%NODES%", json.dumps(nodes))
             .replace("%EDGES%", json.dumps(edges))
-            .replace("%PAPERC%", PAPER_COLOR)
+            .replace("%PAPERC%", PAPER_COLOR).replace("%CONTRIBC%", CONTRIB_COLOR)
             .replace("%N1%", str(len(paper_ids))).replace("%N2%", str(len(cs)))
             .replace("%N3%", str(len(rels))))
     out_path = out_path or (config.ATLAS / "view_evolution.html")
