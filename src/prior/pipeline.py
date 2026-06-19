@@ -103,7 +103,8 @@ def _contributions_path() -> Path:
 
 
 def extract_contributions(papers: list[Paper], *, limit: int | None = None,
-                          model: str | None = None, progress=print) -> list[dict]:
+                          model: str | None = None, relate: bool = True,
+                          progress=print) -> list[dict]:
     """Run the Contribution agent over primary papers (reviews skipped), using
     full text. Caches to data/atlas/contributions.json."""
     from . import contributor, fulltext
@@ -129,9 +130,11 @@ def extract_contributions(papers: list[Paper], *, limit: int | None = None,
             continue
         out.extend(cs)
         progress(f"  [{i}/{len(todo)}] {p.short_cite()}: {len(cs)} contributions")
-    progress("  relating contributions across papers ...")
-    edges = _relate_contribs(out, model=model)
-    progress(f"  {len(edges)} cross-contribution relations")
+    edges: list[dict] = []
+    if relate:
+        progress("  relating contributions across papers ...")
+        edges = _relate_contribs(out, model=model)
+        progress(f"  {len(edges)} cross-contribution relations")
     _contributions_path().write_text(json.dumps(
         {"contributions": out, "edges": edges, "skipped_no_fulltext": no_fulltext},
         indent=2))

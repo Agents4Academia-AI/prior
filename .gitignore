@@ -29,3 +29,6 @@ data/atlas/*
 
 # Downloaded eval datasets (regenerable via --download)
 data/scifact/
+
+# Scoped topic corpus (separate build, regenerable)
+data_hackathon/
