@@ -13,7 +13,9 @@ Run (writes to a separate data dir so it doesn't touch the committed demo snapsh
 """
 
 import json
+import os
 import sys
+from collections import Counter
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
@@ -88,13 +90,12 @@ def main():
     cands = scoper.gather_candidates(seeds, per_query=20, progress=lambda m: None)
     print(f"      {len(cands)} candidates", flush=True)
 
-    print("[3/5] scoping (LLM relevance filter) ...", flush=True)
+    print("[3/3] scoping (LLM relevance filter) ...", flush=True)
     kept, dropped = scoper.scope(TOPIC, cands, progress=lambda m: print("   "+m, flush=True))
-    kept = sorted(kept, key=lambda t: -t[0].cited_by_count)[:CAP]
-    papers = [p for p, _ in kept]
-    print(f"      kept {len(papers)} (capped at {CAP}) / dropped {len(dropped)}", flush=True)
+    papers = [p for p, _ in kept]          # FULL relevant set — no citation cap
+    print(f"      kept {len(papers)} / dropped {len(dropped)}", flush=True)
 
-    # cache papers + papers-only atlas + scope record
+    # cache full scoped corpus for inspection (coverage checkpoint)
     with (config.RAW / "papers.jsonl").open("w") as f:
         for p in papers:
             f.write(json.dumps(p.to_dict()) + "\n")
@@ -104,19 +105,28 @@ def main():
     a.link_citations(); a.save()
     (config.ATLAS / "scope.json").write_text(json.dumps({
         "topic": TOPIC,
-        "kept": [{"id": p.id, "cite": p.short_cite(), "title": p.title} for p in papers],
+        "kept": [{"id": p.id, "cite": p.short_cite(), "year": p.year,
+                  "cited_by": p.cited_by_count, "title": p.title} for p in papers],
         "dropped": [{"id": p.id, "reason": r} for p, r in dropped],
     }, indent=2))
 
-    print("[4/5] extracting contributions (full text) ...", flush=True)
+    yrs = Counter(p.year for p in papers if p.year)
+    print("\n=== SCOPED CORPUS (coverage checkpoint) ===", flush=True)
+    print("by year: " + " ".join(f"{y}:{yrs[y]}" for y in sorted(yrs)), flush=True)
+
+    if os.environ.get("BUILD_CONTRIBUTIONS") != "1":
+        print("\nScope-only. Inspect data_hackathon/atlas/scope.json. "
+              "To build contributions: set BUILD_CONTRIBUTIONS=1 (will cap by recency).",
+              flush=True)
+        return
+
+    # build phase — cap by RECENCY (this field is recent), not citations
+    papers = sorted(papers, key=lambda p: (p.year or 0), reverse=True)[:CAP]
+    print(f"\n[build] contributions over {len(papers)} most-recent papers ...", flush=True)
     pipeline.extract_contributions(papers, relate=False,
                                    progress=lambda m: print("   "+m, flush=True))
-
-    print("[5/5] relating contributions (one-shot) ...", flush=True)
     pipeline.relate_contributions_fast(progress=lambda m: print("   "+m, flush=True))
-
-    print("DONE. View with: PRIOR_DATA_DIR=%s python -m prior.cli view --evolution"
-          % config.DATA, flush=True)
+    print("DONE.", flush=True)
 
 
 if __name__ == "__main__":
