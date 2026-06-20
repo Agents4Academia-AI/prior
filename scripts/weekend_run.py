@@ -127,12 +127,15 @@ def main():
         anchors = _gold_anchors()
         if anchors:
             before = len(papers)
+            # gold is a recall gauge + seeds, NOT auto-include: scope it so
+            # off-topic grant refs (e.g. general-agent benchmarks) are excluded.
+            kept_a, _drop_a = scoper.scope(TOPIC, anchors, cache_path=cache, progress=_log)
             cur = {p.id: p for p in papers}
-            for p in anchors:
+            for p, _r in kept_a:
                 cur.setdefault(p.id, p)
             papers = list(cur.values())
-            _log(f"    folded {len(anchors)} gold anchors (+{len(papers) - before} "
-                 f"new) → corpus {len(papers)}")
+            _log(f"    folded {len(kept_a)}/{len(anchors)} gold anchors (relevant; "
+                 f"+{len(papers) - before} new) → corpus {len(papers)}")
 
         _log("[1a] OpenAlex snowball (backward refs + forward cited-by) ...")
         new_oa, reached_oa = scoper.snowball(papers, progress=lambda m: _log("    " + m))
