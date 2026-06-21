@@ -40,10 +40,10 @@ def main():
     new_relevant = [p for p, _ in kept]
     print(f"      +{len(new_relevant)} relevant (of {len(cands)} new)", flush=True)
 
-    # merge — no capping
-    merged = {p.id: p for p in seeds}
+    # merge — no capping, dedup by canonical key
+    merged = {p.key(): p for p in seeds}
     for p in new_relevant:
-        merged.setdefault(p.id, p)
+        merged.setdefault(p.key(), p)
     papers = list(merged.values())
 
     print("[3/3] rewriting corpus ...", flush=True)

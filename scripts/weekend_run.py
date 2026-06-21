@@ -122,7 +122,7 @@ def main():
     # ── [1] citation snowball (no caps) ──────────────────────────────────────
     sc = json.loads(scope_json.read_text())
     if "snowball_added" not in sc:
-        search_ids = {p.id for p in papers}          # the SEARCH channel (method A)
+        search_keys = {p.key() for p in papers}      # the SEARCH channel (method A)
 
         anchors = _gold_anchors()
         if anchors:
@@ -130,31 +130,33 @@ def main():
             # gold is a recall gauge + seeds, NOT auto-include: scope it so
             # off-topic grant refs (e.g. general-agent benchmarks) are excluded.
             kept_a, _drop_a = scoper.scope(TOPIC, anchors, cache_path=cache, progress=_log)
-            cur = {p.id: p for p in papers}
+            cur = {p.key(): p for p in papers}
             for p, _r in kept_a:
-                cur.setdefault(p.id, p)
+                cur.setdefault(p.key(), p)
             papers = list(cur.values())
             _log(f"    folded {len(kept_a)}/{len(anchors)} gold anchors (relevant; "
                  f"+{len(papers) - before} new) → corpus {len(papers)}")
 
         _log("[1a] OpenAlex snowball (backward refs + forward cited-by) ...")
-        new_oa, reached_oa = scoper.snowball(papers, progress=lambda m: _log("    " + m))
+        new_oa, reached_oa = scoper.snowball(papers, corpus=papers,
+                                             progress=lambda m: _log("    " + m))
         _log("[1b] Semantic Scholar snowball (recent frontier) ...")
-        new_s2, reached_s2 = scoper.snowball_s2(papers, progress=lambda m: _log("    " + m))
+        new_s2, reached_s2 = scoper.snowball_s2(papers, corpus=papers,
+                                                progress=lambda m: _log("    " + m))
 
         cands = scoper._dedup_cross_source(new_oa + new_s2)
         _log(f"    {len(cands)} new candidates ({len(new_oa)} OA + {len(new_s2)} S2); "
              f"scoping (cache-aware) ...")
         kept, _ = scoper.scope(TOPIC, cands, cache_path=cache, progress=_log)
         new = [p for p, _ in kept]
-        merged = {p.id: p for p in papers}
+        merged = {p.key(): p for p in papers}
         for p in new:
-            merged.setdefault(p.id, p)
+            merged.setdefault(p.key(), p)
         papers = list(merged.values())
         _write_corpus(papers)
 
         # completeness — SEARCH channel vs CITATION (snowball) channel
-        overlap = len((reached_oa | reached_s2) & search_ids)
+        overlap = len((reached_oa | reached_s2) & search_keys)
         comp = completeness.capture_recapture(len(search_ids), overlap + len(new), overlap)
         sc = json.loads(scope_json.read_text())
         sc["snowball_added"] = len(new)

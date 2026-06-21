@@ -47,21 +47,16 @@ def propose_queries(topic_def: str, *, model: str | None = None) -> list[str]:
 # ── stage 2: gather candidates (recall) ──────────────────────────────────────
 def _dedup_cross_source(papers: list[Paper]) -> list[Paper]:
     """Collapse the same paper arriving from different sources (OpenAlex / arXiv /
-    S2) by normalised title, preferring OpenAlex (it carries the citation graph
-    the snowball needs), then arXiv, then S2. Papers with no usable title pass
-    through untouched. This avoids double-processing without capping recall."""
+    S2) by canonical key (Paper.key), preferring OpenAlex (it carries the citation
+    graph the snowball needs), then arXiv, then S2."""
     rank = {"openalex": 0, "arxiv": 1, "semanticscholar": 2}
-    by_title: dict[str, Paper] = {}
-    out: list[Paper] = []
+    best: dict[str, Paper] = {}
     for p in papers:
-        key = " ".join(re.sub(r"[^a-z0-9]", " ", (p.title or "").lower()).split())
-        if len(key) < 8:
-            out.append(p)
-            continue
-        cur = by_title.get(key)
+        k = p.key()
+        cur = best.get(k)
         if cur is None or rank.get(p.source, 9) < rank.get(cur.source, 9):
-            by_title[key] = p
-    return out + list(by_title.values())
+            best[k] = p
+    return list(best.values())
 
 
 def gather_candidates(queries: list[str], *, per_query: int = 25,
@@ -98,26 +93,35 @@ def gather_candidates(queries: list[str], *, per_query: int = 25,
 
 
 # ── stage 2b: citation snowball (recall, the high-leverage step) ─────────────
-def snowball(seeds: list[Paper], *, anchor_k: int = 25, per_paper: int = 40,
+def snowball(seeds: list[Paper], *, corpus: list[Paper] | None = None,
+             anchor_k: int = 25, per_paper: int = 40,
              progress=print) -> tuple[list[Paper], set[str]]:
     """One-hop citation expansion of a seed set (OpenAlex): backward references
     of all seeds + forward cited-by of the most-cited anchors. Finds the
     connected cluster that keyword search misses.
 
-    Returns (new_candidates, reached_known) where reached_known is the set of
-    SEED ids the snowball re-reached — the capture-recapture overlap between the
-    search channel and the citation channel, used by the completeness model."""
-    have = {p.id for p in seeds}
-    new: dict[str, Paper] = {}
-    reached_known: set[str] = set()
+    `corpus` (default = seeds) is what we already have: membership and the
+    capture-recapture overlap are tested by canonical key (Paper.key), so a paper
+    we already hold under a different source's id is recognised — not re-added or
+    miscounted. Returns (new_candidates, reached_keys), reached_keys being the
+    canonical keys of corpus papers the citation channel re-reached."""
+    corpus = corpus if corpus is not None else seeds
+    known_ids = {p.id for p in corpus}                       # for OpenAlex-id refs
+    id_to_key = {p.id: p.key() for p in corpus}
+    known_keys = {p.key() for p in corpus}                   # cross-source identity
+    new: dict[str, Paper] = {}                                # keyed by canonical key
+    reached: set[str] = set()
 
-    # backward — union of references (they overlap heavily, so the set is bounded)
+    # backward — references are OpenAlex ids; match them against corpus ids
     all_refs = list(dict.fromkeys(
         r for p in seeds for r in p.referenced_works if r.startswith("openalex:")))
-    reached_known |= {r for r in all_refs if r in have}      # seed cited by a seed
-    for pid, p in openalex.fetch_many([r for r in all_refs if r not in have]).items():
-        if pid not in have:
-            new.setdefault(pid, p)
+    reached |= {id_to_key[r] for r in all_refs if r in known_ids}   # ref → corpus paper
+    for _pid, p in openalex.fetch_many([r for r in all_refs if r not in known_ids]).items():
+        k = p.key()
+        if k in known_keys:
+            reached.add(k)
+        elif k not in new:
+            new[k] = p
     progress(f"  backward: {len(all_refs)} refs → +{len(new)} new")
 
     # forward — cited-by of the most-cited anchors (catches newer connected work)
@@ -125,12 +129,13 @@ def snowball(seeds: list[Paper], *, anchor_k: int = 25, per_paper: int = 40,
                      key=lambda p: -p.cited_by_count)[:anchor_k]
     for p in anchors:
         for cp in openalex.cited_by(p.id, max_results=per_paper):
-            if cp.id in have:
-                reached_known.add(cp.id)
-            elif cp.id not in new:
-                new[cp.id] = cp
+            k = cp.key()
+            if k in known_keys:
+                reached.add(k)
+            elif k not in new:
+                new[k] = cp
         progress(f"  forward cited-by {p.short_cite()} → pool {len(new)}")
-    return list(new.values()), reached_known
+    return list(new.values()), reached
 
 
 def _s2_id(p: Paper) -> str | None:
@@ -144,16 +149,19 @@ def _s2_id(p: Paper) -> str | None:
     return None
 
 
-def snowball_s2(seeds: list[Paper], *, anchor_k: int = 40, per_paper: int = 40,
+def snowball_s2(seeds: list[Paper], *, corpus: list[Paper] | None = None,
+                anchor_k: int = 40, per_paper: int = 40,
                 recent_year: int = 2024, progress=print
                 ) -> tuple[list[Paper], set[str]]:
     """Citation snowball via Semantic Scholar — the path for the RECENT frontier,
     where OpenAlex has no citation edges yet. Anchors on recent / arXiv-keyed
-    seeds and pulls S2 backward references + forward citations. Returns
-    (new_candidates, reached_known) like snowball()."""
-    have = {p.id for p in seeds}
+    seeds and pulls S2 backward references + forward citations. Membership and
+    overlap are tested by canonical key (S2 returns arXiv-keyed papers that match
+    OpenAlex corpus papers by title). Returns (new_candidates, reached_keys)."""
+    corpus = corpus if corpus is not None else seeds
+    known_keys = {p.key() for p in corpus}
     new: dict[str, Paper] = {}
-    reached_known: set[str] = set()
+    reached: set[str] = set()
     anchors = [p for p in seeds
                if (p.year or 0) >= recent_year or p.id.startswith(("arxiv:", "s2:"))]
     anchors = sorted(anchors, key=lambda p: -(p.year or 0))[:anchor_k]
@@ -164,12 +172,13 @@ def snowball_s2(seeds: list[Paper], *, anchor_k: int = 40, per_paper: int = 40,
         neighbours = (semanticscholar.references(sid, max_results=per_paper)
                       + semanticscholar.citations(sid, max_results=per_paper))
         for cp in neighbours:
-            if cp.id in have:
-                reached_known.add(cp.id)
-            elif cp.id not in new:
-                new[cp.id] = cp
+            k = cp.key()
+            if k in known_keys:
+                reached.add(k)
+            elif k not in new:
+                new[k] = cp
         progress(f"  s2 cites {p.short_cite()} → pool {len(new)}")
-    return list(new.values()), reached_known
+    return list(new.values()), reached
 
 
 def high_yield_seeds(papers: list[Paper], *, top_cited: int = 40,

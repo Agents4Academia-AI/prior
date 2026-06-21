@@ -37,7 +37,7 @@ def main():
     cache = str(config.ATLAS / "scope_cache.jsonl")
     corpus = [Paper.from_dict(json.loads(l))
               for l in pp.read_text().splitlines() if l]
-    corpus_ids = {p.id for p in corpus}
+    corpus_keys = {p.key() for p in corpus}
     _log(f"corpus: {len(corpus)} papers")
 
     seeds = scoper.high_yield_seeds(corpus)
@@ -47,12 +47,12 @@ def main():
     if s2_only:
         new_oa, reached_oa = [], set()
     else:
-        new_oa, reached_oa = scoper.snowball(seeds, anchor_k=25, per_paper=40,
-                                             progress=lambda m: _log("    " + m))
-    new_s2, reached_s2 = scoper.snowball_s2(seeds, anchor_k=40, per_paper=40,
-                                            progress=lambda m: _log("    " + m))
+        new_oa, reached_oa = scoper.snowball(seeds, corpus=corpus, anchor_k=25,
+                                             per_paper=40, progress=lambda m: _log("    " + m))
+    new_s2, reached_s2 = scoper.snowball_s2(seeds, corpus=corpus, anchor_k=40,
+                                            per_paper=40, progress=lambda m: _log("    " + m))
     cands = [p for p in scoper._dedup_cross_source(new_oa + new_s2)
-             if p.id not in corpus_ids]
+             if p.key() not in corpus_keys]
     _log(f"    {len(cands)} new candidates ({len(new_oa)} OA + {len(new_s2)} S2)")
 
     _log("[2] scoping with pre-filter (cache-aware) ...")
@@ -61,9 +61,9 @@ def main():
     new = [p for p, _ in kept]
     _log(f"    +{len(new)} relevant kept")
 
-    merged = {p.id: p for p in corpus}
+    merged = {p.key(): p for p in corpus}
     for p in new:
-        merged.setdefault(p.id, p)
+        merged.setdefault(p.key(), p)
     corpus = list(merged.values())
 
     with pp.open("w") as f:
@@ -76,7 +76,7 @@ def main():
         a.add_paper(p)
     a.link_citations(); a.save()
 
-    overlap = len((reached_oa | reached_s2) & corpus_ids)
+    overlap = len((reached_oa | reached_s2) & corpus_keys)
     comp = completeness.capture_recapture(len(corpus_ids), overlap + len(new), overlap)
     o["kept"] = [{"id": p.id, "cite": p.short_cite(), "year": p.year,
                   "cited_by": p.cited_by_count, "title": p.title} for p in corpus]
