@@ -77,7 +77,7 @@ def main():
     a.link_citations(); a.save()
 
     overlap = len((reached_oa | reached_s2) & corpus_keys)
-    comp = completeness.capture_recapture(len(corpus_ids), overlap + len(new), overlap)
+    comp = completeness.capture_recapture(len(corpus_keys), overlap + len(new), overlap)
     o["kept"] = [{"id": p.id, "cite": p.short_cite(), "year": p.year,
                   "cited_by": p.cited_by_count, "title": p.title} for p in corpus]
     o["completeness"] = comp
