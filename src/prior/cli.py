@@ -62,8 +62,11 @@ def main(argv: list[str] | None = None) -> int:
     p_srv.add_argument("--port", type=int, default=8077)
 
     p_dmn = sub.add_parser("daemon", help="continuous ingestion into the live graph")
-    p_dmn.add_argument("--topic", action="append", required=True, dest="topics",
-                       help="watch this topic (repeatable)")
+    p_dmn.add_argument("--topic", action="append", default=[], dest="topics",
+                       help="watch this topic via raw search (repeatable)")
+    p_dmn.add_argument("--topic-def", action="append", default=[], dest="topic_defs",
+                       help="watch this topic via the Scoper relevance filter — pass a "
+                            "definition with include/exclude criteria (repeatable)")
     p_dmn.add_argument("--rounds", type=int, default=1)
     p_dmn.add_argument("--per-topic", type=int, default=10)
     p_dmn.add_argument("--workers", type=int, default=None)
@@ -124,8 +127,11 @@ def main(argv: list[str] | None = None) -> int:
         uvicorn.run("prior.web.api:app", host=args.host, port=args.port)
     elif args.cmd == "daemon":
         from . import daemon
-        daemon.run(args.topics, rounds=args.rounds, per_topic=args.per_topic,
-                   workers=args.workers, watch=args.watch, interval=args.interval)
+        if not args.topics and not args.topic_defs:
+            sys.exit("daemon needs at least one --topic or --topic-def")
+        daemon.run(args.topics, topic_defs=args.topic_defs, rounds=args.rounds,
+                   per_topic=args.per_topic, workers=args.workers,
+                   watch=args.watch, interval=args.interval)
     return 0
 
 

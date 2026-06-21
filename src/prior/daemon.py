@@ -21,7 +21,7 @@ import os
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-from . import cartographer, config, embeddings, graph, reader
+from . import cartographer, config, embeddings, graph, reader, scoper
 from .models import Contribution
 from .sources import arxiv, fulltext, openalex
 
@@ -74,24 +74,41 @@ def process_paper(paper, *, model: str | None = None, neighbours: int = 6) -> di
             "claims": len(r.claims), "edges": g_edges}
 
 
-def run(topics: list[str], *, rounds: int = 1, per_topic: int = 10,
-        workers: int | None = None, watch: bool = False, interval: int = 300,
-        progress=print) -> None:
-    """Discover → enqueue (dedup) → process pool → repeat. With watch=True, loops
-    forever, re-polling topics every `interval` seconds."""
+def _discover(topics: list[str], topic_defs: list[str], per_topic: int,
+              progress) -> list:
+    """Two discovery modes: plain `topics` (raw search) and `topic_defs` (Scoper —
+    LLM queries + multi-source gather + strict relevance filter for a clean corpus)."""
+    out = []
+    for t in topics:
+        out.extend(_discover_topic(t, per_topic))
+    for td in topic_defs:
+        progress(f"  scoping topic-def ({len(td)} chars) ...")
+        kept, dropped = scoper.build_scoped_corpus(td, per_query=per_topic, progress=progress)
+        progress(f"  scoper kept {len(kept)} / dropped {len(dropped)}")
+        out.extend(kept)
+    return out
+
+
+def run(topics: list[str] | None = None, *, topic_defs: list[str] | None = None,
+        rounds: int = 1, per_topic: int = 10, workers: int | None = None,
+        watch: bool = False, interval: int = 300, progress=print) -> None:
+    """Discover → enqueue (dedup) → process pool → repeat. `topics` use raw search;
+    `topic_defs` route through the Scoper for a clean, relevance-filtered corpus.
+    With watch=True, loops forever, re-polling every `interval` seconds."""
     graph.setup_schema()
+    topics = topics or []
+    topic_defs = topic_defs or []
     workers = workers or int(os.environ.get("PRIOR_WORKERS", "6"))
     rnd = 0
     while True:
         rnd += 1
         seen = set()
         frontier = []
-        for t in topics:
-            for p in _discover_topic(t, per_topic):
-                if p.id in seen or _have(p.id):
-                    continue
-                seen.add(p.id)
-                frontier.append(p)
+        for p in _discover(topics, topic_defs, per_topic, progress):
+            if p.id in seen or _have(p.id):
+                continue
+            seen.add(p.id)
+            frontier.append(p)
         progress(f"[round {rnd}] {len(frontier)} new papers to ingest")
         if frontier:
             with ThreadPoolExecutor(max_workers=workers) as pool:
