@@ -7,12 +7,47 @@ network-bound; read/map are LLM-bound and the expensive part).
 from __future__ import annotations
 
 import json
+import os
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
-from . import cartographer, config, reader
+from . import cartographer, config, fulltext, reader
 from .atlas import Atlas
-from .models import Claim, Paper
+from .models import Claim, Contribution, Edge, Paper
+from .reader import ReadResult
 from .sources import arxiv, openalex
+
+
+def sink_to_neo4j(atlas, *, progress=print) -> dict:
+    """Push a built atlas into Neo4j with embeddings via batched (UNWIND) writes.
+    Idempotent (MERGE), so it also serves as the incremental-merge primitive for
+    continuous ingestion."""
+    from . import embeddings, graph
+    graph.setup_schema()
+
+    contribs = list(atlas.contributions.values())
+    cvecs = embeddings.embed([f"{k.problem} {k.method} {k.result}" for k in contribs])
+    contrib_rows = [{**k.to_dict(), "embedding": v} for k, v in zip(contribs, cvecs)]
+
+    claims = list(atlas.claims.values())
+    clvecs = embeddings.embed([c.text for c in claims])
+    claim_rows = [{**c.to_dict(), "embedding": v} for c, v in zip(claims, clvecs)]
+
+    edge_rows = []
+    for e in atlas.edges:
+        if e.level in ("global", "local"):
+            edge_rows.append({"src": e.src, "dst": e.dst, "rel": e.relation,
+                              "evidence": e.evidence, "confidence": e.confidence,
+                              "source": e.source})
+        elif e.relation == "cites":
+            edge_rows.append({"src": e.src, "dst": e.dst, "rel": "CITES",
+                              "evidence": "", "confidence": e.confidence, "source": "citation"})
+
+    graph.bulk_load([p.to_dict() for p in atlas.papers.values()],
+                    contrib_rows, claim_rows, edge_rows)
+    s = graph.summary()
+    progress(f"      neo4j: {s}")
+    return s
 
 
 def _papers_path() -> Path:
@@ -23,23 +58,27 @@ def _claims_path() -> Path:
     return config.ATLAS / "claims.jsonl"
 
 
+def _contributions_path() -> Path:
+    return config.ATLAS / "contributions.jsonl"
+
+
+def _local_edges_path() -> Path:
+    return config.ATLAS / "local_edges.jsonl"
+
+
 def expand_references(papers: list[Paper], *, hops: int = 1, cap: int = 200,
                       progress=print) -> list[Paper]:
     """Walk citation edges backward: fetch the OpenAlex works the given papers
-    reference, adding them to the corpus. This is how the atlas reaches an idea's
-    true origins (e.g. 1989) that keyword search — bound by current terminology —
-    never surfaces. Expanded papers enrich the citation graph; those without
-    abstracts are simply skipped by the Reader."""
+    reference, reaching an idea's true origins that keyword search (bound by
+    current terminology) never surfaces. (From main.)"""
     have: dict[str, Paper] = {p.id: p for p in papers}
     frontier = list(papers)
     for hop in range(hops):
         wanted = [ref for p in frontier for ref in p.referenced_works
                   if ref.startswith("openalex:") and ref not in have]
         wanted = list(dict.fromkeys(wanted))
-        if not wanted:
-            break
         room = cap - len(have)
-        if room <= 0:
+        if not wanted or room <= 0:
             break
         fetched = openalex.fetch_many(wanted[:room])
         new = [p for pid, p in fetched.items() if pid not in have]
@@ -50,22 +89,38 @@ def expand_references(papers: list[Paper], *, hops: int = 1, cap: int = 200,
     return list(have.values())
 
 
-def ingest(topic: str, *, max_papers: int | None = None,
-           use_arxiv: bool = True, cite_hops: int = 0,
-           cap: int = 200, progress=print) -> list[Paper]:
-    """Fetch papers for a topic from primary sources and cache them.
-    `cite_hops > 0` expands backward along citations to reach origins."""
+def ingest(topic: str, *, max_papers: int | None = None, use_arxiv: bool = True,
+           full_text: bool = True, cite_hops: int = 0, cap: int = 200,
+           progress=print) -> list[Paper]:
+    """Fetch papers for a topic from primary sources and cache them. `cite_hops>0`
+    expands backward along citations; `full_text` fetches body text where available."""
     config.ensure_dirs()
     n = max_papers or config.DEFAULT_MAX_PAPERS
     papers: dict[str, Paper] = {}
     for p in openalex.search(topic, max_papers=n):
         papers[p.id] = p
-    if use_arxiv:
-        for p in arxiv.search(topic, max_papers=max(4, n // 4)):
+    if use_arxiv and len(papers) < n:
+        # Fill the remainder from arXiv so `max_papers` is a true total cap.
+        for p in arxiv.search(topic, max_papers=n - len(papers)):
+            if len(papers) >= n:
+                break
             papers.setdefault(p.id, p)
-    out = list(papers.values())
+    out = list(papers.values())[:n]
     if cite_hops > 0:
         out = expand_references(out, hops=cite_hops, cap=cap, progress=progress)
+
+    if full_text:
+        got = 0
+        for p in out:
+            try:
+                body = fulltext.fetch(p)
+            except Exception:  # noqa: BLE001 — full text is best-effort
+                body = ""
+            if body:
+                p.full_text = body
+                got += 1
+        progress(f"      full text for {got}/{len(out)} papers")
+
     with _papers_path().open("w") as f:
         for p in out:
             f.write(json.dumps(p.to_dict()) + "\n")
@@ -80,200 +135,76 @@ def load_papers() -> list[Paper]:
 
 
 def read_all(papers: list[Paper], *, model: str | None = None,
-             progress=print) -> list[Claim]:
-    """Run Reader over every paper, caching claims as we go."""
+             progress=print) -> ReadResult:
+    """Run Reader over every paper (in parallel — PRIOR_READ_WORKERS at a time),
+    caching contributions/claims/local edges. Returns one aggregate ReadResult."""
     config.ensure_dirs()
-    claims: list[Claim] = []
-    with _claims_path().open("w") as f:
-        for i, p in enumerate(papers, 1):
+    workers = int(os.environ.get("PRIOR_READ_WORKERS", "6"))
+    results: dict[int, ReadResult] = {}
+    done = 0
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        futs = {pool.submit(reader.read, p, model=model): (i, p)
+                for i, p in enumerate(papers)}
+        for f in as_completed(futs):
+            i, p = futs[f]
+            done += 1
             try:
-                cs = reader.read(p, model=model)
+                r = f.result()
             except Exception as e:  # noqa: BLE001 — one bad paper shouldn't sink the run
-                progress(f"  [{i}/{len(papers)}] {p.short_cite()}: ERROR {e}")
+                progress(f"  read [{done}/{len(papers)}] {p.short_cite()}: ERROR {e}")
                 continue
-            for c in cs:
-                f.write(json.dumps(c.to_dict()) + "\n")
-            claims.extend(cs)
-            progress(f"  [{i}/{len(papers)}] {p.short_cite()}: {len(cs)} claims")
-    return claims
+            results[i] = r
+            progress(f"  read [{done}/{len(papers)}] {p.short_cite()}: "
+                     f"{len(r.contributions)} contribs, {len(r.claims)} claims, "
+                     f"{len(r.local_edges)} edges")
 
-
-def _contributions_path() -> Path:
-    return config.ATLAS / "contributions.json"
-
-
-def extract_contributions(papers: list[Paper], *, limit: int | None = None,
-                          model: str | None = None, progress=print) -> list[dict]:
-    """Run the Contribution agent over primary papers (reviews skipped), using
-    full text. Caches to data/atlas/contributions.json."""
-    from . import contributor, fulltext
-    from .sources import looks_like_review
-    config.ensure_dirs()
-    todo = [p for p in papers if not (p.is_review or looks_like_review(p.title))]
-    skipped = len(papers) - len(todo)
-    if limit:
-        todo = todo[:limit]
-    progress(f"  {len(todo)} primary papers ({skipped} reviews skipped)")
-    out: list[dict] = []
-    no_fulltext: list[str] = []
-    for i, p in enumerate(todo, 1):
-        try:
-            ft = fulltext.fetch(p)
-            if not ft:                     # full-text-only: never use the abstract
-                no_fulltext.append(p.id)
-                progress(f"  [{i}/{len(todo)}] {p.short_cite()}: SKIPPED (no full text)")
+    # Write caches + aggregate in stable paper order.
+    agg = ReadResult()
+    with _contributions_path().open("w") as kf, \
+            _claims_path().open("w") as cf, \
+            _local_edges_path().open("w") as ef:
+        for i in range(len(papers)):
+            r = results.get(i)
+            if not r:
                 continue
-            cs = contributor.extract(p, ft, model=model)
-        except Exception as e:  # noqa: BLE001 — one paper shouldn't sink the run
-            progress(f"  [{i}/{len(todo)}] {p.short_cite()}: ERROR {e}")
-            continue
-        out.extend(cs)
-        progress(f"  [{i}/{len(todo)}] {p.short_cite()}: {len(cs)} contributions")
-    progress("  relating contributions across papers ...")
-    edges = _relate_contribs(out, model=model)
-    progress(f"  {len(edges)} cross-contribution relations")
-    _contributions_path().write_text(json.dumps(
-        {"contributions": out, "edges": edges, "skipped_no_fulltext": no_fulltext},
-        indent=2))
-    if no_fulltext:
-        progress(f"  {len(no_fulltext)} papers skipped (no full text): "
-                 f"{', '.join(no_fulltext)}")
-    return out
+            for k in r.contributions:
+                kf.write(json.dumps(k.to_dict()) + "\n")
+            for c in r.claims:
+                cf.write(json.dumps(c.to_dict()) + "\n")
+            for e in r.local_edges:
+                ef.write(json.dumps(e.to_dict()) + "\n")
+            agg.contributions.extend(r.contributions)
+            agg.claims.extend(r.claims)
+            agg.local_edges.extend(r.local_edges)
+    return agg
 
 
-def _relate_contribs(contribs: list[dict], *, model: str | None = None) -> list[dict]:
-    """Typed relations between contributions across papers (reuses Cartographer).
-    This is what gives the contributions graph cross-paper 'cross-talk'."""
-    from . import cartographer
-    claims = [Claim(id=c["id"], paper_id=c["paper_id"], text=c["statement"],
-                    claim_type=c.get("kind", "other")) for c in contribs]
-    return [e.to_dict() for e in cartographer.relate_claims(claims, model=model)]
-
-
-def contributions_atlas() -> Atlas:
-    """An atlas whose nodes are the standalone *contributions* (primary lit only)
-    + their cross-paper relations — so Navigator can answer over the final
-    contributions graph rather than the raw claims atlas."""
-    from .models import Claim, Edge
-    base = Atlas.load(config.ATLAS / "atlas.json")
-    data = json.loads(_contributions_path().read_text())
-    a = Atlas()
-    a.topic = (base.topic or "") + " — contributions"
-    for pid in {c["paper_id"] for c in data["contributions"]}:
-        if pid in base.papers:
-            a.add_paper(base.papers[pid])
-    for c in data["contributions"]:
-        a.add_claim(Claim(id=c["id"], paper_id=c["paper_id"], text=c["statement"],
-                          claim_type=c.get("kind", "other"), evidence=c.get("quote", "")))
-    for e in data.get("edges", []):
-        a.add_edge(Edge(e["src"], e["dst"], e["relation"], e.get("evidence", ""),
-                        e.get("confidence", 0.6)))
-    return a
-
-
-def relate_contributions(*, model: str | None = None, progress=print) -> list[dict]:
-    """Add cross-contribution relations to an existing contributions.json (no
-    re-extraction)."""
-    data = json.loads(_contributions_path().read_text())
-    edges = _relate_contribs(data.get("contributions", []), model=model)
-    data["edges"] = edges
-    _contributions_path().write_text(json.dumps(data, indent=2))
-    progress(f"{len(edges)} cross-contribution relations")
-    return edges
-
-
-_RELATE_SYS = """You relate research contributions. Given a numbered list of
-standalone contributions (each tagged with its source paper), find typed
-relations BETWEEN contributions from DIFFERENT papers:
-  supports     — one provides evidence for / agrees with another
-  contradicts  — the two are incompatible
-  extends      — one builds on / generalizes the other
-  refines      — one adds conditions / narrows the scope of the other
-Only assert relations you can defend from the statements themselves. Skip pairs
-from the same paper. Refer to contributions by their numbers."""
-
-_RELATE_SCHEMA = {
-    "type": "object",
-    "properties": {"relations": {"type": "array", "items": {
-        "type": "object",
-        "properties": {
-            "a": {"type": "integer"}, "b": {"type": "integer"},
-            "relation": {"type": "string",
-                         "enum": ["supports", "contradicts", "extends", "refines"]},
-            "reason": {"type": "string"},
-        },
-        "required": ["a", "b", "relation", "reason"]}}},
-    "required": ["relations"],
-}
-
-
-def relate_contributions_fast(*, model: str | None = None, progress=print) -> list[dict]:
-    """One-shot cross-contribution relations: a single LLM call over the whole
-    (small) contribution set. Seconds instead of ~one call per contribution."""
-    from . import llm
-    data = json.loads(_contributions_path().read_text())
-    cs = data.get("contributions", [])
-    listing = "\n".join(f"[{i}] ({c['paper_id']}) {c['statement']}"
-                        for i, c in enumerate(cs))
-    out = llm.structured(
-        model=model or config.CARTOGRAPHER_MODEL, system=_RELATE_SYS,
-        user=f"CONTRIBUTIONS:\n{listing}", schema=_RELATE_SCHEMA,
-        tool_name="emit_relations", max_tokens=4000)
-    edges: list[dict] = []
-    seen: set = set()
-    for r in out.get("relations", []):
-        a, b = r.get("a"), r.get("b")
-        if not (isinstance(a, int) and isinstance(b, int)):
-            continue
-        if not (0 <= a < len(cs) and 0 <= b < len(cs)) or a == b:
-            continue
-        if cs[a]["paper_id"] == cs[b]["paper_id"]:
-            continue
-        key = frozenset({a, b})
-        if key in seen:
-            continue
-        seen.add(key)
-        edges.append({"src": cs[a]["id"], "dst": cs[b]["id"],
-                      "relation": r["relation"], "evidence": r.get("reason", ""),
-                      "confidence": 0.6})
-    data["edges"] = edges
-    _contributions_path().write_text(json.dumps(data, indent=2))
-    progress(f"{len(edges)} cross-contribution relations (one-shot)")
-    return edges
-
-
-def load_claims() -> list[Claim]:
-    path = _claims_path()
-    if not path.exists():
-        return []
-    return [Claim.from_dict(json.loads(line)) for line in path.read_text().splitlines() if line]
+def load_reading() -> ReadResult:
+    def _lines(path: Path):
+        return path.read_text().splitlines() if path.exists() else []
+    return ReadResult(
+        contributions=[Contribution.from_dict(json.loads(x))
+                       for x in _lines(_contributions_path()) if x],
+        claims=[Claim.from_dict(json.loads(x)) for x in _lines(_claims_path()) if x],
+        local_edges=[Edge.from_dict(json.loads(x))
+                     for x in _lines(_local_edges_path()) if x],
+    )
 
 
 def build(topic: str, *, max_papers: int | None = None, relate: bool = True,
           cite_hops: int = 0, progress=print) -> Atlas:
-    """Full pipeline: ingest -> read (seeds only) -> expand citations -> map -> save.
-
-    Reader runs on the seed papers only; citation expansion enriches the graph for
-    origin tracing without paying to extract claims from every cited ancestor."""
+    """Full pipeline: ingest -> read -> map -> save."""
     progress(f"[1/3] ingesting '{topic}' ...")
-    seeds = ingest(topic, max_papers=max_papers, cite_hops=0, progress=progress)
-    progress(f"      {len(seeds)} seed papers")
+    papers = ingest(topic, max_papers=max_papers, cite_hops=cite_hops, progress=progress)
+    progress(f"      {len(papers)} papers")
 
-    progress("[2/3] reading (seed papers -> claims) ...")
-    claims = read_all(seeds, progress=progress)
-    progress(f"      {len(claims)} claims")
+    progress("[2/3] reading (paper -> contributions + claims + local graph) ...")
+    r = read_all(papers, progress=progress)
+    progress(f"      {len(r.contributions)} contributions, {len(r.claims)} claims, "
+             f"{len(r.local_edges)} local edges")
 
-    papers = seeds
-    if cite_hops > 0:
-        progress(f"      expanding citations {cite_hops} hop(s) for lineage ...")
-        papers = expand_references(seeds, hops=cite_hops, progress=progress)
-        with _papers_path().open("w") as f:   # cache full set so `map` stays consistent
-            for p in papers:
-                f.write(json.dumps(p.to_dict()) + "\n")
-
-    progress("[3/3] mapping (claims -> atlas) ...")
-    atlas = cartographer.build(papers, claims, topic=topic, relate=relate,
-                               model=None)
+    progress("[3/3] mapping (contributions -> global graph) ...")
+    atlas = cartographer.build(papers, r, topic=topic, relate=relate, model=None)
     path = atlas.save()
     progress(f"      {atlas.summary()}")
     progress(f"saved -> {path}")

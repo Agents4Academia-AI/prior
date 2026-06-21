@@ -1,16 +1,20 @@
 """Thin wrapper over the model, with a pluggable backend.
 
-Two backends, selected by `PRIOR_LLM_BACKEND`:
+Three backends, selected by `PRIOR_LLM_BACKEND`:
 
   "api"          (default) — the Anthropic API via the SDK. Forces a single tool
                  so structured output is guaranteed valid JSON. Costs metered
                  API credits (the hackathon's ANTHROPIC_API_KEY).
 
-  "claude-code"  — routes through the Claude Agent SDK, which runs on your
-                 Claude Code login (e.g. a Max subscription) when no API key is
-                 set. Lets the whole Prior pipeline run on a flat-rate plan
-                 instead of burning API credits. The Agent SDK has no forced-tool
-                 knob, so we ask for JSON-only and parse it (with retries).
+  "claude-code"  — routes through the Claude Agent SDK. NOTE: the SDK (like
+                 `-p/--print`) now meters against API credits, so this no longer
+                 saves credits — kept for compatibility. Asks for JSON-only and
+                 parses it (with retries).
+
+  "claude-cli"   — drives the *interactive* Claude Code TUI through a PTY (see
+                 `claude_cli.py`). This is the only path that runs on the Claude
+                 Code login (Max plan) WITHOUT metering API credits. The model
+                 writes its JSON to a file we then read.
 
 Everything downstream (Reader/Cartographer/Navigator) calls `structured()` /
 `text()` and is backend-agnostic.
@@ -23,16 +27,18 @@ import json
 import os
 import re
 import time
-from typing import Any, Optional
+from typing import TYPE_CHECKING, Any, Optional
 
-import anthropic
+if TYPE_CHECKING:  # only the "api" backend needs the SDK; keep import lazy
+    import anthropic
 
-_client: Optional[anthropic.Anthropic] = None
+_client: "Optional[anthropic.Anthropic]" = None
 
 
-def client() -> anthropic.Anthropic:
+def client() -> "anthropic.Anthropic":
     global _client
     if _client is None:
+        import anthropic  # lazy: the credit-free claude-cli backend doesn't need it
         _client = anthropic.Anthropic()  # reads ANTHROPIC_API_KEY from env
     return _client
 
@@ -51,9 +57,15 @@ def structured(
     tool_name: str = "emit",
     max_tokens: int = 4096,
     retries: int = 3,
+    timeout: int | None = None,
 ) -> dict[str, Any]:
     """Return a dict matching `schema` (a JSON-Schema object). Raises on
-    persistent failure rather than returning malformed data."""
+    persistent failure rather than returning malformed data. `timeout` (seconds)
+    bounds a single claude-cli call; ignored by the other backends."""
+    if backend() == "claude-cli":
+        return _structured_claude_cli(
+            model=model, system=system, user=user, schema=schema,
+            retries=retries, timeout=timeout)
     if backend() == "claude-code":
         return _structured_claude_code(
             model=model, system=system, user=user, schema=schema, retries=retries)
@@ -75,6 +87,7 @@ def text(*, model: str, system: str, user: str, max_tokens: int = 4096) -> str:
 
 # ── API backend ──────────────────────────────────────────────────────────────
 def _structured_api(*, model, system, user, schema, tool_name, max_tokens, retries):
+    import anthropic  # lazy; only the api backend needs the SDK
     tool = {
         "name": tool_name,
         "description": "Return the result in exactly this structure.",
@@ -102,6 +115,19 @@ def _structured_api(*, model, system, user, schema, tool_name, max_tokens, retri
             last_err = e
             time.sleep(1)
     raise RuntimeError(f"structured() failed after {retries} attempts: {last_err}")
+
+
+# ── Claude CLI (interactive PTY, no metered credits) backend ────────────────────
+def _structured_claude_cli(*, model, system, user, schema, retries, timeout=None):
+    from . import claude_cli  # lazy: only this backend needs pexpect
+    kw = {"timeout": timeout} if timeout else {}
+    last_err: Optional[Exception] = None
+    for _ in range(max(1, min(retries, 2))):  # cap retries — a hung call is costly
+        try:
+            return claude_cli.run_json(system=system, user=user, schema=schema, **kw)
+        except Exception as e:  # noqa: BLE001 — surface after retries
+            last_err = e
+    raise RuntimeError(f"structured() (claude-cli) failed: {last_err}")
 
 
 # ── Claude Code (Agent SDK) backend ────────────────────────────────────────────
@@ -137,23 +163,16 @@ def _run_claude_code(*, system: str, prompt: str, model: str) -> str:
     async def _go() -> str:
         opts = ClaudeAgentOptions(
             system_prompt=system,
-            allowed_tools=[],     # pure generation; no file/bash/web tools
-            setting_sources=[],   # don't load project skills/settings (bare model)
-            max_turns=6,          # ceiling, not a target; open prompts may want >1 turn
+            allowed_tools=[],   # pure generation; no file/bash/web tools
+            max_turns=1,
             model=model,
         )
         chunks: list[str] = []
-        try:
-            async for msg in query(prompt=prompt, options=opts):
-                if isinstance(msg, AssistantMessage):
-                    for block in msg.content:
-                        if isinstance(block, TextBlock):
-                            chunks.append(block.text)
-        except Exception:
-            # The Agent SDK raises on e.g. "max turns reached" even after the
-            # model has already produced its answer — salvage that text.
-            if not chunks:
-                raise
+        async for msg in query(prompt=prompt, options=opts):
+            if isinstance(msg, AssistantMessage):
+                for block in msg.content:
+                    if isinstance(block, TextBlock):
+                        chunks.append(block.text)
         return "".join(chunks)
 
     return asyncio.run(_go())

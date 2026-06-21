@@ -1,34 +1,63 @@
-"""Reader agent: one paper -> structured, atomic claims.
+"""Reader agent: one paper -> contributions + claims + a local claim graph.
 
-A claim must be self-contained (no dangling "this"/"it"), verifiable, and tied
-to a short evidence span from the source. We extract from the abstract by
-default; richer full-text extraction can slot in behind the same interface.
+Two levels come out of a single read (see docs/design.md):
+  - contributions: the paper's research contributions, ORKG-style
+    (problem / method / result) — these become GLOBAL-graph nodes.
+  - claims: atomic, evidence-bearing assertions — LOCAL-graph nodes, each
+    optionally linked up to the contribution it supports.
+  - local_edges: typed relations BETWEEN claims of this paper (entails /
+    contradicts / supports / depends_on) — the paper's internal coherence/story.
+
+Local edges are necessarily text-extracted (no citations exist within a paper).
 """
 
 from __future__ import annotations
 
+from dataclasses import dataclass, field
+
 from . import config, llm
-from .models import CLAIM_TYPES, Claim, Paper
+from .models import CLAIM_TYPES, LOCAL_RELATIONS, Claim, Contribution, Edge, Paper
 
-SYSTEM = """You are Reader, a meticulous scientific claims extractor.
-You read one paper and extract its ATOMIC, VERIFIABLE claims — the assertions a
-careful peer reviewer would check.
+SYSTEM = """You are Reader, a meticulous scientific analyst. From ONE paper you
+extract three things and nothing else:
 
-Rules:
-- Each claim is self-contained: resolve pronouns, name the method/dataset/quantity.
-- Prefer the paper's own contributions and findings over background it cites.
-- Every claim needs a short evidence span quoted from the provided text.
-- Classify each claim:
-    empirical      — a measured result / observation ("X improves Y by Z%")
-    theoretical    — a proof, bound, or formal statement
-    methodological — "we propose/introduce method M that does N"
-    definitional   — a definition or framing the paper establishes
-- confidence ∈ [0,1]: how sure you are this is a genuine, checkable claim.
-- Extract 3–8 claims. Do not invent claims not supported by the text."""
+1. CONTRIBUTIONS — the paper's own research contributions, each as a triple:
+     problem  (what gap/question it addresses)
+     method   (what it proposes/does)
+     result   (what it shows/achieves)
+   Most papers have 1–3. Use the paper's own contributions, not background it cites.
+
+2. CLAIMS — atomic, self-contained, verifiable assertions (resolve pronouns; name
+   the method/dataset/quantity). Each claim has:
+     claim_type: empirical | theoretical | methodological | definitional | background
+     evidence:   a short span quoted from the provided text
+     confidence: [0,1]
+     contribution: the index of the CONTRIBUTION it supports, or -1 if it is
+                   background/unrelated.
+   Extract 3–8 claims. Do not invent claims unsupported by the text.
+
+3. LOCAL_EDGES — relations BETWEEN claims of THIS paper (by claim index):
+     entails | contradicts | supports | depends_on
+   Capture the paper's internal logic. `contradicts` between two of the paper's
+   own claims is a real coherence signal — surface it if present. It is fine to
+   return an empty list if the claims are independent."""
 
 _SCHEMA = {
     "type": "object",
     "properties": {
+        "contributions": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "problem": {"type": "string"},
+                    "method": {"type": "string"},
+                    "result": {"type": "string"},
+                    "confidence": {"type": "number"},
+                },
+                "required": ["problem", "method", "result"],
+            },
+        },
         "claims": {
             "type": "array",
             "items": {
@@ -38,40 +67,112 @@ _SCHEMA = {
                     "claim_type": {"type": "string", "enum": list(CLAIM_TYPES)},
                     "evidence": {"type": "string"},
                     "confidence": {"type": "number"},
+                    "contribution": {"type": "integer"},
                 },
-                "required": ["text", "claim_type", "evidence", "confidence"],
+                "required": ["text", "claim_type", "evidence", "confidence", "contribution"],
             },
-        }
+        },
+        "local_edges": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "src": {"type": "integer"},
+                    "dst": {"type": "integer"},
+                    "relation": {"type": "string", "enum": list(LOCAL_RELATIONS)},
+                    "evidence": {"type": "string"},
+                },
+                "required": ["src", "dst", "relation"],
+            },
+        },
     },
-    "required": ["claims"],
+    "required": ["contributions", "claims", "local_edges"],
 }
 
 
-def read(paper: Paper, *, model: str | None = None) -> list[Claim]:
-    if not paper.abstract:
-        return []
+@dataclass
+class ReadResult:
+    """Everything Reader pulls from one paper."""
+    contributions: list[Contribution] = field(default_factory=list)
+    claims: list[Claim] = field(default_factory=list)
+    local_edges: list[Edge] = field(default_factory=list)
+
+
+def _windowed(text: str, cap: int) -> str:
+    """Fit long body text into `cap` chars by keeping the head and tail — intro
+    and conclusion carry most of the contributions/claims."""
+    if len(text) <= cap:
+        return text
+    head = int(cap * 0.7)
+    tail = cap - head
+    return text[:head] + "\n\n[... middle elided ...]\n\n" + text[-tail:]
+
+
+def read(paper: Paper, *, model: str | None = None) -> ReadResult:
+    body = paper.full_text or paper.abstract
+    if not body:
+        return ReadResult()
+    if paper.full_text:
+        kind = "full text"
+        content = _windowed(paper.full_text, config.FULLTEXT_CHARS)
+    else:
+        kind = "abstract"
+        content = paper.abstract
     user = (
         f"PAPER TITLE: {paper.title}\n"
         f"YEAR: {paper.year}\n"
         f"AUTHORS: {', '.join(paper.authors[:8])}\n\n"
-        f"TEXT (abstract):\n{paper.abstract}"
+        f"TEXT ({kind}):\n{content}"
     )
     out = llm.structured(
         model=model or config.READER_MODEL,
         system=SYSTEM,
         user=user,
         schema=_SCHEMA,
-        tool_name="emit_claims",
+        tool_name="emit_reading",
     )
+
+    contribs: list[Contribution] = []
+    for j, k in enumerate(out.get("contributions", [])):
+        contribs.append(Contribution(
+            id=f"{paper.id}::contrib{j}",
+            paper_id=paper.id,
+            problem=str(k.get("problem", "")).strip(),
+            method=str(k.get("method", "")).strip(),
+            result=str(k.get("result", "")).strip(),
+            confidence=float(k.get("confidence", 0.5)),
+        ))
+
     claims: list[Claim] = []
     for i, c in enumerate(out.get("claims", [])):
-        claims.append(Claim(
+        ci = c.get("contribution", -1)
+        contrib_id = contribs[ci].id if isinstance(ci, int) and 0 <= ci < len(contribs) else None
+        claim = Claim(
             id=f"{paper.id}::c{i:02d}",
             paper_id=paper.id,
-            text=c["text"].strip(),
+            text=str(c["text"]).strip(),
             claim_type=c.get("claim_type", "empirical"),
-            evidence=c.get("evidence", "").strip(),
-            location="abstract",
+            evidence=str(c.get("evidence", "")).strip(),
+            location=kind,
             confidence=float(c.get("confidence", 0.5)),
-        ))
-    return claims
+            contribution_id=contrib_id,
+        )
+        claims.append(claim)
+        if contrib_id:
+            contribs[ci].claim_ids.append(claim.id)
+
+    local_edges: list[Edge] = []
+    n = len(claims)
+    for e in out.get("local_edges", []):
+        s, d = e.get("src"), e.get("dst")
+        if isinstance(s, int) and isinstance(d, int) and 0 <= s < n and 0 <= d < n and s != d:
+            local_edges.append(Edge(
+                src=claims[s].id,
+                dst=claims[d].id,
+                relation=e.get("relation", "supports"),
+                evidence=str(e.get("evidence", "")).strip(),
+                source="text",
+                level="local",
+            ))
+
+    return ReadResult(contributions=contribs, claims=claims, local_edges=local_edges)
