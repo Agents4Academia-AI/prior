@@ -93,10 +93,13 @@ def edge_precision(sample: int = 10, *, with_llm=True) -> dict:
                        0.80, kind="llm", detail="skipped (--no-llm)")
     from . import llm
     with graph.session() as s:
+        # Random sample across relation types (LIMIT-only skews to the dominant
+        # 'mentions'); rand() gives a fairer mix of builds_on/refines/contradicts/…
         rows = s.run(
             """MATCH (a:Contribution)-[r]->(b:Contribution)
+               WITH a, b, r ORDER BY rand() LIMIT $n
                RETURN type(r) AS rel, a.method AS am, a.result AS ar,
-                      b.method AS bm, b.result AS br LIMIT $n""", n=sample).data()
+                      b.method AS bm, b.result AS br""", n=sample).data()
     if not rows:
         return _metric("edge_precision", "Global-edge precision", "faithful", None,
                        0.80, kind="llm", detail="no global edges")
@@ -106,15 +109,23 @@ def edge_precision(sample: int = 10, *, with_llm=True) -> dict:
     for r in rows:
         out = llm.structured(
             model=config.CARTOGRAPHER_MODEL,
-            system="Judge whether the stated relation truly holds between the two "
-                   "research contributions, from their text alone. Return holds=true/false.",
-            user=(f"RELATION: {r['rel']}\nFROM: {r['am']} → {r['ar']}\n"
-                  f"TO: {r['bm']} → {r['br']}\nDoes '{r['rel']}' hold from FROM to TO?"),
+            system="You verify a knowledge-graph edge between two research "
+                   "contributions. Given the labelled relation and both contributions, "
+                   "decide whether the label is a DEFENSIBLE characterization of how "
+                   "FROM relates to TO (a reader would accept it). Relations: builds_on, "
+                   "refines, contradicts, contrast (alternative approach), supports, "
+                   "mentions (related, no stronger link). holds=true if defensible.",
+            user=(f"LABEL: {r['rel']}\nFROM: {r['am']} → {r['ar']}\n"
+                  f"TO: {r['bm']} → {r['br']}"),
             schema=schema, tool_name="judge", timeout=90)
         ok += bool(out.get("holds"))
     rate = ok / len(rows)
+    mix = {}
+    for r in rows:
+        mix[r["rel"].lower()] = mix.get(r["rel"].lower(), 0) + 1
     return _metric("edge_precision", "Global-edge precision", "faithful", round(rate, 3),
-                   0.80, kind="llm", detail=f"{ok}/{len(rows)} sampled edges confirmed by judge")
+                   0.80, kind="llm",
+                   detail=f"{ok}/{len(rows)} sampled edges defensible (mix: {mix})")
 
 
 # ── HONEST ──────────────────────────────────────────────────────────────────────
