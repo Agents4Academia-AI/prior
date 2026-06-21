@@ -172,6 +172,83 @@ def snowball_s2(seeds: list[Paper], *, anchor_k: int = 40, per_paper: int = 40,
     return list(new.values()), reached_known
 
 
+def high_yield_seeds(papers: list[Paper], *, top_cited: int = 40,
+                     recent_year: int = 2024, recent_k: int = 60) -> list[Paper]:
+    """A small, high-yield seed set for a BOUNDED snowball: the most-cited papers
+    (deep, well-connected) plus the recent frontier. Snowballing from ~100 chosen
+    seeds keeps the candidate pool tractable, unlike snowballing from the whole
+    corpus (which explodes into tens of thousands)."""
+    by_cite = sorted(papers, key=lambda p: -p.cited_by_count)[:top_cited]
+    recent = sorted((p for p in papers if (p.year or 0) >= recent_year),
+                    key=lambda p: -(p.year or 0))[:recent_k]
+    out, seen = [], set()
+    for p in by_cite + recent:
+        if p.id not in seen:
+            seen.add(p.id)
+            out.append(p)
+    return out
+
+
+# ── stage 2c: cheap TF-IDF pre-filter (spare the LLM the obvious noise) ───────
+def _split_scope(topic_def: str) -> tuple[str, str]:
+    """Split a topic definition into its IN-scope and OUT-of-scope text."""
+    oi = topic_def.lower().find("out of scope")
+    if oi == -1:
+        return topic_def, ""
+    return topic_def[:oi], topic_def[oi:]
+
+
+def _bm25(cand_counts, doc_len, avgdl, idf, q_idx, *, k1=1.5, b=0.75):
+    """BM25 score of every candidate against a query term-index set."""
+    import numpy as np
+    if len(q_idx) == 0:
+        return np.zeros(cand_counts.shape[0])
+    tf = cand_counts[:, q_idx].toarray().astype(float)        # (n × |Q|)
+    denom = tf + k1 * (1 - b + b * doc_len.reshape(-1, 1) / avgdl)
+    contrib = idf[q_idx] * (tf * (k1 + 1)) / np.where(denom == 0, 1.0, denom)
+    return contrib.sum(axis=1)
+
+
+def prefilter(topic_def: str, candidates: list[Paper], *, keep_frac: float = 0.30,
+              progress=print) -> tuple[list[Paper], list[Paper]]:
+    """Recall-preserving coarse gate, BM25. Scores each candidate's title+abstract
+    against the IN-scope vocabulary and (separately) the OUT-of-scope vocabulary,
+    and gates out the clear off-topic tail so the slow LLM filter only judges
+    plausible candidates. BM25's term saturation + length normalisation make it a
+    better lexical ranker than plain TF-IDF cosine for ranking abstracts.
+
+    Recall-safe: any candidate whose in-scope score is at least its out-scope
+    score is ALWAYS kept (we never gate an in-scope-dominant paper), plus the
+    strongest in-scope matches overall. Only out-of-scope-dominant weak matches
+    (recipes, classroom/education, software libraries…) get gated. The LLM still
+    makes the precise call on every survivor."""
+    if not candidates:
+        return [], []
+    import numpy as np
+    from sklearn.feature_extraction.text import CountVectorizer
+    inc, exc = _split_scope(topic_def)
+    docs = [inc, exc or inc] + [f"{p.title} {p.abstract}" for p in candidates]
+    X = CountVectorizer(stop_words="english", ngram_range=(1, 2),
+                        max_features=40000).fit_transform(docs)
+    in_q, out_q = X[0].indices, X[1].indices
+    cand = X[2:]
+    doc_len = np.asarray(cand.sum(axis=1)).ravel().astype(float)
+    avgdl = max(doc_len.mean(), 1.0)
+    df = np.asarray((cand > 0).sum(axis=0)).ravel().astype(float)
+    idf = np.log(1 + (cand.shape[0] - df + 0.5) / (df + 0.5))
+    bm_in = _bm25(cand, doc_len, avgdl, idf, in_q)
+    bm_out = _bm25(cand, doc_len, avgdl, idf, out_q)
+    n = len(candidates)
+    k = max(1, int(n * keep_frac))
+    keep = set(np.flatnonzero(bm_in >= bm_out).tolist())        # in-dominant: always keep
+    keep |= set(np.argsort(bm_in)[::-1][:k].tolist())           # + strongest in-scope
+    survivors = [p for i, p in enumerate(candidates) if i in keep]
+    gated = [p for i, p in enumerate(candidates) if i not in keep]
+    progress(f"  pre-filter (BM25): {len(survivors)} kept for LLM / {len(gated)} "
+             f"gated (of {n})")
+    return survivors, gated
+
+
 # ── stage 3: relevance filter (precision) ────────────────────────────────────
 _S_SYSTEM = """You are the Scoper. Decide whether each candidate paper is IN SCOPE
 for the given topic, judging only from its title + abstract. Honour the topic's
@@ -202,12 +279,19 @@ _S_SCHEMA = {
 
 def scope(topic_def: str, candidates: list[Paper], *, model: str | None = None,
           batch: int = 12, cache_path: str | Path | None = None,
+          use_prefilter: bool = False,
           progress=print) -> tuple[list[tuple[Paper, str]], list[tuple[Paper, str]]]:
     """Return (kept, dropped), each a list of (paper, reason).
 
     If cache_path is given, each decision is recorded (keyed by paper id) and a
     restart skips already-judged candidates — so re-scoping after a snowball, or
-    resuming a crashed run, never re-spends LLM calls on papers already seen."""
+    resuming a crashed run, never re-spends LLM calls on papers already seen.
+
+    If use_prefilter, a cheap TF-IDF gate drops the clear off-topic tail before
+    the LLM sees anything — the lever that makes a broad snowball affordable."""
+    gated: list[Paper] = []
+    if use_prefilter:
+        candidates, gated = prefilter(topic_def, candidates, progress=progress)
     cache: dict[str, dict] = {}
     cp = Path(cache_path) if cache_path else None
     if cp and cp.exists():
@@ -262,6 +346,8 @@ def scope(topic_def: str, candidates: list[Paper], *, model: str | None = None,
     finally:
         if fh:
             fh.close()
+    for p in gated:                                # gated never reach the LLM
+        dropped.append((p, "pre-filtered: low topic similarity"))
     return kept, dropped
 
 
