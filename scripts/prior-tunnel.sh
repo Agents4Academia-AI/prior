@@ -6,8 +6,8 @@
 set -euo pipefail
 
 HOST="${PRIOR_HOST:-ziz4}"      # the Host alias in your ~/.ssh/config (ProxyJump handled there)
-UI_PORT=5175
-API_PORT=8078
+UI_PORT="${PRIOR_UI_PORT:-5175}"
+API_PORT="${PRIOR_API_PORT:-8078}"
 
 echo "Tunneling $HOST: UI :$UI_PORT, API :$API_PORT  (Ctrl-C to stop) ..."
 ssh -N -L "$UI_PORT:127.0.0.1:$UI_PORT" -L "$API_PORT:127.0.0.1:$API_PORT" "$HOST" &
