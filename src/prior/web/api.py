@@ -122,6 +122,22 @@ def solved(body: SolvedBody) -> dict:
     return agent.has_been_solved(body.problem).to_dict()
 
 
+@app.get("/api/eval")
+def eval_results() -> dict:
+    """The scorecard for the /eval dashboard: saved LLM-metric run (if any) merged
+    with live key-free graph distributions."""
+    from .. import config, eval_suite
+    live = {"graph": graph.summary(), "distributions": eval_suite.graph_distributions()}
+    path = config.DATA / "eval" / "results.json"
+    if path.exists():
+        import json
+        saved = json.loads(path.read_text())
+        return {**saved, **live, "gates": saved.get("gates", eval_suite.GATES)}
+    # no saved run yet — return live distributions + a key-free faithfulness pass
+    return {**live, "metrics": [eval_suite.faithfulness(str(config.DATA))],
+            "gates": eval_suite.GATES, "note": "no full run yet — `prior eval`"}
+
+
 def _cite(p: dict) -> str:
     authors = p.get("authors") or []
     first = authors[0].split()[-1] if authors else "Anon"

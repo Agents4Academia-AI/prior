@@ -521,3 +521,48 @@ input.text:focus {
 .muted {
   color: var(--text-dim);
 }
+
+/* ── Eval dashboard ─────────────────────────────────────────────────── */
+.eval { padding: 20px 24px; overflow-y: auto; height: 100%; }
+.eval-head h2 { margin: 0 0 4px; }
+.eval-note { margin-top: 8px; color: var(--text-dim); font-size: 13px; }
+.gates { display: flex; gap: 12px; margin: 18px 0; }
+.gate { flex: 1; border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 14px 16px; background: var(--bg-elev); }
+.gate-name { font-weight: 600; }
+.gate-status { font-size: 12px; font-family: var(--mono); margin-top: 4px; }
+.gate.pass { border-color: #2ea04366; background: rgba(46,160,67,.10); }
+.gate.warn { border-color: #d2992266; background: rgba(210,153,34,.10); }
+.gate.pending { border-color: var(--border); color: var(--text-faint); }
+.gate.pass .gate-status { color: #3fb950; }
+.gate.warn .gate-status { color: #d29922; }
+
+.eval-group { margin: 22px 0; }
+.eval-group h3 { margin: 0 0 8px; font-size: 14px; color: var(--text-dim);
+  text-transform: uppercase; letter-spacing: .04em; }
+table.scorecard { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.scorecard th { text-align: left; color: var(--text-faint); font-weight: 500;
+  padding: 6px 10px; border-bottom: 1px solid var(--border); }
+table.scorecard td { padding: 9px 10px; border-bottom: 1px solid var(--border-soft);
+  vertical-align: top; }
+.m-name { font-weight: 500; }
+.m-detail { color: var(--text-faint); font-size: 12px; margin-top: 2px; }
+.m-val { font-family: var(--mono); font-size: 15px; white-space: nowrap; }
+.pill { font-family: var(--mono); font-size: 11px; padding: 2px 8px; border-radius: 999px; }
+.pill.pass { background: rgba(46,160,67,.18); color: #3fb950; }
+.pill.warn { background: rgba(210,153,34,.18); color: #d29922; }
+.pill.pending { background: var(--bg-elev-2); color: var(--text-faint); }
+
+.eval-callout { margin: 18px 0; padding: 12px 16px; border-radius: var(--radius);
+  background: var(--accent-soft); border: 1px solid var(--accent);
+  font-size: 13px; color: var(--text); }
+.eval-callout b { color: var(--accent); font-family: var(--mono); }
+
+.eval-charts { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 10px; }
+.eval-chart h4 { margin: 0 0 8px; font-size: 13px; color: var(--text-dim); }
+.bar-row { display: flex; align-items: center; gap: 8px; margin: 3px 0; font-size: 12px; }
+.bar-label { width: 110px; color: var(--text-dim); font-family: var(--mono);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bar-track { flex: 1; height: 12px; background: var(--bg-elev-2); border-radius: 3px; }
+.bar-fill { display: block; height: 100%; background: var(--accent); border-radius: 3px; }
+.bar-val { width: 34px; text-align: right; font-family: var(--mono); color: var(--text-dim); }

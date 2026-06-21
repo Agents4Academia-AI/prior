@@ -12,11 +12,12 @@ import type {
 import Sidebar from "./components/Sidebar";
 import GlobalView from "./components/GlobalView";
 import LocalView from "./components/LocalView";
+import EvalView from "./components/EvalView";
 import Legend from "./components/Legend";
 import DetailsPanel from "./components/DetailsPanel";
 import AskPanel from "./components/AskPanel";
 
-type Mode = "global" | "local";
+type Mode = "global" | "local" | "eval";
 type Tab = "details" | "ask";
 
 export default function App() {
@@ -134,6 +135,12 @@ export default function App() {
             >
               Local
             </button>
+            <button
+              className={mode === "eval" ? "on" : ""}
+              onClick={() => setMode("eval")}
+            >
+              Eval
+            </button>
           </div>
           {mode === "global" && (
             <div className="canvas-banner">
@@ -203,6 +210,8 @@ export default function App() {
             )}
           </>
         )}
+
+        {!bootError && mode === "eval" && <EvalView />}
       </div>
 
       <div className="panel right">
