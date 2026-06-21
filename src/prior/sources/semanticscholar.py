@@ -26,11 +26,18 @@ FIELDS = ("title,abstract,year,authors,externalIds,citationCount,"
           "openAccessPdf,publicationTypes,venue")
 
 
+_KEY_DISABLED = False     # set once if the key is rejected (expired/invalid)
+
+
+def _key() -> str:
+    return (os.environ.get("PRIOR_S2_API_KEY")
+            or os.environ.get("SEMANTIC_SCHOLAR_API_KEY") or "")
+
+
 def _headers() -> dict:
     h = {"User-Agent": config.USER_AGENT}
-    key = os.environ.get("PRIOR_S2_API_KEY") or os.environ.get("SEMANTIC_SCHOLAR_API_KEY")
-    if key:
-        h["x-api-key"] = key
+    if _key() and not _KEY_DISABLED:
+        h["x-api-key"] = _key()
     return h
 
 
@@ -59,21 +66,26 @@ def _to_paper(it: dict) -> Paper:
     )
 
 
-def _get(url: str, params: dict, *, tries: int = 5):
-    """GET with backoff — the keyless S2 pool 429s readily; a patient retry
-    (fine for an unattended run) recovers most requests without a key."""
+def _get(url: str, params: dict, *, tries: int = 6):
+    """GET with backoff. A rejected key (401/403, e.g. expired) disables the key
+    and retries keyless — a dead key must never silently break S2. The keyless
+    pool 429s readily, so a patient retry recovers most requests."""
+    global _KEY_DISABLED
     delay = 3.0
     last = None
     for _ in range(tries):
         last = requests.get(url, params=params, headers=_headers(),
                             timeout=config.HTTP_TIMEOUT)
+        if last.status_code in (401, 403) and _key() and not _KEY_DISABLED:
+            _KEY_DISABLED = True                   # key rejected → fall back keyless
+            continue
         if last.status_code == 429:
             time.sleep(delay)
             delay *= 1.7
             continue
         last.raise_for_status()
         return last
-    last.raise_for_status()                        # exhausted retries → surface 429
+    last.raise_for_status()                        # exhausted retries → surface error
     return last
 
 
