@@ -13,6 +13,7 @@ plausible candidates ever reach the (slow, claude-code) LLM filter.
 """
 
 import json
+import os
 import sys
 from collections import Counter
 from pathlib import Path
@@ -40,9 +41,14 @@ def main():
     _log(f"corpus: {len(corpus)} papers")
 
     seeds = scoper.high_yield_seeds(corpus)
-    _log(f"[1] bounded snowball from {len(seeds)} high-yield seeds ...")
-    new_oa, reached_oa = scoper.snowball(seeds, anchor_k=25, per_paper=40,
-                                         progress=lambda m: _log("    " + m))
+    s2_only = os.environ.get("EXPAND_S2_ONLY") == "1"
+    _log(f"[1] bounded snowball from {len(seeds)} high-yield seeds "
+         f"({'S2 only' if s2_only else 'OpenAlex + S2'}) ...")
+    if s2_only:
+        new_oa, reached_oa = [], set()
+    else:
+        new_oa, reached_oa = scoper.snowball(seeds, anchor_k=25, per_paper=40,
+                                             progress=lambda m: _log("    " + m))
     new_s2, reached_s2 = scoper.snowball_s2(seeds, anchor_k=40, per_paper=40,
                                             progress=lambda m: _log("    " + m))
     cands = [p for p in scoper._dedup_cross_source(new_oa + new_s2)
