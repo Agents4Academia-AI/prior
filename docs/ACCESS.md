@@ -1,9 +1,9 @@
 # Accessing the `prior` web app on ziz4
 
-The app runs entirely on **ziz4** (`zizgpu04.cpu.stats.ox.ac.uk`), which sits
-behind the department **jump host** (gateway). You reach it from your laptop by
-SSH port-forwarding the two ports the app uses, then opening it in your local
-browser. Nothing is exposed to the public internet.
+The app runs entirely on **ziz4** (`zizgpu04.cpu.stats.ox.ac.uk`), reached through
+two department **jump hosts** (`gate.stats.ox.ac.uk` → `ziz.stats.ox.ac.uk`). You
+reach it from your laptop by SSH port-forwarding the two ports the app uses, then
+opening it in your local browser. Nothing is exposed to the public internet.
 
 | Port | Service | Notes |
 |------|---------|-------|
@@ -27,20 +27,30 @@ private keys.
 
 ## 2. SSH config (`~/.ssh/config` on your laptop)
 
-Fill in `<your-user>` and the real `<jump-host-hostname>`:
+ziz4 sits two hops in: **laptop → `stats_gateway` → `ziz` → `ziz4`**. Replace
+`<your-user>` with your department username and point `IdentityFile` at your key:
 
 ```sshconfig
-Host ziz
-    HostName <jump-host-hostname>        # department gateway / jump host
+Host stats_gateway
+    HostName gate.stats.ox.ac.uk
     User <your-user>
+    IdentityFile ~/.ssh/your_key
+
+Host ziz
+    HostName ziz.stats.ox.ac.uk
+    ProxyJump stats_gateway
+    User <your-user>
+    IdentityFile ~/.ssh/your_key
 
 Host ziz4
     HostName zizgpu04.cpu.stats.ox.ac.uk
+    ProxyJump ziz
     User <your-user>
-    ProxyJump ziz                        # routes through the gateway automatically
+    IdentityFile ~/.ssh/your_key
 ```
 
-Test it: `ssh ziz4` should drop you onto the box.
+`ProxyJump` chains the hops automatically. Test it: `ssh ziz4` should drop you
+onto the box.
 
 ## 3. Start the servers (on ziz4)
 
