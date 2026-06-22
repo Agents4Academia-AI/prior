@@ -57,7 +57,7 @@ export default function AnnotateControls({
 
   if (!signedIn) {
     return (
-      <div className="annotate muted">Sign in (left) to verify this item.</div>
+      <div className="annotate muted">Sign in (top-left) to verify this item.</div>
     );
   }
 

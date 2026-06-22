@@ -44,8 +44,8 @@ def reload_users() -> None:
     _users.cache_clear()
 
 
-def authenticate(user: Optional[str], token: Optional[str]) -> Optional[Identity]:
-    """Return an Identity if (user, token) is valid, else None.
+def authenticate(user: Optional[str], password: Optional[str]) -> Optional[Identity]:
+    """Return an Identity if (user, password) is valid, else None.
     In open mode (no users.json) any non-empty user is accepted as a non-admin."""
     user = (user or "").strip()
     if not user:
@@ -54,7 +54,7 @@ def authenticate(user: Optional[str], token: Optional[str]) -> Optional[Identity
     if not users:                                   # open dev mode
         return Identity(user=user, is_admin=False, open_mode=True)
     rec = users.get(user)
-    if not rec or rec.get("token") != (token or ""):
+    if not rec or rec.get("password") != (password or ""):
         return None
     return Identity(user=user, is_admin=bool(rec.get("admin")))
 

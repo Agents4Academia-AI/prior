@@ -84,20 +84,20 @@ def _attach_annotations(g: dict, ident: Optional[auth.Identity]) -> None:
 
 @app.get("/api/graph/global")
 def global_graph(x_prior_user: Optional[str] = Header(None),
-                 x_prior_token: Optional[str] = Header(None)) -> dict:
+                 x_prior_password: Optional[str] = Header(None)) -> dict:
     g = graph.global_graph()
     for n in g["nodes"]:
         m = n.get("method") or ""
         n["label"] = (m[:60] + "…") if len(m) > 60 else m
         n["paper"] = n.get("paper_title") or n.get("paper_id")
         n["year"] = n.get("paper_year")
-    _attach_annotations(g, _identity(x_prior_user, x_prior_token))
+    _attach_annotations(g, _identity(x_prior_user, x_prior_password))
     return g
 
 
 @app.get("/api/graph/paper/{paper_id:path}")
 def local_graph(paper_id: str, x_prior_user: Optional[str] = Header(None),
-                x_prior_token: Optional[str] = Header(None)) -> dict:
+                x_prior_password: Optional[str] = Header(None)) -> dict:
     g = graph.paper_local_graph(paper_id)
     if not g:
         raise HTTPException(404, f"Unknown paper {paper_id}")
@@ -106,17 +106,17 @@ def local_graph(paper_id: str, x_prior_user: Optional[str] = Header(None),
         n["label"] = n.get("text")
     g["paper"] = {"id": p["id"], "title": p.get("title"),
                   "cite": _cite(p), "url": p.get("url")}
-    _attach_annotations(g, _identity(x_prior_user, x_prior_token))
+    _attach_annotations(g, _identity(x_prior_user, x_prior_password))
     return g
 
 
 @app.get("/api/contribution/{contrib_id:path}")
 def contribution(contrib_id: str, x_prior_user: Optional[str] = Header(None),
-                 x_prior_token: Optional[str] = Header(None)) -> dict:
+                 x_prior_password: Optional[str] = Header(None)) -> dict:
     d = graph.contribution_detail(contrib_id)
     if not d:
         raise HTTPException(404, f"Unknown contribution {contrib_id}")
-    ident = _identity(x_prior_user, x_prior_token)
+    ident = _identity(x_prior_user, x_prior_password)
     if ident:
         d["annotations"] = graph.annotations_for(
             contrib_id, viewer=ident.user, see_others=auth.can_see_others(ident))
@@ -129,8 +129,8 @@ _VERDICTS = {"correct", "incorrect", "unsure", "wrong_type", "wrong_direction"}
 
 @app.get("/api/whoami")
 def whoami(x_prior_user: Optional[str] = Header(None),
-           x_prior_token: Optional[str] = Header(None)) -> dict:
-    ident = _identity(x_prior_user, x_prior_token)
+           x_prior_password: Optional[str] = Header(None)) -> dict:
+    ident = _identity(x_prior_user, x_prior_password)
     if not ident:
         return {"signed_in": False, "shared": config.ANNOTATIONS_SHARED}
     return {"signed_in": True, "user": ident.user, "is_admin": ident.is_admin,
@@ -147,8 +147,8 @@ class AnnotateBody(BaseModel):
 
 @app.post("/api/annotate")
 def annotate(body: AnnotateBody, x_prior_user: Optional[str] = Header(None),
-             x_prior_token: Optional[str] = Header(None)) -> dict:
-    ident = _require(x_prior_user, x_prior_token)
+             x_prior_password: Optional[str] = Header(None)) -> dict:
+    ident = _require(x_prior_user, x_prior_password)
     if body.verdict not in _VERDICTS:
         raise HTTPException(422, f"verdict must be one of {sorted(_VERDICTS)}")
     graph.upsert_annotation(ident.user, body.target_kind, body.target_key,
@@ -158,17 +158,17 @@ def annotate(body: AnnotateBody, x_prior_user: Optional[str] = Header(None),
 
 @app.get("/api/annotations")
 def annotations(target_key: str, x_prior_user: Optional[str] = Header(None),
-                x_prior_token: Optional[str] = Header(None)) -> list[dict]:
-    ident = _require(x_prior_user, x_prior_token)
+                x_prior_password: Optional[str] = Header(None)) -> list[dict]:
+    ident = _require(x_prior_user, x_prior_password)
     return graph.annotations_for(target_key, viewer=ident.user,
                                  see_others=auth.can_see_others(ident))
 
 
 @app.get("/api/annotations/summary")
 def annotations_summary(x_prior_user: Optional[str] = Header(None),
-                        x_prior_token: Optional[str] = Header(None)) -> dict:
+                        x_prior_password: Optional[str] = Header(None)) -> dict:
     """Cross-annotator agreement / coverage — admins only."""
-    ident = _require(x_prior_user, x_prior_token)
+    ident = _require(x_prior_user, x_prior_password)
     if not ident.is_admin:
         raise HTTPException(403, "admin only")
     return graph.annotation_agreement()

@@ -616,3 +616,34 @@ button.lg-btn.on { background: var(--accent-soft); border-color: var(--accent);
   background: rgba(255,107,107,.16); color: var(--danger); }
 .ann-row .who { color: var(--text-faint); }
 .ann-note-txt { color: var(--text-dim); font-style: italic; }
+
+/* ── Account + sign-in modal ──────────────────────────────────────────── */
+.account { padding: 9px 10px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.account.in .who-name { font-weight: 600; }
+.signin-trigger { width: 100%; background: var(--accent-soft);
+  border: 1px solid var(--accent); color: var(--text); border-radius: 6px;
+  padding: 8px 10px; cursor: pointer; font: inherit; font-size: 13px; }
+.signin-trigger:hover { background: rgba(110,168,254,.25); }
+
+.modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.55);
+  display: flex; align-items: center; justify-content: center; z-index: 1000; }
+.modal { background: var(--bg-elev); border: 1px solid var(--border);
+  border-radius: 10px; padding: 20px 22px; width: 340px; max-width: 90vw;
+  box-shadow: 0 12px 48px rgba(0,0,0,.5); }
+.modal-head { display: flex; justify-content: space-between; align-items: center; }
+.modal-head h3 { margin: 0; font-size: 17px; }
+.modal-x { background: none; border: none; color: var(--text-faint);
+  font-size: 24px; line-height: 1; cursor: pointer; }
+.modal-sub { color: var(--text-dim); font-size: 13px; margin: 6px 0 16px; }
+.modal label { display: block; font-size: 12px; color: var(--text-dim); margin-bottom: 12px; }
+.modal label input { display: block; width: 100%; margin-top: 5px; box-sizing: border-box;
+  background: var(--bg-elev-2); border: 1px solid var(--border); color: var(--text);
+  border-radius: 6px; padding: 9px 11px; font: inherit; font-size: 14px; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 6px; }
+.btn-ghost { background: transparent; border: 1px solid var(--border);
+  color: var(--text-dim); border-radius: 6px; padding: 8px 13px; cursor: pointer; font: inherit; }
+.btn-primary { background: var(--accent); border: 1px solid var(--accent);
+  color: #0e1117; font-weight: 600; border-radius: 6px; padding: 8px 15px;
+  cursor: pointer; font: inherit; }
+.btn-primary:disabled { opacity: .5; cursor: default; }

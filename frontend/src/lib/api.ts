@@ -11,8 +11,8 @@ import type {
 const API_BASE =
   import.meta.env.VITE_API_BASE?.replace(/\/$/, "") || "http://127.0.0.1:8077";
 
-// ── identity (username + token) kept in localStorage, sent as headers ──────────
-export type Identity = { user: string; token: string };
+// ── identity (username + password) kept in localStorage, sent as headers ───────
+export type Identity = { user: string; password: string };
 
 export function getIdentity(): Identity | null {
   try {
@@ -29,7 +29,7 @@ export function setIdentity(id: Identity | null) {
 function authHeaders(): Record<string, string> {
   const id = getIdentity();
   return id
-    ? { "X-Prior-User": id.user, "X-Prior-Token": id.token }
+    ? { "X-Prior-User": id.user, "X-Prior-Password": id.password }
     : {};
 }
 
