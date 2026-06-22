@@ -1,19 +1,23 @@
 :root {
-  --bg: #0e1117;
-  --bg-elev: #161b22;
-  --bg-elev-2: #1c2330;
-  --border: #2a3140;
-  --border-soft: #232a36;
-  --text: #e6edf3;
-  --text-dim: #9aa7b4;
-  --text-faint: #6b7886;
-  --accent: #6ea8fe;
-  --accent-soft: rgba(110, 168, 254, 0.15);
-  --danger: #ff6b6b;
-  --radius: 8px;
+  /* Refined dark palette — higher text contrast (WCAG-AA secondary text). */
+  --bg: #0c0f14;
+  --bg-elev: #141922;
+  --bg-elev-2: #1b2230;
+  --border: #2c3543;
+  --border-soft: #222a36;
+  --text: #f1f5f9;        /* primary */
+  --text-dim: #c2ccd8;    /* secondary — readable */
+  --text-faint: #94a1b2;  /* tertiary — still ~4.7:1 on --bg */
+  --accent: #7aa2ff;
+  --accent-soft: rgba(122, 162, 255, 0.16);
+  --danger: #ff7a7a;
+  --ok: #56d364;
+  --warn: #e3b341;
+  --radius: 9px;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.22);
   --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
-  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
-    Arial, sans-serif;
+  --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
 }
 
 * {
@@ -31,10 +35,22 @@ body {
   font-family: var(--sans);
   background: var(--bg);
   color: var(--text);
-  font-size: 16px;
-  line-height: 1.45;
+  font-size: 15px;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
+
+/* readable muted text everywhere */
+.muted { color: var(--text-faint); }
+
+::selection { background: var(--accent-soft); }
+
+/* tidy scrollbars */
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-thumb { background: #2c3543; border-radius: 6px;
+  border: 2px solid var(--bg); }
+*::-webkit-scrollbar-thumb:hover { background: #3a4555; }
 
 button {
   font-family: inherit;
