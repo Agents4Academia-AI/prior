@@ -78,6 +78,32 @@ class Contribution:
 
 
 @dataclass
+class Contribution:
+    """A GLOBAL-graph node: one research contribution of a paper, ORKG-style
+    (problem + method + result). Cross-paper edges (builds_on / refines /
+    contradicts …) connect contributions; `claim_ids` are the LOCAL claims in
+    this same paper that support it (the bridge between the two levels)."""
+
+    id: str                   # "<paper_id>::contrib<N>"
+    paper_id: str
+    problem: str
+    method: str
+    result: str
+    claim_ids: list[str] = field(default_factory=list)
+    confidence: float = 0.5
+
+    def summary(self) -> str:
+        return f"{self.method} → {self.result} (for: {self.problem})"
+
+    def to_dict(self) -> dict:
+        return asdict(self)
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "Contribution":
+        return cls(**{k: d.get(k) for k in cls.__dataclass_fields__})  # type: ignore[attr-defined]
+
+
+@dataclass
 class Claim:
     """A LOCAL-graph node: an atomic, verifiable statement extracted from one
     paper. `contribution_id` links it up to the contribution it supports."""

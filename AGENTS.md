@@ -24,10 +24,12 @@ literature (reviews/surveys excluded). Read `README.md` for the why.
 
 ## Credits
 
-- `prior.llm` has two backends via `PRIOR_LLM_BACKEND`: `api` (metered) and
-  `claude-code` (Agent SDK → your Claude Code login, no API credits). The SciFact
-  runner also takes `--backend`. Use `--mock` / mocked `ask_fn` to develop evals
-  for free; spend credits only on the final run.
+- `prior.llm` has three backends via `PRIOR_LLM_BACKEND`: `api` (metered),
+  `claude-code` (Agent SDK), and `claude-cli`. IMPORTANT: `-p/--print` and the
+  Agent SDK now meter API credits even on a Max plan — only `claude-cli` (drives
+  the *interactive* Claude TUI through a PTY, see `claude_cli.py`) is truly
+  credit-free. Set `PRIOR_LLM_BACKEND=claude-cli` for free runs on the
+  subscription. Use `--mock` / mocked `ask_fn` to develop evals for free.
 
 ## Architecture (one line each)
 
