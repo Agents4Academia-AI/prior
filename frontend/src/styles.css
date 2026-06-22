@@ -1,23 +1,24 @@
 :root {
-  /* Refined dark palette — higher text contrast (WCAG-AA secondary text). */
-  --bg: #0c0f14;
-  --bg-elev: #141922;
-  --bg-elev-2: #1b2230;
-  --border: #2c3543;
-  --border-soft: #222a36;
-  --text: #f1f5f9;        /* primary */
-  --text-dim: #c2ccd8;    /* secondary — readable */
-  --text-faint: #94a1b2;  /* tertiary — still ~4.7:1 on --bg */
-  --accent: #7aa2ff;
-  --accent-soft: rgba(122, 162, 255, 0.16);
-  --danger: #ff7a7a;
-  --ok: #56d364;
-  --warn: #e3b341;
+  /* Light, warm — borrowed from Anthropic: cream surfaces, clay accent, serif display. */
+  --bg: #faf9f5;          /* warm off-white (page) */
+  --bg-elev: #ffffff;     /* cards */
+  --bg-elev-2: #f2efe6;   /* warm cream (subtle fills) */
+  --border: #e5e0d4;      /* warm light border */
+  --border-soft: #eeebe1;
+  --text: #1f1e1c;        /* warm near-black */
+  --text-dim: #51504a;    /* secondary — readable */
+  --text-faint: #78766d;  /* tertiary — ~4.7:1 on cream */
+  --accent: #c96442;      /* clay / terracotta */
+  --accent-soft: rgba(201, 100, 66, 0.12);
+  --danger: #b3261e;
+  --ok: #2e7d4f;
+  --warn: #b3781a;
   --radius: 9px;
-  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.22);
+  --shadow: 0 1px 2px rgba(60, 50, 40, 0.06), 0 8px 24px rgba(60, 50, 40, 0.08);
   --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
   --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Helvetica, Arial, sans-serif;
+  --serif: "Lora", Georgia, "Times New Roman", serif;
 }
 
 * {
@@ -48,9 +49,9 @@ body {
 
 /* tidy scrollbars */
 *::-webkit-scrollbar { width: 10px; height: 10px; }
-*::-webkit-scrollbar-thumb { background: #2c3543; border-radius: 6px;
+*::-webkit-scrollbar-thumb { background: #d8d2c4; border-radius: 6px;
   border: 2px solid var(--bg); }
-*::-webkit-scrollbar-thumb:hover { background: #3a4555; }
+*::-webkit-scrollbar-thumb:hover { background: #c4bdac; }
 
 button {
   font-family: inherit;
@@ -95,8 +96,11 @@ button {
 }
 .brand h1 {
   margin: 0;
-  font-size: 22px;
-  letter-spacing: 0.5px;
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  color: var(--text);
 }
 .brand .tag {
   color: var(--text-dim);
@@ -205,7 +209,7 @@ button {
 }
 .toggle button.on {
   background: var(--accent);
-  color: #06101f;
+  color: #ffffff;
   font-weight: 600;
 }
 .toggle button:disabled {
@@ -277,7 +281,8 @@ button {
   width: 180px;
   font-size: 11.5px;
   color: var(--text);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  background: var(--bg-elev);
+  box-shadow: var(--shadow);
 }
 .rf-node.selected {
   border-color: var(--accent);
@@ -363,7 +368,7 @@ button {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: #06101f;
+  color: #ffffff;
 }
 
 .rel-pill {
@@ -372,7 +377,7 @@ button {
   border-radius: 4px;
   font-size: 13px;
   font-weight: 600;
-  color: #06101f;
+  color: #ffffff;
 }
 
 .neighbour {
@@ -435,7 +440,7 @@ input.text:focus {
 
 .btn {
   background: var(--accent);
-  color: #06101f;
+  color: #ffffff;
   border: none;
   border-radius: var(--radius);
   padding: 9px 16px;
@@ -660,7 +665,7 @@ button.lg-btn.on { background: var(--accent-soft); border-color: var(--accent);
 .btn-ghost { background: transparent; border: 1px solid var(--border);
   color: var(--text-dim); border-radius: 6px; padding: 8px 13px; cursor: pointer; font: inherit; }
 .btn-primary { background: var(--accent); border: 1px solid var(--accent);
-  color: #0e1117; font-weight: 600; border-radius: 6px; padding: 8px 15px;
+  color: #faf9f5; font-weight: 600; border-radius: 6px; padding: 8px 15px;
   cursor: pointer; font: inherit; }
 .btn-primary:disabled { opacity: .5; cursor: default; }
 

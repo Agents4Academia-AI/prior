@@ -55,7 +55,7 @@ export default function LocalView({
         animated: e.relation === "contradicts",
         style: { stroke: color, strokeWidth: 1.6 },
         labelStyle: { fill: color, fontSize: 14, fontWeight: 600 },
-        labelBgStyle: { fill: "#0e1117", fillOpacity: 0.85 },
+        labelBgStyle: { fill: "#faf9f5", fillOpacity: 0.9 },
         markerEnd: {
           type: MarkerType.ArrowClosed,
           color,
@@ -92,7 +92,7 @@ export default function LocalView({
         minZoom={0.15}
         proOptions={{ hideAttribution: true }}
       >
-        <Background color="#1c2330" gap={22} />
+        <Background color="#e6e1d4" gap={22} />
         <Controls showInteractive={false} />
       </ReactFlow>
     </>
