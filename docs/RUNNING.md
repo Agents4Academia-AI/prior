@@ -49,30 +49,6 @@ docker compose up -d        # docker-compose.yml in the repo root
 
 Connection is configurable via `NEO4J_URI` / `NEO4J_USER` / `NEO4J_PASSWORD`.
 
-### First-time setup (new person / fresh Neo4j)
-
-You do **not** create the schema by hand — `prior build`/`daemon` call
-`graph.setup_schema()` on first run, which creates the uniqueness constraints and
-the vector index automatically. So first-time setup is just:
-
-1. **Code + deps:** `pip install -e ".[graph,web]"`.
-2. **A Neo4j to write to** — either:
-   - *reuse the shared instance on ziz4* (already running, already populated) — just
-     leave `NEO4J_*` at their defaults (`bolt://localhost:7687`, pwd in §2); your
-     `build` MERGEs into the same graph (idempotent, dedups by id); **or**
-   - *your own* — install the Neo4j 5 tarball, set its initial password once
-     (`bin/neo4j-admin dbms set-initial-password <pw>`), `bin/neo4j start`, then
-     point Prior at it via `NEO4J_URI/USER/PASSWORD`.
-3. **A model backend:** `export PRIOR_LLM_BACKEND=claude-cli` (your own Claude Code
-   login) or `ANTHROPIC_API_KEY=…` with `PRIOR_LLM_BACKEND=api`.
-4. **Ingest** (next section). On the first call the local embedding model downloads
-   once (~640 MB, cached); `PRIOR_EMBED_DIM` (1024) must match the index — leave
-   the default and it just works.
-
-> Heads-up: a colleague who only wants to *view* the running app doesn't ingest at
-> all — that's the tunnel flow in [ACCESS.md](ACCESS.md). Ingestion is only for
-> growing the graph.
-
 ---
 
 ## 3. Build a graph

@@ -4,100 +4,73 @@
 
 ---
 
-## 2026-06-19 — session 4: Neo4j live graph + continuous daemon + agent + speed
+## 2026-06-20 — demo shipped; `main` frozen, work moves to branches
 
-**Goal:** Move off one-shot `atlas.json` to a live graph DB with embeddings;
-make the pipeline fast; add a graph-backed agent, continuous ingestion, evals,
-and point the web app at the live graph.
+**Goal:** Friday demo + clean handoff.
 
-**Done (verified):**
-- **Neo4j store** (`graph.py`): two-level graph (Paper/Contribution/Claim nodes;
-  level implied by labels) with **native vector index** (1024-dim). Idempotent
-  `MERGE` upserts + batched `UNWIND` `bulk_load`; the agent's read tools
-  (`ann`/`neighbours`/`traverse`/`aggregate`). Runs from the Neo4j 5 tarball on
-  Java 21 (this box has no subuid → no rootless containers).
-- **Local embeddings** (`embeddings.py`): fastembed `mxbai-embed-large-v1`
-  (1024-dim, CPU/ONNX) — free, ~42ms/text.
-- **Speed**: parallel Reader + Cartographer (thread pools, `PRIOR_*_WORKERS`);
-  per-call timeout + capped retries so a hung call can't stall a build. Root
-  cause of the 30-min builds was the sink — one-node-per-tx vector writes flush
-  HNSW each commit (~5.7s/node); `bulk_load` UNWIND → 12-paper sink 8min→37s.
-  12-paper build now ~3 min total.
-- **Graph-backed agent** (`agent.py`): `ask()` (forward, grounded, honest
-  not_found) and `has_been_solved()` (vector-seed contributions → expand global
-  neighbours → aggregate consensus → grounded verdict + gap). CLI `prior ask` /
-  `prior solved`.
-- **Continuous daemon** (`daemon.py`, `prior daemon`): discover (topic search) →
-  dedup vs Neo4j → worker pool → per-paper enrich + MERGE + **incremental** global
-  relate (new contribution vs vector-nearest existing). `--watch` loops.
-- **Web app on Neo4j** (`web/api.py`): reads the live graph (no atlas.json),
-  same shapes so the React UI is unchanged; adds agent-tool endpoints
-  (`/api/search`, `/neighbours`, `/traverse`, `/ask`, `/solved`).
-- **Evals** (`evals/graph_eval.py`): groundedness (key-free), abstention, novelty.
+**Done (verified):** Demo went well. Shipped the contributions graph + evolution
+view (Reader → Cartographer → Contributor → relate), `ask`/`origin` over the
+contributions graph (`--contributions`), reveal.js deck (`docs/slides.html`),
+"Sunny Beach"-style palette, and the full-text/review-filter pipeline. All on
+`main`, pushed.
 
-**Verified by:**
-- 12-paper graph in Neo4j: 12 papers, 26 contributions, 87 claims, 98 global +
-  49 local edges, 18 citations. Every API endpoint correct.
-- Groundedness: **100%** of 87 claims grounded (mean overlap 0.997).
-- agent: grounded "open" verdict w/ cited contributions + gap; graceful not_found.
-- daemon: ingested 9 new papers incrementally with new global edges.
-- `pytest -q` → 31 passed (no API key / Neo4j needed).
+**Branching (new convention):** `main` is the demo snapshot — **do NOT commit to
+`main`.** All subsequent work on feature branches (`name/feature`) + PR. See the
+banner in `AGENTS.md`.
 
-**Design decisions made (user away):**
-- Storage: **Neo4j 5** (graph-native + native vectors) over Postgres/Kùzu.
-- Embeddings: local open-weight (Anthropic has none; Voyage is paid) — fast model
-  over the 7B leaders (no GPU here).
-- Two parallel implementations now exist (this branch vs team `main`); see "Not done".
+**Next session — start here (post-demo, see `WEEK_2.md` "NOW"):**
+1. Branch (`name/merge`), then prototype **iterative contribution merging** on the
+   existing 39 RAG contributions (embeddings + LLM-confirm). YWT-endorsed.
+2. Build the **Scoper** + a clean corpus for the hackathon topic ("agents in
+   academic tasks…"); naive search is noisy (see WEEK_2 finding).
+3. **Shared snapshot committed:** `data/atlas/atlas.json` (19 papers / 111 claims)
+   + `data/atlas/contributions.json` (39 contributions + relations) are on `main`,
+   so Harit starts from our exact data — no rebuild. `prior view --evolution`,
+   `prior ask --contributions`, and the merge prototype all read these directly.
 
-**Not done / next:**
-- **Reconcile with `main`** — `main` advanced ~35 commits (its own contributions/
-  full-text/views). Unique here: credit-free `claude-cli`, Neo4j+vectors, the
-  continuous daemon, interactive React app. Recommended: port these onto `main`
-  rather than a conflicting merge. NOT pushed; no PR opened.
-- Cartographer is mentions-heavy (conservative prompt) — tune for builds_on/refines.
-- Full temporal-holdout novelty eval (current is a recall proxy).
-- Citation-frontier expansion in the daemon (topics drive discovery for now).
+---
 
-## 2026-06-19 — session 3: two-level graph + full text + web app
+## 2026-06-18 — session 3: Friday MVP shipped (live run, web view, baseline, skill)
 
-**Goal:** Reshape Prior into a two-level knowledge graph, run it credit-free on a
-Claude Code subscription, ingest full text, and ship an interactive web UI.
+**Goal:** Ship the Friday demo deliverables — a real end-to-end run, a web view,
+a vanilla baseline, and real numbers. Use case (a). No refactors.
 
 **Done (verified):**
-- **Credit-free `claude-cli` backend** (`claude_cli.py` + `llm.py`): the headless
-  `-p` path / Agent SDK now meter API credits, so we drive the *interactive* TUI
-  through a PTY with a file-in/file-out protocol (model writes JSON to a file we
-  read; `--ax-screen-reader` + fence-tolerant `extract_json`). Runs on the Max
-  plan, no credits. `anthropic` import made lazy. `PRIOR_LLM_BACKEND=claude-cli`.
-- **Two-level graph** (`models.py`, `reader.py`, `cartographer.py`, `atlas.py`):
-  Reader now emits *contributions* (ORKG-style problem/method/result, global
-  nodes) + *claims* (local nodes) + *local edges* (entails/contradicts/supports/
-  depends_on). Cartographer builds global contribution→contribution edges via the
-  hybrid (citations propose ∪ BM25 neighbours; LLM labels; `source`=both|text).
-  Every edge carries an explicit `level` (local|global|meta) so same-named
-  relations across levels never conflate. See `docs/design.md`.
-- **Full-text ingestion** (`sources/fulltext.py`): arXiv HTML (arxiv.org/html →
-  ar5iv) directly or via title match for OpenAlex papers; head+tail window
-  (`FULLTEXT_CHARS`). Reader reads full text when present, else abstract.
-- **Web app**: FastAPI backend (`web/api.py`, `prior serve`) serving the
-  two-level graph + `/ask` + `/origin`; React UI (`frontend/`, Vite + React Flow)
-  visualizing global/local graphs with a question box.
-- `docs/landscape.md`: prior-art scan (ORKG/scite/GoAI/OpenNovelty/…) — the
-  whitespace is the integrated two-level graph + agent-callable serving.
+- **Live build on real data** via the `claude-code` backend (Max login, no API
+  credits): "retrieval augmented generation reduces hallucination" → 19 papers,
+  111 claims, 191 relations (107 supports / 49 extends / 29 refines / 6
+  contradicts), 11 citations.
+- **Forward** (`ask`): grounded, cited "EMERGING" verdict on the RAG/hallucination
+  question. **Graceful "no"**: protein-structure-prediction question → NOT_FOUND
+  with closest + gap, no fabrication. **Backward** (`origin`): traces in-atlas and
+  flags it misses the true (Lewis 2020) origin.
+- **Web view**: `prior view` / `src/prior/render_html.py` → self-contained
+  interactive HTML graph (vis-network), claims/papers nodes, typed edges,
+  click-to-detail. → data/atlas/view.html.
+- **Baseline**: `evals/baseline_vanilla.py` → `evals/baseline_comparison.md` —
+  vanilla Claude answers confidently / invents citations; Prior is calibrated,
+  grounded, and abstains honestly.
+- **Agent artifact**: `.claude/skills/prior/SKILL.md` (Prior as a Claude Code
+  skill driving the CLI tools).
+- **Real numbers** pasted into `evals/results.md`. `WEEK_2.md` holds deferred work.
+- Fixed `claude-code` backend for open prompts: `setting_sources=[]` (don't load
+  project skills → bare baseline) + salvage text on SDK "max turns".
 
 **Verified by:**
-- `pytest -q` → 25 passed (no API key needed).
-- Live two-level build via `claude-cli`: 7 papers → 15 contributions, 47 claims,
-  global graph with provenance-tagged edges. Full-text read yields body-only
-  concepts the abstract lacked.
-- API + Vite dev server both serving live (`:8077` / `:5173`), data flows.
+- `pytest -q` → 30 passed.
+- `evals/groundedness.py` → 100% groundedness; `evals/graph_stats.py` → 191 relations.
+- `evals/baseline_comparison.md` + `evals/results.md` written from the real run.
 
-**Not done / next:**
-- Throughput: each LLM call spawns a fresh `claude` PTY (~30s). 100 papers ≈ 2.5h
-  serially — parallelize PTY sessions (file-in/out is already isolated).
-- Reader on full text is single-call (head+tail window); add real chunking.
-- Navigator/Auditor not yet upgraded to reason over contributions/global edges.
-- Browser-verify the UI visually (stack is up; not yet eyeballed in a browser).
+**Not done / blocked:**
+- SciFact not run (dataset not downloaded) — no held-out accuracy number tonight.
+- Built at --max-papers 15 (not 25) to fit the Max-plan time budget.
+- Web view shows the single-layer atlas; local/global split is README-only.
+
+**Next session — start here (Friday AM demo prep):**
+1. Open `data/atlas/view.html` in a browser; rehearse the click-through.
+2. Dry-run the three queries from the cached atlas (forward / graceful-no /
+   origin) — do NOT live-build on stage.
+3. Pull `evals/results.md` numbers + the baseline contrast onto the slide.
 
 ## 2026-06-17 — session 2: SciFact harness + credit-saving backend
 

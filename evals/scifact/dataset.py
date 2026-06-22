@@ -10,9 +10,10 @@ from __future__ import annotations
 
 import json
 import tarfile
-import urllib.request
 from dataclasses import dataclass, field
 from pathlib import Path
+
+import requests
 
 SCIFACT_URL = "https://scifact.s3-us-west-2.amazonaws.com/release/latest/data.tar.gz"
 LABELS = ("SUPPORT", "CONTRADICT", "NOINFO")
@@ -92,7 +93,9 @@ def download(dest: Path) -> Path:  # pragma: no cover - network
     dest.mkdir(parents=True, exist_ok=True)
     tgz = dest / "scifact.tar.gz"
     if not tgz.exists():
-        urllib.request.urlretrieve(SCIFACT_URL, tgz)
+        r = requests.get(SCIFACT_URL, timeout=180)
+        r.raise_for_status()
+        tgz.write_bytes(r.content)
     with tarfile.open(tgz) as t:
         t.extractall(dest)
     for p in dest.rglob("corpus.jsonl"):

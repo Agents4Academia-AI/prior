@@ -11,8 +11,11 @@ import requests
 
 from .. import config
 from ..models import Paper
+from ._filters import looks_like_review
 
 API = "https://api.openalex.org/works"
+_SELECT = ("id,title,publication_year,authorships,primary_location,doi,type,"
+           "best_oa_location,abstract_inverted_index,referenced_works,cited_by_count")
 
 
 def _headers() -> dict:
@@ -45,16 +48,24 @@ def _abstract_from_index(inv: dict | None) -> str:
     return " ".join(word for _, word in positions)
 
 
+def _pdf_url(w: dict) -> str:
+    for loc in (w.get("best_oa_location"), w.get("primary_location")):
+        if loc and loc.get("pdf_url"):
+            return loc["pdf_url"]
+    return ""
+
+
 def _to_paper(w: dict) -> Paper:
     authors = [
         a.get("author", {}).get("display_name", "")
         for a in w.get("authorships", [])
     ]
     venue = (w.get("primary_location") or {}).get("source") or {}
+    title = w.get("title") or "(untitled)"
     return Paper(
         id=_norm_id(w.get("id")),
         source="openalex",
-        title=w.get("title") or "(untitled)",
+        title=title,
         abstract=_abstract_from_index(w.get("abstract_inverted_index")),
         url=w.get("id") or "",
         year=w.get("publication_year"),
@@ -63,20 +74,19 @@ def _to_paper(w: dict) -> Paper:
         doi=w.get("doi"),
         referenced_works=[_norm_id(r) for r in w.get("referenced_works", [])],
         cited_by_count=w.get("cited_by_count", 0),
+        pdf_url=_pdf_url(w),
+        is_review=looks_like_review(title, w.get("type", "")),
     )
 
 
 def search(query: str, *, max_papers: int = config.DEFAULT_MAX_PAPERS,
-           require_abstract: bool = True) -> list[Paper]:
-    """Search works by relevance; keep those with usable abstracts."""
+           require_abstract: bool = True, exclude_reviews: bool = True) -> list[Paper]:
+    """Search works by relevance; keep primary research with usable abstracts."""
     params = _params() | {
         "search": query,
-        "per_page": min(max_papers * 2, 200),
+        "per_page": min(max_papers * 3, 200),   # over-fetch: reviews get filtered
         "sort": "relevance_score:desc",
-        "select": (
-            "id,title,publication_year,authorships,primary_location,doi,"
-            "abstract_inverted_index,referenced_works,cited_by_count"
-        ),
+        "select": _SELECT,
     }
     r = requests.get(API, params=params, headers=_headers(),
                      timeout=config.HTTP_TIMEOUT)
@@ -86,10 +96,33 @@ def search(query: str, *, max_papers: int = config.DEFAULT_MAX_PAPERS,
         p = _to_paper(w)
         if require_abstract and not p.abstract:
             continue
+        if exclude_reviews and p.is_review:
+            continue
         papers.append(p)
         if len(papers) >= max_papers:
             break
     return papers
+
+
+def fetch_many(ids: list[str], *, batch: int = 50) -> dict[str, Paper]:
+    """Resolve many OpenAlex ids in batched requests (for reference expansion).
+    Accepts 'openalex:W..' or bare 'W..'. Returns {id: Paper}."""
+    clean = [i.split(":")[-1] for i in dict.fromkeys(ids) if i]
+    out: dict[str, Paper] = {}
+    for k in range(0, len(clean), batch):
+        chunk = clean[k:k + batch]
+        params = _params() | {
+            "filter": "ids.openalex:" + "|".join(chunk),
+            "per_page": batch,
+            "select": _SELECT,
+        }
+        r = requests.get(API, params=params, headers=_headers(),
+                         timeout=config.HTTP_TIMEOUT)
+        r.raise_for_status()
+        for w in r.json().get("results", []):
+            p = _to_paper(w)
+            out[p.id] = p
+    return out
 
 
 def fetch(openalex_id: str) -> Paper | None:

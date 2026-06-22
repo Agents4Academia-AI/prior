@@ -11,11 +11,11 @@ import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
-from . import cartographer, config, reader
+from . import cartographer, config, fulltext, reader
 from .atlas import Atlas
 from .models import Claim, Contribution, Edge, Paper
 from .reader import ReadResult
-from .sources import arxiv, fulltext, openalex
+from .sources import arxiv, openalex
 
 
 def sink_to_neo4j(atlas, *, progress=print) -> dict:
@@ -66,10 +66,34 @@ def _local_edges_path() -> Path:
     return config.ATLAS / "local_edges.jsonl"
 
 
-def ingest(topic: str, *, max_papers: int | None = None,
-           use_arxiv: bool = True, full_text: bool = True, progress=print) -> list[Paper]:
-    """Fetch papers for a topic from primary sources and cache them. When
-    `full_text` is set, also fetch body text where available (else abstract)."""
+def expand_references(papers: list[Paper], *, hops: int = 1, cap: int = 200,
+                      progress=print) -> list[Paper]:
+    """Walk citation edges backward: fetch the OpenAlex works the given papers
+    reference, reaching an idea's true origins that keyword search (bound by
+    current terminology) never surfaces. (From main.)"""
+    have: dict[str, Paper] = {p.id: p for p in papers}
+    frontier = list(papers)
+    for hop in range(hops):
+        wanted = [ref for p in frontier for ref in p.referenced_works
+                  if ref.startswith("openalex:") and ref not in have]
+        wanted = list(dict.fromkeys(wanted))
+        room = cap - len(have)
+        if not wanted or room <= 0:
+            break
+        fetched = openalex.fetch_many(wanted[:room])
+        new = [p for pid, p in fetched.items() if pid not in have]
+        for p in new:
+            have[p.id] = p
+        progress(f"  hop {hop + 1}: +{len(new)} cited works (corpus now {len(have)})")
+        frontier = new
+    return list(have.values())
+
+
+def ingest(topic: str, *, max_papers: int | None = None, use_arxiv: bool = True,
+           full_text: bool = True, cite_hops: int = 0, cap: int = 200,
+           progress=print) -> list[Paper]:
+    """Fetch papers for a topic from primary sources and cache them. `cite_hops>0`
+    expands backward along citations; `full_text` fetches body text where available."""
     config.ensure_dirs()
     n = max_papers or config.DEFAULT_MAX_PAPERS
     papers: dict[str, Paper] = {}
@@ -82,6 +106,8 @@ def ingest(topic: str, *, max_papers: int | None = None,
                 break
             papers.setdefault(p.id, p)
     out = list(papers.values())[:n]
+    if cite_hops > 0:
+        out = expand_references(out, hops=cite_hops, cap=cap, progress=progress)
 
     if full_text:
         got = 0
@@ -166,10 +192,10 @@ def load_reading() -> ReadResult:
 
 
 def build(topic: str, *, max_papers: int | None = None, relate: bool = True,
-          progress=print) -> Atlas:
+          cite_hops: int = 0, progress=print) -> Atlas:
     """Full pipeline: ingest -> read -> map -> save."""
     progress(f"[1/3] ingesting '{topic}' ...")
-    papers = ingest(topic, max_papers=max_papers)
+    papers = ingest(topic, max_papers=max_papers, cite_hops=cite_hops, progress=progress)
     progress(f"      {len(papers)} papers")
 
     progress("[2/3] reading (paper -> contributions + claims + local graph) ...")

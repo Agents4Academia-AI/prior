@@ -1,30 +1,26 @@
 # AGENTS.md — what Claude Code reads at session start
 
-Prior turns primary literature into a **two-level knowledge graph**, stored live
-in **Neo4j**: a GLOBAL graph of *contributions* across papers (builds_on/refines/
-contradicts…) and a LOCAL graph of *claims* within each paper (entails/contradicts/
-supports/depends_on), joined by bridge edges. Agents: **Reader** (paper →
-contributions + claims + local edges), **Cartographer** (→ global graph),
-**Navigator/agent** (grounded Q&A + "has this been solved?"). Ingestion runs
-**continuously** (`prior daemon`), MERGE-ing each paper into the graph. A FastAPI +
-React app visualizes both levels and answers questions. See `docs/design.md`
-(data model), `docs/architecture.md` (full pipeline), `docs/landscape.md` (prior art).
+> ⚠️ **BRANCHING — `main` is the Friday-demo snapshot.** Do **not** commit to
+> `main`. All subsequent work goes on a feature branch (`name/feature`, e.g.
+> `harit/local-graph`, `klara/merge`), then opens a PR for a teammate to review
+> and merge. One Claude Code session per branch.
+
+Prior turns primary literature into a queryable atlas of claims via three core
+agents: **Reader** (paper → claims), **Cartographer** (claims → graph),
+**Navigator** (question → grounded answer, forward & backward). A fourth,
+**Contribution agent** (`contributor.py`), extracts papers' *self-declared,
+standalone* contributions from full text. Sources are filtered to primary
+literature (reviews/surveys excluded). Read `README.md` for the why.
 
 ## How to run
 
-- Install: `pip install -e ".[graph,web]"`   (core + Neo4j/embeddings + web API)
-- Neo4j:   `docker compose up -d`  — or, where containers can't run, the Neo4j 5
-           tarball on Java 21 (see docs/architecture.md). Bolt: `bolt://localhost:7687`.
-- Backend: `export PRIOR_LLM_BACKEND=claude-cli`  (credit-free; see Credits)
-- Build:   `prior build "<topic>"`      (ingest → read → map → sink to Neo4j)
-- Stream:  `prior daemon --topic "<t>" [--watch]`   (continuous ingestion)
-- Query:   `prior ask "<q>"` / `prior solved "<problem>"` / `prior info`
-- Serve:   `prior serve`   then `cd frontend && npm install && npm run dev`  (web UI)
-- Test:    `pytest -q`   (whole suite runs without an API key / Neo4j — 31 tests, mocked)
-- Eval:    `python evals/graph_eval.py groundedness`  (key-free) ; `... abstention|novelty` (LLM)
-
-Embeddings are local + free (fastembed, `mxbai-embed-large-v1`, 1024-dim); the
-Neo4j vector index dimension (`PRIOR_EMBED_DIM`) must match the embedder.
+- Install: `pip install -e .`  (or `pip install -r requirements.txt`)
+- Env:     `export ANTHROPIC_API_KEY=...` ; optionally `PRIOR_CONTACT_EMAIL=...`
+- Build:   `prior build "<topic>" [--cite-hops N]`  (ingest → read → map → `data/atlas/atlas.json`)
+- Query:   `prior ask "<q>"` / `prior origin "<concept>"` / `prior info`
+- Extras:  `prior contributions` (self-declared contributions, full text) · `prior view [--contributions]`
+- Test:    `pytest -q`   (the whole suite runs without an API key — 20 tests, all backends mocked)
+- Eval:    `python evals/scifact/run.py --data data/scifact --mock`  (SciFact, zero credits)
 
 ## Credits
 
@@ -37,13 +33,16 @@ Neo4j vector index dimension (`PRIOR_EMBED_DIM`) must match the embedder.
 
 ## Architecture (one line each)
 
-- `sources/openalex.py` — search + citation edges (`referenced_works`); no key needed
-- `sources/arxiv.py` — abstracts for recent preprints; Atom XML via stdlib
+- `sources/openalex.py` — search + citation edges + OA PDF urls; no key needed
+- `sources/arxiv.py` — recent preprints; Atom XML via stdlib
+- `sources/_filters.py` — `looks_like_review` (primary-lit only; reviews excluded)
 - `reader.py` — forces JSON via a single tool; atomic, typed, evidence-bearing claims
 - `cartographer.py` — BM25 proposes candidate claim pairs; LLM labels only those (avoids O(n²))
 - `navigator.py` — `ask` (forward: verdict + supporting/contradicting/open) and `origin` (backward)
+- `contributor.py` — Contribution agent; standalone self-declared contributions (full text)
+- `fulltext.py` — HTML-first full text (arxiv html → ar5iv → real-PDF); skip, never abstract-fallback
 - `atlas.py` — the graph + JSON persistence; `atlas.json` is the hand-off API
-- `llm.py` — `structured()` (forced tool-call JSON) and `text()`; retries on rate limits
+- `llm.py` — `structured()` (forced tool-call JSON) and `text()`; api / claude-code backends
 
 ## Conventions
 

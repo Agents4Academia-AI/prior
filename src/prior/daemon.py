@@ -21,9 +21,9 @@ import os
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-from . import cartographer, config, embeddings, graph, reader, scoper
+from . import cartographer, config, embeddings, fulltext, graph, reader
 from .models import Contribution
-from .sources import arxiv, fulltext, openalex
+from .sources import arxiv, openalex
 
 
 def _have(paper_id: str) -> bool:
@@ -81,11 +81,16 @@ def _discover(topics: list[str], topic_defs: list[str], per_topic: int,
     out = []
     for t in topics:
         out.extend(_discover_topic(t, per_topic))
-    for td in topic_defs:
-        progress(f"  scoping topic-def ({len(td)} chars) ...")
-        kept, dropped = scoper.build_scoped_corpus(td, per_query=per_topic, progress=progress)
-        progress(f"  scoper kept {len(kept)} / dropped {len(dropped)}")
-        out.extend(kept)
+    if topic_defs:
+        try:
+            from . import scoper          # optional: present once klara/scoper is merged
+        except ImportError as e:  # noqa: BLE001
+            raise RuntimeError("--topic-def needs the Scoper (merge klara/scoper)") from e
+        for td in topic_defs:
+            progress(f"  scoping topic-def ({len(td)} chars) ...")
+            kept, dropped = scoper.build_scoped_corpus(td, per_query=per_topic, progress=progress)
+            progress(f"  scoper kept {len(kept)} / dropped {len(dropped)}")
+            out.extend(kept)
     return out
 
 
