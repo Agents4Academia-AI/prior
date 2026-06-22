@@ -40,16 +40,27 @@ def main():
     corpus_keys = {p.key() for p in corpus}
     _log(f"corpus: {len(corpus)} papers")
 
-    seeds = scoper.high_yield_seeds(corpus)
     s2_only = os.environ.get("EXPAND_S2_ONLY") == "1"
-    _log(f"[1] bounded snowball from {len(seeds)} high-yield seeds "
-         f"({'S2 only' if s2_only else 'OpenAlex + S2'}) ...")
+    if os.environ.get("EXPAND_SEED") == "gold":
+        # snowball FROM the curated/gold anchors — they open citation neighbourhoods
+        # the high-yield-seed snowball never reached
+        from weekend_run import _gold_anchors
+        akeys = {p.key() for p in _gold_anchors()}
+        seeds = [p for p in corpus if p.key() in akeys]
+        anchor_k = max(len(seeds), 1)               # forward cited-by from ALL gold seeds
+        _log(f"[1] snowball seeded on {len(seeds)} gold/curated anchors "
+             f"({'S2 only' if s2_only else 'OpenAlex + S2'}) ...")
+    else:
+        seeds = scoper.high_yield_seeds(corpus)
+        anchor_k = 25
+        _log(f"[1] bounded snowball from {len(seeds)} high-yield seeds "
+             f"({'S2 only' if s2_only else 'OpenAlex + S2'}) ...")
     if s2_only:
         new_oa, reached_oa = [], set()
     else:
-        new_oa, reached_oa = scoper.snowball(seeds, corpus=corpus, anchor_k=25,
+        new_oa, reached_oa = scoper.snowball(seeds, corpus=corpus, anchor_k=anchor_k,
                                              per_paper=40, progress=lambda m: _log("    " + m))
-    new_s2, reached_s2 = scoper.snowball_s2(seeds, corpus=corpus, anchor_k=40,
+    new_s2, reached_s2 = scoper.snowball_s2(seeds, corpus=corpus, anchor_k=max(anchor_k, 40),
                                             per_paper=40, progress=lambda m: _log("    " + m))
     cands = [p for p in scoper._dedup_cross_source(new_oa + new_s2)
              if p.key() not in corpus_keys]
