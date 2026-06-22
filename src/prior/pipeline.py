@@ -240,20 +240,68 @@ _RELATE_SCHEMA = {
 }
 
 
-def _cluster_by_meaning(statements: list[str], k: int) -> list[int]:
-    """KMeans over sentence-embedding vectors so contributions that mean the same
-    thing — even with different wording — share a cluster. Falls back to TF-IDF
-    if sentence-transformers isn't installed."""
-    from sklearn.cluster import KMeans
+def _embed(statements: list[str]):
+    """Sentence embeddings (MiniLM, local, no API) — None if unavailable."""
     try:
+        import numpy as np
         from sentence_transformers import SentenceTransformer
-        X = SentenceTransformer("all-MiniLM-L6-v2").encode(
+        return np.asarray(SentenceTransformer("all-MiniLM-L6-v2").encode(
             statements, normalize_embeddings=True, batch_size=64,
-            show_progress_bar=False)
-    except Exception:  # noqa: BLE001 — degrade to lexical clustering
+            show_progress_bar=False))
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def _pack_pairs(pairs, pos: dict, batch: int) -> list[list[int]]:
+    """Pack candidate pairs into batches (each ≤ batch indices) keeping BOTH
+    endpoints of every pair in the same batch, ordered for locality so each
+    batch is topically coherent."""
+    groups: list[list[int]] = []
+    cur: set = set()
+    for i, j in sorted(pairs, key=lambda p: pos[p[0]] + pos[p[1]]):
+        if cur and len(cur | {i, j}) > batch:
+            groups.append(sorted(cur))
+            cur = set()
+        cur |= {i, j}
+    if len(cur) >= 2:
+        groups.append(sorted(cur))
+    return groups
+
+
+def _semantic_groups(statements: list[str], *, batch: int = 70, k: int = 6) -> list[list[int]]:
+    """Index groups to relate. Candidate related-pairs are each contribution's k
+    nearest neighbours by sentence-embedding cosine — GLOBAL, so semantically
+    close contributions in DIFFERENT topic clusters are still compared (this is
+    how cross-cluster relations are captured). Pairs are packed into ≤batch
+    groups with both endpoints together. Falls back to TF-IDF KMeans clusters
+    when embeddings are unavailable (which only relates within clusters)."""
+    import numpy as np
+    n = len(statements)
+    if n <= batch:
+        return [list(range(n))] if n >= 2 else []
+    V = _embed(statements)
+    if V is None:                                    # lexical fallback (no cross-cluster)
+        from sklearn.cluster import KMeans
         from sklearn.feature_extraction.text import TfidfVectorizer
         X = TfidfVectorizer(stop_words="english", max_features=5000).fit_transform(statements)
-    return list(KMeans(n_clusters=k, n_init=3, random_state=0).fit_predict(X))
+        labels = KMeans(n_clusters=max(2, n // batch), n_init=3, random_state=0).fit_predict(X)
+        return [[i for i in range(n) if labels[i] == g] for g in sorted(set(labels))]
+    S = V @ V.T
+    np.fill_diagonal(S, -np.inf)
+    kk = min(k, n - 1)
+    nbr = np.argpartition(-S, kk - 1, axis=1)[:, :kk]
+    pairs = {(min(i, int(j)), max(i, int(j))) for i in range(n) for j in nbr[i]}
+    # nearest-neighbour chain → 1-D order so packed batches stay coherent
+    order, used, cur = [0], np.zeros(n, bool), 0
+    used[0] = True
+    for _ in range(n - 1):
+        row = S[cur].copy()
+        row[used] = -np.inf
+        cur = int(row.argmax())
+        order.append(cur)
+        used[cur] = True
+    pos = {node: idx for idx, node in enumerate(order)}
+    return _pack_pairs(pairs, pos, batch)
 
 
 def _relate_chunk(cs: list[dict], *, model: str | None = None) -> list[dict]:
@@ -282,19 +330,17 @@ def _relate_chunk(cs: list[dict], *, model: str | None = None) -> list[dict]:
 
 def relate_contributions_fast(*, model: str | None = None, batch: int = 70,
                               progress=print) -> list[dict]:
-    """Cross-contribution relations. Small sets go in one LLM call; large ones are
-    clustered by topical similarity (TF-IDF) and related cluster-by-cluster — a
-    one-shot call over thousands of contributions overflows the model and returns
-    nothing, while related contributions naturally share a cluster."""
+    """Cross-contribution relations. A one-shot call over thousands of
+    contributions overflows the model and returns nothing, so candidate
+    related-pairs are drawn from the embedding k-NN graph (each contribution's
+    nearest neighbours, GLOBALLY — so cross-cluster pairs are included) and packed
+    into small batches the model can actually handle; a failed batch is skipped,
+    not fatal."""
     data = json.loads(_contributions_path().read_text())
     cs = data.get("contributions", [])
-    if len(cs) <= batch:
-        groups = [list(range(len(cs)))] if cs else []
-    else:
-        k = max(2, len(cs) // batch)
-        labels = _cluster_by_meaning([c["statement"] for c in cs], k)
-        groups = [[i for i in range(len(cs)) if labels[i] == g] for g in range(k)]
-        progress(f"  {len(cs)} contributions → {k} semantic clusters")
+    groups = _semantic_groups([c["statement"] for c in cs], batch=batch) if cs else []
+    if len(groups) > 1:
+        progress(f"  {len(cs)} contributions → {len(groups)} kNN-pair batches")
 
     edges: list[dict] = []
     seen: set = set()
