@@ -66,6 +66,13 @@ def setup_schema() -> None:
                       OPTIONS {{indexConfig: {{
                         `vector.dimensions`: {dim},
                         `vector.similarity_function`: 'cosine' }}}}""")
+        # Human annotations (graph enrichment) — keyed by target, queried by index.
+        s.run("CREATE CONSTRAINT annotation_id IF NOT EXISTS "
+              "FOR (n:Annotation) REQUIRE n.id IS UNIQUE")
+        s.run("CREATE INDEX annotation_target IF NOT EXISTS "
+              "FOR (n:Annotation) ON (n.target_key)")
+        s.run("CREATE INDEX annotation_user IF NOT EXISTS "
+              "FOR (n:Annotation) ON (n.annotator)")
 
 
 # ── writes (idempotent; continuous-ingestion safe) ──────────────────────────────
@@ -311,5 +318,73 @@ def summary() -> dict:
 
 
 def wipe() -> None:
+    """Clear the literature graph but SPARE human annotations (they're costly to
+    recreate and survive re-ingest)."""
     with session() as s:
-        s.run("MATCH (n) DETACH DELETE n")
+        s.run("MATCH (n) WHERE NOT n:Annotation DETACH DELETE n")
+
+
+# ── annotations (human verification — graph enrichment) ─────────────────────────
+def upsert_annotation(annotator: str, target_kind: str, target_key: str,
+                      verdict: str, note: str, created_at: str) -> None:
+    """One upsertable verdict per (annotator, target). Keyed by target_key — a
+    node id, or 'srcId|RELATION|dstId' for an edge."""
+    with session() as s:
+        s.run("""MERGE (a:Annotation {id: $id})
+                 SET a.annotator=$ann, a.target_kind=$kind, a.target_key=$key,
+                     a.verdict=$verdict, a.note=$note, a.created_at=$ts""",
+              id=f"{annotator}|{target_key}", ann=annotator, kind=target_kind,
+              key=target_key, verdict=verdict, note=note, ts=created_at)
+
+
+def annotations_for(target_key: str, *, viewer: str, see_others: bool) -> list[dict]:
+    """All annotations on one target visible to `viewer` (own always; others only
+    if see_others)."""
+    with session() as s:
+        res = s.run("""MATCH (a:Annotation {target_key:$key})
+                       WHERE a.annotator=$me OR $others
+                       RETURN a{.annotator,.verdict,.note,.created_at} AS a
+                       ORDER BY a.created_at DESC""",
+                    key=target_key, me=viewer, others=see_others)
+        return [r["a"] for r in res]
+
+
+def annotation_summaries(target_keys: list[str], *, viewer: str,
+                         see_others: bool) -> dict[str, dict]:
+    """Batched tally for a whole subgraph — ONE query for all keys. Returns
+    {target_key: {n, correct, incorrect, unsure, mine}}."""
+    if not target_keys:
+        return {}
+    with session() as s:
+        res = s.run("""UNWIND $keys AS k
+                       OPTIONAL MATCH (a:Annotation {target_key:k})
+                       WHERE a.annotator=$me OR $others
+                       WITH k,
+                            collect(a) AS anns,
+                            head([x IN collect(a) WHERE x.annotator=$me | x.verdict]) AS mine
+                       RETURN k AS key, size(anns) AS n, mine AS mine,
+                         size([x IN anns WHERE x.verdict='correct']) AS correct,
+                         size([x IN anns WHERE x.verdict IN
+                              ['incorrect','wrong_type','wrong_direction']]) AS incorrect,
+                         size([x IN anns WHERE x.verdict='unsure']) AS unsure""",
+                    keys=target_keys, me=viewer, others=see_others)
+        return {r["key"]: {"n": r["n"], "correct": r["correct"],
+                           "incorrect": r["incorrect"], "unsure": r["unsure"],
+                           "mine": r["mine"]} for r in res}
+
+
+def my_annotation_count(annotator: str) -> int:
+    with session() as s:
+        return s.run("MATCH (a:Annotation {annotator:$me}) RETURN count(a)",
+                     me=annotator).single()[0]
+
+
+def annotation_agreement() -> dict:
+    """Per-target verdict tallies across ALL annotators (admin/eval). Returns the
+    raw votes so callers compute majority / Cohen's kappa."""
+    with session() as s:
+        res = s.run("""MATCH (a:Annotation)
+                       RETURN a.target_kind AS kind, a.target_key AS key,
+                              collect(a.verdict) AS verdicts""")
+        return {"items": [{"kind": r["kind"], "key": r["key"],
+                           "verdicts": r["verdicts"]} for r in res]}
