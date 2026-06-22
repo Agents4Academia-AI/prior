@@ -566,3 +566,13 @@ table.scorecard td { padding: 9px 10px; border-bottom: 1px solid var(--border-so
 .bar-track { flex: 1; height: 12px; background: var(--bg-elev-2); border-radius: 3px; }
 .bar-fill { display: block; height: 100%; background: var(--accent); border-radius: 3px; }
 .bar-val { width: 34px; text-align: right; font-family: var(--mono); color: var(--text-dim); }
+
+/* clickable relation filter in the legend */
+.lg-hint { color: var(--text-faint); font-weight: 400; font-size: 11px; }
+button.lg-btn { display: flex; align-items: center; gap: 7px; width: 100%;
+  background: transparent; border: 1px solid transparent; border-radius: 5px;
+  padding: 3px 6px; margin: 1px 0; color: var(--text-dim); cursor: pointer;
+  font: inherit; text-align: left; }
+button.lg-btn:hover { background: var(--bg-elev-2); color: var(--text); }
+button.lg-btn.on { background: var(--accent-soft); border-color: var(--accent);
+  color: var(--text); }

@@ -27,6 +27,7 @@ export default function App() {
 
   const [mode, setMode] = useState<Mode>("global");
   const [tab, setTab] = useState<Tab>("details");
+  const [relFilter, setRelFilter] = useState<string | null>(null);
 
   const [globalGraph, setGlobalGraph] = useState<GlobalGraph | null>(null);
 
@@ -168,8 +169,13 @@ export default function App() {
               graph={globalGraph}
               selectedId={selectedNodeId}
               onSelectNode={onGlobalNode}
+              activeRelation={relFilter}
             />
-            <Legend mode="global" />
+            <Legend
+              mode="global"
+              activeRelation={relFilter}
+              onPickRelation={setRelFilter}
+            />
           </ReactFlowProvider>
         )}
 

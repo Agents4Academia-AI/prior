@@ -18,10 +18,12 @@ export default function GlobalView({
   graph,
   selectedId,
   onSelectNode,
+  activeRelation,
 }: {
   graph: GlobalGraph;
   selectedId: string | null;
   onSelectNode: (id: string) => void;
+  activeRelation?: string | null;
 }) {
   const { nodes, edges } = useMemo(() => {
     const pos = forceLayout(
@@ -30,7 +32,18 @@ export default function GlobalView({
       { width: 1100, height: 760, iterations: 350 },
     );
 
-    const rfNodes: Node<GraphNodeData>[] = graph.nodes.map((n) => ({
+    // When a relation is picked, show only those edges + the nodes they connect.
+    const keepEdges = activeRelation
+      ? graph.edges.filter((e) => e.relation === activeRelation)
+      : graph.edges;
+    const keepIds = activeRelation
+      ? new Set(keepEdges.flatMap((e) => [e.source, e.target]))
+      : null;
+    const visibleNodes = keepIds
+      ? graph.nodes.filter((n) => keepIds.has(n.id))
+      : graph.nodes;
+
+    const rfNodes: Node<GraphNodeData>[] = visibleNodes.map((n) => ({
       id: n.id,
       type: "prior",
       position: pos[n.id] ?? { x: 0, y: 0 },
@@ -43,7 +56,7 @@ export default function GlobalView({
       },
     }));
 
-    const rfEdges: Edge[] = graph.edges.map((e) => {
+    const rfEdges: Edge[] = keepEdges.map((e) => {
       const color = relationColor[e.relation] ?? "#868e96";
       const dashed = e.provenance === "text";
       return {
@@ -69,7 +82,7 @@ export default function GlobalView({
     });
 
     return { nodes: rfNodes, edges: rfEdges };
-  }, [graph, selectedId]);
+  }, [graph, selectedId, activeRelation]);
 
   return (
     <ReactFlow
