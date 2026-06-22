@@ -7,6 +7,7 @@
     prior ask "<question>"     Navigator, forward (state of evidence)
     prior origin "<concept>"   Navigator, backward (trace to origin)
     prior info                 summarise the current atlas
+    prior serve                launch the web API (for the React UI)
 """
 
 from __future__ import annotations
@@ -36,89 +37,103 @@ def main(argv: list[str] | None = None) -> int:
     p_build.add_argument("--no-relate", action="store_true",
                          help="skip LLM claim-relation finding (fast first pass)")
     p_build.add_argument("--cite-hops", type=int, default=0,
-                         help="expand backward along citations N hops (reaches origins)")
+                         help="expand backward along citations N hops (reach origins)")
 
     p_ing = sub.add_parser("ingest", help="fetch papers only")
     p_ing.add_argument("topic")
     p_ing.add_argument("--max-papers", type=int, default=None)
-    p_ing.add_argument("--cite-hops", type=int, default=0,
-                       help="expand backward along citations N hops (reaches origins)")
 
     sub.add_parser("read", help="run Reader over cached papers")
 
     p_map = sub.add_parser("map", help="run Cartographer over cached papers+claims")
     p_map.add_argument("--no-relate", action="store_true")
 
-    p_ask = sub.add_parser("ask", help="forward: state of evidence")
+    p_ask = sub.add_parser("ask", help="forward: state of evidence (over the graph)")
     p_ask.add_argument("question")
-    p_ask.add_argument("--contributions", action="store_true",
-                       help="assess over the contributions graph (not raw claims)")
+
+    p_solved = sub.add_parser("solved", help="has this problem/hypothesis been solved?")
+    p_solved.add_argument("problem")
 
     p_org = sub.add_parser("origin", help="backward: trace to origin")
     p_org.add_argument("concept")
-    p_org.add_argument("--contributions", action="store_true",
-                       help="trace over the contributions graph (not raw claims)")
-
-    p_con = sub.add_parser("contributions",
-                           help="extract papers' self-declared contributions (full text)")
-    p_con.add_argument("--limit", type=int, default=None)
 
     sub.add_parser("info", help="summarise the current atlas")
-    p_view = sub.add_parser("view", help="render the atlas to an interactive HTML graph")
-    p_view.add_argument("--contributions", action="store_true",
-                        help="show only contribution claims (filter definitional/background)")
-    p_view.add_argument("--evolution", action="store_true",
-                        help="staged reveal: papers → contributions → relations")
+
+    p_srv = sub.add_parser("serve", help="launch the web API")
+    p_srv.add_argument("--host", default="127.0.0.1")
+    p_srv.add_argument("--port", type=int, default=8077)
+
+    p_dmn = sub.add_parser("daemon", help="continuous ingestion into the live graph")
+    p_dmn.add_argument("--topic", action="append", default=[], dest="topics",
+                       help="watch this topic via raw search (repeatable)")
+    p_dmn.add_argument("--topic-def", action="append", default=[], dest="topic_defs",
+                       help="watch this topic via the Scoper relevance filter — pass a "
+                            "definition with include/exclude criteria (repeatable)")
+    p_dmn.add_argument("--rounds", type=int, default=1)
+    p_dmn.add_argument("--per-topic", type=int, default=10)
+    p_dmn.add_argument("--workers", type=int, default=None)
+    p_dmn.add_argument("--watch", action="store_true", help="loop forever")
+    p_dmn.add_argument("--interval", type=int, default=300)
 
     args = ap.parse_args(argv)
 
     if args.cmd == "build":
-        pipeline.build(args.topic, max_papers=args.max_papers,
-                       relate=not args.no_relate, cite_hops=args.cite_hops)
+        atlas = pipeline.build(args.topic, max_papers=args.max_papers,
+                               relate=not args.no_relate, cite_hops=args.cite_hops)
+        try:
+            pipeline.sink_to_neo4j(atlas)   # push into the live graph store
+        except Exception as e:  # noqa: BLE001 — atlas.json still written
+            print(f"(neo4j sink skipped: {e})")
     elif args.cmd == "ingest":
-        papers = pipeline.ingest(args.topic, max_papers=args.max_papers,
-                                 cite_hops=args.cite_hops)
+        papers = pipeline.ingest(args.topic, max_papers=args.max_papers)
         print(f"{len(papers)} papers cached.")
     elif args.cmd == "read":
         papers = pipeline.load_papers()
         if not papers:
             sys.exit("No cached papers. Run `prior ingest` first.")
-        claims = pipeline.read_all(papers)
-        print(f"{len(claims)} claims extracted.")
+        r = pipeline.read_all(papers)
+        print(f"{len(r.contributions)} contributions, {len(r.claims)} claims, "
+              f"{len(r.local_edges)} local edges.")
     elif args.cmd == "map":
-        papers, claims = pipeline.load_papers(), pipeline.load_claims()
-        if not papers or not claims:
-            sys.exit("Need cached papers and claims. Run `prior ingest` + `prior read`.")
-        atlas = cartographer.build(papers, claims, relate=not args.no_relate)
+        papers, reading = pipeline.load_papers(), pipeline.load_reading()
+        if not papers or not reading.contributions:
+            sys.exit("Need cached papers and reading. Run `prior ingest` + `prior read`.")
+        atlas = cartographer.build(papers, reading, relate=not args.no_relate)
         atlas.save()
         print(atlas.summary())
     elif args.cmd == "ask":
-        atlas = pipeline.contributions_atlas() if args.contributions else _load_atlas()
-        print(navigator.ask(atlas, args.question).render())
+        from . import agent
+        a = agent.ask(args.question)
+        print(f"VERDICT: {a.verdict.upper()}\n\n{a.answer}\n")
+        for s in a.supporting:
+            print(f"  + {s}")
+        for s in a.contradicting:
+            print(f"  - {s}")
+        for s in a.open_questions:
+            print(f"  ? {s}")
+        if a.verdict == "not_found":
+            print(f"\nClosest: {a.closest}\nGap: {a.gap}")
+    elif args.cmd == "solved":
+        from . import agent
+        s = agent.has_been_solved(args.problem)
+        print(f"VERDICT: {s.verdict.upper()}\n\n{s.summary}\n")
+        print(f"Addressed by: {', '.join(s.addressed_by) or '(none)'}")
+        print(f"Consensus: {s.consensus}")
+        print(f"\nClosest: {s.closest}\nGap: {s.gap}")
     elif args.cmd == "origin":
-        atlas = pipeline.contributions_atlas() if args.contributions else _load_atlas()
-        print(navigator.origin(atlas, args.concept).render())
-    elif args.cmd == "contributions":
-        papers = pipeline.load_papers()
-        if not papers:
-            sys.exit("No cached papers. Run `prior build \"<topic>\"` first.")
-        cs = pipeline.extract_contributions(papers, limit=args.limit)
-        print(f"\n{len(cs)} contributions → {pipeline._contributions_path()}")
+        print(navigator.origin(_load_atlas(), args.concept).render())
     elif args.cmd == "info":
         print(_load_atlas().summary())
-    elif args.cmd == "view":
-        from . import render_html
-        if not (config.ATLAS / "atlas.json").exists():
-            sys.exit("No atlas found. Run `prior build \"<topic>\"` first.")
-        if args.evolution:
-            if not (config.ATLAS / "contributions.json").exists():
-                sys.exit("Run `prior contributions` first (needs contributions + relations).")
-            path = render_html.render_evolution()
-        elif args.contributions and (config.ATLAS / "contributions.json").exists():
-            path = render_html.render_contributions()   # real self-declared contributions
-        else:
-            path = render_html.render(contributions_only=args.contributions)
-        print(f"atlas view → {path}\n  open in a browser:  file://{path}")
+    elif args.cmd == "serve":
+        import uvicorn
+        uvicorn.run("prior.web.api:app", host=args.host, port=args.port)
+    elif args.cmd == "daemon":
+        from . import daemon
+        if not args.topics and not args.topic_defs:
+            sys.exit("daemon needs at least one --topic or --topic-def")
+        daemon.run(args.topics, topic_defs=args.topic_defs, rounds=args.rounds,
+                   per_topic=args.per_topic, workers=args.workers,
+                   watch=args.watch, interval=args.interval)
     return 0
 
 
