@@ -14,8 +14,8 @@ def test_open_mode_when_no_users_file(tmp_path, monkeypatch):
 
 def test_token_enforced_with_users_file(tmp_path, monkeypatch):
     f = tmp_path / "users.json"
-    f.write_text(json.dumps({"alice": {"token": "s3cret", "admin": False},
-                             "boss": {"token": "k", "admin": True}}))
+    f.write_text(json.dumps({"alice": {"password": "s3cret", "admin": False},
+                             "boss": {"password": "k", "admin": True}}))
     monkeypatch.setattr(config, "USERS_FILE", f)
     auth.reload_users()
     assert auth.authenticate("alice", "s3cret").is_admin is False

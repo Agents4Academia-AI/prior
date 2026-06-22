@@ -82,7 +82,9 @@ export const api = {
   annotate: (b: {
     target_kind: string;
     target_key: string;
-    verdict: string;
+    faithful: string;
+    issues?: string[];
+    soundness?: string;
     note?: string;
   }) => postJSON<{ ok: boolean; annotated: number }>("/api/annotate", b),
   annotations: (targetKey: string) =>
@@ -101,7 +103,9 @@ export type WhoAmI = {
 };
 export type AnnotationRow = {
   annotator: string;
-  verdict: string;
+  faithful: string;
+  issues: string[];
+  soundness: string;
   note: string;
   created_at: string;
 };

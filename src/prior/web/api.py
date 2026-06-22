@@ -124,7 +124,8 @@ def contribution(contrib_id: str, x_prior_user: Optional[str] = Header(None),
 
 
 # ── human annotation (verification → eval gold set) ─────────────────────────────
-_VERDICTS = {"correct", "incorrect", "unsure", "wrong_type", "wrong_direction"}
+_FAITHFUL = {"correct", "incorrect", "unsure"}
+_SOUNDNESS = {"", "sound", "doubtful", "implausible", "contested", "na"}
 
 
 @app.get("/api/whoami")
@@ -139,9 +140,11 @@ def whoami(x_prior_user: Optional[str] = Header(None),
 
 
 class AnnotateBody(BaseModel):
-    target_kind: str         # claim | contribution | edge
-    target_key: str          # node id, or "src|REL|dst"
-    verdict: str
+    target_kind: str            # claim | contribution | edge
+    target_key: str             # node id, or "src|REL|dst"
+    faithful: str               # axis A: correct | incorrect | unsure
+    issues: list[str] = []      # which fields are wrong (when incorrect)
+    soundness: str = ""         # axis B: ""|sound|doubtful|implausible|contested|na
     note: str = ""
 
 
@@ -149,10 +152,13 @@ class AnnotateBody(BaseModel):
 def annotate(body: AnnotateBody, x_prior_user: Optional[str] = Header(None),
              x_prior_password: Optional[str] = Header(None)) -> dict:
     ident = _require(x_prior_user, x_prior_password)
-    if body.verdict not in _VERDICTS:
-        raise HTTPException(422, f"verdict must be one of {sorted(_VERDICTS)}")
+    if body.faithful not in _FAITHFUL:
+        raise HTTPException(422, f"faithful must be one of {sorted(_FAITHFUL)}")
+    if body.soundness not in _SOUNDNESS:
+        raise HTTPException(422, f"soundness must be one of {sorted(_SOUNDNESS)}")
     graph.upsert_annotation(ident.user, body.target_kind, body.target_key,
-                            body.verdict, body.note, _now())
+                            faithful=body.faithful, issues=body.issues,
+                            soundness=body.soundness, note=body.note, created_at=_now())
     return {"ok": True, "annotated": graph.my_annotation_count(ident.user)}
 
 

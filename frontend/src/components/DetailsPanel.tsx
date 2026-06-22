@@ -1,6 +1,5 @@
 import type { ContributionDetail, ClaimNode, PaperGraph } from "../lib/types";
 import { relationColor, claimTypeColor, claimRelationColor } from "../lib/colors";
-import AnnotateControls from "./AnnotateControls";
 
 export type SelectedEdge = {
   source: string;
@@ -17,8 +16,6 @@ export default function DetailsPanel({
   claim,
   paperGraph,
   edge,
-  signedIn,
-  onAnnotated,
 }: {
   contribution: ContributionDetail | null;
   contribLoading: boolean;
@@ -26,11 +23,8 @@ export default function DetailsPanel({
   claim: ClaimNode | null;
   paperGraph: PaperGraph | null;
   edge: SelectedEdge | null;
-  signedIn: boolean;
-  onAnnotated: () => void;
 }) {
   if (edge) {
-    const key = `${edge.source}|${edge.relation.toUpperCase()}|${edge.target}`;
     return (
       <div>
         <Field
@@ -58,12 +52,7 @@ export default function DetailsPanel({
           />
         )}
         {edge.evidence && <Field k="Why" v={edge.evidence} />}
-        <AnnotateControls
-          targetKind="edge"
-          targetKey={key}
-          signedIn={signedIn}
-          onSaved={onAnnotated}
-        />
+        <div className="muted hint">Use the <b>Annotate</b> tab to verify this relation.</div>
       </div>
     );
   }
@@ -102,12 +91,6 @@ export default function DetailsPanel({
             v={<span className="cite">{paperGraph.paper.cite}</span>}
           />
         )}
-        <AnnotateControls
-          targetKind="claim"
-          targetKey={claim.id}
-          signedIn={signedIn}
-          onSaved={onAnnotated}
-        />
       </div>
     );
   }
@@ -164,13 +147,6 @@ export default function DetailsPanel({
             </div>
           ))}
         </div>
-
-        <AnnotateControls
-          targetKind="contribution"
-          targetKey={contribution.id}
-          signedIn={signedIn}
-          onSaved={onAnnotated}
-        />
       </div>
     );
   }

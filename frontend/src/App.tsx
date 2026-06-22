@@ -18,9 +18,10 @@ import EvalView from "./components/EvalView";
 import Legend from "./components/Legend";
 import DetailsPanel, { type SelectedEdge } from "./components/DetailsPanel";
 import AskPanel from "./components/AskPanel";
+import AnnotatePanel, { type AnnotationTarget } from "./components/AnnotatePanel";
 
 type Mode = "global" | "local" | "eval";
-type Tab = "details" | "ask";
+type Tab = "details" | "ask" | "annotate";
 
 export default function App() {
   const [summary, setSummary] = useState<Summary | null>(null);
@@ -102,7 +103,7 @@ export default function App() {
     setSelectedNodeId(id);
     setSelectedClaim(null);
     setSelectedEdge(null);
-    setTab("details");
+    setTab((t) => (t === "ask" ? "details" : t));
     setContribLoading(true);
     setContribError(null);
     setContribution(null);
@@ -119,7 +120,7 @@ export default function App() {
     setContribution(null);
     setSelectedClaim(null);
     setSelectedNodeId(null);
-    setTab("details");
+    setTab((t) => (t === "ask" ? "details" : t));
     setSelectedEdge({
       source: e.source, target: e.target, relation: e.relation,
       provenance: e.provenance, evidence: e.evidence,
@@ -130,7 +131,7 @@ export default function App() {
     setContribution(null);
     setSelectedClaim(null);
     setSelectedNodeId(null);
-    setTab("details");
+    setTab((t) => (t === "ask" ? "details" : t));
     setSelectedEdge({
       source: e.source, target: e.target, relation: e.relation, evidence: e.evidence,
     });
@@ -142,12 +143,49 @@ export default function App() {
       setContribution(null);
       setContribError(null);
       setSelectedEdge(null);
-      setTab("details");
+      setTab((t) => (t === "ask" ? "details" : t));
       const node = paperGraph?.nodes.find((n) => n.id === id) ?? null;
       setSelectedClaim(node);
     },
     [paperGraph],
   );
+
+  // Normalize the current selection into an annotation target (for the Annotate tab).
+  const annotationTarget: AnnotationTarget | null = selectedEdge
+    ? {
+        kind: "edge",
+        key: `${selectedEdge.source}|${selectedEdge.relation.toUpperCase()}|${selectedEdge.target}`,
+        heading: `Relation: ${selectedEdge.relation}`,
+        fields: [
+          { label: "from", value: selectedEdge.source },
+          { label: "to", value: selectedEdge.target },
+          ...(selectedEdge.evidence ? [{ label: "why", value: selectedEdge.evidence }] : []),
+        ],
+      }
+    : selectedClaim
+    ? {
+        kind: "claim",
+        key: selectedClaim.id,
+        heading: `Claim (${selectedClaim.claim_type})`,
+        fields: [
+          { label: "claim", value: selectedClaim.label },
+          ...(selectedClaim.evidence ? [{ label: "evidence", value: selectedClaim.evidence }] : []),
+        ],
+        source: paperGraph?.paper.cite,
+      }
+    : contribution
+    ? {
+        kind: "contribution",
+        key: contribution.id,
+        heading: "Contribution",
+        fields: [
+          { label: "problem", value: contribution.problem },
+          { label: "method", value: contribution.method },
+          { label: "result", value: contribution.result },
+        ],
+        source: papers.find((p) => p.id === contribution.paper_id)?.cite,
+      }
+    : null;
 
   return (
     <div className="app">
@@ -274,6 +312,12 @@ export default function App() {
             Details
           </button>
           <button
+            className={tab === "annotate" ? "on" : ""}
+            onClick={() => setTab("annotate")}
+          >
+            Annotate
+          </button>
+          <button
             className={tab === "ask" ? "on" : ""}
             onClick={() => setTab("ask")}
           >
@@ -281,7 +325,7 @@ export default function App() {
           </button>
         </div>
         <div className="pane">
-          {tab === "details" ? (
+          {tab === "details" && (
             <DetailsPanel
               contribution={contribution}
               contribLoading={contribLoading}
@@ -289,12 +333,16 @@ export default function App() {
               claim={selectedClaim}
               paperGraph={paperGraph}
               edge={selectedEdge}
+            />
+          )}
+          {tab === "annotate" && (
+            <AnnotatePanel
+              target={annotationTarget}
               signedIn={!!who?.signed_in}
               onAnnotated={onAnnotated}
             />
-          ) : (
-            <AskPanel />
           )}
+          {tab === "ask" && <AskPanel />}
         </div>
       </div>
     </div>
