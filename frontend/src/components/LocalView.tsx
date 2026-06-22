@@ -52,7 +52,7 @@ export default function LocalView({
         label: e.relation,
         animated: e.relation === "contradicts",
         style: { stroke: color, strokeWidth: 1.6 },
-        labelStyle: { fill: color, fontSize: 9, fontWeight: 600 },
+        labelStyle: { fill: color, fontSize: 14, fontWeight: 600 },
         labelBgStyle: { fill: "#0e1117", fillOpacity: 0.85 },
         markerEnd: {
           type: MarkerType.ArrowClosed,

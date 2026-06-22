@@ -57,7 +57,7 @@ export default function GlobalView({
           strokeWidth: 1.6,
           strokeDasharray: dashed ? "5 4" : undefined,
         },
-        labelStyle: { fill: color, fontSize: 9, fontWeight: 600 },
+        labelStyle: { fill: color, fontSize: 14, fontWeight: 600 },
         labelBgStyle: { fill: "#0e1117", fillOpacity: 0.85 },
         markerEnd: {
           type: MarkerType.ArrowClosed,
