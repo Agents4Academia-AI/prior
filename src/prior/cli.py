@@ -59,6 +59,11 @@ def main(argv: list[str] | None = None) -> int:
 
     sub.add_parser("info", help="summarise the current atlas")
 
+    p_eval = sub.add_parser("eval", help="run the evaluation scorecard")
+    p_eval.add_argument("--data", default=None, help="cached reading dir for faithfulness")
+    p_eval.add_argument("--no-llm", action="store_true", help="key-free metrics only")
+    p_eval.add_argument("--sample", type=int, default=6)
+
     p_srv = sub.add_parser("serve", help="launch the web API")
     p_srv.add_argument("--host", default="127.0.0.1")
     p_srv.add_argument("--port", type=int, default=8077)
@@ -124,6 +129,12 @@ def main(argv: list[str] | None = None) -> int:
         print(navigator.origin(_load_atlas(), args.concept).render())
     elif args.cmd == "info":
         print(_load_atlas().summary())
+    elif args.cmd == "eval":
+        from . import eval_suite
+        r = eval_suite.run(data_dir=args.data, with_llm=not args.no_llm, sample=args.sample)
+        for m in r["metrics"]:
+            v = "—" if m["value"] is None else m["value"]
+            print(f"  [{m['status']:>7}] {m['name']}: {v}  (target {m['threshold']})")
     elif args.cmd == "serve":
         import uvicorn
         uvicorn.run("prior.web.api:app", host=args.host, port=args.port)

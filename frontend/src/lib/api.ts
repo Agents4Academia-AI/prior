@@ -52,4 +52,31 @@ export const api = {
   ask: (question: string) => postJSON<AskResponse>("/api/ask", { question }),
   origin: (concept: string) =>
     postJSON<OriginResponse>("/api/origin", { concept }),
+  eval: () => getJSON<EvalResults>("/api/eval"),
+};
+
+export type EvalMetric = {
+  id: string;
+  name: string;
+  group: string;
+  value: number | null;
+  threshold: number;
+  higher_better: boolean;
+  unit: string;
+  status: "pass" | "warn" | "pending";
+  kind: string;
+  detail: string;
+};
+
+export type EvalResults = {
+  graph: Record<string, number>;
+  distributions: {
+    provenance: Record<string, number>;
+    global_relations: Record<string, number>;
+    local_relations: Record<string, number>;
+    claim_types: Record<string, number>;
+  };
+  metrics: EvalMetric[];
+  gates: Record<string, string>;
+  note?: string;
 };
