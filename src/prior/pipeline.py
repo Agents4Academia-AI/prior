@@ -240,20 +240,32 @@ _RELATE_SCHEMA = {
 }
 
 
-def relate_contributions_fast(*, model: str | None = None, progress=print) -> list[dict]:
-    """One-shot cross-contribution relations: a single LLM call over the whole
-    (small) contribution set. Seconds instead of ~one call per contribution."""
+def _cluster_by_meaning(statements: list[str], k: int) -> list[int]:
+    """KMeans over sentence-embedding vectors so contributions that mean the same
+    thing — even with different wording — share a cluster. Falls back to TF-IDF
+    if sentence-transformers isn't installed."""
+    from sklearn.cluster import KMeans
+    try:
+        from sentence_transformers import SentenceTransformer
+        X = SentenceTransformer("all-MiniLM-L6-v2").encode(
+            statements, normalize_embeddings=True, batch_size=64,
+            show_progress_bar=False)
+    except Exception:  # noqa: BLE001 — degrade to lexical clustering
+        from sklearn.feature_extraction.text import TfidfVectorizer
+        X = TfidfVectorizer(stop_words="english", max_features=5000).fit_transform(statements)
+    return list(KMeans(n_clusters=k, n_init=3, random_state=0).fit_predict(X))
+
+
+def _relate_chunk(cs: list[dict], *, model: str | None = None) -> list[dict]:
+    """One LLM call relating a SMALL set of contributions. Returns edges by id."""
     from . import llm
-    data = json.loads(_contributions_path().read_text())
-    cs = data.get("contributions", [])
     listing = "\n".join(f"[{i}] ({c['paper_id']}) {c['statement']}"
                         for i, c in enumerate(cs))
     out = llm.structured(
         model=model or config.CARTOGRAPHER_MODEL, system=_RELATE_SYS,
         user=f"CONTRIBUTIONS:\n{listing}", schema=_RELATE_SCHEMA,
-        tool_name="emit_relations", max_tokens=4000)
-    edges: list[dict] = []
-    seen: set = set()
+        tool_name="emit_relations", max_tokens=3000)
+    edges = []
     for r in out.get("relations", []):
         a, b = r.get("a"), r.get("b")
         if not (isinstance(a, int) and isinstance(b, int)):
@@ -262,16 +274,48 @@ def relate_contributions_fast(*, model: str | None = None, progress=print) -> li
             continue
         if cs[a]["paper_id"] == cs[b]["paper_id"]:
             continue
-        key = frozenset({a, b})
-        if key in seen:
-            continue
-        seen.add(key)
         edges.append({"src": cs[a]["id"], "dst": cs[b]["id"],
                       "relation": r["relation"], "evidence": r.get("reason", ""),
                       "confidence": 0.6})
+    return edges
+
+
+def relate_contributions_fast(*, model: str | None = None, batch: int = 70,
+                              progress=print) -> list[dict]:
+    """Cross-contribution relations. Small sets go in one LLM call; large ones are
+    clustered by topical similarity (TF-IDF) and related cluster-by-cluster — a
+    one-shot call over thousands of contributions overflows the model and returns
+    nothing, while related contributions naturally share a cluster."""
+    data = json.loads(_contributions_path().read_text())
+    cs = data.get("contributions", [])
+    if len(cs) <= batch:
+        groups = [list(range(len(cs)))] if cs else []
+    else:
+        k = max(2, len(cs) // batch)
+        labels = _cluster_by_meaning([c["statement"] for c in cs], k)
+        groups = [[i for i in range(len(cs)) if labels[i] == g] for g in range(k)]
+        progress(f"  {len(cs)} contributions → {k} semantic clusters")
+
+    edges: list[dict] = []
+    seen: set = set()
+    for gi, idxs in enumerate(groups):
+        if len(idxs) < 2:
+            continue
+        try:
+            chunk_edges = _relate_chunk([cs[i] for i in idxs], model=model)
+        except Exception as e:  # noqa: BLE001 — one cluster shouldn't sink the rest
+            progress(f"  cluster {gi + 1}/{len(groups)}: relate failed ({e})")
+            continue
+        for e in chunk_edges:
+            key = frozenset({e["src"], e["dst"]})
+            if key not in seen:
+                seen.add(key)
+                edges.append(e)
+        if len(groups) > 1:
+            progress(f"  cluster {gi + 1}/{len(groups)} ({len(idxs)}) → {len(edges)} edges")
     data["edges"] = edges
     _contributions_path().write_text(json.dumps(data, indent=2))
-    progress(f"{len(edges)} cross-contribution relations (one-shot)")
+    progress(f"{len(edges)} cross-contribution relations")
     return edges
 
 
