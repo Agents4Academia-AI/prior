@@ -1,0 +1,5 @@
+{
+  "alice": {"token": "change-me-alice", "admin": false},
+  "bob":   {"token": "change-me-bob",   "admin": false},
+  "harit": {"token": "change-me-admin", "admin": true}
+}

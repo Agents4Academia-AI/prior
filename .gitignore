@@ -29,3 +29,6 @@ data/atlas/*
 
 # Downloaded eval datasets (regenerable via --download)
 data/scifact/
+
+# Annotator tokens (real)
+data/users.json
