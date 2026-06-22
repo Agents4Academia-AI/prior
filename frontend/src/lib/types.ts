@@ -1,5 +1,14 @@
 // API response types for the Prior backend.
 
+// Annotation tally attached inline to a node/edge (one batched query server-side).
+export interface AnnSummary {
+  n: number;
+  correct: number;
+  incorrect: number;
+  unsure: number;
+  mine: string | null;
+}
+
 export interface Summary {
   topic: string;
   papers: number;
@@ -40,6 +49,7 @@ export interface GlobalNode {
   result: string;
   paper: string;
   year: number;
+  ann?: AnnSummary | null;
 }
 
 export interface GlobalEdge {
@@ -50,6 +60,7 @@ export interface GlobalEdge {
   provenance: Provenance;
   confidence: number;
   evidence: string;
+  ann?: AnnSummary | null;
 }
 
 export interface GlobalGraph {
@@ -81,6 +92,7 @@ export interface ClaimNode {
   confidence: number;
   evidence: string;
   contribution_id: string;
+  ann?: AnnSummary | null;
 }
 
 export interface ClaimEdge {
@@ -89,6 +101,7 @@ export interface ClaimEdge {
   target: string;
   relation: ClaimRelation;
   evidence: string;
+  ann?: AnnSummary | null;
 }
 
 export interface PaperGraph {
@@ -115,6 +128,7 @@ export interface ContributionDetail {
   result: string;
   claims: { id: string; text: string; [k: string]: unknown }[];
   neighbours: Neighbour[];
+  annotations?: { annotator: string; verdict: string; note: string; created_at: string }[];
 }
 
 export type Verdict = "established" | "contested" | "emerging" | "not_found";

@@ -1,5 +1,14 @@
 import type { ContributionDetail, ClaimNode, PaperGraph } from "../lib/types";
-import { relationColor, claimTypeColor } from "../lib/colors";
+import { relationColor, claimTypeColor, claimRelationColor } from "../lib/colors";
+import AnnotateControls from "./AnnotateControls";
+
+export type SelectedEdge = {
+  source: string;
+  target: string;
+  relation: string;
+  provenance?: string;
+  evidence?: string;
+};
 
 export default function DetailsPanel({
   contribution,
@@ -7,13 +16,57 @@ export default function DetailsPanel({
   contribError,
   claim,
   paperGraph,
+  edge,
+  signedIn,
+  onAnnotated,
 }: {
   contribution: ContributionDetail | null;
   contribLoading: boolean;
   contribError: string | null;
   claim: ClaimNode | null;
   paperGraph: PaperGraph | null;
+  edge: SelectedEdge | null;
+  signedIn: boolean;
+  onAnnotated: () => void;
 }) {
+  if (edge) {
+    const key = `${edge.source}|${edge.relation.toUpperCase()}|${edge.target}`;
+    return (
+      <div>
+        <Field
+          k="Relation"
+          v={
+            <span
+              className="rel-pill"
+              style={{
+                background:
+                  (relationColor as Record<string, string>)[edge.relation] ??
+                  (claimRelationColor as Record<string, string>)[edge.relation] ??
+                  "#868e96",
+              }}
+            >
+              {edge.relation}
+            </span>
+          }
+        />
+        <Field k="From" v={edge.source} />
+        <Field k="To" v={edge.target} />
+        {edge.provenance && (
+          <Field
+            k="Provenance"
+            v={edge.provenance === "both" ? "citation-backed" : "uncited / text"}
+          />
+        )}
+        {edge.evidence && <Field k="Why" v={edge.evidence} />}
+        <AnnotateControls
+          targetKind="edge"
+          targetKey={key}
+          signedIn={signedIn}
+          onSaved={onAnnotated}
+        />
+      </div>
+    );
+  }
   if (contribLoading) {
     return (
       <div className="loading">
@@ -49,6 +102,12 @@ export default function DetailsPanel({
             v={<span className="cite">{paperGraph.paper.cite}</span>}
           />
         )}
+        <AnnotateControls
+          targetKind="claim"
+          targetKey={claim.id}
+          signedIn={signedIn}
+          onSaved={onAnnotated}
+        />
       </div>
     );
   }
@@ -105,6 +164,13 @@ export default function DetailsPanel({
             </div>
           ))}
         </div>
+
+        <AnnotateControls
+          targetKind="contribution"
+          targetKey={contribution.id}
+          signedIn={signedIn}
+          onSaved={onAnnotated}
+        />
       </div>
     );
   }

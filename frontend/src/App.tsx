@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 import { ReactFlowProvider } from "@xyflow/react";
-import { api } from "./lib/api";
+import { api, type WhoAmI } from "./lib/api";
 import type {
   Summary,
   Paper,
   GlobalGraph,
+  GlobalEdge,
   PaperGraph,
+  ClaimEdge,
   ContributionDetail,
   ClaimNode,
 } from "./lib/types";
@@ -14,7 +16,7 @@ import GlobalView from "./components/GlobalView";
 import LocalView from "./components/LocalView";
 import EvalView from "./components/EvalView";
 import Legend from "./components/Legend";
-import DetailsPanel from "./components/DetailsPanel";
+import DetailsPanel, { type SelectedEdge } from "./components/DetailsPanel";
 import AskPanel from "./components/AskPanel";
 
 type Mode = "global" | "local" | "eval";
@@ -43,9 +45,24 @@ export default function App() {
   const [contribLoading, setContribLoading] = useState(false);
   const [contribError, setContribError] = useState<string | null>(null);
   const [selectedClaim, setSelectedClaim] = useState<ClaimNode | null>(null);
+  const [selectedEdge, setSelectedEdge] = useState<SelectedEdge | null>(null);
+  const [who, setWho] = useState<WhoAmI | null>(null);
 
-  // Boot: summary, papers, global graph.
+  const refreshWho = useCallback(() => {
+    api.whoami().then(setWho).catch(() => setWho(null));
+  }, []);
+
+  // Re-fetch the current graph so freshly-saved annotation tallies show up.
+  const onAnnotated = useCallback(() => {
+    refreshWho();
+    api.globalGraph().then(setGlobalGraph).catch(() => {});
+    if (selectedPaperId)
+      api.paperGraph(selectedPaperId).then(setPaperGraph).catch(() => {});
+  }, [refreshWho, selectedPaperId]);
+
+  // Boot: summary, papers, global graph, identity.
   useEffect(() => {
+    refreshWho();
     (async () => {
       try {
         const [s, p, g] = await Promise.all([
@@ -67,6 +84,7 @@ export default function App() {
     setMode("local");
     setSelectedNodeId(null);
     setSelectedClaim(null);
+    setSelectedEdge(null);
     setContribution(null);
     setPaperLoading(true);
     setPaperError(null);
@@ -83,6 +101,7 @@ export default function App() {
   const onGlobalNode = useCallback(async (id: string) => {
     setSelectedNodeId(id);
     setSelectedClaim(null);
+    setSelectedEdge(null);
     setTab("details");
     setContribLoading(true);
     setContribError(null);
@@ -96,11 +115,33 @@ export default function App() {
     }
   }, []);
 
+  const onGlobalEdge = useCallback((e: GlobalEdge) => {
+    setContribution(null);
+    setSelectedClaim(null);
+    setSelectedNodeId(null);
+    setTab("details");
+    setSelectedEdge({
+      source: e.source, target: e.target, relation: e.relation,
+      provenance: e.provenance, evidence: e.evidence,
+    });
+  }, []);
+
+  const onLocalEdge = useCallback((e: ClaimEdge) => {
+    setContribution(null);
+    setSelectedClaim(null);
+    setSelectedNodeId(null);
+    setTab("details");
+    setSelectedEdge({
+      source: e.source, target: e.target, relation: e.relation, evidence: e.evidence,
+    });
+  }, []);
+
   const onLocalNode = useCallback(
     (id: string) => {
       setSelectedNodeId(id);
       setContribution(null);
       setContribError(null);
+      setSelectedEdge(null);
       setTab("details");
       const node = paperGraph?.nodes.find((n) => n.id === id) ?? null;
       setSelectedClaim(node);
@@ -115,6 +156,8 @@ export default function App() {
         papers={papers}
         selectedPaperId={selectedPaperId}
         onSelectPaper={openPaper}
+        who={who}
+        onIdentityChange={refreshWho}
       />
 
       <div className="panel canvas">
@@ -169,6 +212,7 @@ export default function App() {
               graph={globalGraph}
               selectedId={selectedNodeId}
               onSelectNode={onGlobalNode}
+              onSelectEdge={onGlobalEdge}
               activeRelation={relFilter}
             />
             <Legend
@@ -205,6 +249,7 @@ export default function App() {
                   graph={paperGraph}
                   selectedId={selectedNodeId}
                   onSelectNode={onLocalNode}
+                  onSelectEdge={onLocalEdge}
                 />
                 <Legend mode="local" />
               </ReactFlowProvider>
@@ -243,6 +288,9 @@ export default function App() {
               contribError={contribError}
               claim={selectedClaim}
               paperGraph={paperGraph}
+              edge={selectedEdge}
+              signedIn={!!who?.signed_in}
+              onAnnotated={onAnnotated}
             />
           ) : (
             <AskPanel />

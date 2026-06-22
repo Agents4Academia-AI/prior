@@ -7,7 +7,7 @@ import {
   type Node,
   type Edge,
 } from "@xyflow/react";
-import type { GlobalGraph } from "../lib/types";
+import type { GlobalGraph, GlobalEdge } from "../lib/types";
 import { relationColor } from "../lib/colors";
 import { forceLayout } from "../lib/layout";
 import GraphNode, { type GraphNodeData } from "./GraphNode";
@@ -18,11 +18,13 @@ export default function GlobalView({
   graph,
   selectedId,
   onSelectNode,
+  onSelectEdge,
   activeRelation,
 }: {
   graph: GlobalGraph;
   selectedId: string | null;
   onSelectNode: (id: string) => void;
+  onSelectEdge?: (e: GlobalEdge) => void;
   activeRelation?: string | null;
 }) {
   const { nodes, edges } = useMemo(() => {
@@ -90,6 +92,10 @@ export default function GlobalView({
       edges={edges}
       nodeTypes={nodeTypes}
       onNodeClick={(_, node) => onSelectNode(node.id)}
+      onEdgeClick={(_, ed) => {
+        const orig = graph.edges.find((x) => x.id === ed.id);
+        if (orig) onSelectEdge?.(orig);
+      }}
       fitView
       fitViewOptions={{ padding: 0.18 }}
       minZoom={0.15}
