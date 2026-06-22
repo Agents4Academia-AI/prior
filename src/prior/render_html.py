@@ -194,10 +194,12 @@ def render(atlas_path: Path | None = None, out_path: Path | None = None,
     return out_path
 
 
-def render_contributions(out_path: Path | None = None) -> Path:
-    """Render the REAL contributions (data/atlas/contributions.json) as a graph:
-    each contribution is a node (coloured by kind) attached to its paper."""
-    contribs = json.loads((config.ATLAS / "contributions.json").read_text())
+def render_contributions(out_path: Path | None = None,
+                         data_path: Path | None = None) -> Path:
+    """Render the REAL contributions (data/atlas/contributions.json, or a filtered
+    VIEW via data_path) as a graph: each contribution is a node (coloured by kind)
+    attached to its paper."""
+    contribs = json.loads((data_path or (config.ATLAS / "contributions.json")).read_text())
     atlas = Atlas.load(config.ATLAS / "atlas.json")
     cs = contribs.get("contributions", [])
     paper_ids = list(dict.fromkeys(c["paper_id"] for c in cs))

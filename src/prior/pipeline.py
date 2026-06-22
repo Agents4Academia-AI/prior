@@ -329,14 +329,15 @@ def _relate_chunk(cs: list[dict], *, model: str | None = None) -> list[dict]:
 
 
 def relate_contributions_fast(*, model: str | None = None, batch: int = 70,
-                              progress=print) -> list[dict]:
+                              path: Path | None = None, progress=print) -> list[dict]:
     """Cross-contribution relations. A one-shot call over thousands of
     contributions overflows the model and returns nothing, so candidate
     related-pairs are drawn from the embedding k-NN graph (each contribution's
     nearest neighbours, GLOBALLY — so cross-cluster pairs are included) and packed
     into small batches the model can actually handle; a failed batch is skipped,
-    not fatal."""
-    data = json.loads(_contributions_path().read_text())
+    not fatal. `path` lets it relate a filtered VIEW file in place."""
+    cpath = path or _contributions_path()
+    data = json.loads(cpath.read_text())
     cs = data.get("contributions", [])
     groups = _semantic_groups([c["statement"] for c in cs], batch=batch) if cs else []
     if len(groups) > 1:
@@ -360,9 +361,64 @@ def relate_contributions_fast(*, model: str | None = None, batch: int = 70,
         if len(groups) > 1:
             progress(f"  cluster {gi + 1}/{len(groups)} ({len(idxs)}) → {len(edges)} edges")
     data["edges"] = edges
-    _contributions_path().write_text(json.dumps(data, indent=2))
+    cpath.write_text(json.dumps(data, indent=2))
     progress(f"{len(edges)} cross-contribution relations")
     return edges
+
+
+def write_contribution_view(name: str, keep_paper_ids, *, relate: bool = True,
+                            progress=print) -> Path:
+    """A non-destructive, filtered VIEW of the contributions graph: select the
+    contributions whose paper is in keep_paper_ids and write them to
+    contributions_<name>.json (re-related), leaving the full contributions.json
+    untouched. This is the general 'slice the corpus' mechanism — a core view, a
+    section, a zoom — over one ever-growing substrate."""
+    full = json.loads(_contributions_path().read_text())
+    keep = set(keep_paper_ids)
+    sub = [c for c in full.get("contributions", []) if c["paper_id"] in keep]
+    path = config.ATLAS / f"contributions_{name}.json"
+    path.write_text(json.dumps(
+        {"contributions": sub, "edges": [],
+         "skipped_no_fulltext": full.get("skipped_no_fulltext", [])}, indent=2))
+    progress(f"  view '{name}': {len(sub)} contributions from {len(keep)} papers")
+    if relate:
+        relate_contributions_fast(path=path, progress=progress)
+    return path
+
+
+def append_contributions(papers: list[Paper], *, model: str | None = None,
+                         progress=print) -> list[dict]:
+    """Extract contributions for NEW papers and APPEND to contributions.json —
+    additive, never touching or re-extracting what's already there. Papers that
+    are reviews, lack full text, or are already present are skipped."""
+    from . import contributor, fulltext
+    from .sources import looks_like_review
+    path = _contributions_path()
+    data = (json.loads(path.read_text()) if path.exists()
+            else {"contributions": [], "edges": [], "skipped_no_fulltext": []})
+    seen = ({c["paper_id"] for c in data["contributions"]}
+            | set(data.get("skipped_no_fulltext", [])))
+    todo = [p for p in papers
+            if p.id not in seen and not (p.is_review or looks_like_review(p.title))]
+    progress(f"  appending contributions for {len(todo)} new papers ...")
+    new: list[dict] = []
+    for i, p in enumerate(todo, 1):
+        try:
+            ft = fulltext.fetch(p)
+            if not ft:
+                data["skipped_no_fulltext"].append(p.id)
+                continue
+            cs = contributor.extract(p, ft, model=model)
+        except Exception as e:  # noqa: BLE001 — one paper shouldn't sink the rest
+            progress(f"  [{i}/{len(todo)}] {p.short_cite()}: ERROR {e}")
+            continue
+        new.extend(cs)
+        progress(f"  [{i}/{len(todo)}] {p.short_cite()}: {len(cs)} contributions")
+    data["contributions"].extend(new)
+    path.write_text(json.dumps(data, indent=2))
+    progress(f"  +{len(new)} contributions appended "
+             f"(total {len(data['contributions'])})")
+    return new
 
 
 def load_claims() -> list[Claim]:

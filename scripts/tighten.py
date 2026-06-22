@@ -56,40 +56,70 @@ def _log(m):
 
 
 def main():
+    import shutil
+    config.ensure_dirs()
     pp = config.RAW / "papers.jsonl"
+    cj = config.ATLAS / "contributions.json"
+
+    # one-time full-corpus snapshot — NEVER delete data
+    for f in (pp, cj):
+        bak = f.with_name(f.stem + "_full" + f.suffix)
+        if f.exists() and not bak.exists():
+            shutil.copy2(f, bak)
+            _log(f"backed up {f.name} -> {bak.name}")
+
     corpus = [Paper.from_dict(json.loads(l))
               for l in pp.read_text().splitlines() if l]
+
+    # fold the curated/gold anchors (grant bibs + GitHub repo) — ADD new papers
+    # (additive: the full corpus only grows; nothing is removed)
+    from weekend_run import _gold_anchors
+    anchors = _gold_anchors()
+    have = {p.key() for p in corpus}
+    added = [p for p in anchors if p.key() not in have]
+    if added:
+        corpus += added
+        with pp.open("w") as f:
+            for p in corpus:
+                f.write(json.dumps(p.to_dict()) + "\n")
+        a = Atlas(); a.topic = "agents for the scientific process"
+        for p in corpus:
+            a.add_paper(p)
+        a.link_citations(); a.save()
+    _log(f"folded {len(added)} new curated papers (of {len(anchors)} anchors) → "
+         f"corpus {len(corpus)}")
+
+    # strict re-scope the FULL corpus → CORE selection (ids only — no removal)
     _log(f"re-scoping {len(corpus)} papers with the strict CORE filter ...")
     cache = str(config.ATLAS / "scope_strict_cache.jsonl")
     kept, dropped = scoper.scope(STRICT_TOPIC, corpus, batch=20, cache_path=cache,
                                  progress=lambda m: _log("  " + m))
-    papers = [p for p, _ in kept]
-    _log(f"\nCORE: {len(papers)} kept / {len(dropped)} dropped (from {len(corpus)})")
-    yr = Counter(p.year for p in papers if p.year)
+    core_ids = {p.id for p, _ in kept}
+    _log(f"\nCORE: {len(core_ids)} kept / {len(dropped)} dropped (of {len(corpus)})")
+    yr = Counter(p.year for p, _ in kept if p.year)
     _log("by year: " + " ".join(f"{y}:{yr[y]}" for y in sorted(yr)))
 
-    with pp.open("w") as f:
-        for p in papers:
-            f.write(json.dumps(p.to_dict()) + "\n")
-    a = Atlas(); a.topic = "agents for the scientific process (core)"
-    for p in papers:
-        a.add_paper(p)
-    a.link_citations(); a.save()
-    sc = config.ATLAS / "scope.json"
-    o = json.loads(sc.read_text()) if sc.exists() else {}
-    o["topic"] = STRICT_TOPIC
-    o["kept"] = [{"id": p.id, "cite": p.short_cite(), "year": p.year,
-                  "title": p.title} for p in papers]
-    o["dropped"] = [{"id": p.id, "reason": r} for p, r in dropped]
-    o["tightened_from"] = len(corpus)
-    o.pop("completeness", None); o.pop("recall_expansion", None)
-    sc.write_text(json.dumps(o, indent=2))
+    # record the core selection in a SEPARATE file (full scope untouched)
+    (config.ATLAS / "core_scope.json").write_text(json.dumps({
+        "topic": STRICT_TOPIC, "core_ids": sorted(core_ids),
+        "kept": [{"id": p.id, "cite": p.short_cite(), "year": p.year,
+                  "title": p.title} for p, _ in kept],
+        "dropped": [{"id": p.id, "reason": r} for p, r in dropped],
+    }, indent=2))
 
-    _log("\ncontributions over the core (resumable) ...")
-    pipeline.extract_contributions(papers, relate=False, progress=lambda m: _log("  " + m))
-    pipeline.relate_contributions_fast(progress=lambda m: _log("  " + m))
-    out = render_html.render_contributions()
-    _log(f"DONE | core {len(papers)} papers | view {out}")
+    # append contributions for the new papers that PASSED the strict filter
+    core_added = [p for p in added if p.id in core_ids]
+    if core_added:
+        _log(f"appending contributions for {len(core_added)} folded core papers ...")
+        pipeline.append_contributions(core_added, progress=lambda m: _log("  " + m))
+
+    # build + render the CORE VIEW (filtered from the full contributions, related)
+    path = pipeline.write_contribution_view("core", core_ids,
+                                            progress=lambda m: _log("  " + m))
+    n_view = len(json.loads(path.read_text())["contributions"])
+    out = render_html.render_contributions(data_path=path,
+                                           out_path=config.ATLAS / "view_core.html")
+    _log(f"DONE | core {len(core_ids)} papers | {n_view} core contributions | view {out}")
 
 
 if __name__ == "__main__":
