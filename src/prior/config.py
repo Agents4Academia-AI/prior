@@ -36,6 +36,7 @@ DATA = Path(os.environ.get("PRIOR_DATA_DIR", ROOT / "data"))
 RAW = DATA / "raw"        # cached source responses (papers)
 ATLAS = DATA / "atlas"    # built atlas (claims + graph)
 FULLTEXT = DATA / "fulltext"   # cached raw full texts (provenance; re-extract source)
+FULLPAPER = DATA / "fullpaper"  # rich Markdown renders (LaTeX math + embedded images)
 
 # ── Source / network ────────────────────────────────────────────────────────────
 # OpenAlex asks for a contact email in the "polite pool" for faster, reliable
@@ -90,6 +91,22 @@ RELATION_NEIGHBORS = int(os.environ.get("PRIOR_RELATION_NEIGHBORS", "6"))
 # Max chars of full text fed to the Reader (head+tail window when longer).
 FULLTEXT_CHARS = int(os.environ.get("PRIOR_FULLTEXT_CHARS", "48000"))
 
+# ── fullpaper: rich Markdown render (LaTeX math + embedded figures) ───────────────
+# Defaults for the standalone "fullpaper" stage; each is also a per-call/CLI knob.
+def _flag(name: str, default: bool) -> bool:
+    v = os.environ.get(name)
+    return default if v is None else v.lower() in ("1", "true", "yes")
+
+
+FULLPAPER_MATH = _flag("PRIOR_FULLPAPER_MATH", True)        # keep equations as LaTeX
+FULLPAPER_IMAGES = _flag("PRIOR_FULLPAPER_IMAGES", True)    # include figures/plots
+FULLPAPER_EMBED_IMAGES = _flag("PRIOR_FULLPAPER_EMBED", True)  # base64-inline vs assets dir
+# Page cap for the PDF fallback (0 = all). The arXiv-HTML path is not paginated and
+# is always rendered in full.
+FULLPAPER_MAX_PAGES = int(os.environ.get("PRIOR_FULLPAPER_MAX_PAGES", "0"))
+# Drop raster images smaller than this (px, either side) — icons, rules, logos.
+FULLPAPER_MIN_IMAGE_PX = int(os.environ.get("PRIOR_FULLPAPER_MIN_IMAGE_PX", "50"))
+
 # ── Annotation / auth ───────────────────────────────────────────────────────────
 # users.json maps username -> {"token": "...", "admin": true|false}. When the file
 # is absent, auth runs in OPEN dev mode (any name, no token, non-admin).
@@ -103,3 +120,4 @@ def ensure_dirs() -> None:
     RAW.mkdir(parents=True, exist_ok=True)
     ATLAS.mkdir(parents=True, exist_ok=True)
     FULLTEXT.mkdir(parents=True, exist_ok=True)
+    FULLPAPER.mkdir(parents=True, exist_ok=True)

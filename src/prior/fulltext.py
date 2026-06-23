@@ -22,7 +22,7 @@ import io
 import re
 import threading
 import time
-from urllib.parse import quote
+from urllib.parse import quote, urljoin
 
 import requests
 
@@ -333,10 +333,14 @@ def _meta_pdf(doi: str) -> str | None:
         html = r.text
     except requests.RequestException:
         return None
+    # resolve a (possibly relative / scheme-relative) citation_pdf_url as a browser
+    # would: against <base href> if declared, else the final landing-page URL.
+    bh = re.search(r"(?is)<base[^>]+href=[\"']([^\"']+)", html)
+    base = urljoin(r.url, bh.group(1)) if bh else r.url
     for pat in (r'name=["\']citation_pdf_url["\'][^>]*?content=["\']([^"\']+)',
                 r'content=["\']([^"\']+)["\'][^>]*?name=["\']citation_pdf_url["\']'):
         m = re.search(pat, html, re.I | re.S)
-        if m and (text := _oa_pdf(m.group(1).replace("&amp;", "&"))):
+        if m and (text := _oa_pdf(urljoin(base, m.group(1).replace("&amp;", "&")))):
             return text
     return None
 
