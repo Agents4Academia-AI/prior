@@ -17,7 +17,9 @@ secrets/
 
 # Built data (regenerable; not the golden inputs)
 data/raw/
+data/fulltext/
 data/fullpaper/
+compare/
 data/atlas/*
 !data/raw/.gitkeep
 !data/atlas/.gitkeep
