@@ -1,0 +1,140 @@
+{
+  "graph": {
+    "papers": 21,
+    "contributions": 50,
+    "claims": 161,
+    "global_edges": 158,
+    "local_edges": 94,
+    "citations": 18
+  },
+  "distributions": {
+    "provenance": {
+      "both": 47,
+      "text": 111
+    },
+    "global_relations": {
+      "builds_on": 12,
+      "contradicts": 2,
+      "contrast": 56,
+      "mentions": 77,
+      "refines": 2,
+      "supports": 9
+    },
+    "local_relations": {
+      "contradicts": 4,
+      "depends_on": 33,
+      "entails": 5,
+      "supports": 52
+    },
+    "claim_types": {
+      "background": 20,
+      "definitional": 8,
+      "empirical": 61,
+      "methodological": 42,
+      "theoretical": 30
+    }
+  },
+  "metrics": [
+    {
+      "id": "faithfulness",
+      "name": "Extraction faithfulness",
+      "group": "faithful",
+      "value": 1.0,
+      "threshold": 0.95,
+      "higher_better": true,
+      "unit": "rate",
+      "status": "pass",
+      "kind": "key-free",
+      "detail": "87/87 claims grounded (evidence span in source)"
+    },
+    {
+      "id": "edge_precision",
+      "name": "Global-edge precision",
+      "group": "faithful",
+      "value": 1.0,
+      "threshold": 0.8,
+      "higher_better": true,
+      "unit": "rate",
+      "status": "pass",
+      "kind": "llm",
+      "detail": "8/8 sampled edges defensible (mix: {'mentions': 3, 'contrast': 3, 'contradicts': 2})"
+    },
+    {
+      "id": "hallucination",
+      "name": "Grounding (cited ids are real)",
+      "group": "faithful",
+      "value": 1.0,
+      "threshold": 1.0,
+      "higher_better": true,
+      "unit": "rate",
+      "status": "pass",
+      "kind": "llm",
+      "detail": "48/48 cited claim ids exist in the graph"
+    },
+    {
+      "id": "abstention",
+      "name": "Abstention (off-topic \u2192 not_found)",
+      "group": "honest",
+      "value": 1.0,
+      "threshold": 0.95,
+      "higher_better": true,
+      "unit": "rate",
+      "status": "pass",
+      "kind": "llm",
+      "detail": "3/3 off-topic questions correctly abstained"
+    },
+    {
+      "id": "answer_coverage",
+      "name": "In-scope coverage (not over-abstaining)",
+      "group": "honest",
+      "value": 1.0,
+      "threshold": 0.9,
+      "higher_better": true,
+      "unit": "rate",
+      "status": "pass",
+      "kind": "llm",
+      "detail": "4/4 in-scope questions answered (not abstained)"
+    },
+    {
+      "id": "novelty_recall",
+      "name": "Novelty recall (finds related work)",
+      "group": "useful",
+      "value": 1.0,
+      "threshold": 0.8,
+      "higher_better": true,
+      "unit": "rate",
+      "status": "pass",
+      "kind": "llm",
+      "detail": "5/5 sampled problems linked to related contributions"
+    },
+    {
+      "id": "temporal_holdout",
+      "name": "Novelty vs temporal holdout",
+      "group": "useful",
+      "value": null,
+      "threshold": 0.7,
+      "higher_better": true,
+      "unit": "rate",
+      "status": "pending",
+      "kind": "llm",
+      "detail": "harness in evals/temporal_holdout.py (run offline)"
+    },
+    {
+      "id": "calibration",
+      "name": "Verdict calibration (ECE)",
+      "group": "honest",
+      "value": null,
+      "threshold": 0.1,
+      "higher_better": false,
+      "unit": "ece",
+      "status": "pending",
+      "kind": "llm",
+      "detail": "needs holdout truth + confidences (pending)"
+    }
+  ],
+  "gates": {
+    "faithful": "Faithful",
+    "honest": "Honest",
+    "useful": "Useful"
+  }
+}

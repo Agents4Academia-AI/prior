@@ -87,6 +87,8 @@ PLAYWRIGHT_PROFILE = os.environ.get("PRIOR_PLAYWRIGHT_PROFILE",
 DEFAULT_MAX_PAPERS = int(os.environ.get("PRIOR_MAX_PAPERS", "25"))
 # How many other-paper claims to consider as relation candidates per claim.
 RELATION_NEIGHBORS = int(os.environ.get("PRIOR_RELATION_NEIGHBORS", "6"))
+# Max chars of full text fed to the Reader (head+tail window when longer).
+FULLTEXT_CHARS = int(os.environ.get("PRIOR_FULLTEXT_CHARS", "48000"))
 
 
 def ensure_dirs() -> None:

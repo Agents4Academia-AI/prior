@@ -33,9 +33,9 @@ def main():
 
     papers = pipeline.select_papers(args.select)
     _log(f"extracting {len(papers)} papers (--select {args.select})")
-    pipeline.append_contributions(papers, model=args.model, progress=_log)
-    if args.view:
-        pipeline.write_contribution_view(args.view, {p.id for p in papers}, progress=_log)
+    r = pipeline.read_all(papers, model=args.model, progress=_log)
+    _log(f"done | {len(r.contributions)} contributions, {len(r.claims)} claims, "
+         f"{len(r.local_edges)} local edges (run `build`/`sink_to_neo4j` for the global graph)")
 
 
 if __name__ == "__main__":
