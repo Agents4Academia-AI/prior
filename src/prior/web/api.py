@@ -12,7 +12,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from typing import Optional
 
-from fastapi import FastAPI, Header, HTTPException
+from fastapi import FastAPI, File, Form, Header, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -178,6 +178,34 @@ def annotations_summary(x_prior_user: Optional[str] = Header(None),
     if not ident.is_admin:
         raise HTTPException(403, "admin only")
     return graph.annotation_agreement()
+
+
+# ── on-demand ingestion (add a paper from the UI) ───────────────────────────────
+@app.post("/api/ingest")
+async def ingest(kind: str = Form(...), value: str = Form(""),
+                 file: Optional[UploadFile] = File(None)) -> dict:
+    """Start a background ingestion. kind ∈ arxiv | pdf_url | pdf_upload."""
+    from .. import ingestion
+    if kind not in ("arxiv", "pdf_url", "pdf_upload"):
+        raise HTTPException(422, "kind must be arxiv | pdf_url | pdf_upload")
+    content, filename = None, ""
+    if kind == "pdf_upload":
+        if not file:
+            raise HTTPException(422, "no file uploaded")
+        content, filename = await file.read(), file.filename or "upload.pdf"
+    elif not value.strip():
+        raise HTTPException(422, "value (arXiv id/URL or PDF URL) is required")
+    job_id = ingestion.start(kind, value=value.strip(), content=content, filename=filename)
+    return {"job_id": job_id}
+
+
+@app.get("/api/ingest/{job_id}")
+def ingest_status(job_id: str) -> dict:
+    from .. import ingestion
+    st = ingestion.job_status(job_id)
+    if not st:
+        raise HTTPException(404, "unknown job")
+    return st
 
 
 # ── agent-callable graph tools ──────────────────────────────────────────────────

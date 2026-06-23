@@ -91,6 +91,32 @@ export const api = {
     getJSON<AnnotationRow[]>(
       `/api/annotations?target_key=${encodeURIComponent(targetKey)}`,
     ),
+  ingest: async (kind: string, value: string, file: File | null) => {
+    const fd = new FormData();
+    fd.append("kind", kind);
+    if (value) fd.append("value", value);
+    if (file) fd.append("file", file);
+    const res = await fetch(`${API_BASE}/api/ingest`, {
+      method: "POST",
+      headers: authHeaders(), // multipart: let the browser set Content-Type
+      body: fd,
+    });
+    if (!res.ok) throw new Error((await res.text()).slice(0, 200) || `HTTP ${res.status}`);
+    return (await res.json()) as { job_id: string };
+  },
+  ingestStatus: (jobId: string) => getJSON<IngestJob>(`/api/ingest/${jobId}`),
+};
+
+export type IngestJob = {
+  id: string;
+  kind: string;
+  label: string;
+  status: "queued" | "fetching" | "extracting" | "relating" | "done" | "failed";
+  message: string;
+  paper_id: string | null;
+  title: string | null;
+  result: { contribs?: number; claims?: number; edges?: number };
+  error: string | null;
 };
 
 export type WhoAmI = {

@@ -42,7 +42,8 @@ def _discover_topic(topic: str, n: int) -> list:
 
 def process_paper(paper, *, model: str | None = None, neighbours: int = 6) -> dict:
     """Enrich one paper and MERGE it into the graph, relating it incrementally."""
-    paper.full_text = fulltext.fetch(paper) or ""
+    # Keep already-supplied body text (e.g. an uploaded PDF); else fetch it.
+    paper.full_text = paper.full_text or fulltext.fetch(paper) or ""
     r = reader.read(paper, model=model)
     if not r.contributions and not r.claims:
         return {"id": paper.id, "contribs": 0, "claims": 0, "edges": 0}

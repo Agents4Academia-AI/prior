@@ -707,3 +707,28 @@ button.lg-btn.on { background: var(--accent-soft); border-color: var(--accent);
 .snd { color: var(--accent); font-size: 12px; }
 .iss { color: var(--danger); font-size: 12px; }
 .hint { margin-top: 12px; font-size: 12px; }
+
+/* ── Add paper ────────────────────────────────────────────────────────── */
+.papers-head { display: flex; align-items: center; justify-content: space-between;
+  padding-right: 8px; }
+.add-trigger { background: var(--accent-soft); border: 1px solid var(--accent);
+  color: var(--accent); border-radius: 6px; padding: 4px 9px; font: inherit;
+  font-size: 12.5px; font-weight: 500; cursor: pointer; }
+.add-trigger:hover { background: var(--accent); color: #fff; }
+.modal.wide { width: 440px; }
+.add-input { margin: 14px 0 4px; }
+.add-input input[type="text"], .add-input input:not([type]) { width: 100%; box-sizing: border-box;
+  background: var(--bg-elev-2); border: 1px solid var(--border); color: var(--text);
+  border-radius: 6px; padding: 9px 11px; font: inherit; font-size: 14px; }
+.add-input input[type="file"] { width: 100%; font-size: 13px; color: var(--text-dim); }
+
+.ingest-progress { margin-top: 6px; }
+.ip-title { font-weight: 600; margin-bottom: 12px; }
+.steps { list-style: none; padding: 0; margin: 0 0 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+.steps li { font-size: 12px; color: var(--text-faint); background: var(--bg-elev-2);
+  border: 1px solid var(--border); border-radius: 999px; padding: 3px 10px; }
+.steps li.active-step { color: var(--accent); border-color: var(--accent);
+  background: var(--accent-soft); font-weight: 600; }
+.steps li.done-step { color: var(--ok); border-color: rgba(46,125,79,.4); }
+.steps li.err-step { color: var(--danger); border-color: rgba(179,38,30,.4); }
+.ip-msg { font-size: 13px; color: var(--text-dim); margin-bottom: 14px; }

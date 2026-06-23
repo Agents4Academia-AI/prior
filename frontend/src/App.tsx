@@ -61,6 +61,13 @@ export default function App() {
       api.paperGraph(selectedPaperId).then(setPaperGraph).catch(() => {});
   }, [refreshWho, selectedPaperId]);
 
+  // After a paper is ingested, refresh the corpus + graph.
+  const onIngested = useCallback(() => {
+    api.summary().then(setSummary).catch(() => {});
+    api.papers().then(setPapers).catch(() => {});
+    api.globalGraph().then(setGlobalGraph).catch(() => {});
+  }, []);
+
   // Boot: summary, papers, global graph, identity.
   useEffect(() => {
     refreshWho();
@@ -196,6 +203,7 @@ export default function App() {
         onSelectPaper={openPaper}
         who={who}
         onIdentityChange={refreshWho}
+        onIngested={onIngested}
       />
 
       <div className="panel canvas">
