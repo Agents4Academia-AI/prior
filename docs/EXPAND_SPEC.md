@@ -122,3 +122,15 @@ high_yield_seeds, scope, _dedup_cross_source}`, `Paper.key`, the three sources
 keyless-fallback), `completeness.capture_recapture`, `pipeline.{append_contributions,
 write_contribution_view, relate_contributions_fast(path=)}`,
 `render_contributions(data_path=)`, append-only + checkpointing.
+
+**Full-text stage (implemented).** `fulltext.fetch_with_source` is the retrieval
+cascade — arXiv (html / pdf / **title-search for arXiv twins**) → OA PDF → preprint
+servers → Unpaywall → **Elsevier / Springer / Wiley TDM APIs** → generic
+`citation_pdf_url` → institutional cookies → Playwright — with a raw-text cache
+(`data/fulltext/`, pymupdf parsing) so nothing is re-fetched. `pipeline.fetch_fulltext`
+runs it in PARALLEL (no LLM, so safe to fan out); `pipeline.expand` chains
+full-text → `append_contributions` → `write_contribution_view`. One CLI:
+`scripts/expand.py --select {all,core,missing,skip,preprints} [--fetch-only|--view]`.
+Document-class + topical-scope filtering: `scripts/classify_core.py` (primary ×
+llm_agent) layered with the OpenAlex `Paper.type` veto. Manual entitled PDFs:
+`scripts/ingest_manual_pdfs.py`. Keys live in `.env` (Elsevier/Springer/Wiley/Unpaywall).

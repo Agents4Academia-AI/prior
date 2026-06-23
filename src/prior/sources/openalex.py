@@ -75,6 +75,7 @@ def _to_paper(w: dict) -> Paper:
         referenced_works=[_norm_id(r) for r in w.get("referenced_works", [])],
         cited_by_count=w.get("cited_by_count", 0),
         pdf_url=_pdf_url(w),
+        type=w.get("type") or "",
         is_review=looks_like_review(title, w.get("type", "")),
     )
 

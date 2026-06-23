@@ -421,6 +421,93 @@ def append_contributions(papers: list[Paper], *, model: str | None = None,
     return new
 
 
+def fetch_fulltext(papers: list[Paper], *, workers: int = 12, progress=print) -> dict:
+    """Thin re-export of the standalone full-text stage (`fulltext.fetch_many`),
+    so the orchestrator and old callers keep working while the logic lives in the
+    self-contained, reusable `fulltext` module."""
+    from . import fulltext
+    config.ensure_dirs()
+    return fulltext.fetch_many(papers, workers=workers, progress=progress)
+
+
+def expand(papers: list[Paper], *, model: str | None = None, view: str | None = None,
+           workers: int = 12, progress=print) -> dict:
+    """The clean end-to-end stage chain over `papers`:
+        full text (parallel, cached) -> extract contributions -> [filtered view].
+    Idempotent: re-running only fetches/extracts what's new (the cache and the
+    additive extractor both skip finished work). Supersedes the ad-hoc fetch/
+    extract scripts. If `view` is set, also writes a re-related core view."""
+    progress(f"expand: {len(papers)} papers")
+    progress("[1/3] full text")
+    fetch_fulltext(papers, workers=workers, progress=progress)
+    progress("[2/3] extract contributions")
+    new = append_contributions(papers, model=model, progress=progress)
+    if view:
+        progress("[3/3] view")
+        write_contribution_view(view, {p.id for p in papers}, progress=progress)
+    return {"papers": len(papers), "new_contributions": len(new)}
+
+
+_PREPRINT_PREFIXES = {"10.1101", "10.64898", "10.26434", "10.21203", "10.20944",
+                      "10.31234", "10.31235", "10.31219", "10.36227", "10.22541",
+                      "10.48550", "10.3929", "10.5281", "10.2139"}
+
+
+def select_papers(which: str = "core") -> list[Paper]:
+    """Shared corpus selector for the stage CLIs — picks a subset by full-text
+    status. which ∈ {all, core, missing, skip, preprints}."""
+    from . import fulltext
+    corpus = load_papers()
+    cpath = _contributions_path()
+    data = json.loads(cpath.read_text()) if cpath.exists() else {"contributions": [], "skipped_no_fulltext": []}
+    has_contrib = {c["paper_id"] for c in data["contributions"]}
+    skip = set(data.get("skipped_no_fulltext", []))
+
+    def has_ft(p):
+        return p.id in has_contrib or fulltext.cached_text(p) is not None
+
+    if which == "all":
+        return corpus
+    if which == "core":
+        core = set(json.loads((config.ATLAS / "core_scope.json").read_text())["core_ids"])
+        return [p for p in corpus if p.id in core]
+    if which == "missing":
+        return [p for p in corpus if not has_ft(p)]
+    if which == "skip":
+        return [p for p in corpus if p.id in skip]
+    if which == "preprints":
+        def is_pre(p):
+            d = (p.doi or "").replace("https://doi.org/", "")
+            return p.source == "arxiv" or (d and ".".join(d.split("/")[0].split(".")[:2]) in _PREPRINT_PREFIXES)
+        return [p for p in corpus if is_pre(p) and not has_ft(p)]
+    return corpus
+
+
+def enrich_arxiv_twins(papers: list[Paper], *, throttle: float = 1.0, progress=print) -> int:
+    """Exploration enrichment: attach the open arXiv twin to records that came in
+    closed. For each paper with no arXiv locator, title-search arXiv and, on a
+    confident match, set pdf_url to the arXiv PDF so the full-text stage uses the
+    open edition. Mutates `papers` in place; returns the count enriched.
+
+    (Fixes the AgentRxiv case: OpenAlex canonicalised it to the closed ETH deposit,
+    so we never had the arXiv id until we searched by title.)"""
+    import time
+    from .sources import arxiv
+    cand = [p for p in papers
+            if p.source != "arxiv" and "arxiv.org" not in (p.pdf_url or "")]
+    progress(f"  enriching {len(cand)} records lacking an arXiv locator ...")
+    n = 0
+    for p in cand:
+        aid = arxiv.find_id_by_title(p.title)
+        time.sleep(throttle)                           # polite to the arXiv API
+        if aid:
+            p.pdf_url = f"https://arxiv.org/pdf/{aid}"
+            n += 1
+            progress(f"  twin: {p.short_cite()} -> arXiv:{aid}")
+    progress(f"  attached arXiv twins to {n} records")
+    return n
+
+
 def load_claims() -> list[Claim]:
     path = _claims_path()
     if not path.exists():

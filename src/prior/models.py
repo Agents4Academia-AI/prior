@@ -27,6 +27,8 @@ class Paper:
     referenced_works: list[str] = field(default_factory=list)
     cited_by_count: int = 0
     pdf_url: str = ""          # open-access full-text PDF, when known
+    type: str = ""             # OpenAlex work type: article/review/letter/editorial/
+                               # book-chapter/preprint/... — a free non-primary veto
     is_review: bool = False    # survey/review — excluded as non-primary literature
 
     def short_cite(self) -> str:

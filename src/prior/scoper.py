@@ -375,3 +375,70 @@ def build_scoped_corpus(topic_def: str, *, per_query: int = 25,
     kept, dropped = scope(topic_def, candidates, model=model, progress=progress)
     progress(f"      kept {len(kept)} / dropped {len(dropped)}")
     return [p for p, _ in kept], dropped
+
+
+def explore(topic_def: str, *, hops: int = 3, per_query: int = 25,
+            use_prefilter: bool = True, epsilon: float = 0.03,
+            model: str | None = None, progress=print):
+    """The full exploration pipeline as one call — Stage 1, the agentic stage:
+
+      1. recall-then-precision : LLM query variations over OpenAlex+arXiv+S2, then
+                                 an LLM relevance filter (the *search* channel)
+      2. citation snowball      : backward refs + forward cited-by from high-yield
+                                 seeds, OpenAlex + Semantic Scholar (the *snowball* channel)
+      3. BM25 pre-filter        : a cheap recall-safe gate before the LLM filter
+      4. saturation stopping    : stop when new-relevant-per-hop < epsilon, and
+                                 report a capture-recapture completeness estimate
+
+    Returns (corpus, dropped, stats={curve, completeness, n}). For a fresh corpus,
+    point PRIOR_DATA_DIR at a new dir."""
+    from . import completeness
+
+    # 1 + 3: recall-then-precision (search channel)
+    progress("[explore 1/3] search: queries -> candidates -> scope")
+    queries = propose_queries(topic_def, model=model)
+    candidates = gather_candidates(queries, per_query=per_query, progress=progress)
+    search_keys = {c.key() for c in candidates}
+    if use_prefilter and candidates:
+        candidates, _ = prefilter(topic_def, candidates, progress=progress)
+    kept, dropped = scope(topic_def, candidates, model=model, progress=progress)
+    corpus = [p for p, _ in kept]
+    corpus_keys = {p.key() for p in corpus}
+    curve = [len(corpus)]
+    progress(f"  search channel: {len(corpus)} relevant")
+
+    # 2 + 4: citation snowball to saturation (snowball channel)
+    progress("[explore 2/3] snowball to saturation")
+    snow_keys: set[str] = set()
+    for hop in range(1, hops + 1):
+        seeds = high_yield_seeds(corpus)
+        new_oa, reached_oa = snowball(seeds, corpus=corpus, progress=progress)
+        new_s2, reached_s2 = snowball_s2(seeds, corpus=corpus, progress=progress)
+        snow_keys |= reached_oa | reached_s2
+        uniq: dict[str, Paper] = {}
+        for c in new_oa + new_s2:
+            if c.key() not in corpus_keys:
+                uniq.setdefault(c.key(), c)
+        cand = list(uniq.values())
+        if use_prefilter and cand:
+            cand, _ = prefilter(topic_def, cand, progress=progress)
+        hkept, hdrop = (scope(topic_def, cand, model=model, progress=progress)
+                        if cand else ([], []))
+        new_rel = [p for p, _ in hkept]
+        for p in new_rel:
+            corpus.append(p)
+            corpus_keys.add(p.key())
+        dropped += hdrop
+        curve.append(len(new_rel))
+        progress(f"  hop {hop}: +{len(new_rel)} relevant of {len(cand)} candidates "
+                 f"(curve {curve})")
+        if not new_rel or len(new_rel) / max(1, len(cand)) < epsilon:
+            progress("  saturated — stopping.")
+            break
+
+    # completeness between the two independent channels
+    progress("[explore 3/3] completeness")
+    overlap = len(search_keys & snow_keys)
+    est = completeness.capture_recapture(len(search_keys), len(snow_keys), overlap)
+    progress(f"  completeness: {est}")
+    return corpus, dropped, {"curve": curve, "completeness": est, "n": len(corpus)}
