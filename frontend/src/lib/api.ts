@@ -11,8 +11,33 @@ import type {
 const API_BASE =
   import.meta.env.VITE_API_BASE?.replace(/\/$/, "") || "http://127.0.0.1:8077";
 
+// ── identity (username + password) kept in localStorage, sent as headers ───────
+export type Identity = { user: string; password: string };
+
+export function getIdentity(): Identity | null {
+  try {
+    const raw = localStorage.getItem("prior_identity");
+    return raw ? (JSON.parse(raw) as Identity) : null;
+  } catch {
+    return null;
+  }
+}
+export function setIdentity(id: Identity | null) {
+  if (id) localStorage.setItem("prior_identity", JSON.stringify(id));
+  else localStorage.removeItem("prior_identity");
+}
+function authHeaders(): Record<string, string> {
+  const id = getIdentity();
+  return id
+    ? { "X-Prior-User": id.user, "X-Prior-Password": id.password }
+    : {};
+}
+
 async function getJSON<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${API_BASE}${path}`, init);
+  const res = await fetch(`${API_BASE}${path}`, {
+    ...init,
+    headers: { ...authHeaders(), ...(init?.headers ?? {}) },
+  });
   if (!res.ok) {
     let detail = "";
     try {
@@ -53,6 +78,43 @@ export const api = {
   origin: (concept: string) =>
     postJSON<OriginResponse>("/api/origin", { concept }),
   eval: () => getJSON<EvalResults>("/api/eval"),
+  whoami: () => getJSON<WhoAmI>("/api/whoami"),
+  annotate: (b: {
+    target_kind: string;
+    target_key: string;
+    faithful: string;
+    issues?: string[];
+    soundness?: string;
+    note?: string;
+  }) => postJSON<{ ok: boolean; annotated: number }>("/api/annotate", b),
+  annotations: (targetKey: string) =>
+    getJSON<AnnotationRow[]>(
+      `/api/annotations?target_key=${encodeURIComponent(targetKey)}`,
+    ),
+};
+
+export type WhoAmI = {
+  signed_in: boolean;
+  user?: string;
+  is_admin?: boolean;
+  open_mode?: boolean;
+  shared?: boolean;
+  annotated?: number;
+};
+export type AnnotationRow = {
+  annotator: string;
+  faithful: string;
+  issues: string[];
+  soundness: string;
+  note: string;
+  created_at: string;
+};
+export type AnnSummary = {
+  n: number;
+  correct: number;
+  incorrect: number;
+  unsure: number;
+  mine: string | null;
 };
 
 export type EvalMetric = {

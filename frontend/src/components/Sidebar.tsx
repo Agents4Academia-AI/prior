@@ -1,15 +1,21 @@
 import type { Summary, Paper } from "../lib/types";
+import type { WhoAmI } from "../lib/api";
+import SignIn from "./SignIn";
 
 export default function Sidebar({
   summary,
   papers,
   selectedPaperId,
   onSelectPaper,
+  who,
+  onIdentityChange,
 }: {
   summary: Summary | null;
   papers: Paper[];
   selectedPaperId: string | null;
   onSelectPaper: (p: Paper) => void;
+  who: WhoAmI | null;
+  onIdentityChange: () => void;
 }) {
   return (
     <div className="panel sidebar">
@@ -18,6 +24,8 @@ export default function Sidebar({
         <div className="tag">Literature knowledge graph</div>
         {summary && <div className="topic">{summary.topic}</div>}
       </div>
+
+      <SignIn who={who} onChange={onIdentityChange} />
 
       {summary && (
         <div className="stats">

@@ -1,0 +1,5 @@
+{
+  "alice": {"password": "change-me-alice", "admin": false},
+  "bob":   {"password": "change-me-bob",   "admin": false},
+  "harit": {"password": "change-me-admin", "admin": true}
+}

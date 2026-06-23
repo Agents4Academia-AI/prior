@@ -30,6 +30,14 @@ RELATION_NEIGHBORS = int(os.environ.get("PRIOR_RELATION_NEIGHBORS", "6"))
 # Max chars of full text fed to the Reader (head+tail window when longer).
 FULLTEXT_CHARS = int(os.environ.get("PRIOR_FULLTEXT_CHARS", "48000"))
 
+# ── Annotation / auth ───────────────────────────────────────────────────────────
+# users.json maps username -> {"token": "...", "admin": true|false}. When the file
+# is absent, auth runs in OPEN dev mode (any name, no token, non-admin).
+USERS_FILE = Path(os.environ.get("PRIOR_USERS_FILE", str(DATA / "users.json")))
+# When true, every annotator can see everyone's annotations (else only their own).
+ANNOTATIONS_SHARED = os.environ.get("PRIOR_ANNOTATIONS_SHARED", "").lower() in ("1", "true", "yes")
+ANNOTATIONS_DB = DATA / "annotations.db"
+
 
 def ensure_dirs() -> None:
     RAW.mkdir(parents=True, exist_ok=True)

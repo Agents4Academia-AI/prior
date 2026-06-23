@@ -7,7 +7,7 @@ import {
   type Node,
   type Edge,
 } from "@xyflow/react";
-import type { PaperGraph } from "../lib/types";
+import type { PaperGraph, ClaimEdge } from "../lib/types";
 import { claimTypeColor, claimRelationColor } from "../lib/colors";
 import { forceLayout } from "../lib/layout";
 import GraphNode, { type GraphNodeData } from "./GraphNode";
@@ -18,10 +18,12 @@ export default function LocalView({
   graph,
   selectedId,
   onSelectNode,
+  onSelectEdge,
 }: {
   graph: PaperGraph;
   selectedId: string | null;
   onSelectNode: (id: string) => void;
+  onSelectEdge?: (e: ClaimEdge) => void;
 }) {
   const { nodes, edges } = useMemo(() => {
     const pos = forceLayout(
@@ -52,7 +54,7 @@ export default function LocalView({
         label: e.relation,
         animated: e.relation === "contradicts",
         style: { stroke: color, strokeWidth: 1.6 },
-        labelStyle: { fill: color, fontSize: 9, fontWeight: 600 },
+        labelStyle: { fill: color, fontSize: 14, fontWeight: 600 },
         labelBgStyle: { fill: "#0e1117", fillOpacity: 0.85 },
         markerEnd: {
           type: MarkerType.ArrowClosed,
@@ -81,6 +83,10 @@ export default function LocalView({
         edges={edges}
         nodeTypes={nodeTypes}
         onNodeClick={(_, node) => onSelectNode(node.id)}
+        onEdgeClick={(_, ed) => {
+          const orig = graph.edges.find((x) => x.id === ed.id);
+          if (orig) onSelectEdge?.(orig);
+        }}
         fitView
         fitViewOptions={{ padding: 0.2 }}
         minZoom={0.15}

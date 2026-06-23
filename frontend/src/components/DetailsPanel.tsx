@@ -1,5 +1,13 @@
 import type { ContributionDetail, ClaimNode, PaperGraph } from "../lib/types";
-import { relationColor, claimTypeColor } from "../lib/colors";
+import { relationColor, claimTypeColor, claimRelationColor } from "../lib/colors";
+
+export type SelectedEdge = {
+  source: string;
+  target: string;
+  relation: string;
+  provenance?: string;
+  evidence?: string;
+};
 
 export default function DetailsPanel({
   contribution,
@@ -7,13 +15,47 @@ export default function DetailsPanel({
   contribError,
   claim,
   paperGraph,
+  edge,
 }: {
   contribution: ContributionDetail | null;
   contribLoading: boolean;
   contribError: string | null;
   claim: ClaimNode | null;
   paperGraph: PaperGraph | null;
+  edge: SelectedEdge | null;
 }) {
+  if (edge) {
+    return (
+      <div>
+        <Field
+          k="Relation"
+          v={
+            <span
+              className="rel-pill"
+              style={{
+                background:
+                  (relationColor as Record<string, string>)[edge.relation] ??
+                  (claimRelationColor as Record<string, string>)[edge.relation] ??
+                  "#868e96",
+              }}
+            >
+              {edge.relation}
+            </span>
+          }
+        />
+        <Field k="From" v={edge.source} />
+        <Field k="To" v={edge.target} />
+        {edge.provenance && (
+          <Field
+            k="Provenance"
+            v={edge.provenance === "both" ? "citation-backed" : "uncited / text"}
+          />
+        )}
+        {edge.evidence && <Field k="Why" v={edge.evidence} />}
+        <div className="muted hint">Use the <b>Annotate</b> tab to verify this relation.</div>
+      </div>
+    );
+  }
   if (contribLoading) {
     return (
       <div className="loading">
