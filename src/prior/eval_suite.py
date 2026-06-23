@@ -217,6 +217,45 @@ def calibration() -> dict:
                    detail="needs holdout truth + confidences (pending)")
 
 
+# ── human gold set (from annotations — live, key-free) ──────────────────────────
+def _majority_correct(verdicts: list[str]) -> bool:
+    c = sum(1 for v in verdicts if v == "correct")
+    return c > len(verdicts) / 2
+
+
+def human_metrics() -> list[dict]:
+    """Human-verified correctness + inter-annotator agreement, read live from the
+    annotation nodes. Populates as people annotate — the real gold-set signal."""
+    items = graph.annotation_agreement().get("items", [])
+    by_kind: dict[str, list[list[str]]] = {}
+    for it in items:
+        by_kind.setdefault(it["kind"], []).append(it["verdicts"])
+
+    metrics = []
+    for kind in ("edge", "contribution", "claim"):
+        vs = by_kind.get(kind, [])
+        if not vs:
+            metrics.append(_metric(f"human_{kind}", f"Human {kind} correctness",
+                                   "faithful", None, 0.8, kind="human",
+                                   detail="no annotations yet"))
+            continue
+        ok = sum(1 for v in vs if _majority_correct(v))
+        metrics.append(_metric(f"human_{kind}", f"Human {kind} correctness", "faithful",
+                               round(ok / len(vs), 3), 0.8, kind="human",
+                               detail=f"{ok}/{len(vs)} {kind}s majority-correct (human-labelled)"))
+
+    multi = [it["verdicts"] for it in items if len(it["verdicts"]) >= 2]
+    if multi:
+        agree = sum(1 for v in multi if len(set(v)) == 1)
+        metrics.append(_metric("agreement", "Annotator agreement", "honest",
+                               round(agree / len(multi), 3), 0.7, kind="human",
+                               detail=f"{agree}/{len(multi)} multi-annotator items in full agreement"))
+    else:
+        metrics.append(_metric("agreement", "Annotator agreement", "honest", None, 0.7,
+                               kind="human", detail="need ≥2 annotators on shared items"))
+    return metrics
+
+
 # ── runner ──────────────────────────────────────────────────────────────────────
 GATES = {"faithful": "Faithful", "honest": "Honest", "useful": "Useful"}
 
@@ -236,6 +275,7 @@ def run(*, data_dir: str | None = None, with_llm: bool = True, sample: int = 6,
     progress("novelty recall ..."); metrics.append(novelty_recall(min(sample, 5), with_llm=with_llm))
     metrics.append(temporal_holdout())
     metrics.append(calibration())
+    progress("human gold set ..."); metrics.extend(human_metrics())
 
     result = {"graph": graph.summary(), "distributions": dist, "metrics": metrics,
               "gates": GATES}

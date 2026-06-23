@@ -73,3 +73,11 @@ overlap most with the typed-edge / claim-aggregation goals; verify directly.
 4. **Is the LOCAL per-paper coherence/"story" graph load-bearing for novelty/gap-finding,
    or a nice-to-have?** OpenNovelty gets results with *no* local claim graph — we need a
    crisp argument for why the local layer earns its cost.
+
+## Positioning & motivation (external) — see [principles.md](principles.md)
+
+- **AI as normal technology** (Narayanan & Kapoor) — control spectrum (audit/monitor/circuit-breaker/least-privilege); reliability > capability; reversibility + legibility. https://www.normaltech.ai/p/ai-as-normal-technology
+- **Why AI hasn't replaced software engineers** (same) — decide→execute→deliver; "vibe coding" → verification is irreducible. https://www.normaltech.ai/p/why-ai-hasnt-replaced-software-engineers
+- **What if AI systems weren't chatbots?** (Ghosh et al.) — task-specific tools over one-size-fits-all chatbots. https://arxiv.org/abs/2605.07896
+- **Ellf** (Explosion / spaCy / Prodigy) — task-specific, data-private NLP pipeline tooling (relation extraction, annotation, QA/eval) for the extraction + review layer. https://beta.ellf.ai/
+- **The ontology trap** (Sergey Vasiliev) — AI generates ontology structure faster than it can be validated; failure modes (false equivalence, structural hallucination, vague relationships, missing provenance, duplication, drift) + a Propose→Stage→Validate→Review→Merge→Monitor safe-merge model. Directly the spec for Prior's merge/abstraction layer. https://sergeyvasiliev.substack.com/p/the-ontology-trap-when-ai-scales
