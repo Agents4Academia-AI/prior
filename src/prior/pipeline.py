@@ -209,3 +209,71 @@ def build(topic: str, *, max_papers: int | None = None, relate: bool = True,
     progress(f"      {atlas.summary()}")
     progress(f"saved -> {path}")
     return atlas
+
+
+# ── full-text + exploration stages (integrated onto the read_all / graph model) ──
+_PREPRINT_PREFIXES = {"10.1101", "10.64898", "10.26434", "10.21203", "10.20944",
+                      "10.31234", "10.31235", "10.31219", "10.36227", "10.22541",
+                      "10.48550", "10.3929", "10.5281", "10.2139"}
+
+
+def fetch_fulltext(papers: list[Paper], *, workers: int = 12, progress=print) -> dict:
+    """Pre-stage: cache raw full text for `papers` in PARALLEL (no LLM), so the
+    parallel reader (read_all -> reader.read -> fulltext.fetch) reads locally
+    instead of re-fetching. Delegates to the standalone fulltext.fetch_many."""
+    config.ensure_dirs()
+    return fulltext.fetch_many(papers, workers=workers, progress=progress)
+
+
+def enrich_arxiv_twins(papers: list[Paper], *, throttle: float = 1.0, progress=print) -> int:
+    """Exploration enrichment: attach the open arXiv twin to records that came in
+    closed (OpenAlex canonicalised to a publisher/repository deposit). Sets pdf_url
+    so the full-text stage uses the open edition. Mutates in place; returns count."""
+    import time
+    cand = [p for p in papers
+            if p.source != "arxiv" and "arxiv.org" not in (p.pdf_url or "")]
+    progress(f"  enriching {len(cand)} records lacking an arXiv locator ...")
+    n = 0
+    for p in cand:
+        aid = arxiv.find_id_by_title(p.title)
+        time.sleep(throttle)                           # polite to the arXiv API
+        if aid:
+            p.pdf_url = f"https://arxiv.org/pdf/{aid}"
+            n += 1
+            progress(f"  twin: {p.short_cite()} -> arXiv:{aid}")
+    progress(f"  attached arXiv twins to {n} records")
+    return n
+
+
+def select_papers(which: str = "core") -> list[Paper]:
+    """Shared corpus selector by full-text status, over the reading store.
+    which ∈ {all, core, missing, preprints}."""
+    corpus = load_papers()
+    has_contrib = {c.paper_id for c in load_reading().contributions}
+
+    def has_ft(p):
+        return p.id in has_contrib or fulltext.cached_text(p) is not None
+
+    if which == "core":
+        core = set(json.loads((config.ATLAS / "core_scope.json").read_text())["core_ids"])
+        return [p for p in corpus if p.id in core]
+    if which == "missing":
+        return [p for p in corpus if not has_ft(p)]
+    if which == "preprints":
+        def is_pre(p):
+            d = (p.doi or "").replace("https://doi.org/", "")
+            return p.source == "arxiv" or (d and ".".join(d.split("/")[0].split(".")[:2]) in _PREPRINT_PREFIXES)
+        return [p for p in corpus if is_pre(p) and not has_ft(p)]
+    return corpus
+
+
+def expand(papers: list[Paper], *, model: str | None = None, workers: int = 12,
+           progress=print) -> ReadResult:
+    """Stage chain over `papers`: cache full text (parallel) -> read (extract into
+    the Contribution + local-graph model). Extraction is read_all; build() /
+    sink_to_neo4j then take it to the global graph DB."""
+    progress(f"expand: {len(papers)} papers")
+    progress("[1/2] full text")
+    fetch_fulltext(papers, workers=workers, progress=progress)
+    progress("[2/2] read (extract into contributions + local graph)")
+    return read_all(papers, model=model, progress=progress)

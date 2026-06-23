@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field, asdict
 from typing import Optional
 
@@ -34,14 +35,25 @@ class Paper:
     doi: Optional[str] = None
     referenced_works: list[str] = field(default_factory=list)
     cited_by_count: int = 0
-    full_text: str = ""                  # body text when available (else abstract-only)
-    pdf_url: str = ""                    # open-access full-text PDF, when known (from sources)
-    is_review: bool = False              # survey/review — excluded as non-primary literature
+    full_text: str = ""        # body text when available (else abstract-only)
+    pdf_url: str = ""          # open-access full-text PDF, when known
+    type: str = ""             # OpenAlex work type: article/review/letter/editorial/
+                               # book-chapter/preprint/... — a free non-primary veto
+    is_review: bool = False    # survey/review — excluded as non-primary literature
 
     def short_cite(self) -> str:
         first = self.authors[0].split()[-1] if self.authors else "Anon"
         etal = " et al." if len(self.authors) > 1 else ""
         return f"{first}{etal} ({self.year or 'n.d.'})"
+
+    def key(self) -> str:
+        """Canonical cross-source identity. OpenAlex (W-ids), arXiv (arxiv:…) and
+        Semantic Scholar (s2:…) key the SAME paper differently; the normalised
+        title is the one identifier every source shares, so it's the reliable
+        join for dedup and for the snowball's membership/overlap checks. Falls
+        back to the raw id when the title is too short to trust."""
+        t = " ".join(re.sub(r"[^a-z0-9]", " ", (self.title or "").lower()).split())
+        return f"title:{t}" if len(t) >= 8 else self.id
 
     def to_dict(self) -> dict:
         return asdict(self)

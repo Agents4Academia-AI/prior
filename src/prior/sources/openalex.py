@@ -75,6 +75,7 @@ def _to_paper(w: dict) -> Paper:
         referenced_works=[_norm_id(r) for r in w.get("referenced_works", [])],
         cited_by_count=w.get("cited_by_count", 0),
         pdf_url=_pdf_url(w),
+        type=w.get("type") or "",
         is_review=looks_like_review(title, w.get("type", "")),
     )
 
@@ -123,6 +124,40 @@ def fetch_many(ids: list[str], *, batch: int = 50) -> dict[str, Paper]:
             p = _to_paper(w)
             out[p.id] = p
     return out
+
+
+def cited_by(openalex_id: str, *, max_results: int = 50) -> list[Paper]:
+    """Forward citations: works that CITE the given paper, most-recent first —
+    the key signal for snowballing toward newer connected work."""
+    wid = openalex_id.split(":")[-1]
+    params = _params() | {
+        "filter": f"cites:{wid}",
+        "per_page": min(max_results, 200),
+        "sort": "publication_date:desc",
+        "select": _SELECT,
+    }
+    try:
+        r = requests.get(API, params=params, headers=_headers(),
+                         timeout=config.HTTP_TIMEOUT)
+        r.raise_for_status()
+    except requests.RequestException:
+        return []
+    return [_to_paper(w) for w in r.json().get("results", [])][:max_results]
+
+
+def fetch_doi(doi: str) -> Paper | None:
+    """Fetch a single work by DOI (exact) — the resolution path for journal
+    papers in a reference export that carry no arXiv id."""
+    doi = doi.strip().replace("https://doi.org/", "").replace("doi:", "")
+    try:
+        r = requests.get(f"{API}/doi:{doi}", params=_params() | {"select": _SELECT},
+                         headers=_headers(), timeout=config.HTTP_TIMEOUT)
+        if r.status_code == 404:
+            return None
+        r.raise_for_status()
+    except requests.RequestException:
+        return None
+    return _to_paper(r.json())
 
 
 def fetch(openalex_id: str) -> Paper | None:

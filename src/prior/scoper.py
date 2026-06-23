@@ -47,21 +47,16 @@ def propose_queries(topic_def: str, *, model: str | None = None) -> list[str]:
 # ── stage 2: gather candidates (recall) ──────────────────────────────────────
 def _dedup_cross_source(papers: list[Paper]) -> list[Paper]:
     """Collapse the same paper arriving from different sources (OpenAlex / arXiv /
-    S2) by normalised title, preferring OpenAlex (it carries the citation graph
-    the snowball needs), then arXiv, then S2. Papers with no usable title pass
-    through untouched. This avoids double-processing without capping recall."""
+    S2) by canonical key (Paper.key), preferring OpenAlex (it carries the citation
+    graph the snowball needs), then arXiv, then S2."""
     rank = {"openalex": 0, "arxiv": 1, "semanticscholar": 2}
-    by_title: dict[str, Paper] = {}
-    out: list[Paper] = []
+    best: dict[str, Paper] = {}
     for p in papers:
-        key = " ".join(re.sub(r"[^a-z0-9]", " ", (p.title or "").lower()).split())
-        if len(key) < 8:
-            out.append(p)
-            continue
-        cur = by_title.get(key)
+        k = p.key()
+        cur = best.get(k)
         if cur is None or rank.get(p.source, 9) < rank.get(cur.source, 9):
-            by_title[key] = p
-    return out + list(by_title.values())
+            best[k] = p
+    return list(best.values())
 
 
 def gather_candidates(queries: list[str], *, per_query: int = 25,
@@ -97,8 +92,171 @@ def gather_candidates(queries: list[str], *, per_query: int = 25,
     return _dedup_cross_source(list(papers.values()))
 
 
-# NOTE: citation snowball (openalex.cited_by / S2 references+citations) lives on
-# klara/scoper; omitted here until those source additions are merged in.
+# ── stage 2b: citation snowball (recall, the high-leverage step) ─────────────
+def snowball(seeds: list[Paper], *, corpus: list[Paper] | None = None,
+             anchor_k: int = 25, per_paper: int = 40,
+             progress=print) -> tuple[list[Paper], set[str]]:
+    """One-hop citation expansion of a seed set (OpenAlex): backward references
+    of all seeds + forward cited-by of the most-cited anchors. Finds the
+    connected cluster that keyword search misses.
+
+    `corpus` (default = seeds) is what we already have: membership and the
+    capture-recapture overlap are tested by canonical key (Paper.key), so a paper
+    we already hold under a different source's id is recognised — not re-added or
+    miscounted. Returns (new_candidates, reached_keys), reached_keys being the
+    canonical keys of corpus papers the citation channel re-reached."""
+    corpus = corpus if corpus is not None else seeds
+    known_ids = {p.id for p in corpus}                       # for OpenAlex-id refs
+    id_to_key = {p.id: p.key() for p in corpus}
+    known_keys = {p.key() for p in corpus}                   # cross-source identity
+    new: dict[str, Paper] = {}                                # keyed by canonical key
+    reached: set[str] = set()
+
+    # backward — references are OpenAlex ids; match them against corpus ids
+    all_refs = list(dict.fromkeys(
+        r for p in seeds for r in p.referenced_works if r.startswith("openalex:")))
+    reached |= {id_to_key[r] for r in all_refs if r in known_ids}   # ref → corpus paper
+    for _pid, p in openalex.fetch_many([r for r in all_refs if r not in known_ids]).items():
+        k = p.key()
+        if k in known_keys:
+            reached.add(k)
+        elif k not in new:
+            new[k] = p
+    progress(f"  backward: {len(all_refs)} refs → +{len(new)} new")
+
+    # forward — cited-by of the most-cited anchors (catches newer connected work)
+    anchors = sorted((p for p in seeds if p.id.startswith("openalex:")),
+                     key=lambda p: -p.cited_by_count)[:anchor_k]
+    for p in anchors:
+        for cp in openalex.cited_by(p.id, max_results=per_paper):
+            k = cp.key()
+            if k in known_keys:
+                reached.add(k)
+            elif k not in new:
+                new[k] = cp
+        progress(f"  forward cited-by {p.short_cite()} → pool {len(new)}")
+    return list(new.values()), reached
+
+
+def _s2_id(p: Paper) -> str | None:
+    """A Semantic-Scholar-resolvable id for a Paper, preferring arXiv/DOI."""
+    if p.id.startswith("arxiv:"):
+        return "ARXIV:" + p.id.split(":", 1)[1].split("v")[0]
+    if p.id.startswith("s2:"):
+        return p.id.split(":", 1)[1]
+    if p.doi:
+        return "DOI:" + p.doi.rsplit("doi.org/", 1)[-1]
+    return None
+
+
+def snowball_s2(seeds: list[Paper], *, corpus: list[Paper] | None = None,
+                anchor_k: int = 40, per_paper: int = 40,
+                recent_year: int = 2024, progress=print
+                ) -> tuple[list[Paper], set[str]]:
+    """Citation snowball via Semantic Scholar — the path for the RECENT frontier,
+    where OpenAlex has no citation edges yet. Anchors on recent / arXiv-keyed
+    seeds and pulls S2 backward references + forward citations. Membership and
+    overlap are tested by canonical key (S2 returns arXiv-keyed papers that match
+    OpenAlex corpus papers by title). Returns (new_candidates, reached_keys)."""
+    corpus = corpus if corpus is not None else seeds
+    known_keys = {p.key() for p in corpus}
+    new: dict[str, Paper] = {}
+    reached: set[str] = set()
+    anchors = [p for p in seeds
+               if (p.year or 0) >= recent_year or p.id.startswith(("arxiv:", "s2:"))]
+    anchors = sorted(anchors, key=lambda p: -(p.year or 0))[:anchor_k]
+    for p in anchors:
+        sid = _s2_id(p)
+        if not sid:
+            continue
+        neighbours = (semanticscholar.references(sid, max_results=per_paper)
+                      + semanticscholar.citations(sid, max_results=per_paper))
+        for cp in neighbours:
+            k = cp.key()
+            if k in known_keys:
+                reached.add(k)
+            elif k not in new:
+                new[k] = cp
+        progress(f"  s2 cites {p.short_cite()} → pool {len(new)}")
+    return list(new.values()), reached
+
+
+def high_yield_seeds(papers: list[Paper], *, top_cited: int = 40,
+                     recent_year: int = 2024, recent_k: int = 60) -> list[Paper]:
+    """A small, high-yield seed set for a BOUNDED snowball: the most-cited papers
+    (deep, well-connected) plus the recent frontier. Snowballing from ~100 chosen
+    seeds keeps the candidate pool tractable, unlike snowballing from the whole
+    corpus (which explodes into tens of thousands)."""
+    by_cite = sorted(papers, key=lambda p: -p.cited_by_count)[:top_cited]
+    recent = sorted((p for p in papers if (p.year or 0) >= recent_year),
+                    key=lambda p: -(p.year or 0))[:recent_k]
+    out, seen = [], set()
+    for p in by_cite + recent:
+        if p.id not in seen:
+            seen.add(p.id)
+            out.append(p)
+    return out
+
+
+# ── stage 2c: cheap TF-IDF pre-filter (spare the LLM the obvious noise) ───────
+def _split_scope(topic_def: str) -> tuple[str, str]:
+    """Split a topic definition into its IN-scope and OUT-of-scope text."""
+    oi = topic_def.lower().find("out of scope")
+    if oi == -1:
+        return topic_def, ""
+    return topic_def[:oi], topic_def[oi:]
+
+
+def _bm25(cand_counts, doc_len, avgdl, idf, q_idx, *, k1=1.5, b=0.75):
+    """BM25 score of every candidate against a query term-index set."""
+    import numpy as np
+    if len(q_idx) == 0:
+        return np.zeros(cand_counts.shape[0])
+    tf = cand_counts[:, q_idx].toarray().astype(float)        # (n × |Q|)
+    denom = tf + k1 * (1 - b + b * doc_len.reshape(-1, 1) / avgdl)
+    contrib = idf[q_idx] * (tf * (k1 + 1)) / np.where(denom == 0, 1.0, denom)
+    return contrib.sum(axis=1)
+
+
+def prefilter(topic_def: str, candidates: list[Paper], *, keep_frac: float = 0.30,
+              progress=print) -> tuple[list[Paper], list[Paper]]:
+    """Recall-preserving coarse gate, BM25. Scores each candidate's title+abstract
+    against the IN-scope vocabulary and (separately) the OUT-of-scope vocabulary,
+    and gates out the clear off-topic tail so the slow LLM filter only judges
+    plausible candidates. BM25's term saturation + length normalisation make it a
+    better lexical ranker than plain TF-IDF cosine for ranking abstracts.
+
+    Recall-safe: any candidate whose in-scope score is at least its out-scope
+    score is ALWAYS kept (we never gate an in-scope-dominant paper), plus the
+    strongest in-scope matches overall. Only out-of-scope-dominant weak matches
+    (recipes, classroom/education, software libraries…) get gated. The LLM still
+    makes the precise call on every survivor."""
+    if not candidates:
+        return [], []
+    import numpy as np
+    from sklearn.feature_extraction.text import CountVectorizer
+    inc, exc = _split_scope(topic_def)
+    docs = [inc, exc or inc] + [f"{p.title} {p.abstract}" for p in candidates]
+    X = CountVectorizer(stop_words="english", ngram_range=(1, 2),
+                        max_features=40000).fit_transform(docs)
+    in_q, out_q = X[0].indices, X[1].indices
+    cand = X[2:]
+    doc_len = np.asarray(cand.sum(axis=1)).ravel().astype(float)
+    avgdl = max(doc_len.mean(), 1.0)
+    df = np.asarray((cand > 0).sum(axis=0)).ravel().astype(float)
+    idf = np.log(1 + (cand.shape[0] - df + 0.5) / (df + 0.5))
+    bm_in = _bm25(cand, doc_len, avgdl, idf, in_q)
+    bm_out = _bm25(cand, doc_len, avgdl, idf, out_q)
+    n = len(candidates)
+    k = max(1, int(n * keep_frac))
+    keep = set(np.flatnonzero(bm_in >= bm_out).tolist())        # in-dominant: always keep
+    keep |= set(np.argsort(bm_in)[::-1][:k].tolist())           # + strongest in-scope
+    survivors = [p for i, p in enumerate(candidates) if i in keep]
+    gated = [p for i, p in enumerate(candidates) if i not in keep]
+    progress(f"  pre-filter (BM25): {len(survivors)} kept for LLM / {len(gated)} "
+             f"gated (of {n})")
+    return survivors, gated
+
 
 # ── stage 3: relevance filter (precision) ────────────────────────────────────
 _S_SYSTEM = """You are the Scoper. Decide whether each candidate paper is IN SCOPE
@@ -130,12 +288,19 @@ _S_SCHEMA = {
 
 def scope(topic_def: str, candidates: list[Paper], *, model: str | None = None,
           batch: int = 12, cache_path: str | Path | None = None,
+          use_prefilter: bool = False,
           progress=print) -> tuple[list[tuple[Paper, str]], list[tuple[Paper, str]]]:
     """Return (kept, dropped), each a list of (paper, reason).
 
     If cache_path is given, each decision is recorded (keyed by paper id) and a
     restart skips already-judged candidates — so re-scoping after a snowball, or
-    resuming a crashed run, never re-spends LLM calls on papers already seen."""
+    resuming a crashed run, never re-spends LLM calls on papers already seen.
+
+    If use_prefilter, a cheap TF-IDF gate drops the clear off-topic tail before
+    the LLM sees anything — the lever that makes a broad snowball affordable."""
+    gated: list[Paper] = []
+    if use_prefilter:
+        candidates, gated = prefilter(topic_def, candidates, progress=progress)
     cache: dict[str, dict] = {}
     cp = Path(cache_path) if cache_path else None
     if cp and cp.exists():
@@ -190,6 +355,8 @@ def scope(topic_def: str, candidates: list[Paper], *, model: str | None = None,
     finally:
         if fh:
             fh.close()
+    for p in gated:                                # gated never reach the LLM
+        dropped.append((p, "pre-filtered: low topic similarity"))
     return kept, dropped
 
 
@@ -208,3 +375,70 @@ def build_scoped_corpus(topic_def: str, *, per_query: int = 25,
     kept, dropped = scope(topic_def, candidates, model=model, progress=progress)
     progress(f"      kept {len(kept)} / dropped {len(dropped)}")
     return [p for p, _ in kept], dropped
+
+
+def explore(topic_def: str, *, hops: int = 3, per_query: int = 25,
+            use_prefilter: bool = True, epsilon: float = 0.03,
+            model: str | None = None, progress=print):
+    """The full exploration pipeline as one call — Stage 1, the agentic stage:
+
+      1. recall-then-precision : LLM query variations over OpenAlex+arXiv+S2, then
+                                 an LLM relevance filter (the *search* channel)
+      2. citation snowball      : backward refs + forward cited-by from high-yield
+                                 seeds, OpenAlex + Semantic Scholar (the *snowball* channel)
+      3. BM25 pre-filter        : a cheap recall-safe gate before the LLM filter
+      4. saturation stopping    : stop when new-relevant-per-hop < epsilon, and
+                                 report a capture-recapture completeness estimate
+
+    Returns (corpus, dropped, stats={curve, completeness, n}). For a fresh corpus,
+    point PRIOR_DATA_DIR at a new dir."""
+    from . import completeness
+
+    # 1 + 3: recall-then-precision (search channel)
+    progress("[explore 1/3] search: queries -> candidates -> scope")
+    queries = propose_queries(topic_def, model=model)
+    candidates = gather_candidates(queries, per_query=per_query, progress=progress)
+    search_keys = {c.key() for c in candidates}
+    if use_prefilter and candidates:
+        candidates, _ = prefilter(topic_def, candidates, progress=progress)
+    kept, dropped = scope(topic_def, candidates, model=model, progress=progress)
+    corpus = [p for p, _ in kept]
+    corpus_keys = {p.key() for p in corpus}
+    curve = [len(corpus)]
+    progress(f"  search channel: {len(corpus)} relevant")
+
+    # 2 + 4: citation snowball to saturation (snowball channel)
+    progress("[explore 2/3] snowball to saturation")
+    snow_keys: set[str] = set()
+    for hop in range(1, hops + 1):
+        seeds = high_yield_seeds(corpus)
+        new_oa, reached_oa = snowball(seeds, corpus=corpus, progress=progress)
+        new_s2, reached_s2 = snowball_s2(seeds, corpus=corpus, progress=progress)
+        snow_keys |= reached_oa | reached_s2
+        uniq: dict[str, Paper] = {}
+        for c in new_oa + new_s2:
+            if c.key() not in corpus_keys:
+                uniq.setdefault(c.key(), c)
+        cand = list(uniq.values())
+        if use_prefilter and cand:
+            cand, _ = prefilter(topic_def, cand, progress=progress)
+        hkept, hdrop = (scope(topic_def, cand, model=model, progress=progress)
+                        if cand else ([], []))
+        new_rel = [p for p, _ in hkept]
+        for p in new_rel:
+            corpus.append(p)
+            corpus_keys.add(p.key())
+        dropped += hdrop
+        curve.append(len(new_rel))
+        progress(f"  hop {hop}: +{len(new_rel)} relevant of {len(cand)} candidates "
+                 f"(curve {curve})")
+        if not new_rel or len(new_rel) / max(1, len(cand)) < epsilon:
+            progress("  saturated — stopping.")
+            break
+
+    # completeness between the two independent channels
+    progress("[explore 3/3] completeness")
+    overlap = len(search_keys & snow_keys)
+    est = completeness.capture_recapture(len(search_keys), len(snow_keys), overlap)
+    progress(f"  completeness: {est}")
+    return corpus, dropped, {"curve": curve, "completeness": est, "n": len(corpus)}

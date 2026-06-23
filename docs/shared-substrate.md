@@ -105,15 +105,13 @@ flowchart TB
   ATLAS(["PRIOR shared atlas<br/>claims · contributions · relations<br/>+ open VERIFICATION SLOTS per claim"])
 
   subgraph ENRICH["Enrichers — write verification stamps"]
-    CITE["Citation verification (Team 2)<br/>→ real / relevant / fair"]
-    REPRO["Benchmark replicator / evaluator (Team 1)<br/>→ reproducibility"]
-    INT["Paper-error / Wittgenstein · Reviewer #2<br/>→ internal consistency"]
-    NOV["Novelty / Reviewer-0<br/>→ novelty"]
+    CITE["Citation verification<br/>→ real / relevant / fair"]
+    CLAIMV["Claim verification<br/>→ claim faithfully supported"]
+    EMP["Paper / empirical verification<br/>→ result reproduces"]
   end
   subgraph CONSUME["Consumers — read the atlas"]
-    KM["Knowledge management (Team 3)<br/>store / query"]
-    LIT["Personal assistant / Lit Buddy<br/>surface by interest"]
-    REV["Paper review (Team 5)<br/>contradictions + gaps → feedback"]
+    PKM["Personal knowledge management<br/>store / query / surface by interest"]
+    REV["Auto-review<br/>contradictions + gaps → feedback"]
   end
 
   ENRICH -->|stamp claims| ATLAS
@@ -127,10 +125,9 @@ ASCII fallback:
 ```
   ENRICHERS (write verification stamps)         CONSUMERS (read)
   ───────────────────────────────────          ────────────────
-  Citation verif. (T2)  → real/relevant/fair    Knowledge mgmt (T3) → store/query
-  Benchmark replic.(T1) → reproducibility       Lit Buddy / PKA     → surface by interest
-  Wittgenstein/Rev#2    → internal consistency   Paper review (T5)  → contradictions+gaps
-  Novelty/Reviewer-0    → novelty
+  Citation verification → real/relevant/fair    Personal knowledge mgmt → query / surface
+  Claim verification    → faithfully supported  Auto-review            → contradictions+gaps
+  Paper/empirical verif → result reproduces
             │  stamp                                        ▲  read
             ▼                                               │
    sources ─▶┌──────────────────────────────────────────┐──┘
