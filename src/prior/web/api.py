@@ -183,8 +183,10 @@ def annotations_summary(x_prior_user: Optional[str] = Header(None),
 # ── on-demand ingestion (add a paper from the UI) ───────────────────────────────
 @app.post("/api/ingest")
 async def ingest(kind: str = Form(...), value: str = Form(""),
+                 force: bool = Form(False),
                  file: Optional[UploadFile] = File(None)) -> dict:
-    """Start a background ingestion. kind ∈ arxiv | pdf_url | pdf_upload."""
+    """Start a background ingestion. kind ∈ arxiv | pdf_url | pdf_upload.
+    `force` overrides the version-duplicate guard (exact dups are always skipped)."""
     from .. import ingestion
     if kind not in ("arxiv", "pdf_url", "pdf_upload"):
         raise HTTPException(422, "kind must be arxiv | pdf_url | pdf_upload")
@@ -195,7 +197,8 @@ async def ingest(kind: str = Form(...), value: str = Form(""),
         content, filename = await file.read(), file.filename or "upload.pdf"
     elif not value.strip():
         raise HTTPException(422, "value (arXiv id/URL or PDF URL) is required")
-    job_id = ingestion.start(kind, value=value.strip(), content=content, filename=filename)
+    job_id = ingestion.start(kind, value=value.strip(), content=content,
+                             filename=filename, force=force)
     return {"job_id": job_id}
 
 

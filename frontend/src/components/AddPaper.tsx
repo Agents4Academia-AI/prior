@@ -34,15 +34,15 @@ function AddPaperModal({
 
   useEffect(() => () => { if (poll.current) window.clearInterval(poll.current); }, []);
 
-  const submit = async () => {
-    setErr(null); setBusy(true);
+  const submit = async (force = false) => {
+    setErr(null); setBusy(true); setJob(null);
     try {
-      const { job_id } = await api.ingest(mode, mode === "pdf_upload" ? "" : value, file);
+      const { job_id } = await api.ingest(mode, mode === "pdf_upload" ? "" : value, file, force);
       poll.current = window.setInterval(async () => {
         try {
           const st = await api.ingestStatus(job_id);
           setJob(st);
-          if (st.status === "done" || st.status === "failed") {
+          if (st.status === "done" || st.status === "failed" || st.status === "duplicate") {
             window.clearInterval(poll.current!);
             setBusy(false);
             if (st.status === "done") onIngested();
@@ -58,6 +58,8 @@ function AddPaperModal({
   const stepIdx = job ? STEPS.indexOf(job.status === "relating" ? "relating" : job.status) : -1;
   const done = job?.status === "done";
   const failed = job?.status === "failed";
+  const dup = job?.status === "duplicate";
+  const versionDup = dup && job?.duplicate_of?.kind === "version";
 
   return (
     <div className="modal-backdrop" onClick={busy ? undefined : onClose}>
@@ -97,7 +99,7 @@ function AddPaperModal({
             {err && <div className="err">{err}</div>}
             <div className="modal-actions">
               <button className="btn-ghost" onClick={onClose}>Cancel</button>
-              <button className="btn-primary" onClick={submit}
+              <button className="btn-primary" onClick={() => submit()}
                       disabled={busy || (mode === "pdf_upload" ? !file : !value.trim())}>
                 Add paper
               </button>
@@ -105,7 +107,22 @@ function AddPaperModal({
           </>
         )}
 
-        {job && (
+        {job && dup && (
+          <div className="ingest-progress">
+            {job.title && <div className="ip-title">{job.title}</div>}
+            <div className="dup-note">{job.message}</div>
+            <div className="modal-actions">
+              <button className="btn-ghost" onClick={onClose}>Close</button>
+              {versionDup && (
+                <button className="btn-primary" onClick={() => submit(true)} disabled={busy}>
+                  Add anyway
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
+        {job && !dup && (
           <div className="ingest-progress">
             {job.title && <div className="ip-title">{job.title}</div>}
             <ol className="steps">

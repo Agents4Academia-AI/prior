@@ -239,6 +239,19 @@ def claims_of(contrib_id: str) -> list[dict]:
         return [r["c"] for r in res]
 
 
+def paper_index() -> list[dict]:
+    """Lightweight (id, title) for every paper — used for ingest dedup."""
+    with session() as s:
+        return [{"id": r["id"], "title": r["title"]}
+                for r in s.run("MATCH (p:Paper) RETURN p.id AS id, p.title AS title")]
+
+
+def have_paper(paper_id: str) -> bool:
+    with session() as s:
+        return s.run("MATCH (p:Paper {id:$id}) RETURN p LIMIT 1",
+                     id=paper_id).single() is not None
+
+
 def list_papers() -> list[dict]:
     with session() as s:
         res = s.run("""MATCH (p:Paper)

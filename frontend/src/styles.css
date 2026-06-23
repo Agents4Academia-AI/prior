@@ -732,3 +732,7 @@ button.lg-btn.on { background: var(--accent-soft); border-color: var(--accent);
 .steps li.done-step { color: var(--ok); border-color: rgba(46,125,79,.4); }
 .steps li.err-step { color: var(--danger); border-color: rgba(179,38,30,.4); }
 .ip-msg { font-size: 13px; color: var(--text-dim); margin-bottom: 14px; }
+
+.dup-note { font-size: 14px; color: var(--text-dim); margin: 6px 0 16px;
+  padding: 10px 12px; background: rgba(179,120,26,.10); border: 1px solid rgba(179,120,26,.35);
+  border-radius: 8px; }

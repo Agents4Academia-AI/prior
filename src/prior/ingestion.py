@@ -20,9 +20,30 @@ from typing import Optional
 
 import requests
 
-from . import config, daemon, fulltext, llm
+from . import config, daemon, fulltext, graph, llm
 from .models import Paper
 from .sources import arxiv
+
+
+def _norm_title(title: str) -> str:
+    """Same normalisation as Paper.key() — the cross-source/version join key."""
+    t = " ".join(re.sub(r"[^a-z0-9]", " ", (title or "").lower()).split())
+    return t if len(t) >= 8 else ""
+
+
+def find_duplicate(paper: Paper) -> Optional[dict]:
+    """Is this paper already in the graph? Returns {kind, id, title} where kind is
+    'exact' (same id) or 'version' (same normalised title — e.g. arXiv vs
+    proceedings vs an uploaded PDF), else None."""
+    if graph.have_paper(paper.id):
+        return {"kind": "exact", "id": paper.id, "title": paper.title}
+    tkey = _norm_title(paper.title)
+    if tkey:
+        for p in graph.paper_index():
+            if _norm_title(p.get("title", "")) == tkey:
+                return {"kind": "version", "id": p["id"], "title": p.get("title")}
+    return None
+
 
 # ── job registry ────────────────────────────────────────────────────────────────
 @dataclass
@@ -30,11 +51,12 @@ class Job:
     id: str
     kind: str                       # arxiv | pdf_url | pdf_upload
     label: str                      # what the user submitted (for display)
-    status: str = "queued"          # queued|fetching|extracting|relating|done|failed
+    status: str = "queued"          # queued|fetching|extracting|done|failed|duplicate
     message: str = ""
     paper_id: Optional[str] = None
     title: Optional[str] = None
     result: dict = field(default_factory=dict)   # contribs/claims/edges on done
+    duplicate_of: Optional[dict] = None          # {kind, id, title} when a dup is found
     error: Optional[str] = None
 
 
@@ -117,7 +139,7 @@ def _paper_from_pdf_url(url: str) -> Paper:
 
 
 # ── background runner ───────────────────────────────────────────────────────────
-def _run(job: Job, *, content: Optional[bytes], value: str) -> None:
+def _run(job: Job, *, content: Optional[bytes], value: str, force: bool) -> None:
     try:
         _set(job, status="fetching", message="Fetching the paper…")
         if job.kind == "arxiv":
@@ -126,9 +148,19 @@ def _run(job: Job, *, content: Optional[bytes], value: str) -> None:
             paper = _paper_from_pdf_url(value)
         else:  # pdf_upload
             paper = _paper_from_pdf_bytes(content or b"", job.label)
-        _set(job, paper_id=paper.id, title=paper.title,
-             status="extracting", message="Extracting contributions & claims…")
+        _set(job, paper_id=paper.id, title=paper.title)
 
+        # Dedup before the expensive extraction.
+        dup = find_duplicate(paper)
+        if dup and (dup["kind"] == "exact" or not force):
+            msg = ("This paper is already in the graph."
+                   if dup["kind"] == "exact"
+                   else f"A version of this paper is already in the graph "
+                        f"(“{dup.get('title')}”). Add anyway?")
+            _set(job, status="duplicate", message=msg, duplicate_of=dup)
+            return
+
+        _set(job, status="extracting", message="Extracting contributions & claims…")
         st = daemon.process_paper(paper)
         if not st.get("contribs") and not st.get("claims"):
             _set(job, status="failed",
@@ -140,12 +172,14 @@ def _run(job: Job, *, content: Optional[bytes], value: str) -> None:
 
 
 def start(kind: str, *, value: str = "", content: Optional[bytes] = None,
-          filename: str = "") -> str:
-    """Register a job and run it in a daemon thread. Returns the job id."""
+          filename: str = "", force: bool = False) -> str:
+    """Register a job and run it in a daemon thread. `force` skips the version-
+    duplicate guard (exact-id duplicates are always skipped). Returns the job id."""
     label = value or filename or kind
     job = Job(id=uuid.uuid4().hex[:12], kind=kind, label=label)
     with _LOCK:
         _JOBS[job.id] = job
     threading.Thread(target=_run, args=(job,),
-                     kwargs={"content": content, "value": value}, daemon=True).start()
+                     kwargs={"content": content, "value": value, "force": force},
+                     daemon=True).start()
     return job.id
