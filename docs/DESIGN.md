@@ -2,7 +2,7 @@
 
 > The authoritative design note for the Neo4j / continuous-ingestion line of work
 > (branch `cli-backend-twolevel`). Companion runbook: [RUNNING.md](RUNNING.md).
-> Shorter views: [architecture.md](architecture.md), edge model in [design.md](design.md),
+> Shorter views: [architecture.md](architecture.md), edge model in [edge-model.md](edge-model.md),
 > prior art in [landscape.md](landscape.md).
 
 ---
