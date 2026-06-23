@@ -69,6 +69,28 @@ Three agents, working on these two layers:
 > honesty — real / relevant / fair) - work from **team 2** slots in naturally here.
 
 
+## For other teams — reusable stages
+
+Prior is built as three **standalone, independently usable stages**. You don't need
+the whole system — take the one you want:
+
+| stage | what it does | one command |
+|---|---|---|
+| **Explore** (agentic) | topic → scoped corpus (recall-then-precision + citation snowball to saturation + completeness) | `scripts/explore.py --topic "<in/out-of-scope def>"` |
+| **Get full text** (deterministic) | a list of DOIs / arXiv ids → clean cached full text, multi-source cascade | `scripts/get_fulltext.py --ids dois.txt` |
+| **Extract** (LLM) | cached full text → contributions + claims + local graph | `scripts/extract.py --select all` |
+
+**Most reusable: full text.** `get_fulltext.py --ids <file>` takes a plain list of
+DOIs / arXiv ids (one per line). The **free channels** (arXiv, open access,
+Unpaywall, preprint servers, `citation_pdf_url`, arXiv-twin search) need **no keys**
+and work for any project; publisher APIs (Elsevier/Springer/Wiley) and Playwright
+are opt-in via your own `.env` / entitlement.
+
+See **[SHARING.md](SHARING.md)** for how to reuse each stage, what's safe to
+redistribute (metadata + graph) vs not (raw full text), and how to reproduce the
+corpus with your own access.
+
+
 ## Acknowledgements
 
 Built during [Agents4Academia](https://github.com/Agents4Academia-AI),
