@@ -256,14 +256,14 @@ function nodeVis(d){if(!d)return false;const isP=level==="papers";
   if(contradictOnly&&!(isP?contradictPapers.has(d.id):contradictNodes.has(d.id)))return false;
   if(d.year&&d.year>maxYear)return false;
   return true;}
-function applyFilters(){const isP=level==="papers";
+function applyFilters(){if(frontierComm!=null)return;const isP=level==="papers";  // atlas-level filters are inert in the lineage frontier
   node.style("display",d=>nodeVis(d)?null:"none");
   if(ring)ring.style("display",d=>nodeVis(d)?null:"none");
   if(link)link.style("display",l=>{const s=l.source.id||l.source,t=l.target.id||l.target;
     if(!nodeVis(byId.get(s))||!nodeVis(byId.get(t)))return "none";
     if(!isP){if(contradictOnly&&l.rel!=="contradicts")return "none";if(l.trust!==undefined&&l.trust<minTrust)return "none";}
     return null;});}
-function focus(id){
+function focus(id){if(frontierComm!=null)return;  // frontier uses frontierFocus; never the atlas focus
   node.attr("opacity",n=>!nodeVis(n)?0:(!id||adj.get(id).has(n.id)?1:0.1));
   link.attr("stroke-opacity",l=>{const s=l.source.id||l.source,t=l.target.id||l.target;
     if(!id)return level==="papers"?(l.cross?0.4:0.3):(0.06+0.42*(l.trust||0.5)); return(s===id||t===id)?0.9:0.02;});
@@ -301,6 +301,7 @@ function contribDetail(d){const nb=D.contribLinks.filter(l=>l.source===d.id||l.t
      ${n.ev?`<div style="font-size:11.5px;color:var(--dim);margin-top:3px">${esc(n.ev)}</div>`:""}</div>`).join("")||'<div class="empty" style="padding:6px">none — isolated</div>'}`;}
 function clearSel(){sel=null;if(frontierComm!=null){window.__ffocus&&window.__ffocus(null);frontierPanelFn&&frontierPanelFn();return;}focus(null);const qe=document.getElementById("q");if(qe)qe.value="";SIDE.innerHTML='<div class="empty">Hover a node to focus its links. Click for details. Ask the graph with keywords (top-left). Click a cluster name → Expand as knowledge frontier. Switch level top-left.</div>';}
 function runSearch(){
+  if(frontierComm!=null){window.__exitFrontier();}  // search is atlas-level; leave the frontier first
   const qe=document.getElementById("q"), q=(qe.value||"").trim().toLowerCase();
   if(!q){clearSel();return;}
   const terms=q.split(/\s+/), isP=level==="papers";
