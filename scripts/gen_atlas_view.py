@@ -144,8 +144,38 @@ contrib_links = [{"source": e["src"], "target": e["dst"], "rel": e["relation"],
                  for e in edges if e["src"] in ids and e["dst"] in ids
                  and e["src"].split("::")[0] != e["dst"].split("::")[0]]
 
+# provenance / "how this atlas was built" — PRISMA-style stage counts
+_excl = 0
+_exf = DIR / "core_exclusions.json"
+if _exf.exists():
+    try:
+        _ex = json.loads(_exf.read_text())
+        if isinstance(_ex, list):
+            _excl = len(_ex)
+        else:
+            _excl = len(_ex.get("non_primary") or _ex.get("excluded") or _ex.get("entries") or _ex.get("papers") or [])
+    except Exception:
+        _excl = 0
+_gnd = [c.get("grounding") for c in cons if isinstance(c.get("grounding"), (int, float))]
+_tiers = Counter((e.get("agreement") or {}).get("tier") for e in edges)
+try:
+    _modv = round(nx.community.modularity(G, comms), 2)
+except Exception:
+    _modv = None
+meta = {
+    "papers": len(by_paper), "excluded": _excl, "candidates": len(by_paper) + _excl,
+    "contribs": len(cons),
+    "grounding": {"graded": len(_gnd),
+                  "verbatim": sum(1 for g in _gnd if g >= 0.90),
+                  "paraphrase": sum(1 for g in _gnd if 0.60 <= g < 0.90),
+                  "weak": sum(1 for g in _gnd if g < 0.60),
+                  "mean": round(sum(_gnd) / len(_gnd), 3) if _gnd else None},
+    "relations": len(edges), "directed": sum(1 for e in edges if e.get("directed")),
+    "tiers": {k: _tiers.get(k, 0) for k in ("triple", "double", "opus_only")},
+    "communities": len(big), "modularity": _modv,
+}
 payload = {"papers": papers_n, "paperLinks": paper_links, "contribs": contribs_n,
-           "contribLinks": contrib_links, "legend": legend, "rel": REL,
+           "contribLinks": contrib_links, "legend": legend, "rel": REL, "meta": meta,
            "topic": "agents for the scientific process"}
 
 TEMPLATE = r"""<!doctype html><html lang="en"><head><meta charset="utf-8">
@@ -158,6 +188,7 @@ TEMPLATE = r"""<!doctype html><html lang="en"><head><meta charset="utf-8">
  #canvas{position:relative;flex:1;min-width:0}svg{width:100%;height:100%;cursor:grab}
  .hdr{position:absolute;top:14px;left:14px;z-index:5;max-width:55%}
  .hdr h1{margin:0;font-size:15px}.hdr .sub{font-size:12px;color:var(--dim);margin-top:2px}
+ .abt{font-size:11px;color:#0a9396;cursor:pointer;text-decoration:underline;display:inline-block;margin-top:3px}
  .seg{margin-top:8px;display:inline-flex;border:1px solid var(--bd);border-radius:8px;overflow:hidden}
  .seg button{background:var(--elev);border:none;color:var(--dim);padding:6px 14px;font-size:12px;cursor:pointer}
  .seg button.on{background:#0a9396;color:#fff;font-weight:600}
@@ -186,7 +217,7 @@ TEMPLATE = r"""<!doctype html><html lang="en"><head><meta charset="utf-8">
  text.clab{font:700 12px var(--sans);paint-order:stroke;stroke:var(--bg);stroke-width:4px;pointer-events:none;opacity:.9}
 </style></head><body>
 <div id="canvas">
- <div class="hdr"><h1>Prior — atlas</h1><div class="sub" id="sub"></div>
+ <div class="hdr"><h1>Prior — atlas</h1><div class="sub" id="sub"></div><div><span class="abt" onclick="aboutPanel()">ⓘ how this atlas was built</span></div>
    <div class="seg"><button id="mC" class="on">Contributions</button><button id="mP">Communities</button><button id="mT">Timeline</button></div>
    <span id="filtrow"><label style="margin-left:10px;font-size:12px;color:var(--dim)">min trust <input id="tf" type="range" min="0" max="0.95" step="0.05" value="0" style="vertical-align:middle"> <span id="tfv">0.00</span></label>
    <label style="margin-left:10px;font-size:12px;color:var(--dim)">year ≤ <input id="yr" type="range" step="1" style="vertical-align:middle"> <span id="yrv"></span></label>
@@ -314,6 +345,22 @@ function contribDetail(d){const nb=D.contribLinks.filter(l=>l.source===d.id||l.t
    ${nb.map(n=>`<div class="nb"><span class="pill" style="background:${D.rel[n.rel]||'#9aa0b0'}">${esc(n.phrase)}</span> <span class="src">trust ${n.trust} · ${esc(n.tier)}</span>
      <div class="src" style="margin-top:3px">${n.dir} ${plink(pid(n.other),PCITE[pid(n.other)]||n.other)}</div>
      ${n.ev?`<div style="font-size:11.5px;color:var(--dim);margin-top:3px">${esc(n.ev)}</div>`:""}</div>`).join("")||'<div class="empty" style="padding:6px">none — isolated</div>'}`;}
+function aboutPanel(){const m=D.meta||{},g=m.grounding||{},t=m.tiers||{};
+  const box=(n,l,sub)=>`<div style="background:var(--e2);border:1px solid var(--bd);border-radius:7px;padding:7px 10px"><span style="font-size:16px;font-weight:700">${n}</span> <span style="font-size:11px;color:var(--dim)">${l}</span>${sub?`<div style="font-size:10.5px;color:var(--faint);margin-top:3px">${sub}</div>`:""}</div>`;
+  const arr=s=>`<div style="text-align:center;font-size:10px;color:var(--faint);padding:3px 0">↓ ${s}</div>`;
+  SIDE.innerHTML=`<div style="font-weight:700;font-size:14px">How this atlas was built</div>
+   <div class="src" style="margin:4px 0 10px">${esc(m.topic||D.topic||"")}</div>`
+   +box(m.candidates??"—","candidate primary papers")
+   +arr(`scope · primary-only filter −${m.excluded??0} non-primary`)
+   +box(m.papers??"—","primary papers kept")
+   +arr("Reader · paper → contributions")
+   +box(m.contribs??"—","self-declared contributions",`grounded in source: ${g.verbatim||0} verbatim · ${g.paraphrase||0} paraphrase · <b>${g.weak||0}</b> weak (&lt;0.60) · mean ${g.mean??"—"}`)
+   +arr("Cartographer · cross-paper relations (multi-model consensus)")
+   +box(m.relations??"—","relations",`agreement: ${t.triple||0} triple · ${t.double||0} double · ${t.opus_only||0} opus-only · ${m.directed||0} date-oriented`)
+   +arr("edge-modularity clustering")
+   +box(m.communities??"—",`communities (+ unclustered) · modularity ${m.modularity??"—"}`)
+   +`<div style="font-size:11.5px;color:var(--dim);margin-top:12px;border-top:1px solid var(--bd);padding-top:9px">A <b>scoping map of primary literature</b>, not a systematic review. <b>Trust = cross-model agreement</b> that a relation exists — not evidence strength or study quality. Quotes are checked against the source text (token recall); weak ones are flagged above.</div>`;}
+window.aboutPanel=aboutPanel;
 function clearSel(){sel=null;if(frontierComm!=null){window.__ffocus&&window.__ffocus(null);frontierPanelFn&&frontierPanelFn();return;}if(timelineMode){window.__tfocus&&window.__tfocus(null);timelinePanelFn&&timelinePanelFn();return;}focus(null);const qe=document.getElementById("q");if(qe)qe.value="";SIDE.innerHTML='<div class="empty">Hover a node to focus its links. Click for details. Ask the graph with keywords (top-left). Click a cluster name → Expand as knowledge frontier. Switch level top-left.</div>';}
 function runSearch(){
   if(frontierComm!=null){window.__exitFrontier();}  // search is atlas-level; leave the frontier first
@@ -544,6 +591,7 @@ if(_q.get("q")){document.getElementById("q").value=_q.get("q");runSearch();}
 if(_q.get("year")){maxYear=+_q.get("year");_yr.value=maxYear;document.getElementById("yrv").textContent=maxYear;applyFilters();}
 if(_q.get("zoom")!==null&&_q.get("zoom")!==undefined&&_q.get("zoom")!=="")setTimeout(()=>zoomCluster(+_q.get("zoom")),50);
 if(_q.get("frontier")){if(_q.get("fa"))frontierAxis=_q.get("fa");if(_q.get("fs"))frontierShowSupport=true;setTimeout(()=>buildFrontier(+_q.get("frontier")),60);}
+if(_q.get("about"))setTimeout(aboutPanel,80);
 if(_q.get("timeline"))setTimeout(()=>{setLevel("timeline");const tl=_q.get("tl");if(tl!=null)setTimeout(()=>{const r=document.getElementById("tlrange");if(r){r.value=+tl;r.dispatchEvent(new Event("input"));}},160);},60);
 </script></body></html>"""
 
