@@ -33,15 +33,39 @@ def main():
     ap.add_argument("--topic", required=True, help="in-/out-of-scope topic definition")
     ap.add_argument("--hops", type=int, default=3, help="snowball hops (0 = search only)")
     ap.add_argument("--per-query", type=int, default=25)
+    ap.add_argument("--no-repair", action="store_true",
+                    help="skip abstract repair (arXiv/S2 backfill of corrupted abstracts)")
+    ap.add_argument("--hub-cites", type=int, default=1000,
+                    help="warn when a dropped paper has at least this many citations")
     ap.add_argument("--model", default=None)
     args = ap.parse_args()
     config.ensure_dirs()
 
     corpus, dropped, stats = scoper.explore(
-        args.topic, hops=args.hops, per_query=args.per_query, model=args.model, progress=_log)
+        args.topic, hops=args.hops, per_query=args.per_query,
+        repair_abstracts=not args.no_repair, model=args.model, progress=_log)
+
     pp = config.RAW / "papers.jsonl"
     pp.write_text("\n".join(json.dumps(p.to_dict()) for p in corpus) + "\n")
-    _log(f"DONE | {len(corpus)} scoped papers -> {pp} | "
+
+    # Persist the dropped set + reasons so "why is X missing?" is auditable, not a
+    # manual re-investigation.
+    dp = config.RAW / "dropped.jsonl"
+    dp.write_text("\n".join(json.dumps(
+        {"id": p.id, "title": p.title, "cited_by_count": p.cited_by_count,
+         "doi": p.doi, "reason": reason}) for p, reason in dropped) + "\n")
+
+    # Hub-paper safety net: surface any high-citation paper that was dropped, so a
+    # foundational miss is visible rather than silent.
+    hubs = sorted(((p, r) for p, r in dropped if (p.cited_by_count or 0) >= args.hub_cites),
+                  key=lambda pr: -(pr[0].cited_by_count or 0))
+    if hubs:
+        _log(f"WARNING: {len(hubs)} dropped paper(s) have >= {args.hub_cites} citations "
+             f"— review {dp}:")
+        for p, r in hubs[:10]:
+            _log(f"  [{p.cited_by_count}] {p.title[:70]} — {r}")
+
+    _log(f"DONE | {len(corpus)} scoped papers -> {pp} | {len(dropped)} dropped -> {dp} | "
          f"curve {stats['curve']} | completeness {stats['completeness']}")
 
 

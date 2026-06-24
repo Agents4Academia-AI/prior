@@ -132,6 +132,18 @@ def references(s2_id: str, *, max_results: int = 60) -> list[Paper]:
     return _neighbors(s2_id, "references", max_results=max_results)
 
 
+def fetch(s2_id: str) -> Paper | None:
+    """Fetch one paper's metadata (incl. abstract) by an S2-resolvable id:
+    'ARXIV:2006.11239', 'DOI:10.1145/x', or a raw S2 paperId. The repair path uses
+    this to recover an abstract when another source's copy is missing/corrupted."""
+    try:
+        r = _get(f"{GRAPH}/{s2_id}", {"fields": FIELDS})
+    except requests.RequestException:
+        return None
+    it = r.json()
+    return _to_paper(it) if it and it.get("title") else None
+
+
 def search(query: str, *, max_papers: int = config.DEFAULT_MAX_PAPERS,
            require_abstract: bool = True, exclude_reviews: bool = True) -> list[Paper]:
     params = {"query": query, "limit": min(max_papers * 3, 100), "fields": FIELDS}
