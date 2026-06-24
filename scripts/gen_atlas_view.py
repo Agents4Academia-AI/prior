@@ -187,7 +187,10 @@ const LG={}; D.legend.forEach(l=>LG[l.id]=l);
 const COL=id=>(LG[id]?LG[id].color:"#c9cdd2"), LAB=id=>(LG[id]?LG[id].label:"unclustered");
 const off=new Set(), kindOff=new Set(); let level="contribs", sel=null, minTrust=0, contradictOnly=false, maxYear=9999, frontierComm=null, frontierPanelFn=null, sim, node, link, lab, ring, NODES, LINKS, adj, byId;
 const canvas=document.getElementById("canvas");let W=canvas.clientWidth,H=canvas.clientHeight;
-const svg=d3.select("#canvas").append("svg").attr("viewBox",[0,0,W,H]);const root=svg.append("g");
+const svg=d3.select("#canvas").append("svg").attr("viewBox",[0,0,W,H]);
+const _defs=svg.append("defs");
+Object.entries(D.rel).forEach(([rel,c])=>_defs.append("marker").attr("id","arr-"+rel).attr("viewBox","0 -5 10 10").attr("refX",20).attr("refY",0).attr("markerWidth",9).attr("markerHeight",9).attr("markerUnits","userSpaceOnUse").attr("orient","auto").append("path").attr("d","M0,-4L9,0L0,4").attr("fill",c).attr("fill-opacity",0.85));
+const root=svg.append("g");
 const zoom=d3.zoom().scaleExtent([0.1,5]).on("zoom",e=>root.attr("transform",e.transform));
 svg.call(zoom).on("click",e=>{if(!e.defaultPrevented)clearSel();});
 window.addEventListener("keydown",e=>{if(e.key==="Escape"){frontierComm!=null?window.__exitFrontier():clearSel();}});
@@ -196,6 +199,7 @@ real.forEach((l,i)=>{const a=2*Math.PI*i/real.length-Math.PI/2;cen[l.id]={x:cx+R
 cen[-1]={x:cx,y:cy};
 const esc=s=>(s||"").toString().replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const pid=id=>id.split("::")[0];
+const DIRECTED=new Set(["builds_on","refines","extends","contrast"]); // supports/contradicts are symmetric
 const contradictNodes=new Set(), contradictPapers=new Set();
 D.contribLinks.forEach(l=>{if(l.rel==="contradicts"){contradictNodes.add(l.source);contradictNodes.add(l.target);contradictPapers.add(pid(l.source));contradictPapers.add(pid(l.target));}});
 const KINDS=Array.from(new Set(D.contribs.map(c=>c.kind).filter(Boolean))).sort();
@@ -213,7 +217,8 @@ function build(){
   // cluster labels appended last (below) so they sit on top and stay clickable
   link=root.append("g").selectAll("line").data(LINKS).join("line")
     .attr("stroke",d=>isP?(d.cross?"#c9b89a":"#e4ddcf"):(D.rel[d.rel]||"#c9cdd2"))
-    .attr("stroke-width",d=>isP?Math.min(3,0.5+d.w*0.25):(0.5+(d.trust||0.5)*1.6)).attr("stroke-opacity",d=>isP?0.4:(0.06+0.42*(d.trust||0.5)));
+    .attr("stroke-width",d=>isP?Math.min(3,0.5+d.w*0.25):(0.5+(d.trust||0.5)*1.6)).attr("stroke-opacity",d=>isP?0.4:(0.06+0.42*(d.trust||0.5)))
+    .attr("marker-end",d=>(!isP&&DIRECTED.has(d.rel))?`url(#arr-${d.rel})`:null);
   if(isP){ring=root.append("g").selectAll("circle").data(NODES.filter(d=>d.bridge)).join("circle")
     .attr("fill","none").attr("stroke","#3b4252").attr("stroke-width",1.2).attr("stroke-dasharray","2 2")
     .attr("r",d=>rad(d)+3).style("pointer-events","none");}
@@ -309,7 +314,8 @@ function setLevel(l){frontierComm=null;frontierPanelFn=null;level=l;sel=null;doc
 document.getElementById("mC").onclick=()=>setLevel("contribs");document.getElementById("mP").onclick=()=>setLevel("papers");
 document.getElementById("legend").innerHTML=`<div class="t">Clusters (edge-based)</div>`+
   D.legend.map(l=>`<div class="lg" data-c="${l.id}"><span class="sw" style="background:${l.color}"></span><span>${esc(l.label)} (${l.n})</span></div>`).join("")+
-  `<div class="t">Relations (opacity/width = consensus trust)</div>`+Object.entries(D.rel).map(([k,c])=>`<div class="rg"><span class="ln" style="border-color:${c}"></span><span>${k}</span></div>`).join("")+
+  `<div class="t">Relations (opacity/width = consensus trust)</div>`+Object.entries(D.rel).map(([k,c])=>`<div class="rg"><span class="ln" style="border-color:${c}"></span><span>${k}${DIRECTED.has(k)?" →":""}</span></div>`).join("")+
+  `<div class="rg" style="opacity:.6;font-size:10px">→ directed (builds_on/refines); supports/contradicts symmetric</div>`+
   `<div class="t">Contribution kinds (toggle, contributions view)</div>`+
   KINDS.map(k=>`<div class="lg" data-k="${esc(k)}"><span class="sw" style="background:#b9bcc2"></span><span>${esc(k)}</span></div>`).join("")+
   `<div class="t">Papers view</div><div class="rg"><span class="ln" style="border-top:1.2px dashed #3b4252;width:16px"></span><span>bridge (spans ≥2)</span></div>`;
@@ -363,6 +369,7 @@ function buildFrontier(comm){
   rg.append("text").attr("x",cx).attr("y",cy-RM-12).attr("text-anchor","middle").attr("fill","#9aa0b0").attr("font-size",11).text("newer →");
   rg.append("text").attr("x",cx).attr("y",cy-RM-30).attr("text-anchor","middle").attr("fill",COL(comm)).attr("font-size",13).attr("font-weight",700).text(LAB(comm));
   link=root.append("g").selectAll("line").data(links).join("line").attr("stroke",l=>D.rel[l.rel]||"#c9cdd2").attr("stroke-width",l=>0.6+(l.trust||0.5)*1.6).attr("stroke-opacity",0.55)
+    .attr("marker-end",l=>DIRECTED.has(l.rel)?`url(#arr-${l.rel})`:null)
     .attr("x1",l=>byId.get(l.source).x).attr("y1",l=>byId.get(l.source).y).attr("x2",l=>byId.get(l.target).x).attr("y2",l=>byId.get(l.target).y);
   node=root.append("g").selectAll("circle").data(members).join("circle").attr("r",7).attr("fill",COL(comm)).attr("stroke","#fbfcfd").attr("stroke-width",1.2).attr("cx",d=>d.x).attr("cy",d=>d.y).style("cursor","pointer")
     .on("mouseover",(_,d)=>focus(d.id)).on("mouseout",()=>focus(sel)).on("click",(e,d)=>{e.stopPropagation();sel=d.id;focus(d.id);contribDetail(d);});
