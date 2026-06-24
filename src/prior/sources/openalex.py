@@ -7,6 +7,8 @@ powers Navigator's backward / origin-tracing mode.
 
 from __future__ import annotations
 
+import time
+
 import requests
 
 from .. import config, dates
@@ -27,6 +29,27 @@ def _params() -> dict:
     if config.CONTACT_EMAIL:
         p["mailto"] = config.CONTACT_EMAIL
     return p
+
+
+def _get(url: str, params: dict, *, tries: int = 5):
+    """GET with backoff. OpenAlex's 429 is either a transient per-second rate limit
+    (back off and retry) or daily request-budget exhaustion ('Insufficient budget'),
+    which won't recover within a run — so fail fast with an actionable message rather
+    than loop. Reference expansion bursts thousands of lookups, so without this the
+    snowball silently empties out or crashes. Set CONTACT_EMAIL for the polite pool's
+    larger budget."""
+    delay, r = 2.0, None
+    for _ in range(tries):
+        r = requests.get(url, params=params, headers=_headers(), timeout=config.HTTP_TIMEOUT)
+        if r.status_code != 429:
+            return r
+        if "budget" in r.text.lower():
+            raise RuntimeError(
+                "OpenAlex 429: daily request budget exhausted. Set CONTACT_EMAIL for the "
+                "polite pool (larger budget), or retry after the daily reset.")
+        time.sleep(delay)
+        delay *= 1.8
+    return r                              # transient retries exhausted -> caller raises_for_status
 
 
 def _norm_id(openalex_url: str | None) -> str:
@@ -93,8 +116,7 @@ def search(query: str, *, max_papers: int = config.DEFAULT_MAX_PAPERS,
         "sort": "relevance_score:desc",
         "select": _SELECT,
     }
-    r = requests.get(API, params=params, headers=_headers(),
-                     timeout=config.HTTP_TIMEOUT)
+    r = _get(API, params)
     r.raise_for_status()
     papers: list[Paper] = []
     for w in r.json().get("results", []):
@@ -121,8 +143,7 @@ def fetch_many(ids: list[str], *, batch: int = 50) -> dict[str, Paper]:
             "per_page": batch,
             "select": _SELECT,
         }
-        r = requests.get(API, params=params, headers=_headers(),
-                         timeout=config.HTTP_TIMEOUT)
+        r = _get(API, params)
         r.raise_for_status()
         for w in r.json().get("results", []):
             p = _to_paper(w)
@@ -141,8 +162,7 @@ def cited_by(openalex_id: str, *, max_results: int = 50) -> list[Paper]:
         "select": _SELECT,
     }
     try:
-        r = requests.get(API, params=params, headers=_headers(),
-                         timeout=config.HTTP_TIMEOUT)
+        r = _get(API, params)
         r.raise_for_status()
     except requests.RequestException:
         return []
@@ -154,8 +174,7 @@ def fetch_doi(doi: str) -> Paper | None:
     papers in a reference export that carry no arXiv id."""
     doi = doi.strip().replace("https://doi.org/", "").replace("doi:", "")
     try:
-        r = requests.get(f"{API}/doi:{doi}", params=_params() | {"select": _SELECT},
-                         headers=_headers(), timeout=config.HTTP_TIMEOUT)
+        r = _get(f"{API}/doi:{doi}", _params() | {"select": _SELECT})
         if r.status_code == 404:
             return None
         r.raise_for_status()
@@ -167,8 +186,7 @@ def fetch_doi(doi: str) -> Paper | None:
 def fetch(openalex_id: str) -> Paper | None:
     """Fetch a single work by id ('openalex:W123' or bare 'W123')."""
     wid = openalex_id.split(":")[-1]
-    r = requests.get(f"{API}/{wid}", params=_params(), headers=_headers(),
-                     timeout=config.HTTP_TIMEOUT)
+    r = _get(f"{API}/{wid}", _params())
     if r.status_code == 404:
         return None
     r.raise_for_status()
