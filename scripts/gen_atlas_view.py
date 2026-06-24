@@ -170,6 +170,11 @@ TEMPLATE = r"""<!doctype html><html lang="en"><head><meta charset="utf-8">
  .rg{display:flex;align-items:center;gap:6px;margin-bottom:2px}.rg .ln{width:16px;border-top:3px solid}
  .zoom{position:absolute;top:14px;right:calc(360px + 14px);z-index:5;display:flex;flex-direction:column;gap:1px}
  .zoom button{width:30px;height:30px;background:var(--elev);color:var(--dim);border:1px solid var(--bd);cursor:pointer}
+ #tlctrl{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);z-index:6;display:none;align-items:center;gap:10px;background:var(--elev);border:1px solid var(--bd);border-radius:10px;padding:7px 13px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+ #tlctrl.on{display:flex}
+ #tlplay{width:30px;height:30px;border-radius:50%;border:1px solid var(--bd);background:#0a9396;color:#fff;cursor:pointer;font-size:12px;flex:0 0 auto}
+ #tlrange{width:320px;accent-color:#0a9396;cursor:pointer}
+ #tldate{font-family:var(--mono);font-size:12px;color:var(--dim);min-width:70px;text-align:center}
  #side{width:360px;flex:0 0 360px;background:var(--elev);border-left:1px solid var(--bd);overflow-y:auto;padding:18px}
  #side .empty{color:var(--faint);text-align:center;padding:34px 6px}
  .k{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--faint);margin:12px 0 3px}
@@ -183,11 +188,12 @@ TEMPLATE = r"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <div id="canvas">
  <div class="hdr"><h1>Prior — atlas</h1><div class="sub" id="sub"></div>
    <div class="seg"><button id="mC" class="on">Contributions</button><button id="mP">Communities</button><button id="mT">Timeline</button></div>
-   <label style="margin-left:10px;font-size:12px;color:var(--dim)">min trust <input id="tf" type="range" min="0" max="0.95" step="0.05" value="0" style="vertical-align:middle"> <span id="tfv">0.00</span></label>
+   <span id="filtrow"><label style="margin-left:10px;font-size:12px;color:var(--dim)">min trust <input id="tf" type="range" min="0" max="0.95" step="0.05" value="0" style="vertical-align:middle"> <span id="tfv">0.00</span></label>
    <label style="margin-left:10px;font-size:12px;color:var(--dim)">year ≤ <input id="yr" type="range" step="1" style="vertical-align:middle"> <span id="yrv"></span></label>
-   <label style="margin-left:10px;font-size:12px;color:var(--dim)"><input id="conly" type="checkbox" style="vertical-align:middle"> contradictions only</label>
+   <label style="margin-left:10px;font-size:12px;color:var(--dim)"><input id="conly" type="checkbox" style="vertical-align:middle"> contradictions only</label></span>
    <div style="margin-top:8px"><input id="q" type="search" placeholder="ask the graph (keywords)… e.g. hallucination, peer review gaming" style="width:340px;padding:5px 9px;border:1px solid var(--bd);border-radius:8px;font-size:12px;font-family:var(--sans)"></div></div>
  <div class="zoom"><button id="zi">+</button><button id="zo">&minus;</button><button id="zf">fit</button></div>
+ <div id="tlctrl"><button id="tlplay">&#9654;</button><input id="tlrange" type="range" min="0" max="1000" value="1000"><span id="tldate">&mdash;</span></div>
  <div class="legend" id="legend"></div>
 </div>
 <div id="side"><div class="empty">Hover a node to focus its links. Click for details. Toggle clusters in the legend; switch level top-left.</div></div>
@@ -198,7 +204,7 @@ const LG={}; D.legend.forEach(l=>LG[l.id]=l);
 const COL=id=>(LG[id]?LG[id].color:"#c9cdd2"), LAB=id=>(LG[id]?LG[id].label:"unclustered");
 const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const fmtDate=(dt,pr)=>{if(!dt)return"";const y=dt.slice(0,4),m=+dt.slice(5,7),dd=+dt.slice(8,10);if(pr==="day"&&dd)return dd+" "+MON[m-1]+" "+y;if(m)return MON[m-1]+" "+y;return y;};
-const off=new Set(), kindOff=new Set(); let level="contribs", sel=null, minTrust=0, contradictOnly=false, maxYear=9999, frontierComm=null, frontierPanelFn=null, frontierAxis="year", frontierShowSupport=false, timelineMode=false, timelinePanelFn=null, sim, node, link, lab, ring, NODES, LINKS, adj, byId;
+const off=new Set(), kindOff=new Set(); let level="contribs", sel=null, minTrust=0, contradictOnly=false, maxYear=9999, frontierComm=null, frontierPanelFn=null, frontierAxis="year", frontierShowSupport=false, timelineMode=false, timelinePanelFn=null, tlPlaying=false, tlTimer=null, sim, node, link, lab, ring, NODES, LINKS, adj, byId;
 const canvas=document.getElementById("canvas");let W=canvas.clientWidth,H=canvas.clientHeight;
 const svg=d3.select("#canvas").append("svg").attr("viewBox",[0,0,W,H]);
 const _defs=svg.append("defs");
@@ -336,8 +342,8 @@ function backLink(){const q=(document.getElementById("q").value||"").trim();retu
 window.__focus=id=>{const d=byId.get(id);if(!d)return;sel=id;focus(id);level==="papers"?paperDetail(d):contribDetail(d);};
 function setLevel(l){frontierComm=null;frontierPanelFn=null;timelineMode=false;sel=null;
   ["mC","mP","mT"].forEach(b=>document.getElementById(b).classList.remove("on"));
-  if(l==="timeline"){document.getElementById("mT").classList.add("on");document.getElementById("legend").style.display="none";document.getElementById("sub").innerHTML=`<b>${D.papers.length}</b> papers · timeline by date · ${D.topic}`;buildTimeline();return;}
-  document.getElementById("legend").style.display="";
+  if(l==="timeline"){document.getElementById("mT").classList.add("on");document.getElementById("legend").style.display="none";document.getElementById("tlctrl").classList.add("on");document.getElementById("filtrow").style.display="none";document.getElementById("sub").innerHTML=`<b>${D.papers.length}</b> papers · timeline by date · ${D.topic}`;buildTimeline();return;}
+  document.getElementById("legend").style.display="";document.getElementById("tlctrl").classList.remove("on");document.getElementById("filtrow").style.display="";tlStop();
   level=l;document.getElementById(l==="papers"?"mP":"mC").classList.add("on");
   document.getElementById("sub").innerHTML=l==="papers"?`<b>${D.papers.length}</b> papers · <b>${D.paperLinks.length}</b> links · ${D.topic}`:`<b>${D.contribs.length}</b> contributions · <b>${D.contribLinks.length}</b> relations · ${D.topic}`;build();}
 document.getElementById("mC").onclick=()=>setLevel("contribs");document.getElementById("mP").onclick=()=>setLevel("papers");document.getElementById("mT").onclick=()=>setLevel("timeline");
@@ -461,7 +467,7 @@ window.__frontierSupport=()=>{frontierShowSupport=!frontierShowSupport;buildFron
 window.__exitFrontier=()=>{frontierComm=null;frontierPanelFn=null;sel=null;build();};
 function timelinePanel(nP,nL,nC){
   SIDE.innerHTML=`<div><span class="pill" style="background:#3b4252">field timeline</span></div>
-   <div style="font-size:12px;color:var(--dim);margin-top:8px">${nP} papers across ${nC} communities, placed left→right by <b>date</b>; each row is a community, vertical lines are year boundaries. Edges = cross-paper relations (tan = cross-community). Hover a paper to trace its links; click for details. Esc or another view to leave.</div>`;
+   <div style="font-size:12px;color:var(--dim);margin-top:8px">${nP} papers across ${nC} communities, placed left→right by <b>date</b>; each row is a community, vertical lines are year boundaries. Edges = cross-paper relations (tan = cross-community). Hit <b>▶</b> (bottom) to play the field's growth over time, or drag the scrubber to any month. Hover a paper to trace its links; click for details. Esc or another view to leave.</div>`;
 }
 function buildTimeline(){
   timelineMode=true; frontierComm=null; sel=null; root.selectAll("*").remove();
@@ -492,16 +498,40 @@ function buildTimeline(){
   node=root.append("g").selectAll("circle").data(papers).join("circle").attr("r",d=>4+Math.min(5,(d.deg||0)*0.4)).attr("fill",d=>COL(d.comm)).attr("stroke",d=>d.bridge?"#3b4252":"#fbfcfd").attr("stroke-width",d=>d.bridge?1.6:1).attr("cx",d=>d.x).attr("cy",d=>d.y).style("cursor","pointer")
     .on("mouseover",(_,d)=>tlFocus(d.id)).on("mouseout",()=>tlFocus(sel)).on("click",(e,d)=>{e.stopPropagation();sel=d.id;tlFocus(d.id);paperDetail(d);});
   lab=root.append("g").selectAll("text").data(papers).join("text").attr("class","lab").attr("dx",7).attr("dy",3).attr("x",d=>d.x).attr("y",d=>d.y).style("display","none").text(d=>d.cite||"");
+  // time scrubber: a playhead sweeps left→right; papers/edges appear once their date is reached
+  const ph=root.append("line").attr("y1",T-8).attr("y2",H-Bm).attr("stroke","#b56b78").attr("stroke-width",1.5).attr("stroke-dasharray","4 3").style("display","none").style("pointer-events","none");
+  const xAt=tv=>L+(tv-tmin)/(tmax-tmin||1)*(W-L-Rm);
+  let curCut=tmax;
+  function applyCut(tv){curCut=tv;
+    node.attr("opacity",d=>tvOf(d)<=tv+1e-9?1:0.05);
+    link.attr("stroke-opacity",l=>(tvOf(byId.get(l.source))<=tv+1e-9&&tvOf(byId.get(l.target))<=tv+1e-9)?0.28:0);
+    if(lab)lab.style("display","none");
+    ph.attr("x1",xAt(tv)).attr("x2",xAt(tv)).style("display",tv>=tmax-1e-9?"none":null);}
   function tlFocus(id){
-    if(!id){node.attr("opacity",1);link.attr("stroke-opacity",0.28);if(lab)lab.style("display","none");return;}
-    node.attr("opacity",n=>adj.get(id).has(n.id)?1:0.12);
-    link.attr("stroke-opacity",l=>(l.source===id||l.target===id)?0.85:0.04);
-    if(lab)lab.style("display",n=>adj.get(id).has(n.id)?null:"none");
-  }
-  window.__tfocus=tlFocus;
+    if(!id){applyCut(curCut);return;}
+    node.attr("opacity",n=>(tvOf(n)<=curCut+1e-9&&adj.get(id).has(n.id))?1:0.08);
+    link.attr("stroke-opacity",l=>(l.source===id||l.target===id)?0.85:0.03);
+    if(lab)lab.style("display",n=>(tvOf(n)<=curCut+1e-9&&adj.get(id).has(n.id))?null:"none");}
+  window.__tfocus=tlFocus; window.__tlApply=applyCut; window.__tlMin=tmin; window.__tlMax=tmax;
   svg.transition().duration(400).call(zoom.transform,d3.zoomIdentity);
+  if(window.__tlReset)window.__tlReset();
   timelinePanelFn=()=>timelinePanel(papers.length,links.length,nLanes); timelinePanelFn();
 }
+function setTldate(tv){const y=Math.floor(tv),m=Math.min(11,Math.max(0,Math.round((tv-y)*12)));const el=document.getElementById("tldate");if(el)el.textContent=MON[m]+" "+y;}
+function tlStop(){tlPlaying=false;if(tlTimer){clearInterval(tlTimer);tlTimer=null;}const b=document.getElementById("tlplay");if(b)b.innerHTML="&#9654;";}
+function tlPlay(){
+  if(tlPlaying){tlStop();return;}
+  if(window.__tlMin==null)return;
+  let cut=window.__tlMin; const span=(window.__tlMax-window.__tlMin)||1, dur=6500, step=60;
+  tlPlaying=true; document.getElementById("tlplay").innerHTML="&#10074;&#10074;";
+  window.__tlApply(cut); setTldate(cut); document.getElementById("tlrange").value=0;
+  tlTimer=setInterval(()=>{cut+=span*step/dur;
+    if(cut>=window.__tlMax){cut=window.__tlMax;window.__tlApply(cut);setTldate(cut);document.getElementById("tlrange").value=1000;tlStop();return;}
+    window.__tlApply(cut);setTldate(cut);document.getElementById("tlrange").value=Math.round((cut-window.__tlMin)/span*1000);},step);
+}
+window.__tlReset=()=>{tlStop();const r=document.getElementById("tlrange");if(r)r.value=1000;if(window.__tlApply!=null){window.__tlApply(window.__tlMax);setTldate(window.__tlMax);}};
+document.getElementById("tlplay").onclick=tlPlay;
+document.getElementById("tlrange").oninput=e=>{tlStop();const tv=window.__tlMin+(+e.target.value/1000)*((window.__tlMax-window.__tlMin)||1);window.__tlApply(tv);setTldate(tv);};
 function ds(e,d){if(!e.active)sim.alphaTarget(0.3).restart();d.fx=d.x;d.fy=d.y;}function dd(e,d){d.fx=e.x;d.fy=e.y;}function de(e,d){if(!e.active)sim.alphaTarget(0);d.fx=null;d.fy=null;}
 const _q=new URLSearchParams(location.search);
 const _tp=_q.get("trust");
@@ -514,7 +544,7 @@ if(_q.get("q")){document.getElementById("q").value=_q.get("q");runSearch();}
 if(_q.get("year")){maxYear=+_q.get("year");_yr.value=maxYear;document.getElementById("yrv").textContent=maxYear;applyFilters();}
 if(_q.get("zoom")!==null&&_q.get("zoom")!==undefined&&_q.get("zoom")!=="")setTimeout(()=>zoomCluster(+_q.get("zoom")),50);
 if(_q.get("frontier")){if(_q.get("fa"))frontierAxis=_q.get("fa");if(_q.get("fs"))frontierShowSupport=true;setTimeout(()=>buildFrontier(+_q.get("frontier")),60);}
-if(_q.get("timeline"))setTimeout(()=>setLevel("timeline"),60);
+if(_q.get("timeline"))setTimeout(()=>{setLevel("timeline");const tl=_q.get("tl");if(tl!=null)setTimeout(()=>{const r=document.getElementById("tlrange");if(r){r.value=+tl;r.dispatchEvent(new Event("input"));}},160);},60);
 </script></body></html>"""
 
 OUT.write_text(TEMPLATE.replace("__DATA__", json.dumps(payload)))
