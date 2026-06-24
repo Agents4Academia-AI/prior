@@ -209,9 +209,7 @@ function build(){
   adj=new Map(NODES.map(n=>[n.id,new Set([n.id])]));
   LINKS.forEach(l=>{adj.get(l.source).add(l.target);adj.get(l.target).add(l.source);});
   const rad=isP?d=>3+Math.sqrt(d.deg)*1.7:()=>4;
-  clab=root.append("g").selectAll("text").data(real).join("text").attr("class","clab")
-    .attr("fill",d=>d.color).attr("text-anchor","middle").attr("x",d=>cen[d.id].x).attr("y",d=>cen[d.id].y-R*0.20).text(d=>d.label)
-    .style("cursor","pointer").on("click",(e,l)=>{e.stopPropagation();zoomCluster(l.id);});
+  // cluster labels appended last (below) so they sit on top and stay clickable
   link=root.append("g").selectAll("line").data(LINKS).join("line")
     .attr("stroke",d=>isP?(d.cross?"#c9b89a":"#e4ddcf"):(D.rel[d.rel]||"#c9cdd2"))
     .attr("stroke-width",d=>isP?Math.min(3,0.5+d.w*0.25):(0.5+(d.trust||0.5)*1.6)).attr("stroke-opacity",d=>isP?0.4:(0.06+0.42*(d.trust||0.5)));
@@ -227,6 +225,12 @@ function build(){
   let ld=[];
   if(isP){const tp=new Set();real.forEach(l=>D.papers.filter(n=>n.comm===l.id).sort((a,b)=>b.deg-a.deg).slice(0,3).forEach(n=>tp.add(n.id)));ld=NODES.filter(n=>tp.has(n.id));}
   lab=root.append("g").selectAll("text").data(ld).join("text").attr("class","lab").attr("dx",d=>rad(d)+3).attr("dy",4).text(d=>d.cite);
+  clab=root.append("g").selectAll("g.clabg").data(real).join("g").attr("class","clabg")
+    .attr("transform",d=>`translate(${cen[d.id].x},${cen[d.id].y-R*0.20})`).style("cursor","pointer")
+    .on("click",(e,l)=>{e.stopPropagation();zoomCluster(l.id);});
+  clab.each(function(d){const w=d.label.length*7+18,g=d3.select(this);
+    g.append("rect").attr("x",-w/2).attr("y",-12).attr("width",w).attr("height",20).attr("fill","transparent");
+    g.append("text").attr("class","clab").attr("text-anchor","middle").attr("dy",4).attr("fill",d.color).text(d.label);});
   sim=d3.forceSimulation(NODES)
     .force("link",d3.forceLink(LINKS).id(d=>d.id).distance(isP?40:20).strength(isP?0.05:0.03))
     .force("charge",d3.forceManyBody().strength(isP?-70:-18))
@@ -330,6 +334,7 @@ _yr.oninput=e=>{maxYear=+e.target.value;document.getElementById("yrv").textConte
 setLevel("contribs");
 if(_q.get("q")){document.getElementById("q").value=_q.get("q");runSearch();}
 if(_q.get("year")){maxYear=+_q.get("year");_yr.value=maxYear;document.getElementById("yrv").textContent=maxYear;applyFilters();}
+if(_q.get("zoom")!==null&&_q.get("zoom")!==undefined&&_q.get("zoom")!=="")setTimeout(()=>zoomCluster(+_q.get("zoom")),50);
 </script></body></html>"""
 
 OUT.write_text(TEMPLATE.replace("__DATA__", json.dumps(payload)))
