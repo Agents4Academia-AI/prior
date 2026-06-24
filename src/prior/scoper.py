@@ -20,7 +20,7 @@ import json
 import re
 from pathlib import Path
 
-from . import config, dates, llm
+from . import config, dates, llm, repair
 from .models import Paper
 from .sources import arxiv, openalex, semanticscholar
 
@@ -305,6 +305,18 @@ _S_SCHEMA = {
 }
 
 
+def _ask_scope(topic_def: str, items: list[Paper], model: str | None) -> dict[int, dict]:
+    """One LLM scope call over `items`; returns {local_index: decision}."""
+    listing = "\n".join(
+        f"[{j}] {p.title}\n    {p.abstract[:320]}" for j, p in enumerate(items))
+    out = llm.structured(
+        model=model or config.READER_MODEL, system=_S_SYSTEM,
+        user=f"TOPIC:\n{topic_def}\n\nCANDIDATES:\n{listing}",
+        schema=_S_SCHEMA, tool_name="emit_scope", max_tokens=2000)
+    return {d["index"]: d for d in out.get("decisions", [])
+            if isinstance(d.get("index"), int)}
+
+
 def scope(topic_def: str, candidates: list[Paper], *, model: str | None = None,
           batch: int = 12, cache_path: str | Path | None = None,
           use_prefilter: bool = False,
@@ -348,22 +360,32 @@ def scope(topic_def: str, candidates: list[Paper], *, model: str | None = None,
     try:
         for i in range(0, len(pending), batch):
             chunk = pending[i:i + batch]
-            listing = "\n".join(
-                f"[{j}] {p.title}\n    {p.abstract[:320]}" for j, p in enumerate(chunk))
             try:
-                out = llm.structured(
-                    model=model or config.READER_MODEL, system=_S_SYSTEM,
-                    user=f"TOPIC:\n{topic_def}\n\nCANDIDATES:\n{listing}",
-                    schema=_S_SCHEMA, tool_name="emit_scope", max_tokens=2000)
+                dec = _ask_scope(topic_def, chunk, model)
             except Exception as e:  # noqa: BLE001 — skip; uncached batch retries on resume
                 progress(f"  scope batch error (will retry on resume): {e}")
                 continue
-            dec = {d["index"]: d for d in out.get("decisions", [])
-                   if isinstance(d.get("index"), int)}
+            # A batch that omits an index must NOT silently drop that paper — re-ask
+            # the omitted ones once, then treat anything still undecided as recall-safe
+            # KEEP (flagged), never a default drop.
+            missing = [j for j in range(len(chunk)) if j not in dec]
+            if missing:
+                try:
+                    redec = _ask_scope(topic_def, [chunk[j] for j in missing], model)
+                    for local, j in enumerate(missing):
+                        if local in redec:
+                            dec[j] = redec[local]
+                except Exception as e:  # noqa: BLE001
+                    progress(f"  scope re-ask error: {e}")
+                still = [j for j in range(len(chunk)) if j not in dec]
+                if still:
+                    progress(f"  {len(still)} undecided after re-ask — kept for review")
             for j, p in enumerate(chunk):
-                d = dec.get(j, {"in_scope": False, "reason": "no decision returned"})
-                in_scope = bool(d.get("in_scope"))
-                reason = d.get("reason", "")
+                d = dec.get(j)
+                if d is None:                      # undecided → keep (recall-safe)
+                    in_scope, reason = True, "undecided — kept for review"
+                else:
+                    in_scope, reason = bool(d.get("in_scope")), d.get("reason", "")
                 (kept if in_scope else dropped).append((p, reason))
                 if fh:
                     fh.write(json.dumps(
@@ -380,7 +402,8 @@ def scope(topic_def: str, candidates: list[Paper], *, model: str | None = None,
 
 
 def build_scoped_corpus(topic_def: str, *, per_query: int = 25,
-                        model: str | None = None, progress=print
+                        model: str | None = None, repair_abstracts: bool = True,
+                        progress=print
                         ) -> tuple[list[Paper], list[tuple[Paper, str]]]:
     """Full Scoper run: topic → queries → candidates → scoped corpus.
     Returns (kept_papers, dropped_with_reasons)."""
@@ -390,6 +413,8 @@ def build_scoped_corpus(topic_def: str, *, per_query: int = 25,
     progress("[2/3] gathering candidates ...")
     candidates = gather_candidates(queries, per_query=per_query, progress=progress)
     progress(f"      {len(candidates)} candidates")
+    if repair_abstracts:                           # fix corrupted abstracts before judging
+        repair.backfill_abstracts(candidates, progress=progress)
     progress("[3/3] scoping (relevance filter) ...")
     kept, dropped = scope(topic_def, candidates, model=model, progress=progress)
     progress(f"      kept {len(kept)} / dropped {len(dropped)}")
@@ -398,6 +423,7 @@ def build_scoped_corpus(topic_def: str, *, per_query: int = 25,
 
 def explore(topic_def: str, *, hops: int = 3, per_query: int = 25,
             use_prefilter: bool = True, epsilon: float = 0.03,
+            repair_abstracts: bool = True,
             model: str | None = None, progress=print):
     """The full exploration pipeline as one call — Stage 1, the agentic stage:
 
@@ -418,6 +444,8 @@ def explore(topic_def: str, *, hops: int = 3, per_query: int = 25,
     queries = propose_queries(topic_def, model=model)
     candidates = gather_candidates(queries, per_query=per_query, progress=progress)
     search_keys = {c.key() for c in candidates}
+    if repair_abstracts and candidates:            # repair before the prefilter/LLM judge
+        repair.backfill_abstracts(candidates, progress=progress)
     if use_prefilter and candidates:
         candidates, _ = prefilter(topic_def, candidates, progress=progress)
     kept, dropped = scope(topic_def, candidates, model=model, progress=progress)
@@ -439,6 +467,8 @@ def explore(topic_def: str, *, hops: int = 3, per_query: int = 25,
             if c.key() not in corpus_keys:
                 uniq.setdefault(c.key(), c)
         cand = list(uniq.values())
+        if repair_abstracts and cand:              # repair snowballed candidates too
+            repair.backfill_abstracts(cand, progress=progress)
         if use_prefilter and cand:
             cand, _ = prefilter(topic_def, cand, progress=progress)
         hkept, hdrop = (scope(topic_def, cand, model=model, progress=progress)
