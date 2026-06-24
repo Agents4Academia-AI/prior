@@ -38,6 +38,13 @@ GREY = "#c9cdd2"
 REL = {"supports": "#0a9396", "builds_on": "#5b8fb0", "refines": "#ca6702", "contradicts": "#ae2012"}
 
 
+def yr(p):
+    try:
+        return int(str((p or {}).get("year") or "").strip()[:4])
+    except (ValueError, TypeError):
+        return None
+
+
 def cite(p):
     au = p.get("authors") or []
     if isinstance(au, str):
@@ -109,7 +116,7 @@ for (a, b) in pair:
     deg[a] += 1; deg[b] += 1
 
 papers_n = [{"id": p, "cite": cite(A.get(p, {})), "title": A.get(p, {}).get("title") or "",
-             "deg": deg[p], "comm": paper_dom[p], "bridge": paper_bridge[p],
+             "deg": deg[p], "comm": paper_dom[p], "bridge": paper_bridge[p], "year": yr(A.get(p)),
              "spread": paper_spread[p], "n": len(by_paper[p]), "url": A.get(p, {}).get("url") or "",
              "top": [c.get("statement", "")[:150] for c in
                      sorted(by_paper[p], key=lambda c: len(c.get("statement", "")), reverse=True)[:3]]}
@@ -117,7 +124,7 @@ papers_n = [{"id": p, "cite": cite(A.get(p, {})), "title": A.get(p, {}).get("tit
 paper_links = [{"source": a, "target": b, "w": w, "cross": paper_dom[a] != paper_dom[b]}
                for (a, b), w in pair.items()]
 contribs_n = [{"id": c["id"], "comm": comm_of[c["id"]], "kind": c.get("kind", ""),
-               "stmt": c.get("statement", ""), "quote": c.get("quote", ""),
+               "stmt": c.get("statement", ""), "quote": c.get("quote", ""), "year": yr(A.get(c["paper_id"])),
                "cite": cite(A.get(c["paper_id"], {}))} for c in cons]
 contrib_links = [{"source": e["src"], "target": e["dst"], "rel": e["relation"],
                   "ev": (e.get("evidence") or "")[:160],
@@ -166,6 +173,7 @@ TEMPLATE = r"""<!doctype html><html lang="en"><head><meta charset="utf-8">
  <div class="hdr"><h1>Prior — atlas</h1><div class="sub" id="sub"></div>
    <div class="seg"><button id="mC" class="on">Contributions</button><button id="mP">Communities</button></div>
    <label style="margin-left:10px;font-size:12px;color:var(--dim)">min trust <input id="tf" type="range" min="0" max="0.95" step="0.05" value="0" style="vertical-align:middle"> <span id="tfv">0.00</span></label>
+   <label style="margin-left:10px;font-size:12px;color:var(--dim)">year ≤ <input id="yr" type="range" step="1" style="vertical-align:middle"> <span id="yrv"></span></label>
    <label style="margin-left:10px;font-size:12px;color:var(--dim)"><input id="conly" type="checkbox" style="vertical-align:middle"> contradictions only</label>
    <div style="margin-top:8px"><input id="q" type="search" placeholder="ask the graph (keywords)… e.g. hallucination, peer review gaming" style="width:340px;padding:5px 9px;border:1px solid var(--bd);border-radius:8px;font-size:12px;font-family:var(--sans)"></div></div>
  <div class="zoom"><button id="zi">+</button><button id="zo">&minus;</button><button id="zf">fit</button></div>
@@ -177,19 +185,25 @@ TEMPLATE = r"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 const D=JSON.parse(document.getElementById("d").textContent),SIDE=document.getElementById("side");
 const LG={}; D.legend.forEach(l=>LG[l.id]=l);
 const COL=id=>(LG[id]?LG[id].color:"#c9cdd2"), LAB=id=>(LG[id]?LG[id].label:"unclustered");
-const off=new Set(), kindOff=new Set(); let level="contribs", sel=null, minTrust=0, contradictOnly=false, sim, node, link, lab, ring, NODES, LINKS, adj, byId;
+const off=new Set(), kindOff=new Set(); let level="contribs", sel=null, minTrust=0, contradictOnly=false, maxYear=9999, frontierComm=null, frontierPanelFn=null, sim, node, link, lab, ring, NODES, LINKS, adj, byId;
 const canvas=document.getElementById("canvas");let W=canvas.clientWidth,H=canvas.clientHeight;
-const svg=d3.select("#canvas").append("svg").attr("viewBox",[0,0,W,H]);const root=svg.append("g");
+const svg=d3.select("#canvas").append("svg").attr("viewBox",[0,0,W,H]);
+const _defs=svg.append("defs");
+Object.entries(D.rel).forEach(([rel,c])=>_defs.append("marker").attr("id","arr-"+rel).attr("viewBox","0 -5 10 10").attr("refX",20).attr("refY",0).attr("markerWidth",9).attr("markerHeight",9).attr("markerUnits","userSpaceOnUse").attr("orient","auto").append("path").attr("d","M0,-4L9,0L0,4").attr("fill",c).attr("fill-opacity",0.85));
+const root=svg.append("g");
 const zoom=d3.zoom().scaleExtent([0.1,5]).on("zoom",e=>root.attr("transform",e.transform));
 svg.call(zoom).on("click",e=>{if(!e.defaultPrevented)clearSel();});
+window.addEventListener("keydown",e=>{if(e.key==="Escape"){frontierComm!=null?window.__exitFrontier():clearSel();}});
 const real=D.legend.filter(l=>l.id>=0), cx=W/2, cy=H/2, R=Math.min(W,H)/2.7, cen={};
 real.forEach((l,i)=>{const a=2*Math.PI*i/real.length-Math.PI/2;cen[l.id]={x:cx+R*Math.cos(a),y:cy+R*Math.sin(a)};});
 cen[-1]={x:cx,y:cy};
 const esc=s=>(s||"").toString().replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const pid=id=>id.split("::")[0];
+const DIRECTED=new Set(["builds_on","refines","extends","contrast"]); // supports/contradicts are symmetric
 const contradictNodes=new Set(), contradictPapers=new Set();
 D.contribLinks.forEach(l=>{if(l.rel==="contradicts"){contradictNodes.add(l.source);contradictNodes.add(l.target);contradictPapers.add(pid(l.source));contradictPapers.add(pid(l.target));}});
 const KINDS=Array.from(new Set(D.contribs.map(c=>c.kind).filter(Boolean))).sort();
+const YEARS=D.contribs.map(c=>c.year).filter(Boolean); const YMIN=YEARS.length?Math.min(...YEARS):2020, YMAX=YEARS.length?Math.max(...YEARS):2026; maxYear=YMAX;
 
 function build(){
   root.selectAll("*").remove(); const isP=level==="papers";
@@ -200,11 +214,11 @@ function build(){
   adj=new Map(NODES.map(n=>[n.id,new Set([n.id])]));
   LINKS.forEach(l=>{adj.get(l.source).add(l.target);adj.get(l.target).add(l.source);});
   const rad=isP?d=>3+Math.sqrt(d.deg)*1.7:()=>4;
-  clab=root.append("g").selectAll("text").data(real).join("text").attr("class","clab")
-    .attr("fill",d=>d.color).attr("text-anchor","middle").attr("x",d=>cen[d.id].x).attr("y",d=>cen[d.id].y-R*0.20).text(d=>d.label);
+  // cluster labels appended last (below) so they sit on top and stay clickable
   link=root.append("g").selectAll("line").data(LINKS).join("line")
     .attr("stroke",d=>isP?(d.cross?"#c9b89a":"#e4ddcf"):(D.rel[d.rel]||"#c9cdd2"))
-    .attr("stroke-width",d=>isP?Math.min(3,0.5+d.w*0.25):(0.5+(d.trust||0.5)*1.6)).attr("stroke-opacity",d=>isP?0.4:(0.06+0.42*(d.trust||0.5)));
+    .attr("stroke-width",d=>isP?Math.min(3,0.5+d.w*0.25):(0.5+(d.trust||0.5)*1.6)).attr("stroke-opacity",d=>isP?0.4:(0.06+0.42*(d.trust||0.5)))
+    .attr("marker-end",d=>(!isP&&DIRECTED.has(d.rel))?`url(#arr-${d.rel})`:null);
   if(isP){ring=root.append("g").selectAll("circle").data(NODES.filter(d=>d.bridge)).join("circle")
     .attr("fill","none").attr("stroke","#3b4252").attr("stroke-width",1.2).attr("stroke-dasharray","2 2")
     .attr("r",d=>rad(d)+3).style("pointer-events","none");}
@@ -217,6 +231,12 @@ function build(){
   let ld=[];
   if(isP){const tp=new Set();real.forEach(l=>D.papers.filter(n=>n.comm===l.id).sort((a,b)=>b.deg-a.deg).slice(0,3).forEach(n=>tp.add(n.id)));ld=NODES.filter(n=>tp.has(n.id));}
   lab=root.append("g").selectAll("text").data(ld).join("text").attr("class","lab").attr("dx",d=>rad(d)+3).attr("dy",4).text(d=>d.cite);
+  clab=root.append("g").selectAll("g.clabg").data(real).join("g").attr("class","clabg")
+    .attr("transform",d=>`translate(${cen[d.id].x},${cen[d.id].y-R*0.20})`).style("cursor","pointer")
+    .on("click",(e,l)=>{e.stopPropagation();zoomCluster(l.id);clusterPanel(l.id);});
+  clab.each(function(d){const w=d.label.length*7+18,g=d3.select(this);
+    g.append("rect").attr("x",-w/2).attr("y",-12).attr("width",w).attr("height",20).attr("fill","transparent");
+    g.append("text").attr("class","clab").attr("text-anchor","middle").attr("dy",4).attr("fill",d.color).text(d.label);});
   sim=d3.forceSimulation(NODES)
     .force("link",d3.forceLink(LINKS).id(d=>d.id).distance(isP?40:20).strength(isP?0.05:0.03))
     .force("charge",d3.forceManyBody().strength(isP?-70:-18))
@@ -229,9 +249,11 @@ function tick(){link.attr("x1",d=>d.source.x).attr("y1",d=>d.source.y).attr("x2"
   node.attr("cx",d=>d.x).attr("cy",d=>d.y); if(lab)lab.attr("x",d=>d.x).attr("y",d=>d.y);
   if(ring)ring.attr("cx",d=>d.x).attr("cy",d=>d.y);}
 function nodeVis(d){if(!d)return false;const isP=level==="papers";
+  if(frontierComm!=null)return d.comm===frontierComm;
   if(off.has(d.comm))return false;
   if(!isP&&kindOff.has(d.kind))return false;
   if(contradictOnly&&!(isP?contradictPapers.has(d.id):contradictNodes.has(d.id)))return false;
+  if(d.year&&d.year>maxYear)return false;
   return true;}
 function applyFilters(){const isP=level==="papers";
   node.style("display",d=>nodeVis(d)?null:"none");
@@ -263,7 +285,7 @@ function contribDetail(d){const nb=D.contribLinks.filter(l=>l.source===d.id||l.t
    ${nb.map(n=>`<div class="nb"><span class="pill" style="background:${D.rel[n.rel]||'#9aa0b0'}">${n.rel}</span> <span class="src">trust ${n.trust} · ${esc(n.tier)}</span>
      <div class="src" style="margin-top:3px">${n.dir} ${esc(PCITE[pid(n.other)]||n.other)}</div>
      ${n.ev?`<div style="font-size:11.5px;color:var(--dim);margin-top:3px">${esc(n.ev)}</div>`:""}</div>`).join("")||'<div class="empty" style="padding:6px">none — isolated</div>'}`;}
-function clearSel(){sel=null;focus(null);const qe=document.getElementById("q");if(qe)qe.value="";SIDE.innerHTML='<div class="empty">Hover a node to focus its links. Click for details. Ask the graph with keywords (top-left). Toggle clusters in the legend; switch level top-left.</div>';}
+function clearSel(){sel=null;focus(null);if(frontierComm!=null){frontierPanelFn&&frontierPanelFn();return;}const qe=document.getElementById("q");if(qe)qe.value="";SIDE.innerHTML='<div class="empty">Hover a node to focus its links. Click for details. Ask the graph with keywords (top-left). Click a cluster name → Expand as knowledge frontier. Switch level top-left.</div>';}
 function runSearch(){
   const qe=document.getElementById("q"), q=(qe.value||"").trim().toLowerCase();
   if(!q){clearSel();return;}
@@ -287,12 +309,13 @@ function runSearch(){
 }
 function backLink(){const q=(document.getElementById("q").value||"").trim();return q?'<div style="margin-bottom:9px"><a class="src" style="cursor:pointer" onclick="runSearch()">← back to results</a></div>':"";}
 window.__focus=id=>{const d=byId.get(id);if(!d)return;sel=id;focus(id);level==="papers"?paperDetail(d):contribDetail(d);};
-function setLevel(l){level=l;sel=null;document.getElementById("mC").classList.toggle("on",l==="contribs");document.getElementById("mP").classList.toggle("on",l==="papers");
+function setLevel(l){frontierComm=null;frontierPanelFn=null;level=l;sel=null;document.getElementById("mC").classList.toggle("on",l==="contribs");document.getElementById("mP").classList.toggle("on",l==="papers");
   document.getElementById("sub").innerHTML=l==="papers"?`<b>${D.papers.length}</b> papers · <b>${D.paperLinks.length}</b> links · ${D.topic}`:`<b>${D.contribs.length}</b> contributions · <b>${D.contribLinks.length}</b> relations · ${D.topic}`;build();}
 document.getElementById("mC").onclick=()=>setLevel("contribs");document.getElementById("mP").onclick=()=>setLevel("papers");
 document.getElementById("legend").innerHTML=`<div class="t">Clusters (edge-based)</div>`+
   D.legend.map(l=>`<div class="lg" data-c="${l.id}"><span class="sw" style="background:${l.color}"></span><span>${esc(l.label)} (${l.n})</span></div>`).join("")+
-  `<div class="t">Relations (opacity/width = consensus trust)</div>`+Object.entries(D.rel).map(([k,c])=>`<div class="rg"><span class="ln" style="border-color:${c}"></span><span>${k}</span></div>`).join("")+
+  `<div class="t">Relations (opacity/width = consensus trust)</div>`+Object.entries(D.rel).map(([k,c])=>`<div class="rg"><span class="ln" style="border-color:${c}"></span><span>${k}${DIRECTED.has(k)?" →":""}</span></div>`).join("")+
+  `<div class="rg" style="opacity:.6;font-size:10px">→ directed (builds_on/refines); supports/contradicts symmetric</div>`+
   `<div class="t">Contribution kinds (toggle, contributions view)</div>`+
   KINDS.map(k=>`<div class="lg" data-k="${esc(k)}"><span class="sw" style="background:#b9bcc2"></span><span>${esc(k)}</span></div>`).join("")+
   `<div class="t">Papers view</div><div class="rg"><span class="ln" style="border-top:1.2px dashed #3b4252;width:16px"></span><span>bridge (spans ≥2)</span></div>`;
@@ -306,13 +329,69 @@ document.getElementById("q").addEventListener("input",runSearch);
 document.getElementById("zi").onclick=()=>svg.transition().call(zoom.scaleBy,1.4);document.getElementById("zo").onclick=()=>svg.transition().call(zoom.scaleBy,1/1.4);document.getElementById("zf").onclick=fit;
 function fit(){const xs=NODES.map(n=>n.x),ys=NODES.map(n=>n.y);const a=Math.min(...xs),b=Math.max(...xs),c=Math.min(...ys),e=Math.max(...ys),gw=b-a||1,gh=e-c||1,k=Math.min((W-150)/gw,(H-150)/gh,1.8);
   svg.transition().duration(400).call(zoom.transform,d3.zoomIdentity.translate(W/2-k*(a+gw/2),H/2-k*(c+gh/2)).scale(k));}
+function zoomCluster(c){const ns=NODES.filter(n=>n.comm===c);if(!ns.length)return;
+  const xs=ns.map(n=>n.x),ys=ns.map(n=>n.y),a=Math.min(...xs),b=Math.max(...xs),cc=Math.min(...ys),e=Math.max(...ys),gw=b-a||1,gh=e-cc||1,k=Math.min((W-220)/gw,(H-220)/gh,2.8);
+  svg.transition().duration(500).call(zoom.transform,d3.zoomIdentity.translate(W/2-k*(a+gw/2),H/2-k*(cc+gh/2)).scale(k));}
+function clusterPanel(comm){
+  const cs=D.contribs.filter(c=>c.comm===comm), np=new Set(cs.map(c=>pid(c.id))).size;
+  SIDE.innerHTML=`<div><span class="pill" style="background:${COL(comm)}">${esc(LAB(comm))}</span></div>
+   <div style="font-size:12px;color:var(--dim);margin-top:6px">${cs.length} contributions · ${np} papers</div>
+   <button onclick="window.__frontier(${comm})" style="margin-top:12px;width:100%;padding:9px;border-radius:8px;border:1px solid var(--bd);background:var(--e2);color:var(--tx);cursor:pointer;font-size:13px">▸ Expand as knowledge frontier</button>
+   <div style="font-size:11.5px;color:var(--faint);margin-top:8px">Lays this cluster out by lineage depth — foundational work at the centre, frontier at the rim.</div>`;
+}
+function frontierPanel(comm,nC,nL,rings){
+  SIDE.innerHTML=`<div><a class="src" style="cursor:pointer" onclick="window.__exitFrontier()">← back to atlas</a></div>
+   <div style="margin-top:10px"><span class="pill" style="background:${COL(comm)}">${esc(LAB(comm))}</span> · knowledge frontier</div>
+   <div style="font-size:12px;color:var(--dim);margin-top:6px">${nC} contributions · ${nL} internal relations · ${rings} year ring(s).<br>Centre = earliest · rim = newest (by year). Hover/click a node.</div>`;
+}
+function buildFrontier(comm){
+  frontierComm=comm; sel=null; root.selectAll("*").remove();
+  const members=D.contribs.filter(c=>c.comm===comm).map(c=>({...c}));
+  if(!members.length){window.__exitFrontier();return;}
+  const mids=new Set(members.map(m=>m.id));
+  const links=D.contribLinks.filter(l=>mids.has(l.source)&&mids.has(l.target)).map(l=>({...l}));
+  // radial by YEAR: earliest at the centre, newest at the rim (lineage relations
+  // are too sparse within a cluster on the consensus graph to form depth).
+  const years=[...new Set(members.map(m=>m.year).filter(Boolean))].sort((a,b)=>a-b);
+  const yidx=new Map(years.map((y,i)=>[y,i])), hasUnknown=members.some(m=>!m.year);
+  const fr=Math.max(0,years.length-1)+(hasUnknown?1:0);
+  const ringOf=m=>(m.year&&yidx.has(m.year))?yidx.get(m.year):years.length;
+  const cx=W/2,cy=H/2,RM=Math.min(W,H)/2-90,R0=Math.max(58,RM*0.16),gap=(RM-R0)/Math.max(1,fr);
+  const rm={};members.forEach(m=>{const k=ringOf(m);(rm[k]=rm[k]||[]).push(m);});
+  const ang=new Map();Object.keys(rm).forEach(k=>{const arr=rm[k],off=+k*0.6;arr.forEach((m,i)=>ang.set(m.id,off+2*Math.PI*i/arr.length));});
+  members.forEach(m=>{const r=R0+ringOf(m)*gap,a=ang.get(m.id)||0;m.x=m.fx=cx+r*Math.cos(a);m.y=m.fy=cy+r*Math.sin(a);});
+  byId=new Map(members.map(m=>[m.id,m]));
+  adj=new Map(members.map(m=>[m.id,new Set([m.id])]));links.forEach(l=>{adj.get(l.source).add(l.target);adj.get(l.target).add(l.source);});
+  const rg=root.append("g");
+  for(let r=0;r<=fr;r++){rg.append("circle").attr("cx",cx).attr("cy",cy).attr("r",R0+r*gap).attr("fill","none").attr("stroke","#e2e5ea").attr("stroke-dasharray","2 7");
+    if(years[r]!=null)rg.append("text").attr("x",cx).attr("y",cy-(R0+r*gap)+13).attr("text-anchor","middle").attr("fill","#b9b3a3").attr("font-size",9).text(years[r]);}
+  rg.append("text").attr("x",cx).attr("y",cy+3).attr("text-anchor","middle").attr("fill","#b9a98a").attr("font-size",11).attr("font-style","italic").text("earliest");
+  rg.append("text").attr("x",cx).attr("y",cy-RM-12).attr("text-anchor","middle").attr("fill","#9aa0b0").attr("font-size",11).text("newer →");
+  rg.append("text").attr("x",cx).attr("y",cy-RM-30).attr("text-anchor","middle").attr("fill",COL(comm)).attr("font-size",13).attr("font-weight",700).text(LAB(comm));
+  link=root.append("g").selectAll("line").data(links).join("line").attr("stroke",l=>D.rel[l.rel]||"#c9cdd2").attr("stroke-width",l=>0.6+(l.trust||0.5)*1.6).attr("stroke-opacity",0.55)
+    .attr("marker-end",l=>DIRECTED.has(l.rel)?`url(#arr-${l.rel})`:null)
+    .attr("x1",l=>byId.get(l.source).x).attr("y1",l=>byId.get(l.source).y).attr("x2",l=>byId.get(l.target).x).attr("y2",l=>byId.get(l.target).y);
+  node=root.append("g").selectAll("circle").data(members).join("circle").attr("r",7).attr("fill",COL(comm)).attr("stroke","#fbfcfd").attr("stroke-width",1.2).attr("cx",d=>d.x).attr("cy",d=>d.y).style("cursor","pointer")
+    .on("mouseover",(_,d)=>focus(d.id)).on("mouseout",()=>focus(sel)).on("click",(e,d)=>{e.stopPropagation();sel=d.id;focus(d.id);contribDetail(d);});
+  lab=root.append("g").selectAll("text").data(members).join("text").attr("class","lab").attr("dx",10).attr("dy",4).attr("x",d=>d.x).attr("y",d=>d.y).style("display","none").text(d=>(d.stmt||"").slice(0,46));
+  const k=Math.min((W-140)/(2*RM),(H-140)/(2*RM));
+  svg.transition().duration(500).call(zoom.transform,d3.zoomIdentity.translate(W/2-k*cx,H/2-k*cy).scale(k));
+  frontierPanelFn=()=>frontierPanel(comm,members.length,links.length,years.length); frontierPanelFn();
+}
+window.__frontier=comm=>buildFrontier(comm);
+window.__exitFrontier=()=>{frontierComm=null;frontierPanelFn=null;sel=null;build();};
 function ds(e,d){if(!e.active)sim.alphaTarget(0.3).restart();d.fx=d.x;d.fy=d.y;}function dd(e,d){d.fx=e.x;d.fy=e.y;}function de(e,d){if(!e.active)sim.alphaTarget(0);d.fx=null;d.fy=null;}
 const _q=new URLSearchParams(location.search);
 const _tp=_q.get("trust");
 if(_tp){minTrust=+_tp;document.getElementById("tf").value=_tp;document.getElementById("tfv").textContent=(+_tp).toFixed(2);}
 if(_q.get("contradicts")){contradictOnly=true;document.getElementById("conly").checked=true;}
+const _yr=document.getElementById("yr"); _yr.min=YMIN; _yr.max=YMAX; _yr.value=YMAX; document.getElementById("yrv").textContent=YMAX;
+_yr.oninput=e=>{maxYear=+e.target.value;document.getElementById("yrv").textContent=maxYear;applyFilters();focus(sel);};
 setLevel("contribs");
 if(_q.get("q")){document.getElementById("q").value=_q.get("q");runSearch();}
+if(_q.get("year")){maxYear=+_q.get("year");_yr.value=maxYear;document.getElementById("yrv").textContent=maxYear;applyFilters();}
+if(_q.get("zoom")!==null&&_q.get("zoom")!==undefined&&_q.get("zoom")!=="")setTimeout(()=>zoomCluster(+_q.get("zoom")),50);
+if(_q.get("frontier"))setTimeout(()=>buildFrontier(+_q.get("frontier")),60);
 </script></body></html>"""
 
 OUT.write_text(TEMPLATE.replace("__DATA__", json.dumps(payload)))
