@@ -65,11 +65,12 @@ for c in cons:
     by_paper[c["paper_id"]].append(c)
 
 import networkx as nx
-G = nx.Graph(); G.add_nodes_from(ids)
-for e in edges:
+G = nx.Graph(); G.add_nodes_from(sorted(ids))   # sorted → deterministic, input-order independent
+for e in sorted(edges, key=lambda e: (e["src"], e["dst"])):
     if e["src"] in ids and e["dst"] in ids and e["src"] != e["dst"]:
         G.add_edge(e["src"], e["dst"])
-comms = sorted(nx.community.greedy_modularity_communities(G), key=len, reverse=True)
+# break size ties by smallest member id so cluster INDICES are canonical, not order-dependent
+comms = sorted(nx.community.greedy_modularity_communities(G), key=lambda cs: (-len(cs), min(cs)))
 big = [cs for cs in comms if len(cs) >= MIN][:9]
 comm_of = {}
 for ci, cs in enumerate(big):
@@ -397,5 +398,29 @@ if(_q.get("frontier"))setTimeout(()=>buildFrontier(+_q.get("frontier")),60);
 
 OUT.write_text(TEMPLATE.replace("__DATA__", json.dumps(payload)))
 print(f"wrote {OUT}")
+
+# --- canonical sidecars: ship these so consumers don't re-cluster -----------
+# graph.json   = the exact payload the view renders (turnkey for any renderer)
+# clusters.json = minimal contribution->cluster assignment + legend (composable
+#                 with the released raw files). greedy modularity is tie-order
+#                 sensitive, so ship one canonical clustering rather than have
+#                 each interface recompute a slightly different one.
+(DIR / "graph.json").write_text(json.dumps(payload))
+try:
+    _mod = round(nx.community.modularity(G, comms), 4)
+except Exception:
+    _mod = None
+clusters = {
+    "_meta": {
+        "algorithm": "networkx greedy_modularity_communities over consensus edges",
+        "min_cluster_size": MIN, "n_clusters": len(big), "modularity": _mod,
+        "comm_-1": "unclustered / isolated (no edges or below min size)",
+        "note": "canonical contribution->cluster assignment; ship so consumers don't recompute.",
+    },
+    "clusters": legend,
+    "assignment": {c["id"]: comm_of[c["id"]] for c in cons},
+}
+(DIR / "clusters.json").write_text(json.dumps(clusters, indent=2))
+print(f"wrote {DIR/'graph.json'} and {DIR/'clusters.json'}")
 for l in legend:
     print(f"  cluster {l['id']:>2}: {l['label']} ({l['n']})  {l['color']}")
