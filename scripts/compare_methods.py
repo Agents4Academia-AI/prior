@@ -10,13 +10,14 @@ For each paper it writes four files into --out (one per method):
 
 A method that doesn't apply to a paper (e.g. no arXiv HTML render) still gets a
 file, marked unavailable, so every paper has the full side-by-side set. Figures are
-base64-embedded by default (self-contained, render in any Markdown preview); with
---no-embed they are written to per-method `<id>__<method>_assets/` folders instead.
+written to per-method `<id>__<method>_assets/` folders and linked from the Markdown
+(keeps the .md small and diffable); pass --embed to base64-inline them instead for a
+single self-contained file.
 
 Defaults to the curated prior.sample_papers set; override with --ids FILE.
 
     PYTHONPATH=src python3 scripts/compare_methods.py --out compare/
-    PYTHONPATH=src python3 scripts/compare_methods.py --ids ids.txt --out compare/ --no-embed
+    PYTHONPATH=src python3 scripts/compare_methods.py --ids ids.txt --out compare/ --embed
 """
 
 import argparse
@@ -76,8 +77,8 @@ def main():
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--ids", help="file of DOIs / arXiv ids (default: curated sample papers)")
     ap.add_argument("--out", default="compare", help="output dir (default: ./compare)")
-    ap.add_argument("--no-embed", action="store_true",
-                    help="write figures to per-method _assets/ dirs instead of base64-inline")
+    ap.add_argument("--embed", action="store_true",
+                    help="base64-inline figures into the .md instead of separate _assets/ files")
     ap.add_argument("--no-math", action="store_true")
     ap.add_argument("--no-images", action="store_true")
     ap.add_argument("--max-pages", type=int, default=None, help="PDF page cap (0 = all)")
@@ -87,7 +88,7 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     opts = fullpaper.FullPaperOptions(include_math=not args.no_math,
                                       include_images=not args.no_images,
-                                      embed_images=not args.no_embed,
+                                      embed_images=args.embed,
                                       max_pages=args.max_pages)
 
     papers = _from_ids(args.ids) if args.ids else _default_papers()
