@@ -186,7 +186,7 @@ TEMPLATE = r"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 const D=JSON.parse(document.getElementById("d").textContent),SIDE=document.getElementById("side");
 const LG={}; D.legend.forEach(l=>LG[l.id]=l);
 const COL=id=>(LG[id]?LG[id].color:"#c9cdd2"), LAB=id=>(LG[id]?LG[id].label:"unclustered");
-const off=new Set(), kindOff=new Set(); let level="contribs", sel=null, minTrust=0, contradictOnly=false, maxYear=9999, frontierComm=null, frontierPanelFn=null, sim, node, link, lab, ring, NODES, LINKS, adj, byId;
+const off=new Set(), kindOff=new Set(); let level="contribs", sel=null, minTrust=0, contradictOnly=false, maxYear=9999, frontierComm=null, frontierPanelFn=null, frontierAxis="year", frontierShowSupport=false, sim, node, link, lab, ring, NODES, LINKS, adj, byId;
 const canvas=document.getElementById("canvas");let W=canvas.clientWidth,H=canvas.clientHeight;
 const svg=d3.select("#canvas").append("svg").attr("viewBox",[0,0,W,H]);
 const _defs=svg.append("defs");
@@ -278,16 +278,18 @@ function paperDetail(d){const spread=d.spread.map(LAB).join(" · ");
   <div class="k">Top contributions</div><ul>${d.top.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>
   ${d.url?`<a class="src" href="${d.url}" target="_blank">open ↗</a>`:""}`;}
 const PCITE={};D.papers.forEach(p=>PCITE[p.id]=p.cite);
-function contribDetail(d){const nb=D.contribLinks.filter(l=>l.source===d.id||l.target===d.id).map(l=>{const o=l.source===d.id;return{rel:l.rel,dir:o?"→":"←",other:o?l.target:l.source,ev:l.ev,trust:l.trust,tier:l.tier};});
+// phrase a relation from the CLICKED node's perspective: [as src(derivative), as dst(antecedent)]
+const REL_VERB={builds_on:["builds on","built on by"],refines:["refines","refined by"],supports:["supports","supports"],contradicts:["contradicts","contradicts"]};
+function contribDetail(d){const nb=D.contribLinks.filter(l=>l.source===d.id||l.target===d.id).map(l=>{const o=l.source===d.id;return{rel:l.rel,phrase:(REL_VERB[l.rel]||[l.rel,l.rel])[o?0:1],dir:o?"→":"←",other:o?l.target:l.source,ev:l.ev,trust:l.trust,tier:l.tier};});
   SIDE.innerHTML=backLink()+`<div><span class="pill" style="background:${COL(d.comm)}">${esc(LAB(d.comm))}</span> <span class="pill" style="background:#9aa0b0">${esc(d.kind||"contribution")}</span></div>
    <div class="k">Contribution</div><div>${esc(d.stmt)}</div>
    ${d.quote?`<div class="k">Stated as</div><div class="quote">${esc(d.quote)}</div>`:""}
    <div class="k">Paper</div><div class="src">${esc(d.cite)}</div>
    <div class="k">Cross-paper relations (${nb.length})</div>
-   ${nb.map(n=>`<div class="nb"><span class="pill" style="background:${D.rel[n.rel]||'#9aa0b0'}">${n.rel}</span> <span class="src">trust ${n.trust} · ${esc(n.tier)}</span>
+   ${nb.map(n=>`<div class="nb"><span class="pill" style="background:${D.rel[n.rel]||'#9aa0b0'}">${esc(n.phrase)}</span> <span class="src">trust ${n.trust} · ${esc(n.tier)}</span>
      <div class="src" style="margin-top:3px">${n.dir} ${esc(PCITE[pid(n.other)]||n.other)}</div>
      ${n.ev?`<div style="font-size:11.5px;color:var(--dim);margin-top:3px">${esc(n.ev)}</div>`:""}</div>`).join("")||'<div class="empty" style="padding:6px">none — isolated</div>'}`;}
-function clearSel(){sel=null;focus(null);if(frontierComm!=null){frontierPanelFn&&frontierPanelFn();return;}const qe=document.getElementById("q");if(qe)qe.value="";SIDE.innerHTML='<div class="empty">Hover a node to focus its links. Click for details. Ask the graph with keywords (top-left). Click a cluster name → Expand as knowledge frontier. Switch level top-left.</div>';}
+function clearSel(){sel=null;if(frontierComm!=null){window.__ffocus&&window.__ffocus(null);frontierPanelFn&&frontierPanelFn();return;}focus(null);const qe=document.getElementById("q");if(qe)qe.value="";SIDE.innerHTML='<div class="empty">Hover a node to focus its links. Click for details. Ask the graph with keywords (top-left). Click a cluster name → Expand as knowledge frontier. Switch level top-left.</div>';}
 function runSearch(){
   const qe=document.getElementById("q"), q=(qe.value||"").trim().toLowerCase();
   if(!q){clearSel();return;}
@@ -339,48 +341,95 @@ function clusterPanel(comm){
   SIDE.innerHTML=`<div><span class="pill" style="background:${COL(comm)}">${esc(LAB(comm))}</span></div>
    <div style="font-size:12px;color:var(--dim);margin-top:6px">${cs.length} contributions · ${np} papers</div>
    <button onclick="window.__frontier(${comm})" style="margin-top:12px;width:100%;padding:9px;border-radius:8px;border:1px solid var(--bd);background:var(--e2);color:var(--tx);cursor:pointer;font-size:13px">▸ Expand as knowledge frontier</button>
-   <div style="font-size:11.5px;color:var(--faint);margin-top:8px">Lays this cluster out by lineage depth — foundational work at the centre, frontier at the rim.</div>`;
+   <div style="font-size:11.5px;color:var(--faint);margin-top:8px">Lays this cluster out as a lineage view — builds_on / refines edges as outward spokes; corroboration (supports) hidden. Hover a node to trace its lineage; toggle year/depth radius inside.</div>`;
 }
-function frontierPanel(comm,nC,nL,rings){
+function frontierPanel(comm,nC,nLin,nSup){
+  const byYr=frontierAxis!=="depth";
   SIDE.innerHTML=`<div><a class="src" style="cursor:pointer" onclick="window.__exitFrontier()">← back to atlas</a></div>
    <div style="margin-top:10px"><span class="pill" style="background:${COL(comm)}">${esc(LAB(comm))}</span> · knowledge frontier</div>
-   <div style="font-size:12px;color:var(--dim);margin-top:6px">${nC} contributions · ${nL} internal relations · ${rings} year ring(s).<br>Centre = earliest · rim = newest (by year). Hover/click a node.</div>`;
+   <div style="font-size:12px;color:var(--dim);margin-top:6px">${nC} contributions · <b>${nLin}</b> lineage links (builds_on / refines)${frontierShowSupport?` · ${nSup} corroboration`:""}.<br>Radius = ${byYr?"year — earliest centre → newest rim":"lineage depth — foundational centre → frontier rim"}. Coloured = in a lineage chain; grey = unlinked. <b>Hover a node to trace its lineage.</b></div>
+   <div style="display:flex;gap:6px;margin-top:12px">
+     <button onclick="window.__frontierAxis()" style="flex:1;padding:7px;border-radius:7px;border:1px solid var(--bd);background:var(--e2);color:var(--tx);cursor:pointer;font-size:12px">radius: ${byYr?"year":"depth"} ⇄</button>
+     <button onclick="window.__frontierSupport()" style="flex:1;padding:7px;border-radius:7px;border:1px solid var(--bd);background:${frontierShowSupport?"#0a9396":"var(--e2)"};color:${frontierShowSupport?"#fff":"var(--tx)"};cursor:pointer;font-size:12px">${frontierShowSupport?"− corroboration":"+ corroboration"}</button>
+   </div>`;
 }
 function buildFrontier(comm){
   frontierComm=comm; sel=null; root.selectAll("*").remove();
   const members=D.contribs.filter(c=>c.comm===comm).map(c=>({...c}));
   if(!members.length){window.__exitFrontier();return;}
+  byId=new Map(members.map(m=>[m.id,m]));
   const mids=new Set(members.map(m=>m.id));
   const links=D.contribLinks.filter(l=>mids.has(l.source)&&mids.has(l.target)).map(l=>({...l}));
-  // radial by YEAR: earliest at the centre, newest at the rim (lineage relations
-  // are too sparse within a cluster on the consensus graph to form depth).
+  // lineage = builds_on/refines, directed child(src) → antecedent(dst). supports/contradicts = corroboration.
+  const LIN=new Set(["builds_on","refines"]);
+  const parents=new Map(members.map(m=>[m.id,[]])), children=new Map(members.map(m=>[m.id,[]])), inLin=new Set();
+  const linLinks=[], supLinks=[];
+  links.forEach(l=>{if(LIN.has(l.rel)){parents.get(l.source).push(l.target);children.get(l.target).push(l.source);inLin.add(l.source);inLin.add(l.target);linLinks.push(l);}else supLinks.push(l);});
+  // lineage depth (longest path; bounded relaxation — chains are shallow, tolerates cycles)
+  const depth=new Map(members.map(m=>[m.id,0]));
+  for(let it=0;it<8;it++){let ch=false;linLinks.forEach(l=>{if(depth.get(l.source)<depth.get(l.target)+1){depth.set(l.source,depth.get(l.target)+1);ch=true;}});if(!ch)break;}
+  // radial rank: year (default) or lineage depth
   const years=[...new Set(members.map(m=>m.year).filter(Boolean))].sort((a,b)=>a-b);
-  const yidx=new Map(years.map((y,i)=>[y,i])), hasUnknown=members.some(m=>!m.year);
-  const fr=Math.max(0,years.length-1)+(hasUnknown?1:0);
-  const ringOf=m=>(m.year&&yidx.has(m.year))?yidx.get(m.year):years.length;
-  const cx=W/2,cy=H/2,RM=Math.min(W,H)/2-90,R0=Math.max(58,RM*0.16),gap=(RM-R0)/Math.max(1,fr);
-  const rm={};members.forEach(m=>{const k=ringOf(m);(rm[k]=rm[k]||[]).push(m);});
-  const ang=new Map();Object.keys(rm).forEach(k=>{const arr=rm[k],off=+k*0.6;arr.forEach((m,i)=>ang.set(m.id,off+2*Math.PI*i/arr.length));});
-  members.forEach(m=>{const r=R0+ringOf(m)*gap,a=ang.get(m.id)||0;m.x=m.fx=cx+r*Math.cos(a);m.y=m.fy=cy+r*Math.sin(a);});
-  byId=new Map(members.map(m=>[m.id,m]));
+  const yidx=new Map(years.map((y,i)=>[y,i]));
+  const maxDepth=Math.max(0,...members.filter(m=>inLin.has(m.id)).map(m=>depth.get(m.id)));
+  const byYr=frontierAxis!=="depth";
+  const rankOf=m=>byYr?((m.year&&yidx.has(m.year))?yidx.get(m.year):years.length)
+                      :(inLin.has(m.id)?depth.get(m.id):maxDepth+1);
+  const maxRank=Math.max(0,...members.map(rankOf));
+  // angular inheritance: group lineage families into contiguous angular sectors,
+  // DFS-preorder within → builds_on edges become short spokes, not crossing chords.
+  const compOf=new Map(); let nc=0;
+  const flood=s=>{const st=[s];compOf.set(s,nc);while(st.length){const u=st.pop();parents.get(u).concat(children.get(u)).forEach(v=>{if(byId.has(v)&&!compOf.has(v)){compOf.set(v,nc);st.push(v);}});}};
+  members.forEach(m=>{if(inLin.has(m.id)&&!compOf.has(m.id)){flood(m.id);nc++;}});
+  members.forEach(m=>{if(!compOf.has(m.id))compOf.set(m.id,nc++);});
+  const byComp=new Map();members.forEach(m=>{const c=compOf.get(m.id);if(!byComp.has(c))byComp.set(c,[]);byComp.get(c).push(m);});
+  const compIds=[...byComp.keys()].sort((a,b)=>byComp.get(b).length-byComp.get(a).length||a-b);
+  const orderInComp=c=>{const ns=byComp.get(c),nset=new Set(ns.map(m=>m.id)),seen=new Set(),order=[];
+    const roots=ns.filter(m=>parents.get(m.id).filter(p=>nset.has(p)).length===0).map(m=>m.id).sort();
+    const visit=u=>{if(seen.has(u))return;seen.add(u);order.push(u);children.get(u).filter(v=>nset.has(v)).sort().forEach(visit);};
+    (roots.length?roots:ns.map(m=>m.id).sort()).forEach(visit);
+    ns.forEach(m=>{if(!seen.has(m.id)){seen.add(m.id);order.push(m.id);}});return order;};
+  const ang=new Map(); let acc=0; const tot=Math.max(1,members.length);
+  compIds.forEach(c=>{const order=orderInComp(c),sz=order.length,a0=2*Math.PI*acc/tot,span=2*Math.PI*sz/tot;
+    order.forEach((id,i)=>ang.set(id,a0+span*(i+0.5)/sz));acc+=sz;});
+  const cx=W/2,cy=H/2,RM=Math.min(W,H)/2-90,R0=Math.max(58,RM*0.16),gap=(RM-R0)/Math.max(1,maxRank);
+  members.forEach(m=>{const r=R0+rankOf(m)*gap,a=ang.get(m.id)||0;m.x=cx+r*Math.cos(a);m.y=cy+r*Math.sin(a);});
   adj=new Map(members.map(m=>[m.id,new Set([m.id])]));links.forEach(l=>{adj.get(l.source).add(l.target);adj.get(l.target).add(l.source);});
+  // transitive ancestors/descendants (for hover lineage-path highlight)
+  const anc=id=>{const o=new Set(),st=[id];while(st.length){const u=st.pop();parents.get(u).forEach(p=>{if(!o.has(p)){o.add(p);st.push(p);}});}return o;};
+  const desc=id=>{const o=new Set(),st=[id];while(st.length){const u=st.pop();children.get(u).forEach(c=>{if(!o.has(c)){o.add(c);st.push(c);}});}return o;};
   const rg=root.append("g");
-  for(let r=0;r<=fr;r++){rg.append("circle").attr("cx",cx).attr("cy",cy).attr("r",R0+r*gap).attr("fill","none").attr("stroke","#e2e5ea").attr("stroke-dasharray","2 7");
-    if(years[r]!=null)rg.append("text").attr("x",cx).attr("y",cy-(R0+r*gap)+13).attr("text-anchor","middle").attr("fill","#b9b3a3").attr("font-size",9).text(years[r]);}
-  rg.append("text").attr("x",cx).attr("y",cy+3).attr("text-anchor","middle").attr("fill","#b9a98a").attr("font-size",11).attr("font-style","italic").text("earliest");
-  rg.append("text").attr("x",cx).attr("y",cy-RM-12).attr("text-anchor","middle").attr("fill","#9aa0b0").attr("font-size",11).text("newer →");
+  for(let r=0;r<=maxRank;r++){rg.append("circle").attr("cx",cx).attr("cy",cy).attr("r",R0+r*gap).attr("fill","none").attr("stroke","#e2e5ea").attr("stroke-dasharray","2 7");
+    const t=byYr?years[r]:(r<=maxDepth?"depth "+r:null);
+    if(t!=null)rg.append("text").attr("x",cx).attr("y",cy-(R0+r*gap)+13).attr("text-anchor","middle").attr("fill","#b9b3a3").attr("font-size",9).text(t);}
+  rg.append("text").attr("x",cx).attr("y",cy+3).attr("text-anchor","middle").attr("fill","#b9a98a").attr("font-size",11).attr("font-style","italic").text(byYr?"earliest":"foundational");
+  rg.append("text").attr("x",cx).attr("y",cy-RM-12).attr("text-anchor","middle").attr("fill","#9aa0b0").attr("font-size",11).text(byYr?"newer →":"frontier →");
   rg.append("text").attr("x",cx).attr("y",cy-RM-30).attr("text-anchor","middle").attr("fill",COL(comm)).attr("font-size",13).attr("font-weight",700).text(LAB(comm));
-  link=root.append("g").selectAll("line").data(links).join("line").attr("stroke",l=>D.rel[l.rel]||"#c9cdd2").attr("stroke-width",l=>0.6+(l.trust||0.5)*1.6).attr("stroke-opacity",0.55)
-    .attr("marker-end",l=>DIRECTED.has(l.rel)?`url(#arr-${l.rel})`:null)
+  const supG=root.append("g");
+  if(frontierShowSupport)supG.selectAll("line").data(supLinks).join("line").attr("stroke",l=>D.rel[l.rel]||"#c9cdd2").attr("stroke-width",0.7).attr("stroke-opacity",0.12)
     .attr("x1",l=>byId.get(l.source).x).attr("y1",l=>byId.get(l.source).y).attr("x2",l=>byId.get(l.target).x).attr("y2",l=>byId.get(l.target).y);
-  node=root.append("g").selectAll("circle").data(members).join("circle").attr("r",7).attr("fill",COL(comm)).attr("stroke","#fbfcfd").attr("stroke-width",1.2).attr("cx",d=>d.x).attr("cy",d=>d.y).style("cursor","pointer")
-    .on("mouseover",(_,d)=>focus(d.id)).on("mouseout",()=>focus(sel)).on("click",(e,d)=>{e.stopPropagation();sel=d.id;focus(d.id);contribDetail(d);});
+  link=root.append("g").selectAll("line").data(linLinks).join("line").attr("stroke",l=>D.rel[l.rel]||"#5b8fb0").attr("stroke-width",l=>1.1+(l.trust||0.5)*1.8).attr("stroke-opacity",0.85)
+    .attr("marker-end",l=>`url(#arr-${l.rel})`)
+    .attr("x1",l=>byId.get(l.source).x).attr("y1",l=>byId.get(l.source).y).attr("x2",l=>byId.get(l.target).x).attr("y2",l=>byId.get(l.target).y);
+  node=root.append("g").selectAll("circle").data(members).join("circle").attr("r",d=>inLin.has(d.id)?7:5).attr("fill",d=>inLin.has(d.id)?COL(comm):"#cfd3d8").attr("stroke","#fbfcfd").attr("stroke-width",1.2).attr("cx",d=>d.x).attr("cy",d=>d.y).style("cursor","pointer")
+    .on("mouseover",(_,d)=>frontierFocus(d.id)).on("mouseout",()=>frontierFocus(sel)).on("click",(e,d)=>{e.stopPropagation();sel=d.id;frontierFocus(d.id);contribDetail(d);});
   lab=root.append("g").selectAll("text").data(members).join("text").attr("class","lab").attr("dx",10).attr("dy",4).attr("x",d=>d.x).attr("y",d=>d.y).style("display","none").text(d=>(d.stmt||"").slice(0,46));
+  function frontierFocus(id){
+    if(!id){node.attr("opacity",1);link.attr("stroke-opacity",0.85);supG.selectAll("line").attr("stroke-opacity",0.12);if(lab)lab.style("display","none");return;}
+    const keep=new Set([id,...anc(id),...desc(id)]);
+    node.attr("opacity",n=>keep.has(n.id)?1:0.12);
+    link.attr("stroke-opacity",l=>(keep.has(l.source)&&keep.has(l.target))?0.95:0.05);
+    supG.selectAll("line").attr("stroke-opacity",0.03);
+    if(lab)lab.style("display",n=>keep.has(n.id)?null:"none");
+  }
+  window.__ffocus=frontierFocus;
   const k=Math.min((W-140)/(2*RM),(H-140)/(2*RM));
   svg.transition().duration(500).call(zoom.transform,d3.zoomIdentity.translate(W/2-k*cx,H/2-k*cy).scale(k));
-  frontierPanelFn=()=>frontierPanel(comm,members.length,links.length,years.length); frontierPanelFn();
+  frontierPanelFn=()=>frontierPanel(comm,members.length,linLinks.length,supLinks.length); frontierPanelFn();
 }
-window.__frontier=comm=>buildFrontier(comm);
+window.__frontier=comm=>{frontierAxis="year";frontierShowSupport=false;buildFrontier(comm);};
+window.__frontierAxis=()=>{frontierAxis=frontierAxis==="year"?"depth":"year";buildFrontier(frontierComm);};
+window.__frontierSupport=()=>{frontierShowSupport=!frontierShowSupport;buildFrontier(frontierComm);};
 window.__exitFrontier=()=>{frontierComm=null;frontierPanelFn=null;sel=null;build();};
 function ds(e,d){if(!e.active)sim.alphaTarget(0.3).restart();d.fx=d.x;d.fy=d.y;}function dd(e,d){d.fx=e.x;d.fy=e.y;}function de(e,d){if(!e.active)sim.alphaTarget(0);d.fx=null;d.fy=null;}
 const _q=new URLSearchParams(location.search);
@@ -393,7 +442,7 @@ setLevel("contribs");
 if(_q.get("q")){document.getElementById("q").value=_q.get("q");runSearch();}
 if(_q.get("year")){maxYear=+_q.get("year");_yr.value=maxYear;document.getElementById("yrv").textContent=maxYear;applyFilters();}
 if(_q.get("zoom")!==null&&_q.get("zoom")!==undefined&&_q.get("zoom")!=="")setTimeout(()=>zoomCluster(+_q.get("zoom")),50);
-if(_q.get("frontier"))setTimeout(()=>buildFrontier(+_q.get("frontier")),60);
+if(_q.get("frontier")){if(_q.get("fa"))frontierAxis=_q.get("fa");if(_q.get("fs"))frontierShowSupport=true;setTimeout(()=>buildFrontier(+_q.get("frontier")),60);}
 </script></body></html>"""
 
 OUT.write_text(TEMPLATE.replace("__DATA__", json.dumps(payload)))
