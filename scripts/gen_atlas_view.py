@@ -17,7 +17,7 @@ from pathlib import Path
 
 DIR = Path(sys.argv[1]) if len(sys.argv) > 1 else Path(
     "/Users/kk1918_1/Desktop/hackathon/prior/data_hackathon/atlas")
-CONTRIB = sys.argv[2] if len(sys.argv) > 2 else "contributions_core.json"
+CONTRIB = sys.argv[2] if len(sys.argv) > 2 else "contributions_core_grounded.json"
 OUT = DIR / "view_atlas.html"
 MIN = 8  # min cluster size to be a labelled community
 
@@ -54,8 +54,15 @@ def cite(p):
     return f"{last}{' et al.' if len(au) > 1 else ''} ({p.get('year')})"
 
 
+def load_papers(d):
+    jl = d / "papers_core.jsonl"   # dated, trimmed core (preferred)
+    if jl.exists():
+        return {p["id"]: p for p in (json.loads(l) for l in jl.read_text().splitlines() if l.strip())}
+    return {p["id"]: p for p in json.loads((d / "atlas.json").read_text())["papers"]}
+
+
 C = json.loads((DIR / CONTRIB).read_text())
-A = {p["id"]: p for p in json.loads((DIR / "atlas.json").read_text())["papers"]}
+A = load_papers(DIR)
 cons = C["contributions"]
 _ce = json.loads((DIR / "contributions_core_consensus.json").read_text())
 edges = _ce["edges"] if isinstance(_ce, dict) and "edges" in _ce else _ce
@@ -119,6 +126,7 @@ for (a, b) in pair:
 papers_n = [{"id": p, "cite": cite(A.get(p, {})), "title": A.get(p, {}).get("title") or "",
              "deg": deg[p], "comm": paper_dom[p], "bridge": paper_bridge[p], "year": yr(A.get(p)),
              "spread": paper_spread[p], "n": len(by_paper[p]), "url": A.get(p, {}).get("url") or "",
+             "date": A.get(p, {}).get("date") or "",
              "top": [c.get("statement", "")[:150] for c in
                      sorted(by_paper[p], key=lambda c: len(c.get("statement", "")), reverse=True)[:3]]}
             for p in by_paper]
@@ -126,10 +134,11 @@ paper_links = [{"source": a, "target": b, "w": w, "cross": paper_dom[a] != paper
                for (a, b), w in pair.items()]
 contribs_n = [{"id": c["id"], "comm": comm_of[c["id"]], "kind": c.get("kind", ""),
                "stmt": c.get("statement", ""), "quote": c.get("quote", ""), "year": yr(A.get(c["paper_id"])),
+               "date": c.get("date") or A.get(c["paper_id"], {}).get("date") or "",
                "cite": cite(A.get(c["paper_id"], {}))} for c in cons]
 contrib_links = [{"source": e["src"], "target": e["dst"], "rel": e["relation"],
                   "ev": (e.get("evidence") or "")[:160],
-                  "trust": round(e.get("trust", 0.5), 2),
+                  "trust": round(e.get("trust", 0.5), 2), "directed": bool(e.get("directed")),
                   "tier": (e.get("agreement") or {}).get("tier", "")}
                  for e in edges if e["src"] in ids and e["dst"] in ids
                  and e["src"].split("::")[0] != e["dst"].split("::")[0]]
@@ -219,7 +228,7 @@ function build(){
   link=root.append("g").selectAll("line").data(LINKS).join("line")
     .attr("stroke",d=>isP?(d.cross?"#c9b89a":"#e4ddcf"):(D.rel[d.rel]||"#c9cdd2"))
     .attr("stroke-width",d=>isP?Math.min(3,0.5+d.w*0.25):(0.5+(d.trust||0.5)*1.6)).attr("stroke-opacity",d=>isP?0.4:(0.06+0.42*(d.trust||0.5)))
-    .attr("marker-end",d=>(!isP&&DIRECTED.has(d.rel))?`url(#arr-${d.rel})`:null);
+    .attr("marker-end",d=>(!isP&&d.directed)?`url(#arr-${d.rel})`:null);
   if(isP){ring=root.append("g").selectAll("circle").data(NODES.filter(d=>d.bridge)).join("circle")
     .attr("fill","none").attr("stroke","#3b4252").attr("stroke-width",1.2).attr("stroke-dasharray","2 2")
     .attr("r",d=>rad(d)+3).style("pointer-events","none");}
@@ -267,7 +276,7 @@ function focus(id){if(frontierComm!=null)return;  // frontier uses frontierFocus
   node.attr("opacity",n=>!nodeVis(n)?0:(!id||adj.get(id).has(n.id)?1:0.1));
   link.attr("stroke-opacity",l=>{const s=l.source.id||l.source,t=l.target.id||l.target;
     if(!id)return level==="papers"?(l.cross?0.4:0.3):(0.06+0.42*(l.trust||0.5)); return(s===id||t===id)?0.9:0.02;});
-  link.attr("marker-end",l=>{if(!DIRECTED.has(l.rel))return null;const s=l.source.id||l.source,t=l.target.id||l.target;return(!id||s===id||t===id)?`url(#arr-${l.rel})`:null;});
+  link.attr("marker-end",l=>{if(!l.directed)return null;const s=l.source.id||l.source,t=l.target.id||l.target;return(!id||s===id||t===id)?`url(#arr-${l.rel})`:null;});
   if(lab)lab.style("display",n=>(nodeVis(n)&&(!id||adj.get(id).has(n.id)))?null:"none");
 }
 function paperDetail(d){const spread=d.spread.map(LAB).join(" · ");
@@ -277,19 +286,16 @@ function paperDetail(d){const spread=d.spread.map(LAB).join(" · ");
   <div class="k">Clusters spanned</div><div>${esc(spread)||"—"}</div>
   <div class="k">Top contributions</div><ul>${d.top.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>
   ${d.url?`<a class="src" href="${d.url}" target="_blank">open ↗</a>`:""}`;}
-const PCITE={},PURL={},CYEAR={};
+const PCITE={},PURL={};
 D.papers.forEach(p=>{PCITE[p.id]=p.cite;PURL[p.id]=p.url||"";});
-D.contribs.forEach(c=>CYEAR[c.id]=c.year);
 const plink=(p,txt)=>PURL[p]?`<a class="src" style="text-decoration:underline" href="${PURL[p]}" target="_blank">${esc(txt)}</a>`:esc(txt);
-// builds_on/refines: the OLDER work is the antecedent (chronology bounds precedence).
-// The edge src/dst direction is an unreliable precedence signal here, so phrase by
-// year; same-year / unknown → undirected (≈). supports/contradicts are symmetric.
-const VERB={builds_on:"builds on",refines:"refines"}, VERBP={builds_on:"built on by",refines:"refined by"}, DIRREL=new Set(["builds_on","refines"]);
+// Edges are date-oriented upstream: src = derivative (builds on), dst = antecedent.
+// Phrase by the edge's `directed` flag; directed:false builds_on/refines = ambiguous
+// (same-date) → undirected (≈). supports/contradicts are symmetric.
+const VERB={builds_on:["builds on","built on by"],refines:["refines","refined by"]};
 function contribDetail(d){const nb=D.contribLinks.filter(l=>l.source===d.id||l.target===d.id).map(l=>{
-    const other=l.source===d.id?l.target:l.source; let phrase=l.rel,dir="·";
-    if(DIRREL.has(l.rel)){const yd=CYEAR[d.id],yo=CYEAR[other];
-      if(yd!=null&&yo!=null&&yd!==yo){if(yd<yo){phrase=VERBP[l.rel];dir="←";}else{phrase=VERB[l.rel];dir="→";}}
-      else phrase=l.rel.replace("_"," ")+" (≈)";}
+    const o=l.source===d.id, other=o?l.target:l.source; let phrase=l.rel,dir="·";
+    if(VERB[l.rel]){if(l.directed){phrase=VERB[l.rel][o?0:1];dir=o?"→":"←";}else phrase=l.rel.replace("_"," ")+" (≈)";}
     return{rel:l.rel,phrase,dir,other,ev:l.ev,trust:l.trust,tier:l.tier};});
   SIDE.innerHTML=backLink()+`<div><span class="pill" style="background:${COL(d.comm)}">${esc(LAB(d.comm))}</span> <span class="pill" style="background:#9aa0b0">${esc(d.kind||"contribution")}</span></div>
    <div class="k">Contribution</div><div>${esc(d.stmt)}</div>
@@ -358,7 +364,7 @@ function frontierPanel(comm,nC,nLin,nSup){
   const byYr=frontierAxis!=="depth";
   SIDE.innerHTML=`<div><a class="src" style="cursor:pointer" onclick="window.__exitFrontier()">← back to atlas</a></div>
    <div style="margin-top:10px"><span class="pill" style="background:${COL(comm)}">${esc(LAB(comm))}</span> · knowledge frontier</div>
-   <div style="font-size:12px;color:var(--dim);margin-top:6px">${nC} contributions · <b>${nLin}</b> lineage links (builds_on / refines)${frontierShowSupport?` · ${nSup} corroboration`:""}.<br>Radius = ${byYr?"year — earliest centre → newest rim":"lineage depth — foundational centre → frontier rim"}. Coloured = in a lineage chain; grey = unlinked. <b>Hover a node to trace its lineage.</b></div>
+   <div style="font-size:12px;color:var(--dim);margin-top:6px">${nC} contributions · <b>${nLin}</b> lineage links (builds_on / refines)${frontierShowSupport?` · ${nSup} corroboration`:""}.<br>Radius = ${byYr?"date — earliest centre → newest rim (year gridlines)":"lineage depth — foundational centre → frontier rim"}. Coloured = in a lineage chain; grey = unlinked. <b>Hover a node to trace its lineage.</b></div>
    <div style="display:flex;gap:6px;margin-top:12px">
      <button onclick="window.__frontierAxis()" style="flex:1;padding:7px;border-radius:7px;border:1px solid var(--bd);background:var(--e2);color:var(--tx);cursor:pointer;font-size:12px">radius: ${byYr?"year":"depth"} ⇄</button>
      <button onclick="window.__frontierSupport()" style="flex:1;padding:7px;border-radius:7px;border:1px solid var(--bd);background:${frontierShowSupport?"#0a9396":"var(--e2)"};color:${frontierShowSupport?"#fff":"var(--tx)"};cursor:pointer;font-size:12px">${frontierShowSupport?"− corroboration":"+ corroboration"}</button>
@@ -375,18 +381,18 @@ function buildFrontier(comm){
   const LIN=new Set(["builds_on","refines"]);
   const parents=new Map(members.map(m=>[m.id,[]])), children=new Map(members.map(m=>[m.id,[]])), inLin=new Set();
   const linLinks=[], supLinks=[];
-  links.forEach(l=>{if(LIN.has(l.rel)){parents.get(l.source).push(l.target);children.get(l.target).push(l.source);inLin.add(l.source);inLin.add(l.target);linLinks.push(l);}else supLinks.push(l);});
+  links.forEach(l=>{if(LIN.has(l.rel)){inLin.add(l.source);inLin.add(l.target);linLinks.push(l);if(l.directed){parents.get(l.source).push(l.target);children.get(l.target).push(l.source);}}else supLinks.push(l);});
   // lineage depth (longest path; bounded relaxation — chains are shallow, tolerates cycles)
   const depth=new Map(members.map(m=>[m.id,0]));
   for(let it=0;it<8;it++){let ch=false;linLinks.forEach(l=>{if(depth.get(l.source)<depth.get(l.target)+1){depth.set(l.source,depth.get(l.target)+1);ch=true;}});if(!ch)break;}
-  // radial rank: year (default) or lineage depth
-  const years=[...new Set(members.map(m=>m.year).filter(Boolean))].sort((a,b)=>a-b);
-  const yidx=new Map(years.map((y,i)=>[y,i]));
-  const maxDepth=Math.max(0,...members.filter(m=>inLin.has(m.id)).map(m=>depth.get(m.id)));
+  // radial axis: year-axis = continuous by DATE (month precision, year gridlines);
+  // depth-axis = discrete lineage depth.
   const byYr=frontierAxis!=="depth";
-  const rankOf=m=>byYr?((m.year&&yidx.has(m.year))?yidx.get(m.year):years.length)
-                      :(inLin.has(m.id)?depth.get(m.id):maxDepth+1);
-  const maxRank=Math.max(0,...members.map(rankOf));
+  const tvOf=m=>{const d=m.date;if(d&&d.length>=7){const y=+d.slice(0,4),mo=+d.slice(5,7);if(y)return y+(mo-1)/12;}return m.year||null;};
+  const tvs=members.map(tvOf).filter(v=>v!=null);
+  const tmin=tvs.length?Math.min(...tvs):2024, tmax=tvs.length?Math.max(...tvs):2025;
+  const maxDepth=Math.max(0,...members.filter(m=>inLin.has(m.id)).map(m=>depth.get(m.id)));
+  const depthMax=maxDepth+(members.some(m=>!inLin.has(m.id))?1:0);
   // angular inheritance: group lineage families into contiguous angular sectors,
   // DFS-preorder within → builds_on edges become short spokes, not crossing chords.
   const compOf=new Map(); let nc=0;
@@ -403,16 +409,19 @@ function buildFrontier(comm){
   const ang=new Map(); let acc=0; const tot=Math.max(1,members.length);
   compIds.forEach(c=>{const order=orderInComp(c),sz=order.length,a0=2*Math.PI*acc/tot,span=2*Math.PI*sz/tot;
     order.forEach((id,i)=>ang.set(id,a0+span*(i+0.5)/sz));acc+=sz;});
-  const cx=W/2,cy=H/2,RM=Math.min(W,H)/2-90,R0=Math.max(58,RM*0.16),gap=(RM-R0)/Math.max(1,maxRank);
-  members.forEach(m=>{const r=R0+rankOf(m)*gap,a=ang.get(m.id)||0;m.x=cx+r*Math.cos(a);m.y=cy+r*Math.sin(a);});
+  const cx=W/2,cy=H/2,RM=Math.min(W,H)/2-90,R0=Math.max(58,RM*0.16),dgap=(RM-R0)/Math.max(1,depthMax);
+  const radOf=m=>{if(byYr){const tv=tvOf(m);return tv==null?RM:(tmax>tmin?R0+(tv-tmin)/(tmax-tmin)*(RM-R0):R0);}return R0+(inLin.has(m.id)?depth.get(m.id):maxDepth+1)*dgap;};
+  members.forEach(m=>{const r=radOf(m),a=ang.get(m.id)||0;m.x=cx+r*Math.cos(a);m.y=cy+r*Math.sin(a);});
   adj=new Map(members.map(m=>[m.id,new Set([m.id])]));links.forEach(l=>{adj.get(l.source).add(l.target);adj.get(l.target).add(l.source);});
   // transitive ancestors/descendants (for hover lineage-path highlight)
   const anc=id=>{const o=new Set(),st=[id];while(st.length){const u=st.pop();parents.get(u).forEach(p=>{if(!o.has(p)){o.add(p);st.push(p);}});}return o;};
   const desc=id=>{const o=new Set(),st=[id];while(st.length){const u=st.pop();children.get(u).forEach(c=>{if(!o.has(c)){o.add(c);st.push(c);}});}return o;};
   const rg=root.append("g");
-  for(let r=0;r<=maxRank;r++){rg.append("circle").attr("cx",cx).attr("cy",cy).attr("r",R0+r*gap).attr("fill","none").attr("stroke","#e2e5ea").attr("stroke-dasharray","2 7");
-    const t=byYr?years[r]:(r<=maxDepth?"depth "+r:null);
-    if(t!=null)rg.append("text").attr("x",cx).attr("y",cy-(R0+r*gap)+13).attr("text-anchor","middle").attr("fill","#b9b3a3").attr("font-size",9).text(t);}
+  if(byYr){for(let Y=Math.ceil(tmin);Y<=Math.floor(tmax);Y++){const r=tmax>tmin?R0+(Y-tmin)/(tmax-tmin)*(RM-R0):R0;
+      rg.append("circle").attr("cx",cx).attr("cy",cy).attr("r",r).attr("fill","none").attr("stroke","#e2e5ea").attr("stroke-dasharray","2 7");
+      rg.append("text").attr("x",cx).attr("y",cy-r+13).attr("text-anchor","middle").attr("fill","#b9b3a3").attr("font-size",9).text(Y);}}
+  else for(let r=0;r<=depthMax;r++){rg.append("circle").attr("cx",cx).attr("cy",cy).attr("r",R0+r*dgap).attr("fill","none").attr("stroke","#e2e5ea").attr("stroke-dasharray","2 7");
+    if(r<=maxDepth)rg.append("text").attr("x",cx).attr("y",cy-(R0+r*dgap)+13).attr("text-anchor","middle").attr("fill","#b9b3a3").attr("font-size",9).text("depth "+r);}
   rg.append("text").attr("x",cx).attr("y",cy+3).attr("text-anchor","middle").attr("fill","#b9a98a").attr("font-size",11).attr("font-style","italic").text(byYr?"earliest":"foundational");
   rg.append("text").attr("x",cx).attr("y",cy-RM-12).attr("text-anchor","middle").attr("fill","#9aa0b0").attr("font-size",11).text(byYr?"newer →":"frontier →");
   rg.append("text").attr("x",cx).attr("y",cy-RM-30).attr("text-anchor","middle").attr("fill",COL(comm)).attr("font-size",13).attr("font-weight",700).text(LAB(comm));
@@ -420,7 +429,7 @@ function buildFrontier(comm){
   if(frontierShowSupport)supG.selectAll("line").data(supLinks).join("line").attr("stroke",l=>D.rel[l.rel]||"#c9cdd2").attr("stroke-width",0.7).attr("stroke-opacity",0.12)
     .attr("x1",l=>byId.get(l.source).x).attr("y1",l=>byId.get(l.source).y).attr("x2",l=>byId.get(l.target).x).attr("y2",l=>byId.get(l.target).y);
   link=root.append("g").selectAll("line").data(linLinks).join("line").attr("stroke",l=>D.rel[l.rel]||"#5b8fb0").attr("stroke-width",l=>1.1+(l.trust||0.5)*1.8).attr("stroke-opacity",0.85)
-    .attr("marker-end",l=>`url(#arr-${l.rel})`)
+    .attr("marker-end",l=>l.directed?`url(#arr-${l.rel})`:null)
     .attr("x1",l=>byId.get(l.source).x).attr("y1",l=>byId.get(l.source).y).attr("x2",l=>byId.get(l.target).x).attr("y2",l=>byId.get(l.target).y);
   node=root.append("g").selectAll("circle").data(members).join("circle").attr("r",d=>inLin.has(d.id)?7:5).attr("fill",d=>inLin.has(d.id)?COL(comm):"#cfd3d8").attr("stroke","#fbfcfd").attr("stroke-width",1.2).attr("cx",d=>d.x).attr("cy",d=>d.y).style("cursor","pointer")
     .on("mouseover",(_,d)=>frontierFocus(d.id)).on("mouseout",()=>frontierFocus(sel)).on("click",(e,d)=>{e.stopPropagation();sel=d.id;frontierFocus(d.id);contribDetail(d);});
