@@ -25,6 +25,7 @@ from __future__ import annotations
 
 import json
 import re
+import sys
 from collections import defaultdict, deque
 from pathlib import Path
 
@@ -32,9 +33,20 @@ ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "data" / "atlas" / "contributions.json"
 ATLAS = ROOT / "data" / "atlas" / "atlas.json"
 OUT = ROOT / "data" / "atlas" / "review.json"
+# Optional: point at another atlas dir + contributions file
+#   python3 atlas_review.py <atlas_dir> [contributions_file]
+if len(sys.argv) > 1:
+    _d = Path(sys.argv[1])
+    SRC = _d / (sys.argv[2] if len(sys.argv) > 2 else "contributions.json")
+    ATLAS, OUT = _d / "atlas.json", _d / "review.json"
 
 LOW_CONF = 0.5
 LINEAGE = {"refines", "extends", "builds_on"}
+# Non-primary detection: use the work's OWN framing + unambiguous article types.
+# Deliberately NOT `is_review` or bare "review"/"peer review" — those are confounded
+# by peer-review-TOPIC papers (a whole primary cluster) and over-flag.
+NONPRIM_TITLE = re.compile(r"\b(perspective|position paper|a survey|survey of|systematic review|a review of|roadmap|viewpoint|the case for|primer)\b", re.I)
+NONPRIM_TEXT = re.compile(r"(this perspective|this position|position paper|we argue|we advocate|we call for|we contend|we posit|this survey|we survey|a survey of|this review|we review the)", re.I)
 
 
 def norm_title(t: str) -> str:
@@ -159,6 +171,28 @@ def review() -> list[dict]:
                 relation=e.get("relation"), confidence=c,
                 detail=f"relation '{e.get('relation')}' confidence {c} < {LOW_CONF}",
                 suggested_action="human-verify the relation")
+
+    # 9. non-primary candidates (perspective / position / survey / review article) -
+    # Primary-only corpus, but the metadata filters miss arXiv perspectives. Detect
+    # by the work's own framing + unambiguous title types; HUMAN-CONFIRM (peer-review-
+    # topic papers can still slip in as false positives — never auto-drop).
+    ptext: dict[str, str] = defaultdict(str)
+    for c in contribs:
+        ptext[c["paper_id"]] += " " + (c.get("statement") or "") + " " + (c.get("quote") or "")
+    for pid in used:
+        title = (atlas.get(pid) or {}).get("title") or ""
+        sig = []
+        mt = NONPRIM_TITLE.search(title)
+        mx = NONPRIM_TEXT.search(ptext[pid])
+        if mt:
+            sig.append(f"title:'{mt.group(0)}'")
+        if mx:
+            sig.append(f"framing:'{mx.group(0)}'")
+        if sig:
+            add(type="non_primary_candidate", severity="medium", items=[pid],
+                detail=f"reads as a perspective/survey/review article ({'; '.join(sig)}) — "
+                       f"'{title[:60]}'. Primary-only corpus; is_review is unreliable here.",
+                suggested_action="human-confirm; drop if non-primary (do NOT auto-drop)")
 
     return flags
 
