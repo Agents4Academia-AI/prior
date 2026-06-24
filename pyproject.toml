@@ -13,6 +13,7 @@ dependencies = [
     "networkx>=3.0",
     "rank-bm25>=0.2.2",
     "pexpect>=4.9",
+    "rapidfuzz>=3.0",
 ]
 
 [project.optional-dependencies]
