@@ -1,50 +1,34 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { api, type WhoAmI, type RenderPayload, type RContrib, type CollectionInfo } from "./lib/api";
+import { api, type WhoAmI, type CollectionInfo } from "./lib/api";
 import type { Summary, Paper } from "./lib/types";
 import Sidebar from "./components/Sidebar";
-import GraphD3, { type EdgePick } from "./components/GraphD3";
-import ClusterLegend from "./components/ClusterLegend";
 import EvalView from "./components/EvalView";
-import ContribDetails from "./components/ContribDetails";
 import AskPanel from "./components/AskPanel";
 import AnnotatePanel, { type AnnotationTarget } from "./components/AnnotatePanel";
 
 type Mode = "graph" | "eval";
-type Tab = "details" | "annotate" | "ask";
 
-const NODE_CAPS = [150, 300, 600, 0]; // 0 = all
+type SelNode = {
+  level: "contribs" | "papers";
+  node: { id: string; kind?: string; stmt?: string; quote?: string; cite?: string; title?: string };
+};
 
 export default function App() {
   const [collections, setCollections] = useState<CollectionInfo[]>([]);
   const [collection, setCollection] = useState<string>("");
   const [summary, setSummary] = useState<Summary | null>(null);
   const [papers, setPapers] = useState<Paper[]>([]);
-  const [payload, setPayload] = useState<RenderPayload | null>(null);
   const [bootError, setBootError] = useState<string | null>(null);
-  const [loadingGraph, setLoadingGraph] = useState(false);
 
   const [mode, setMode] = useState<Mode>("graph");
-  const [tab, setTab] = useState<Tab>("details");
-  const [maxNodes, setMaxNodes] = useState<number>(300);
-  const [minTrust, setMinTrust] = useState<number>(0);
-  const [focusComm, setFocusComm] = useState<number | null>(null);
-
-  const [selContrib, setSelContrib] = useState<RContrib | null>(null);
-  const [selEdge, setSelEdge] = useState<EdgePick | null>(null);
+  const [overlay, setOverlay] = useState<"none" | "annotate" | "ask">("none");
+  const [sel, setSel] = useState<SelNode | null>(null);
   const [who, setWho] = useState<WhoAmI | null>(null);
 
   const refreshWho = useCallback(() => {
     api.whoami().then(setWho).catch(() => setWho(null));
   }, []);
 
-  const loadGraph = useCallback((coll: string, max: number, trust: number) => {
-    setLoadingGraph(true);
-    return api.renderGlobal(coll, { maxNodes: max, minTrust: trust })
-      .then(setPayload).catch((e) => setBootError(String(e)))
-      .finally(() => setLoadingGraph(false));
-  }, []);
-
-  // boot: collections → default → summary/papers/graph
   useEffect(() => {
     refreshWho();
     (async () => {
@@ -56,7 +40,6 @@ export default function App() {
         setCollection(coll);
         const [s, p] = await Promise.all([api.summary(coll), api.papers(coll)]);
         setSummary(s); setPapers(p);
-        await loadGraph(coll, 300, 0);
       } catch (e) {
         setBootError(e instanceof Error ? e.message : String(e));
       }
@@ -64,74 +47,51 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    const h = (e: MessageEvent) => {
+      if (e.data?.type === "prior-select") setSel({ level: e.data.level, node: e.data.node });
+    };
+    window.addEventListener("message", h);
+    return () => window.removeEventListener("message", h);
+  }, []);
+
   const switchCollection = useCallback((coll: string) => {
     if (coll === collection) return;
-    setCollection(coll);
-    setSelContrib(null); setSelEdge(null); setFocusComm(null);
+    setCollection(coll); setSel(null);
     api.summary(coll).then(setSummary).catch(() => {});
     api.papers(coll).then(setPapers).catch(() => {});
-    loadGraph(coll, maxNodes, minTrust);
-  }, [collection, maxNodes, minTrust, loadGraph]);
-
-  const setCap = useCallback((max: number) => {
-    setMaxNodes(max); loadGraph(collection, max, minTrust);
-  }, [collection, minTrust, loadGraph]);
-  const setTrust = useCallback((t: number) => {
-    setMinTrust(t); loadGraph(collection, maxNodes, t);
-  }, [collection, maxNodes, loadGraph]);
-
-  const onSelectNode = useCallback((id: string | null) => {
-    setSelEdge(null);
-    setSelContrib(id ? payload?.contribs.find((c) => c.id === id) ?? null : null);
-    if (id) setTab((t) => (t === "ask" ? "details" : t));
-  }, [payload]);
-
-  const onSelectEdge = useCallback((e: EdgePick) => {
-    setSelContrib(null); setSelEdge(e);
-    setTab((t) => (t === "ask" ? "details" : t));
-  }, []);
+  }, [collection]);
 
   const onAnnotated = useCallback(() => { refreshWho(); }, [refreshWho]);
 
   const onIngested = useCallback(() => {
-    // ingestion re-clusters server-side; refresh corpus + graph
     api.summary(collection).then(setSummary).catch(() => {});
     api.papers(collection).then(setPapers).catch(() => {});
-    loadGraph(collection, maxNodes, minTrust);
-  }, [collection, maxNodes, minTrust, loadGraph]);
+    const f = document.getElementById("viewer") as HTMLIFrameElement | null;
+    if (f) f.src = f.src; // eslint-disable-line no-self-assign
+  }, [collection]);
 
   const annotationTarget: AnnotationTarget | null = useMemo(() => {
-    if (selEdge) {
-      return {
-        kind: "edge",
-        key: `${selEdge.source}|${selEdge.rel.toUpperCase()}|${selEdge.target}`,
-        heading: `Relation: ${selEdge.rel}`,
-        fields: [
-          { label: "from", value: selEdge.source },
-          { label: "to", value: selEdge.target },
-          ...(selEdge.ev ? [{ label: "why", value: selEdge.ev }] : []),
-        ],
-      };
-    }
-    if (selContrib) {
-      return {
-        kind: "contribution",
-        key: selContrib.id,
-        heading: `Contribution (${selContrib.kind})`,
-        fields: [
-          { label: "statement", value: selContrib.stmt },
-          ...(selContrib.quote ? [{ label: "quote", value: selContrib.quote }] : []),
-        ],
-        source: selContrib.cite,
-      };
-    }
-    return null;
-  }, [selContrib, selEdge]);
+    if (!sel || sel.level !== "contribs") return null;
+    const n = sel.node;
+    return {
+      kind: "contribution",
+      key: n.id,
+      heading: `Contribution (${n.kind || "contribution"})`,
+      fields: [
+        { label: "statement", value: n.stmt || "" },
+        ...(n.quote ? [{ label: "quote", value: n.quote }] : []),
+      ],
+      source: n.cite,
+    };
+  }, [sel]);
 
-  const selectedId = selContrib?.id ?? null;
+  const viewerSrc = collection
+    ? `/viewer.html?api=${encodeURIComponent(api.base)}&collection=${encodeURIComponent(collection)}`
+    : "";
 
   return (
-    <div className="app">
+    <div className="app two-col">
       <Sidebar
         summary={summary}
         papers={papers}
@@ -149,26 +109,15 @@ export default function App() {
             <button className={mode === "graph" ? "on" : ""} onClick={() => setMode("graph")}>Graph</button>
             <button className={mode === "eval" ? "on" : ""} onClick={() => setMode("eval")}>Eval</button>
           </div>
-          {mode === "graph" && payload && (
-            <div className="canvas-banner">
-              <b>{payload.topic || collection}</b> — {payload.n_contribs} contributions
-              {payload.capped && <> · showing densest {payload.n_contribs} of {payload.total_contribs}</>}
-            </div>
-          )}
-          {mode === "graph" && (
-            <div className="constraints">
-              <label>nodes
-                <select value={maxNodes} onChange={(e) => setCap(Number(e.target.value))}>
-                  {NODE_CAPS.map((c) => <option key={c} value={c}>{c === 0 ? "all" : c}</option>)}
-                </select>
-              </label>
-              <label>min&nbsp;trust&nbsp;{minTrust.toFixed(1)}
-                <input type="range" min={0} max={0.9} step={0.1} value={minTrust}
-                       onChange={(e) => setTrust(Number(e.target.value))} />
-              </label>
-            </div>
-          )}
         </div>
+        {mode === "graph" && (
+          <div className="toolbar-right">
+            {sel && sel.level === "contribs" && (
+              <button className="btn-primary sm" onClick={() => setOverlay("annotate")}>✎ Annotate</button>
+            )}
+            <button className="btn-ghost sm" onClick={() => setOverlay("ask")}>Ask</button>
+          </div>
+        )}
 
         {bootError && (
           <div className="center-fill">
@@ -177,48 +126,27 @@ export default function App() {
           </div>
         )}
 
-        {!bootError && mode === "graph" && payload && (
-          <>
-            <GraphD3
-              key={`${collection}:${maxNodes}:${minTrust}`}
-              payload={payload}
-              selectedId={selectedId}
-              focusComm={focusComm}
-              onSelectNode={onSelectNode}
-              onSelectEdge={onSelectEdge}
-            />
-            <ClusterLegend
-              legend={payload.legend}
-              focusComm={focusComm}
-              onPick={(id) => setFocusComm((cur) => (cur === id ? null : id))}
-            />
-            {loadingGraph && <div className="graph-loading">updating…</div>}
-          </>
+        {!bootError && mode === "graph" && viewerSrc && (
+          <iframe id="viewer" key={collection} className="viewer-frame" title="Prior atlas" src={viewerSrc} />
         )}
-
-        {!bootError && mode === "graph" && !payload && (
-          <div className="center-fill"><span className="spinner" />Loading graph…</div>
-        )}
-
         {!bootError && mode === "eval" && <EvalView />}
       </div>
 
-      <div className="panel right">
-        <div className="tabs">
-          <button className={tab === "details" ? "on" : ""} onClick={() => setTab("details")}>Details</button>
-          <button className={tab === "annotate" ? "on" : ""} onClick={() => setTab("annotate")}>Annotate</button>
-          <button className={tab === "ask" ? "on" : ""} onClick={() => setTab("ask")}>Ask</button>
+      {overlay !== "none" && (
+        <div className="modal-backdrop" onClick={() => setOverlay("none")}>
+          <div className="modal side-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-head">
+              <h3>{overlay === "annotate" ? "Annotate" : "Ask the graph"}</h3>
+              <button className="modal-x" onClick={() => setOverlay("none")}>×</button>
+            </div>
+            {overlay === "annotate" ? (
+              <AnnotatePanel target={annotationTarget} signedIn={!!who?.signed_in} onAnnotated={onAnnotated} />
+            ) : (
+              <AskPanel />
+            )}
+          </div>
         </div>
-        <div className="pane">
-          {tab === "details" && (
-            <ContribDetails contrib={selContrib} edge={selEdge} relColor={payload?.rel ?? {}} />
-          )}
-          {tab === "annotate" && (
-            <AnnotatePanel target={annotationTarget} signedIn={!!who?.signed_in} onAnnotated={onAnnotated} />
-          )}
-          {tab === "ask" && <AskPanel />}
-        </div>
-      </div>
+      )}
     </div>
   );
 }

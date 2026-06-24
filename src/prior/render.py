@@ -143,9 +143,40 @@ def _build_payload(collection: str, papers: dict, contribs: list, edges: list,
                       "tier": e.get("tier") or ""}
                      for e in edges if e["src"] in ids and e["dst"] in ids
                      and e["src"].split("::")[0] != e["dst"].split("::")[0]]
+
+    # ── paper level: roll contributions up to their papers ──────────────────────
+    by_paper: dict[str, list] = defaultdict(list)
+    for c in contribs:
+        by_paper[c["paper_id"]].append(c)
+    paper_dom, paper_bridge, paper_spread = {}, {}, {}
+    for p, cs in by_paper.items():
+        cnt = Counter(comm_of.get(c["id"], -1) for c in cs if comm_of.get(c["id"], -1) >= 0)
+        paper_dom[p] = cnt.most_common(1)[0][0] if cnt else -1
+        paper_spread[p] = sorted(cnt)
+        paper_bridge[p] = len(cnt) >= 2
+    pair = Counter()
+    for e in edges:
+        a, b = e["src"].split("::")[0], e["dst"].split("::")[0]
+        if a in by_paper and b in by_paper and a != b:
+            pair[tuple(sorted((a, b)))] += 1
+    pdeg = Counter()
+    for (a, b) in pair:
+        pdeg[a] += 1; pdeg[b] += 1
+    papers_n = [{"id": p, "cite": _cite(papers.get(p, {})),
+                 "title": (papers.get(p, {}) or {}).get("title") or "",
+                 "deg": pdeg[p], "comm": paper_dom[p], "bridge": paper_bridge[p],
+                 "year": _year(papers.get(p)), "spread": paper_spread[p],
+                 "n": len(by_paper[p]), "url": (papers.get(p, {}) or {}).get("url") or ""}
+                for p in by_paper]
+    paper_links = [{"source": a, "target": b, "w": w,
+                    "cross": paper_dom.get(a) != paper_dom.get(b)}
+                   for (a, b), w in pair.items()]
+
     return {"collection": collection, "topic": topic, "legend": legend, "rel": REL,
             "contribs": contribs_n, "contribLinks": contrib_links,
-            "n_contribs": len(contribs_n), "n_links": len(contrib_links)}
+            "papers": papers_n, "paperLinks": paper_links,
+            "n_contribs": len(contribs_n), "n_links": len(contrib_links),
+            "n_papers": len(papers_n)}
 
 
 # ── public API ──────────────────────────────────────────────────────────────────

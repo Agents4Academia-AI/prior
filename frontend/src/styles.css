@@ -785,3 +785,15 @@ button.lg-btn.on { background: var(--accent-soft); border-color: var(--accent);
 
 .paper-item.static { cursor: default; }
 .paper-item.static:hover { background: transparent; }
+
+/* embedded D3 atlas viewer (Klara's full viewer, fed live) */
+.viewer-frame { width: 100%; height: 100%; border: 0; display: block; background: var(--bg); }
+
+/* full-width viewer layout (annotate/ask as overlays) */
+.app.two-col { grid-template-columns: 290px 1fr; }
+.toolbar-right { position: absolute; top: 12px; right: 14px; z-index: 6; display: flex; gap: 8px; }
+.btn-primary.sm, .btn-ghost.sm { padding: 6px 12px; font-size: 13px; border-radius: 7px; }
+.btn-ghost { background: var(--bg-elev); border: 1px solid var(--border); color: var(--text-dim);
+  cursor: pointer; font: inherit; }
+.btn-ghost:hover { color: var(--text); }
+.side-modal { width: 440px; max-width: 92vw; max-height: 88vh; overflow-y: auto; }
