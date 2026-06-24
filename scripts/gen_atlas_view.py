@@ -166,7 +166,8 @@ TEMPLATE = r"""<!doctype html><html lang="en"><head><meta charset="utf-8">
  <div class="hdr"><h1>Prior — atlas</h1><div class="sub" id="sub"></div>
    <div class="seg"><button id="mC" class="on">Contributions</button><button id="mP">Communities</button></div>
    <label style="margin-left:10px;font-size:12px;color:var(--dim)">min trust <input id="tf" type="range" min="0" max="0.95" step="0.05" value="0" style="vertical-align:middle"> <span id="tfv">0.00</span></label>
-   <label style="margin-left:10px;font-size:12px;color:var(--dim)"><input id="conly" type="checkbox" style="vertical-align:middle"> contradictions only</label></div>
+   <label style="margin-left:10px;font-size:12px;color:var(--dim)"><input id="conly" type="checkbox" style="vertical-align:middle"> contradictions only</label>
+   <div style="margin-top:8px"><input id="q" type="search" placeholder="ask the graph (keywords)… e.g. hallucination, peer review gaming" style="width:340px;padding:5px 9px;border:1px solid var(--bd);border-radius:8px;font-size:12px;font-family:var(--sans)"></div></div>
  <div class="zoom"><button id="zi">+</button><button id="zo">&minus;</button><button id="zf">fit</button></div>
  <div class="legend" id="legend"></div>
 </div>
@@ -246,7 +247,7 @@ function focus(id){
   if(lab)lab.style("display",n=>(nodeVis(n)&&(!id||adj.get(id).has(n.id)))?null:"none");
 }
 function paperDetail(d){const spread=d.spread.map(LAB).join(" · ");
-  SIDE.innerHTML=`<div><span class="pill" style="background:${COL(d.comm)}">${esc(LAB(d.comm))}</span>${d.bridge?' <span class="pill" style="background:#3b4252">bridge</span>':''}</div>
+  SIDE.innerHTML=backLink()+`<div><span class="pill" style="background:${COL(d.comm)}">${esc(LAB(d.comm))}</span>${d.bridge?' <span class="pill" style="background:#3b4252">bridge</span>':''}</div>
   <div class="k">Paper</div><div>${esc(d.title)}</div><div class="k">Cite</div><div class="src">${esc(d.cite)}</div>
   <div class="k">Degree / contributions</div><div>${d.deg} links · ${d.n} contributions</div>
   <div class="k">Clusters spanned</div><div>${esc(spread)||"—"}</div>
@@ -254,7 +255,7 @@ function paperDetail(d){const spread=d.spread.map(LAB).join(" · ");
   ${d.url?`<a class="src" href="${d.url}" target="_blank">open ↗</a>`:""}`;}
 const PCITE={};D.papers.forEach(p=>PCITE[p.id]=p.cite);
 function contribDetail(d){const nb=D.contribLinks.filter(l=>l.source===d.id||l.target===d.id).map(l=>{const o=l.source===d.id;return{rel:l.rel,dir:o?"→":"←",other:o?l.target:l.source,ev:l.ev,trust:l.trust,tier:l.tier};});
-  SIDE.innerHTML=`<div><span class="pill" style="background:${COL(d.comm)}">${esc(LAB(d.comm))}</span> <span class="pill" style="background:#9aa0b0">${esc(d.kind||"contribution")}</span></div>
+  SIDE.innerHTML=backLink()+`<div><span class="pill" style="background:${COL(d.comm)}">${esc(LAB(d.comm))}</span> <span class="pill" style="background:#9aa0b0">${esc(d.kind||"contribution")}</span></div>
    <div class="k">Contribution</div><div>${esc(d.stmt)}</div>
    ${d.quote?`<div class="k">Stated as</div><div class="quote">${esc(d.quote)}</div>`:""}
    <div class="k">Paper</div><div class="src">${esc(d.cite)}</div>
@@ -262,7 +263,30 @@ function contribDetail(d){const nb=D.contribLinks.filter(l=>l.source===d.id||l.t
    ${nb.map(n=>`<div class="nb"><span class="pill" style="background:${D.rel[n.rel]||'#9aa0b0'}">${n.rel}</span> <span class="src">trust ${n.trust} · ${esc(n.tier)}</span>
      <div class="src" style="margin-top:3px">${n.dir} ${esc(PCITE[pid(n.other)]||n.other)}</div>
      ${n.ev?`<div style="font-size:11.5px;color:var(--dim);margin-top:3px">${esc(n.ev)}</div>`:""}</div>`).join("")||'<div class="empty" style="padding:6px">none — isolated</div>'}`;}
-function clearSel(){sel=null;focus(null);SIDE.innerHTML='<div class="empty">Hover a node to focus its links. Click for details. Toggle clusters in the legend; switch level top-left.</div>';}
+function clearSel(){sel=null;focus(null);const qe=document.getElementById("q");if(qe)qe.value="";SIDE.innerHTML='<div class="empty">Hover a node to focus its links. Click for details. Ask the graph with keywords (top-left). Toggle clusters in the legend; switch level top-left.</div>';}
+function runSearch(){
+  const qe=document.getElementById("q"), q=(qe.value||"").trim().toLowerCase();
+  if(!q){clearSel();return;}
+  const terms=q.split(/\s+/), isP=level==="papers";
+  const text=d=>isP?((d.title||"")+" "+(d.cite||"")).toLowerCase():((d.stmt||"")+" "+(d.quote||"")+" "+(d.cite||"")).toLowerCase();
+  const ids=new Set();
+  node.each(d=>{if(nodeVis(d)&&terms.every(t=>text(d).includes(t)))ids.add(d.id);});
+  sel=null;
+  node.attr("opacity",d=>!nodeVis(d)?0:(ids.has(d.id)?1:0.07));
+  link.attr("stroke-opacity",0.03);
+  if(lab)lab.style("display",d=>ids.has(d.id)?null:"none");
+  const arr=[...ids].map(i=>byId.get(i)).filter(Boolean);
+  const byc={}; arr.forEach(d=>byc[d.comm]=(byc[d.comm]||0)+1);
+  const groups=Object.entries(byc).sort((a,b)=>b[1]-a[1]).map(([c,n])=>esc(LAB(+c))+": "+n).join(" · ");
+  SIDE.innerHTML=`<div class="k">Ask the graph</div><div><b>${arr.length}</b> ${isP?"paper":"contribution"}(s) match “${esc(q)}”</div>`+
+    (groups?`<div style="font-size:11.5px;color:var(--dim);margin:5px 0">${groups}</div>`:"")+
+    arr.slice(0,40).map(d=>`<div class="nb" style="cursor:pointer" onclick="window.__focus('${d.id}')">`+
+      (isP?`<div>${esc(d.title||d.cite)}</div>`:`<span class="pill" style="background:${COL(d.comm)}">${esc(d.kind||"")}</span><div style="margin-top:3px">${esc(d.stmt||"")}</div>`)+
+      `<div class="src" style="margin-top:3px">${esc(d.cite)}</div></div>`).join("")+
+    (arr.length>40?`<div style="font-size:11.5px;color:var(--dim)">…and ${arr.length-40} more</div>`:"");
+}
+function backLink(){const q=(document.getElementById("q").value||"").trim();return q?'<div style="margin-bottom:9px"><a class="src" style="cursor:pointer" onclick="runSearch()">← back to results</a></div>':"";}
+window.__focus=id=>{const d=byId.get(id);if(!d)return;sel=id;focus(id);level==="papers"?paperDetail(d):contribDetail(d);};
 function setLevel(l){level=l;sel=null;document.getElementById("mC").classList.toggle("on",l==="contribs");document.getElementById("mP").classList.toggle("on",l==="papers");
   document.getElementById("sub").innerHTML=l==="papers"?`<b>${D.papers.length}</b> papers · <b>${D.paperLinks.length}</b> links · ${D.topic}`:`<b>${D.contribs.length}</b> contributions · <b>${D.contribLinks.length}</b> relations · ${D.topic}`;build();}
 document.getElementById("mC").onclick=()=>setLevel("contribs");document.getElementById("mP").onclick=()=>setLevel("papers");
@@ -278,6 +302,7 @@ document.querySelectorAll(".lg").forEach(el=>el.onclick=()=>{
   el.classList.toggle("off"); applyFilters(); focus(sel);});
 document.getElementById("tf").oninput=e=>{minTrust=+e.target.value;document.getElementById("tfv").textContent=minTrust.toFixed(2);applyFilters();};
 document.getElementById("conly").onchange=e=>{contradictOnly=e.target.checked;applyFilters();focus(sel);};
+document.getElementById("q").addEventListener("input",runSearch);
 document.getElementById("zi").onclick=()=>svg.transition().call(zoom.scaleBy,1.4);document.getElementById("zo").onclick=()=>svg.transition().call(zoom.scaleBy,1/1.4);document.getElementById("zf").onclick=fit;
 function fit(){const xs=NODES.map(n=>n.x),ys=NODES.map(n=>n.y);const a=Math.min(...xs),b=Math.max(...xs),c=Math.min(...ys),e=Math.max(...ys),gw=b-a||1,gh=e-c||1,k=Math.min((W-150)/gw,(H-150)/gh,1.8);
   svg.transition().duration(400).call(zoom.transform,d3.zoomIdentity.translate(W/2-k*(a+gw/2),H/2-k*(c+gh/2)).scale(k));}
@@ -287,6 +312,7 @@ const _tp=_q.get("trust");
 if(_tp){minTrust=+_tp;document.getElementById("tf").value=_tp;document.getElementById("tfv").textContent=(+_tp).toFixed(2);}
 if(_q.get("contradicts")){contradictOnly=true;document.getElementById("conly").checked=true;}
 setLevel("contribs");
+if(_q.get("q")){document.getElementById("q").value=_q.get("q");runSearch();}
 </script></body></html>"""
 
 OUT.write_text(TEMPLATE.replace("__DATA__", json.dumps(payload)))
