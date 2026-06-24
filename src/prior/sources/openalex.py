@@ -9,12 +9,12 @@ from __future__ import annotations
 
 import requests
 
-from .. import config
+from .. import config, dates
 from ..models import Paper
 from ._filters import looks_like_review
 
 API = "https://api.openalex.org/works"
-_SELECT = ("id,title,publication_year,authorships,primary_location,doi,type,"
+_SELECT = ("id,title,publication_year,publication_date,authorships,primary_location,doi,type,"
            "best_oa_location,abstract_inverted_index,referenced_works,cited_by_count")
 
 
@@ -62,7 +62,8 @@ def _to_paper(w: dict) -> Paper:
     ]
     venue = (w.get("primary_location") or {}).get("source") or {}
     title = w.get("title") or "(untitled)"
-    return Paper(
+    pub_date = w.get("publication_date") or ""        # OpenAlex day-level date, e.g. 2024-08-12
+    return dates.resolve(Paper(
         id=_norm_id(w.get("id")),
         source="openalex",
         title=title,
@@ -77,7 +78,10 @@ def _to_paper(w: dict) -> Paper:
         pdf_url=_pdf_url(w),
         type=w.get("type") or "",
         is_review=looks_like_review(title, w.get("type", "")),
-    )
+        date=pub_date,
+        date_precision="day" if pub_date else "",
+        date_source="openalex" if pub_date else "",
+    ))
 
 
 def search(query: str, *, max_papers: int = config.DEFAULT_MAX_PAPERS,

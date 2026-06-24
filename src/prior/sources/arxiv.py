@@ -11,7 +11,7 @@ import xml.etree.ElementTree as ET
 
 import requests
 
-from .. import config
+from .. import config, dates
 from ..models import Paper
 from ._filters import looks_like_review
 
@@ -32,11 +32,12 @@ def _to_paper(entry: ET.Element) -> Paper:
         if a.find("atom:name", NS) is not None
     ]
     year = None
-    published = txt("published")
+    published = txt("published")                 # first-version date — truest for precedence
     if len(published) >= 4 and published[:4].isdigit():
         year = int(published[:4])
+    date = published[:10] if len(published) >= 10 and published[4] == "-" else ""
     title = " ".join(txt("title").split())
-    return Paper(
+    return dates.resolve(Paper(
         id=f"arxiv:{arxiv_id}",
         source="arxiv",
         title=title,
@@ -45,7 +46,10 @@ def _to_paper(entry: ET.Element) -> Paper:
         year=year,
         authors=authors,
         is_review=looks_like_review(title),
-    )
+        date=date,
+        date_precision="day" if date else "",
+        date_source="arxiv" if date else "",
+    ))
 
 
 def fetch_ids(arxiv_ids: list[str], *, batch: int = 50) -> dict[str, Paper]:

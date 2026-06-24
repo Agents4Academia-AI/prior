@@ -11,7 +11,7 @@ import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
-from . import cartographer, config, fulltext, reader
+from . import cartographer, config, dates, fulltext, reader
 from .atlas import Atlas
 from .models import Claim, Contribution, Edge, Paper
 from .reader import ReadResult
@@ -239,6 +239,7 @@ def enrich_arxiv_twins(papers: list[Paper], *, throttle: float = 1.0, progress=p
         time.sleep(throttle)                           # polite to the arXiv API
         if aid:
             p.pdf_url = f"https://arxiv.org/pdf/{aid}"
+            dates.resolve(p)          # the open twin's preprint date may predate the venue date
             n += 1
             progress(f"  twin: {p.short_cite()} -> arXiv:{aid}")
     progress(f"  attached arXiv twins to {n} records")
