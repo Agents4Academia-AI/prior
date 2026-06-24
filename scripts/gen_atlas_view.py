@@ -272,22 +272,32 @@ function focus(id){
 }
 function paperDetail(d){const spread=d.spread.map(LAB).join(" · ");
   SIDE.innerHTML=backLink()+`<div><span class="pill" style="background:${COL(d.comm)}">${esc(LAB(d.comm))}</span>${d.bridge?' <span class="pill" style="background:#3b4252">bridge</span>':''}</div>
-  <div class="k">Paper</div><div>${esc(d.title)}</div><div class="k">Cite</div><div class="src">${esc(d.cite)}</div>
+  <div class="k">Paper</div><div>${d.url?`<a class="src" style="text-decoration:underline" href="${d.url}" target="_blank">${esc(d.title)}</a>`:esc(d.title)}</div><div class="k">Cite</div><div class="src">${esc(d.cite)}</div>
   <div class="k">Degree / contributions</div><div>${d.deg} links · ${d.n} contributions</div>
   <div class="k">Clusters spanned</div><div>${esc(spread)||"—"}</div>
   <div class="k">Top contributions</div><ul>${d.top.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>
   ${d.url?`<a class="src" href="${d.url}" target="_blank">open ↗</a>`:""}`;}
-const PCITE={};D.papers.forEach(p=>PCITE[p.id]=p.cite);
-// phrase a relation from the CLICKED node's perspective: [as src(derivative), as dst(antecedent)]
-const REL_VERB={builds_on:["builds on","built on by"],refines:["refines","refined by"],supports:["supports","supports"],contradicts:["contradicts","contradicts"]};
-function contribDetail(d){const nb=D.contribLinks.filter(l=>l.source===d.id||l.target===d.id).map(l=>{const o=l.source===d.id;return{rel:l.rel,phrase:(REL_VERB[l.rel]||[l.rel,l.rel])[o?0:1],dir:o?"→":"←",other:o?l.target:l.source,ev:l.ev,trust:l.trust,tier:l.tier};});
+const PCITE={},PURL={},CYEAR={};
+D.papers.forEach(p=>{PCITE[p.id]=p.cite;PURL[p.id]=p.url||"";});
+D.contribs.forEach(c=>CYEAR[c.id]=c.year);
+const plink=(p,txt)=>PURL[p]?`<a class="src" style="text-decoration:underline" href="${PURL[p]}" target="_blank">${esc(txt)}</a>`:esc(txt);
+// builds_on/refines: the OLDER work is the antecedent (chronology bounds precedence).
+// The edge src/dst direction is an unreliable precedence signal here, so phrase by
+// year; same-year / unknown → undirected (≈). supports/contradicts are symmetric.
+const VERB={builds_on:"builds on",refines:"refines"}, VERBP={builds_on:"built on by",refines:"refined by"}, DIRREL=new Set(["builds_on","refines"]);
+function contribDetail(d){const nb=D.contribLinks.filter(l=>l.source===d.id||l.target===d.id).map(l=>{
+    const other=l.source===d.id?l.target:l.source; let phrase=l.rel,dir="·";
+    if(DIRREL.has(l.rel)){const yd=CYEAR[d.id],yo=CYEAR[other];
+      if(yd!=null&&yo!=null&&yd!==yo){if(yd<yo){phrase=VERBP[l.rel];dir="←";}else{phrase=VERB[l.rel];dir="→";}}
+      else phrase=l.rel.replace("_"," ")+" (≈)";}
+    return{rel:l.rel,phrase,dir,other,ev:l.ev,trust:l.trust,tier:l.tier};});
   SIDE.innerHTML=backLink()+`<div><span class="pill" style="background:${COL(d.comm)}">${esc(LAB(d.comm))}</span> <span class="pill" style="background:#9aa0b0">${esc(d.kind||"contribution")}</span></div>
    <div class="k">Contribution</div><div>${esc(d.stmt)}</div>
    ${d.quote?`<div class="k">Stated as</div><div class="quote">${esc(d.quote)}</div>`:""}
-   <div class="k">Paper</div><div class="src">${esc(d.cite)}</div>
+   <div class="k">Paper</div><div class="src">${plink(pid(d.id),d.cite)}</div>
    <div class="k">Cross-paper relations (${nb.length})</div>
    ${nb.map(n=>`<div class="nb"><span class="pill" style="background:${D.rel[n.rel]||'#9aa0b0'}">${esc(n.phrase)}</span> <span class="src">trust ${n.trust} · ${esc(n.tier)}</span>
-     <div class="src" style="margin-top:3px">${n.dir} ${esc(PCITE[pid(n.other)]||n.other)}</div>
+     <div class="src" style="margin-top:3px">${n.dir} ${plink(pid(n.other),PCITE[pid(n.other)]||n.other)}</div>
      ${n.ev?`<div style="font-size:11.5px;color:var(--dim);margin-top:3px">${esc(n.ev)}</div>`:""}</div>`).join("")||'<div class="empty" style="padding:6px">none — isolated</div>'}`;}
 function clearSel(){sel=null;if(frontierComm!=null){window.__ffocus&&window.__ffocus(null);frontierPanelFn&&frontierPanelFn();return;}focus(null);const qe=document.getElementById("q");if(qe)qe.value="";SIDE.innerHTML='<div class="empty">Hover a node to focus its links. Click for details. Ask the graph with keywords (top-left). Click a cluster name → Expand as knowledge frontier. Switch level top-left.</div>';}
 function runSearch(){
