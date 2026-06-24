@@ -64,8 +64,18 @@ function postJSON<T>(path: string, body: unknown): Promise<T> {
 
 export const api = {
   base: API_BASE,
-  summary: () => getJSON<Summary>("/api/summary"),
-  papers: () => getJSON<Paper[]>("/api/papers"),
+  collections: () => getJSON<CollectionsResp>("/api/collections"),
+  summary: (collection?: string) =>
+    getJSON<Summary>(`/api/summary${collection ? `?collection=${encodeURIComponent(collection)}` : ""}`),
+  papers: (collection?: string) =>
+    getJSON<Paper[]>(`/api/papers${collection ? `?collection=${encodeURIComponent(collection)}` : ""}`),
+  renderGlobal: (collection: string, opts?: { minTrust?: number; maxNodes?: number; yearMax?: number }) => {
+    const q = new URLSearchParams({ collection });
+    if (opts?.minTrust) q.set("min_trust", String(opts.minTrust));
+    if (opts?.maxNodes) q.set("max_nodes", String(opts.maxNodes));
+    if (opts?.yearMax) q.set("year_max", String(opts.yearMax));
+    return getJSON<RenderPayload>(`/api/render/global?${q.toString()}`);
+  },
   globalGraph: () => getJSON<GlobalGraph>("/api/graph/global"),
   // paper_id contains a colon; encode it so it survives the URL safely.
   paperGraph: (paperId: string) =>
@@ -120,6 +130,47 @@ export type IngestJob = {
   result: { contribs?: number; claims?: number; edges?: number };
   duplicate_of: { kind: string; id: string; title: string } | null;
   error: string | null;
+};
+
+export type CollectionInfo = {
+  name: string;
+  papers: number;
+  topic: string;
+  source: string;
+  created_at: string | null;
+};
+export type CollectionsResp = { collections: CollectionInfo[]; default: string };
+
+export type RContrib = {
+  id: string;
+  comm: number;
+  kind: string;
+  stmt: string;
+  quote: string;
+  deg: number;
+  year: number | null;
+  cite: string;
+};
+export type RLink = {
+  source: string;
+  target: string;
+  rel: string;
+  ev: string;
+  trust: number;
+  tier: string;
+};
+export type ClusterLegend = { id: number; label: string; color: string; n: number };
+export type RenderPayload = {
+  collection: string;
+  topic: string;
+  legend: ClusterLegend[];
+  rel: Record<string, string>;
+  contribs: RContrib[];
+  contribLinks: RLink[];
+  n_contribs: number;
+  n_links: number;
+  capped?: boolean;
+  total_contribs?: number;
 };
 
 export type WhoAmI = {

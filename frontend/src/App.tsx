@@ -1,206 +1,143 @@
-import { useCallback, useEffect, useState } from "react";
-import { ReactFlowProvider } from "@xyflow/react";
-import { api, type WhoAmI } from "./lib/api";
-import type {
-  Summary,
-  Paper,
-  GlobalGraph,
-  GlobalEdge,
-  PaperGraph,
-  ClaimEdge,
-  ContributionDetail,
-  ClaimNode,
-} from "./lib/types";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { api, type WhoAmI, type RenderPayload, type RContrib, type CollectionInfo } from "./lib/api";
+import type { Summary, Paper } from "./lib/types";
 import Sidebar from "./components/Sidebar";
-import GlobalView from "./components/GlobalView";
-import LocalView from "./components/LocalView";
+import GraphD3, { type EdgePick } from "./components/GraphD3";
+import ClusterLegend from "./components/ClusterLegend";
 import EvalView from "./components/EvalView";
-import Legend from "./components/Legend";
-import DetailsPanel, { type SelectedEdge } from "./components/DetailsPanel";
+import ContribDetails from "./components/ContribDetails";
 import AskPanel from "./components/AskPanel";
 import AnnotatePanel, { type AnnotationTarget } from "./components/AnnotatePanel";
 
-type Mode = "global" | "local" | "eval";
-type Tab = "details" | "ask" | "annotate";
+type Mode = "graph" | "eval";
+type Tab = "details" | "annotate" | "ask";
+
+const NODE_CAPS = [150, 300, 600, 0]; // 0 = all
 
 export default function App() {
+  const [collections, setCollections] = useState<CollectionInfo[]>([]);
+  const [collection, setCollection] = useState<string>("");
   const [summary, setSummary] = useState<Summary | null>(null);
   const [papers, setPapers] = useState<Paper[]>([]);
+  const [payload, setPayload] = useState<RenderPayload | null>(null);
   const [bootError, setBootError] = useState<string | null>(null);
+  const [loadingGraph, setLoadingGraph] = useState(false);
 
-  const [mode, setMode] = useState<Mode>("global");
+  const [mode, setMode] = useState<Mode>("graph");
   const [tab, setTab] = useState<Tab>("details");
-  const [relFilter, setRelFilter] = useState<string | null>(null);
+  const [maxNodes, setMaxNodes] = useState<number>(300);
+  const [minTrust, setMinTrust] = useState<number>(0);
+  const [focusComm, setFocusComm] = useState<number | null>(null);
 
-  const [globalGraph, setGlobalGraph] = useState<GlobalGraph | null>(null);
-
-  const [selectedPaperId, setSelectedPaperId] = useState<string | null>(null);
-  const [paperGraph, setPaperGraph] = useState<PaperGraph | null>(null);
-  const [paperLoading, setPaperLoading] = useState(false);
-  const [paperError, setPaperError] = useState<string | null>(null);
-
-  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
-  const [contribution, setContribution] = useState<ContributionDetail | null>(
-    null,
-  );
-  const [contribLoading, setContribLoading] = useState(false);
-  const [contribError, setContribError] = useState<string | null>(null);
-  const [selectedClaim, setSelectedClaim] = useState<ClaimNode | null>(null);
-  const [selectedEdge, setSelectedEdge] = useState<SelectedEdge | null>(null);
+  const [selContrib, setSelContrib] = useState<RContrib | null>(null);
+  const [selEdge, setSelEdge] = useState<EdgePick | null>(null);
   const [who, setWho] = useState<WhoAmI | null>(null);
 
   const refreshWho = useCallback(() => {
     api.whoami().then(setWho).catch(() => setWho(null));
   }, []);
 
-  // Re-fetch the current graph so freshly-saved annotation tallies show up.
-  const onAnnotated = useCallback(() => {
-    refreshWho();
-    api.globalGraph().then(setGlobalGraph).catch(() => {});
-    if (selectedPaperId)
-      api.paperGraph(selectedPaperId).then(setPaperGraph).catch(() => {});
-  }, [refreshWho, selectedPaperId]);
-
-  // After a paper is ingested, refresh the corpus + graph.
-  const onIngested = useCallback(() => {
-    api.summary().then(setSummary).catch(() => {});
-    api.papers().then(setPapers).catch(() => {});
-    api.globalGraph().then(setGlobalGraph).catch(() => {});
+  const loadGraph = useCallback((coll: string, max: number, trust: number) => {
+    setLoadingGraph(true);
+    return api.renderGlobal(coll, { maxNodes: max, minTrust: trust })
+      .then(setPayload).catch((e) => setBootError(String(e)))
+      .finally(() => setLoadingGraph(false));
   }, []);
 
-  // Boot: summary, papers, global graph, identity.
+  // boot: collections → default → summary/papers/graph
   useEffect(() => {
     refreshWho();
     (async () => {
       try {
-        const [s, p, g] = await Promise.all([
-          api.summary(),
-          api.papers(),
-          api.globalGraph(),
-        ]);
-        setSummary(s);
-        setPapers(p);
-        setGlobalGraph(g);
+        const cs = await api.collections();
+        setCollections(cs.collections);
+        const coll = cs.collections.some((c) => c.name === cs.default)
+          ? cs.default : (cs.collections[0]?.name ?? cs.default);
+        setCollection(coll);
+        const [s, p] = await Promise.all([api.summary(coll), api.papers(coll)]);
+        setSummary(s); setPapers(p);
+        await loadGraph(coll, 300, 0);
       } catch (e) {
         setBootError(e instanceof Error ? e.message : String(e));
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const openPaper = useCallback(async (paper: Paper) => {
-    setSelectedPaperId(paper.id);
-    setMode("local");
-    setSelectedNodeId(null);
-    setSelectedClaim(null);
-    setSelectedEdge(null);
-    setContribution(null);
-    setPaperLoading(true);
-    setPaperError(null);
-    try {
-      setPaperGraph(await api.paperGraph(paper.id));
-    } catch (e) {
-      setPaperError(e instanceof Error ? e.message : String(e));
-      setPaperGraph(null);
-    } finally {
-      setPaperLoading(false);
-    }
-  }, []);
+  const switchCollection = useCallback((coll: string) => {
+    if (coll === collection) return;
+    setCollection(coll);
+    setSelContrib(null); setSelEdge(null); setFocusComm(null);
+    api.summary(coll).then(setSummary).catch(() => {});
+    api.papers(coll).then(setPapers).catch(() => {});
+    loadGraph(coll, maxNodes, minTrust);
+  }, [collection, maxNodes, minTrust, loadGraph]);
 
-  const onGlobalNode = useCallback(async (id: string) => {
-    setSelectedNodeId(id);
-    setSelectedClaim(null);
-    setSelectedEdge(null);
+  const setCap = useCallback((max: number) => {
+    setMaxNodes(max); loadGraph(collection, max, minTrust);
+  }, [collection, minTrust, loadGraph]);
+  const setTrust = useCallback((t: number) => {
+    setMinTrust(t); loadGraph(collection, maxNodes, t);
+  }, [collection, maxNodes, loadGraph]);
+
+  const onSelectNode = useCallback((id: string | null) => {
+    setSelEdge(null);
+    setSelContrib(id ? payload?.contribs.find((c) => c.id === id) ?? null : null);
+    if (id) setTab((t) => (t === "ask" ? "details" : t));
+  }, [payload]);
+
+  const onSelectEdge = useCallback((e: EdgePick) => {
+    setSelContrib(null); setSelEdge(e);
     setTab((t) => (t === "ask" ? "details" : t));
-    setContribLoading(true);
-    setContribError(null);
-    setContribution(null);
-    try {
-      setContribution(await api.contribution(id));
-    } catch (e) {
-      setContribError(e instanceof Error ? e.message : String(e));
-    } finally {
-      setContribLoading(false);
-    }
   }, []);
 
-  const onGlobalEdge = useCallback((e: GlobalEdge) => {
-    setContribution(null);
-    setSelectedClaim(null);
-    setSelectedNodeId(null);
-    setTab((t) => (t === "ask" ? "details" : t));
-    setSelectedEdge({
-      source: e.source, target: e.target, relation: e.relation,
-      provenance: e.provenance, evidence: e.evidence,
-    });
-  }, []);
+  const onAnnotated = useCallback(() => { refreshWho(); }, [refreshWho]);
 
-  const onLocalEdge = useCallback((e: ClaimEdge) => {
-    setContribution(null);
-    setSelectedClaim(null);
-    setSelectedNodeId(null);
-    setTab((t) => (t === "ask" ? "details" : t));
-    setSelectedEdge({
-      source: e.source, target: e.target, relation: e.relation, evidence: e.evidence,
-    });
-  }, []);
+  const onIngested = useCallback(() => {
+    // ingestion re-clusters server-side; refresh corpus + graph
+    api.summary(collection).then(setSummary).catch(() => {});
+    api.papers(collection).then(setPapers).catch(() => {});
+    loadGraph(collection, maxNodes, minTrust);
+  }, [collection, maxNodes, minTrust, loadGraph]);
 
-  const onLocalNode = useCallback(
-    (id: string) => {
-      setSelectedNodeId(id);
-      setContribution(null);
-      setContribError(null);
-      setSelectedEdge(null);
-      setTab((t) => (t === "ask" ? "details" : t));
-      const node = paperGraph?.nodes.find((n) => n.id === id) ?? null;
-      setSelectedClaim(node);
-    },
-    [paperGraph],
-  );
-
-  // Normalize the current selection into an annotation target (for the Annotate tab).
-  const annotationTarget: AnnotationTarget | null = selectedEdge
-    ? {
+  const annotationTarget: AnnotationTarget | null = useMemo(() => {
+    if (selEdge) {
+      return {
         kind: "edge",
-        key: `${selectedEdge.source}|${selectedEdge.relation.toUpperCase()}|${selectedEdge.target}`,
-        heading: `Relation: ${selectedEdge.relation}`,
+        key: `${selEdge.source}|${selEdge.rel.toUpperCase()}|${selEdge.target}`,
+        heading: `Relation: ${selEdge.rel}`,
         fields: [
-          { label: "from", value: selectedEdge.source },
-          { label: "to", value: selectedEdge.target },
-          ...(selectedEdge.evidence ? [{ label: "why", value: selectedEdge.evidence }] : []),
+          { label: "from", value: selEdge.source },
+          { label: "to", value: selEdge.target },
+          ...(selEdge.ev ? [{ label: "why", value: selEdge.ev }] : []),
         ],
-      }
-    : selectedClaim
-    ? {
-        kind: "claim",
-        key: selectedClaim.id,
-        heading: `Claim (${selectedClaim.claim_type})`,
-        fields: [
-          { label: "claim", value: selectedClaim.label },
-          ...(selectedClaim.evidence ? [{ label: "evidence", value: selectedClaim.evidence }] : []),
-        ],
-        source: paperGraph?.paper.cite,
-      }
-    : contribution
-    ? {
+      };
+    }
+    if (selContrib) {
+      return {
         kind: "contribution",
-        key: contribution.id,
-        heading: "Contribution",
+        key: selContrib.id,
+        heading: `Contribution (${selContrib.kind})`,
         fields: [
-          { label: "problem", value: contribution.problem },
-          { label: "method", value: contribution.method },
-          { label: "result", value: contribution.result },
+          { label: "statement", value: selContrib.stmt },
+          ...(selContrib.quote ? [{ label: "quote", value: selContrib.quote }] : []),
         ],
-        source: papers.find((p) => p.id === contribution.paper_id)?.cite,
-      }
-    : null;
+        source: selContrib.cite,
+      };
+    }
+    return null;
+  }, [selContrib, selEdge]);
+
+  const selectedId = selContrib?.id ?? null;
 
   return (
     <div className="app">
       <Sidebar
         summary={summary}
         papers={papers}
-        selectedPaperId={selectedPaperId}
-        onSelectPaper={openPaper}
+        collections={collections}
+        collection={collection}
+        onSwitchCollection={switchCollection}
         who={who}
         onIdentityChange={refreshWho}
         onIngested={onIngested}
@@ -209,38 +146,26 @@ export default function App() {
       <div className="panel canvas">
         <div className="toolbar">
           <div className="toggle">
-            <button
-              className={mode === "global" ? "on" : ""}
-              onClick={() => setMode("global")}
-            >
-              Global
-            </button>
-            <button
-              className={mode === "local" ? "on" : ""}
-              onClick={() => setMode("local")}
-              disabled={!paperGraph}
-              title={
-                paperGraph ? "" : "Select a paper to view its claim graph"
-              }
-            >
-              Local
-            </button>
-            <button
-              className={mode === "eval" ? "on" : ""}
-              onClick={() => setMode("eval")}
-            >
-              Eval
-            </button>
+            <button className={mode === "graph" ? "on" : ""} onClick={() => setMode("graph")}>Graph</button>
+            <button className={mode === "eval" ? "on" : ""} onClick={() => setMode("eval")}>Eval</button>
           </div>
-          {mode === "global" && (
+          {mode === "graph" && payload && (
             <div className="canvas-banner">
-              <b>Contribution graph.</b> Solid edges are citation-backed; dashed
-              edges are uncited parallel work inferred from text.
+              <b>{payload.topic || collection}</b> — {payload.n_contribs} contributions
+              {payload.capped && <> · showing densest {payload.n_contribs} of {payload.total_contribs}</>}
             </div>
           )}
-          {mode === "local" && paperGraph && (
-            <div className="canvas-banner">
-              <b>{paperGraph.paper.cite}</b> — claim graph
+          {mode === "graph" && (
+            <div className="constraints">
+              <label>nodes
+                <select value={maxNodes} onChange={(e) => setCap(Number(e.target.value))}>
+                  {NODE_CAPS.map((c) => <option key={c} value={c}>{c === 0 ? "all" : c}</option>)}
+                </select>
+              </label>
+              <label>min&nbsp;trust&nbsp;{minTrust.toFixed(1)}
+                <input type="range" min={0} max={0.9} step={0.1} value={minTrust}
+                       onChange={(e) => setTrust(Number(e.target.value))} />
+              </label>
             </div>
           )}
         </div>
@@ -252,60 +177,27 @@ export default function App() {
           </div>
         )}
 
-        {!bootError && mode === "global" && globalGraph && (
-          <ReactFlowProvider>
-            <GlobalView
-              graph={globalGraph}
-              selectedId={selectedNodeId}
-              onSelectNode={onGlobalNode}
-              onSelectEdge={onGlobalEdge}
-              activeRelation={relFilter}
-            />
-            <Legend
-              mode="global"
-              activeRelation={relFilter}
-              onPickRelation={setRelFilter}
-            />
-          </ReactFlowProvider>
-        )}
-
-        {!bootError && mode === "global" && !globalGraph && (
-          <div className="center-fill">
-            <span className="spinner" />
-            Loading global graph…
-          </div>
-        )}
-
-        {!bootError && mode === "local" && (
+        {!bootError && mode === "graph" && payload && (
           <>
-            {paperLoading && (
-              <div className="center-fill">
-                <span className="spinner" />
-                Loading claim graph…
-              </div>
-            )}
-            {paperError && (
-              <div className="center-fill">
-                <div className="err">{paperError}</div>
-              </div>
-            )}
-            {!paperLoading && !paperError && paperGraph && (
-              <ReactFlowProvider>
-                <LocalView
-                  graph={paperGraph}
-                  selectedId={selectedNodeId}
-                  onSelectNode={onLocalNode}
-                  onSelectEdge={onLocalEdge}
-                />
-                <Legend mode="local" />
-              </ReactFlowProvider>
-            )}
-            {!paperLoading && !paperError && !paperGraph && (
-              <div className="center-fill">
-                Select a paper from the left to view its claim graph.
-              </div>
-            )}
+            <GraphD3
+              key={`${collection}:${maxNodes}:${minTrust}`}
+              payload={payload}
+              selectedId={selectedId}
+              focusComm={focusComm}
+              onSelectNode={onSelectNode}
+              onSelectEdge={onSelectEdge}
+            />
+            <ClusterLegend
+              legend={payload.legend}
+              focusComm={focusComm}
+              onPick={(id) => setFocusComm((cur) => (cur === id ? null : id))}
+            />
+            {loadingGraph && <div className="graph-loading">updating…</div>}
           </>
+        )}
+
+        {!bootError && mode === "graph" && !payload && (
+          <div className="center-fill"><span className="spinner" />Loading graph…</div>
         )}
 
         {!bootError && mode === "eval" && <EvalView />}
@@ -313,42 +205,16 @@ export default function App() {
 
       <div className="panel right">
         <div className="tabs">
-          <button
-            className={tab === "details" ? "on" : ""}
-            onClick={() => setTab("details")}
-          >
-            Details
-          </button>
-          <button
-            className={tab === "annotate" ? "on" : ""}
-            onClick={() => setTab("annotate")}
-          >
-            Annotate
-          </button>
-          <button
-            className={tab === "ask" ? "on" : ""}
-            onClick={() => setTab("ask")}
-          >
-            Ask
-          </button>
+          <button className={tab === "details" ? "on" : ""} onClick={() => setTab("details")}>Details</button>
+          <button className={tab === "annotate" ? "on" : ""} onClick={() => setTab("annotate")}>Annotate</button>
+          <button className={tab === "ask" ? "on" : ""} onClick={() => setTab("ask")}>Ask</button>
         </div>
         <div className="pane">
           {tab === "details" && (
-            <DetailsPanel
-              contribution={contribution}
-              contribLoading={contribLoading}
-              contribError={contribError}
-              claim={selectedClaim}
-              paperGraph={paperGraph}
-              edge={selectedEdge}
-            />
+            <ContribDetails contrib={selContrib} edge={selEdge} relColor={payload?.rel ?? {}} />
           )}
           {tab === "annotate" && (
-            <AnnotatePanel
-              target={annotationTarget}
-              signedIn={!!who?.signed_in}
-              onAnnotated={onAnnotated}
-            />
+            <AnnotatePanel target={annotationTarget} signedIn={!!who?.signed_in} onAnnotated={onAnnotated} />
           )}
           {tab === "ask" && <AskPanel />}
         </div>

@@ -736,3 +736,52 @@ button.lg-btn.on { background: var(--accent-soft); border-color: var(--accent);
 .dup-note { font-size: 14px; color: var(--text-dim); margin: 6px 0 16px;
   padding: 10px 12px; background: rgba(179,120,26,.10); border: 1px solid rgba(179,120,26,.35);
   border-radius: 8px; }
+
+/* ── D3 graph ─────────────────────────────────────────────────────────── */
+.graph-d3 { width: 100%; height: 100%; display: block; background: var(--bg); cursor: grab; }
+.graph-d3:active { cursor: grabbing; }
+.graph-loading { position: absolute; top: 60px; right: 16px; z-index: 6;
+  background: var(--bg-elev); border: 1px solid var(--border); border-radius: 6px;
+  padding: 4px 10px; font-size: 12px; color: var(--text-dim); box-shadow: var(--shadow); }
+
+.constraints { display: flex; gap: 14px; align-items: center; background: var(--bg-elev);
+  border: 1px solid var(--border); border-radius: var(--radius); padding: 6px 12px; }
+.constraints label { display: flex; align-items: center; gap: 6px; font-size: 12.5px;
+  color: var(--text-dim); }
+.constraints select { background: var(--bg-elev-2); border: 1px solid var(--border);
+  color: var(--text); border-radius: 5px; padding: 3px 6px; font: inherit; font-size: 12.5px; }
+.constraints input[type="range"] { width: 90px; accent-color: var(--accent); }
+
+/* collection switcher */
+.collection-switch { padding: 10px 16px; border-bottom: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 4px; }
+.collection-switch label { font-size: 11px; text-transform: uppercase; letter-spacing: .5px;
+  color: var(--text-faint); }
+.collection-switch select { background: var(--bg-elev-2); border: 1px solid var(--border);
+  color: var(--text); border-radius: 6px; padding: 7px 9px; font: inherit; font-size: 13.5px; }
+
+/* clickable cluster legend */
+.cluster-legend { max-width: 250px; }
+.cluster-legend .lg-clear { color: var(--text-faint); font-weight: 400; text-transform: none;
+  letter-spacing: 0; }
+.cluster-legend .lg-row { display: flex; align-items: center; gap: 7px; width: 100%;
+  background: transparent; border: none; padding: 3px 4px; border-radius: 5px; cursor: pointer;
+  color: var(--text-dim); font: inherit; font-size: 12.5px; text-align: left; }
+.cluster-legend .lg-row:hover { background: var(--bg-elev-2); color: var(--text); }
+.cluster-legend .lg-row.on { background: var(--accent-soft); color: var(--text); font-weight: 600; }
+.cluster-legend .lg-row.dim { opacity: 0.5; }
+.cluster-legend .lg-label { flex: 1; }
+.cluster-legend .lg-n { color: var(--text-faint); font-size: 11.5px; }
+
+/* contribution / edge details */
+.cd { display: flex; flex-direction: column; gap: 10px; }
+.cd-kind { display: inline-block; align-self: flex-start; font-size: 11px; text-transform: uppercase;
+  letter-spacing: .5px; color: var(--accent); background: var(--accent-soft);
+  border: 1px solid var(--accent); border-radius: 999px; padding: 2px 9px; }
+.cd-stmt { font-size: 15px; line-height: 1.5; }
+.cd-quote { font-style: italic; color: var(--text-dim); border-left: 2px solid var(--border);
+  padding-left: 10px; font-size: 13.5px; }
+.cd-head { font-weight: 600; font-size: 16px; }
+
+.paper-item.static { cursor: default; }
+.paper-item.static:hover { background: transparent; }

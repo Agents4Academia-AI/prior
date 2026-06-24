@@ -1,21 +1,23 @@
 import type { Summary, Paper } from "../lib/types";
-import type { WhoAmI } from "../lib/api";
+import type { WhoAmI, CollectionInfo } from "../lib/api";
 import SignIn from "./SignIn";
 import AddPaper from "./AddPaper";
 
 export default function Sidebar({
   summary,
   papers,
-  selectedPaperId,
-  onSelectPaper,
+  collections,
+  collection,
+  onSwitchCollection,
   who,
   onIdentityChange,
   onIngested,
 }: {
   summary: Summary | null;
   papers: Paper[];
-  selectedPaperId: string | null;
-  onSelectPaper: (p: Paper) => void;
+  collections: CollectionInfo[];
+  collection: string;
+  onSwitchCollection: (name: string) => void;
   who: WhoAmI | null;
   onIdentityChange: () => void;
   onIngested: () => void;
@@ -27,6 +29,19 @@ export default function Sidebar({
         <div className="tag">Literature knowledge graph</div>
         {summary && <div className="topic">{summary.topic}</div>}
       </div>
+
+      {collections.length > 0 && (
+        <div className="collection-switch">
+          <label>Collection</label>
+          <select value={collection} onChange={(e) => onSwitchCollection(e.target.value)}>
+            {collections.map((c) => (
+              <option key={c.name} value={c.name}>
+                {c.name} ({c.papers})
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
 
       <SignIn who={who} onChange={onIdentityChange} />
 
@@ -47,22 +62,14 @@ export default function Sidebar({
       </div>
       <div className="papers">
         {papers.map((p) => (
-          <button
-            key={p.id}
-            className={`paper-item${
-              p.id === selectedPaperId ? " active" : ""
-            }`}
-            onClick={() => onSelectPaper(p)}
-          >
+          <div key={p.id} className="paper-item static">
             <span className="pt">{p.title}</span>
             <span className="pm">
               {p.cite}
               <span className="dot">·</span>
               {p.n_contributions} contrib
-              <span className="dot">·</span>
-              {p.n_claims} claims
             </span>
-          </button>
+          </div>
         ))}
       </div>
     </div>
