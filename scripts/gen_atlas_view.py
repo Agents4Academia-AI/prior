@@ -185,11 +185,12 @@ TEMPLATE = r"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 const D=JSON.parse(document.getElementById("d").textContent),SIDE=document.getElementById("side");
 const LG={}; D.legend.forEach(l=>LG[l.id]=l);
 const COL=id=>(LG[id]?LG[id].color:"#c9cdd2"), LAB=id=>(LG[id]?LG[id].label:"unclustered");
-const off=new Set(), kindOff=new Set(); let level="contribs", sel=null, minTrust=0, contradictOnly=false, maxYear=9999, sim, node, link, lab, ring, NODES, LINKS, adj, byId;
+const off=new Set(), kindOff=new Set(); let level="contribs", sel=null, minTrust=0, contradictOnly=false, maxYear=9999, frontierComm=null, frontierPanelFn=null, sim, node, link, lab, ring, NODES, LINKS, adj, byId;
 const canvas=document.getElementById("canvas");let W=canvas.clientWidth,H=canvas.clientHeight;
 const svg=d3.select("#canvas").append("svg").attr("viewBox",[0,0,W,H]);const root=svg.append("g");
 const zoom=d3.zoom().scaleExtent([0.1,5]).on("zoom",e=>root.attr("transform",e.transform));
 svg.call(zoom).on("click",e=>{if(!e.defaultPrevented)clearSel();});
+window.addEventListener("keydown",e=>{if(e.key==="Escape"){frontierComm!=null?window.__exitFrontier():clearSel();}});
 const real=D.legend.filter(l=>l.id>=0), cx=W/2, cy=H/2, R=Math.min(W,H)/2.7, cen={};
 real.forEach((l,i)=>{const a=2*Math.PI*i/real.length-Math.PI/2;cen[l.id]={x:cx+R*Math.cos(a),y:cy+R*Math.sin(a)};});
 cen[-1]={x:cx,y:cy};
@@ -227,7 +228,7 @@ function build(){
   lab=root.append("g").selectAll("text").data(ld).join("text").attr("class","lab").attr("dx",d=>rad(d)+3).attr("dy",4).text(d=>d.cite);
   clab=root.append("g").selectAll("g.clabg").data(real).join("g").attr("class","clabg")
     .attr("transform",d=>`translate(${cen[d.id].x},${cen[d.id].y-R*0.20})`).style("cursor","pointer")
-    .on("click",(e,l)=>{e.stopPropagation();zoomCluster(l.id);});
+    .on("click",(e,l)=>{e.stopPropagation();zoomCluster(l.id);clusterPanel(l.id);});
   clab.each(function(d){const w=d.label.length*7+18,g=d3.select(this);
     g.append("rect").attr("x",-w/2).attr("y",-12).attr("width",w).attr("height",20).attr("fill","transparent");
     g.append("text").attr("class","clab").attr("text-anchor","middle").attr("dy",4).attr("fill",d.color).text(d.label);});
@@ -243,6 +244,7 @@ function tick(){link.attr("x1",d=>d.source.x).attr("y1",d=>d.source.y).attr("x2"
   node.attr("cx",d=>d.x).attr("cy",d=>d.y); if(lab)lab.attr("x",d=>d.x).attr("y",d=>d.y);
   if(ring)ring.attr("cx",d=>d.x).attr("cy",d=>d.y);}
 function nodeVis(d){if(!d)return false;const isP=level==="papers";
+  if(frontierComm!=null)return d.comm===frontierComm;
   if(off.has(d.comm))return false;
   if(!isP&&kindOff.has(d.kind))return false;
   if(contradictOnly&&!(isP?contradictPapers.has(d.id):contradictNodes.has(d.id)))return false;
@@ -278,7 +280,7 @@ function contribDetail(d){const nb=D.contribLinks.filter(l=>l.source===d.id||l.t
    ${nb.map(n=>`<div class="nb"><span class="pill" style="background:${D.rel[n.rel]||'#9aa0b0'}">${n.rel}</span> <span class="src">trust ${n.trust} · ${esc(n.tier)}</span>
      <div class="src" style="margin-top:3px">${n.dir} ${esc(PCITE[pid(n.other)]||n.other)}</div>
      ${n.ev?`<div style="font-size:11.5px;color:var(--dim);margin-top:3px">${esc(n.ev)}</div>`:""}</div>`).join("")||'<div class="empty" style="padding:6px">none — isolated</div>'}`;}
-function clearSel(){sel=null;focus(null);const qe=document.getElementById("q");if(qe)qe.value="";SIDE.innerHTML='<div class="empty">Hover a node to focus its links. Click for details. Ask the graph with keywords (top-left). Toggle clusters in the legend; switch level top-left.</div>';}
+function clearSel(){sel=null;focus(null);if(frontierComm!=null){frontierPanelFn&&frontierPanelFn();return;}const qe=document.getElementById("q");if(qe)qe.value="";SIDE.innerHTML='<div class="empty">Hover a node to focus its links. Click for details. Ask the graph with keywords (top-left). Click a cluster name → Expand as knowledge frontier. Switch level top-left.</div>';}
 function runSearch(){
   const qe=document.getElementById("q"), q=(qe.value||"").trim().toLowerCase();
   if(!q){clearSel();return;}
@@ -302,7 +304,7 @@ function runSearch(){
 }
 function backLink(){const q=(document.getElementById("q").value||"").trim();return q?'<div style="margin-bottom:9px"><a class="src" style="cursor:pointer" onclick="runSearch()">← back to results</a></div>':"";}
 window.__focus=id=>{const d=byId.get(id);if(!d)return;sel=id;focus(id);level==="papers"?paperDetail(d):contribDetail(d);};
-function setLevel(l){level=l;sel=null;document.getElementById("mC").classList.toggle("on",l==="contribs");document.getElementById("mP").classList.toggle("on",l==="papers");
+function setLevel(l){frontierComm=null;frontierPanelFn=null;level=l;sel=null;document.getElementById("mC").classList.toggle("on",l==="contribs");document.getElementById("mP").classList.toggle("on",l==="papers");
   document.getElementById("sub").innerHTML=l==="papers"?`<b>${D.papers.length}</b> papers · <b>${D.paperLinks.length}</b> links · ${D.topic}`:`<b>${D.contribs.length}</b> contributions · <b>${D.contribLinks.length}</b> relations · ${D.topic}`;build();}
 document.getElementById("mC").onclick=()=>setLevel("contribs");document.getElementById("mP").onclick=()=>setLevel("papers");
 document.getElementById("legend").innerHTML=`<div class="t">Clusters (edge-based)</div>`+
@@ -324,6 +326,53 @@ function fit(){const xs=NODES.map(n=>n.x),ys=NODES.map(n=>n.y);const a=Math.min(
 function zoomCluster(c){const ns=NODES.filter(n=>n.comm===c);if(!ns.length)return;
   const xs=ns.map(n=>n.x),ys=ns.map(n=>n.y),a=Math.min(...xs),b=Math.max(...xs),cc=Math.min(...ys),e=Math.max(...ys),gw=b-a||1,gh=e-cc||1,k=Math.min((W-220)/gw,(H-220)/gh,2.8);
   svg.transition().duration(500).call(zoom.transform,d3.zoomIdentity.translate(W/2-k*(a+gw/2),H/2-k*(cc+gh/2)).scale(k));}
+function clusterPanel(comm){
+  const cs=D.contribs.filter(c=>c.comm===comm), np=new Set(cs.map(c=>pid(c.id))).size;
+  SIDE.innerHTML=`<div><span class="pill" style="background:${COL(comm)}">${esc(LAB(comm))}</span></div>
+   <div style="font-size:12px;color:var(--dim);margin-top:6px">${cs.length} contributions · ${np} papers</div>
+   <button onclick="window.__frontier(${comm})" style="margin-top:12px;width:100%;padding:9px;border-radius:8px;border:1px solid var(--bd);background:var(--e2);color:var(--tx);cursor:pointer;font-size:13px">▸ Expand as knowledge frontier</button>
+   <div style="font-size:11.5px;color:var(--faint);margin-top:8px">Lays this cluster out by lineage depth — foundational work at the centre, frontier at the rim.</div>`;
+}
+function frontierPanel(comm,nC,nL,rings){
+  SIDE.innerHTML=`<div><a class="src" style="cursor:pointer" onclick="window.__exitFrontier()">← back to atlas</a></div>
+   <div style="margin-top:10px"><span class="pill" style="background:${COL(comm)}">${esc(LAB(comm))}</span> · knowledge frontier</div>
+   <div style="font-size:12px;color:var(--dim);margin-top:6px">${nC} contributions · ${nL} internal relations · ${rings} year ring(s).<br>Centre = earliest · rim = newest (by year). Hover/click a node.</div>`;
+}
+function buildFrontier(comm){
+  frontierComm=comm; sel=null; root.selectAll("*").remove();
+  const members=D.contribs.filter(c=>c.comm===comm).map(c=>({...c}));
+  if(!members.length){window.__exitFrontier();return;}
+  const mids=new Set(members.map(m=>m.id));
+  const links=D.contribLinks.filter(l=>mids.has(l.source)&&mids.has(l.target)).map(l=>({...l}));
+  // radial by YEAR: earliest at the centre, newest at the rim (lineage relations
+  // are too sparse within a cluster on the consensus graph to form depth).
+  const years=[...new Set(members.map(m=>m.year).filter(Boolean))].sort((a,b)=>a-b);
+  const yidx=new Map(years.map((y,i)=>[y,i])), hasUnknown=members.some(m=>!m.year);
+  const fr=Math.max(0,years.length-1)+(hasUnknown?1:0);
+  const ringOf=m=>(m.year&&yidx.has(m.year))?yidx.get(m.year):years.length;
+  const cx=W/2,cy=H/2,RM=Math.min(W,H)/2-90,R0=Math.max(58,RM*0.16),gap=(RM-R0)/Math.max(1,fr);
+  const rm={};members.forEach(m=>{const k=ringOf(m);(rm[k]=rm[k]||[]).push(m);});
+  const ang=new Map();Object.keys(rm).forEach(k=>{const arr=rm[k],off=+k*0.6;arr.forEach((m,i)=>ang.set(m.id,off+2*Math.PI*i/arr.length));});
+  members.forEach(m=>{const r=R0+ringOf(m)*gap,a=ang.get(m.id)||0;m.x=m.fx=cx+r*Math.cos(a);m.y=m.fy=cy+r*Math.sin(a);});
+  byId=new Map(members.map(m=>[m.id,m]));
+  adj=new Map(members.map(m=>[m.id,new Set([m.id])]));links.forEach(l=>{adj.get(l.source).add(l.target);adj.get(l.target).add(l.source);});
+  const rg=root.append("g");
+  for(let r=0;r<=fr;r++){rg.append("circle").attr("cx",cx).attr("cy",cy).attr("r",R0+r*gap).attr("fill","none").attr("stroke","#e2e5ea").attr("stroke-dasharray","2 7");
+    if(years[r]!=null)rg.append("text").attr("x",cx).attr("y",cy-(R0+r*gap)+13).attr("text-anchor","middle").attr("fill","#b9b3a3").attr("font-size",9).text(years[r]);}
+  rg.append("text").attr("x",cx).attr("y",cy+3).attr("text-anchor","middle").attr("fill","#b9a98a").attr("font-size",11).attr("font-style","italic").text("earliest");
+  rg.append("text").attr("x",cx).attr("y",cy-RM-12).attr("text-anchor","middle").attr("fill","#9aa0b0").attr("font-size",11).text("newer →");
+  rg.append("text").attr("x",cx).attr("y",cy-RM-30).attr("text-anchor","middle").attr("fill",COL(comm)).attr("font-size",13).attr("font-weight",700).text(LAB(comm));
+  link=root.append("g").selectAll("line").data(links).join("line").attr("stroke",l=>D.rel[l.rel]||"#c9cdd2").attr("stroke-width",l=>0.6+(l.trust||0.5)*1.6).attr("stroke-opacity",0.55)
+    .attr("x1",l=>byId.get(l.source).x).attr("y1",l=>byId.get(l.source).y).attr("x2",l=>byId.get(l.target).x).attr("y2",l=>byId.get(l.target).y);
+  node=root.append("g").selectAll("circle").data(members).join("circle").attr("r",7).attr("fill",COL(comm)).attr("stroke","#fbfcfd").attr("stroke-width",1.2).attr("cx",d=>d.x).attr("cy",d=>d.y).style("cursor","pointer")
+    .on("mouseover",(_,d)=>focus(d.id)).on("mouseout",()=>focus(sel)).on("click",(e,d)=>{e.stopPropagation();sel=d.id;focus(d.id);contribDetail(d);});
+  lab=root.append("g").selectAll("text").data(members).join("text").attr("class","lab").attr("dx",10).attr("dy",4).attr("x",d=>d.x).attr("y",d=>d.y).style("display","none").text(d=>(d.stmt||"").slice(0,46));
+  const k=Math.min((W-140)/(2*RM),(H-140)/(2*RM));
+  svg.transition().duration(500).call(zoom.transform,d3.zoomIdentity.translate(W/2-k*cx,H/2-k*cy).scale(k));
+  frontierPanelFn=()=>frontierPanel(comm,members.length,links.length,years.length); frontierPanelFn();
+}
+window.__frontier=comm=>buildFrontier(comm);
+window.__exitFrontier=()=>{frontierComm=null;frontierPanelFn=null;sel=null;build();};
 function ds(e,d){if(!e.active)sim.alphaTarget(0.3).restart();d.fx=d.x;d.fy=d.y;}function dd(e,d){d.fx=e.x;d.fy=e.y;}function de(e,d){if(!e.active)sim.alphaTarget(0);d.fx=null;d.fy=null;}
 const _q=new URLSearchParams(location.search);
 const _tp=_q.get("trust");
@@ -335,6 +384,7 @@ setLevel("contribs");
 if(_q.get("q")){document.getElementById("q").value=_q.get("q");runSearch();}
 if(_q.get("year")){maxYear=+_q.get("year");_yr.value=maxYear;document.getElementById("yrv").textContent=maxYear;applyFilters();}
 if(_q.get("zoom")!==null&&_q.get("zoom")!==undefined&&_q.get("zoom")!=="")setTimeout(()=>zoomCluster(+_q.get("zoom")),50);
+if(_q.get("frontier"))setTimeout(()=>buildFrontier(+_q.get("frontier")),60);
 </script></body></html>"""
 
 OUT.write_text(TEMPLATE.replace("__DATA__", json.dumps(payload)))
