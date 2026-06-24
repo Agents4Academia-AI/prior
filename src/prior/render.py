@@ -53,7 +53,8 @@ def _read(collection: str) -> tuple[dict, list, list]:
         papers = {r["id"]: dict(r) for r in s.run(
             "MATCH (p:Paper {collection:$c}) "
             "RETURN p.id AS id, p.title AS title, p.year AS year, "
-            "p.authors AS authors, p.url AS url", c=collection)}
+            "p.authors AS authors, p.url AS url, p.date AS date, "
+            "p.date_precision AS dprec", c=collection)}
         contribs = [dict(r) for r in s.run(
             "MATCH (k:Contribution {collection:$c}) "
             "RETURN k.id AS id, k.paper_id AS paper_id, k.statement AS statement, "
@@ -63,7 +64,8 @@ def _read(collection: str) -> tuple[dict, list, list]:
             "MATCH (a:Contribution {collection:$c})-[r]->(b:Contribution {collection:$c}) "
             "WHERE type(r) IN $rels "
             "RETURN a.id AS src, b.id AS dst, type(r) AS rel, r.trust AS trust, "
-            "r.tier AS tier, r.evidence AS evidence", c=collection, rels=rel_list)]
+            "r.tier AS tier, r.evidence AS evidence, r.directed AS directed",
+            c=collection, rels=rel_list)]
     return papers, contribs, edges
 
 
@@ -163,13 +165,15 @@ def _build_payload(collection: str, papers: dict, contribs: list, edges: list,
                    "quote": c.get("quote") or "", "deg": deg[c["id"]],
                    "x": pos[c["id"]][0], "y": pos[c["id"]][1],
                    "year": _year(papers.get(c["paper_id"])),
+                   "date": (papers.get(c["paper_id"], {}) or {}).get("date") or "",
+                   "dprec": (papers.get(c["paper_id"], {}) or {}).get("dprec") or "",
                    "cite": _cite(papers.get(c["paper_id"], {}))}
                   for c in contribs]
     contrib_links = [{"source": e["src"], "target": e["dst"],
                       "rel": (e["rel"] or "").lower(),
                       "ev": (e.get("evidence") or "")[:160],
                       "trust": round(e["trust"], 2) if e.get("trust") is not None else 0.5,
-                      "tier": e.get("tier") or ""}
+                      "tier": e.get("tier") or "", "directed": bool(e.get("directed"))}
                      for e in edges if e["src"] in ids and e["dst"] in ids
                      and e["src"].split("::")[0] != e["dst"].split("::")[0]]
 
@@ -195,6 +199,8 @@ def _build_payload(collection: str, papers: dict, contribs: list, edges: list,
                  "title": (papers.get(p, {}) or {}).get("title") or "",
                  "deg": pdeg[p], "comm": paper_dom[p], "bridge": paper_bridge[p],
                  "year": _year(papers.get(p)), "spread": paper_spread[p],
+                 "date": (papers.get(p, {}) or {}).get("date") or "",
+                 "dprec": (papers.get(p, {}) or {}).get("dprec") or "",
                  "n": len(by_paper[p]), "url": (papers.get(p, {}) or {}).get("url") or ""}
                 for p in by_paper]
     paper_links = [{"source": a, "target": b, "w": w,

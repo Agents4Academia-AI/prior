@@ -79,7 +79,7 @@ def _edge_rows(edges: list[dict]) -> list[dict]:
             "evidence": e.get("evidence", ""), "confidence": e.get("confidence"),
             "source": e.get("source", ""), "trust": e.get("trust"),
             "tier": (e.get("agreement") or {}).get("tier", ""),
-            "similarity": e.get("similarity"),
+            "similarity": e.get("similarity"), "directed": bool(e.get("directed")),
         })
     return rows
 
@@ -100,6 +100,7 @@ def load_bundle(bundle_dir: str | Path, *, collection: str, topic: str = "",
 
     progress("  writing to Neo4j …")
     graph.setup_schema()
+    graph.clear_contrib_edges(collection)   # idempotent re-load (no reversed dups)
     graph.bulk_load(papers, contrib_rows, [], _edge_rows(edges), collection=collection)
     upsert_collection(collection, topic=topic, source=source)
     return {"collection": collection, "papers": len(papers),

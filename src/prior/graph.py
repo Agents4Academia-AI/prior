@@ -143,8 +143,8 @@ def bulk_load(papers: list[dict], contributions: list[dict], claims: list[dict],
         s.run("UNWIND $rows AS r MERGE (p:Paper {id:r.id}) SET p += r.props",
               rows=[{"id": p["id"], "props": {**{k: p.get(k) for k in
                     ("title", "year", "venue", "doi", "url", "cited_by_count",
-                     "is_review", "abstract", "authors")}, "collection": collection}}
-                    for p in papers])
+                     "is_review", "abstract", "authors", "date", "date_precision")},
+                    "collection": collection}} for p in papers])
 
         s.run("""UNWIND $rows AS r
                  MERGE (n:Contribution {id:r.id}) SET n += r.props
@@ -184,7 +184,7 @@ def bulk_load(papers: list[dict], contributions: list[dict], claims: list[dict],
                       MERGE (a)-[e:{rel}]->(b)
                       SET e.evidence=r.evidence, e.confidence=r.confidence,
                           e.source=r.source, e.trust=r.trust, e.tier=r.tier,
-                          e.similarity=r.similarity""", rows=rows)
+                          e.similarity=r.similarity, e.directed=r.directed""", rows=rows)
 
 
 # ── reads (the agent's graph tools) ─────────────────────────────────────────────
@@ -254,6 +254,15 @@ def paper_index() -> list[dict]:
     with session() as s:
         return [{"id": r["id"], "title": r["title"]}
                 for r in s.run("MATCH (p:Paper) RETURN p.id AS id, p.title AS title")]
+
+
+def clear_contrib_edges(collection: str) -> int:
+    """Delete all contribution↔contribution relations in a collection. Used before
+    a re-load so edge re-orientation (changed src/dst direction) can't leave
+    reversed duplicates behind. Leaves nodes, claims, and annotations intact."""
+    with session() as s:
+        return s.run("""MATCH (:Contribution {collection:$c})-[r]->(:Contribution {collection:$c})
+                        DELETE r RETURN count(r) AS n""", c=collection).single()["n"]
 
 
 def have_paper(paper_id: str) -> bool:
