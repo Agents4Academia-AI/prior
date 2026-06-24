@@ -33,3 +33,4 @@ data/scifact/
 # Scoped topic corpora (separate builds, regenerable)
 data_hackathon/
 data_search/
+data/users.json
