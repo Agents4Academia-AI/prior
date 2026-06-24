@@ -63,11 +63,36 @@ _SCHEMA = {
 }
 
 
+def align_quote(quote: str, source: str) -> dict | None:
+    """Snap an extracted quote to its best-matching verbatim span in the source.
+
+    The LLM's `quote` is usually a paraphrase/synthesis even though we ask for a
+    span (models don't reliably copy). This recovers the real span deterministically
+    so provenance is lexically auditable, returning the verbatim text, its char
+    offsets in `source`, and a grounding score in [0,1] (how well the quote is
+    actually supported verbatim — a triage signal for the auditor)."""
+    q = (quote or "").strip()
+    if not q or not source:
+        return None
+    from rapidfuzz import fuzz
+    # match case-insensitively; .lower() preserves length so offsets stay valid in
+    # the original (true for ASCII/Latin; negligible drift otherwise).
+    a = fuzz.partial_ratio_alignment(q.lower(), source.lower(), score_cutoff=0)
+    if a is None:
+        return None
+    return {
+        "quote_verbatim": source[a.dest_start:a.dest_end].strip(),
+        "quote_offsets": [a.dest_start, a.dest_end],
+        "grounding": round(a.score / 100, 3),
+    }
+
+
 def extract(paper: Paper, fulltext: str | None = None, *,
             model: str | None = None) -> list[dict]:
     """Return the paper's self-declared contributions as dicts
-    {id, paper_id, statement, kind, quote}. Requires full text — we do NOT fall
-    back to the abstract (the contribution list lives in the intro)."""
+    {id, paper_id, statement, kind, quote, quote_verbatim, quote_offsets, grounding}.
+    Requires full text — we do NOT fall back to the abstract (the contribution list
+    lives in the intro)."""
     if not fulltext:
         return []
     body = fulltext[:12000]   # intro + contribution list live near the top
@@ -83,11 +108,15 @@ def extract(paper: Paper, fulltext: str | None = None, *,
     )
     result = []
     for i, c in enumerate(out.get("contributions", [])):
-        result.append({
+        rec = {
             "id": f"{paper.id}::k{i:02d}",
             "paper_id": paper.id,
             "statement": c.get("statement", "").strip(),
             "kind": c.get("kind", "other"),
             "quote": c.get("quote", "").strip(),
-        })
+        }
+        span = align_quote(rec["quote"], fulltext)   # verbatim provenance + grounding
+        if span:
+            rec.update(span)
+        result.append(rec)
     return result
