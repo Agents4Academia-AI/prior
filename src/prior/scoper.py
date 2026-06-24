@@ -445,10 +445,48 @@ def build_scoped_corpus(topic_def: str, *, per_query: int = 25,
     return [p for p, _ in kept], dropped
 
 
+def source_preflight(progress=print) -> dict[str, str]:
+    """Ping each source with a trivial query and report throttling BEFORE a run, so a
+    degraded source surfaces upfront instead of mid-snowball — e.g. OpenAlex daily
+    budget exhaustion (which otherwise silently empties the snowball) or an expired
+    Semantic Scholar key. Non-fatal; just warns."""
+    import requests
+
+    def _probe(url, params, headers):
+        try:
+            r = requests.get(url, params=params, headers=headers, timeout=15)
+            if r.status_code == 200:
+                return "ok"
+            if r.status_code == 429:
+                return "budget-exhausted" if "budget" in r.text.lower() else "rate-limited (429)"
+            return f"http {r.status_code}"
+        except Exception as e:  # noqa: BLE001
+            return f"unreachable ({str(e)[:36]})"
+
+    status = {
+        "openalex": _probe(openalex.API, openalex._params() | {"per_page": 1, "select": "id"},
+                           openalex._headers()),
+        "arxiv": _probe(arxiv.API, {"search_query": "all:agent", "max_results": 1},
+                        {"User-Agent": config.USER_AGENT}),
+        "semanticscholar": _probe(semanticscholar.SEARCH,
+                                  {"query": "agent", "limit": 1, "fields": "title"},
+                                  semanticscholar._headers()),
+    }
+    for src, st in status.items():
+        progress(f"  [preflight] {src:<16} {st}")
+    bad = {s: st for s, st in status.items() if st != "ok"}
+    if bad:
+        progress("  [preflight] WARNING degraded: "
+                 + ", ".join(f"{s} ({st})" for s, st in bad.items())
+                 + " — recall reduced. Fixes: SEMANTIC_SCHOLAR_API_KEY in .env / CONTACT_EMAIL "
+                 "(OpenAlex polite pool) / wait for OpenAlex's daily budget reset.")
+    return status
+
+
 def explore(topic_def: str, *, hops: int = 3, per_query: int = 25,
             use_prefilter: bool = True, epsilon: float = 0.03,
             repair_abstracts: bool = True, recover_rounds: int = 5,
-            model: str | None = None, progress=print):
+            preflight: bool = True, model: str | None = None, progress=print):
     """The full exploration pipeline as one call — Stage 1, the agentic stage:
 
       1. recall-then-precision : LLM query variations over OpenAlex+arXiv+S2, then
@@ -462,6 +500,9 @@ def explore(topic_def: str, *, hops: int = 3, per_query: int = 25,
     Returns (corpus, dropped, stats={curve, completeness, n}). For a fresh corpus,
     point PRIOR_DATA_DIR at a new dir."""
     from . import completeness
+
+    if preflight:
+        source_preflight(progress=progress)
 
     # 1 + 3: recall-then-precision with query RECOVERY (search channel). A one-shot
     # query expansion misses facets; reacting to the results and reformulating
