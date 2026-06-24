@@ -53,36 +53,53 @@ def _now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
-def _sample(collection: str, kind: str, n: int) -> list[dict]:
-    lim = "" if n <= 0 else f"ORDER BY rand() LIMIT {int(n)}"
+def _key_of(kind: str, it: dict) -> str:
+    return it["key"] if kind != "edge" else f"{it['src']}|{it['rel']}|{it['dst']}"
+
+
+def _judged_keys(kind: str) -> set[str]:
+    """Targets this judge has already labelled — so runs are incremental/resumable."""
+    with graph.session() as s:
+        return {r["k"] for r in s.run(
+            "MATCH (a:Annotation {annotator:$j, target_kind:$kind}) RETURN a.target_key AS k",
+            j=JUDGE, kind=kind)}
+
+
+def _candidates(collection: str, kind: str) -> list[dict]:
     with graph.session() as s:
         if kind == "contribution":
             return [dict(r) for r in s.run(
-                f"MATCH (k:Contribution {{collection:$c}}) "
-                f"RETURN k.id AS key, k.statement AS statement, k.quote AS quote {lim}", c=collection)]
+                "MATCH (k:Contribution {collection:$c}) "
+                "RETURN k.id AS key, k.statement AS statement, k.quote AS quote", c=collection)]
         if kind == "claim":
             return [dict(r) for r in s.run(
-                f"MATCH (c:Claim {{collection:$c}}) "
-                f"RETURN c.id AS key, c.text AS text, c.evidence AS evidence {lim}", c=collection)]
+                "MATCH (c:Claim {collection:$c}) "
+                "RETURN c.id AS key, c.text AS text, c.evidence AS evidence", c=collection)]
         if kind == "edge":
             return [dict(r) for r in s.run(
-                f"MATCH (a:Contribution {{collection:$c}})-[r]->(b:Contribution {{collection:$c}}) "
-                f"WHERE type(r) IN ['SUPPORTS','BUILDS_ON','REFINES','CONTRADICTS'] "
-                f"RETURN a.id AS src, b.id AS dst, type(r) AS rel, "
-                f"a.statement AS a_stmt, b.statement AS b_stmt {lim}", c=collection)]
+                "MATCH (a:Contribution {collection:$c})-[r]->(b:Contribution {collection:$c}) "
+                "WHERE type(r) IN ['SUPPORTS','BUILDS_ON','REFINES','CONTRADICTS'] "
+                "RETURN a.id AS src, b.id AS dst, type(r) AS rel, r.evidence AS evidence, "
+                "a.statement AS a_stmt, b.statement AS b_stmt", c=collection)]
     return []
 
 
+def _remaining(collection: str, kind: str, limit: int) -> list[dict]:
+    """All not-yet-judged items of `kind` (optionally capped to `limit` for this run)."""
+    skip = _judged_keys(kind)
+    rem = [it for it in _candidates(collection, kind) if _key_of(kind, it) not in skip]
+    return rem[:limit] if limit and limit > 0 else rem
+
+
 def _prompt(kind: str, it: dict) -> tuple[str, str]:
+    key = _key_of(kind, it)
     if kind == "contribution":
-        return it["key"], f"STATEMENT:\n{it.get('statement','')}\n\nQUOTE:\n{it.get('quote','') or '(none provided)'}"
+        return key, f"STATEMENT:\n{it.get('statement','')}\n\nQUOTE:\n{it.get('quote','') or '(none provided)'}"
     if kind == "claim":
-        return it["key"], f"CLAIM:\n{it.get('text','')}\n\nEVIDENCE:\n{it.get('evidence','') or '(none provided)'}"
-    # edge
-    key = f"{it['src']}|{it['rel']}|{it['dst']}"
+        return key, f"CLAIM:\n{it.get('text','')}\n\nEVIDENCE:\n{it.get('evidence','') or '(none provided)'}"
     rel = it["rel"].lower()
     return key, (f"A (source): {it.get('a_stmt','')}\n\nB (target): {it.get('b_stmt','')}\n\n"
-                 f"RELATION: A {rel} B")
+                 f"RELATION: A {rel} B\n\nWHY (extracted reasoning): {it.get('evidence','') or '(none)'}")
 
 
 def _judge_one(kind: str, it: dict, model: str) -> tuple[str, bool]:
@@ -97,17 +114,19 @@ def _judge_one(kind: str, it: dict, model: str) -> tuple[str, bool]:
     return key, True
 
 
-def run(collection: str, *, kinds: list[str] | None = None, sample: int = 40,
+def run(collection: str, *, kinds: list[str] | None = None, limit: int = 0,
         workers: int | None = None, model: str | None = None, progress=print) -> dict:
-    """Judge a sample of each kind and store verdicts as `claude` annotations."""
+    """Judge every not-yet-judged item of each kind (incremental/resumable), storing
+    verdicts as `claude` annotations. `limit` > 0 caps how many to do this run."""
     graph.setup_schema()
     kinds = kinds or ["contribution", "edge", "claim"]
     model = model or config.READER_MODEL
     workers = workers or int(os.environ.get("PRIOR_WORKERS", "6"))
     done = {}
     for kind in kinds:
-        items = _sample(collection, kind, sample)
-        progress(f"{kind}: judging {len(items)} items")
+        items = _remaining(collection, kind, limit)
+        already = len(_judged_keys(kind))
+        progress(f"{kind}: {already} already judged · judging {len(items)} more")
         n = 0
         with ThreadPoolExecutor(max_workers=workers) as pool:
             futs = [pool.submit(_judge_one, kind, it, model) for it in items]
