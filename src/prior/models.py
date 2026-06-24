@@ -36,6 +36,9 @@ class Paper:
     referenced_works: list[str] = field(default_factory=list)
     cited_by_count: int = 0
     full_text: str = ""        # body text when available (else abstract-only)
+    date: str = ""             # full publication date ISO YYYY-MM-DD (month-level chronology)
+    date_precision: str = ""   # "day" | "month" | "year" — how much to trust the granularity
+    date_source: str = ""      # openalex | arxiv | semanticscholar | arxiv_id | year_fallback
     pdf_url: str = ""          # open-access full-text PDF, when known
     type: str = ""             # OpenAlex work type: article/review/letter/editorial/
                                # book-chapter/preprint/... — a free non-primary veto

@@ -16,14 +16,14 @@ import time
 
 import requests
 
-from .. import config
+from .. import config, dates
 from ..models import Paper
 from ._filters import looks_like_review
 
 GRAPH = "https://api.semanticscholar.org/graph/v1/paper"
 SEARCH = GRAPH + "/search"
 FIELDS = ("title,abstract,year,authors,externalIds,citationCount,"
-          "openAccessPdf,publicationTypes,venue")
+          "openAccessPdf,publicationTypes,venue,publicationDate")
 
 
 _KEY_DISABLED = False     # set once if the key is rejected (expired/invalid)
@@ -49,7 +49,8 @@ def _to_paper(it: dict) -> Paper:
     authors = [a.get("name", "") for a in (it.get("authors") or [])]
     types = it.get("publicationTypes") or []
     title = it.get("title") or "(untitled)"
-    return Paper(
+    pub_date = it.get("publicationDate") or ""        # sometimes null -> dates.resolve falls back
+    return dates.resolve(Paper(
         id=pid,
         source="semanticscholar",
         title=title,
@@ -63,7 +64,10 @@ def _to_paper(it: dict) -> Paper:
         cited_by_count=it.get("citationCount") or 0,
         pdf_url=(it.get("openAccessPdf") or {}).get("url") or "",
         is_review=("Review" in types) or looks_like_review(title),
-    )
+        date=pub_date,
+        date_precision="day" if pub_date else "",
+        date_source="semanticscholar" if pub_date else "",
+    ))
 
 
 def _get(url: str, params: dict, *, tries: int = 6):

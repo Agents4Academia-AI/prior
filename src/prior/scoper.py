@@ -20,7 +20,7 @@ import json
 import re
 from pathlib import Path
 
-from . import config, llm
+from . import config, dates, llm
 from .models import Paper
 from .sources import arxiv, openalex, semanticscholar
 
@@ -51,11 +51,19 @@ def _dedup_cross_source(papers: list[Paper]) -> list[Paper]:
     graph the snowball needs), then arXiv, then S2."""
     rank = {"openalex": 0, "arxiv": 1, "semanticscholar": 2}
     best: dict[str, Paper] = {}
+    variants: dict[str, list[Paper]] = {}
     for p in papers:
         k = p.key()
+        variants.setdefault(k, []).append(p)
         cur = best.get(k)
         if cur is None or rank.get(p.source, 9) < rank.get(cur.source, 9):
             best[k] = p
+    # preprint precedence: the kept record adopts the EARLIEST real date across its
+    # source variants, so an OpenAlex venue date never overrides an arXiv <published>.
+    for k, rec in best.items():
+        e = dates.earliest(variants[k])
+        if e and (not rec.date or e[0][:7] < rec.date[:7]):
+            rec.date, rec.date_precision, rec.date_source = e
     return list(best.values())
 
 
