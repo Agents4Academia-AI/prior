@@ -52,15 +52,28 @@ export default function ClaimGraph({
         .on("end", (e, d) => { if (!e.active) sim.alphaTarget(0); d.fx = null; d.fy = null; }));
     node.append("title").text((d) => d.label);
 
+    const elab = g.append("g").selectAll("text").data(links).join("text")
+      .attr("class", "claim-elab").attr("text-anchor", "middle").attr("font-size", 10)
+      .attr("fill", (d) => claimRelationColor[d.relation as keyof typeof claimRelationColor] || "#7a8290")
+      .text((d) => d.relation);
+
+    const trunc = (s: string, n: number) => (s.length > n ? s.slice(0, n - 1) + "…" : s);
+    const lab = g.append("g").selectAll("text").data(nodes).join("text")
+      .attr("class", "claim-nlab").attr("dx", 13).attr("dy", 4).attr("font-size", 11)
+      .text((d) => trunc(d.label, 48));
+
     const sim = d3.forceSimulation<N>(nodes)
-      .force("link", d3.forceLink<N, L>(links).id((d) => d.id).distance(60).strength(0.4))
-      .force("charge", d3.forceManyBody().strength(-160))
+      .force("link", d3.forceLink<N, L>(links).id((d) => d.id).distance(120).strength(0.35))
+      .force("charge", d3.forceManyBody().strength(-320))
       .force("center", d3.forceCenter(width / 2, height / 2))
-      .force("collide", d3.forceCollide(14))
+      .force("collide", d3.forceCollide(18))
       .on("tick", () => {
         link.attr("x1", (d) => (d.source as N).x!).attr("y1", (d) => (d.source as N).y!)
           .attr("x2", (d) => (d.target as N).x!).attr("y2", (d) => (d.target as N).y!);
         node.attr("cx", (d) => d.x!).attr("cy", (d) => d.y!);
+        lab.attr("x", (d) => d.x!).attr("y", (d) => d.y!);
+        elab.attr("x", (d) => ((d.source as N).x! + (d.target as N).x!) / 2)
+          .attr("y", (d) => ((d.source as N).y! + (d.target as N).y!) / 2);
       });
     svg.on("click", () => onSelectClaim?.(null));
     return () => { sim.stop(); };

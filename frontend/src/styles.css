@@ -830,3 +830,9 @@ button.lg-btn.on { background: var(--accent-soft); border-color: var(--accent);
 .claimgraph { display: flex; flex-direction: column; height: 100%; gap: 8px; }
 .claim-svg { flex: 1; height: auto; width: 100%; }
 .claim-legend { flex: 0 0 auto; }
+
+/* claim-graph labels */
+.claim-nlab { fill: var(--text); paint-order: stroke; stroke: var(--bg);
+  stroke-width: 3px; pointer-events: none; font-family: var(--sans); }
+.claim-elab { paint-order: stroke; stroke: var(--bg); stroke-width: 3px;
+  pointer-events: none; font-weight: 600; font-family: var(--sans); opacity: 0.95; }
