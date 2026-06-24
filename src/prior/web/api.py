@@ -14,14 +14,27 @@ from typing import Optional
 
 from fastapi import FastAPI, File, Form, Header, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 from pydantic import BaseModel
 
 from .. import auth, config, graph
 
 app = FastAPI(title="Prior API", version="0.3.0")
+# gzip the (large) render payloads — ~735KB → ~150KB over the wire.
+app.add_middleware(GZipMiddleware, minimum_size=1024)
 app.add_middleware(
     CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"],
 )
+
+
+@app.on_event("startup")
+def _warm_cache() -> None:
+    """Pre-cluster the default collection so the first page load isn't cold."""
+    try:
+        from .. import render
+        render.recluster(config.DEFAULT_COLLECTION)
+    except Exception:  # noqa: BLE001 — never block startup
+        pass
 
 
 # ── identity (username + token via headers) ─────────────────────────────────────

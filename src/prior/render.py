@@ -15,6 +15,7 @@ cache. Size is bounded by server-side constraints (min-trust, top-N by degree).
 
 from __future__ import annotations
 
+import math
 import threading
 from collections import Counter, defaultdict
 from typing import Optional
@@ -118,6 +119,32 @@ def _cluster(contribs: list, edges: list) -> tuple[dict, list]:
     return comm_of, legend
 
 
+def _layout(contribs: list, comm_of: dict, cluster_ids: list) -> dict:
+    """Deterministic, O(n) initial positions: each cluster anchored on a ring, its
+    members spiralled around the anchor (golden angle). Normalised to ~[-0.5, 0.5].
+    Shipped so the client renders from a good starting layout and barely needs to
+    run the force sim — the main page-load cost."""
+    k = len(cluster_ids) or 1
+    anchor = {}
+    for i, cid in enumerate(sorted(cluster_ids)):
+        a = 2 * math.pi * i / k - math.pi / 2
+        anchor[cid] = (0.36 * math.cos(a), 0.36 * math.sin(a))
+    anchor[-1] = (0.0, 0.0)
+    members: dict[int, list] = defaultdict(list)
+    for c in contribs:
+        members[comm_of.get(c["id"], -1)].append(c["id"])
+    pos = {}
+    for cid, ids in members.items():
+        ax, ay = anchor.get(cid, (0.0, 0.0))
+        n = len(ids)
+        spread = 0.45 if cid < 0 else 0.13   # isolated nodes fan out around centre
+        for j, nid in enumerate(sorted(ids)):
+            r = spread * math.sqrt((j + 1) / n)
+            t = j * 2.399963229728653          # golden angle
+            pos[nid] = (round(ax + r * math.cos(t), 4), round(ay + r * math.sin(t), 4))
+    return pos
+
+
 def _build_payload(collection: str, papers: dict, contribs: list, edges: list,
                    comm_of: dict, legend: list) -> dict:
     topic = ""
@@ -130,9 +157,11 @@ def _build_payload(collection: str, papers: dict, contribs: list, edges: list,
     deg = Counter()
     for e in edges:
         deg[e["src"]] += 1; deg[e["dst"]] += 1
+    pos = _layout(contribs, comm_of, [l["id"] for l in legend if l["id"] >= 0])
     contribs_n = [{"id": c["id"], "comm": comm_of.get(c["id"], -1),
                    "kind": c.get("kind") or "", "stmt": c.get("statement") or "",
                    "quote": c.get("quote") or "", "deg": deg[c["id"]],
+                   "x": pos[c["id"]][0], "y": pos[c["id"]][1],
                    "year": _year(papers.get(c["paper_id"])),
                    "cite": _cite(papers.get(c["paper_id"], {}))}
                   for c in contribs]

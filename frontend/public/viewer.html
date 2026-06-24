@@ -70,6 +70,9 @@ const YEARS=D.contribs.map(c=>c.year).filter(Boolean); const YMIN=YEARS.length?M
 function build(){
   root.selectAll("*").remove(); const isP=level==="papers";
   NODES=(isP?D.papers:D.contribs).map(n=>({...n}));
+  // use server-precomputed positions (normalised) as the initial layout → fast load
+  const HASPOS=!isP&&NODES.length&&NODES[0].x!=null;
+  if(HASPOS){const SP=Math.min(W,H)*0.92;NODES.forEach(n=>{n.x=cx+n.x*SP;n.y=cy+n.y*SP;});}
   const idset=new Set(NODES.map(n=>n.id));
   LINKS=(isP?D.paperLinks:D.contribLinks).filter(l=>idset.has(l.source)&&idset.has(l.target)).map(l=>({...l}));
   byId=new Map(NODES.map(n=>[n.id,n]));
@@ -105,7 +108,7 @@ function build(){
     .force("x",d3.forceX(d=>cen[d.comm].x).strength(d=>d.comm<0?0.04:0.25))
     .force("y",d3.forceY(d=>cen[d.comm].y).strength(d=>d.comm<0?0.04:0.25))
     .force("collide",d3.forceCollide(d=>rad(d)+1.4)).stop();
-  for(let i=0;i<440;i++)sim.tick(); tick(); sim.on("tick",tick); applyFilters(); fit();
+  for(let i=0;i<(HASPOS?70:440);i++)sim.tick(); tick(); sim.on("tick",tick); applyFilters(); fit();
 }
 function tick(){link.attr("x1",d=>d.source.x).attr("y1",d=>d.source.y).attr("x2",d=>d.target.x).attr("y2",d=>d.target.y);
   node.attr("cx",d=>d.x).attr("cy",d=>d.y); if(lab)lab.attr("x",d=>d.x).attr("y",d=>d.y);
