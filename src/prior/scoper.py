@@ -44,6 +44,30 @@ def propose_queries(topic_def: str, *, model: str | None = None) -> list[str]:
     return [q.strip() for q in out.get("queries", []) if q.strip()]
 
 
+_FOLLOWUP_SYSTEM = """You expand a literature search to improve RECALL. Given the
+topic + its scope, the titles already found IN-SCOPE, and a few that were dropped,
+find sub-areas, methods, named systems, or terminology that are under-represented
+or missing, and output 4–8 NEW OpenAlex/arXiv keyword queries targeting those gaps.
+Go after what's THIN — don't repeat angles already well covered, and avoid queries
+so generic they'd pull in unrelated highly-cited tools."""
+
+
+def followup_queries(topic_def: str, kept: list[Paper],
+                     dropped: list[tuple[Paper, str]] | None = None, *,
+                     model: str | None = None, max_titles: int = 60) -> list[str]:
+    """Reformulate the search from what's been found so far: propose NEW queries
+    aimed at gaps in the in-scope set (the query-axis complement to the citation
+    snowball). Reacting to results is what lifts recall beyond a one-shot expansion."""
+    found = "\n".join(f"- {p.title}" for p in kept[:max_titles])
+    user = f"TOPIC:\n{topic_def}\n\nIN-SCOPE SO FAR ({len(kept)}):\n{found}"
+    if dropped:
+        drp = "\n".join(f"- {p.title}" for p, _ in dropped[:15])
+        user += f"\n\nDROPPED (out of scope — don't re-surface):\n{drp}"
+    out = llm.structured(model=model or config.READER_MODEL, system=_FOLLOWUP_SYSTEM,
+                         user=user, schema=_Q_SCHEMA, tool_name="emit_queries")
+    return [q.strip() for q in out.get("queries", []) if q.strip()]
+
+
 # ── stage 2: gather candidates (recall) ──────────────────────────────────────
 def _dedup_cross_source(papers: list[Paper]) -> list[Paper]:
     """Collapse the same paper arriving from different sources (OpenAlex / arXiv /
@@ -423,7 +447,7 @@ def build_scoped_corpus(topic_def: str, *, per_query: int = 25,
 
 def explore(topic_def: str, *, hops: int = 3, per_query: int = 25,
             use_prefilter: bool = True, epsilon: float = 0.03,
-            repair_abstracts: bool = True,
+            repair_abstracts: bool = True, recover_rounds: int = 2,
             model: str | None = None, progress=print):
     """The full exploration pipeline as one call — Stage 1, the agentic stage:
 
@@ -439,18 +463,40 @@ def explore(topic_def: str, *, hops: int = 3, per_query: int = 25,
     point PRIOR_DATA_DIR at a new dir."""
     from . import completeness
 
-    # 1 + 3: recall-then-precision (search channel)
-    progress("[explore 1/3] search: queries -> candidates -> scope")
+    # 1 + 3: recall-then-precision with query RECOVERY (search channel). A one-shot
+    # query expansion misses facets; reacting to the results and reformulating
+    # toward gaps lifts recall — the query-axis complement to the citation snowball.
+    progress("[explore 1/3] search: queries -> candidates -> scope (+ recovery)")
     queries = propose_queries(topic_def, model=model)
-    candidates = gather_candidates(queries, per_query=per_query, progress=progress)
-    search_keys = {c.key() for c in candidates}
-    if repair_abstracts and candidates:            # repair before the prefilter/LLM judge
-        repair.backfill_abstracts(candidates, progress=progress)
-    if use_prefilter and candidates:
-        candidates, _ = prefilter(topic_def, candidates, progress=progress)
-    kept, dropped = scope(topic_def, candidates, model=model, progress=progress)
-    corpus = [p for p, _ in kept]
-    corpus_keys = {p.key() for p in corpus}
+    asked = {q.lower() for q in queries}
+    corpus: list[Paper] = []
+    corpus_keys: set[str] = set()
+    search_keys: set[str] = set()
+    dropped: list[tuple[Paper, str]] = []
+    for rnd in range(recover_rounds + 1):
+        cand = [c for c in gather_candidates(queries, per_query=per_query, progress=progress)
+                if c.key() not in corpus_keys]
+        search_keys |= {c.key() for c in cand}
+        if repair_abstracts and cand:              # repair before the prefilter/LLM judge
+            repair.backfill_abstracts(cand, progress=progress)
+        if use_prefilter and cand:
+            cand, _ = prefilter(topic_def, cand, progress=progress)
+        kept, drp = (scope(topic_def, cand, model=model, progress=progress)
+                     if cand else ([], []))
+        for p, _ in kept:
+            corpus.append(p)
+            corpus_keys.add(p.key())
+        dropped += drp
+        progress(f"  search round {rnd}: +{len(kept)} relevant of {len(cand)} candidates")
+        # stop on the last round, or when a recovery round stops paying off (saturation)
+        if rnd == recover_rounds or (rnd and len(kept) / max(1, len(cand)) < epsilon):
+            break
+        queries = [q for q in followup_queries(topic_def, corpus, dropped, model=model)
+                   if q.lower() not in asked]
+        asked |= {q.lower() for q in queries}
+        if not queries:
+            break
+        progress(f"  recovery: +{len(queries)} follow-up queries targeting gaps")
     curve = [len(corpus)]
     progress(f"  search channel: {len(corpus)} relevant")
 

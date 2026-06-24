@@ -33,6 +33,8 @@ def main():
     ap.add_argument("--topic", required=True, help="in-/out-of-scope topic definition")
     ap.add_argument("--hops", type=int, default=3, help="snowball hops (0 = search only)")
     ap.add_argument("--per-query", type=int, default=25)
+    ap.add_argument("--recover-rounds", type=int, default=2,
+                    help="query-recovery rounds: reformulate from results to fill recall gaps (0 = one-shot)")
     ap.add_argument("--no-repair", action="store_true",
                     help="skip abstract repair (arXiv/S2 backfill of corrupted abstracts)")
     ap.add_argument("--hub-cites", type=int, default=1000,
@@ -43,7 +45,8 @@ def main():
 
     corpus, dropped, stats = scoper.explore(
         args.topic, hops=args.hops, per_query=args.per_query,
-        repair_abstracts=not args.no_repair, model=args.model, progress=_log)
+        repair_abstracts=not args.no_repair, recover_rounds=args.recover_rounds,
+        model=args.model, progress=_log)
 
     pp = config.RAW / "papers.jsonl"
     pp.write_text("\n".join(json.dumps(p.to_dict()) for p in corpus) + "\n")
