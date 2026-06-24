@@ -112,9 +112,12 @@ def upsert_claim(c: dict, embedding: Optional[list[float]] = None) -> None:
 
 
 def add_edge(src: str, dst: str, rel: str, *, evidence: str = "",
-             confidence: float = 0.5, source: str = "text") -> None:
+             confidence: float = 0.5, source: str = "text",
+             trust: float | None = None, tier: str = "",
+             similarity: float | None = None) -> None:
     """Typed relationship. rel must be a LOCAL_/GLOBAL_REL or CITES; we whitelist
-    to keep the relationship type safe to interpolate."""
+    to keep the relationship type safe to interpolate. Optional consensus signals
+    (trust/tier/similarity) are stored when provided."""
     rel = rel.upper()
     allowed = set(LOCAL_RELS) | set(GLOBAL_RELS) | {"CITES"}
     if rel not in allowed:
@@ -122,8 +125,10 @@ def add_edge(src: str, dst: str, rel: str, *, evidence: str = "",
     with session() as s:
         s.run(f"""MATCH (a {{id:$src}}), (b {{id:$dst}})
                   MERGE (a)-[r:{rel}]->(b)
-                  SET r.evidence=$ev, r.confidence=$conf, r.source=$source""",
-              src=src, dst=dst, ev=evidence, conf=confidence, source=source)
+                  SET r.evidence=$ev, r.confidence=$conf, r.source=$source,
+                      r.trust=$trust, r.tier=$tier, r.similarity=$sim""",
+              src=src, dst=dst, ev=evidence, conf=confidence, source=source,
+              trust=trust, tier=tier, sim=similarity)
 
 
 # ── bulk writes (single transactions — fast vector-index inserts) ───────────────

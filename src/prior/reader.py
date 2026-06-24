@@ -16,15 +16,18 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from . import config, llm
-from .models import CLAIM_TYPES, LOCAL_RELATIONS, Claim, Contribution, Edge, Paper
+from .models import (CLAIM_TYPES, CONTRIB_KINDS, LOCAL_RELATIONS, Claim,
+                     Contribution, Edge, Paper)
 
 SYSTEM = """You are Reader, a meticulous scientific analyst. From ONE paper you
 extract three things and nothing else:
 
-1. CONTRIBUTIONS — the paper's own research contributions, each as a triple:
-     problem  (what gap/question it addresses)
-     method   (what it proposes/does)
-     result   (what it shows/achieves)
+1. CONTRIBUTIONS — the paper's own research contributions, each as:
+     statement: ONE self-contained sentence naming the contribution (resolve
+                pronouns; name the system/method/finding concretely).
+     kind:      empirical_finding | framework | method | benchmark | dataset |
+                model | analysis | resource | system | other
+     quote:     a short verbatim span from the text that grounds it.
    Most papers have 1–3. Use the paper's own contributions, not background it cites.
 
 2. CLAIMS — atomic, self-contained, verifiable assertions (resolve pronouns; name
@@ -50,12 +53,12 @@ _SCHEMA = {
             "items": {
                 "type": "object",
                 "properties": {
-                    "problem": {"type": "string"},
-                    "method": {"type": "string"},
-                    "result": {"type": "string"},
+                    "statement": {"type": "string"},
+                    "kind": {"type": "string", "enum": list(CONTRIB_KINDS)},
+                    "quote": {"type": "string"},
                     "confidence": {"type": "number"},
                 },
-                "required": ["problem", "method", "result"],
+                "required": ["statement", "kind"],
             },
         },
         "claims": {
@@ -134,12 +137,13 @@ def read(paper: Paper, *, model: str | None = None) -> ReadResult:
 
     contribs: list[Contribution] = []
     for j, k in enumerate(out.get("contributions", [])):
+        kind = str(k.get("kind", "other")).strip()
         contribs.append(Contribution(
             id=f"{paper.id}::contrib{j}",
             paper_id=paper.id,
-            problem=str(k.get("problem", "")).strip(),
-            method=str(k.get("method", "")).strip(),
-            result=str(k.get("result", "")).strip(),
+            statement=str(k.get("statement", "")).strip(),
+            kind=kind if kind in CONTRIB_KINDS else "other",
+            quote=str(k.get("quote", "")).strip(),
             confidence=float(k.get("confidence", 0.5)),
         ))
 

@@ -5,14 +5,14 @@ type Mode = "arxiv" | "pdf_url" | "pdf_upload";
 
 const STEPS = ["queued", "fetching", "extracting", "relating", "done"];
 
-export default function AddPaper({ onIngested }: { onIngested: () => void }) {
+export default function AddPaper({ onIngested, collection }: { onIngested: () => void; collection: string }) {
   const [open, setOpen] = useState(false);
   return (
     <div className="addpaper">
       <button className="add-trigger" onClick={() => setOpen(true)}>
         + Add paper
       </button>
-      {open && <AddPaperModal onClose={() => setOpen(false)} onIngested={onIngested} />}
+      {open && <AddPaperModal onClose={() => setOpen(false)} onIngested={onIngested} collection={collection} />}
     </div>
   );
 }
@@ -20,9 +20,11 @@ export default function AddPaper({ onIngested }: { onIngested: () => void }) {
 function AddPaperModal({
   onClose,
   onIngested,
+  collection,
 }: {
   onClose: () => void;
   onIngested: () => void;
+  collection: string;
 }) {
   const [mode, setMode] = useState<Mode>("arxiv");
   const [value, setValue] = useState("");
@@ -37,7 +39,7 @@ function AddPaperModal({
   const submit = async (force = false) => {
     setErr(null); setBusy(true); setJob(null);
     try {
-      const { job_id } = await api.ingest(mode, mode === "pdf_upload" ? "" : value, file, force);
+      const { job_id } = await api.ingest(mode, mode === "pdf_upload" ? "" : value, file, force, collection);
       poll.current = window.setInterval(async () => {
         try {
           const st = await api.ingestStatus(job_id);

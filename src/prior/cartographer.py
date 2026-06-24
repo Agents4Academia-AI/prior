@@ -96,14 +96,11 @@ _SCHEMA = {
 
 def _label(source: Contribution, cands: list[Contribution], cited: set[str],
            model: str) -> list[Edge]:
-    listing = "\n".join(
-        f"[{i}] problem: {c.problem}\n    method: {c.method}\n    result: {c.result}"
-        for i, c in enumerate(cands))
+    listing = "\n".join(f"[{i}] {c.summary()}" for i, c in enumerate(cands))
     out = llm.structured(
         model=model,
         system=SYSTEM,
-        user=(f"SOURCE CONTRIBUTION:\n  problem: {source.problem}\n"
-              f"  method: {source.method}\n  result: {source.result}\n\n"
+        user=(f"SOURCE CONTRIBUTION:\n  {source.summary()}\n\n"
               f"CANDIDATE CONTRIBUTIONS:\n{listing}"),
         schema=_SCHEMA,
         tool_name="emit_relations",

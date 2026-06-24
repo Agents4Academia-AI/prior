@@ -58,7 +58,7 @@ export default function Sidebar({
 
       <div className="papers-head">
         <span className="section-title">Papers ({papers.length})</span>
-        <AddPaper onIngested={onIngested} />
+        <AddPaper onIngested={onIngested} collection={collection} />
       </div>
       <div className="papers">
         {papers.map((p) => (

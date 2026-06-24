@@ -139,7 +139,8 @@ def _paper_from_pdf_url(url: str) -> Paper:
 
 
 # ── background runner ───────────────────────────────────────────────────────────
-def _run(job: Job, *, content: Optional[bytes], value: str, force: bool) -> None:
+def _run(job: Job, *, content: Optional[bytes], value: str, force: bool,
+         collection: str) -> None:
     try:
         _set(job, status="fetching", message="Fetching the paper…")
         if job.kind == "arxiv":
@@ -161,25 +162,31 @@ def _run(job: Job, *, content: Optional[bytes], value: str, force: bool) -> None
             return
 
         _set(job, status="extracting", message="Extracting contributions & claims…")
-        st = daemon.process_paper(paper)
+        st = daemon.process_paper(paper, collection=collection)
         if not st.get("contribs") and not st.get("claims"):
             _set(job, status="failed",
                  error="No contributions or claims could be extracted from this paper.")
             return
+        _set(job, status="relating", message="Re-clustering the graph…")
+        from . import render
+        render.recluster(collection)
         _set(job, status="done", message="Added to the graph.", result=st)
     except Exception as e:  # noqa: BLE001 — surface to the UI
         _set(job, status="failed", error=str(e))
 
 
 def start(kind: str, *, value: str = "", content: Optional[bytes] = None,
-          filename: str = "", force: bool = False) -> str:
+          filename: str = "", force: bool = False,
+          collection: str = "default") -> str:
     """Register a job and run it in a daemon thread. `force` skips the version-
-    duplicate guard (exact-id duplicates are always skipped). Returns the job id."""
+    duplicate guard (exact-id duplicates are always skipped). The paper is added to
+    `collection` and that collection is re-clustered on success. Returns the job id."""
     label = value or filename or kind
     job = Job(id=uuid.uuid4().hex[:12], kind=kind, label=label)
     with _LOCK:
         _JOBS[job.id] = job
     threading.Thread(target=_run, args=(job,),
-                     kwargs={"content": content, "value": value, "force": force},
+                     kwargs={"content": content, "value": value, "force": force,
+                             "collection": collection},
                      daemon=True).start()
     return job.id

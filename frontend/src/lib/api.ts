@@ -101,11 +101,12 @@ export const api = {
     getJSON<AnnotationRow[]>(
       `/api/annotations?target_key=${encodeURIComponent(targetKey)}`,
     ),
-  ingest: async (kind: string, value: string, file: File | null, force = false) => {
+  ingest: async (kind: string, value: string, file: File | null, force = false, collection?: string) => {
     const fd = new FormData();
     fd.append("kind", kind);
     if (value) fd.append("value", value);
     if (force) fd.append("force", "true");
+    if (collection) fd.append("collection", collection);
     if (file) fd.append("file", file);
     const res = await fetch(`${API_BASE}/api/ingest`, {
       method: "POST",

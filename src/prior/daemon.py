@@ -40,15 +40,18 @@ def _discover_topic(topic: str, n: int) -> list:
     return list(papers.values())
 
 
-def process_paper(paper, *, model: str | None = None, neighbours: int = 6) -> dict:
-    """Enrich one paper and MERGE it into the graph, relating it incrementally."""
+def process_paper(paper, *, model: str | None = None, neighbours: int = 6,
+                  collection: str = "default") -> dict:
+    """Enrich one paper and MERGE it into the graph, relating it incrementally.
+    New global edges are consensus-scored (trust/tier) to match the v0.2 schema."""
+    from . import consensus
     # Keep already-supplied body text (e.g. an uploaded PDF); else fetch it.
     paper.full_text = paper.full_text or fulltext.fetch(paper) or ""
     r = reader.read(paper, model=model)
     if not r.contributions and not r.claims:
         return {"id": paper.id, "contribs": 0, "claims": 0, "edges": 0}
 
-    cvecs = embeddings.embed([f"{k.problem} {k.method} {k.result}" for k in r.contributions])
+    cvecs = embeddings.embed([k.summary() for k in r.contributions])
     clvecs = embeddings.embed([c.text for c in r.claims])
     edge_rows = [{"src": e.src, "dst": e.dst, "rel": e.relation, "evidence": e.evidence,
                   "confidence": e.confidence, "source": e.source} for e in r.local_edges]
@@ -56,20 +59,25 @@ def process_paper(paper, *, model: str | None = None, neighbours: int = 6) -> di
         [paper.to_dict()],
         [{**k.to_dict(), "embedding": v} for k, v in zip(r.contributions, cvecs)],
         [{**c.to_dict(), "embedding": v} for c, v in zip(r.claims, clvecs)],
-        edge_rows)
+        edge_rows, collection=collection)
 
-    # Incremental global relate: each new contribution vs its nearest existing ones.
+    # Incremental global relate: each new contribution vs its nearest existing ones,
+    # scored by Sonnet+Opus+similarity consensus (trust/tier).
     g_edges = 0
     for k, v in zip(r.contributions, cvecs):
-        hits = graph.ann(v, label="Contribution", k=neighbours + 4)
-        cands = [Contribution(id=h["id"], paper_id=h["paper_id"], problem=h.get("problem", ""),
-                              method=h.get("method", ""), result=h.get("result", ""))
-                 for h in hits if h["paper_id"] != paper.id][:neighbours]
+        hits = [h for h in graph.ann(v, label="Contribution", k=neighbours + 4)
+                if h["paper_id"] != paper.id][:neighbours]
+        cands = [Contribution(id=h["id"], paper_id=h["paper_id"],
+                              statement=h.get("statement") or "", kind=h.get("kind") or "other",
+                              problem=h.get("problem") or "", method=h.get("method") or "",
+                              result=h.get("result") or "") for h in hits]
         if not cands:
             continue
-        for e in cartographer._label(k, cands, set(), model or config.CARTOGRAPHER_MODEL):
-            graph.add_edge(e.src, e.dst, e.relation, evidence=e.evidence,
-                           confidence=e.confidence, source=e.source)
+        sim_by_id = {h["id"]: h.get("_score", 0.0) for h in hits}
+        for ed in consensus.relate(k, cands, sim_by_id, set()):
+            graph.add_edge(ed["src"], ed["dst"], ed["relation"], evidence=ed["evidence"],
+                           confidence=ed["confidence"], source=ed["source"],
+                           trust=ed["trust"], tier=ed["tier"], similarity=ed["similarity"])
             g_edges += 1
     return {"id": paper.id, "contribs": len(r.contributions),
             "claims": len(r.claims), "edges": g_edges}

@@ -63,23 +63,34 @@ class Paper:
         return cls(**{k: d[k] for k in cls.__dataclass_fields__ if k in d})  # type: ignore[attr-defined]
 
 
+# Contribution kinds — the v0.2 canonical vocabulary (what a contribution *is*).
+CONTRIB_KINDS = ("empirical_finding", "framework", "method", "benchmark",
+                 "dataset", "model", "analysis", "resource", "system", "other")
+
+
 @dataclass
 class Contribution:
-    """A GLOBAL-graph node: one research contribution of a paper, ORKG-style
-    (problem + method + result). Cross-paper edges (builds_on / refines /
-    contradicts …) connect contributions; `claim_ids` are the LOCAL claims in
-    this same paper that support it (the bridge between the two levels)."""
+    """A GLOBAL-graph node: one research contribution of a paper. The canonical
+    shape is a single `statement` + a `kind` (CONTRIB_KINDS) + a verbatim `quote`
+    grounding it. The legacy ORKG triple (problem/method/result) is kept optional
+    for back-compat with older data. Cross-paper edges (builds_on / refines /
+    contradicts …) connect contributions; `claim_ids` bridge to LOCAL claims."""
 
     id: str                   # "<paper_id>::contrib<N>"
     paper_id: str
-    problem: str
-    method: str
-    result: str
+    statement: str = ""
+    kind: str = "other"
+    quote: str = ""
+    problem: str = ""         # legacy triple (older collections); empty for v0.2+
+    method: str = ""
+    result: str = ""
     claim_ids: list[str] = field(default_factory=list)
     confidence: float = 0.5
 
     def summary(self) -> str:
-        return f"{self.method} → {self.result} (for: {self.problem})"
+        if self.statement:
+            return self.statement
+        return f"{self.method} → {self.result} (for: {self.problem})".strip(" →()for:")
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -87,32 +98,6 @@ class Contribution:
     @classmethod
     def from_dict(cls, d: dict) -> "Contribution":
         return cls(**{k: d[k] for k in cls.__dataclass_fields__ if k in d})  # type: ignore[attr-defined]
-
-
-@dataclass
-class Contribution:
-    """A GLOBAL-graph node: one research contribution of a paper, ORKG-style
-    (problem + method + result). Cross-paper edges (builds_on / refines /
-    contradicts …) connect contributions; `claim_ids` are the LOCAL claims in
-    this same paper that support it (the bridge between the two levels)."""
-
-    id: str                   # "<paper_id>::contrib<N>"
-    paper_id: str
-    problem: str
-    method: str
-    result: str
-    claim_ids: list[str] = field(default_factory=list)
-    confidence: float = 0.5
-
-    def summary(self) -> str:
-        return f"{self.method} → {self.result} (for: {self.problem})"
-
-    def to_dict(self) -> dict:
-        return asdict(self)
-
-    @classmethod
-    def from_dict(cls, d: dict) -> "Contribution":
-        return cls(**{k: d.get(k) for k in cls.__dataclass_fields__})  # type: ignore[attr-defined]
 
 
 @dataclass
