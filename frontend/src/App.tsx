@@ -4,7 +4,7 @@ import type { Summary, Paper, PaperGraph, ClaimNode } from "./lib/types";
 import Sidebar from "./components/Sidebar";
 import EvalView from "./components/EvalView";
 import AskPanel from "./components/AskPanel";
-import ClaimGraph from "./components/ClaimGraph";
+import ClaimGraph, { type ClaimEdgePick } from "./components/ClaimGraph";
 import AnnotatePanel, { type AnnotationTarget } from "./components/AnnotatePanel";
 
 type Mode = "graph" | "local" | "eval";
@@ -14,6 +14,7 @@ type SelNode = {
   level: "contribs" | "papers";
   node: { id: string; kind?: string; stmt?: string; quote?: string; cite?: string; title?: string };
 };
+type SelEdge = { source: string; target: string; rel: string; ev?: string; tier?: string };
 
 export default function App() {
   const [collections, setCollections] = useState<CollectionInfo[]>([]);
@@ -25,10 +26,12 @@ export default function App() {
   const [mode, setMode] = useState<Mode>("graph");
   const [overlay, setOverlay] = useState<Overlay>("none");
   const [sel, setSel] = useState<SelNode | null>(null);
+  const [selEdge, setSelEdge] = useState<SelEdge | null>(null);
 
   const [localPaper, setLocalPaper] = useState<PaperGraph | null>(null);
   const [localLoading, setLocalLoading] = useState(false);
   const [selClaim, setSelClaim] = useState<ClaimNode | null>(null);
+  const [selClaimEdge, setSelClaimEdge] = useState<ClaimEdgePick | null>(null);
   const [who, setWho] = useState<WhoAmI | null>(null);
 
   const refreshWho = useCallback(() => {
@@ -55,7 +58,13 @@ export default function App() {
 
   useEffect(() => {
     const h = (e: MessageEvent) => {
-      if (e.data?.type === "prior-select") setSel({ level: e.data.level, node: e.data.node });
+      if (e.data?.type === "prior-select") {
+        setSel({ level: e.data.level, node: e.data.node }); setSelEdge(null);
+      } else if (e.data?.type === "prior-select-edge") {
+        setSelEdge({ source: e.data.source, target: e.data.target, rel: e.data.rel,
+                     ev: e.data.ev, tier: e.data.tier });
+        setSel(null);
+      }
     };
     window.addEventListener("message", h);
     return () => window.removeEventListener("message", h);
@@ -73,12 +82,14 @@ export default function App() {
   const openLocal = useCallback(() => {
     if (!sel) return;
     const paperId = sel.node.id.split("::")[0];
-    setLocalPaper(null); setSelClaim(null); setLocalLoading(true); setMode("local");
+    setLocalPaper(null); setSelClaim(null); setSelClaimEdge(null); setLocalLoading(true); setMode("local");
     api.paperGraph(paperId).then(setLocalPaper).catch(() => setLocalPaper(null))
       .finally(() => setLocalLoading(false));
   }, [sel]);
 
-  const exitLocal = useCallback(() => { setMode("graph"); setLocalPaper(null); setSelClaim(null); }, []);
+  const exitLocal = useCallback(() => {
+    setMode("graph"); setLocalPaper(null); setSelClaim(null); setSelClaimEdge(null);
+  }, []);
 
   const onIngested = useCallback(() => {
     api.summary(collection).then(setSummary).catch(() => {});
@@ -90,6 +101,18 @@ export default function App() {
   // contribution annotation (atlas mode) / claim annotation (local mode)
   const annotationTarget: AnnotationTarget | null = useMemo(() => {
     if (mode === "local") {
+      if (selClaimEdge) {
+        return {
+          kind: "edge",
+          key: `${selClaimEdge.source}|${selClaimEdge.relation.toUpperCase()}|${selClaimEdge.target}`,
+          heading: `Claim relation: ${selClaimEdge.relation}`,
+          fields: [
+            { label: "from", value: selClaimEdge.source },
+            { label: "to", value: selClaimEdge.target },
+          ],
+          source: localPaper?.paper.cite,
+        };
+      }
       if (!selClaim) return null;
       return {
         kind: "claim", key: selClaim.id,
@@ -99,6 +122,18 @@ export default function App() {
           ...(selClaim.evidence ? [{ label: "evidence", value: selClaim.evidence }] : []),
         ],
         source: localPaper?.paper.cite,
+      };
+    }
+    if (selEdge) {
+      return {
+        kind: "edge",
+        key: `${selEdge.source}|${selEdge.rel.toUpperCase()}|${selEdge.target}`,
+        heading: `Relation: ${selEdge.rel}`,
+        fields: [
+          { label: "from", value: selEdge.source },
+          { label: "to", value: selEdge.target },
+          ...(selEdge.ev ? [{ label: "why", value: selEdge.ev }] : []),
+        ],
       };
     }
     if (sel?.level === "contribs") {
@@ -114,7 +149,7 @@ export default function App() {
       };
     }
     return null;
-  }, [mode, sel, selClaim, localPaper]);
+  }, [mode, sel, selEdge, selClaim, selClaimEdge, localPaper]);
 
   const viewerSrc = collection
     ? `/viewer.html?api=${encodeURIComponent(api.base)}&collection=${encodeURIComponent(collection)}`
@@ -152,8 +187,10 @@ export default function App() {
             {mode === "graph" && sel && (
               <button className="btn-ghost sm" onClick={openLocal}>Claims ↳</button>
             )}
-            {mode === "graph" && sel?.level === "contribs" && (
-              <button className="btn-primary sm" onClick={() => setOverlay("annotate")}>✎ Annotate</button>
+            {mode === "graph" && (selEdge || sel?.level === "contribs") && (
+              <button className="btn-primary sm" onClick={() => setOverlay("annotate")}>
+                ✎ Annotate {selEdge ? "edge" : ""}
+              </button>
             )}
             <button className="btn-ghost sm" onClick={() => setOverlay("ask")}>Ask</button>
           </div>
@@ -181,14 +218,15 @@ export default function App() {
                     graph={localPaper}
                     highlightContrib={sel?.level === "contribs" ? sel.node.id : null}
                     selectedId={selClaim?.id ?? null}
-                    onSelectClaim={setSelClaim}
+                    onSelectClaim={(c) => { setSelClaim(c); setSelClaimEdge(null); }}
+                    onSelectEdge={(e) => { setSelClaimEdge(e); setSelClaim(null); }}
                   />
                 ) : (
                   <div className="center-fill"><div className="err">Could not load claims.</div></div>
                 )}
               </div>
               <div className="local-side">
-                <div className="ls-head">Annotate claim</div>
+                <div className="ls-head">Annotate {selClaimEdge ? "relation" : "claim"}</div>
                 <AnnotatePanel target={annotationTarget} signedIn={!!who?.signed_in} onAnnotated={onAnnotated} />
               </div>
             </div>

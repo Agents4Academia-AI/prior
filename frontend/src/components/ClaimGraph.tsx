@@ -6,13 +6,16 @@ import { claimTypeColor, claimRelationColor } from "../lib/colors";
 type N = ClaimNode & { x?: number; y?: number; fx?: number | null; fy?: number | null };
 type L = { source: string | N; target: string | N; relation: string };
 
+export type ClaimEdgePick = { source: string; target: string; relation: string };
+
 export default function ClaimGraph({
-  graph, highlightContrib, selectedId, onSelectClaim,
+  graph, highlightContrib, selectedId, onSelectClaim, onSelectEdge,
 }: {
   graph: PaperGraph;
   highlightContrib?: string | null;
   selectedId?: string | null;
   onSelectClaim?: (c: ClaimNode | null) => void;
+  onSelectEdge?: (e: ClaimEdgePick) => void;
 }) {
   const svgRef = useRef<SVGSVGElement | null>(null);
 
@@ -32,9 +35,14 @@ export default function ClaimGraph({
     svg.call(d3.zoom<SVGSVGElement, unknown>().scaleExtent([0.3, 4])
       .on("zoom", (e) => g.attr("transform", e.transform.toString())));
 
-    const link = g.append("g").selectAll("line").data(links).join("line")
+    const link = g.append("g").selectAll<SVGLineElement, L>("line").data(links).join("line")
       .attr("stroke", (d) => claimRelationColor[d.relation as keyof typeof claimRelationColor] || "#b9bfc7")
-      .attr("stroke-width", 1.6).attr("stroke-opacity", 0.6);
+      .attr("stroke-width", 2.4).attr("stroke-opacity", 0.6).style("cursor", "pointer")
+      .on("click", (e, d) => {
+        e.stopPropagation();
+        onSelectEdge?.({ source: (d.source as N).id ?? (d.source as string),
+                         target: (d.target as N).id ?? (d.target as string), relation: d.relation });
+      });
 
     const node = g.append("g").selectAll<SVGCircleElement, N>("circle").data(nodes).join("circle")
       .attr("r", (d) => (d.id === selectedId ? 11 : 8))

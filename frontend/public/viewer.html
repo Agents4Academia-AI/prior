@@ -83,7 +83,10 @@ function build(){
   link=root.append("g").selectAll("line").data(LINKS).join("line")
     .attr("stroke",d=>isP?(d.cross?"#c9b89a":"#e4ddcf"):(D.rel[d.rel]||"#c9cdd2"))
     .attr("stroke-width",d=>isP?Math.min(3,0.5+d.w*0.25):(0.5+(d.trust||0.5)*1.6)).attr("stroke-opacity",d=>isP?0.4:(0.06+0.42*(d.trust||0.5)))
-    .attr("marker-end",d=>(!isP&&DIRECTED.has(d.rel))?`url(#arr-${d.rel})`:null);
+    .attr("marker-end",d=>(!isP&&DIRECTED.has(d.rel))?`url(#arr-${d.rel})`:null)
+    .style("cursor",d=>isP?"default":"pointer")
+    .on("click",(e,d)=>{if(isP)return;e.stopPropagation();const s=d.source.id||d.source,t=d.target.id||d.target;
+      parent.postMessage({type:"prior-select-edge",source:s,target:t,rel:d.rel,ev:d.ev||"",tier:d.tier||""},"*");});
   if(isP){ring=root.append("g").selectAll("circle").data(NODES.filter(d=>d.bridge)).join("circle")
     .attr("fill","none").attr("stroke","#3b4252").attr("stroke-width",1.2).attr("stroke-dasharray","2 2")
     .attr("r",d=>rad(d)+3).style("pointer-events","none");}
