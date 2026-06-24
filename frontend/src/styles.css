@@ -836,3 +836,12 @@ button.lg-btn.on { background: var(--accent-soft); border-color: var(--accent);
   stroke-width: 3px; pointer-events: none; font-family: var(--sans); }
 .claim-elab { paint-order: stroke; stroke: var(--bg); stroke-width: 3px;
   pointer-events: none; font-weight: 600; font-family: var(--sans); opacity: 0.95; }
+
+/* docked annotate/ask panel (replaces the popup) */
+.app.three-col { grid-template-columns: 290px 1fr 360px; }
+.dock { background: var(--bg-elev); border-left: 1px solid var(--border);
+  display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+.dock-head { display: flex; align-items: center; justify-content: space-between;
+  padding: 11px 16px; border-bottom: 1px solid var(--border); flex: 0 0 auto; }
+.dock-head h3 { margin: 0; font-size: 15px; }
+.dock-body { flex: 1; overflow-y: auto; padding: 16px; }

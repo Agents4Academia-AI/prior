@@ -155,8 +155,10 @@ export default function App() {
     ? `/viewer.html?api=${encodeURIComponent(api.base)}&collection=${encodeURIComponent(collection)}`
     : "";
 
+  const dockOpen = mode === "graph" && overlay !== "none";
+
   return (
-    <div className="app two-col">
+    <div className={`app ${dockOpen ? "three-col" : "two-col"}`}>
       <Sidebar
         summary={summary}
         papers={papers}
@@ -236,13 +238,13 @@ export default function App() {
         </div>
       </div>
 
-      {overlay !== "none" && (
-        <div className="modal-backdrop" onClick={() => setOverlay("none")}>
-          <div className="modal side-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-head">
-              <h3>{overlay === "annotate" ? "Annotate" : "Ask the graph"}</h3>
-              <button className="modal-x" onClick={() => setOverlay("none")}>×</button>
-            </div>
+      {dockOpen && (
+        <div className="panel dock">
+          <div className="dock-head">
+            <h3>{overlay === "annotate" ? "Annotate" : "Ask the graph"}</h3>
+            <button className="modal-x" onClick={() => setOverlay("none")}>×</button>
+          </div>
+          <div className="dock-body">
             {overlay === "annotate"
               ? <AnnotatePanel target={annotationTarget} signedIn={!!who?.signed_in} onAnnotated={onAnnotated} />
               : <AskPanel />}
