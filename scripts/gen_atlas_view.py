@@ -170,6 +170,11 @@ TEMPLATE = r"""<!doctype html><html lang="en"><head><meta charset="utf-8">
  .rg{display:flex;align-items:center;gap:6px;margin-bottom:2px}.rg .ln{width:16px;border-top:3px solid}
  .zoom{position:absolute;top:14px;right:calc(360px + 14px);z-index:5;display:flex;flex-direction:column;gap:1px}
  .zoom button{width:30px;height:30px;background:var(--elev);color:var(--dim);border:1px solid var(--bd);cursor:pointer}
+ #tlctrl{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);z-index:6;display:none;align-items:center;gap:10px;background:var(--elev);border:1px solid var(--bd);border-radius:10px;padding:7px 13px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+ #tlctrl.on{display:flex}
+ #tlplay{width:30px;height:30px;border-radius:50%;border:1px solid var(--bd);background:#0a9396;color:#fff;cursor:pointer;font-size:12px;flex:0 0 auto}
+ #tlrange{width:320px;accent-color:#0a9396;cursor:pointer}
+ #tldate{font-family:var(--mono);font-size:12px;color:var(--dim);min-width:70px;text-align:center}
  #side{width:360px;flex:0 0 360px;background:var(--elev);border-left:1px solid var(--bd);overflow-y:auto;padding:18px}
  #side .empty{color:var(--faint);text-align:center;padding:34px 6px}
  .k{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--faint);margin:12px 0 3px}
@@ -182,12 +187,13 @@ TEMPLATE = r"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 </style></head><body>
 <div id="canvas">
  <div class="hdr"><h1>Prior — atlas</h1><div class="sub" id="sub"></div>
-   <div class="seg"><button id="mC" class="on">Contributions</button><button id="mP">Communities</button></div>
-   <label style="margin-left:10px;font-size:12px;color:var(--dim)">min trust <input id="tf" type="range" min="0" max="0.95" step="0.05" value="0" style="vertical-align:middle"> <span id="tfv">0.00</span></label>
+   <div class="seg"><button id="mC" class="on">Contributions</button><button id="mP">Communities</button><button id="mT">Timeline</button></div>
+   <span id="filtrow"><label style="margin-left:10px;font-size:12px;color:var(--dim)">min trust <input id="tf" type="range" min="0" max="0.95" step="0.05" value="0" style="vertical-align:middle"> <span id="tfv">0.00</span></label>
    <label style="margin-left:10px;font-size:12px;color:var(--dim)">year ≤ <input id="yr" type="range" step="1" style="vertical-align:middle"> <span id="yrv"></span></label>
-   <label style="margin-left:10px;font-size:12px;color:var(--dim)"><input id="conly" type="checkbox" style="vertical-align:middle"> contradictions only</label>
+   <label style="margin-left:10px;font-size:12px;color:var(--dim)"><input id="conly" type="checkbox" style="vertical-align:middle"> contradictions only</label></span>
    <div style="margin-top:8px"><input id="q" type="search" placeholder="ask the graph (keywords)… e.g. hallucination, peer review gaming" style="width:340px;padding:5px 9px;border:1px solid var(--bd);border-radius:8px;font-size:12px;font-family:var(--sans)"></div></div>
  <div class="zoom"><button id="zi">+</button><button id="zo">&minus;</button><button id="zf">fit</button></div>
+ <div id="tlctrl"><button id="tlplay">&#9654;</button><input id="tlrange" type="range" min="0" max="1000" value="1000"><span id="tldate">&mdash;</span></div>
  <div class="legend" id="legend"></div>
 </div>
 <div id="side"><div class="empty">Hover a node to focus its links. Click for details. Toggle clusters in the legend; switch level top-left.</div></div>
@@ -198,7 +204,7 @@ const LG={}; D.legend.forEach(l=>LG[l.id]=l);
 const COL=id=>(LG[id]?LG[id].color:"#c9cdd2"), LAB=id=>(LG[id]?LG[id].label:"unclustered");
 const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const fmtDate=(dt,pr)=>{if(!dt)return"";const y=dt.slice(0,4),m=+dt.slice(5,7),dd=+dt.slice(8,10);if(pr==="day"&&dd)return dd+" "+MON[m-1]+" "+y;if(m)return MON[m-1]+" "+y;return y;};
-const off=new Set(), kindOff=new Set(); let level="contribs", sel=null, minTrust=0, contradictOnly=false, maxYear=9999, frontierComm=null, frontierPanelFn=null, frontierAxis="year", frontierShowSupport=false, sim, node, link, lab, ring, NODES, LINKS, adj, byId;
+const off=new Set(), kindOff=new Set(); let level="contribs", sel=null, minTrust=0, contradictOnly=false, maxYear=9999, frontierComm=null, frontierPanelFn=null, frontierAxis="year", frontierShowSupport=false, timelineMode=false, timelinePanelFn=null, tlPlaying=false, tlTimer=null, sim, node, link, lab, ring, NODES, LINKS, adj, byId;
 const canvas=document.getElementById("canvas");let W=canvas.clientWidth,H=canvas.clientHeight;
 const svg=d3.select("#canvas").append("svg").attr("viewBox",[0,0,W,H]);
 const _defs=svg.append("defs");
@@ -206,7 +212,7 @@ Object.entries(D.rel).forEach(([rel,c])=>_defs.append("marker").attr("id","arr-"
 const root=svg.append("g");
 const zoom=d3.zoom().scaleExtent([0.1,5]).on("zoom",e=>root.attr("transform",e.transform));
 svg.call(zoom).on("click",e=>{if(!e.defaultPrevented)clearSel();});
-window.addEventListener("keydown",e=>{if(e.key==="Escape"){frontierComm!=null?window.__exitFrontier():clearSel();return;}if(e.target.tagName==="INPUT")return;if(e.key==="0"||e.key==="f")fit();});
+window.addEventListener("keydown",e=>{if(e.key==="Escape"){if(frontierComm!=null)window.__exitFrontier();else if(timelineMode)setLevel("papers");else clearSel();return;}if(e.target.tagName==="INPUT")return;if(e.key==="0"||e.key==="f")fit();});
 const real=D.legend.filter(l=>l.id>=0), cx=W/2, cy=H/2, R=Math.min(W,H)/2.7, cen={};
 real.forEach((l,i)=>{const a=2*Math.PI*i/real.length-Math.PI/2;cen[l.id]={x:cx+R*Math.cos(a),y:cy+R*Math.sin(a)};});
 cen[-1]={x:cx,y:cy};
@@ -268,14 +274,14 @@ function nodeVis(d){if(!d)return false;const isP=level==="papers";
   if(contradictOnly&&!(isP?contradictPapers.has(d.id):contradictNodes.has(d.id)))return false;
   if(d.year&&d.year>maxYear)return false;
   return true;}
-function applyFilters(){if(frontierComm!=null)return;const isP=level==="papers";  // atlas-level filters are inert in the lineage frontier
+function applyFilters(){if(frontierComm!=null||timelineMode)return;const isP=level==="papers";  // atlas-level filters are inert in the frontier / timeline
   node.style("display",d=>nodeVis(d)?null:"none");
   if(ring)ring.style("display",d=>nodeVis(d)?null:"none");
   if(link)link.style("display",l=>{const s=l.source.id||l.source,t=l.target.id||l.target;
     if(!nodeVis(byId.get(s))||!nodeVis(byId.get(t)))return "none";
     if(!isP){if(contradictOnly&&l.rel!=="contradicts")return "none";if(l.trust!==undefined&&l.trust<minTrust)return "none";}
     return null;});}
-function focus(id){if(frontierComm!=null)return;  // frontier uses frontierFocus; never the atlas focus
+function focus(id){if(frontierComm!=null||timelineMode)return;  // frontier/timeline use their own focus
   node.attr("opacity",n=>!nodeVis(n)?0:(!id||adj.get(id).has(n.id)?1:0.1));
   link.attr("stroke-opacity",l=>{const s=l.source.id||l.source,t=l.target.id||l.target;
     if(!id)return level==="papers"?(l.cross?0.4:0.3):(0.06+0.42*(l.trust||0.5)); return(s===id||t===id)?0.9:0.02;});
@@ -308,9 +314,10 @@ function contribDetail(d){const nb=D.contribLinks.filter(l=>l.source===d.id||l.t
    ${nb.map(n=>`<div class="nb"><span class="pill" style="background:${D.rel[n.rel]||'#9aa0b0'}">${esc(n.phrase)}</span> <span class="src">trust ${n.trust} · ${esc(n.tier)}</span>
      <div class="src" style="margin-top:3px">${n.dir} ${plink(pid(n.other),PCITE[pid(n.other)]||n.other)}</div>
      ${n.ev?`<div style="font-size:11.5px;color:var(--dim);margin-top:3px">${esc(n.ev)}</div>`:""}</div>`).join("")||'<div class="empty" style="padding:6px">none — isolated</div>'}`;}
-function clearSel(){sel=null;if(frontierComm!=null){window.__ffocus&&window.__ffocus(null);frontierPanelFn&&frontierPanelFn();return;}focus(null);const qe=document.getElementById("q");if(qe)qe.value="";SIDE.innerHTML='<div class="empty">Hover a node to focus its links. Click for details. Ask the graph with keywords (top-left). Click a cluster name → Expand as knowledge frontier. Switch level top-left.</div>';}
+function clearSel(){sel=null;if(frontierComm!=null){window.__ffocus&&window.__ffocus(null);frontierPanelFn&&frontierPanelFn();return;}if(timelineMode){window.__tfocus&&window.__tfocus(null);timelinePanelFn&&timelinePanelFn();return;}focus(null);const qe=document.getElementById("q");if(qe)qe.value="";SIDE.innerHTML='<div class="empty">Hover a node to focus its links. Click for details. Ask the graph with keywords (top-left). Click a cluster name → Expand as knowledge frontier. Switch level top-left.</div>';}
 function runSearch(){
   if(frontierComm!=null){window.__exitFrontier();}  // search is atlas-level; leave the frontier first
+  if(timelineMode){setLevel("papers");}
   const qe=document.getElementById("q"), q=(qe.value||"").trim().toLowerCase();
   if(!q){clearSel();return;}
   const terms=q.split(/\s+/), isP=level==="papers";
@@ -333,9 +340,13 @@ function runSearch(){
 }
 function backLink(){const q=(document.getElementById("q").value||"").trim();return q?'<div style="margin-bottom:9px"><a class="src" style="cursor:pointer" onclick="runSearch()">← back to results</a></div>':"";}
 window.__focus=id=>{const d=byId.get(id);if(!d)return;sel=id;focus(id);level==="papers"?paperDetail(d):contribDetail(d);};
-function setLevel(l){frontierComm=null;frontierPanelFn=null;level=l;sel=null;document.getElementById("mC").classList.toggle("on",l==="contribs");document.getElementById("mP").classList.toggle("on",l==="papers");
+function setLevel(l){frontierComm=null;frontierPanelFn=null;timelineMode=false;sel=null;
+  ["mC","mP","mT"].forEach(b=>document.getElementById(b).classList.remove("on"));
+  if(l==="timeline"){document.getElementById("mT").classList.add("on");document.getElementById("legend").style.display="none";document.getElementById("tlctrl").classList.add("on");document.getElementById("filtrow").style.display="none";document.getElementById("sub").innerHTML=`<b>${D.papers.length}</b> papers · timeline by date · ${D.topic}`;buildTimeline();return;}
+  document.getElementById("legend").style.display="";document.getElementById("tlctrl").classList.remove("on");document.getElementById("filtrow").style.display="";tlStop();
+  level=l;document.getElementById(l==="papers"?"mP":"mC").classList.add("on");
   document.getElementById("sub").innerHTML=l==="papers"?`<b>${D.papers.length}</b> papers · <b>${D.paperLinks.length}</b> links · ${D.topic}`:`<b>${D.contribs.length}</b> contributions · <b>${D.contribLinks.length}</b> relations · ${D.topic}`;build();}
-document.getElementById("mC").onclick=()=>setLevel("contribs");document.getElementById("mP").onclick=()=>setLevel("papers");
+document.getElementById("mC").onclick=()=>setLevel("contribs");document.getElementById("mP").onclick=()=>setLevel("papers");document.getElementById("mT").onclick=()=>setLevel("timeline");
 document.getElementById("legend").innerHTML=`<div class="t">Clusters (edge-based)</div>`+
   D.legend.map(l=>`<div class="lg" data-c="${l.id}"><span class="sw" style="background:${l.color}"></span><span>${esc(l.label)} (${l.n})</span></div>`).join("")+
   `<div class="t">Relations (opacity/width = consensus trust)</div>`+Object.entries(D.rel).map(([k,c])=>`<div class="rg"><span class="ln" style="border-color:${c}"></span><span>${k}${DIRECTED.has(k)?" →":""}</span></div>`).join("")+
@@ -454,6 +465,73 @@ window.__frontier=comm=>{frontierAxis="year";frontierShowSupport=false;buildFron
 window.__frontierAxis=()=>{frontierAxis=frontierAxis==="year"?"depth":"year";buildFrontier(frontierComm);};
 window.__frontierSupport=()=>{frontierShowSupport=!frontierShowSupport;buildFrontier(frontierComm);};
 window.__exitFrontier=()=>{frontierComm=null;frontierPanelFn=null;sel=null;build();};
+function timelinePanel(nP,nL,nC){
+  SIDE.innerHTML=`<div><span class="pill" style="background:#3b4252">field timeline</span></div>
+   <div style="font-size:12px;color:var(--dim);margin-top:8px">${nP} papers across ${nC} communities, placed left→right by <b>date</b>; each row is a community, vertical lines are year boundaries. Edges = cross-paper relations (tan = cross-community). Hit <b>▶</b> (bottom) to play the field's growth over time, or drag the scrubber to any month. Hover a paper to trace its links; click for details. Esc or another view to leave.</div>`;
+}
+function buildTimeline(){
+  timelineMode=true; frontierComm=null; sel=null; root.selectAll("*").remove();
+  const papers=D.papers.map(p=>({...p}));
+  byId=new Map(papers.map(p=>[p.id,p]));
+  const links=D.paperLinks.filter(l=>byId.has(l.source)&&byId.has(l.target)).map(l=>({...l}));
+  adj=new Map(papers.map(p=>[p.id,new Set([p.id])]));links.forEach(l=>{adj.get(l.source).add(l.target);adj.get(l.target).add(l.source);});
+  const tvOf=p=>{const d=p.date;if(d&&d.length>=7){const y=+d.slice(0,4),m=+d.slice(5,7);if(y)return y+(m-1)/12;}return p.year||null;};
+  const tvs=papers.map(tvOf).filter(v=>v!=null);
+  const tmin=tvs.length?Math.min(...tvs):2024, tmax=tvs.length?Math.max(...tvs):2025;
+  const L=200,Rm=46,T=120,Bm=44;
+  const xOf=p=>{const tv=tvOf(p);return tv==null?L:(L+(tv-tmin)/(tmax-tmin||1)*(W-L-Rm));};
+  const present=new Set(papers.map(p=>p.comm));
+  const order=D.legend.map(l=>l.id).filter(id=>present.has(id));present.forEach(c=>{if(!order.includes(c))order.push(c);});
+  const nLanes=order.length, laneH=(H-T-Bm)/Math.max(1,nLanes), laneIdx=new Map(order.map((c,i)=>[c,i]));
+  const laneY=c=>T+laneIdx.get(c)*laneH+laneH/2;
+  papers.forEach(p=>p.x=xOf(p));
+  const bk=new Map();papers.forEach(p=>{const k=p.comm+":"+Math.round(p.x/13);if(!bk.has(k))bk.set(k,[]);bk.get(k).push(p);});
+  bk.forEach(arr=>{const cy=laneY(arr[0].comm),sp=Math.min(12,(laneH*0.78)/Math.max(1,arr.length));arr.forEach((p,i)=>p.y=cy+(i-(arr.length-1)/2)*sp);});
+  const g=root.append("g");
+  order.forEach((c,i)=>{if(i%2)g.append("rect").attr("x",0).attr("y",T+i*laneH).attr("width",W).attr("height",laneH).attr("fill","#3b4252").attr("fill-opacity",0.025);
+    g.append("text").attr("x",14).attr("y",laneY(c)).attr("fill",COL(c)).attr("font-size",11).attr("font-weight",600).attr("dominant-baseline","middle").text(LAB(c));});
+  for(let Y=Math.ceil(tmin);Y<=Math.floor(tmax);Y++){const x=L+(Y-tmin)/(tmax-tmin||1)*(W-L-Rm);
+    g.append("line").attr("x1",x).attr("y1",T-8).attr("x2",x).attr("y2",H-Bm).attr("stroke","#e2e5ea").attr("stroke-dasharray","2 6");
+    g.append("text").attr("x",x).attr("y",H-Bm+17).attr("text-anchor","middle").attr("fill","#9aa0b0").attr("font-size",10).text(Y);}
+  link=root.append("g").selectAll("line").data(links).join("line").attr("stroke",l=>l.cross?"#c9b89a":"#cfd3d8").attr("stroke-width",l=>0.5+Math.min(2,(l.w||1)*0.3)).attr("stroke-opacity",0.28)
+    .attr("x1",l=>byId.get(l.source).x).attr("y1",l=>byId.get(l.source).y).attr("x2",l=>byId.get(l.target).x).attr("y2",l=>byId.get(l.target).y);
+  node=root.append("g").selectAll("circle").data(papers).join("circle").attr("r",d=>4+Math.min(5,(d.deg||0)*0.4)).attr("fill",d=>COL(d.comm)).attr("stroke",d=>d.bridge?"#3b4252":"#fbfcfd").attr("stroke-width",d=>d.bridge?1.6:1).attr("cx",d=>d.x).attr("cy",d=>d.y).style("cursor","pointer")
+    .on("mouseover",(_,d)=>tlFocus(d.id)).on("mouseout",()=>tlFocus(sel)).on("click",(e,d)=>{e.stopPropagation();sel=d.id;tlFocus(d.id);paperDetail(d);});
+  lab=root.append("g").selectAll("text").data(papers).join("text").attr("class","lab").attr("dx",7).attr("dy",3).attr("x",d=>d.x).attr("y",d=>d.y).style("display","none").text(d=>d.cite||"");
+  // time scrubber: a playhead sweeps left→right; papers/edges appear once their date is reached
+  const ph=root.append("line").attr("y1",T-8).attr("y2",H-Bm).attr("stroke","#b56b78").attr("stroke-width",1.5).attr("stroke-dasharray","4 3").style("display","none").style("pointer-events","none");
+  const xAt=tv=>L+(tv-tmin)/(tmax-tmin||1)*(W-L-Rm);
+  let curCut=tmax;
+  function applyCut(tv){curCut=tv;
+    node.attr("opacity",d=>tvOf(d)<=tv+1e-9?1:0.05);
+    link.attr("stroke-opacity",l=>(tvOf(byId.get(l.source))<=tv+1e-9&&tvOf(byId.get(l.target))<=tv+1e-9)?0.28:0);
+    if(lab)lab.style("display","none");
+    ph.attr("x1",xAt(tv)).attr("x2",xAt(tv)).style("display",tv>=tmax-1e-9?"none":null);}
+  function tlFocus(id){
+    if(!id){applyCut(curCut);return;}
+    node.attr("opacity",n=>(tvOf(n)<=curCut+1e-9&&adj.get(id).has(n.id))?1:0.08);
+    link.attr("stroke-opacity",l=>(l.source===id||l.target===id)?0.85:0.03);
+    if(lab)lab.style("display",n=>(tvOf(n)<=curCut+1e-9&&adj.get(id).has(n.id))?null:"none");}
+  window.__tfocus=tlFocus; window.__tlApply=applyCut; window.__tlMin=tmin; window.__tlMax=tmax;
+  svg.transition().duration(400).call(zoom.transform,d3.zoomIdentity);
+  if(window.__tlReset)window.__tlReset();
+  timelinePanelFn=()=>timelinePanel(papers.length,links.length,nLanes); timelinePanelFn();
+}
+function setTldate(tv){const y=Math.floor(tv),m=Math.min(11,Math.max(0,Math.round((tv-y)*12)));const el=document.getElementById("tldate");if(el)el.textContent=MON[m]+" "+y;}
+function tlStop(){tlPlaying=false;if(tlTimer){clearInterval(tlTimer);tlTimer=null;}const b=document.getElementById("tlplay");if(b)b.innerHTML="&#9654;";}
+function tlPlay(){
+  if(tlPlaying){tlStop();return;}
+  if(window.__tlMin==null)return;
+  let cut=window.__tlMin; const span=(window.__tlMax-window.__tlMin)||1, dur=6500, step=60;
+  tlPlaying=true; document.getElementById("tlplay").innerHTML="&#10074;&#10074;";
+  window.__tlApply(cut); setTldate(cut); document.getElementById("tlrange").value=0;
+  tlTimer=setInterval(()=>{cut+=span*step/dur;
+    if(cut>=window.__tlMax){cut=window.__tlMax;window.__tlApply(cut);setTldate(cut);document.getElementById("tlrange").value=1000;tlStop();return;}
+    window.__tlApply(cut);setTldate(cut);document.getElementById("tlrange").value=Math.round((cut-window.__tlMin)/span*1000);},step);
+}
+window.__tlReset=()=>{tlStop();const r=document.getElementById("tlrange");if(r)r.value=1000;if(window.__tlApply!=null){window.__tlApply(window.__tlMax);setTldate(window.__tlMax);}};
+document.getElementById("tlplay").onclick=tlPlay;
+document.getElementById("tlrange").oninput=e=>{tlStop();const tv=window.__tlMin+(+e.target.value/1000)*((window.__tlMax-window.__tlMin)||1);window.__tlApply(tv);setTldate(tv);};
 function ds(e,d){if(!e.active)sim.alphaTarget(0.3).restart();d.fx=d.x;d.fy=d.y;}function dd(e,d){d.fx=e.x;d.fy=e.y;}function de(e,d){if(!e.active)sim.alphaTarget(0);d.fx=null;d.fy=null;}
 const _q=new URLSearchParams(location.search);
 const _tp=_q.get("trust");
@@ -466,6 +544,7 @@ if(_q.get("q")){document.getElementById("q").value=_q.get("q");runSearch();}
 if(_q.get("year")){maxYear=+_q.get("year");_yr.value=maxYear;document.getElementById("yrv").textContent=maxYear;applyFilters();}
 if(_q.get("zoom")!==null&&_q.get("zoom")!==undefined&&_q.get("zoom")!=="")setTimeout(()=>zoomCluster(+_q.get("zoom")),50);
 if(_q.get("frontier")){if(_q.get("fa"))frontierAxis=_q.get("fa");if(_q.get("fs"))frontierShowSupport=true;setTimeout(()=>buildFrontier(+_q.get("frontier")),60);}
+if(_q.get("timeline"))setTimeout(()=>{setLevel("timeline");const tl=_q.get("tl");if(tl!=null)setTimeout(()=>{const r=document.getElementById("tlrange");if(r){r.value=+tl;r.dispatchEvent(new Event("input"));}},160);},60);
 </script></body></html>"""
 
 OUT.write_text(TEMPLATE.replace("__DATA__", json.dumps(payload)))
