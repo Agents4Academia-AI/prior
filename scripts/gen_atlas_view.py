@@ -356,7 +356,7 @@ function aboutPanel(){const m=D.meta||{},g=m.grounding||{},t=m.tiers||{};
    +arr("Reader · paper → contributions")
    +box(m.contribs??"—","self-declared contributions",`grounded in source: ${g.verbatim||0} verbatim · ${g.paraphrase||0} paraphrase · <b>${g.weak||0}</b> weak (&lt;0.60) · mean ${g.mean??"—"}`)
    +arr("Cartographer · cross-paper relations (multi-model consensus)")
-   +box(m.relations??"—","relations",`agreement: ${t.triple||0} triple · ${t.double||0} double · ${t.opus_only||0} opus-only · ${m.directed||0} date-oriented`)
+   +box(m.relations??"—","relations",`model agreement: ${t.triple||0} triple · ${t.double||0} double · ${t.opus_only||0} opus-only<br>direction: ${m.directed||0} date-oriented (builds_on/refines), rest symmetric / same-date`)
    +arr("edge-modularity clustering")
    +box(m.communities??"—",`communities (+ unclustered) · modularity ${m.modularity??"—"}`)
    +`<div style="font-size:11.5px;color:var(--dim);margin-top:12px;border-top:1px solid var(--bd);padding-top:9px">A <b>scoping map of primary literature</b>, not a systematic review. <b>Trust = cross-model agreement</b> that a relation exists — not evidence strength or study quality. Quotes are checked against the source text (token recall); weak ones are flagged above.</div>`;}
