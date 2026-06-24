@@ -266,6 +266,7 @@ function focus(id){
   node.attr("opacity",n=>!nodeVis(n)?0:(!id||adj.get(id).has(n.id)?1:0.1));
   link.attr("stroke-opacity",l=>{const s=l.source.id||l.source,t=l.target.id||l.target;
     if(!id)return level==="papers"?(l.cross?0.4:0.3):(0.06+0.42*(l.trust||0.5)); return(s===id||t===id)?0.9:0.02;});
+  link.attr("marker-end",l=>{if(!DIRECTED.has(l.rel))return null;const s=l.source.id||l.source,t=l.target.id||l.target;return(!id||s===id||t===id)?`url(#arr-${l.rel})`:null;});
   if(lab)lab.style("display",n=>(nodeVis(n)&&(!id||adj.get(id).has(n.id)))?null:"none");
 }
 function paperDetail(d){const spread=d.spread.map(LAB).join(" · ");
@@ -295,7 +296,7 @@ function runSearch(){
   node.each(d=>{if(nodeVis(d)&&terms.every(t=>text(d).includes(t)))ids.add(d.id);});
   sel=null;
   node.attr("opacity",d=>!nodeVis(d)?0:(ids.has(d.id)?1:0.07));
-  link.attr("stroke-opacity",0.03);
+  link.attr("stroke-opacity",0.03).attr("marker-end",null);
   if(lab)lab.style("display",d=>ids.has(d.id)?null:"none");
   const arr=[...ids].map(i=>byId.get(i)).filter(Boolean);
   const byc={}; arr.forEach(d=>byc[d.comm]=(byc[d.comm]||0)+1);
