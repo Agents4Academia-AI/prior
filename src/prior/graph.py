@@ -304,7 +304,9 @@ def paper_local_graph(paper_id: str) -> Optional[dict]:
             "RETURN k{.id, .problem, .method, .result} AS k", id=paper_id)]
         nodes = [r["c"] for r in s.run(
             "MATCH (c:Claim)-[:STATED_IN]->(:Paper {id:$id}) "
-            "RETURN c{.id, .text, .claim_type, .confidence, .evidence} AS c", id=paper_id)]
+            "OPTIONAL MATCH (c)-[:SUPPORTS_CONTRIB]->(k:Contribution) "
+            "RETURN c{.id, .text, .claim_type, .confidence, .evidence, "
+            "contribution_id: k.id} AS c", id=paper_id)]
         loc = set(LOCAL_RELS)
         edges = []
         for i, r in enumerate(s.run(

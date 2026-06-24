@@ -797,3 +797,14 @@ button.lg-btn.on { background: var(--accent-soft); border-color: var(--accent);
   cursor: pointer; font: inherit; }
 .btn-ghost:hover { color: var(--text); }
 .side-modal { width: 440px; max-width: 92vw; max-height: 88vh; overflow-y: auto; }
+
+/* local claim graph overlay */
+.wide-modal { width: 760px; max-width: 94vw; }
+.claimgraph { display: flex; flex-direction: column; gap: 10px; }
+.claim-svg { width: 100%; height: 360px; background: var(--bg); border: 1px solid var(--border);
+  border-radius: 8px; }
+.claim-legend { display: flex; flex-wrap: wrap; gap: 10px; font-size: 12px; color: var(--text-dim); }
+.cl-chip { display: inline-flex; align-items: center; gap: 5px; }
+.cl-chip .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.claim-detail { border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px;
+  background: var(--bg-elev); display: flex; flex-direction: column; gap: 8px; }

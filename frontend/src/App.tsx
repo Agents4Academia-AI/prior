@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { api, type WhoAmI, type CollectionInfo } from "./lib/api";
-import type { Summary, Paper } from "./lib/types";
+import type { Summary, Paper, PaperGraph } from "./lib/types";
 import Sidebar from "./components/Sidebar";
 import EvalView from "./components/EvalView";
 import AskPanel from "./components/AskPanel";
+import ClaimGraph from "./components/ClaimGraph";
 import AnnotatePanel, { type AnnotationTarget } from "./components/AnnotatePanel";
 
 type Mode = "graph" | "eval";
+type Overlay = "none" | "annotate" | "ask" | "claims";
 
 type SelNode = {
   level: "contribs" | "papers";
@@ -21,8 +23,9 @@ export default function App() {
   const [bootError, setBootError] = useState<string | null>(null);
 
   const [mode, setMode] = useState<Mode>("graph");
-  const [overlay, setOverlay] = useState<"none" | "annotate" | "ask">("none");
+  const [overlay, setOverlay] = useState<Overlay>("none");
   const [sel, setSel] = useState<SelNode | null>(null);
+  const [claimGraph, setClaimGraph] = useState<PaperGraph | null>(null);
   const [who, setWho] = useState<WhoAmI | null>(null);
 
   const refreshWho = useCallback(() => {
@@ -63,6 +66,14 @@ export default function App() {
   }, [collection]);
 
   const onAnnotated = useCallback(() => { refreshWho(); }, [refreshWho]);
+
+  const openClaims = useCallback(() => {
+    if (!sel) return;
+    const paperId = sel.node.id.split("::")[0];
+    setClaimGraph(null);
+    setOverlay("claims");
+    api.paperGraph(paperId).then(setClaimGraph).catch(() => setClaimGraph(null));
+  }, [sel]);
 
   const onIngested = useCallback(() => {
     api.summary(collection).then(setSummary).catch(() => {});
@@ -112,6 +123,9 @@ export default function App() {
         </div>
         {mode === "graph" && (
           <div className="toolbar-right">
+            {sel && (
+              <button className="btn-ghost sm" onClick={() => openClaims()}>Claims</button>
+            )}
             {sel && sel.level === "contribs" && (
               <button className="btn-primary sm" onClick={() => setOverlay("annotate")}>✎ Annotate</button>
             )}
@@ -134,15 +148,19 @@ export default function App() {
 
       {overlay !== "none" && (
         <div className="modal-backdrop" onClick={() => setOverlay("none")}>
-          <div className="modal side-modal" onClick={(e) => e.stopPropagation()}>
+          <div className={`modal ${overlay === "claims" ? "wide-modal" : "side-modal"}`} onClick={(e) => e.stopPropagation()}>
             <div className="modal-head">
-              <h3>{overlay === "annotate" ? "Annotate" : "Ask the graph"}</h3>
+              <h3>{overlay === "annotate" ? "Annotate" : overlay === "ask" ? "Ask the graph" : "Local claim graph"}</h3>
               <button className="modal-x" onClick={() => setOverlay("none")}>×</button>
             </div>
-            {overlay === "annotate" ? (
+            {overlay === "annotate" && (
               <AnnotatePanel target={annotationTarget} signedIn={!!who?.signed_in} onAnnotated={onAnnotated} />
-            ) : (
-              <AskPanel />
+            )}
+            {overlay === "ask" && <AskPanel />}
+            {overlay === "claims" && (
+              claimGraph
+                ? <ClaimGraph graph={claimGraph} highlightContrib={sel?.level === "contribs" ? sel.node.id : null} />
+                : <div className="center-fill"><span className="spinner" /> Loading claims…</div>
             )}
           </div>
         </div>
