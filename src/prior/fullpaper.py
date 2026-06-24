@@ -131,6 +131,11 @@ class _HTMLToMarkdown(HTMLParser):
         self._row: list[str] | None = None
         self._table: list[list[str]] | None = None
         self._table_has_head = False
+        # arXiv wraps display equations in <table class="...ltx_eqn_table">; collect
+        # their math (and the ltx_eqn_eqno number) and emit clean $$…$$ blocks rather
+        # than table scaffolding.
+        self._eqn_rows: list[dict] | None = None   # not None ⇒ inside an equation table
+        self._in_eqno = False
 
     # text sink: route to the open table cell, else the document body
     def _put(self, s: str) -> None:
@@ -154,8 +159,12 @@ class _HTMLToMarkdown(HTMLParser):
                 latex = _html.unescape(a.get("alttext", "")).strip()
                 if latex:
                     self.result.n_math += 1
-                    disp = a.get("display") == "block"
-                    self._put(f"\n\n$$\n{latex}\n$$\n\n" if disp else f" ${latex}$ ")
+                    if self._eqn_rows is not None:           # collect for the eqn block
+                        if self._eqn_rows:
+                            self._eqn_rows[-1]["math"].append(latex)
+                    else:
+                        disp = a.get("display") == "block"
+                        self._put(f"\n\n$$\n{latex}\n$$\n\n" if disp else f" ${latex}$ ")
             self._skip = 1              # skip the MathML subtree either way
             return
         if tag == "img":
@@ -181,15 +190,24 @@ class _HTMLToMarkdown(HTMLParser):
                 self._put(f"\n{indent}- ")
             return
         if tag == "table":
-            self._table, self._table_has_head = [], False
+            if "ltx_eqn_table" in a.get("class", ""):     # equation, not a real table
+                self._eqn_rows = []
+            else:
+                self._table, self._table_has_head = [], False
             return
-        if tag == "tr" and self._table is not None:
-            self._row = []
+        if tag == "tr":
+            if self._eqn_rows is not None:
+                self._eqn_rows.append({"math": [], "eqno": ""})
+            elif self._table is not None:
+                self._row = []
             return
-        if tag in ("td", "th") and self._table is not None:
-            self._cell = []
-            if tag == "th":
-                self._table_has_head = True
+        if tag in ("td", "th"):
+            if self._eqn_rows is not None:
+                self._in_eqno = "ltx_eqn_eqno" in a.get("class", "")
+            elif self._table is not None:
+                self._cell = []
+                if tag == "th":
+                    self._table_has_head = True
             return
         if tag == "br":
             self._put("  \n")
@@ -215,17 +233,24 @@ class _HTMLToMarkdown(HTMLParser):
                 self._list.pop(); self._ol_n.pop()
             self._put("\n")
             return
-        if tag in ("td", "th") and self._table is not None and self._cell is not None:
-            text = re.sub(r"\s+", " ", "".join(self._cell)).strip()
-            (self._row if self._row is not None else []).append(text)
-            self._cell = None
+        if tag in ("td", "th"):
+            if self._eqn_rows is not None:
+                self._in_eqno = False
+            elif self._table is not None and self._cell is not None:
+                text = re.sub(r"\s+", " ", "".join(self._cell)).strip()
+                (self._row if self._row is not None else []).append(text)
+                self._cell = None
             return
-        if tag == "tr" and self._table is not None and self._row is not None:
-            self._table.append(self._row)
-            self._row = None
+        if tag == "tr":
+            if self._eqn_rows is None and self._table is not None and self._row is not None:
+                self._table.append(self._row)
+                self._row = None
             return
-        if tag == "table" and self._table is not None:
-            self._flush_table()
+        if tag == "table":
+            if self._eqn_rows is not None:
+                self._flush_equation()
+            elif self._table is not None:
+                self._flush_table()
             return
         if tag in _HEADINGS or tag in _BLOCK:
             self._put("\n\n")
@@ -233,6 +258,10 @@ class _HTMLToMarkdown(HTMLParser):
     def handle_data(self, data):
         if self._skip:
             return
+        if self._eqn_rows is not None:                # inside an equation table
+            if self._in_eqno and self._eqn_rows:
+                self._eqn_rows[-1]["eqno"] += data    # capture the eqn number
+            return                                    # ignore padding-cell text
         self._put(re.sub(r"[ \t\r\n]+", " ", data))   # whitespace-only → single sep space
 
     # — helpers —
@@ -248,6 +277,22 @@ class _HTMLToMarkdown(HTMLParser):
             return
         md = _emit_image(data, mime, a.get("alt", ""), self.opts, self.result, self.stem)
         self._put(f"\n\n{md}\n\n")
+
+    def _flush_equation(self) -> None:
+        """Emit the collected equation rows as clean $$…$$ blocks (number → \\tag),
+        dropping the table scaffolding entirely."""
+        rows = self._eqn_rows or []
+        self._eqn_rows = None
+        blocks = []
+        for row in rows:
+            math = " ".join(m for m in row["math"] if m).strip()
+            if not math:
+                continue
+            eqno = re.sub(r"^\((.*)\)$", r"\1", row["eqno"].strip()).strip()
+            tag = f" \\tag{{{eqno}}}" if eqno else ""
+            blocks.append(f"$$\n{math}{tag}\n$$")
+        if blocks:
+            self._put("\n\n" + "\n\n".join(blocks) + "\n\n")
 
     def _flush_table(self) -> None:
         rows = [r for r in (self._table or []) if r]
