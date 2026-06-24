@@ -128,16 +128,18 @@ def add_edge(src: str, dst: str, rel: str, *, evidence: str = "",
 
 # ── bulk writes (single transactions — fast vector-index inserts) ───────────────
 def bulk_load(papers: list[dict], contributions: list[dict], claims: list[dict],
-              edges: list[dict]) -> None:
+              edges: list[dict], *, collection: str = "default") -> None:
     """Load a whole atlas in a few batched transactions. Per-node transactions
     flush the HNSW vector index on every commit (~5s each); UNWIND batches amortize
     that to one flush per stage. Each `contributions`/`claims` row carries an
-    `embedding` key; `edges` rows have src/dst/rel/evidence/confidence/source."""
+    `embedding` key; `edges` rows have src/dst/rel/evidence/confidence/source and
+    optionally trust/tier/similarity. All nodes are tagged with `collection`."""
     with session() as s:
         s.run("UNWIND $rows AS r MERGE (p:Paper {id:r.id}) SET p += r.props",
-              rows=[{"id": p["id"], "props": {k: p.get(k) for k in
+              rows=[{"id": p["id"], "props": {**{k: p.get(k) for k in
                     ("title", "year", "venue", "doi", "url", "cited_by_count",
-                     "is_review", "abstract", "authors")}} for p in papers])
+                     "is_review", "abstract", "authors")}, "collection": collection}}
+                    for p in papers])
 
         s.run("""UNWIND $rows AS r
                  MERGE (n:Contribution {id:r.id}) SET n += r.props
@@ -145,7 +147,8 @@ def bulk_load(papers: list[dict], contributions: list[dict], claims: list[dict],
                  MERGE (p)-[:HAS_CONTRIBUTION]->(n)""",
               rows=[{"id": k["id"], "props": {**{x: k.get(x) for x in
                     ("paper_id", "statement", "kind", "problem", "method",
-                     "result", "quote", "confidence")}, "embedding": k.get("embedding")}}
+                     "result", "quote", "confidence")}, "collection": collection,
+                    "embedding": k.get("embedding")}}
                     for k in contributions])
 
         s.run("""UNWIND $rows AS r
@@ -154,7 +157,8 @@ def bulk_load(papers: list[dict], contributions: list[dict], claims: list[dict],
                  MERGE (n)-[:STATED_IN]->(p)""",
               rows=[{"id": c["id"], "props": {**{x: c.get(x) for x in
                     ("paper_id", "text", "claim_type", "evidence", "confidence")},
-                    "embedding": c.get("embedding")}} for c in claims])
+                    "collection": collection, "embedding": c.get("embedding")}}
+                    for c in claims])
 
         bridge = [{"cid": c["id"], "kid": c["contribution_id"]}
                   for c in claims if c.get("contribution_id")]
@@ -174,7 +178,8 @@ def bulk_load(papers: list[dict], contributions: list[dict], claims: list[dict],
                       MATCH (a {{id:r.src}}), (b {{id:r.dst}})
                       MERGE (a)-[e:{rel}]->(b)
                       SET e.evidence=r.evidence, e.confidence=r.confidence,
-                          e.source=r.source""", rows=rows)
+                          e.source=r.source, e.trust=r.trust, e.tier=r.tier,
+                          e.similarity=r.similarity""", rows=rows)
 
 
 # ── reads (the agent's graph tools) ─────────────────────────────────────────────
@@ -252,14 +257,16 @@ def have_paper(paper_id: str) -> bool:
                      id=paper_id).single() is not None
 
 
-def list_papers() -> list[dict]:
+def list_papers(collection: Optional[str] = None) -> list[dict]:
+    where = "WHERE p.collection=$c" if collection else ""
     with session() as s:
-        res = s.run("""MATCH (p:Paper)
+        res = s.run(f"""MATCH (p:Paper) {where}
                        OPTIONAL MATCH (p)-[:HAS_CONTRIBUTION]->(k:Contribution)
                        OPTIONAL MATCH (c:Claim)-[:STATED_IN]->(p)
-                       RETURN p{.*} AS p, count(DISTINCT k) AS nk, count(DISTINCT c) AS nc
-                       ORDER BY p.year DESC""")
-        return [{**r["p"], "n_contributions": r["nk"], "n_claims": r["nc"]} for r in res]
+                       RETURN p{{.*}} AS p, count(DISTINCT k) AS nk, count(DISTINCT c) AS nc
+                       ORDER BY p.year DESC""", c=collection)
+        return [{k: v for k, v in r["p"].items() if k != "embedding"}
+                | {"n_contributions": r["nk"], "n_claims": r["nc"]} for r in res]
 
 
 def global_graph() -> dict:
@@ -317,16 +324,17 @@ def contribution_detail(contrib_id: str) -> Optional[dict]:
                            for e in neighbours(contrib_id, rels=GLOBAL_RELS)]}
 
 
-def summary() -> dict:
+def summary(collection: Optional[str] = None) -> dict:
+    f = " {collection:$c}" if collection else ""
     with session() as s:
-        def one(q): return s.run(q).single()[0]
+        def one(q): return s.run(q, c=collection).single()[0]
         return {
-            "papers": one("MATCH (n:Paper) RETURN count(n)"),
-            "contributions": one("MATCH (n:Contribution) RETURN count(n)"),
-            "claims": one("MATCH (n:Claim) RETURN count(n)"),
-            "global_edges": one("MATCH (:Contribution)-[r]->(:Contribution) RETURN count(r)"),
-            "local_edges": one("MATCH (:Claim)-[r]->(:Claim) RETURN count(r)"),
-            "citations": one("MATCH (:Paper)-[r:CITES]->(:Paper) RETURN count(r)"),
+            "papers": one(f"MATCH (n:Paper{f}) RETURN count(n)"),
+            "contributions": one(f"MATCH (n:Contribution{f}) RETURN count(n)"),
+            "claims": one(f"MATCH (n:Claim{f}) RETURN count(n)"),
+            "global_edges": one(f"MATCH (:Contribution{f})-[r]->(:Contribution{f}) RETURN count(r)"),
+            "local_edges": one(f"MATCH (:Claim{f})-[r]->(:Claim{f}) RETURN count(r)"),
+            "citations": one(f"MATCH (:Paper{f})-[r:CITES]->(:Paper{f}) RETURN count(r)"),
         }
 
 

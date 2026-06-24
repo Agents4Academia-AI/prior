@@ -41,15 +41,36 @@ def _now() -> str:
 
 
 # ── meta ──────────────────────────────────────────────────────────────────────
+def _coll(collection: Optional[str]) -> str:
+    return collection or config.DEFAULT_COLLECTION
+
+
+@app.get("/api/collections")
+def collections_list() -> dict:
+    from .. import collections as colmod
+    return {"collections": colmod.list_collections(), "default": config.DEFAULT_COLLECTION}
+
+
 @app.get("/api/summary")
-def summary() -> dict:
-    return {"topic": "", **graph.summary()}
+def summary(collection: Optional[str] = None) -> dict:
+    from .. import collections as colmod
+    c = _coll(collection)
+    topic = next((x["topic"] for x in colmod.list_collections() if x["name"] == c), "")
+    return {"collection": c, "topic": topic, **graph.summary(c)}
+
+
+@app.get("/api/render/global")
+def render_global(collection: Optional[str] = None, min_trust: float = 0.0,
+                  max_nodes: int = 0, year_max: Optional[int] = None) -> dict:
+    from .. import render
+    return render.payload(_coll(collection), min_trust=min_trust,
+                          max_nodes=max_nodes, year_max=year_max)
 
 
 @app.get("/api/papers")
-def papers() -> list[dict]:
+def papers(collection: Optional[str] = None) -> list[dict]:
     out = []
-    for p in graph.list_papers():
+    for p in graph.list_papers(_coll(collection)):
         authors = p.get("authors") or []
         out.append({
             "id": p["id"], "title": p.get("title"), "year": p.get("year"),

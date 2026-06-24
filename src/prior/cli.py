@@ -80,6 +80,20 @@ def main(argv: list[str] | None = None) -> int:
     p_dmn.add_argument("--watch", action="store_true", help="loop forever")
     p_dmn.add_argument("--interval", type=int, default=300)
 
+    p_col = sub.add_parser("collection", help="manage named paper collections")
+    col_sub = p_col.add_subparsers(dest="col_cmd", required=True)
+    c_load = col_sub.add_parser("load", help="load a release bundle as a collection")
+    c_load.add_argument("bundle_dir", help="dir with papers_core.jsonl + contributions_core_consensus.json")
+    c_load.add_argument("--name", required=True, help="collection name, e.g. core-v0.2")
+    c_load.add_argument("--topic", default="", help="display topic for the UI")
+    c_load.add_argument("--source", default="", help="provenance, e.g. release URL")
+    col_sub.add_parser("list", help="list collections with counts")
+    c_tag = col_sub.add_parser("tag-legacy", help="tag pre-collections data with a name")
+    c_tag.add_argument("--name", default="legacy")
+
+    p_clu = sub.add_parser("cluster", help="(re)cluster a collection + cache its render payload")
+    p_clu.add_argument("--collection", required=True)
+
     args = ap.parse_args(argv)
 
     if args.cmd == "build":
@@ -145,6 +159,21 @@ def main(argv: list[str] | None = None) -> int:
         daemon.run(args.topics, topic_defs=args.topic_defs, rounds=args.rounds,
                    per_topic=args.per_topic, workers=args.workers,
                    watch=args.watch, interval=args.interval)
+    elif args.cmd == "collection":
+        from . import collections as colmod
+        if args.col_cmd == "load":
+            st = colmod.load_bundle(args.bundle_dir, collection=args.name,
+                                    topic=args.topic, source=args.source)
+            print(f"loaded: {st}")
+        elif args.col_cmd == "list":
+            for c in colmod.list_collections():
+                print(f"  {c['name']:18} {c['papers']:5} papers   {c['topic']}")
+        elif args.col_cmd == "tag-legacy":
+            print(f"tagged {colmod.tag_untagged(args.name)} nodes as {args.name}")
+    elif args.cmd == "cluster":
+        from . import render
+        st = render.recluster(args.collection)
+        print(f"clustered {args.collection}: {st}")
     return 0
 
 

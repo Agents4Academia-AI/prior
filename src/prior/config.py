@@ -94,6 +94,8 @@ FULLTEXT_CHARS = int(os.environ.get("PRIOR_FULLTEXT_CHARS", "48000"))
 # users.json maps username -> {"token": "...", "admin": true|false}. When the file
 # is absent, auth runs in OPEN dev mode (any name, no token, non-admin).
 USERS_FILE = Path(os.environ.get("PRIOR_USERS_FILE", str(DATA / "users.json")))
+# Default collection the UI opens to (a named corpus in the graph).
+DEFAULT_COLLECTION = os.environ.get("PRIOR_DEFAULT_COLLECTION", "core-v0.2")
 # When true, every annotator can see everyone's annotations (else only their own).
 ANNOTATIONS_SHARED = os.environ.get("PRIOR_ANNOTATIONS_SHARED", "").lower() in ("1", "true", "yes")
 ANNOTATIONS_DB = DATA / "annotations.db"
