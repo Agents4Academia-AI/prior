@@ -38,6 +38,13 @@ GREY = "#c9cdd2"
 REL = {"supports": "#0a9396", "builds_on": "#5b8fb0", "refines": "#ca6702", "contradicts": "#ae2012"}
 
 
+def yr(p):
+    try:
+        return int(str((p or {}).get("year") or "").strip()[:4])
+    except (ValueError, TypeError):
+        return None
+
+
 def cite(p):
     au = p.get("authors") or []
     if isinstance(au, str):
@@ -109,7 +116,7 @@ for (a, b) in pair:
     deg[a] += 1; deg[b] += 1
 
 papers_n = [{"id": p, "cite": cite(A.get(p, {})), "title": A.get(p, {}).get("title") or "",
-             "deg": deg[p], "comm": paper_dom[p], "bridge": paper_bridge[p],
+             "deg": deg[p], "comm": paper_dom[p], "bridge": paper_bridge[p], "year": yr(A.get(p)),
              "spread": paper_spread[p], "n": len(by_paper[p]), "url": A.get(p, {}).get("url") or "",
              "top": [c.get("statement", "")[:150] for c in
                      sorted(by_paper[p], key=lambda c: len(c.get("statement", "")), reverse=True)[:3]]}
@@ -117,7 +124,7 @@ papers_n = [{"id": p, "cite": cite(A.get(p, {})), "title": A.get(p, {}).get("tit
 paper_links = [{"source": a, "target": b, "w": w, "cross": paper_dom[a] != paper_dom[b]}
                for (a, b), w in pair.items()]
 contribs_n = [{"id": c["id"], "comm": comm_of[c["id"]], "kind": c.get("kind", ""),
-               "stmt": c.get("statement", ""), "quote": c.get("quote", ""),
+               "stmt": c.get("statement", ""), "quote": c.get("quote", ""), "year": yr(A.get(c["paper_id"])),
                "cite": cite(A.get(c["paper_id"], {}))} for c in cons]
 contrib_links = [{"source": e["src"], "target": e["dst"], "rel": e["relation"],
                   "ev": (e.get("evidence") or "")[:160],
@@ -166,6 +173,7 @@ TEMPLATE = r"""<!doctype html><html lang="en"><head><meta charset="utf-8">
  <div class="hdr"><h1>Prior — atlas</h1><div class="sub" id="sub"></div>
    <div class="seg"><button id="mC" class="on">Contributions</button><button id="mP">Communities</button></div>
    <label style="margin-left:10px;font-size:12px;color:var(--dim)">min trust <input id="tf" type="range" min="0" max="0.95" step="0.05" value="0" style="vertical-align:middle"> <span id="tfv">0.00</span></label>
+   <label style="margin-left:10px;font-size:12px;color:var(--dim)">year ≤ <input id="yr" type="range" step="1" style="vertical-align:middle"> <span id="yrv"></span></label>
    <label style="margin-left:10px;font-size:12px;color:var(--dim)"><input id="conly" type="checkbox" style="vertical-align:middle"> contradictions only</label>
    <div style="margin-top:8px"><input id="q" type="search" placeholder="ask the graph (keywords)… e.g. hallucination, peer review gaming" style="width:340px;padding:5px 9px;border:1px solid var(--bd);border-radius:8px;font-size:12px;font-family:var(--sans)"></div></div>
  <div class="zoom"><button id="zi">+</button><button id="zo">&minus;</button><button id="zf">fit</button></div>
@@ -177,7 +185,7 @@ TEMPLATE = r"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 const D=JSON.parse(document.getElementById("d").textContent),SIDE=document.getElementById("side");
 const LG={}; D.legend.forEach(l=>LG[l.id]=l);
 const COL=id=>(LG[id]?LG[id].color:"#c9cdd2"), LAB=id=>(LG[id]?LG[id].label:"unclustered");
-const off=new Set(), kindOff=new Set(); let level="contribs", sel=null, minTrust=0, contradictOnly=false, sim, node, link, lab, ring, NODES, LINKS, adj, byId;
+const off=new Set(), kindOff=new Set(); let level="contribs", sel=null, minTrust=0, contradictOnly=false, maxYear=9999, sim, node, link, lab, ring, NODES, LINKS, adj, byId;
 const canvas=document.getElementById("canvas");let W=canvas.clientWidth,H=canvas.clientHeight;
 const svg=d3.select("#canvas").append("svg").attr("viewBox",[0,0,W,H]);const root=svg.append("g");
 const zoom=d3.zoom().scaleExtent([0.1,5]).on("zoom",e=>root.attr("transform",e.transform));
@@ -190,6 +198,7 @@ const pid=id=>id.split("::")[0];
 const contradictNodes=new Set(), contradictPapers=new Set();
 D.contribLinks.forEach(l=>{if(l.rel==="contradicts"){contradictNodes.add(l.source);contradictNodes.add(l.target);contradictPapers.add(pid(l.source));contradictPapers.add(pid(l.target));}});
 const KINDS=Array.from(new Set(D.contribs.map(c=>c.kind).filter(Boolean))).sort();
+const YEARS=D.contribs.map(c=>c.year).filter(Boolean); const YMIN=YEARS.length?Math.min(...YEARS):2020, YMAX=YEARS.length?Math.max(...YEARS):2026; maxYear=YMAX;
 
 function build(){
   root.selectAll("*").remove(); const isP=level==="papers";
@@ -201,7 +210,8 @@ function build(){
   LINKS.forEach(l=>{adj.get(l.source).add(l.target);adj.get(l.target).add(l.source);});
   const rad=isP?d=>3+Math.sqrt(d.deg)*1.7:()=>4;
   clab=root.append("g").selectAll("text").data(real).join("text").attr("class","clab")
-    .attr("fill",d=>d.color).attr("text-anchor","middle").attr("x",d=>cen[d.id].x).attr("y",d=>cen[d.id].y-R*0.20).text(d=>d.label);
+    .attr("fill",d=>d.color).attr("text-anchor","middle").attr("x",d=>cen[d.id].x).attr("y",d=>cen[d.id].y-R*0.20).text(d=>d.label)
+    .style("cursor","pointer").on("click",(e,l)=>{e.stopPropagation();zoomCluster(l.id);});
   link=root.append("g").selectAll("line").data(LINKS).join("line")
     .attr("stroke",d=>isP?(d.cross?"#c9b89a":"#e4ddcf"):(D.rel[d.rel]||"#c9cdd2"))
     .attr("stroke-width",d=>isP?Math.min(3,0.5+d.w*0.25):(0.5+(d.trust||0.5)*1.6)).attr("stroke-opacity",d=>isP?0.4:(0.06+0.42*(d.trust||0.5)));
@@ -232,6 +242,7 @@ function nodeVis(d){if(!d)return false;const isP=level==="papers";
   if(off.has(d.comm))return false;
   if(!isP&&kindOff.has(d.kind))return false;
   if(contradictOnly&&!(isP?contradictPapers.has(d.id):contradictNodes.has(d.id)))return false;
+  if(d.year&&d.year>maxYear)return false;
   return true;}
 function applyFilters(){const isP=level==="papers";
   node.style("display",d=>nodeVis(d)?null:"none");
@@ -306,13 +317,19 @@ document.getElementById("q").addEventListener("input",runSearch);
 document.getElementById("zi").onclick=()=>svg.transition().call(zoom.scaleBy,1.4);document.getElementById("zo").onclick=()=>svg.transition().call(zoom.scaleBy,1/1.4);document.getElementById("zf").onclick=fit;
 function fit(){const xs=NODES.map(n=>n.x),ys=NODES.map(n=>n.y);const a=Math.min(...xs),b=Math.max(...xs),c=Math.min(...ys),e=Math.max(...ys),gw=b-a||1,gh=e-c||1,k=Math.min((W-150)/gw,(H-150)/gh,1.8);
   svg.transition().duration(400).call(zoom.transform,d3.zoomIdentity.translate(W/2-k*(a+gw/2),H/2-k*(c+gh/2)).scale(k));}
+function zoomCluster(c){const ns=NODES.filter(n=>n.comm===c);if(!ns.length)return;
+  const xs=ns.map(n=>n.x),ys=ns.map(n=>n.y),a=Math.min(...xs),b=Math.max(...xs),cc=Math.min(...ys),e=Math.max(...ys),gw=b-a||1,gh=e-cc||1,k=Math.min((W-220)/gw,(H-220)/gh,2.8);
+  svg.transition().duration(500).call(zoom.transform,d3.zoomIdentity.translate(W/2-k*(a+gw/2),H/2-k*(cc+gh/2)).scale(k));}
 function ds(e,d){if(!e.active)sim.alphaTarget(0.3).restart();d.fx=d.x;d.fy=d.y;}function dd(e,d){d.fx=e.x;d.fy=e.y;}function de(e,d){if(!e.active)sim.alphaTarget(0);d.fx=null;d.fy=null;}
 const _q=new URLSearchParams(location.search);
 const _tp=_q.get("trust");
 if(_tp){minTrust=+_tp;document.getElementById("tf").value=_tp;document.getElementById("tfv").textContent=(+_tp).toFixed(2);}
 if(_q.get("contradicts")){contradictOnly=true;document.getElementById("conly").checked=true;}
+const _yr=document.getElementById("yr"); _yr.min=YMIN; _yr.max=YMAX; _yr.value=YMAX; document.getElementById("yrv").textContent=YMAX;
+_yr.oninput=e=>{maxYear=+e.target.value;document.getElementById("yrv").textContent=maxYear;applyFilters();focus(sel);};
 setLevel("contribs");
 if(_q.get("q")){document.getElementById("q").value=_q.get("q");runSearch();}
+if(_q.get("year")){maxYear=+_q.get("year");_yr.value=maxYear;document.getElementById("yrv").textContent=maxYear;applyFilters();}
 </script></body></html>"""
 
 OUT.write_text(TEMPLATE.replace("__DATA__", json.dumps(payload)))
