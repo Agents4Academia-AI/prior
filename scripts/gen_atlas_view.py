@@ -165,7 +165,8 @@ TEMPLATE = r"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <div id="canvas">
  <div class="hdr"><h1>Prior — atlas</h1><div class="sub" id="sub"></div>
    <div class="seg"><button id="mC" class="on">Contributions</button><button id="mP">Communities</button></div>
-   <label style="margin-left:10px;font-size:12px;color:var(--dim)">min trust <input id="tf" type="range" min="0" max="0.95" step="0.05" value="0" style="vertical-align:middle"> <span id="tfv">0.00</span></label></div>
+   <label style="margin-left:10px;font-size:12px;color:var(--dim)">min trust <input id="tf" type="range" min="0" max="0.95" step="0.05" value="0" style="vertical-align:middle"> <span id="tfv">0.00</span></label>
+   <label style="margin-left:10px;font-size:12px;color:var(--dim)"><input id="conly" type="checkbox" style="vertical-align:middle"> contradictions only</label></div>
  <div class="zoom"><button id="zi">+</button><button id="zo">&minus;</button><button id="zf">fit</button></div>
  <div class="legend" id="legend"></div>
 </div>
@@ -175,7 +176,7 @@ TEMPLATE = r"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 const D=JSON.parse(document.getElementById("d").textContent),SIDE=document.getElementById("side");
 const LG={}; D.legend.forEach(l=>LG[l.id]=l);
 const COL=id=>(LG[id]?LG[id].color:"#c9cdd2"), LAB=id=>(LG[id]?LG[id].label:"unclustered");
-const off=new Set(); let level="contribs", sel=null, minTrust=0, sim, node, link, lab, ring, NODES, LINKS, adj;
+const off=new Set(), kindOff=new Set(); let level="contribs", sel=null, minTrust=0, contradictOnly=false, sim, node, link, lab, ring, NODES, LINKS, adj, byId;
 const canvas=document.getElementById("canvas");let W=canvas.clientWidth,H=canvas.clientHeight;
 const svg=d3.select("#canvas").append("svg").attr("viewBox",[0,0,W,H]);const root=svg.append("g");
 const zoom=d3.zoom().scaleExtent([0.1,5]).on("zoom",e=>root.attr("transform",e.transform));
@@ -185,13 +186,16 @@ real.forEach((l,i)=>{const a=2*Math.PI*i/real.length-Math.PI/2;cen[l.id]={x:cx+R
 cen[-1]={x:cx,y:cy};
 const esc=s=>(s||"").toString().replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const pid=id=>id.split("::")[0];
+const contradictNodes=new Set(), contradictPapers=new Set();
+D.contribLinks.forEach(l=>{if(l.rel==="contradicts"){contradictNodes.add(l.source);contradictNodes.add(l.target);contradictPapers.add(pid(l.source));contradictPapers.add(pid(l.target));}});
+const KINDS=Array.from(new Set(D.contribs.map(c=>c.kind).filter(Boolean))).sort();
 
 function build(){
   root.selectAll("*").remove(); const isP=level==="papers";
   NODES=(isP?D.papers:D.contribs).map(n=>({...n}));
   const idset=new Set(NODES.map(n=>n.id));
   LINKS=(isP?D.paperLinks:D.contribLinks).filter(l=>idset.has(l.source)&&idset.has(l.target)).map(l=>({...l}));
-  const byId=new Map(NODES.map(n=>[n.id,n]));
+  byId=new Map(NODES.map(n=>[n.id,n]));
   adj=new Map(NODES.map(n=>[n.id,new Set([n.id])]));
   LINKS.forEach(l=>{adj.get(l.source).add(l.target);adj.get(l.target).add(l.source);});
   const rad=isP?d=>3+Math.sqrt(d.deg)*1.7:()=>4;
@@ -218,19 +222,28 @@ function build(){
     .force("x",d3.forceX(d=>cen[d.comm].x).strength(d=>d.comm<0?0.04:0.25))
     .force("y",d3.forceY(d=>cen[d.comm].y).strength(d=>d.comm<0?0.04:0.25))
     .force("collide",d3.forceCollide(d=>rad(d)+1.4)).stop();
-  for(let i=0;i<440;i++)sim.tick(); tick(); sim.on("tick",tick); applyVis(); applyTrust(); fit();
+  for(let i=0;i<440;i++)sim.tick(); tick(); sim.on("tick",tick); applyFilters(); fit();
 }
 function tick(){link.attr("x1",d=>d.source.x).attr("y1",d=>d.source.y).attr("x2",d=>d.target.x).attr("y2",d=>d.target.y);
   node.attr("cx",d=>d.x).attr("cy",d=>d.y); if(lab)lab.attr("x",d=>d.x).attr("y",d=>d.y);
   if(ring)ring.attr("cx",d=>d.x).attr("cy",d=>d.y);}
-const vis=d=>!off.has(d.comm);
-function applyVis(){node.style("display",d=>vis(d)?null:"none");if(ring)ring.style("display",d=>vis(d)?null:"none");}
-function applyTrust(){if(!link)return;link.style("display",l=>(level==="contribs"&&l.trust!==undefined&&l.trust<minTrust)?"none":null);}
+function nodeVis(d){if(!d)return false;const isP=level==="papers";
+  if(off.has(d.comm))return false;
+  if(!isP&&kindOff.has(d.kind))return false;
+  if(contradictOnly&&!(isP?contradictPapers.has(d.id):contradictNodes.has(d.id)))return false;
+  return true;}
+function applyFilters(){const isP=level==="papers";
+  node.style("display",d=>nodeVis(d)?null:"none");
+  if(ring)ring.style("display",d=>nodeVis(d)?null:"none");
+  if(link)link.style("display",l=>{const s=l.source.id||l.source,t=l.target.id||l.target;
+    if(!nodeVis(byId.get(s))||!nodeVis(byId.get(t)))return "none";
+    if(!isP){if(contradictOnly&&l.rel!=="contradicts")return "none";if(l.trust!==undefined&&l.trust<minTrust)return "none";}
+    return null;});}
 function focus(id){
-  node.attr("opacity",n=>!vis(n)?0:(!id||adj.get(id).has(n.id)?1:0.1));
+  node.attr("opacity",n=>!nodeVis(n)?0:(!id||adj.get(id).has(n.id)?1:0.1));
   link.attr("stroke-opacity",l=>{const s=l.source.id||l.source,t=l.target.id||l.target;
     if(!id)return level==="papers"?(l.cross?0.4:0.3):(0.06+0.42*(l.trust||0.5)); return(s===id||t===id)?0.9:0.02;});
-  if(lab)lab.style("display",n=>(vis(n)&&(!id||adj.get(id).has(n.id)))?null:"none");
+  if(lab)lab.style("display",n=>(nodeVis(n)&&(!id||adj.get(id).has(n.id)))?null:"none");
 }
 function paperDetail(d){const spread=d.spread.map(LAB).join(" · ");
   SIDE.innerHTML=`<div><span class="pill" style="background:${COL(d.comm)}">${esc(LAB(d.comm))}</span>${d.bridge?' <span class="pill" style="background:#3b4252">bridge</span>':''}</div>
@@ -256,15 +269,23 @@ document.getElementById("mC").onclick=()=>setLevel("contribs");document.getEleme
 document.getElementById("legend").innerHTML=`<div class="t">Clusters (edge-based)</div>`+
   D.legend.map(l=>`<div class="lg" data-c="${l.id}"><span class="sw" style="background:${l.color}"></span><span>${esc(l.label)} (${l.n})</span></div>`).join("")+
   `<div class="t">Relations (opacity/width = consensus trust)</div>`+Object.entries(D.rel).map(([k,c])=>`<div class="rg"><span class="ln" style="border-color:${c}"></span><span>${k}</span></div>`).join("")+
+  `<div class="t">Contribution kinds (toggle, contributions view)</div>`+
+  KINDS.map(k=>`<div class="lg" data-k="${esc(k)}"><span class="sw" style="background:#b9bcc2"></span><span>${esc(k)}</span></div>`).join("")+
   `<div class="t">Papers view</div><div class="rg"><span class="ln" style="border-top:1.2px dashed #3b4252;width:16px"></span><span>bridge (spans ≥2)</span></div>`;
-document.querySelectorAll(".lg").forEach(el=>el.onclick=()=>{const c=+el.dataset.c;off.has(c)?(off.delete(c),el.classList.remove("off")):(off.add(c),el.classList.add("off"));applyVis();focus(sel);});
-document.getElementById("tf").oninput=e=>{minTrust=+e.target.value;document.getElementById("tfv").textContent=minTrust.toFixed(2);applyTrust();};
+document.querySelectorAll(".lg").forEach(el=>el.onclick=()=>{
+  if(el.dataset.c!==undefined){const c=+el.dataset.c; off.has(c)?off.delete(c):off.add(c);}
+  else if(el.dataset.k!==undefined){const k=el.dataset.k; kindOff.has(k)?kindOff.delete(k):kindOff.add(k);}
+  el.classList.toggle("off"); applyFilters(); focus(sel);});
+document.getElementById("tf").oninput=e=>{minTrust=+e.target.value;document.getElementById("tfv").textContent=minTrust.toFixed(2);applyFilters();};
+document.getElementById("conly").onchange=e=>{contradictOnly=e.target.checked;applyFilters();focus(sel);};
 document.getElementById("zi").onclick=()=>svg.transition().call(zoom.scaleBy,1.4);document.getElementById("zo").onclick=()=>svg.transition().call(zoom.scaleBy,1/1.4);document.getElementById("zf").onclick=fit;
 function fit(){const xs=NODES.map(n=>n.x),ys=NODES.map(n=>n.y);const a=Math.min(...xs),b=Math.max(...xs),c=Math.min(...ys),e=Math.max(...ys),gw=b-a||1,gh=e-c||1,k=Math.min((W-150)/gw,(H-150)/gh,1.8);
   svg.transition().duration(400).call(zoom.transform,d3.zoomIdentity.translate(W/2-k*(a+gw/2),H/2-k*(c+gh/2)).scale(k));}
 function ds(e,d){if(!e.active)sim.alphaTarget(0.3).restart();d.fx=d.x;d.fy=d.y;}function dd(e,d){d.fx=e.x;d.fy=e.y;}function de(e,d){if(!e.active)sim.alphaTarget(0);d.fx=null;d.fy=null;}
-const _tp=new URLSearchParams(location.search).get("trust");
+const _q=new URLSearchParams(location.search);
+const _tp=_q.get("trust");
 if(_tp){minTrust=+_tp;document.getElementById("tf").value=_tp;document.getElementById("tfv").textContent=(+_tp).toFixed(2);}
+if(_q.get("contradicts")){contradictOnly=true;document.getElementById("conly").checked=true;}
 setLevel("contribs");
 </script></body></html>"""
 
