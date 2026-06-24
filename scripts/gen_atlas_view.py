@@ -126,7 +126,7 @@ for (a, b) in pair:
 papers_n = [{"id": p, "cite": cite(A.get(p, {})), "title": A.get(p, {}).get("title") or "",
              "deg": deg[p], "comm": paper_dom[p], "bridge": paper_bridge[p], "year": yr(A.get(p)),
              "spread": paper_spread[p], "n": len(by_paper[p]), "url": A.get(p, {}).get("url") or "",
-             "date": A.get(p, {}).get("date") or "",
+             "date": A.get(p, {}).get("date") or "", "dprec": A.get(p, {}).get("date_precision") or "",
              "top": [c.get("statement", "")[:150] for c in
                      sorted(by_paper[p], key=lambda c: len(c.get("statement", "")), reverse=True)[:3]]}
             for p in by_paper]
@@ -135,6 +135,7 @@ paper_links = [{"source": a, "target": b, "w": w, "cross": paper_dom[a] != paper
 contribs_n = [{"id": c["id"], "comm": comm_of[c["id"]], "kind": c.get("kind", ""),
                "stmt": c.get("statement", ""), "quote": c.get("quote", ""), "year": yr(A.get(c["paper_id"])),
                "date": c.get("date") or A.get(c["paper_id"], {}).get("date") or "",
+               "dprec": c.get("date_precision") or A.get(c["paper_id"], {}).get("date_precision") or "",
                "cite": cite(A.get(c["paper_id"], {}))} for c in cons]
 contrib_links = [{"source": e["src"], "target": e["dst"], "rel": e["relation"],
                   "ev": (e.get("evidence") or "")[:160],
@@ -195,6 +196,8 @@ TEMPLATE = r"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 const D=JSON.parse(document.getElementById("d").textContent),SIDE=document.getElementById("side");
 const LG={}; D.legend.forEach(l=>LG[l.id]=l);
 const COL=id=>(LG[id]?LG[id].color:"#c9cdd2"), LAB=id=>(LG[id]?LG[id].label:"unclustered");
+const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const fmtDate=(dt,pr)=>{if(!dt)return"";const y=dt.slice(0,4),m=+dt.slice(5,7),dd=+dt.slice(8,10);if(pr==="day"&&dd)return dd+" "+MON[m-1]+" "+y;if(m)return MON[m-1]+" "+y;return y;};
 const off=new Set(), kindOff=new Set(); let level="contribs", sel=null, minTrust=0, contradictOnly=false, maxYear=9999, frontierComm=null, frontierPanelFn=null, frontierAxis="year", frontierShowSupport=false, sim, node, link, lab, ring, NODES, LINKS, adj, byId;
 const canvas=document.getElementById("canvas");let W=canvas.clientWidth,H=canvas.clientHeight;
 const svg=d3.select("#canvas").append("svg").attr("viewBox",[0,0,W,H]);
@@ -203,7 +206,7 @@ Object.entries(D.rel).forEach(([rel,c])=>_defs.append("marker").attr("id","arr-"
 const root=svg.append("g");
 const zoom=d3.zoom().scaleExtent([0.1,5]).on("zoom",e=>root.attr("transform",e.transform));
 svg.call(zoom).on("click",e=>{if(!e.defaultPrevented)clearSel();});
-window.addEventListener("keydown",e=>{if(e.key==="Escape"){frontierComm!=null?window.__exitFrontier():clearSel();}});
+window.addEventListener("keydown",e=>{if(e.key==="Escape"){frontierComm!=null?window.__exitFrontier():clearSel();return;}if(e.target.tagName==="INPUT")return;if(e.key==="0"||e.key==="f")fit();});
 const real=D.legend.filter(l=>l.id>=0), cx=W/2, cy=H/2, R=Math.min(W,H)/2.7, cen={};
 real.forEach((l,i)=>{const a=2*Math.PI*i/real.length-Math.PI/2;cen[l.id]={x:cx+R*Math.cos(a),y:cy+R*Math.sin(a)};});
 cen[-1]={x:cx,y:cy};
@@ -281,7 +284,7 @@ function focus(id){if(frontierComm!=null)return;  // frontier uses frontierFocus
 }
 function paperDetail(d){const spread=d.spread.map(LAB).join(" · ");
   SIDE.innerHTML=backLink()+`<div><span class="pill" style="background:${COL(d.comm)}">${esc(LAB(d.comm))}</span>${d.bridge?' <span class="pill" style="background:#3b4252">bridge</span>':''}</div>
-  <div class="k">Paper</div><div>${d.url?`<a class="src" style="text-decoration:underline" href="${d.url}" target="_blank">${esc(d.title)}</a>`:esc(d.title)}</div><div class="k">Cite</div><div class="src">${esc(d.cite)}</div>
+  <div class="k">Paper</div><div>${d.url?`<a class="src" style="text-decoration:underline" href="${d.url}" target="_blank">${esc(d.title)}</a>`:esc(d.title)}</div><div class="k">Cite</div><div class="src">${esc(d.cite)}</div><div class="k">Date</div><div>${esc(fmtDate(d.date,d.dprec)||String(d.year||"—"))}</div>
   <div class="k">Degree / contributions</div><div>${d.deg} links · ${d.n} contributions</div>
   <div class="k">Clusters spanned</div><div>${esc(spread)||"—"}</div>
   <div class="k">Top contributions</div><ul>${d.top.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>
@@ -300,7 +303,7 @@ function contribDetail(d){const nb=D.contribLinks.filter(l=>l.source===d.id||l.t
   SIDE.innerHTML=backLink()+`<div><span class="pill" style="background:${COL(d.comm)}">${esc(LAB(d.comm))}</span> <span class="pill" style="background:#9aa0b0">${esc(d.kind||"contribution")}</span></div>
    <div class="k">Contribution</div><div>${esc(d.stmt)}</div>
    ${d.quote?`<div class="k">Stated as</div><div class="quote">${esc(d.quote)}</div>`:""}
-   <div class="k">Paper</div><div class="src">${plink(pid(d.id),d.cite)}</div>
+   <div class="k">Paper</div><div class="src">${plink(pid(d.id),d.cite)}${d.date?` <span style="color:var(--faint)">· ${esc(fmtDate(d.date,d.dprec))}</span>`:""}</div>
    <div class="k">Cross-paper relations (${nb.length})</div>
    ${nb.map(n=>`<div class="nb"><span class="pill" style="background:${D.rel[n.rel]||'#9aa0b0'}">${esc(n.phrase)}</span> <span class="src">trust ${n.trust} · ${esc(n.tier)}</span>
      <div class="src" style="margin-top:3px">${n.dir} ${plink(pid(n.other),PCITE[pid(n.other)]||n.other)}</div>
@@ -348,7 +351,7 @@ document.getElementById("tf").oninput=e=>{minTrust=+e.target.value;document.getE
 document.getElementById("conly").onchange=e=>{contradictOnly=e.target.checked;applyFilters();focus(sel);};
 document.getElementById("q").addEventListener("input",runSearch);
 document.getElementById("zi").onclick=()=>svg.transition().call(zoom.scaleBy,1.4);document.getElementById("zo").onclick=()=>svg.transition().call(zoom.scaleBy,1/1.4);document.getElementById("zf").onclick=fit;
-function fit(){const xs=NODES.map(n=>n.x),ys=NODES.map(n=>n.y);const a=Math.min(...xs),b=Math.max(...xs),c=Math.min(...ys),e=Math.max(...ys),gw=b-a||1,gh=e-c||1,k=Math.min((W-150)/gw,(H-150)/gh,1.8);
+function fit(){const ns=(node&&node.data().length?node.data():NODES);const xs=ns.map(n=>n.x),ys=ns.map(n=>n.y);const a=Math.min(...xs),b=Math.max(...xs),c=Math.min(...ys),e=Math.max(...ys),gw=b-a||1,gh=e-c||1,k=Math.min((W-150)/gw,(H-150)/gh,1.8);
   svg.transition().duration(400).call(zoom.transform,d3.zoomIdentity.translate(W/2-k*(a+gw/2),H/2-k*(c+gh/2)).scale(k));}
 function zoomCluster(c){const ns=NODES.filter(n=>n.comm===c);if(!ns.length)return;
   const xs=ns.map(n=>n.x),ys=ns.map(n=>n.y),a=Math.min(...xs),b=Math.max(...xs),cc=Math.min(...ys),e=Math.max(...ys),gw=b-a||1,gh=e-cc||1,k=Math.min((W-220)/gw,(H-220)/gh,2.8);

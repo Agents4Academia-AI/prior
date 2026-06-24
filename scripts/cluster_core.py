@@ -157,7 +157,8 @@ def main() -> None:
     contribs_n = [{"id": c["id"], "comm": comm_of[c["id"]], "kind": c.get("kind", ""),
                    "stmt": c.get("statement", ""), "quote": c.get("quote", ""),
                    "year": yr(papers.get(c["paper_id"])), "cite": cite(papers.get(c["paper_id"], {})),
-                   "date": c.get("date") or papers.get(c["paper_id"], {}).get("date") or ""}
+                   "date": c.get("date") or papers.get(c["paper_id"], {}).get("date") or "",
+                   "dprec": c.get("date_precision") or papers.get(c["paper_id"], {}).get("date_precision") or ""}
                   for c in cons]
     contrib_links = [{"source": e["src"], "target": e["dst"], "rel": e["relation"],
                       "ev": (e.get("evidence") or "")[:160], "trust": round(e.get("trust", 0.5), 2),
@@ -179,7 +180,7 @@ def main() -> None:
         paper_dom[p] = cl.most_common(1)[0][0] if cl else -1
     papers_n = [{"id": p, "cite": cite(papers.get(p, {})), "title": papers.get(p, {}).get("title") or "",
                  "deg": deg[p], "comm": paper_dom[p], "year": yr(papers.get(p)),
-                 "date": papers.get(p, {}).get("date") or "",
+                 "date": papers.get(p, {}).get("date") or "", "dprec": papers.get(p, {}).get("date_precision") or "",
                  "n": len(by_paper[p]), "url": papers.get(p, {}).get("url") or ""}
                 for p in by_paper]
     paper_links = [{"source": a, "target": b, "w": w, "cross": paper_dom[a] != paper_dom[b]}
