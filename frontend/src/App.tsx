@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { api, type WhoAmI, type CollectionInfo } from "./lib/api";
-import type { Summary, Paper, PaperGraph } from "./lib/types";
+import type { Summary, Paper, PaperGraph, ClaimNode } from "./lib/types";
 import Sidebar from "./components/Sidebar";
 import EvalView from "./components/EvalView";
 import AskPanel from "./components/AskPanel";
 import ClaimGraph from "./components/ClaimGraph";
 import AnnotatePanel, { type AnnotationTarget } from "./components/AnnotatePanel";
 
-type Mode = "graph" | "eval";
-type Overlay = "none" | "annotate" | "ask" | "claims";
+type Mode = "graph" | "local" | "eval";
+type Overlay = "none" | "annotate" | "ask";
 
 type SelNode = {
   level: "contribs" | "papers";
@@ -25,7 +25,10 @@ export default function App() {
   const [mode, setMode] = useState<Mode>("graph");
   const [overlay, setOverlay] = useState<Overlay>("none");
   const [sel, setSel] = useState<SelNode | null>(null);
-  const [claimGraph, setClaimGraph] = useState<PaperGraph | null>(null);
+
+  const [localPaper, setLocalPaper] = useState<PaperGraph | null>(null);
+  const [localLoading, setLocalLoading] = useState(false);
+  const [selClaim, setSelClaim] = useState<ClaimNode | null>(null);
   const [who, setWho] = useState<WhoAmI | null>(null);
 
   const refreshWho = useCallback(() => {
@@ -60,20 +63,22 @@ export default function App() {
 
   const switchCollection = useCallback((coll: string) => {
     if (coll === collection) return;
-    setCollection(coll); setSel(null);
+    setCollection(coll); setSel(null); setMode("graph"); setLocalPaper(null);
     api.summary(coll).then(setSummary).catch(() => {});
     api.papers(coll).then(setPapers).catch(() => {});
   }, [collection]);
 
   const onAnnotated = useCallback(() => { refreshWho(); }, [refreshWho]);
 
-  const openClaims = useCallback(() => {
+  const openLocal = useCallback(() => {
     if (!sel) return;
     const paperId = sel.node.id.split("::")[0];
-    setClaimGraph(null);
-    setOverlay("claims");
-    api.paperGraph(paperId).then(setClaimGraph).catch(() => setClaimGraph(null));
+    setLocalPaper(null); setSelClaim(null); setLocalLoading(true); setMode("local");
+    api.paperGraph(paperId).then(setLocalPaper).catch(() => setLocalPaper(null))
+      .finally(() => setLocalLoading(false));
   }, [sel]);
+
+  const exitLocal = useCallback(() => { setMode("graph"); setLocalPaper(null); setSelClaim(null); }, []);
 
   const onIngested = useCallback(() => {
     api.summary(collection).then(setSummary).catch(() => {});
@@ -82,20 +87,34 @@ export default function App() {
     if (f) f.src = f.src; // eslint-disable-line no-self-assign
   }, [collection]);
 
+  // contribution annotation (atlas mode) / claim annotation (local mode)
   const annotationTarget: AnnotationTarget | null = useMemo(() => {
-    if (!sel || sel.level !== "contribs") return null;
-    const n = sel.node;
-    return {
-      kind: "contribution",
-      key: n.id,
-      heading: `Contribution (${n.kind || "contribution"})`,
-      fields: [
-        { label: "statement", value: n.stmt || "" },
-        ...(n.quote ? [{ label: "quote", value: n.quote }] : []),
-      ],
-      source: n.cite,
-    };
-  }, [sel]);
+    if (mode === "local") {
+      if (!selClaim) return null;
+      return {
+        kind: "claim", key: selClaim.id,
+        heading: `Claim (${selClaim.claim_type})`,
+        fields: [
+          { label: "claim", value: selClaim.label },
+          ...(selClaim.evidence ? [{ label: "evidence", value: selClaim.evidence }] : []),
+        ],
+        source: localPaper?.paper.cite,
+      };
+    }
+    if (sel?.level === "contribs") {
+      const n = sel.node;
+      return {
+        kind: "contribution", key: n.id,
+        heading: `Contribution (${n.kind || "contribution"})`,
+        fields: [
+          { label: "statement", value: n.stmt || "" },
+          ...(n.quote ? [{ label: "quote", value: n.quote }] : []),
+        ],
+        source: n.cite,
+      };
+    }
+    return null;
+  }, [mode, sel, selClaim, localPaper]);
 
   const viewerSrc = collection
     ? `/viewer.html?api=${encodeURIComponent(api.base)}&collection=${encodeURIComponent(collection)}`
@@ -115,53 +134,80 @@ export default function App() {
       />
 
       <div className="panel canvas">
-        <div className="toolbar">
-          <div className="toggle">
-            <button className={mode === "graph" ? "on" : ""} onClick={() => setMode("graph")}>Graph</button>
-            <button className={mode === "eval" ? "on" : ""} onClick={() => setMode("eval")}>Eval</button>
-          </div>
-        </div>
-        {mode === "graph" && (
-          <div className="toolbar-right">
-            {sel && (
-              <button className="btn-ghost sm" onClick={() => openClaims()}>Claims</button>
+        <div className="canvas-bar">
+          <div className="bar-left">
+            {mode === "local" ? (
+              <>
+                <button className="btn-ghost sm" onClick={exitLocal}>← Atlas</button>
+                <span className="bar-title">{localPaper?.paper.cite ?? "claim graph"}</span>
+              </>
+            ) : (
+              <div className="toggle">
+                <button className={mode === "graph" ? "on" : ""} onClick={() => setMode("graph")}>Graph</button>
+                <button className={mode === "eval" ? "on" : ""} onClick={() => setMode("eval")}>Eval</button>
+              </div>
             )}
-            {sel && sel.level === "contribs" && (
+          </div>
+          <div className="bar-right">
+            {mode === "graph" && sel && (
+              <button className="btn-ghost sm" onClick={openLocal}>Claims ↳</button>
+            )}
+            {mode === "graph" && sel?.level === "contribs" && (
               <button className="btn-primary sm" onClick={() => setOverlay("annotate")}>✎ Annotate</button>
             )}
             <button className="btn-ghost sm" onClick={() => setOverlay("ask")}>Ask</button>
           </div>
-        )}
+        </div>
 
-        {bootError && (
-          <div className="center-fill">
-            <div className="err">Could not reach the backend: {bootError}</div>
-            <div className="muted">Is the API running at {api.base}?</div>
-          </div>
-        )}
+        <div className="canvas-body">
+          {bootError && (
+            <div className="center-fill">
+              <div className="err">Could not reach the backend: {bootError}</div>
+              <div className="muted">Is the API running at {api.base}?</div>
+            </div>
+          )}
 
-        {!bootError && mode === "graph" && viewerSrc && (
-          <iframe id="viewer" key={collection} className="viewer-frame" title="Prior atlas" src={viewerSrc} />
-        )}
-        {!bootError && mode === "eval" && <EvalView />}
+          {!bootError && mode === "graph" && viewerSrc && (
+            <iframe id="viewer" key={collection} className="viewer-frame" title="Prior atlas" src={viewerSrc} />
+          )}
+
+          {!bootError && mode === "local" && (
+            <div className="local-split">
+              <div className="local-graph">
+                {localLoading ? (
+                  <div className="center-fill"><span className="spinner" /> Loading claims…</div>
+                ) : localPaper ? (
+                  <ClaimGraph
+                    graph={localPaper}
+                    highlightContrib={sel?.level === "contribs" ? sel.node.id : null}
+                    selectedId={selClaim?.id ?? null}
+                    onSelectClaim={setSelClaim}
+                  />
+                ) : (
+                  <div className="center-fill"><div className="err">Could not load claims.</div></div>
+                )}
+              </div>
+              <div className="local-side">
+                <div className="ls-head">Annotate claim</div>
+                <AnnotatePanel target={annotationTarget} signedIn={!!who?.signed_in} onAnnotated={onAnnotated} />
+              </div>
+            </div>
+          )}
+
+          {!bootError && mode === "eval" && <EvalView />}
+        </div>
       </div>
 
       {overlay !== "none" && (
         <div className="modal-backdrop" onClick={() => setOverlay("none")}>
-          <div className={`modal ${overlay === "claims" ? "wide-modal" : "side-modal"}`} onClick={(e) => e.stopPropagation()}>
+          <div className="modal side-modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-head">
-              <h3>{overlay === "annotate" ? "Annotate" : overlay === "ask" ? "Ask the graph" : "Local claim graph"}</h3>
+              <h3>{overlay === "annotate" ? "Annotate" : "Ask the graph"}</h3>
               <button className="modal-x" onClick={() => setOverlay("none")}>×</button>
             </div>
-            {overlay === "annotate" && (
-              <AnnotatePanel target={annotationTarget} signedIn={!!who?.signed_in} onAnnotated={onAnnotated} />
-            )}
-            {overlay === "ask" && <AskPanel />}
-            {overlay === "claims" && (
-              claimGraph
-                ? <ClaimGraph graph={claimGraph} highlightContrib={sel?.level === "contribs" ? sel.node.id : null} />
-                : <div className="center-fill"><span className="spinner" /> Loading claims…</div>
-            )}
+            {overlay === "annotate"
+              ? <AnnotatePanel target={annotationTarget} signedIn={!!who?.signed_in} onAnnotated={onAnnotated} />
+              : <AskPanel />}
           </div>
         </div>
       )}

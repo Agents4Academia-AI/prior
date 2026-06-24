@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import type { PaperGraph, ClaimNode } from "../lib/types";
 import { claimTypeColor, claimRelationColor } from "../lib/colors";
@@ -7,18 +7,19 @@ type N = ClaimNode & { x?: number; y?: number; fx?: number | null; fy?: number |
 type L = { source: string | N; target: string | N; relation: string };
 
 export default function ClaimGraph({
-  graph, highlightContrib,
+  graph, highlightContrib, selectedId, onSelectClaim,
 }: {
   graph: PaperGraph;
   highlightContrib?: string | null;
+  selectedId?: string | null;
+  onSelectClaim?: (c: ClaimNode | null) => void;
 }) {
   const svgRef = useRef<SVGSVGElement | null>(null);
-  const [sel, setSel] = useState<ClaimNode | null>(null);
 
   useEffect(() => {
     const el = svgRef.current;
     if (!el) return;
-    const width = el.clientWidth || 600, height = 360;
+    const width = el.clientWidth || 600, height = el.clientHeight || 460;
     const nodes: N[] = graph.nodes.map((n) => ({ ...n }));
     const ids = new Set(nodes.map((n) => n.id));
     const links: L[] = graph.edges
@@ -36,13 +37,15 @@ export default function ClaimGraph({
       .attr("stroke-width", 1.6).attr("stroke-opacity", 0.6);
 
     const node = g.append("g").selectAll<SVGCircleElement, N>("circle").data(nodes).join("circle")
-      .attr("r", 8)
+      .attr("r", (d) => (d.id === selectedId ? 11 : 8))
       .attr("fill", (d) => claimTypeColor[d.claim_type] || "#9aa0b0")
-      .attr("stroke", (d) => (highlightContrib && d.contribution_id === highlightContrib ? "#1f1e1c" : "#fff"))
-      .attr("stroke-width", (d) => (highlightContrib && d.contribution_id === highlightContrib ? 2.4 : 1))
-      .attr("opacity", (d) => (highlightContrib && d.contribution_id !== highlightContrib ? 0.35 : 1))
+      .attr("stroke", (d) => (d.id === selectedId ? "#1f1e1c"
+        : highlightContrib && d.contribution_id === highlightContrib ? "#1f1e1c" : "#fff"))
+      .attr("stroke-width", (d) => (d.id === selectedId ? 3
+        : highlightContrib && d.contribution_id === highlightContrib ? 2.4 : 1))
+      .attr("opacity", (d) => (highlightContrib && d.contribution_id !== highlightContrib && d.id !== selectedId ? 0.35 : 1))
       .style("cursor", "pointer")
-      .on("click", (_, d) => setSel(d))
+      .on("click", (e, d) => { e.stopPropagation(); onSelectClaim?.(d); })
       .call(d3.drag<SVGCircleElement, N>()
         .on("start", (e, d) => { if (!e.active) sim.alphaTarget(0.2).restart(); d.fx = d.x; d.fy = d.y; })
         .on("drag", (e, d) => { d.fx = e.x; d.fy = e.y; })
@@ -59,32 +62,23 @@ export default function ClaimGraph({
           .attr("x2", (d) => (d.target as N).x!).attr("y2", (d) => (d.target as N).y!);
         node.attr("cx", (d) => d.x!).attr("cy", (d) => d.y!);
       });
+    svg.on("click", () => onSelectClaim?.(null));
     return () => { sim.stop(); };
-  }, [graph, highlightContrib]);
+  }, [graph, highlightContrib, selectedId]);
 
+  if (graph.nodes.length === 0) {
+    return <div className="empty">No claims extracted for this paper yet.</div>;
+  }
   return (
     <div className="claimgraph">
-      {graph.nodes.length === 0 ? (
-        <div className="empty">No claims for this paper yet.</div>
-      ) : (
-        <>
-          <svg ref={svgRef} className="claim-svg" />
-          <div className="claim-legend">
-            {[...new Set(graph.nodes.map((n) => n.claim_type))].map((t) => (
-              <span key={t} className="cl-chip">
-                <span className="dot" style={{ background: claimTypeColor[t] || "#9aa0b0" }} />{t}
-              </span>
-            ))}
-          </div>
-          {sel && (
-            <div className="claim-detail">
-              <span className="pill" style={{ background: claimTypeColor[sel.claim_type] || "#9aa0b0" }}>{sel.claim_type}</span>
-              <div className="cd-stmt">{sel.label}</div>
-              {sel.evidence && <div className="cd-quote">“{sel.evidence}”</div>}
-            </div>
-          )}
-        </>
-      )}
+      <svg ref={svgRef} className="claim-svg" />
+      <div className="claim-legend">
+        {[...new Set(graph.nodes.map((n) => n.claim_type))].map((t) => (
+          <span key={t} className="cl-chip">
+            <span className="dot" style={{ background: claimTypeColor[t] || "#9aa0b0" }} />{t}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }
