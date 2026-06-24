@@ -420,6 +420,21 @@ def my_annotation_count(annotator: str) -> int:
                      me=annotator).single()[0]
 
 
+def annotation_label_sets(judge: str = "claude") -> list[dict]:
+    """Per target, the LLM judge's verdict vs all human verdicts — the basis for the
+    self-eval / human / aggregated scorecard. Returns
+    [{kind, key, judge: verdict|None, humans: [verdict, …]}]."""
+    with session() as s:
+        res = s.run("""MATCH (a:Annotation)
+                       WITH a.target_kind AS kind, a.target_key AS key,
+                            collect({who:a.annotator, v:a.faithful}) AS anns
+                       RETURN kind, key,
+                         head([x IN anns WHERE x.who=$j | x.v]) AS judge,
+                         [x IN anns WHERE x.who<>$j | x.v] AS humans""", j=judge)
+        return [{"kind": r["kind"], "key": r["key"], "judge": r["judge"],
+                 "humans": [v for v in r["humans"] if v]} for r in res]
+
+
 def annotation_agreement() -> dict:
     """Per-target faithfulness votes across ALL annotators (admin/eval). Returns
     the raw votes so callers compute majority / Cohen's kappa."""

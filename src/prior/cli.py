@@ -99,6 +99,13 @@ def main(argv: list[str] | None = None) -> int:
     p_cl.add_argument("--fulltext-dir", required=True, help="dir of <paper_id>.txt full texts")
     p_cl.add_argument("--workers", type=int, default=None)
 
+    p_se = sub.add_parser("selfeval", help="LLM self-eval: Claude labels its own extraction")
+    p_se.add_argument("--collection", required=True)
+    p_se.add_argument("--kind", action="append", default=[], dest="kinds",
+                      choices=["contribution", "edge", "claim"], help="repeatable; default all")
+    p_se.add_argument("--sample", type=int, default=40, help="items per kind (0 = all)")
+    p_se.add_argument("--workers", type=int, default=None)
+
     args = ap.parse_args(argv)
 
     if args.cmd == "build":
@@ -182,6 +189,10 @@ def main(argv: list[str] | None = None) -> int:
     elif args.cmd == "claims":
         from . import claims as claimsmod
         claimsmod.run(args.collection, args.fulltext_dir, workers=args.workers)
+    elif args.cmd == "selfeval":
+        from . import selfeval
+        selfeval.run(args.collection, kinds=args.kinds or None,
+                     sample=args.sample, workers=args.workers)
     return 0
 
 

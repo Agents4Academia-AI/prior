@@ -292,23 +292,14 @@ def solved(body: SolvedBody) -> dict:
 
 
 @app.get("/api/eval")
-def eval_results() -> dict:
-    """The scorecard for the /eval dashboard: saved LLM-metric run (if any) merged
-    with live key-free graph distributions."""
-    from .. import config, eval_suite
-    live = {"graph": graph.summary(), "distributions": eval_suite.graph_distributions()}
-    human = eval_suite.human_metrics()           # always fresh from annotations
-    path = config.DATA / "eval" / "results.json"
-    if path.exists():
-        import json
-        saved = json.loads(path.read_text())
-        # keep saved LLM/key-free metrics; refresh the human ones live.
-        metrics = [m for m in saved.get("metrics", []) if m.get("kind") != "human"] + human
-        return {**saved, **live, "metrics": metrics,
-                "gates": saved.get("gates", eval_suite.GATES)}
-    # no saved run yet — live key-free faithfulness + the live human gold set.
-    return {**live, "metrics": [eval_suite.faithfulness(str(config.DATA))] + human,
-            "gates": eval_suite.GATES, "note": "no full run yet — `prior eval`"}
+def eval_results(collection: Optional[str] = None) -> dict:
+    """Three-view scorecard (self-eval / human / aggregated) per dimension, live
+    from the annotation store, plus graph distributions. Run the judge with
+    `prior selfeval`; human numbers update as people annotate."""
+    from .. import eval_suite, evaluation
+    return {"summary": graph.summary(_coll(collection)),
+            "scorecard": evaluation.scorecard(),
+            "distributions": eval_suite.graph_distributions()}
 
 
 def _cite(p: dict) -> str:

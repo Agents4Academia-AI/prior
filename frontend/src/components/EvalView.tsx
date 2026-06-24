@@ -1,15 +1,43 @@
 import { useEffect, useState } from "react";
-import { api, type EvalResults, type EvalMetric } from "../lib/api";
+import { api, type EvalResults, type EvalRate, type EvalDim } from "../lib/api";
 
-const PCT = (v: number) => `${Math.round(v * 100)}%`;
+const PCT = (v: number | null) => (v === null ? "—" : `${Math.round(v * 100)}%`);
+const KIND_LABEL: Record<string, string> = {
+  contribution: "Contributions", edge: "Relations (edges)", claim: "Claims",
+};
 
-function fmt(m: EvalMetric): string {
-  if (m.value === null) return "—";
-  return m.unit === "rate" ? PCT(m.value) : String(m.value);
+function Cell({ r, accent }: { r: EvalRate; accent?: boolean }) {
+  return (
+    <td className={`ev-cell${accent ? " accent" : ""}`}>
+      <span className="ev-pct">{PCT(r.correct)}</span>
+      <span className="ev-n">{r.n ? `n=${r.n}` : "no labels"}</span>
+    </td>
+  );
+}
+
+function DimRow({ d }: { d: EvalDim }) {
+  return (
+    <tr>
+      <td className="ev-dim">
+        <span className={`gate ${d.gate}`}>{d.gate}</span>
+        <div>
+          <div className="ev-dim-name">{KIND_LABEL[d.kind] ?? d.kind}</div>
+          <div className="ev-dim-gate">{d.gate_label} · target {PCT(d.threshold)}</div>
+        </div>
+      </td>
+      <Cell r={d.self_eval} />
+      <Cell r={d.human} />
+      <Cell r={d.aggregated} accent />
+      <td className="ev-cell">
+        <span className="ev-pct">{PCT(d.agreement.rate)}</span>
+        <span className="ev-n">{d.agreement.n ? `n=${d.agreement.n}` : "—"}</span>
+      </td>
+    </tr>
+  );
 }
 
 function Bars({ data, title }: { data: Record<string, number>; title: string }) {
-  const entries = Object.entries(data).sort((a, b) => b[1] - a[1]);
+  const entries = Object.entries(data || {}).sort((a, b) => b[1] - a[1]);
   const max = Math.max(1, ...entries.map(([, n]) => n));
   return (
     <div className="eval-chart">
@@ -18,9 +46,7 @@ function Bars({ data, title }: { data: Record<string, number>; title: string }) 
       {entries.map(([k, n]) => (
         <div className="bar-row" key={k}>
           <span className="bar-label">{k}</span>
-          <span className="bar-track">
-            <span className="bar-fill" style={{ width: `${(n / max) * 100}%` }} />
-          </span>
+          <span className="bar-track"><span className="bar-fill" style={{ width: `${(n / max) * 100}%` }} /></span>
           <span className="bar-val">{n}</span>
         </div>
       ))}
@@ -37,80 +63,34 @@ export default function EvalView() {
   }, []);
 
   if (err) return <div className="center-fill"><div className="err">{err}</div></div>;
-  if (!data) return <div className="center-fill"><span className="spinner" />Loading eval…</div>;
+  if (!data) return <div className="center-fill"><span className="spinner" /> Loading eval…</div>;
 
-  const byGroup = (g: string) => data.metrics.filter((m) => m.group === g);
-  const gateStatus = (g: string) => {
-    const ms = byGroup(g).filter((m) => m.value !== null);
-    if (ms.length === 0) return "pending";
-    return ms.every((m) => m.status === "pass") ? "pass" : "warn";
-  };
-  const d = data.distributions;
-  const prov = d.provenance || {};
-  const textEdges = prov.text || 0;
-  const bothEdges = prov.both || 0;
-
+  const sc = data.scorecard;
   return (
     <div className="eval">
       <div className="eval-head">
-        <h2>Evaluation scorecard</h2>
-        <div className="muted">
-          {data.graph.papers} papers · {data.graph.contributions} contributions ·{" "}
-          {data.graph.claims} claims · {data.graph.global_edges} global edges
-        </div>
-        {data.note && <div className="eval-note">{data.note}</div>}
+        <h2>Evaluation</h2>
+        <p className="muted">{sc.note}</p>
       </div>
 
-      {/* the three gates */}
-      <div className="gates">
-        {Object.entries(data.gates).map(([g, label]) => (
-          <div className={`gate ${gateStatus(g)}`} key={g}>
-            <div className="gate-name">{label}</div>
-            <div className="gate-status">{gateStatus(g).toUpperCase()}</div>
-          </div>
-        ))}
-      </div>
+      <table className="ev-table">
+        <thead>
+          <tr>
+            <th>Dimension</th>
+            <th>Self-eval<div className="th-sub">Claude</div></th>
+            <th>Human<div className="th-sub">annotators</div></th>
+            <th className="accent">Aggregated<div className="th-sub">human ∪ Claude</div></th>
+            <th>Judge↔human<div className="th-sub">agreement</div></th>
+          </tr>
+        </thead>
+        <tbody>
+          {sc.dimensions.map((d) => <DimRow key={d.kind} d={d} />)}
+        </tbody>
+      </table>
 
-      {/* scorecard grouped by gate */}
-      {Object.entries(data.gates).map(([g, label]) => (
-        <div className="eval-group" key={g}>
-          <h3>{label}</h3>
-          <table className="scorecard">
-            <thead>
-              <tr><th>Metric</th><th>Value</th><th>Target</th><th>Status</th><th>Kind</th></tr>
-            </thead>
-            <tbody>
-              {byGroup(g).map((m) => (
-                <tr key={m.id}>
-                  <td>
-                    <div className="m-name">{m.name}</div>
-                    <div className="m-detail">{m.detail}</div>
-                  </td>
-                  <td className="m-val">{fmt(m)}</td>
-                  <td className="muted">
-                    {m.higher_better ? "≥" : "≤"} {m.unit === "rate" ? PCT(m.threshold) : m.threshold}
-                  </td>
-                  <td><span className={`pill ${m.status}`}>{m.status}</span></td>
-                  <td className="muted">{m.kind}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ))}
-
-      {/* the value-add headline number */}
-      <div className="eval-callout">
-        <b>{textEdges}</b> uncited-parallel-work edges (text-inferred) vs{" "}
-        <b>{bothEdges}</b> citation-backed — links citation-only tools can't find.
-      </div>
-
-      {/* distributions */}
-      <div className="eval-charts">
-        <Bars data={d.provenance} title="Global-edge provenance" />
-        <Bars data={d.global_relations} title="Global relations" />
-        <Bars data={d.local_relations} title="Local relations" />
-        <Bars data={d.claim_types} title="Claim types" />
+      <div className="eval-grid">
+        <Bars data={data.distributions?.global_relations} title="Relation types" />
+        <Bars data={data.distributions?.claim_types} title="Claim types" />
       </div>
     </div>
   );

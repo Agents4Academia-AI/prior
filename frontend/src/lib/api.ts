@@ -198,28 +198,24 @@ export type AnnSummary = {
   mine: string | null;
 };
 
-export type EvalMetric = {
-  id: string;
-  name: string;
-  group: string;
-  value: number | null;
-  threshold: number;
-  higher_better: boolean;
-  unit: string;
-  status: "pass" | "warn" | "pending";
+export type EvalRate = { n: number; correct: number | null };
+export type EvalDim = {
   kind: string;
-  detail: string;
+  gate_label: string;
+  threshold: number;
+  gate: "pass" | "warn" | "pending";
+  self_eval: EvalRate;
+  human: EvalRate;
+  aggregated: EvalRate;
+  agreement: { n: number; rate: number | null };
 };
-
 export type EvalResults = {
-  graph: Record<string, number>;
+  summary: Record<string, number>;
+  scorecard: { dimensions: EvalDim[]; gates: Record<string, string>; note: string };
   distributions: {
     provenance: Record<string, number>;
     global_relations: Record<string, number>;
     local_relations: Record<string, number>;
     claim_types: Record<string, number>;
   };
-  metrics: EvalMetric[];
-  gates: Record<string, string>;
-  note?: string;
 };
