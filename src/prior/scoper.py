@@ -447,7 +447,7 @@ def build_scoped_corpus(topic_def: str, *, per_query: int = 25,
 
 def explore(topic_def: str, *, hops: int = 3, per_query: int = 25,
             use_prefilter: bool = True, epsilon: float = 0.03,
-            repair_abstracts: bool = True, recover_rounds: int = 2,
+            repair_abstracts: bool = True, recover_rounds: int = 5,
             model: str | None = None, progress=print):
     """The full exploration pipeline as one call — Stage 1, the agentic stage:
 
