@@ -111,6 +111,78 @@ def _windowed(text: str, cap: int) -> str:
     return text[:head] + "\n\n[... middle elided ...]\n\n" + text[-tail:]
 
 
+# ── claims-only pass (anchored to existing contributions) ───────────────────────
+CLAIMS_SYSTEM = """You extract the LOCAL claim layer of ONE paper, given the
+paper's already-identified CONTRIBUTIONS. Output two things:
+
+1. CLAIMS — atomic, self-contained, verifiable assertions the paper makes (resolve
+   pronouns; name the method/dataset/quantity). Each:
+     claim_type: empirical | theoretical | methodological | definitional | background
+     evidence:   a short span quoted from the text
+     confidence: [0,1]
+     contribution: the index of the CONTRIBUTION (from the numbered list) this claim
+                   supports, or -1 if background/unrelated.
+   Extract 3–10 claims grounded in the text. Do not invent claims.
+
+2. LOCAL_EDGES — relations BETWEEN claims of THIS paper (by claim index):
+     entails | contradicts | supports | depends_on
+   Capture the paper's internal logic; `contradicts` between two of its own claims
+   is a real signal. Empty list is fine."""
+
+_CLAIMS_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "claims": _SCHEMA["properties"]["claims"],
+        "local_edges": _SCHEMA["properties"]["local_edges"],
+    },
+    "required": ["claims", "local_edges"],
+}
+
+
+def read_claims(paper: Paper, contributions: list[Contribution], *,
+                model: str | None = None) -> ReadResult:
+    """Extract the local claim graph for a paper whose contributions already exist,
+    bridging each claim to one of those contributions. Used to backfill the claim
+    layer for collections loaded contribution-only (e.g. core-v0.2)."""
+    body = paper.full_text or paper.abstract
+    if not body or not contributions:
+        return ReadResult(contributions=contributions)
+    if paper.full_text:
+        loc, content = "full text", _windowed(paper.full_text, config.FULLTEXT_CHARS)
+    else:
+        loc, content = "abstract", paper.abstract
+    listing = "\n".join(f"[{i}] {k.summary()}" for i, k in enumerate(contributions))
+    out = llm.structured(
+        model=model or config.READER_MODEL, system=CLAIMS_SYSTEM,
+        user=(f"PAPER TITLE: {paper.title}\nYEAR: {paper.year}\n\n"
+              f"CONTRIBUTIONS:\n{listing}\n\nTEXT ({loc}):\n{content}"),
+        schema=_CLAIMS_SCHEMA, tool_name="emit_claims")
+
+    claims: list[Claim] = []
+    for i, c in enumerate(out.get("claims", [])):
+        ci = c.get("contribution", -1)
+        contrib_id = contributions[ci].id if isinstance(ci, int) and 0 <= ci < len(contributions) else None
+        claim = Claim(
+            id=f"{paper.id}::c{i:02d}", paper_id=paper.id, text=str(c["text"]).strip(),
+            claim_type=c.get("claim_type", "empirical"),
+            evidence=str(c.get("evidence", "")).strip(), location=loc,
+            confidence=float(c.get("confidence", 0.5)), contribution_id=contrib_id)
+        claims.append(claim)
+        if contrib_id:
+            contributions[ci].claim_ids.append(claim.id)
+
+    local_edges: list[Edge] = []
+    n = len(claims)
+    for e in out.get("local_edges", []):
+        s, d = e.get("src"), e.get("dst")
+        if isinstance(s, int) and isinstance(d, int) and 0 <= s < n and 0 <= d < n and s != d:
+            local_edges.append(Edge(src=claims[s].id, dst=claims[d].id,
+                                    relation=e.get("relation", "supports"),
+                                    evidence=str(e.get("evidence", "")).strip(),
+                                    source="text", level="local"))
+    return ReadResult(contributions=contributions, claims=claims, local_edges=local_edges)
+
+
 def read(paper: Paper, *, model: str | None = None) -> ReadResult:
     body = paper.full_text or paper.abstract
     if not body:

@@ -94,6 +94,11 @@ def main(argv: list[str] | None = None) -> int:
     p_clu = sub.add_parser("cluster", help="(re)cluster a collection + cache its render payload")
     p_clu.add_argument("--collection", required=True)
 
+    p_cl = sub.add_parser("claims", help="backfill the local claim layer for a collection")
+    p_cl.add_argument("--collection", required=True)
+    p_cl.add_argument("--fulltext-dir", required=True, help="dir of <paper_id>.txt full texts")
+    p_cl.add_argument("--workers", type=int, default=None)
+
     args = ap.parse_args(argv)
 
     if args.cmd == "build":
@@ -174,6 +179,9 @@ def main(argv: list[str] | None = None) -> int:
         from . import render
         st = render.recluster(args.collection)
         print(f"clustered {args.collection}: {st}")
+    elif args.cmd == "claims":
+        from . import claims as claimsmod
+        claimsmod.run(args.collection, args.fulltext_dir, workers=args.workers)
     return 0
 
 
