@@ -1,0 +1,14 @@
+{
+  "harit": {
+    "password": "eOlAN2oz",
+    "admin": true
+  },
+  "annotator1": {
+    "password": "tahpWQx8",
+    "admin": false
+  },
+  "annotator2": {
+    "password": "n6IxH4c8",
+    "admin": false
+  }
+}

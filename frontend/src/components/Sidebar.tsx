@@ -1,6 +1,7 @@
 import type { Summary, Paper } from "../lib/types";
 import type { WhoAmI } from "../lib/api";
 import SignIn from "./SignIn";
+import AddPaper from "./AddPaper";
 
 export default function Sidebar({
   summary,
@@ -9,6 +10,7 @@ export default function Sidebar({
   onSelectPaper,
   who,
   onIdentityChange,
+  onIngested,
 }: {
   summary: Summary | null;
   papers: Paper[];
@@ -16,6 +18,7 @@ export default function Sidebar({
   onSelectPaper: (p: Paper) => void;
   who: WhoAmI | null;
   onIdentityChange: () => void;
+  onIngested: () => void;
 }) {
   return (
     <div className="panel sidebar">
@@ -38,7 +41,10 @@ export default function Sidebar({
         </div>
       )}
 
-      <div className="section-title">Papers ({papers.length})</div>
+      <div className="papers-head">
+        <span className="section-title">Papers ({papers.length})</span>
+        <AddPaper onIngested={onIngested} />
+      </div>
       <div className="papers">
         {papers.map((p) => (
           <button
