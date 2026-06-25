@@ -66,6 +66,10 @@ def structured(
         return _structured_claude_cli(
             model=model, system=system, user=user, schema=schema,
             retries=retries, timeout=timeout)
+    if backend() == "claude-p":
+        return _structured_claude_p(
+            model=model, system=system, user=user, schema=schema,
+            retries=retries, timeout=timeout)
     if backend() == "claude-code":
         return _structured_claude_code(
             model=model, system=system, user=user, schema=schema, retries=retries)
@@ -134,6 +138,36 @@ def _structured_claude_cli(*, model, system, user, schema, retries, timeout=None
         except Exception as e:  # noqa: BLE001 — surface after retries
             last_err = e
     raise RuntimeError(f"structured() (claude-cli) failed: {last_err}")
+
+
+# ── Claude headless (`claude -p`) backend ───────────────────────────────────────
+def _structured_claude_p(*, model, system, user, schema, retries, timeout=None):
+    """Call `claude -p` headlessly (one subprocess, JSON output). Much faster than
+    driving the interactive TUI: no PTY, no cold-start sleeps, no file polling. Note:
+    headless `-p` bills the Agent SDK credit pool / API rates, not the interactive
+    subscription, so it is fast but metered. Reads the `result` field of the JSON."""
+    import shutil
+    import subprocess
+    exe = shutil.which("claude") or "claude"
+    prompt = (f"{system}\n\n=== TASK ===\n{user}\n\n=== OUTPUT ===\n"
+              "Reply with ONLY a single JSON object conforming to this JSON Schema. "
+              "No prose, no markdown fences:\n" + json.dumps(schema))
+    args = [exe, "-p", prompt, "--output-format", "json"]
+    if model:
+        args += ["--model", model]
+    last_err: Optional[Exception] = None
+    for _ in range(retries):
+        try:
+            r = subprocess.run(args, capture_output=True, text=True, timeout=timeout or 120)
+            if r.returncode != 0:
+                raise RuntimeError(f"claude -p exit {r.returncode}: {(r.stderr or '')[:200]}")
+            payload = json.loads(r.stdout)
+            content = payload.get("result", "") if isinstance(payload, dict) else r.stdout
+            return extract_json(content)
+        except Exception as e:  # noqa: BLE001 — surface after retries
+            last_err = e
+            time.sleep(1)
+    raise RuntimeError(f"structured() (claude-p) failed: {last_err}")
 
 
 # ── OpenAI-compatible backend (vLLM / Ollama / any /v1) ─────────────────────────
