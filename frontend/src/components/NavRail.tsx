@@ -12,7 +12,7 @@ const NAV: { mode: NavMode; icon: string; label: string }[] = [
 export default function NavRail({
   mode, onNavigate, open, onToggle,
   collections, collection, onSwitchCollection,
-  who, onIdentityChange,
+  who, onIdentityChange, onAskPrior,
 }: {
   mode: string;
   onNavigate: (m: NavMode) => void;
@@ -23,6 +23,7 @@ export default function NavRail({
   onSwitchCollection: (name: string) => void;
   who: WhoAmI | null;
   onIdentityChange: () => void;
+  onAskPrior?: () => void;
 }) {
   return (
     <div className={`navrail${open ? " open" : ""}`}>
@@ -33,6 +34,12 @@ export default function NavRail({
         </button>
 
         <nav className="nr-nav">
+          {who?.signed_in && onAskPrior && (
+            <button className="nr-item nr-ask" onClick={onAskPrior} title="Ask Prior">
+              <span className="nr-icon">💬</span>
+              {open && <span className="nr-label">Ask Prior</span>}
+            </button>
+          )}
           {NAV.map((n) => (
             <button
               key={n.mode}

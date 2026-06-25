@@ -35,16 +35,22 @@ if TYPE_CHECKING:  # only the "api" backend needs the SDK; keep import lazy
 _client: "Optional[anthropic.Anthropic]" = None
 
 
-def client() -> "anthropic.Anthropic":
+def client(api_key: str | None = None) -> "anthropic.Anthropic":
+    import anthropic  # lazy: the credit-free claude-cli backend doesn't need it
+    if api_key:  # per-request key (the chat UI's "bring your own key") — not cached
+        return anthropic.Anthropic(api_key=api_key)
     global _client
     if _client is None:
-        import anthropic  # lazy: the credit-free claude-cli backend doesn't need it
         _client = anthropic.Anthropic()  # reads ANTHROPIC_API_KEY from env
     return _client
 
 
 def backend() -> str:
     return os.environ.get("PRIOR_LLM_BACKEND", "api").lower()
+
+
+# alias so structured() can read the env default even though it has a `backend` param
+_env_backend = backend
 
 
 # ── public API ────────────────────────────────────────────────────────────────
@@ -58,28 +64,33 @@ def structured(
     max_tokens: int = 4096,
     retries: int = 3,
     timeout: int | None = None,
+    backend: str | None = None,
+    api_key: str | None = None,
 ) -> dict[str, Any]:
     """Return a dict matching `schema` (a JSON-Schema object). Raises on
     persistent failure rather than returning malformed data. `timeout` (seconds)
-    bounds a single claude-cli call; ignored by the other backends."""
-    if backend() == "claude-cli":
+    bounds a single claude-cli call; ignored by the other backends. `backend`
+    overrides PRIOR_LLM_BACKEND for this one call (used by the chat backend picker).
+    `api_key` is a per-request Anthropic key for the 'api' backend (UI bring-your-own-key)."""
+    bk = (backend or _env_backend()).lower()
+    if bk == "claude-cli":
         return _structured_claude_cli(
             model=model, system=system, user=user, schema=schema,
             retries=retries, timeout=timeout)
-    if backend() == "claude-p":
+    if bk == "claude-p":
         return _structured_claude_p(
             model=model, system=system, user=user, schema=schema,
             retries=retries, timeout=timeout)
-    if backend() == "claude-code":
+    if bk == "claude-code":
         return _structured_claude_code(
             model=model, system=system, user=user, schema=schema, retries=retries)
-    if backend() in ("openai", "vllm", "ollama"):
+    if bk in ("openai", "vllm", "ollama"):
         return _structured_openai(
             model=model, system=system, user=user, schema=schema,
             max_tokens=max_tokens, retries=retries, timeout=timeout)
     return _structured_api(
         model=model, system=system, user=user, schema=schema,
-        tool_name=tool_name, max_tokens=max_tokens, retries=retries)
+        tool_name=tool_name, max_tokens=max_tokens, retries=retries, api_key=api_key)
 
 
 def text(*, model: str, system: str, user: str, max_tokens: int = 4096) -> str:
@@ -93,8 +104,111 @@ def text(*, model: str, system: str, user: str, max_tokens: int = 4096) -> str:
     return "".join(b.text for b in resp.content if b.type == "text")
 
 
+def stream_text(*, model: str, system: str, user: str,
+                backend: str | None = None, timeout: int | None = None,
+                api_key: str | None = None):
+    """Yield the assistant's answer as text chunks as they generate (streaming).
+
+    Used by the chat answer phase so the UI shows tokens immediately instead of one
+    blocking wait. Backends that can't stream (claude-cli/claude-code) fall back to a
+    single final chunk. `backend` overrides PRIOR_LLM_BACKEND for this call.
+    `api_key` is a per-request Anthropic key for the 'api' backend (UI bring-your-own-key)."""
+    bk = (backend or _env_backend()).lower()
+    if bk == "claude-p":
+        yield from _stream_claude_p(model=model, system=system, user=user, timeout=timeout)
+    elif bk in ("openai", "vllm", "ollama"):
+        yield from _stream_openai(model=model, system=system, user=user, timeout=timeout)
+    elif bk == "api":
+        yield from _stream_api(model=model, system=system, user=user, api_key=api_key)
+    else:  # claude-cli / claude-code: no token stream — emit the whole answer once.
+        out = structured(
+            model=model, system=system, user=user,
+            schema={"type": "object", "properties": {"answer": {"type": "string"}},
+                    "required": ["answer"]},
+            tool_name="emit_answer", timeout=timeout, backend=bk)
+        yield out.get("answer", "")
+
+
+def _stream_claude_p(*, model, system, user, timeout=None):
+    """Stream `claude -p --output-format stream-json`. Yields text_delta chunks only
+    (thinking/signature deltas are skipped). API key scrubbed → Max subscription."""
+    import shutil
+    import subprocess
+    exe = shutil.which("claude") or "claude"
+    prompt = f"{system}\n\n=== TASK ===\n{user}"
+    args = [exe, "-p", prompt, "--output-format", "stream-json",
+            "--include-partial-messages", "--verbose"]
+    if model:
+        args += ["--model", model]
+    child_env = {k: v for k, v in os.environ.items()
+                 if k not in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN")}
+    proc = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+                            text=True, env=child_env, bufsize=1)
+    try:
+        for line in proc.stdout:                      # NDJSON, one event per line
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                ev = json.loads(line)
+            except ValueError:
+                continue
+            if ev.get("type") == "stream_event":
+                inner = ev.get("event", {})
+                if inner.get("type") == "content_block_delta":
+                    d = inner.get("delta", {})
+                    if d.get("type") == "text_delta" and d.get("text"):
+                        yield d["text"]
+        proc.wait(timeout=timeout or 180)
+    finally:
+        if proc.poll() is None:
+            proc.kill()
+
+
+def _stream_openai(*, model, system, user, timeout=None):
+    """Stream an OpenAI-compatible /chat/completions endpoint (vLLM / Ollama)."""
+    import urllib.request
+    base = os.environ.get("PRIOR_OPENAI_BASE_URL", "http://127.0.0.1:8000/v1").rstrip("/")
+    key = os.environ.get("PRIOR_OPENAI_API_KEY", "EMPTY")
+    body = json.dumps({
+        "model": model,
+        "messages": [{"role": "system", "content": system},
+                     {"role": "user", "content": user}],
+        "temperature": 0, "stream": True,
+    }).encode()
+    req = urllib.request.Request(
+        base + "/chat/completions", data=body,
+        headers={"Content-Type": "application/json", "Authorization": f"Bearer {key}"})
+    with urllib.request.urlopen(req, timeout=timeout or 180) as r:
+        for raw in r:
+            line = raw.decode("utf-8", "ignore").strip()
+            if not line.startswith("data:"):
+                continue
+            data = line[5:].strip()
+            if data == "[DONE]":
+                break
+            try:
+                ev = json.loads(data)
+            except ValueError:
+                continue
+            delta = (ev.get("choices") or [{}])[0].get("delta", {}).get("content")
+            if delta:
+                yield delta
+
+
+def _stream_api(*, model, system, user, max_tokens=4096, api_key=None):
+    """Stream the Anthropic API (metered)."""
+    import anthropic  # noqa: F401 — ensures a clear error if missing
+    with client(api_key).messages.stream(
+        model=model, max_tokens=max_tokens, system=system,
+        messages=[{"role": "user", "content": user}],
+    ) as stream:
+        for chunk in stream.text_stream:
+            yield chunk
+
+
 # ── API backend ──────────────────────────────────────────────────────────────
-def _structured_api(*, model, system, user, schema, tool_name, max_tokens, retries):
+def _structured_api(*, model, system, user, schema, tool_name, max_tokens, retries, api_key=None):
     import anthropic  # lazy; only the api backend needs the SDK
     tool = {
         "name": tool_name,
@@ -104,7 +218,7 @@ def _structured_api(*, model, system, user, schema, tool_name, max_tokens, retri
     last_err: Optional[Exception] = None
     for attempt in range(retries):
         try:
-            resp = client().messages.create(
+            resp = client(api_key).messages.create(
                 model=model,
                 max_tokens=max_tokens,
                 system=system,
@@ -116,6 +230,8 @@ def _structured_api(*, model, system, user, schema, tool_name, max_tokens, retri
                 if block.type == "tool_use" and block.name == tool_name:
                     return block.input  # type: ignore[return-value]
             raise ValueError("model did not call the emit tool")
+        except anthropic.AuthenticationError as e:  # bad/expired key — don't retry, surface clearly
+            raise RuntimeError(f"Invalid Anthropic API key: {e}") from e
         except (anthropic.RateLimitError, anthropic.APIStatusError) as e:
             last_err = e
             time.sleep(2 ** attempt)
@@ -155,10 +271,16 @@ def _structured_claude_p(*, model, system, user, schema, retries, timeout=None):
     args = [exe, "-p", prompt, "--output-format", "json"]
     if model:
         args += ["--model", model]
+    # CRITICAL: strip ANTHROPIC_API_KEY / AUTH_TOKEN from the child env. Claude Code auth
+    # precedence is API key > OAuth, so a key exported in ~/.profile would silently bill
+    # pay-per-token instead of the Max subscription. Scrubbing forces the subscription.
+    child_env = {k: v for k, v in os.environ.items()
+                 if k not in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN")}
     last_err: Optional[Exception] = None
     for _ in range(retries):
         try:
-            r = subprocess.run(args, capture_output=True, text=True, timeout=timeout or 120)
+            r = subprocess.run(args, capture_output=True, text=True,
+                               timeout=timeout or 120, env=child_env)
             if r.returncode != 0:
                 raise RuntimeError(f"claude -p exit {r.returncode}: {(r.stderr or '')[:200]}")
             payload = json.loads(r.stdout)

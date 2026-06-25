@@ -1036,3 +1036,29 @@ button.lg-btn.on { background: var(--accent-soft); border-color: var(--accent);
 .md-ul, .md-ol { margin: 4px 0 8px; padding-left: 20px; }
 .md-ul li, .md-ol li { margin: 3px 0; }
 .md strong { font-weight: 600; }
+
+/* ── Chat export: print-only view (Export PDF) ─────────────────────────────── */
+/* Hidden on screen; the browser's print-to-PDF captures just this block, with the
+   Markdown rendered the same way it appears in the chat. */
+.chat-print { display: none; }
+@media print {
+  body * { visibility: hidden; }
+  .chat-print, .chat-print * { visibility: visible; }
+  .chat-print {
+    display: block; position: absolute; left: 0; top: 0; width: 100%;
+    padding: 8px 12px; color: #111; background: #fff;
+    font: 14px/1.55 system-ui, -apple-system, sans-serif;
+  }
+  .chat-print h1 { font-size: 20px; margin: 0 0 18px; }
+  .chat-print .print-turn { margin: 0 0 18px; page-break-inside: avoid; }
+  .chat-print .print-role {
+    font-weight: 600; font-size: 11px; text-transform: uppercase;
+    letter-spacing: .05em; color: #666; margin-bottom: 4px;
+  }
+  .chat-print .md-link, .chat-print a { color: #1a4fcc; text-decoration: underline; }
+  .chat-print .md-pre { background: #f4f4f5; border: 1px solid #ddd; }
+  @page { margin: 14mm; }
+}
+
+/* "Ask Prior" action at the top of the nav rail — set apart from the mode items below. */
+.nr-ask { margin-bottom: 8px; border-bottom: 1px solid var(--border, rgba(255,255,255,.08)); padding-bottom: 12px; }

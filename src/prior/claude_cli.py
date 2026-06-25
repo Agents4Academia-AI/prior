@@ -79,9 +79,15 @@ def run_json(
         fh.write(prompt_doc)
 
     spawn_args = list(_SPAWN_ARGS) + (["--model", model] if model else [])
+    # CRITICAL: strip ANTHROPIC_API_KEY / AUTH_TOKEN from the child's env. Claude Code
+    # auth precedence is API key > OAuth subscription, so if a key is exported (e.g. in
+    # ~/.profile) the interactive CLI would silently bill pay-per-token instead of the
+    # Max subscription. Scrubbing it forces the subscription (the whole point of this path).
+    child_env = {k: v for k, v in os.environ.items()
+                 if k not in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN")}
     child = pexpect.spawn(
         _SPAWN_CMD, spawn_args, encoding="utf-8",
-        timeout=timeout, dimensions=(50, 220), cwd=_CWD,
+        timeout=timeout, dimensions=(50, 220), cwd=_CWD, env=child_env,
     )
     try:
         # One-time per-directory trust gate, if it appears.

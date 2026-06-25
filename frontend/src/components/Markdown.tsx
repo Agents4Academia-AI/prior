@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 // Minimal, dependency-free, safe Markdown renderer for chat answers.
 // Supports: headings, bold, italic, inline code, fenced code, bullet/numbered
@@ -18,12 +18,16 @@ function linkify(text: string, kb: string): React.ReactNode[] {
   });
 }
 
-const INLINE = /(`[^`]+`)|(\*\*[^*]+\*\*)|(\*[^*]+\*)|(\[[^\]]+\]\([^)]+\))/g;
+// NOTE: built fresh per call. A single shared /g regex carries `lastIndex`, and
+// because inline() recurses (for **bold**), a shared instance gets its lastIndex
+// clobbered by the recursive walk — the outer loop then re-matches the same token
+// forever and freezes the tab. A per-call instance keeps each level's state isolated.
+const INLINE_SRC = "(`[^`]+`)|(\\*\\*[^*]+\\*\\*)|(\\*[^*]+\\*)|(\\[[^\\]]+\\]\\([^)]+\\))";
 
 function inline(text: string, kb: string): React.ReactNode[] {
   const out: React.ReactNode[] = [];
   let last = 0, i = 0, m: RegExpExecArray | null;
-  INLINE.lastIndex = 0;
+  const INLINE = new RegExp(INLINE_SRC, "g");
   while ((m = INLINE.exec(text)) !== null) {
     if (m.index > last) out.push(...linkify(text.slice(last, m.index), `${kb}-${i++}`));
     const tok = m[0];
@@ -44,7 +48,13 @@ function inline(text: string, kb: string): React.ReactNode[] {
   return out;
 }
 
+// Parsing is cheap (sub-ms even for link-heavy answers), but memoize so re-renders
+// of the surrounding chat list don't re-parse every bubble — only changed text reparses.
 export default function Markdown({ text }: { text: string }) {
+  return useMemo(() => renderMarkdown(text), [text]);
+}
+
+function renderMarkdown(text: string) {
   const lines = (text || "").split("\n");
   const blocks: React.ReactNode[] = [];
   let i = 0;

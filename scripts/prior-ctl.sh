@@ -16,18 +16,56 @@ neo4j_bin() {
     fi
 }
 
+# Chat backends honoured by the UI model picker:
+#   claude  -> claude -p (Max subscription, no metered credits) — the default.
+#   api     -> Anthropic API; needs ANTHROPIC_API_KEY in the environment (inherited below).
+#   ollama  -> local open-weight model via Ollama's OpenAI-compatible endpoint.
+# Local model + endpoint default to the on-box Ollama install; override via env.
+export PRIOR_LOCAL_MODEL="${PRIOR_LOCAL_MODEL:-qwen3:14b}"
+export PRIOR_OPENAI_BASE_URL="${PRIOR_OPENAI_BASE_URL:-http://127.0.0.1:11434/v1}"
+export OLLAMA_HOST="${OLLAMA_HOST:-127.0.0.1:11434}"
+export OLLAMA_MODELS="${OLLAMA_MODELS:-/vols/bitbucket/stat0531/opt/ollama-models}"
+# Pin Ollama to GPUs with free VRAM. Discovery probes EVERY visible card and aborts
+# to CPU if any one is OOM (e.g. a card another user has filled), so restrict to free
+# ones. Override with PRIOR_OLLAMA_GPUS as the box fills/empties.
+export CUDA_VISIBLE_DEVICES="${PRIOR_OLLAMA_GPUS:-4,5}"
+
+# Ollama binary: $PRIOR_OLLAMA_BIN, else the shared install, else `ollama` on PATH, else "".
+ollama_bin() {
+    if [ -n "${PRIOR_OLLAMA_BIN:-}" ]; then echo "$PRIOR_OLLAMA_BIN"
+    elif [ -x /vols/bitbucket/stat0531/opt/ollama-dl/bin/ollama ]; then echo /vols/bitbucket/stat0531/opt/ollama-dl/bin/ollama
+    elif command -v ollama >/dev/null; then echo ollama
+    else echo ""
+    fi
+}
+
 start() {
     echo "repo: $REPO"
-    echo "[1/3] Neo4j ..."
+    echo "[1/4] Neo4j ..."
     "$(neo4j_bin)" start || true        # no-op if already running
 
-    echo "[2/3] API (:$API_PORT) ..."
+    echo "[2/4] Ollama (:11434, for the chat's local-model option) ..."
+    ob="$(ollama_bin)"
+    if [ -n "$ob" ]; then
+        if curl -s -m 2 "http://$OLLAMA_HOST/api/version" >/dev/null 2>&1; then
+            echo "  ollama already up"
+        else
+            nohup "$ob" serve > /tmp/prior-ollama.log 2>&1 &
+            echo $! > /tmp/prior-ollama.pid
+            echo "  started ollama (models in $OLLAMA_MODELS, model $PRIOR_LOCAL_MODEL)"
+        fi
+    else
+        echo "  ollama not found — the 'Local (Ollama)' chat option will be unavailable" >&2
+    fi
+
+    echo "[3/4] API (:$API_PORT) ..."
     cd "$REPO"
-    PYTHONPATH=src PRIOR_LLM_BACKEND="${PRIOR_LLM_BACKEND:-claude-cli}" \
+    # ANTHROPIC_API_KEY (if set) is inherited here → the 'api' chat backend works.
+    PYTHONPATH=src PRIOR_LLM_BACKEND="${PRIOR_LLM_BACKEND:-claude-p}" \
         nohup python -m prior.cli serve --port "$API_PORT" > /tmp/prior-api.log 2>&1 &
     echo $! > /tmp/prior-api.pid
 
-    echo "[3/3] UI (:$UI_PORT) ..."
+    echo "[4/4] UI (:$UI_PORT) ..."
     cd "$REPO/frontend"; [ -d node_modules ] || npm install
     nohup env VITE_API_BASE="http://127.0.0.1:$API_PORT" \
           npx vite --port "$UI_PORT" --host 127.0.0.1 > /tmp/prior-ui.log 2>&1 &

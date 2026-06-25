@@ -283,6 +283,23 @@ def list_papers(collection: Optional[str] = None) -> list[dict]:
                 | {"n_contributions": r["nk"], "n_claims": r["nc"]} for r in res]
 
 
+def papers_meta(ids: list[str]) -> dict:
+    """Map paper_id -> {title, url, doi, year, venue} for a set of ids.
+
+    Used to turn the bare paper_ids that come back from vector search into real,
+    citable references (clickable links) in chat answers."""
+    ids = [i for i in dict.fromkeys(ids) if i]
+    if not ids:
+        return {}
+    with session() as s:
+        res = s.run(
+            "MATCH (p:Paper) WHERE p.id IN $ids "
+            "RETURN p.id AS id, p.title AS title, p.url AS url, p.doi AS doi, "
+            "p.year AS year, p.venue AS venue", ids=ids)
+        return {r["id"]: {"title": r["title"], "url": r["url"], "doi": r["doi"],
+                          "year": r["year"], "venue": r["venue"]} for r in res}
+
+
 def global_graph() -> dict:
     """Contribution nodes + contribution→contribution edges, for the top level."""
     with session() as s:
@@ -364,20 +381,22 @@ def wipe() -> None:
 # ── annotations (human verification — graph enrichment) ─────────────────────────
 def upsert_annotation(annotator: str, target_kind: str, target_key: str, *,
                       faithful: str, issues: list[str], soundness: str,
-                      note: str, created_at: str) -> None:
+                      note: str, created_at: str, confidence: float | None = None) -> None:
     """One upsertable annotation per (annotator, target). Two axes:
     `faithful` (correct/incorrect/unsure — did the pipeline extract it right) with
     `issues` (which fields are wrong, when incorrect), and `soundness`
     (sound/doubtful/implausible/contested/na — is the science itself sound, optional).
-    Keyed by target_key — a node id, or 'srcId|RELATION|dstId' for an edge."""
+    `confidence` (optional 0-1) is the JUDGE's own confidence in its faithful verdict,
+    distinct from the extractor's per-node confidence. Keyed by target_key — a node id,
+    or 'srcId|RELATION|dstId' for an edge."""
     with session() as s:
         s.run("""MERGE (a:Annotation {id: $id})
                  SET a.annotator=$ann, a.target_kind=$kind, a.target_key=$key,
                      a.faithful=$faithful, a.issues=$issues, a.soundness=$soundness,
-                     a.note=$note, a.created_at=$ts""",
+                     a.note=$note, a.created_at=$ts, a.confidence=$conf""",
               id=f"{annotator}|{target_key}", ann=annotator, kind=target_kind,
               key=target_key, faithful=faithful, issues=issues or [],
-              soundness=soundness or "", note=note, ts=created_at)
+              soundness=soundness or "", note=note, ts=created_at, conf=confidence)
 
 
 def annotations_for(target_key: str, *, viewer: str, see_others: bool) -> list[dict]:
@@ -386,7 +405,7 @@ def annotations_for(target_key: str, *, viewer: str, see_others: bool) -> list[d
     with session() as s:
         res = s.run("""MATCH (a:Annotation {target_key:$key})
                        WHERE a.annotator=$me OR $others
-                       RETURN a{.annotator,.faithful,.issues,.soundness,.note,.created_at} AS a
+                       RETURN a{.annotator,.faithful,.issues,.soundness,.note,.created_at,.confidence} AS a
                        ORDER BY a.created_at DESC""",
                     key=target_key, me=viewer, others=see_others)
         return [r["a"] for r in res]

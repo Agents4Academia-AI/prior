@@ -9,6 +9,7 @@ Run:  prior serve     (or: uvicorn prior.web.api:app --reload)
 
 from __future__ import annotations
 
+import json
 from datetime import datetime, timezone
 from typing import Optional
 
@@ -17,14 +18,38 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from pydantic import BaseModel
 
-from .. import auth, config, graph
+from .. import auth, chat_store, config, graph
 
 app = FastAPI(title="Prior API", version="0.3.0")
+
+
+class _NoGzipForStream:
+    """Strip Accept-Encoding for SSE so GZipMiddleware never buffers the stream.
+
+    GZip on a text/event-stream response holds chunks back to compress them, which
+    makes the browser sit on a spinner until the whole answer is done (it can't
+    surface events incrementally). curl doesn't hit this because it doesn't send
+    Accept-Encoding by default — only the browser does. We drop the header for the
+    streaming path so the response goes out as plain, unbuffered chunks."""
+
+    def __init__(self, app):
+        self.app = app
+
+    async def __call__(self, scope, receive, send):
+        if scope.get("type") == "http" and scope.get("path", "").endswith("/ask_chat_stream"):
+            scope = dict(scope)
+            scope["headers"] = [(k, v) for (k, v) in scope["headers"]
+                                if k.lower() != b"accept-encoding"]
+        await self.app(scope, receive, send)
+
+
 # gzip the (large) render payloads — ~735KB → ~150KB over the wire.
 app.add_middleware(GZipMiddleware, minimum_size=1024)
 app.add_middleware(
     CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"],
 )
+# Added last → outermost → runs before GZip, so SSE is never compressed.
+app.add_middleware(_NoGzipForStream)
 
 
 @app.on_event("startup")
@@ -297,22 +322,157 @@ class ChatMessage(BaseModel):
 
 
 class AskChatBody(BaseModel):
-    messages: list[ChatMessage]
+    # Either send `message` (the new user turn) with a `session_id`, or a full
+    # `messages` list (back-compat). The server is the source of truth: it stores
+    # every turn and rebuilds context from its own store.
+    messages: Optional[list[ChatMessage]] = None
+    message: Optional[str] = None
+    session_id: Optional[str] = None
     collection: Optional[str] = None
+    backend: Optional[str] = None    # "ollama" | "claude" (subscription) | "api"
+
+
+def _chat_user(user: Optional[str], token: Optional[str]) -> str:
+    """Owner for a chat. Sign-in is REQUIRED so every conversation maps to a real
+    user (no anonymous bucket). In open dev mode (no users.json) any name counts."""
+    ident = _identity(user, token)
+    if not ident:
+        raise HTTPException(401, "Sign in to use chat.")
+    return ident.user
 
 
 @app.post("/api/ask_chat")
-def ask_chat(body: AskChatBody) -> dict:
-    """Agentic, multi-turn Ask: the model queries the graph (read-only Cypher +
-    semantic search) and answers, mixing in general knowledge when it says so."""
+def ask_chat(body: AskChatBody,
+             x_prior_user: Optional[str] = Header(None),
+             x_prior_password: Optional[str] = Header(None)) -> dict:
+    """Graph-grounded chat, persisted server-side and owned by the user.
+
+    `backend` picks the model path: "ollama" (local), "claude" (Max subscription via
+    the CLI, API key scrubbed), or "api" (Anthropic key). The conversation is stored
+    in chat_store, so it survives the browser and is retrievable from any device."""
     from .. import ask_agent
-    msgs = [{"role": m.role, "content": m.content} for m in body.messages]
+    user = _chat_user(x_prior_user, x_prior_password)
+
+    # The new user turn: explicit `message`, else the last user msg in `messages`.
+    new_text = (body.message or "").strip()
+    if not new_text and body.messages:
+        new_text = next((m.content for m in reversed(body.messages)
+                         if m.role == "user"), "").strip()
+    if not new_text:
+        raise HTTPException(400, "Empty message.")
+
+    sid = body.session_id or chat_store.create_session(user)["id"]
+    # Persist the user turn first (also creates the session if new), then build
+    # context from the durable store so the server owns the full history.
+    chat_store.add_message(user, sid, "user", new_text)
+    context = chat_store.history(user, sid)
+    if not context:  # extreme fallback (store failed): use whatever the client sent
+        context = [{"role": m.role, "content": m.content} for m in (body.messages or [])]
+
     try:
-        return ask_agent.chat(msgs, collection=body.collection)
+        res = ask_agent.chat(context, collection=body.collection, backend=body.backend)
     except RuntimeError as e:  # LLM backend / SDK runtime failure
         raise HTTPException(503, f"Ask agent unavailable: {e}")
     except Exception as e:  # noqa: BLE001 — readable error, not a bare 500
         raise HTTPException(500, f"Ask agent error: {e}")
+
+    chat_store.add_message(user, sid, "assistant", res.get("answer", ""),
+                           trace=res.get("trace"))
+    return {**res, "session_id": sid}
+
+
+def _sse(obj: dict) -> str:
+    return f"data: {json.dumps(obj)}\n\n"
+
+
+@app.post("/api/ask_chat_stream")
+def ask_chat_stream(body: AskChatBody,
+                    x_prior_user: Optional[str] = Header(None),
+                    x_prior_password: Optional[str] = Header(None),
+                    x_anthropic_key: Optional[str] = Header(None)):
+    """Streaming chat (Server-Sent Events). Emits `session` first, then `trace`
+    (if it queried the graph), then `delta` chunks as the answer generates, then a
+    final `done`. The full turn is persisted server-side once streaming completes."""
+    from fastapi.responses import StreamingResponse
+
+    from .. import ask_agent
+    user = _chat_user(x_prior_user, x_prior_password)
+    new_text = (body.message or "").strip()
+    if not new_text and body.messages:
+        new_text = next((m.content for m in reversed(body.messages)
+                         if m.role == "user"), "").strip()
+    if not new_text:
+        raise HTTPException(400, "Empty message.")
+
+    sid = body.session_id or chat_store.create_session(user)["id"]
+    chat_store.add_message(user, sid, "user", new_text)
+    context = chat_store.history(user, sid)
+
+    def gen():
+        yield _sse({"type": "session", "session_id": sid})
+        answer, trace = "", []
+        try:
+            for ev in ask_agent.chat_stream(context, collection=body.collection,
+                                            backend=body.backend, api_key=x_anthropic_key):
+                if ev["type"] == "delta":
+                    yield _sse(ev)
+                elif ev["type"] == "trace":
+                    trace = ev.get("trace") or trace
+                    yield _sse(ev)
+                elif ev["type"] == "done":
+                    answer = ev.get("answer", "")
+                    trace = ev.get("trace") or trace
+            chat_store.add_message(user, sid, "assistant", answer, trace=trace)
+            yield _sse({"type": "done", "session_id": sid, "trace": trace})
+        except Exception as e:  # noqa: BLE001 — surface to the client as an event
+            yield _sse({"type": "error", "error": str(e)})
+
+    return StreamingResponse(gen(), media_type="text/event-stream",
+                             headers={"Cache-Control": "no-cache",
+                                      "X-Accel-Buffering": "no"})
+
+
+# ── chat history (durable, per-user) ─────────────────────────────────────────────
+@app.get("/api/chats")
+def chats_list(x_prior_user: Optional[str] = Header(None),
+               x_prior_password: Optional[str] = Header(None)) -> dict:
+    user = _chat_user(x_prior_user, x_prior_password)
+    return {"user": user, "sessions": chat_store.list_sessions(user)}
+
+
+@app.get("/api/chats/{sid}")
+def chats_get(sid: str,
+              x_prior_user: Optional[str] = Header(None),
+              x_prior_password: Optional[str] = Header(None)) -> dict:
+    user = _chat_user(x_prior_user, x_prior_password)
+    sess = chat_store.get_session(user, sid)
+    if not sess:
+        raise HTTPException(404, "No such chat.")
+    return sess
+
+
+class RenameBody(BaseModel):
+    title: str
+
+
+@app.post("/api/chats/{sid}/rename")
+def chats_rename(sid: str, body: RenameBody,
+                 x_prior_user: Optional[str] = Header(None),
+                 x_prior_password: Optional[str] = Header(None)) -> dict:
+    user = _chat_user(x_prior_user, x_prior_password)
+    if not chat_store.rename_session(user, sid, body.title):
+        raise HTTPException(404, "No such chat.")
+    return {"ok": True}
+
+
+@app.delete("/api/chats/{sid}")
+def chats_delete(sid: str,
+                 x_prior_user: Optional[str] = Header(None),
+                 x_prior_password: Optional[str] = Header(None)) -> dict:
+    user = _chat_user(x_prior_user, x_prior_password)
+    if not chat_store.delete_session(user, sid):
+        raise HTTPException(404, "No such chat.")
+    return {"ok": True}
 
 
 @app.get("/api/eval")

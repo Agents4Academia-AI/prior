@@ -200,6 +200,7 @@ export default function App() {
         onSwitchCollection={switchCollection}
         who={who}
         onIdentityChange={refreshWho}
+        onAskPrior={() => setOverlay("ask")}
       />
 
       <div className="panel canvas">
@@ -227,7 +228,6 @@ export default function App() {
                 ✎ Annotate {selEdge ? "edge" : ""}
               </button>
             )}
-            <button className="btn-ghost sm" onClick={() => setOverlay("ask")}>Ask</button>
           </div>
         </div>
 
@@ -282,13 +282,17 @@ export default function App() {
           <div className="resizer" onMouseDown={startResize} title="Drag to resize" />
           <div className="panel dock" style={{ width: dockWidth }}>
             <div className="dock-head">
-              <h3>{overlay === "annotate" ? "Annotate" : "Ask the graph"}</h3>
+              <h3>{overlay === "annotate" ? "Annotate" : "Ask Prior"}</h3>
               <button className="modal-x" onClick={() => setOverlay("none")}>×</button>
             </div>
             <div className="dock-body">
               {overlay === "annotate"
                 ? <AnnotatePanel target={annotationTarget} signedIn={!!who?.signed_in} onAnnotated={onAnnotated} />
-                : <AskPanel />}
+                : who?.signed_in
+                  ? <AskPanel />
+                  : <div className="muted" style={{ padding: 12, fontSize: 13 }}>
+                      Sign in to chat — conversations are saved to your account.
+                    </div>}
             </div>
           </div>
         </>

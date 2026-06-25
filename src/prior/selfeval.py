@@ -25,10 +25,18 @@ _SCHEMA = {
     "type": "object",
     "properties": {
         "verdict": {"type": "string", "enum": ["correct", "incorrect", "unsure"]},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1,
+                       "description": "calibrated probability (0-1) that this verdict is correct"},
         "reason": {"type": "string"},
     },
-    "required": ["verdict"],
+    "required": ["verdict", "confidence"],
 }
+
+# Appended to every judge prompt so each backend reports a calibrated confidence.
+_CONF_INSTRUCTION = (
+    "\n\nAlso return `confidence`: your calibrated probability from 0.0 to 1.0 that your "
+    "verdict is correct. Be honest — use values near 0.5 when the evidence is thin or "
+    "ambiguous, and high values only when the quote/evidence clearly settles it.")
 
 _SYS = {
     "contribution": (
@@ -102,15 +110,21 @@ def _prompt(kind: str, it: dict) -> tuple[str, str]:
                  f"RELATION: A {rel} B\n\nWHY (extracted reasoning): {it.get('evidence','') or '(none)'}")
 
 
-def _judge_one(kind: str, it: dict, model: str, judge: str = JUDGE) -> tuple[str, bool]:
+def _judge_one(kind: str, it: dict, model: str, judge: str = JUDGE,
+               backend: str | None = None, api_key: str | None = None) -> tuple[str, bool]:
     key, user = _prompt(kind, it)
-    out = llm.structured(model=model, system=_SYS[kind], user=user,
-                         schema=_SCHEMA, tool_name="judge")
+    out = llm.structured(model=model, system=_SYS[kind] + _CONF_INSTRUCTION, user=user,
+                         schema=_SCHEMA, tool_name="judge", backend=backend, api_key=api_key)
     verdict = out.get("verdict", "unsure")
     if verdict not in ("correct", "incorrect", "unsure"):
         verdict = "unsure"
+    try:
+        conf = max(0.0, min(1.0, float(out.get("confidence"))))
+    except (TypeError, ValueError):
+        conf = None
     graph.upsert_annotation(judge, kind, key, faithful=verdict, issues=[],
-                            soundness="", note=(out.get("reason") or "")[:300], created_at=_now())
+                            soundness="", note=(out.get("reason") or "")[:300],
+                            created_at=_now(), confidence=conf)
     return key, True
 
 

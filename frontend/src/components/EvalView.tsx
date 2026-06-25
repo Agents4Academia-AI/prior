@@ -139,7 +139,14 @@ function ThresholdChart({ d }: { d: CalibDim }) {
 function CalibCard({ d }: { d: CalibDim }) {
   const title = `${KIND_LABEL[d.kind] ?? d.kind} · ${d.signal}`;
   if (!d.n) return (
-    <div className="calib-card"><h4>{title}</h4><div className="muted">no scored + judged items</div></div>
+    <div className="calib-card">
+      <h4>{title}</h4>
+      <div className="muted">
+        No <code>{d.signal}</code> score is stored for {KIND_LABEL[d.kind] ?? d.kind} in this
+        collection, so calibration cannot be computed. (core-v0.2 was loaded from a prebuilt
+        bundle whose contributions carry no confidence.) Correctness is still shown in the table above.
+      </div>
+    </div>
   );
   return (
     <div className="calib-card">

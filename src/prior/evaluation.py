@@ -69,6 +69,10 @@ def scorecard() -> dict:
 # A model judge labels densely (hundreds+); a human spot-checks a handful. Show only
 # dense annotators as "judges" so sparse human labels don't clutter the table.
 MIN_JUDGE_LABELS = int(os.environ.get("PRIOR_MIN_JUDGE_LABELS", "10"))
+# Annotators to hide from the judges dashboard regardless of count (comma-separated).
+# `opus` was a partial/halted run, so it's excluded by default.
+EXCLUDE_JUDGES = {a.strip() for a in
+                  os.environ.get("PRIOR_EXCLUDE_JUDGES", "opus").split(",") if a.strip()}
 
 
 def judges() -> dict:
@@ -83,7 +87,8 @@ def judges() -> dict:
     for a, _, _, v in rows:
         if v:
             totals[a] += 1
-    labels = sorted(a for a, n in totals.items() if n >= MIN_JUDGE_LABELS)
+    labels = sorted(a for a, n in totals.items()
+                    if n >= MIN_JUDGE_LABELS and a not in EXCLUDE_JUDGES)
     keep = set(labels)
     rows = [r for r in rows if r[0] in keep]
     by: dict[tuple[str, str], list[str]] = defaultdict(list)   # (ann, kind) -> verdicts

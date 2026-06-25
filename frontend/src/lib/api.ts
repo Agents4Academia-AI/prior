@@ -85,8 +85,124 @@ export const api = {
       `/api/contribution/${encodeURIComponent(contribId)}`,
     ),
   ask: (question: string) => postJSON<AskResponse>("/api/ask", { question }),
-  askChat: (messages: ChatMessage[], collection?: string) =>
-    postJSON<AskChatResponse>("/api/ask_chat", { messages, collection }),
+  // Send the new user turn + session id; the server owns history and context.
+  askChat: (message: string, sessionId?: string, backend?: string, collection?: string) =>
+    postJSON<AskChatResponse>("/api/ask_chat", {
+      message, session_id: sessionId, backend, collection,
+    }),
+  // Streaming chat over SSE: tokens arrive as they generate, so the UI never
+  // sits frozen on one long request.
+  askChatStream: async (
+    message: string,
+    opts: { sessionId?: string; backend?: string; collection?: string; apiKey?: string },
+    on: {
+      session?: (id: string) => void;
+      trace?: (t: AskChatTrace[]) => void;
+      delta?: (s: string) => void;
+      done?: (t: AskChatTrace[]) => void;
+      error?: (e: string) => void;
+    },
+    signal?: AbortSignal,
+  ): Promise<void> => {
+    // Safety net: if no bytes arrive for IDLE_MS, abort instead of spinning forever.
+    // The watchdog is reset on every chunk, so a slow-but-alive stream is fine.
+    const IDLE_MS = 90_000;
+    const ctrl = new AbortController();
+    if (signal) signal.addEventListener("abort", () => ctrl.abort(), { once: true });
+    let timedOut = false;
+    let idle: ReturnType<typeof setTimeout> | undefined;
+    const bump = () => {
+      if (idle) clearTimeout(idle);
+      idle = setTimeout(() => { timedOut = true; ctrl.abort(); }, IDLE_MS);
+    };
+    const stop = () => { if (idle) clearTimeout(idle); };
+
+    bump();
+    let res: Response;
+    try {
+      res = await fetch(`${API_BASE}/api/ask_chat_stream`, {
+        method: "POST",
+        headers: {
+          ...authHeaders(), "Content-Type": "application/json",
+          ...(opts.apiKey ? { "X-Anthropic-Key": opts.apiKey } : {}),
+        },
+        body: JSON.stringify({
+          message, session_id: opts.sessionId, backend: opts.backend, collection: opts.collection,
+        }),
+        signal: ctrl.signal,
+      });
+    } catch (e) {
+      stop();
+      if (timedOut) throw new Error("The model took too long to respond (timed out). Please try again.");
+      throw e;
+    }
+    if (!res.ok || !res.body) {
+      stop();
+      const detail = await res.text().catch(() => "");
+      throw new Error(`Request failed (${res.status} ${res.statusText})${detail ? `: ${detail.slice(0, 200)}` : ""}`);
+    }
+    const reader = res.body.getReader();
+    const dec = new TextDecoder();
+    let buf = "";
+    let returned = false;
+    // Parse whatever complete `data: ...` events sit in `buf`. Returns true if a
+    // terminal (done/error) event was handled. `final` flushes a trailing event that
+    // never got its closing \n\n before the socket closed.
+    const drain = (final: boolean): boolean => {
+      const parts = buf.split("\n\n");
+      buf = final ? "" : (parts.pop() || "");
+      for (const part of parts) {
+        const line = part.trim();
+        if (!line.startsWith("data:")) continue;
+        const json = line.slice(5).trim();
+        if (!json) continue;
+        let ev: { type: string; [k: string]: unknown };
+        try { ev = JSON.parse(json); } catch { continue; }
+        if (ev.type === "session") on.session?.(ev.session_id as string);
+        else if (ev.type === "trace") on.trace?.(ev.trace as AskChatTrace[]);
+        else if (ev.type === "delta") on.delta?.(ev.text as string);
+        else if (ev.type === "done") {
+          on.done?.((ev.trace as AskChatTrace[]) || []);
+          returned = true;
+          reader.cancel().catch(() => {});   // fire-and-forget — awaiting can hang on keep-alive
+          return true;
+        } else if (ev.type === "error") {
+          on.error?.(ev.error as string);
+          returned = true;
+          reader.cancel().catch(() => {});
+          return true;
+        }
+      }
+      return false;
+    };
+    // The `done`/`error` event is the completion signal — return the instant it
+    // arrives. Do NOT wait for the socket to close (claude-p lags before exiting and
+    // HTTP keep-alive can delay EOF, which would leave the UI stuck on "Thinking…").
+    try {
+      for (;;) {
+        const { value, done } = await reader.read();
+        if (done) {
+          if (!returned) drain(true);             // EOF: flush a trailing event that lacked \n\n
+          break;
+        }
+        bump();                                   // got data → reset the watchdog
+        buf += dec.decode(value, { stream: true });
+        if (drain(false)) return;
+      }
+    } catch (e) {
+      if (timedOut) throw new Error("The model stalled mid-answer (timed out). Please try again.");
+      throw e;
+    } finally {
+      stop();
+    }
+  },
+  // Durable, per-user chat history (server-side).
+  chatsList: () => getJSON<ChatListResp>("/api/chats"),
+  chatGet: (sid: string) => getJSON<ChatSessionFull>(`/api/chats/${encodeURIComponent(sid)}`),
+  chatRename: (sid: string, title: string) =>
+    postJSON<{ ok: boolean }>(`/api/chats/${encodeURIComponent(sid)}/rename`, { title }),
+  chatDelete: (sid: string) =>
+    getJSON<{ ok: boolean }>(`/api/chats/${encodeURIComponent(sid)}`, { method: "DELETE" }),
   origin: (concept: string) =>
     postJSON<OriginResponse>("/api/origin", { concept }),
   eval: () => getJSON<EvalResults>("/api/eval"),
@@ -238,6 +354,28 @@ export type AskChatResponse = {
   answer: string;
   used: { id?: string; text?: string; title?: string }[];
   trace: AskChatTrace[];
+  session_id: string;
+};
+export type ChatSessionSummary = {
+  id: string;
+  title: string;
+  n: number;
+  created_at: string;
+  updated_at: string;
+};
+export type ChatListResp = { user: string; sessions: ChatSessionSummary[] };
+export type ChatStoredMessage = {
+  role: ChatRole;
+  content: string;
+  trace?: AskChatTrace[];
+  created_at: string;
+};
+export type ChatSessionFull = {
+  id: string;
+  title: string;
+  created_at: string;
+  updated_at: string;
+  messages: ChatStoredMessage[];
 };
 
 export type JudgeRate = { n: number; correct: number | null };

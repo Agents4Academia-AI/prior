@@ -34,3 +34,5 @@ data/scifact/
 data_hackathon/
 data_search/
 data/users.json
+data/chats.db
+data/*.db
