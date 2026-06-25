@@ -291,6 +291,30 @@ def solved(body: SolvedBody) -> dict:
     return agent.has_been_solved(body.problem).to_dict()
 
 
+class ChatMessage(BaseModel):
+    role: str
+    content: str
+
+
+class AskChatBody(BaseModel):
+    messages: list[ChatMessage]
+    collection: Optional[str] = None
+
+
+@app.post("/api/ask_chat")
+def ask_chat(body: AskChatBody) -> dict:
+    """Agentic, multi-turn Ask: the model queries the graph (read-only Cypher +
+    semantic search) and answers, mixing in general knowledge when it says so."""
+    from .. import ask_agent
+    msgs = [{"role": m.role, "content": m.content} for m in body.messages]
+    try:
+        return ask_agent.chat(msgs, collection=body.collection)
+    except RuntimeError as e:  # LLM backend / SDK runtime failure
+        raise HTTPException(503, f"Ask agent unavailable: {e}")
+    except Exception as e:  # noqa: BLE001 — readable error, not a bare 500
+        raise HTTPException(500, f"Ask agent error: {e}")
+
+
 @app.get("/api/eval")
 def eval_results(collection: Optional[str] = None) -> dict:
     """Three-view scorecard (self-eval / human / aggregated) per dimension, live
@@ -299,6 +323,8 @@ def eval_results(collection: Optional[str] = None) -> dict:
     from .. import eval_suite, evaluation
     return {"summary": graph.summary(_coll(collection)),
             "scorecard": evaluation.scorecard(),
+            "judges": evaluation.judges(),
+            "calibration": evaluation.calibration(_coll(collection)),
             "distributions": eval_suite.graph_distributions()}
 
 

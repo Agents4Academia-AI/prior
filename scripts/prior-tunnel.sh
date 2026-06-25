@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Open SSH tunnels to the `prior` web app on ziz4, then open it locally.
 # Run this ON YOUR LAPTOP. The servers must already be running on ziz4
-# (see scripts/prior-up.sh). UI -> 5175; API -> 8078 (the browser hits the API
+# (see scripts/prior-ctl.sh). UI -> 5175; API -> 8078 (the browser hits the API
 # directly via VITE_API_BASE, so both ports must be forwarded).
 set -euo pipefail
 

@@ -58,7 +58,7 @@ Once: clone/checkout the repo and install (`pip install -e ".[graph,web]"`).
 Then, from the repo root on ziz4:
 
 ```bash
-bash scripts/prior-up.sh        # starts Neo4j + API (:8078) + UI (:5175)
+bash scripts/prior-ctl.sh start # starts Neo4j + API (:8078) + UI (:5175)
 ```
 Tip: run it inside `tmux`/`screen` so it survives disconnects. Logs land in
 `/tmp/prior-api.log` and `/tmp/prior-ui.log`. (Neo4j creds: see RUNNING.md.)
@@ -81,7 +81,7 @@ then open **http://127.0.0.1:5175**. Leave the tunnel running while you use the 
 - **Page loads but no data / errors:** port 8078 isn't forwarded, or the API/Neo4j
   isn't running on ziz4. Check `/tmp/prior-api.log`.
 - **`channel: open failed: connect failed`:** the server on ziz4 isn't up on that
-  port yet — run `scripts/prior-up.sh` first.
+  port yet — run `scripts/prior-ctl.sh start` first.
 - **`open: command not found` (Linux laptop):** the script falls back to `xdg-open`;
   if neither exists, just open the URL manually.
 - **Permission denied (publickey):** your key/account isn't set up — see step 1.

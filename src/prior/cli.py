@@ -106,6 +106,14 @@ def main(argv: list[str] | None = None) -> int:
     p_se.add_argument("--limit", type=int, default=0,
                       help="max NOT-yet-judged items per kind this run (0 = all remaining)")
     p_se.add_argument("--workers", type=int, default=None)
+    p_se.add_argument("--model", default=None,
+                      help="judge model id (default READER_MODEL); pair with PRIOR_LLM_BACKEND")
+    p_se.add_argument("--judge", default="claude",
+                      help="annotator label to store verdicts under, e.g. opus / qwen")
+
+    p_cal = sub.add_parser("calibration",
+                           help="AUC-ROC + accuracy-vs-threshold of stored scores vs the judge")
+    p_cal.add_argument("--collection", default=None, help="limit to one collection")
 
     args = ap.parse_args(argv)
 
@@ -193,7 +201,20 @@ def main(argv: list[str] | None = None) -> int:
     elif args.cmd == "selfeval":
         from . import selfeval
         selfeval.run(args.collection, kinds=args.kinds or None,
-                     limit=args.limit, workers=args.workers)
+                     limit=args.limit, workers=args.workers,
+                     model=args.model, judge=args.judge)
+    elif args.cmd == "calibration":
+        from . import evaluation
+        for d in evaluation.calibration(args.collection)["dimensions"]:
+            head = f"{d['kind']}/{d['signal']}"
+            if not d["n"]:
+                print(f"  {head}: no scored+judged items"); continue
+            print(f"  {head}  n={d['n']}  AUC={d['auc']}  acc={d['accuracy']}  "
+                  f"mean={d['mean_score']}  ECE={d['ece']}")
+            for t in d["thresholds"]:
+                acc = "n/a" if t["accuracy"] is None else f"{t['accuracy']:.3f}"
+                print(f"      >={t['t']:<4} keep {t['kept']:>4} "
+                      f"(cov {t['coverage']})  acc {acc}")
     return 0
 
 

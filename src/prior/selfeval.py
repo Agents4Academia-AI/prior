@@ -57,12 +57,12 @@ def _key_of(kind: str, it: dict) -> str:
     return it["key"] if kind != "edge" else f"{it['src']}|{it['rel']}|{it['dst']}"
 
 
-def _judged_keys(kind: str) -> set[str]:
-    """Targets this judge has already labelled — so runs are incremental/resumable."""
+def _judged_keys(kind: str, judge: str = JUDGE) -> set[str]:
+    """Targets this judge has already labelled, so runs are incremental/resumable."""
     with graph.session() as s:
         return {r["k"] for r in s.run(
             "MATCH (a:Annotation {annotator:$j, target_kind:$kind}) RETURN a.target_key AS k",
-            j=JUDGE, kind=kind)}
+            j=judge, kind=kind)}
 
 
 def _candidates(collection: str, kind: str) -> list[dict]:
@@ -84,9 +84,9 @@ def _candidates(collection: str, kind: str) -> list[dict]:
     return []
 
 
-def _remaining(collection: str, kind: str, limit: int) -> list[dict]:
+def _remaining(collection: str, kind: str, limit: int, judge: str = JUDGE) -> list[dict]:
     """All not-yet-judged items of `kind` (optionally capped to `limit` for this run)."""
-    skip = _judged_keys(kind)
+    skip = _judged_keys(kind, judge)
     rem = [it for it in _candidates(collection, kind) if _key_of(kind, it) not in skip]
     return rem[:limit] if limit and limit > 0 else rem
 
@@ -102,34 +102,37 @@ def _prompt(kind: str, it: dict) -> tuple[str, str]:
                  f"RELATION: A {rel} B\n\nWHY (extracted reasoning): {it.get('evidence','') or '(none)'}")
 
 
-def _judge_one(kind: str, it: dict, model: str) -> tuple[str, bool]:
+def _judge_one(kind: str, it: dict, model: str, judge: str = JUDGE) -> tuple[str, bool]:
     key, user = _prompt(kind, it)
     out = llm.structured(model=model, system=_SYS[kind], user=user,
                          schema=_SCHEMA, tool_name="judge")
     verdict = out.get("verdict", "unsure")
     if verdict not in ("correct", "incorrect", "unsure"):
         verdict = "unsure"
-    graph.upsert_annotation(JUDGE, kind, key, faithful=verdict, issues=[],
+    graph.upsert_annotation(judge, kind, key, faithful=verdict, issues=[],
                             soundness="", note=(out.get("reason") or "")[:300], created_at=_now())
     return key, True
 
 
 def run(collection: str, *, kinds: list[str] | None = None, limit: int = 0,
-        workers: int | None = None, model: str | None = None, progress=print) -> dict:
+        workers: int | None = None, model: str | None = None,
+        judge: str = JUDGE, progress=print) -> dict:
     """Judge every not-yet-judged item of each kind (incremental/resumable), storing
-    verdicts as `claude` annotations. `limit` > 0 caps how many to do this run."""
+    verdicts under the `judge` annotator (default "claude"). Pass a distinct label
+    (e.g. "opus", "qwen") to run a second/third model independently. `limit` > 0 caps
+    how many to do this run."""
     graph.setup_schema()
     kinds = kinds or ["contribution", "edge", "claim"]
     model = model or config.READER_MODEL
     workers = workers or int(os.environ.get("PRIOR_WORKERS", "6"))
     done = {}
     for kind in kinds:
-        items = _remaining(collection, kind, limit)
-        already = len(_judged_keys(kind))
-        progress(f"{kind}: {already} already judged · judging {len(items)} more")
+        items = _remaining(collection, kind, limit, judge)
+        already = len(_judged_keys(kind, judge))
+        progress(f"[{judge}] {kind}: {already} already judged, judging {len(items)} more")
         n = 0
         with ThreadPoolExecutor(max_workers=workers) as pool:
-            futs = [pool.submit(_judge_one, kind, it, model) for it in items]
+            futs = [pool.submit(_judge_one, kind, it, model, judge) for it in items]
             for i, f in enumerate(as_completed(futs), 1):
                 try:
                     f.result(); n += 1

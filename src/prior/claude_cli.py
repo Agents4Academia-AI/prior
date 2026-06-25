@@ -54,9 +54,11 @@ def run_json(
     schema: dict[str, Any],
     timeout: int = 240,
     startup_timeout: int = 30,
+    model: str | None = None,
 ) -> dict[str, Any]:
     """Run one extraction turn through the interactive CLI and return a dict
-    matching `schema`. Raises on timeout / unparseable output."""
+    matching `schema`. Raises on timeout / unparseable output. `model` (e.g.
+    "opus") is passed to the CLI via --model so a second-model judge is possible."""
     infile = _tmp("in", "txt")
     outfile = _tmp("out", "json")
     for f in (infile, outfile):
@@ -76,8 +78,9 @@ def run_json(
     with open(infile, "w") as fh:
         fh.write(prompt_doc)
 
+    spawn_args = list(_SPAWN_ARGS) + (["--model", model] if model else [])
     child = pexpect.spawn(
-        _SPAWN_CMD, _SPAWN_ARGS, encoding="utf-8",
+        _SPAWN_CMD, spawn_args, encoding="utf-8",
         timeout=timeout, dimensions=(50, 220), cwd=_CWD,
     )
     try:

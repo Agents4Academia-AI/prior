@@ -85,6 +85,8 @@ export const api = {
       `/api/contribution/${encodeURIComponent(contribId)}`,
     ),
   ask: (question: string) => postJSON<AskResponse>("/api/ask", { question }),
+  askChat: (messages: ChatMessage[], collection?: string) =>
+    postJSON<AskChatResponse>("/api/ask_chat", { messages, collection }),
   origin: (concept: string) =>
     postJSON<OriginResponse>("/api/origin", { concept }),
   eval: () => getJSON<EvalResults>("/api/eval"),
@@ -209,9 +211,44 @@ export type EvalDim = {
   aggregated: EvalRate;
   agreement: { n: number; rate: number | null };
 };
+export type CalibBin = { lo: number; hi: number; n: number; score: number; acc: number };
+export type CalibThreshold = { t: number; kept: number; coverage: number | null; accuracy: number | null };
+export type CalibDim = {
+  kind: string;
+  signal: string;
+  n: number;
+  auc: number | null;
+  accuracy: number | null;
+  mean_score: number | null;
+  ece: number | null;
+  reliability: CalibBin[];
+  thresholds: CalibThreshold[];
+};
+// ── agentic Ask chat ───────────────────────────────────────────────────────────
+export type ChatRole = "user" | "assistant" | "system";
+export type ChatMessage = { role: ChatRole; content: string };
+export type AskChatTrace = {
+  tool: string;
+  args?: Record<string, unknown>;
+  n?: number | null;
+  error?: string | null;
+  thought?: string;
+};
+export type AskChatResponse = {
+  answer: string;
+  used: { id?: string; text?: string; title?: string }[];
+  trace: AskChatTrace[];
+};
+
+export type JudgeRate = { n: number; correct: number | null };
+export type JudgesDim = { kind: string; rates: Record<string, JudgeRate> };
+export type JudgeAgreement = { a: string; b: string; n: number; rate: number };
+export type EvalJudges = { labels: string[]; dimensions: JudgesDim[]; agreement: JudgeAgreement[] };
 export type EvalResults = {
   summary: Record<string, number>;
   scorecard: { dimensions: EvalDim[]; gates: Record<string, string>; note: string };
+  judges: EvalJudges;
+  calibration: { dimensions: CalibDim[]; note: string };
   distributions: {
     provenance: Record<string, number>;
     global_relations: Record<string, number>;

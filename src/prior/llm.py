@@ -69,6 +69,10 @@ def structured(
     if backend() == "claude-code":
         return _structured_claude_code(
             model=model, system=system, user=user, schema=schema, retries=retries)
+    if backend() in ("openai", "vllm", "ollama"):
+        return _structured_openai(
+            model=model, system=system, user=user, schema=schema,
+            max_tokens=max_tokens, retries=retries, timeout=timeout)
     return _structured_api(
         model=model, system=system, user=user, schema=schema,
         tool_name=tool_name, max_tokens=max_tokens, retries=retries)
@@ -121,6 +125,8 @@ def _structured_api(*, model, system, user, schema, tool_name, max_tokens, retri
 def _structured_claude_cli(*, model, system, user, schema, retries, timeout=None):
     from . import claude_cli  # lazy: only this backend needs pexpect
     kw = {"timeout": timeout} if timeout else {}
+    if model:
+        kw["model"] = model            # force e.g. opus for a second-model judge
     last_err: Optional[Exception] = None
     for _ in range(max(1, min(retries, 2))):  # cap retries — a hung call is costly
         try:
@@ -128,6 +134,41 @@ def _structured_claude_cli(*, model, system, user, schema, retries, timeout=None
         except Exception as e:  # noqa: BLE001 — surface after retries
             last_err = e
     raise RuntimeError(f"structured() (claude-cli) failed: {last_err}")
+
+
+# ── OpenAI-compatible backend (vLLM / Ollama / any /v1) ─────────────────────────
+def _structured_openai(*, model, system, user, schema, max_tokens, retries, timeout=None):
+    """Talk to an OpenAI-compatible chat endpoint (a local open-weight model served by
+    vLLM or Ollama). JSON is requested via response_format + schema-in-prompt and parsed
+    leniently. Used to run a cheap, independent open-weight judge on a local GPU.
+    Reads PRIOR_OPENAI_BASE_URL (default http://127.0.0.1:8000/v1) and PRIOR_OPENAI_API_KEY."""
+    import urllib.request  # stdlib; no new dependency
+    base = os.environ.get("PRIOR_OPENAI_BASE_URL", "http://127.0.0.1:8000/v1").rstrip("/")
+    key = os.environ.get("PRIOR_OPENAI_API_KEY", "EMPTY")
+    sys_json = (system + "\n\nReturn ONLY a single JSON object conforming to this JSON "
+                "Schema. No prose, no markdown fences:\n" + json.dumps(schema))
+    body = json.dumps({
+        "model": model,
+        "messages": [{"role": "system", "content": sys_json},
+                     {"role": "user", "content": user}],
+        "temperature": 0,
+        "max_tokens": max_tokens,
+        "response_format": {"type": "json_object"},
+    }).encode()
+    last_err: Optional[Exception] = None
+    for attempt in range(retries):
+        try:
+            req = urllib.request.Request(
+                base + "/chat/completions", data=body,
+                headers={"Content-Type": "application/json",
+                         "Authorization": f"Bearer {key}"})
+            with urllib.request.urlopen(req, timeout=timeout or 120) as r:
+                payload = json.loads(r.read())
+            return extract_json(payload["choices"][0]["message"]["content"])
+        except Exception as e:  # noqa: BLE001 — surface after retries
+            last_err = e
+            time.sleep(min(2 ** attempt, 8))
+    raise RuntimeError(f"structured() (openai) failed after {retries} attempts: {last_err}")
 
 
 # ── Claude Code (Agent SDK) backend ────────────────────────────────────────────

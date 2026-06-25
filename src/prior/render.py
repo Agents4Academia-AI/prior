@@ -195,12 +195,16 @@ def _build_payload(collection: str, papers: dict, contribs: list, edges: list,
     pdeg = Counter()
     for (a, b) in pair:
         pdeg[a] += 1; pdeg[b] += 1
+    def _top(p: str) -> list[str]:
+        cs = sorted(by_paper[p], key=lambda c: deg.get(c["id"], 0), reverse=True)
+        return [c.get("statement") or c.get("quote") or "" for c in cs[:3] if (c.get("statement") or c.get("quote"))]
     papers_n = [{"id": p, "cite": _cite(papers.get(p, {})),
                  "title": (papers.get(p, {}) or {}).get("title") or "",
                  "deg": pdeg[p], "comm": paper_dom[p], "bridge": paper_bridge[p],
                  "year": _year(papers.get(p)), "spread": paper_spread[p],
                  "date": (papers.get(p, {}) or {}).get("date") or "",
                  "dprec": (papers.get(p, {}) or {}).get("dprec") or "",
+                 "top": _top(p),
                  "n": len(by_paper[p]), "url": (papers.get(p, {}) or {}).get("url") or ""}
                 for p in by_paper]
     paper_links = [{"source": a, "target": b, "w": w,

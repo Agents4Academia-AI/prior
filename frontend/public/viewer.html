@@ -41,7 +41,7 @@
    <span id="filtrow"><label style="margin-left:10px;font-size:12px;color:var(--dim)">min trust <input id="tf" type="range" min="0" max="0.95" step="0.05" value="0" style="vertical-align:middle"> <span id="tfv">0.00</span></label>
    <label style="margin-left:10px;font-size:12px;color:var(--dim)">year ≤ <input id="yr" type="range" step="1" style="vertical-align:middle"> <span id="yrv"></span></label>
    <label style="margin-left:10px;font-size:12px;color:var(--dim)"><input id="conly" type="checkbox" style="vertical-align:middle"> contradictions only</label></span>
-   <div style="margin-top:8px"><input id="q" type="search" placeholder="ask the graph (keywords)… e.g. hallucination, peer review gaming" style="width:340px;padding:5px 9px;border:1px solid var(--bd);border-radius:8px;font-size:12px;font-family:var(--sans)"></div></div>
+   <div style="margin-top:8px"><input id="q" type="search" placeholder="find a paper by title, or keywords… e.g. hallucination, peer review" style="width:340px;padding:5px 9px;border:1px solid var(--bd);border-radius:8px;font-size:12px;font-family:var(--sans)"></div></div>
  <div class="zoom"><button id="zi">+</button><button id="zo">&minus;</button><button id="zf">fit</button></div>
  <div id="tlctrl"><button id="tlplay">&#9654;</button><input id="tlrange" type="range" min="0" max="1000" value="1000"><span id="tldate">&mdash;</span></div>
  <div class="legend" id="legend"></div>
@@ -103,6 +103,7 @@ function build(){
     .style("cursor","pointer").call(d3.drag().on("start",ds).on("drag",dd).on("end",de))
     .on("mouseover",(_,d)=>focus(d.id)).on("mouseout",()=>focus(sel))
     .on("click",(e,d)=>{e.stopPropagation();sel=d.id;focus(d.id);isP?paperDetail(d):contribDetail(d);notify(d);});
+  node.append("title").text(d=>isP?(d.title||d.cite||""):((PTITLE[pid(d.id)]||d.cite||"")+(d.stmt?` — ${d.stmt}`:"")));
   let ld=[];
   if(isP){const tp=new Set();real.forEach(l=>D.papers.filter(n=>n.comm===l.id).sort((a,b)=>b.deg-a.deg).slice(0,3).forEach(n=>tp.add(n.id)));ld=NODES.filter(n=>tp.has(n.id));}
   lab=root.append("g").selectAll("text").data(ld).join("text").attr("class","lab").attr("dx",d=>rad(d)+3).attr("dy",4).text(d=>d.cite);
@@ -144,15 +145,15 @@ function focus(id){if(frontierComm!=null||timelineMode)return;  // frontier/time
   link.attr("marker-end",l=>{if(!l.directed)return null;const s=l.source.id||l.source,t=l.target.id||l.target;return(!id||s===id||t===id)?`url(#arr-${l.rel})`:null;});
   if(lab)lab.style("display",n=>(nodeVis(n)&&(!id||adj.get(id).has(n.id)))?null:"none");
 }
-function paperDetail(d){const spread=d.spread.map(LAB).join(" · ");
+function paperDetail(d){const spread=(d.spread||[]).map(LAB).join(" · ");
   SIDE.innerHTML=backLink()+`<div><span class="pill" style="background:${COL(d.comm)}">${esc(LAB(d.comm))}</span>${d.bridge?' <span class="pill" style="background:#3b4252">bridge</span>':''}</div>
   <div class="k">Paper</div><div>${d.url?`<a class="src" style="text-decoration:underline" href="${d.url}" target="_blank">${esc(d.title)}</a>`:esc(d.title)}</div><div class="k">Cite</div><div class="src">${esc(d.cite)}</div><div class="k">Date</div><div>${esc(fmtDate(d.date,d.dprec)||String(d.year||"—"))}</div>
   <div class="k">Degree / contributions</div><div>${d.deg} links · ${d.n} contributions</div>
   <div class="k">Clusters spanned</div><div>${esc(spread)||"—"}</div>
-  <div class="k">Top contributions</div><ul>${d.top.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>
+  <div class="k">Top contributions</div><ul>${(d.top||[]).map(t=>`<li>${esc(t)}</li>`).join("")||"<li class='src'>(none)</li>"}</ul>
   ${d.url?`<a class="src" href="${d.url}" target="_blank">open ↗</a>`:""}`;}
-const PCITE={},PURL={};
-D.papers.forEach(p=>{PCITE[p.id]=p.cite;PURL[p.id]=p.url||"";});
+const PCITE={},PURL={},PTITLE={};
+D.papers.forEach(p=>{PCITE[p.id]=p.cite;PURL[p.id]=p.url||"";PTITLE[p.id]=p.title||"";});
 const plink=(p,txt)=>PURL[p]?`<a class="src" style="text-decoration:underline" href="${PURL[p]}" target="_blank">${esc(txt)}</a>`:esc(txt);
 // Edges are date-oriented upstream: src = derivative (builds on), dst = antecedent.
 // Phrase by the edge's `directed` flag; directed:false builds_on/refines = ambiguous
@@ -165,7 +166,7 @@ function contribDetail(d){const nb=D.contribLinks.filter(l=>l.source===d.id||l.t
   SIDE.innerHTML=backLink()+`<div><span class="pill" style="background:${COL(d.comm)}">${esc(LAB(d.comm))}</span> <span class="pill" style="background:#9aa0b0">${esc(d.kind||"contribution")}</span></div>
    <div class="k">Contribution</div><div>${esc(d.stmt)}</div>
    ${d.quote?`<div class="k">Stated as</div><div class="quote">${esc(d.quote)}</div>`:""}
-   <div class="k">Paper</div><div class="src">${plink(pid(d.id),d.cite)}${d.date?` <span style="color:var(--faint)">· ${esc(fmtDate(d.date,d.dprec))}</span>`:""}</div>
+   <div class="k">Paper</div><div>${plink(pid(d.id),PTITLE[pid(d.id)]||d.cite)}</div><div class="src" style="color:var(--faint);margin-top:2px">${esc(d.cite)}${d.date?` · ${esc(fmtDate(d.date,d.dprec))}`:""}</div>
    <div class="k">Cross-paper relations (${nb.length})</div>
    ${nb.map(n=>`<div class="nb"><span class="pill" style="background:${D.rel[n.rel]||'#9aa0b0'}">${esc(n.phrase)}</span> <span class="src">trust ${n.trust} · ${esc(n.tier)}</span>
      <div class="src" style="margin-top:3px">${n.dir} ${plink(pid(n.other),PCITE[pid(n.other)]||n.other)}</div>
@@ -177,7 +178,7 @@ function runSearch(){
   const qe=document.getElementById("q"), q=(qe.value||"").trim().toLowerCase();
   if(!q){clearSel();return;}
   const terms=q.split(/\s+/), isP=level==="papers";
-  const text=d=>isP?((d.title||"")+" "+(d.cite||"")).toLowerCase():((d.stmt||"")+" "+(d.quote||"")+" "+(d.cite||"")).toLowerCase();
+  const text=d=>isP?((d.title||"")+" "+(d.cite||"")).toLowerCase():((d.stmt||"")+" "+(d.quote||"")+" "+(d.cite||"")+" "+(PTITLE[pid(d.id)]||"")).toLowerCase();
   const ids=new Set();
   node.each(d=>{if(nodeVis(d)&&terms.every(t=>text(d).includes(t)))ids.add(d.id);});
   sel=null;

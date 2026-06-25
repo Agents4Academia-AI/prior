@@ -1,14 +1,18 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { api, type WhoAmI, type CollectionInfo } from "./lib/api";
 import type { Summary, Paper, PaperGraph, ClaimNode } from "./lib/types";
-import Sidebar from "./components/Sidebar";
+import NavRail from "./components/NavRail";
+import PapersView from "./components/PapersView";
+import PaperLink from "./components/PaperLink";
+import MethodsView from "./components/MethodsView";
 import EvalView from "./components/EvalView";
 import AskPanel from "./components/AskPanel";
 import ClaimGraph, { type ClaimEdgePick } from "./components/ClaimGraph";
 import AnnotatePanel, { type AnnotationTarget } from "./components/AnnotatePanel";
 
-type Mode = "graph" | "local" | "eval";
+type Mode = "graph" | "local" | "eval" | "papers" | "report";
 type Overlay = "none" | "annotate" | "ask";
+const DOCK_MIN = 300, DOCK_MAX = 760;
 
 type SelNode = {
   level: "contribs" | "papers";
@@ -25,6 +29,9 @@ export default function App() {
 
   const [mode, setMode] = useState<Mode>("graph");
   const [overlay, setOverlay] = useState<Overlay>("none");
+  const [railOpen, setRailOpen] = useState(true);
+  const [dockWidth, setDockWidth] = useState(400);
+  const [resizing, setResizing] = useState(false);
   const [sel, setSel] = useState<SelNode | null>(null);
   const [selEdge, setSelEdge] = useState<SelEdge | null>(null);
 
@@ -78,6 +85,28 @@ export default function App() {
   }, [collection]);
 
   const onAnnotated = useCallback(() => { refreshWho(); }, [refreshWho]);
+
+  const navigate = useCallback((m: "graph" | "papers" | "eval" | "report") => { setMode(m); }, []);
+
+  const draggingRef = useRef(false);
+  const startResize = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    draggingRef.current = true;
+    setResizing(true);              // overlay captures events over the graph iframe
+    const onMove = (ev: MouseEvent) => {
+      if (!draggingRef.current) return;
+      const w = window.innerWidth - ev.clientX;
+      setDockWidth(Math.min(DOCK_MAX, Math.max(DOCK_MIN, w)));
+    };
+    const onUp = () => {
+      draggingRef.current = false;
+      setResizing(false);
+      document.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mouseup", onUp);
+    };
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onUp);
+  }, []);
 
   const openLocal = useCallback(() => {
     if (!sel) return;
@@ -155,19 +184,22 @@ export default function App() {
     ? `/viewer.html?api=${encodeURIComponent(api.base)}&collection=${encodeURIComponent(collection)}`
     : "";
 
-  const dockOpen = mode === "graph" && overlay !== "none";
+  const dockOpen = overlay !== "none";
+  const MODE_TITLE: Record<string, string> = { graph: "Atlas", eval: "Evaluation", papers: "", report: "" };
 
   return (
-    <div className={`app ${dockOpen ? "three-col" : "two-col"}`}>
-      <Sidebar
-        summary={summary}
-        papers={papers}
+    <div className="app">
+      {resizing && <div className="resize-overlay" />}
+      <NavRail
+        mode={mode}
+        onNavigate={navigate}
+        open={railOpen}
+        onToggle={() => setRailOpen((o) => !o)}
         collections={collections}
         collection={collection}
         onSwitchCollection={switchCollection}
         who={who}
         onIdentityChange={refreshWho}
-        onIngested={onIngested}
       />
 
       <div className="panel canvas">
@@ -176,13 +208,14 @@ export default function App() {
             {mode === "local" ? (
               <>
                 <button className="btn-ghost sm" onClick={exitLocal}>← Atlas</button>
-                <span className="bar-title">{localPaper?.paper.cite ?? "claim graph"}</span>
+                {localPaper ? (
+                  <PaperLink paper={localPaper.paper} className="bar-title">
+                    {localPaper.paper.cite ?? "claim graph"}
+                  </PaperLink>
+                ) : <span className="bar-title">claim graph</span>}
               </>
             ) : (
-              <div className="toggle">
-                <button className={mode === "graph" ? "on" : ""} onClick={() => setMode("graph")}>Graph</button>
-                <button className={mode === "eval" ? "on" : ""} onClick={() => setMode("eval")}>Eval</button>
-              </div>
+              <span className="bar-title">{MODE_TITLE[mode] ?? ""}</span>
             )}
           </div>
           <div className="bar-right">
@@ -205,6 +238,12 @@ export default function App() {
               <div className="muted">Is the API running at {api.base}?</div>
             </div>
           )}
+
+          {!bootError && mode === "papers" && (
+            <PapersView summary={summary} papers={papers} collection={collection} onIngested={onIngested} />
+          )}
+
+          {!bootError && mode === "report" && <MethodsView />}
 
           {!bootError && mode === "graph" && viewerSrc && (
             <iframe id="viewer" key={collection} className="viewer-frame" title="Prior atlas" src={viewerSrc} />
@@ -239,17 +278,20 @@ export default function App() {
       </div>
 
       {dockOpen && (
-        <div className="panel dock">
-          <div className="dock-head">
-            <h3>{overlay === "annotate" ? "Annotate" : "Ask the graph"}</h3>
-            <button className="modal-x" onClick={() => setOverlay("none")}>×</button>
+        <>
+          <div className="resizer" onMouseDown={startResize} title="Drag to resize" />
+          <div className="panel dock" style={{ width: dockWidth }}>
+            <div className="dock-head">
+              <h3>{overlay === "annotate" ? "Annotate" : "Ask the graph"}</h3>
+              <button className="modal-x" onClick={() => setOverlay("none")}>×</button>
+            </div>
+            <div className="dock-body">
+              {overlay === "annotate"
+                ? <AnnotatePanel target={annotationTarget} signedIn={!!who?.signed_in} onAnnotated={onAnnotated} />
+                : <AskPanel />}
+            </div>
           </div>
-          <div className="dock-body">
-            {overlay === "annotate"
-              ? <AnnotatePanel target={annotationTarget} signedIn={!!who?.signed_in} onAnnotated={onAnnotated} />
-              : <AskPanel />}
-          </div>
-        </div>
+        </>
       )}
     </div>
   );
