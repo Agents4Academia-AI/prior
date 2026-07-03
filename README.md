@@ -142,7 +142,8 @@ each model judge (Claude, Qwen, Gemma…) *and* human annotator scores Contribut
 Relations / Claims. Correctness runs ~**53–80%** on contributions and ~**63–85%** on
 claims, but only **21–53% on relations** — quantifying that *relation extraction is
 the weak link*. Plus **cross-judge agreement** and **calibration** diagrams
-(reliability + accuracy-vs-coverage).
+(reliability + accuracy-vs-coverage). *(The `Eval` view — multi-judge scorecard,
+cross-judge agreement, and calibration diagrams — was built by **Harit**.)*
 
 **Honest caveats:** the headline checks are **self-eval** — the system auditing its
 own output, a smoke test, *not* independent proof; a parallel **human-annotation**
@@ -156,9 +157,9 @@ means the self-audit is clean, not that the graph is proven correct.
 The Anthropic deliverable is a report on **model behaviour and failure modes** on
 agentic-research tasks. Ours, plainly:
 
-- **Relation *direction* is unreliable.** Which of two claims `builds_on` the
-  other is model noise; the viewer infers precedence from publication **year**
-  instead. Don't trust edge direction as a model output.
+- **Direction is the noisiest signal.** *Whether* two claims are related, and *what
+  type*, hold up better than *which way* `builds_on` points — so the viewer anchors
+  precedence to publication **year** rather than the model's directional guess.
 - **Confidence is model-agreement, not evidence weight** (see Roadmap → scope of
   confidence). A claim agreed on by 3 runs can still rest on one weak study.
 - **Contradiction precision is imperfect.** The atlas flags 73 `contradicts` edges,
@@ -222,16 +223,15 @@ redistribution — and we prefer open **arXiv** copies where they exist.
 
 ## Roadmap & next steps
 
-**Scope of "confidence" (honest note).** Today Prior's confidence answers *"was this
-faithfully extracted, and do the models agree?"* — a per-node extraction score plus
-`triple`/`double`/`opus_only` model-agreement tiers, with a self-audit for
-calibration. It is **not yet** *"how strong is the evidence?"*. Closing that gap
-(item 1) is the headline next step. Each step makes the map better at flagging
-*which* phenomena deserve attention and *how sure* we should be:
+Each step makes the map better at flagging *which* phenomena deserve attention and
+*how sure* we should be:
 
-1. **Evidence-weighted confidence** — calibrate a claim by the *strength and
-   agreement of its evidence* (the IPCC/IPBES scheme, Mastrandrea et al. 2010), not
-   just how many model runs concur.
+1. **Evidence-weighted confidence — the headline item.** Today confidence answers
+   *"was this faithfully extracted, and do the models agree?"* — a per-node extraction
+   score plus `triple`/`double`/`opus_only` model-agreement tiers, self-audited for
+   calibration. It is **not yet** *"how strong is the evidence?"*. Next: calibrate a
+   claim by the *strength and agreement of its evidence* (the IPCC/IPBES scheme,
+   Mastrandrea et al. 2010), not just how many model runs concur.
 2. **Beyond papers** — generalise the `Paper` node to a typed `Source` (talk,
    blog, video, thread, preprint) with credibility-weighted provenance, so the
    atlas reflects the whole scholarly conversation, not just the archived record.
@@ -253,26 +253,6 @@ Contributions welcome — start from any reusable stage above, see
 progress log in `claude-progress.md`.
 
 ## End notes
-
-### Built with Claude Code — token report
-
-Prior was built almost entirely **through Claude Code on a Max subscription (no
-metered API)**. Usage logged in this workspace, 2026-06-17 → 07-01, **deduplicated
-by message id** (Claude Code replays messages into continuation files, so raw logs
-double-count by ~2×):
-
-| model | turns | input | cache write | cache read | output | ~$ equiv-API |
-|---|--:|--:|--:|--:|--:|--:|
-| Claude Opus 4.8 | 2,587 | 0.31M | 30.4M | **1.12B** | 5.2M | $992 |
-| Claude Sonnet 4.6 | 2,768 | 0.01M | 12.5M | 32.5M | 9.8M | $232 |
-| Claude Haiku 4.5 | 2,566 | 0.03M | 17.2M | 26.1M | 15.9M | $116 |
-| **Total** | **7,921** | 0.35M | 60.0M | **1.17B** | 30.8M | **≈ $1,340** |
-
-**≈ 1.26 B tokens**, of which **~93% were cache reads** — prompt caching did the
-heavy lifting. Cache writes were **1-hour TTL** (Claude Code's default), priced at
-2× input. The `$1,340` is *equivalent-API* list-price cost for scale; actual spend
-was the flat Max subscription (~$96/day-equivalent). Counts cover this workspace;
-teammates' machines are separate.
 
 ### Links
 
