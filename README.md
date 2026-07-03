@@ -282,11 +282,13 @@ teammates' machines are separate.
 ### Acknowledgements
 
 Built during [Agents4Academia](https://github.com/Agents4Academia-AI), 14–26 June
-2026. MIT License.
+2026. Code **Apache-2.0**; graph/atlas data (`data/`) **CC-BY-4.0**.
 
 **Adjacent & prior work:** ORKG (TIB Hannover) · NLPContributionGraph (SemEval
-2021) · AutoSci/OmegaWiki · FutureHouse PaperQA2/Aviary · Open Knowledge Format
-(Google, 2026) · OpenAlex / arXiv / Semantic Scholar.
+2021) · AutoSci/OmegaWiki · FutureHouse PaperQA2/Aviary · Papers with Code
+(Meta → Hugging Face) · scite.ai (supporting/contradicting *Smart Citations*) ·
+Elicit (Ought) · STORM (Stanford) · Connected Papers / ResearchRabbit ·
+Open Knowledge Format (Google, 2026) · OpenAlex / arXiv / Semantic Scholar.
 
 **Inspiration:** Mastrandrea et al. 2010 (IPCC AR5 uncertainty guidance) · IPBES
 assessment guide · Parkinson 2026, *"Writing science that humans and machines can
