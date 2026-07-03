@@ -254,6 +254,27 @@ progress log in `claude-progress.md`.
 
 ## End notes
 
+### Contributions
+
+Reconstructed from the (privately archived) commit history:
+
+- **Klara Kaleb** — project lead + editorial direction; the core pipeline — **Scoper**
+  (scoping, recall→precision, citation snowball), **Contributor** (contribution/claim
+  extraction), **Cartographer** (cross-paper atlas + consensus edges) — the atlas
+  viewer, groundedness / SciFact evals, and the writeup.
+- **Harit Vishwakarma** — the web application (nav rail, Papers, agentic **Ask**,
+  **Report**, streaming chat across model backends), the self-auditing **Eval** system
+  (multi-judge scorecard, cross-judge agreement, calibration), the D3 graph viz +
+  collections UI, ingestion / dedup, a fast headless LLM backend, and deployment.
+- **Yee Whye Teh** — whole-paper Markdown rendering (LaTeX math + figures), Scoper
+  abstract-repair (recovering foundational papers), method-comparison tooling and tests.
+- **Claude (Claude Code)** — most of the implementation grunt-work under human
+  direction: pipeline code, the `prior view` CLI, scripts, docs and this writeup,
+  research synthesis, and the release engineering.
+
+A candid account of how the human + Claude collaboration actually went — what worked
+and where the model needed steering — is in **[RETRO.md](RETRO.md)**.
+
 ### Links
 
 - **Slides:** [hackathon deck](https://docs.google.com/presentation/d/1ESDmlK8z3T8XWKAdn_xdJVWpP079jkP1iKCl95wjQLo/edit)
