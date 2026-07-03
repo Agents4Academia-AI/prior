@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "prior"
+version = "0.1.0"
+description = "Turn primary literature into a queryable atlas of claims (Reader / Cartographer / Navigator)."
+requires-python = ">=3.11"
+dependencies = [
+    "anthropic>=0.40",
+    "requests>=2.31",
+    "networkx>=3.0",
+    "rank-bm25>=0.2.2",
+    "pexpect>=4.9",
+    "rapidfuzz>=3.0",
+]
+
+[project.optional-dependencies]
+# Run the pipeline on a Claude Code login (Max plan) instead of API credits:
+#   pip install -e ".[claude-code]"  ;  export PRIOR_LLM_BACKEND=claude-code
+claude-code = ["claude-agent-sdk>=0.1"]
+# Live two-level graph store (Neo4j) + local credit-free embeddings:
+graph = ["neo4j>=5.20", "fastembed>=0.3"]
+# Web API (prior serve), consumed by the React UI in frontend/:
+web = ["fastapi>=0.110", "uvicorn[standard]>=0.27"]
+# Rich whole-paper Markdown renders (scripts/fullpaper.py): structure-aware PDF →
+# Markdown with figures. The arXiv-HTML path (math + figures) needs no extra deps.
+fullpaper = ["pymupdf>=1.24", "pymupdf4llm>=0.0.17"]
+
+[project.scripts]
+prior = "prior.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]

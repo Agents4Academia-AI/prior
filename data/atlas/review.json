@@ -1,0 +1,77 @@
+{
+  "summary": {
+    "high": 1,
+    "medium": 4,
+    "low": 2
+  },
+  "flags": [
+    {
+      "type": "duplicate_paper",
+      "severity": "high",
+      "items": [
+        "openalex:W4401042735",
+        "openalex:W4394838812"
+      ],
+      "detail": "2 records share a title \u2014 likely one paper. openalex:W4401042735\u2192https://doi.org/10.18653/v1/2024.naacl-industry.19; openalex:W4394838812\u2192https://doi.org/10.48550/arxiv.2404.08189",
+      "suggested_action": "merge into one canonical paper node"
+    },
+    {
+      "type": "version_variant",
+      "severity": "medium",
+      "items": [
+        "openalex:W4401042735",
+        "openalex:W4394838812"
+      ],
+      "detail": "records look like different versions: arXiv preprint, published",
+      "suggested_action": "canonicalize; use earliest (preprint) date for precedence"
+    },
+    {
+      "type": "duplicate_contribution",
+      "severity": "medium",
+      "items": [
+        "openalex:W4401042735::k00",
+        "openalex:W4394838812::k00"
+      ],
+      "detail": "contributions of duplicate paper records linked by 'supports' \u2014 likely restated",
+      "suggested_action": "merge contributions"
+    },
+    {
+      "type": "duplicate_contribution",
+      "severity": "medium",
+      "items": [
+        "openalex:W4401042735::k01",
+        "openalex:W4394838812::k01"
+      ],
+      "detail": "contributions of duplicate paper records linked by 'supports' \u2014 likely restated",
+      "suggested_action": "merge contributions"
+    },
+    {
+      "type": "duplicate_contribution",
+      "severity": "medium",
+      "items": [
+        "openalex:W4394838812::k02",
+        "openalex:W4401042735::k00"
+      ],
+      "detail": "contributions of duplicate paper records linked by 'supports' \u2014 likely restated",
+      "suggested_action": "merge contributions"
+    },
+    {
+      "type": "isolated_paper",
+      "severity": "low",
+      "items": [
+        "openalex:W4402670429"
+      ],
+      "detail": "no cross-paper relations \u2014 'Chain-of-Verification Reduces Hallucination in Large Language Models'",
+      "suggested_action": "review relevance / look for missing links"
+    },
+    {
+      "type": "isolated_paper",
+      "severity": "low",
+      "items": [
+        "arxiv:2504.17204v1"
+      ],
+      "detail": "no cross-paper relations \u2014 'Factually: Exploring Wearable Fact-Checking for Augmented Truth Discernment'",
+      "suggested_action": "review relevance / look for missing links"
+    }
+  ]
+}

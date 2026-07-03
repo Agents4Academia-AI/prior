@@ -1,0 +1,404 @@
+{
+  "contributions": [
+    {
+      "id": "openalex:W4401042735::k00",
+      "paper_id": "openalex:W4401042735",
+      "statement": "A RAG-based system for structured output generation (workflow-to-JSON) that retrieves relevant JSON objects from a large, customizable step catalogue and injects them into the LLM prompt, significantly reducing hallucination of non-existent steps and database table names.",
+      "kind": "method",
+      "quote": "We provide an application of RAG in workflow generation, a structured output task. We show that using RAG reduces hallucination and improves results."
+    },
+    {
+      "id": "openalex:W4401042735::k01",
+      "paper_id": "openalex:W4401042735",
+      "statement": "A small, well-trained dense retriever that aligns natural language queries with structured JSON objects enables deployment of a smaller LLM at no loss in performance, making LLM-based structured-output systems less resource-intensive.",
+      "kind": "empirical_finding",
+      "quote": "We demonstrate that RAG allows deploying a smaller LLM while using a very small retriever model, at no loss in performance."
+    },
+    {
+      "id": "openalex:W4401042735::k02",
+      "paper_id": "openalex:W4401042735",
+      "statement": "RAG-augmented structured output generation generalises to out-of-domain enterprise settings, reducing the out-of-distribution mismatch without requiring per-customer LLM fine-tuning.",
+      "kind": "empirical_finding",
+      "quote": "our proposed system significantly reduces hallucination and allows the generalization of our LLM to out-of-domain settings"
+    },
+    {
+      "id": "openalex:W3155807546::k00",
+      "paper_id": "openalex:W3155807546",
+      "statement": "Neural retrieval-in-the-loop architectures \u2014 combining retrievers, rankers, and encoder-decoders \u2014 applied to knowledge-grounded multi-turn dialogue achieve state-of-the-art performance and reduce hallucinated responses by over 60% compared to non-retrieval-augmented large language models.",
+      "kind": "empirical_finding",
+      "quote": "We demonstrate that our best models obtain state-of-the-art performance on two knowledge-grounded conversational tasks. The models exhibit open-domain conversational capabilities, generalize effectively to scenarios not within the training data, and, as verified by human evaluations, substantially reduce the well-known problem of knowledge hallucination in state-of-the-art chatbots."
+    },
+    {
+      "id": "openalex:W3155807546::k01",
+      "paper_id": "openalex:W3155807546",
+      "statement": "Retrieval augmentation for dialogue generalizes more effectively to out-of-distribution topics than parametric language models, with knowledgeability gains of 70% on in-distribution data and 85% on out-of-distribution data.",
+      "kind": "empirical_finding",
+      "quote": "this effect is even more pronounced on out-of-distribution topics and test data, a case where retrieval can intuitively supplement what is simply not in the weights of the model: knowledgeability metric gains over the baseline are 70% for in-distribution data and 85% for out-of-distribution data"
+    },
+    {
+      "id": "openalex:W3155807546::k02",
+      "paper_id": "openalex:W3155807546",
+      "statement": "Dialogue turn-based retrieval \u2014 querying a large unstructured document store per conversation turn using the full multi-turn context \u2014 avoids the information loss of standard single-query retrievers in multi-turn settings.",
+      "kind": "method",
+      "quote": "by building a dialogue turn-based retrieval mechanism that avoids the problem of standard retrievers that ignore much of the dialogue context"
+    },
+    {
+      "id": "openalex:W3155807546::k03",
+      "paper_id": "openalex:W3155807546",
+      "statement": "Poly-encoder Transformers used for finer-grained context-candidate document scoring improve downstream knowledge-grounded dialogue performance within retrieval-augmented generation pipelines.",
+      "kind": "method",
+      "quote": "we improve downstream performance by employing Poly-encoder Transformers (Humeau et al., 2020) for finer-grained context-candidate scoring of documents"
+    },
+    {
+      "id": "openalex:W4394838812::k00",
+      "paper_id": "openalex:W4394838812",
+      "statement": "Retrieval-Augmented Generation applied to structured output generation \u2014 retrieving relevant JSON objects as suggestions that are prepended to the LLM prompt \u2014 reduces hallucination in workflow generation tasks and improves out-of-domain generalization.",
+      "kind": "method",
+      "quote": "we devised a system leveraging Retrieval-Augmented Generation (RAG) to improve the quality of the structured output that represents such workflows. Thanks to our implementation of RAG, our proposed system significantly reduces hallucination and allows the generalization of our LLM to out-of-domain settings."
+    },
+    {
+      "id": "openalex:W4394838812::k01",
+      "paper_id": "openalex:W4394838812",
+      "statement": "A small, well-trained retriever encoder, fine-tuned to align natural language queries with structured JSON objects, enables a smaller accompanying LLM to match the performance of a larger LLM, making RAG-based structured-output deployments less resource-intensive.",
+      "kind": "empirical_finding",
+      "quote": "we show that using a small, well-trained retriever can reduce the size of the accompanying LLM at no loss in performance, thereby making deployments of LLM-based systems less resource-intensive."
+    },
+    {
+      "id": "openalex:W4394838812::k02",
+      "paper_id": "openalex:W4394838812",
+      "statement": "RAG for workflow generation, where retrieved JSON step and table objects serve as in-context suggestions, is an effective application of retrieval augmentation to a structured output task with a large, customizable lexicon where in-context learning alone is impractical.",
+      "kind": "method",
+      "quote": "We provide an application of RAG in workflow generation, a structured output task."
+    },
+    {
+      "id": "openalex:W4389520468::k00",
+      "paper_id": "openalex:W4389520468",
+      "statement": "Iter-RetGen \u2014 an iterative retrieval-generation synergy approach that uses a model's full response from one iteration as a retrieval query for the next, alternating retrieval-augmented generation and generation-augmented retrieval \u2014 achieves strong performance on multi-hop question answering, fact verification, and commonsense reasoning while incurring fewer retrieval and generation overheads than methods that interleave retrieval with generation mid-output.",
+      "kind": "method",
+      "quote": "we show that strong performance can be achieved by a method we call Iter-RetGen, which synergizes retrieval and generation in an iterative manner: a model's response to a task input shows what might be needed to finish the task, and thus can serve as an informative context for retrieving more relevant knowledge which in turn helps generate a better response in another iteration"
+    },
+    {
+      "id": "openalex:W4389520468::k01",
+      "paper_id": "openalex:W4389520468",
+      "statement": "Generation-augmented retrieval adaptation \u2014 distilling knowledge from a re-ranker that has access to model generations into a dense retriever that operates only on task inputs \u2014 further improves retrieval quality and reduces the number of iterations needed.",
+      "kind": "method",
+      "quote": "We can also leverage model generations to adapt retrieval, by distilling knowledge from a re-ranker with access to model generations to a dense retriever with access to task inputs only"
+    },
+    {
+      "id": "openalex:W4389520468::k02",
+      "paper_id": "openalex:W4389520468",
+      "statement": "Automatic exact-match metrics significantly underestimate LLM performance on question answering tasks, and improvements in exact match do not always reflect improvements in generation quality, suggesting LLM-based evaluation is more reliable.",
+      "kind": "empirical_finding",
+      "quote": "Automatic metrics such as exact match can significantly underestimate the performance of LLMs in question answering tasks. Moreover, improvements in exact match do not always reflect improvements in generations. Evaluation using LLMs may be more reliable."
+    },
+    {
+      "id": "openalex:W3176182290::k00",
+      "paper_id": "openalex:W3176182290",
+      "statement": "Generation-Augmented Retrieval (GAR) \u2014 expanding open-domain question answering queries with heuristically discovered relevant contexts (answer, answer sentence, passage title) generated by a pre-trained language model via seq2seq learning, without external supervision or reinforcement learning feedback \u2014 enables sparse BM25 retrieval to match or exceed state-of-the-art dense retrieval methods such as DPR.",
+      "kind": "method",
+      "quote": "We propose Generation-Augmented Retrieval (GAR), which augments queries with heuristically discovered relevant contexts through text generation without external supervision or time-consuming downstream feedback."
+    },
+    {
+      "id": "openalex:W3176182290::k01",
+      "paper_id": "openalex:W3176182290",
+      "statement": "Fusing retrieval results from multiple diverse generation targets (different context types augmenting the same query) consistently improves retrieval accuracy over using a single generation target in generation-augmented retrieval.",
+      "kind": "empirical_finding",
+      "quote": "We show that using generation-augmented queries achieves significantly better retrieval and QA results than using the original queries or existing unsupervised QE methods."
+    },
+    {
+      "id": "openalex:W3176182290::k02",
+      "paper_id": "openalex:W3176182290",
+      "statement": "GAR combined with BM25 achieves state-of-the-art extractive open-domain QA performance on Natural Questions and TriviaQA, and further gains are obtained by fusing GAR with dense retrieval (DPR), as sparse and dense representations are complementary.",
+      "kind": "empirical_finding",
+      "quote": "We show that GAR, combined with a simple BM25 model, achieves new state-of-the-art performance on two benchmark datasets in extractive OpenQA and competitive results in the generative setting."
+    },
+    {
+      "id": "openalex:W4389518671::k00",
+      "paper_id": "openalex:W4389518671",
+      "statement": "Rewrite-Retrieve-Read \u2014 a retrieval-augmented generation framework that inserts a query-rewriting step before retrieval, using an LLM prompt to rewrite the input query and close the gap between raw input text and retrieval need, before passing the rewritten query to a web search engine and a frozen LLM reader.",
+      "kind": "framework",
+      "quote": "This work introduces a new framework, Rewrite-Retrieve-Read instead of the previous retrieve-then-read for the retrieval-augmented LLMs from the perspective of the query rewriting."
+    },
+    {
+      "id": "openalex:W4389518671::k01",
+      "paper_id": "openalex:W4389518671",
+      "statement": "A trainable query-rewriting scheme in which a small language model is fine-tuned via reinforcement learning \u2014 using downstream LLM reader performance as reward \u2014 to adapt search queries for frozen retriever and black-box LLM reader modules, achieving performance gains with reduced resource consumption.",
+      "kind": "method",
+      "quote": "We also propose a trainable scheme for our rewrite-retrieve-read framework... A small language model is adopted as a trainable rewriter to cater to the black-box LLM reader. The rewriter is trained using the feedback of the LLM reader by reinforcement learning."
+    },
+    {
+      "id": "openalex:W4389518671::k02",
+      "paper_id": "openalex:W4389518671",
+      "statement": "Query rewriting consistently improves retrieval-augmented LLM performance on open-domain QA and multiple-choice QA benchmarks, and a small language model is sufficient to serve as a competent query rewriter.",
+      "kind": "empirical_finding",
+      "quote": "The results show that query rewriting consistently improves the retrieve-augmented LLM performance. The results also indicate that the smaller language model can be competent for query rewriting."
+    },
+    {
+      "id": "openalex:W4402670429::k00",
+      "paper_id": "openalex:W4402670429",
+      "statement": "Chain-of-Verification (CoVe) \u2014 a four-step prompting method in which a language model drafts an initial response, plans targeted verification questions, answers those questions independently (without conditioning on the original response), and revises its final answer \u2014 reduces hallucination in large language models across list-based, closed-book QA, and long-form generation tasks.",
+      "kind": "method",
+      "quote": "We develop the Chain-of-Verification (COVE) method whereby the model first (i) drafts an initial response; then (ii) plans verification questions to fact-check its draft; (iii) answers those questions independently so the answers are not biased by other responses; and (iv) generates its final verified response."
+    },
+    {
+      "id": "openalex:W4402670429::k01",
+      "paper_id": "openalex:W4402670429",
+      "statement": "Factored variants of Chain-of-Verification, which separate the verification execution step from the context of the original draft, yield greater hallucination reduction than a joint left-to-right verification chain by preventing the model from conditioning on and repeating its own hallucinated content.",
+      "kind": "method",
+      "quote": "Hence we also introduce further improvements with factored variants which separate out the verification chain steps, in terms of which context is attended to. We show how these factored variants give further performance gains across all three tasks considered."
+    },
+    {
+      "id": "openalex:W4402670429::k02",
+      "paper_id": "openalex:W4402670429",
+      "statement": "Independent verification questions generated about specific factual claims in a draft response are answered more accurately than the same facts appear in the original long-form generation, enabling self-correction without external retrieval.",
+      "kind": "empirical_finding",
+      "quote": "We find that independent verification questions tend to provide more accurate facts than those in the original longform answer, and hence improve the correctness of the overall response."
+    },
+    {
+      "id": "openalex:W3186138538::k00",
+      "paper_id": "openalex:W3186138538",
+      "statement": "An internet-augmented dialogue generation approach that learns to generate a search query from conversational context and conditions on live internet search results to produce grounded, up-to-date responses.",
+      "kind": "method",
+      "quote": "we propose an approach that learns to generate an internet search query based on the context, and then conditions on the search results to finally generate a response, a method that can employ up-to-the-minute relevant information"
+    },
+    {
+      "id": "openalex:W3186138538::k01",
+      "paper_id": "openalex:W3186138538",
+      "statement": "Wizard of the Internet \u2014 a crowdsourced dataset of human-human knowledge-driven conversations in which one speaker uses live internet search to ground their responses.",
+      "kind": "dataset",
+      "quote": "We train and evaluate such models on a newly collected dataset of human-human conversations whereby one of the speakers is given access to internet search during knowledge-driven discussions in order to ground their responses"
+    },
+    {
+      "id": "openalex:W3186138538::k02",
+      "paper_id": "openalex:W3186138538",
+      "statement": "Search-query-based internet retrieval outperforms both non-augmented generation and FAISS-based dense retrieval (RAG, FiD-RAG) for knowledge-grounded dialogue, as measured by automatic metrics and human evaluations.",
+      "kind": "empirical_finding",
+      "quote": "We find that search-query based access of the internet in conversation provides superior performance compared to existing approaches that either use no augmentation or FAISS-based retrieval"
+    },
+    {
+      "id": "arxiv:2506.06962v3::k00",
+      "paper_id": "arxiv:2506.06962v3",
+      "statement": "AR-RAG (Autoregressive Retrieval Augmentation) \u2014 a patch-level retrieval-augmented image generation framework that dynamically retrieves k-nearest neighbor patch-level visual references at each generation step using already-generated surrounding patches as queries, avoiding over-copying and stylistic bias present in static, image-level retrieval methods.",
+      "kind": "framework",
+      "quote": "We propose AR-RAG, the first patch-level autoregressive retrieval augmentation framework which dynamically retrieves and integrates fine-grained visual content to enhance image generation, while avoiding limitations (e.g., over-copying, stylistic bias, etc.) prevalent in existing image-level retrieval augmentation methods."
+    },
+    {
+      "id": "arxiv:2506.06962v3::k01",
+      "paper_id": "arxiv:2506.06962v3",
+      "statement": "Distribution-Augmentation in Decoding (DAiD) \u2014 a training-free, plug-and-play decoding strategy that enhances autoregressive image generation by linearly combining the model's predicted patch token distribution with a distribution derived from retrieved nearest-neighbor patches, requiring no fine-tuning and integrating directly into existing architectures.",
+      "kind": "method",
+      "quote": "We introduce Distribution-Augmentation in Decoding (DAiD), a training-free, plug-and-play decoding strategy that directly integrates the distribution of retrieved patches into that predicted by the image generation models, enabling easy integration into existing architectures."
+    },
+    {
+      "id": "arxiv:2506.06962v3::k02",
+      "paper_id": "arxiv:2506.06962v3",
+      "statement": "Feature-Augmentation in Decoding (FAiD) \u2014 a parameter-efficient fine-tuning method that progressively refines retrieved patch features via multi-scale convolutional smoothing and blends them with the model's intermediate representations at multiple transformer layers, improving spatial coherence and visual quality in autoregressive image generation.",
+      "kind": "method",
+      "quote": "We introduce Feature-Augmentation in Decoding (FAiD), a parameter-efficient fine-tuning framework that progressively refines and blends retrieval signals via lightweight convolutional modules, enhancing spatial coherence and visual quality across layers."
+    },
+    {
+      "id": "arxiv:2506.06962v3::k03",
+      "paper_id": "arxiv:2506.06962v3",
+      "statement": "Applying AR-RAG (FAiD variant) to Janus-Pro achieves 6.67 FID on Midjourney-30K and 0.78 overall score on GenEval, establishing a new state of the art among autoregressive image generation models of comparable scale.",
+      "kind": "empirical_finding",
+      "quote": "Janus-Pro with FAiD achieves 6.67 FID on Midjourney-30K and 0.78 overall score on GenEval, establishing a new state of the art among autoregressive image generation models of comparable scale."
+    },
+    {
+      "id": "arxiv:2504.13684v1::k00",
+      "paper_id": "arxiv:2504.13684v1",
+      "statement": "A think-aloud study in a multi-modal exhibition setting surfaces key cognitive challenges users face when structuring, retrieving, and applying knowledge in information-rich, real-world environments, and reveals expectations for adaptive AI-driven cognitive support.",
+      "kind": "empirical_finding",
+      "quote": "This work contributes by identifying key cognitive challenges in knowledge augmentation, offering empirical insights into users' expectations for AI-driven support"
+    },
+    {
+      "id": "arxiv:2504.13684v1::k01",
+      "paper_id": "arxiv:2504.13684v1",
+      "statement": "A framework for context-aware cognitive augmentation in which LLMs dynamically adapt to users' cognitive states and task environments, seamlessly transitioning between real-time cognitive support and post-experience knowledge organization.",
+      "kind": "framework",
+      "quote": "We propose a framework for AI augmentation that seamlessly transitions between real-time cognitive support and post-experience knowledge organization, contributing to the design of more effective human-centered AI systems"
+    },
+    {
+      "id": "arxiv:2504.13684v1::k02",
+      "paper_id": "arxiv:2504.13684v1",
+      "statement": "Design considerations for integrating real-time contextual awareness, personalized reasoning assistance, and socially adaptive interactions into LLM-based cognitive support systems.",
+      "kind": "analysis",
+      "quote": "suggesting design considerations for integrating context-aware reasoning into LLM-based systems"
+    },
+    {
+      "id": "arxiv:2504.17204v1::k00",
+      "paper_id": "arxiv:2504.17204v1",
+      "statement": "Factually \u2014 a proactive wearable fact-checking system integrated into smartwatches or rings that transcribes ambient speech in real time, flags potentially false claims via a backend combining large language models and web-based resources, and delivers discreet vibrotactile alerts to the wearer, enabling real-time misinformation discernment without disrupting social interaction.",
+      "kind": "model",
+      "quote": "we present Factually \u2014 a proactive, wearable fact-checking system integrated into devices like smartwatches or rings. Factually discreetly alerts users to potential falsehoods via vibrotactile feedback, helping them assess information critically."
+    },
+    {
+      "id": "arxiv:2504.17204v1::k01",
+      "paper_id": "arxiv:2504.17204v1",
+      "statement": "A design framework for wearable misinformation-detection systems grounded in assistive augmentation principles, structured around two dimensions \u2014 ability (amplifying cognitive capacity for truth discernment) and integration (embedding augmentation seamlessly into everyday social contexts through non-verbal tactile cues rather than disruptive audio or visual signals).",
+      "kind": "framework",
+      "quote": "The design of the Factually is inspired by the principles of assistive augmentation \u2026 They introduce assistive augmentation as a paradigm that enhances human capabilities along two primary dimensions: ability (expanding cognitive and sensory capacities) and integration (seamlessly embedding augmentation into everyday life). We design Factually so that it embodies these dimensions in the context of misinformation detection and truth discernment."
+    },
+    {
+      "id": "arxiv:2504.17204v1::k02",
+      "paper_id": "arxiv:2504.17204v1",
+      "statement": "Three proof-of-concept scenarios \u2014 health misinformation in casual conversation, social conversation fact-checking, and everyday learning \u2014 that illustrate how wearable real-time fact-checking can extend cognitive abilities across naturalistic, interpersonal settings.",
+      "kind": "other",
+      "quote": "To demonstrate the potential of Factually, we developed three proof-of-concept scenarios \u2026 highlighting its potential to extend cognitive abilities for real-time misinformation detection."
+    },
+    {
+      "id": "arxiv:2504.17204v1::k03",
+      "paper_id": "arxiv:2504.17204v1",
+      "statement": "Early qualitative evidence that discreet wearable fact-checking via vibrotactile feedback can enhance users' fact-checking capabilities, yielding both practical utility and experiential benefits during real-world interactions.",
+      "kind": "empirical_finding",
+      "quote": "Early qualitative feedback suggests that Factually can enhance users' fact-checking capabilities, offering both practical and experiential benefits."
+    },
+    {
+      "id": "arxiv:2504.14689v1::k00",
+      "paper_id": "arxiv:2504.14689v1",
+      "statement": "A conceptual distinction between 'performed critical thinking' \u2014 independent cognitive processes undertaken without AI assistance \u2014 and 'demonstrated critical thinking' \u2014 the process or product of thinking that occurs through collaboration with generative AI \u2014 clarifies what is actually being measured or augmented when AI systems interact with human cognition.",
+      "kind": "analysis",
+      "quote": "this position paper proposes the distinction between demonstrated and performed critical thinking in the era of generative AI and discusses the implication of this distinction in research and development of AI systems that aim to augment human critical thinking"
+    },
+    {
+      "id": "arxiv:2504.14689v1::k01",
+      "paper_id": "arxiv:2504.14689v1",
+      "statement": "Current empirical evaluations of generative AI's impact on critical thinking conflate performed and demonstrated critical thinking by assessing only AI-assisted outputs, thereby failing to measure whether independent cognitive abilities have improved; longitudinal and pre/post study designs are needed to isolate effects on performed critical thinking.",
+      "kind": "empirical_finding",
+      "quote": "We identify that current evaluation on the impact of GenAI on critical thinking skills often focuses on demonstrated rather than performed critical thinking and provide considerations for future research designs"
+    },
+    {
+      "id": "arxiv:2504.14689v1::k02",
+      "paper_id": "arxiv:2504.14689v1",
+      "statement": "While current AI systems and interaction paradigms can enhance demonstrated critical thinking, they do not necessarily improve performed critical thinking; design considerations grounded in the Engelbart intellect-augmentation framework \u2014 targeting the underlying cognitive processes rather than output quality \u2014 are required to augment independent human critical thinking.",
+      "kind": "analysis",
+      "quote": "we argue that while current AI systems and interaction paradigms may enhance the demonstrated critical thinking, they do not necessarily improve the performed critical thinking. We also discuss design considerations to accomplish the latter"
+    }
+  ],
+  "skipped_no_fulltext": [
+    "openalex:W4391221150",
+    "openalex:W4317898419",
+    "openalex:W4392544551",
+    "openalex:W4392597393"
+  ],
+  "edges": [
+    {
+      "src": "openalex:W4401042735::k00",
+      "dst": "openalex:W4394838812::k00",
+      "relation": "supports",
+      "evidence": "Both papers independently demonstrate that RAG applied to workflow/JSON structured output generation reduces hallucination of non-existent steps, providing mutual corroborating evidence across two distinct publications.",
+      "confidence": 0.6
+    },
+    {
+      "src": "openalex:W4401042735::k01",
+      "dst": "openalex:W4394838812::k01",
+      "relation": "supports",
+      "evidence": "Both contributions, from different papers (W4401042735 and W4394838812), independently report that a small, well-trained dense retriever enables a smaller LLM to match a larger LLM in RAG-based structured output, replicating each other's central finding.",
+      "confidence": 0.6
+    },
+    {
+      "src": "openalex:W4401042735::k02",
+      "dst": "openalex:W3155807546::k01",
+      "relation": "supports",
+      "evidence": "W4401042735 shows RAG generalizes to out-of-domain enterprise settings without per-customer fine-tuning; W3155807546 independently shows retrieval augmentation generalizes more effectively to OOD topics than parametric LMs, corroborating the OOD generalization benefit across different domains.",
+      "confidence": 0.6
+    },
+    {
+      "src": "openalex:W3155807546::k00",
+      "dst": "openalex:W4401042735::k00",
+      "relation": "supports",
+      "evidence": "The over 60% reduction in hallucinated responses via neural retrieval-augmented dialogue (W3155807546) provides evidence that RAG reliably suppresses hallucination, supporting W4401042735's claim that RAG reduces hallucination in structured workflow output.",
+      "confidence": 0.6
+    },
+    {
+      "src": "openalex:W3155807546::k00",
+      "dst": "openalex:W4394838812::k00",
+      "relation": "supports",
+      "evidence": "RAG cutting hallucinated responses by more than 60% in knowledge-grounded dialogue (W3155807546) corroborates W4394838812's finding that RAG reduces hallucination in workflow generation tasks.",
+      "confidence": 0.6
+    },
+    {
+      "src": "openalex:W4394838812::k02",
+      "dst": "openalex:W4401042735::k00",
+      "relation": "supports",
+      "evidence": "W4394838812's finding that RAG with retrieved JSON objects is effective for structured output where in-context learning alone is impractical (large lexicon) supports W4401042735's claim that RAG significantly reduces hallucination of non-existent steps and table names in workflow-to-JSON generation.",
+      "confidence": 0.6
+    },
+    {
+      "src": "openalex:W4389518671::k00",
+      "dst": "openalex:W3176182290::k00",
+      "relation": "extends",
+      "evidence": "GAR (W3176182290) uses a seq2seq model to generate expanded query contexts for sparse BM25 retrieval; Rewrite-Retrieve-Read (W4389518671) extends this by introducing a dedicated LLM-based query-rewriting step as a general modular framework applicable to web search and frozen readers, making query adaptation an explicit stage.",
+      "confidence": 0.6
+    },
+    {
+      "src": "openalex:W4389518671::k01",
+      "dst": "openalex:W3176182290::k00",
+      "relation": "extends",
+      "evidence": "GAR (W3176182290) uses heuristic seq2seq generation for query expansion; W4389518671's trainable RL-based rewriter extends this by optimizing the query-generation step end-to-end with downstream reader performance as reward, replacing heuristic generation with learnable adaptation.",
+      "confidence": 0.6
+    },
+    {
+      "src": "openalex:W4389520468::k00",
+      "dst": "openalex:W3155807546::k02",
+      "relation": "extends",
+      "evidence": "W3155807546 proposes per-turn retrieval using the full multi-turn conversational context to avoid information loss; Iter-RetGen (W4389520468) extends this idea into a general iterative loop where the model's full response is used as the retrieval query for the next iteration, generalizing beyond dialogue to multi-hop QA, fact verification, and commonsense reasoning.",
+      "confidence": 0.6
+    },
+    {
+      "src": "openalex:W3186138538::k00",
+      "dst": "openalex:W3155807546::k02",
+      "relation": "extends",
+      "evidence": "W3155807546 proposes per-turn retrieval from a static document store using full multi-turn context; W3186138538 extends this to live internet search by learning to generate search queries from conversational context, enabling dynamic grounding on up-to-date information.",
+      "confidence": 0.6
+    },
+    {
+      "src": "arxiv:2506.06962v3::k00",
+      "dst": "openalex:W4389520468::k00",
+      "relation": "extends",
+      "evidence": "Iter-RetGen (W4389520468) establishes iterative retrieval-generation synergy for text-based knowledge tasks; AR-RAG (arxiv:2506.06962v3) extends this concept to image generation, dynamically retrieving patch-level visual references at each autoregressive decoding step using already-generated patches as queries.",
+      "confidence": 0.6
+    },
+    {
+      "src": "arxiv:2504.14689v1::k02",
+      "dst": "arxiv:2504.13684v1::k01",
+      "relation": "refines",
+      "evidence": "arxiv:2504.13684v1 proposes a broad LLM framework for context-aware cognitive augmentation; arxiv:2504.14689v1 narrows its scope by showing that such systems enhance demonstrated (AI-assisted) critical thinking but do not necessarily improve performed (independent) critical thinking, adding a critical boundary condition.",
+      "confidence": 0.6
+    },
+    {
+      "src": "arxiv:2504.14689v1::k01",
+      "dst": "arxiv:2504.13684v1::k01",
+      "relation": "refines",
+      "evidence": "arxiv:2504.13684v1 proposes LLM-based cognitive augmentation adapting to users' cognitive states; arxiv:2504.14689v1 refines this by adding the condition that current evaluations of such systems conflate demonstrated and performed critical thinking, limiting how broadly cognitive augmentation claims can be interpreted.",
+      "confidence": 0.6
+    },
+    {
+      "src": "openalex:W3186138538::k02",
+      "dst": "openalex:W3176182290::k02",
+      "relation": "supports",
+      "evidence": "W3186138538 shows search-query-based internet retrieval outperforms dense retrieval (RAG, FiD-RAG) for knowledge-grounded dialogue; W3176182290 shows GAR+BM25 matches or exceeds dense DPR on open-domain QA. Both support the claim that sparse/search retrieval can be competitive with or superior to dense retrieval.",
+      "confidence": 0.6
+    },
+    {
+      "src": "openalex:W4389520468::k02",
+      "dst": "openalex:W3176182290::k02",
+      "relation": "refines",
+      "evidence": "W3176182290 claims state-of-the-art extractive QA performance measured by exact-match on Natural Questions and TriviaQA; W4389520468 adds the condition that automatic exact-match metrics significantly underestimate LLM performance, narrowing the interpretation of those benchmark results.",
+      "confidence": 0.6
+    },
+    {
+      "src": "openalex:W4389520468::k02",
+      "dst": "openalex:W4389518671::k02",
+      "relation": "refines",
+      "evidence": "W4389518671 reports that query rewriting consistently improves RAG performance on QA benchmarks assessed with exact-match metrics; W4389520468's finding that exact-match metrics underestimate LLM performance adds conditions limiting how those improvements should be interpreted.",
+      "confidence": 0.6
+    },
+    {
+      "src": "openalex:W3176182290::k00",
+      "dst": "openalex:W4389520468::k01",
+      "relation": "supports",
+      "evidence": "GAR (W3176182290) demonstrates that using LM-generated contexts to augment retrieval queries improves retrieval accuracy; W4389520468's generation-augmented retrieval adaptation corroborates this by showing that distilling knowledge derived from model generations into the dense retriever further improves retrieval quality.",
+      "confidence": 0.6
+    }
+  ]
+}
