@@ -1,0 +1,17 @@
+# Neo4j 5 — the live two-level graph store (graph traversal + native vector index).
+# Start:  docker compose up -d   (or: podman run ... see README)
+# Browser: http://localhost:7474   Bolt: bolt://localhost:7687
+services:
+  neo4j:
+    image: neo4j:5
+    container_name: prior-neo4j
+    ports:
+      - "7474:7474"   # HTTP browser
+      - "7687:7687"   # Bolt (driver)
+    environment:
+      NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:-priorpass123}
+      NEO4J_server_memory_heap_max__size: 1G
+    volumes:
+      - prior_neo4j_data:/data
+volumes:
+  prior_neo4j_data:

@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+title: "Prior: an auditable contribution graph for literature synthesis"
+message: "If you use Prior, please cite it."
+type: software
+authors:
+  - given-names: Klara
+    family-names: Kaleb
+  - given-names: Harit
+    family-names: Vishwakarma
+  - given-names: "Yee Whye"
+    family-names: Teh
+repository-code: "https://github.com/Agents4Academia-AI/prior"
+url: "https://github.com/Agents4Academia-AI/prior"
+license: Apache-2.0
+version: "v06.26"
+date-released: "2026-07-03"
+keywords:
+  - literature synthesis
+  - knowledge graph
+  - research agents
+  - contribution extraction
+  - scientific claims

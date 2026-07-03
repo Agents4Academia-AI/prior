@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# Secrets
+.env
+.env.*
+*.key
+secrets/
+
+# Local agent settings
+.claude/settings.local.json
+
+# Built data (regenerable; not the golden inputs)
+data/raw/
+data/fulltext/
+data/fullpaper/
+compare/
+data/atlas/*
+!data/raw/.gitkeep
+!data/atlas/.gitkeep
+# shared snapshot so collaborators can start without rebuilding (the demo atlas)
+!data/atlas/atlas.json
+!data/atlas/contributions.json
+
+# OS
+.DS_Store
+
+# Downloaded eval datasets (regenerable via --download)
+data/scifact/
+
+# Scoped topic corpora (separate builds, regenerable)
+data_hackathon/
+data_search/
+data/users.json
+data/chats.db
+data/*.db
