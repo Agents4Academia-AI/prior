@@ -220,29 +220,7 @@ redistribution — and we prefer open **arXiv** copies where they exist.
 
 ---
 
-## About
-
-### Built with Claude Code — token report
-
-Prior was built almost entirely **through Claude Code on a Max subscription (no
-metered API)**. Usage logged in this workspace, 2026-06-17 → 07-01, **deduplicated
-by message id** (Claude Code replays messages into continuation files, so raw logs
-double-count by ~2×):
-
-| model | turns | input | cache write | cache read | output | ~$ equiv-API |
-|---|--:|--:|--:|--:|--:|--:|
-| Claude Opus 4.8 | 2,587 | 0.31M | 30.4M | **1.12B** | 5.2M | $992 |
-| Claude Sonnet 4.6 | 2,768 | 0.01M | 12.5M | 32.5M | 9.8M | $232 |
-| Claude Haiku 4.5 | 2,566 | 0.03M | 17.2M | 26.1M | 15.9M | $116 |
-| **Total** | **7,921** | 0.35M | 60.0M | **1.17B** | 30.8M | **≈ $1,340** |
-
-**≈ 1.26 B tokens**, of which **~93% were cache reads** — prompt caching did the
-heavy lifting. Cache writes were **1-hour TTL** (Claude Code's default), priced at
-2× input. The `$1,340` is *equivalent-API* list-price cost for scale; actual spend
-was the flat Max subscription (~$96/day-equivalent). Counts cover this workspace;
-teammates' machines are separate.
-
-### Roadmap & next steps
+## Roadmap & next steps
 
 **Scope of "confidence" (honest note).** Today Prior's confidence answers *"was this
 faithfully extracted, and do the models agree?"* — a per-node extraction score plus
@@ -273,6 +251,28 @@ calibration. It is **not yet** *"how strong is the evidence?"*. Closing that gap
 Contributions welcome — start from any reusable stage above, see
 [CONTRIBUTING.md](CONTRIBUTING.md), or open an issue. Design notes in [docs/](docs/);
 progress log in `claude-progress.md`.
+
+## End notes
+
+### Built with Claude Code — token report
+
+Prior was built almost entirely **through Claude Code on a Max subscription (no
+metered API)**. Usage logged in this workspace, 2026-06-17 → 07-01, **deduplicated
+by message id** (Claude Code replays messages into continuation files, so raw logs
+double-count by ~2×):
+
+| model | turns | input | cache write | cache read | output | ~$ equiv-API |
+|---|--:|--:|--:|--:|--:|--:|
+| Claude Opus 4.8 | 2,587 | 0.31M | 30.4M | **1.12B** | 5.2M | $992 |
+| Claude Sonnet 4.6 | 2,768 | 0.01M | 12.5M | 32.5M | 9.8M | $232 |
+| Claude Haiku 4.5 | 2,566 | 0.03M | 17.2M | 26.1M | 15.9M | $116 |
+| **Total** | **7,921** | 0.35M | 60.0M | **1.17B** | 30.8M | **≈ $1,340** |
+
+**≈ 1.26 B tokens**, of which **~93% were cache reads** — prompt caching did the
+heavy lifting. Cache writes were **1-hour TTL** (Claude Code's default), priced at
+2× input. The `$1,340` is *equivalent-API* list-price cost for scale; actual spend
+was the flat Max subscription (~$96/day-equivalent). Counts cover this workspace;
+teammates' machines are separate.
 
 ### Links
 
