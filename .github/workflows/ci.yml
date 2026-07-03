@@ -15,7 +15,7 @@ jobs:
           python-version: "3.11"
           cache: pip
       - name: Install (core + local embeddings)
-        run: pip install -e ".[graph]"
+        run: pip install -e ".[graph,test]"
       - name: Tests — key-free, no Neo4j
         run: pytest -q
       # Eval-as-a-gate: run the key-free scorecard on every PR so regressions show up.

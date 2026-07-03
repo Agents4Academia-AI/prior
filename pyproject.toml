@@ -18,6 +18,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+test = ["pytest>=8"]
 # Run the pipeline on a Claude Code login (Max plan) instead of API credits:
 #   pip install -e ".[claude-code]"  ;  export PRIOR_LLM_BACKEND=claude-code
 claude-code = ["claude-agent-sdk>=0.1"]
