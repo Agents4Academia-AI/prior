@@ -94,7 +94,7 @@ work at the centre, the frontier at the rim):
 
 ![Contributions view, then a community expanded as a knowledge frontier.](docs/prior-frontier.gif)
 
-### The atlas
+### The flagship atlas — *agents for science*
 
 Prior's flagship build maps **the hackathon's own field** — *agents for the
 scientific process* — a fitting stress test: the tool mapping the literature it is
@@ -214,11 +214,11 @@ obvious broader uses. Take whichever you need:
 | **Get full text** (deterministic) | DOIs / arXiv ids → clean cached full text, multi-source cascade | `scripts/get_fulltext.py --ids dois.txt` |
 | **Extract** (LLM) | cached full text → contributions + claims + graph | `scripts/extract.py --select all` |
 
-**Most reusable: full text.** The free channels (arXiv, OA, Unpaywall, preprint
-servers, `citation_pdf_url`) need **no keys**. See **[SHARING.md](SHARING.md)** for
-what's safe to redistribute (metadata + graph) vs. not (raw full text): **closed-access
-papers we cite rather than ship** — usage agreements permit mining, not
-redistribution — and we prefer open **arXiv** copies where they exist.
+**Most reusable: the full-text stage.** Its free channels (arXiv, OpenAlex OA,
+Unpaywall, preprint servers) need **no keys**. On sharing: metadata and the graph are
+safe to redistribute, but raw full text isn't — closed-access papers are **cited, not
+shipped** (mining is permitted, redistribution isn't), and we prefer open arXiv copies.
+Details in **[SHARING.md](SHARING.md)**.
 
 ---
 
@@ -253,11 +253,13 @@ Each step makes the map better at flagging *which* phenomena deserve attention a
 7. **Gap surfacing — a coverage view, not the graph.** Absence is invisible in a
    node-link layout; a method × task (or community × claim-type) matrix makes
    under-studied cells pop, plus a Navigator "what's under-supported?" query.
-8. **Citation-aware Cartographer** (once the citation graph is backfilled) ·
-   **hosted demo** (STORM-style).
-9. **MCP server — Prior as an agent tool.** Expose the atlas over MCP so other agents
-   can build and query it — the graph as agent-queryable long-term memory, not just a
-   human UI.
+8. **Citation-aware Cartographer** — once the citation graph is backfilled.
+9. **Hosted demo** — a public, STORM-style instance to try Prior without installing.
+10. **MCP server — Prior as an agent tool.** Expose the atlas over MCP so other agents
+    can build and query it — the graph as agent-queryable long-term memory, not just a
+    human UI.
+11. **Eval as a gate.** Make the key-free eval scorecard a *blocking* CI check — a PR
+    that regresses faithfulness / grounding / relation numbers fails, so quality only ratchets up.
 
 Contributions welcome — start from any reusable stage above, see
 [CONTRIBUTING.md](CONTRIBUTING.md), or open an issue. Design notes in [docs/](docs/);
@@ -267,9 +269,12 @@ progress log in `claude-progress.md`.
 
 ### Credits
 
-**Klara Kaleb · Harit Vishwakarma · Yee Whye Teh**, with **Claude (Claude Code, mostly
-Opus 4.8)**. Who-did-what and a candid human + Claude retrospective:
-**[RETRO.md](RETRO.md)**.
+- **Klara Kaleb**
+- **Harit Vishwakarma**
+- **Yee Whye Teh**
+- **Claude** — Claude Code, mostly Opus 4.8
+
+Who-did-what and a candid human + Claude retrospective: **[RETRO.md](RETRO.md)**.
 
 ### Links
 
@@ -281,7 +286,7 @@ Opus 4.8)**. Who-did-what and a candid human + Claude retrospective:
 Built during [Agents4Academia](https://github.com/Agents4Academia-AI), 14–26 June
 2026. Code **Apache-2.0**; graph/atlas data (`data/`) **CC-BY-4.0**.
 
-**Adjacent & prior work:** [ORKG](https://orkg.org) (TIB Hannover) ·
+**Related & inspired by:** [ORKG](https://orkg.org) (TIB Hannover) ·
 [NLPContributionGraph](https://ncg-task.github.io/) (SemEval 2021) ·
 [AutoSci](https://github.com/skyllwt/AutoSci) (knowledge-graph long-term memory) ·
 FutureHouse [PaperQA2](https://github.com/Future-House/paper-qa) / Aviary ·
@@ -289,10 +294,6 @@ FutureHouse [PaperQA2](https://github.com/Future-House/paper-qa) / Aviary ·
 [scite.ai](https://scite.ai) (supporting / contradicting *Smart Citations*) ·
 [Elicit](https://elicit.com) (Ought) · [STORM](https://github.com/stanford-oval/storm)
 (Stanford) · [Connected Papers](https://www.connectedpapers.com) /
-[ResearchRabbit](https://www.researchrabbit.ai) · Open Knowledge Format (Google, 2026) ·
-[OpenAlex](https://openalex.org) / [arXiv](https://arxiv.org) /
-[Semantic Scholar](https://www.semanticscholar.org).
-
-**Inspiration:** Mastrandrea et al. 2010 (IPCC AR5 uncertainty guidance) ·
-[IPBES assessment guide](https://www.ipbes.net) · Parkinson 2026, *"Writing science
-that humans and machines can read."*
+[ResearchRabbit](https://www.researchrabbit.ai) / [Litmaps](https://www.litmaps.com) ·
+Open Knowledge Format (Google, 2026) · [OpenAlex](https://openalex.org) /
+[arXiv](https://arxiv.org) / [Semantic Scholar](https://www.semanticscholar.org).
