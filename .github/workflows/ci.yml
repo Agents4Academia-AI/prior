@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install (core + local embeddings)
+        run: pip install -e ".[graph]"
+      - name: Tests — key-free, no Neo4j
+        run: pytest -q
+      # Eval-as-a-gate: run the key-free scorecard on every PR so regressions show up.
+      # Informational for now (continue-on-error); flip to a hard gate once thresholds settle.
+      - name: Eval scorecard — key-free
+        continue-on-error: true
+        run: prior eval --no-llm

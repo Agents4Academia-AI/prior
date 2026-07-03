@@ -7,6 +7,7 @@
 
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Python ≥3.11](https://img.shields.io/badge/python-%E2%89%A53.11-blue.svg)](https://www.python.org/)
+[![CI](https://github.com/Agents4Academia-AI/prior/actions/workflows/ci.yml/badge.svg)](https://github.com/Agents4Academia-AI/prior/actions/workflows/ci.yml)
 [![Release v06.26](https://img.shields.io/badge/release-v06.26-2ea44f.svg)](https://github.com/Agents4Academia-AI/prior/releases/tag/v06.26)
 
 **Team 6** (merged with Team 4): Klara · Harit
@@ -181,12 +182,15 @@ agentic-research tasks. Ours, plainly:
 Full runbook in **[docs/RUNNING.md](docs/RUNNING.md)**. Short version:
 
 ```bash
-export PRIOR_LLM_BACKEND=claude-cli           # credit-free (Claude Code login); or set ANTHROPIC_API_KEY
+pip install -e ".[graph]"                     # core + local embeddings (no Neo4j server needed)
 
-# ── build your own atlas of a topic — no database, one HTML file ──
-pip install -e ".[graph]"                     # core + local embeddings (Neo4j server NOT needed)
+# ── see it in 10 seconds: the shipped atlas — no API key, no database ──
+prior view --open                             # opens the bundled atlas as one HTML file
+
+# ── build your own atlas of a topic (needs an LLM) ──
+export PRIOR_LLM_BACKEND=claude-cli           # credit-free (Claude Code login); or set ANTHROPIC_API_KEY
 prior build "diffusion models for planning"   # → data/atlas/atlas.json
-prior view --open                             # → one self-contained HTML viewer, opens in your browser
+prior view --open                             # → your atlas, one self-contained HTML viewer
 
 # ── or the full web app (persistent + queryable) ──
 pip install -e ".[graph,web]" && docker compose up -d   # adds the web API + Neo4j
@@ -251,6 +255,9 @@ Each step makes the map better at flagging *which* phenomena deserve attention a
    under-studied cells pop, plus a Navigator "what's under-supported?" query.
 8. **Citation-aware Cartographer** (once the citation graph is backfilled) ·
    **hosted demo** (STORM-style).
+9. **MCP server — Prior as an agent tool.** Expose the atlas over MCP so other agents
+   can build and query it — the graph as agent-queryable long-term memory, not just a
+   human UI.
 
 Contributions welcome — start from any reusable stage above, see
 [CONTRIBUTING.md](CONTRIBUTING.md), or open an issue. Design notes in [docs/](docs/);
