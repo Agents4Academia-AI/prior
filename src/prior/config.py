@@ -95,7 +95,7 @@ FULLPAPER_MIN_IMAGE_PX = int(os.environ.get("PRIOR_FULLPAPER_MIN_IMAGE_PX", "50"
 
 # ── Annotation / auth ───────────────────────────────────────────────────────────
 # users.json maps username -> {"password": "...", "admin": true|false}. When the file
-# is absent, auth runs in OPEN dev mode (any name, no token, non-admin).
+# is absent, auth runs in OPEN dev mode (any name, no password, non-admin).
 USERS_FILE = Path(os.environ.get("PRIOR_USERS_FILE", str(DATA / "users.json")))
 # Default collection the UI opens to (a named corpus in the graph).
 DEFAULT_COLLECTION = os.environ.get("PRIOR_DEFAULT_COLLECTION", "core-v0.2")

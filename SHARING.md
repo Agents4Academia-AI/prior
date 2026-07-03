@@ -57,9 +57,9 @@ APIs** (Elsevier / Springer / Wiley — bring your own keys if entitled) via
 
 ## Getting the graph data
 
-The shareable artifact is the **graph** (papers metadata + contributions + relations),
-to be released as a JSON export / Neo4j dump (and optionally a Zenodo DOI for a
-citable reference). _Link TBD once extraction over the full corpus completes._
+The shareable artifact is the **graph** — papers metadata + contributions + relations.
+A sample atlas ships in `data/atlas/`; the full 152-paper AI-scientist graph is built and
+exportable as a JSON bundle or Neo4j dump (a Zenodo DOI for a citable snapshot is planned).
 
 ## Reproducing the corpus
 

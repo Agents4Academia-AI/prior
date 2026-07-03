@@ -293,7 +293,7 @@ Who-did-what and a candid human + Claude retrospective: **[RETRO.md](RETRO.md)**
 
 ### Links
 
-- **Slides:** hackathon deck — available on request
+- **Slides:** [hackathon deck](https://docs.google.com/presentation/d/1ESDmlK8z3T8XWKAdn_xdJVWpP079jkP1iKCl95wjQLo/edit)
 - **Demo:** run locally per the Quickstart (hosted instance planned)
 
 ### Acknowledgements
