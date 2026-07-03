@@ -159,30 +159,28 @@ means the self-audit is clean, not that the graph is proven correct.
 
 ### Honest limitations & failure modes
 
-The Anthropic deliverable is a report on **model behaviour and failure modes** on
-agentic-research tasks. Ours, plainly:
+The Anthropic deliverable is a report on **model behaviour and failure modes**. Ours, grouped:
 
-- **Direction is the noisiest signal.** *Whether* two claims are related, and *what
-  type*, hold up better than *which way* `builds_on` points — so the viewer anchors
-  precedence to publication **year** rather than the model's directional guess.
-- **Confidence is model-agreement, not evidence weight** (see Roadmap → scope of
-  confidence). A claim agreed on by 3 runs can still rest on one weak study.
-- **Contradiction precision is imperfect.** The atlas flags 73 `contradicts` edges,
-  but some are novelty-framing ("unlike prior work X…") mis-read as conflict — treat
-  them as candidates to investigate, not verdicts (the eval puts relation correctness
-  at just 21–53%). "Contradiction as its own agent" is a roadmap item.
-- **Grounding is semantic, not verbatim.** Quotes are faithful paraphrases, not
-  guaranteed exact spans — verification should treat them as such.
-- **The corpus is query-shaped.** Papers are *relevance* hits for the exact
-  query, so selection leans toward the asked relationship; report it as "papers
-  most relevant to the question," not "the literature." `--cite-hops` reaches
-  older foundational work relevance ranking buries.
-- **The citation graph is incomplete.** arXiv reference lists are largely
-  missing from the sources; intra-corpus citation coverage is sparse.
-- **Contributions are self-proclaimed, not audited.** Prior extracts what each paper
-  *claims* as its contribution and takes it at face value — it doesn't yet check the claim
-  holds, reproduces, or isn't overstated. Read a contribution as "what the authors assert,"
-  not "what's been verified."
+**Extraction — what we pull from papers.**
+- **Contributions are self-proclaimed, not audited** — we take what a paper *claims* as its
+  contribution at face value; we don't yet check it holds, reproduces, or isn't overstated.
+- **Grounding is semantic, not verbatim** — quotes are faithful paraphrases, not guaranteed
+  exact spans.
+
+**The graph layer — relations & confidence.**
+- **Relation direction is the noisiest signal** — *which way* `builds_on` points is unreliable,
+  so the viewer anchors precedence to publication **year** instead.
+- **Contradiction precision is imperfect** — some of the 73 `contradicts` edges are
+  novelty-framing ("unlike prior work X…") misread as conflict; treat them as candidates, not
+  verdicts (relation correctness is only 21–53%).
+- **Confidence is model-agreement, not evidence weight** — a claim agreed on by 3 runs can
+  still rest on one weak study (see the roadmap).
+
+**Corpus & coverage.**
+- **The corpus is query-shaped** — papers are *relevance* hits for the exact query; report as
+  "most relevant to the question," not "the literature" (`--cite-hops` reaches older work).
+- **The citation graph is incomplete** — arXiv reference lists are largely missing; intra-corpus
+  citation coverage is sparse.
 
 ---
 
@@ -295,7 +293,7 @@ Who-did-what and a candid human + Claude retrospective: **[RETRO.md](RETRO.md)**
 
 ### Links
 
-- **Slides:** [hackathon deck](https://docs.google.com/presentation/d/1ESDmlK8z3T8XWKAdn_xdJVWpP079jkP1iKCl95wjQLo/edit)
+- **Slides:** hackathon deck — available on request
 - **Demo:** run locally per the Quickstart (hosted instance planned)
 
 ### Acknowledgements

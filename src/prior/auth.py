@@ -9,8 +9,8 @@ If `users.json` is absent, auth runs in OPEN dev mode: any name is accepted with
 no token, as a non-admin. Create the file to enforce tokens.
 
   users.json:
-    { "alice": {"token": "s3cret", "admin": false},
-      "harit": {"token": "boss",   "admin": true} }
+    { "alice": {"password": "s3cret", "admin": false},
+      "harit": {"password": "boss",   "admin": true} }
 """
 
 from __future__ import annotations

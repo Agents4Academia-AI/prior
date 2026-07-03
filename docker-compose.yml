@@ -9,7 +9,7 @@ services:
       - "7474:7474"   # HTTP browser
       - "7687:7687"   # Bolt (driver)
     environment:
-      NEO4J_AUTH: neo4j/priorpass123
+      NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:-priorpass123}
       NEO4J_server_memory_heap_max__size: 1G
     volumes:
       - prior_neo4j_data:/data
