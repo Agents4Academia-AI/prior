@@ -15,6 +15,10 @@
 
 ![The Prior atlas — 152 papers · 581 contributions · 989 typed relations — cycling through the graph's lenses: contributions, communities, and a playable timeline.](docs/prior-demo.gif)
 
+*The atlas of "agents for the scientific process" — 152 papers · 581 contributions · 989
+typed relations. Shown here as the **contribution graph** (nodes = contributions), then
+**papers grouped into research communities**, then **papers on a timeline**.*
+
 ---
 
 ## Why Prior
@@ -37,7 +41,7 @@ a research system needs to judge **which phenomena deserve attention and what
 questions to ask of them** — the call that comes *prior* to any task. Prior doesn't
 make that call yet; it makes it **auditable** for whoever (or whatever) does.
 
-Prior ships as an **open tool to reuse and improve** — not a demo. Build an atlas of your
+Prior ships as an **open tool to reuse and improve** — not just a demo. Build an atlas of your
 own topic in one command (`prior build`), lift any single stage into your own project, and
 send improvements back via PR.
 
@@ -45,7 +49,7 @@ send improvements back via PR.
 
 ## What it does & how
 
-### Three things the black boxes don't
+### Three commitments — provenance, contradictions, confidence
 
 1. **Provenance.** Every contribution and claim is a node that links back to the
    paper (and, where cached, the exact supporting text) — one click from a
@@ -54,9 +58,10 @@ send improvements back via PR.
    flags `contradicts` edges automatically — genuine empirical clashes get
    surfaced instead of averaged into a bland summary.
 3. **Confidence — made explicit.** Nodes and edges carry confidence (an extraction
-   score + cross-model agreement), shown in the UI, and a self-auditing eval
-   *measures* how well-calibrated it is against human labels. (Honest scope of
-   what "confidence" means today: see [Roadmap & next steps](#roadmap--next-steps).)
+   score + cross-model agreement), shown in the UI; a self-auditing eval *checks* how
+   well-calibrated those numbers are, with a human-annotation track as the real
+   cross-check (in progress). (Honest scope of what "confidence" means today: see
+   [Roadmap & next steps](#roadmap--next-steps).)
 
 ### Architecture — one atlas, four agents
 
@@ -83,8 +88,6 @@ flowchart LR
 - **Navigator** — a question + the atlas → a grounded answer (cited to node ids),
   and the rendered views.
 
-**Product surface (web UI):** `Graph` · `Papers` · `Eval` · `Report` · `Ask Prior`.
-
 ### The interface
 
 Four views — **Graph · Papers · Eval · Report** (+ Ask Prior). The **Graph** is the
@@ -94,7 +97,7 @@ work at the centre, the frontier at the rim):
 
 ![Contributions view, then a community expanded as a knowledge frontier.](docs/prior-frontier.gif)
 
-### The flagship atlas — *agents for science*
+### The flagship atlas — *agents for the scientific process*
 
 Prior's flagship build maps **the hackathon's own field** — *agents for the
 scientific process* — a fitting stress test: the tool mapping the literature it is
@@ -108,6 +111,11 @@ part of. It's the atlas in the GIF above.
 | Cross-paper relations | 989 — `supports` 695 · `builds_on` 212 · **`contradicts` 73** · `refines` 9 |
 | Structure | **83%** of contributions sit in one connected component |
 | Communities | Peer review · Autonomous systems · Hypothesis generation · Benchmarks & eval · Multi-agent orchestration · Domain-science agents · Idea novelty · RAG / literature QA · Safety / risk |
+
+The **communities are emergent, not hand-drawn** — greedy-modularity clustering
+(`networkx`) over the consensus relation edges, each labelled by a keyword vote
+(deterministic, key-free — no LLM). In the **Communities** and **Timeline** views the
+nodes are **papers**, which inherit their contributions' community.
 
 The corpus spans the anchors — *The AI Scientist* (v1 & v2), *ResearchAgent*,
 *NovBench* — and the **73 `contradicts` edges** surface genuine tensions. One the
@@ -140,8 +148,7 @@ each model judge (Claude, Qwen, Gemma…) *and* human annotator scores Contribut
 Relations / Claims. Correctness runs ~**53–80%** on contributions and ~**63–85%** on
 claims, but only **21–53% on relations** — quantifying that *relation extraction is
 the weak link*. Plus **cross-judge agreement** and **calibration** diagrams
-(reliability + accuracy-vs-coverage). *(The `Eval` view — multi-judge scorecard,
-cross-judge agreement, and calibration diagrams — was built by **Harit**.)*
+(reliability + accuracy-vs-coverage).
 
 **Honest caveats:** the headline checks are **self-eval** — the system auditing its
 own output, a smoke test, *not* independent proof; a parallel **human-annotation**
@@ -172,6 +179,10 @@ agentic-research tasks. Ours, plainly:
   older foundational work relevance ranking buries.
 - **The citation graph is incomplete.** arXiv reference lists are largely
   missing from the sources; intra-corpus citation coverage is sparse.
+- **Contributions are self-proclaimed, not audited.** Prior extracts what each paper
+  *claims* as its contribution and takes it at face value — it doesn't yet check the claim
+  holds, reproduces, or isn't overstated. Read a contribution as "what the authors assert,"
+  not "what's been verified."
 
 ---
 
