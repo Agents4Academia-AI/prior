@@ -1,14 +1,33 @@
-# How we worked — a candid retrospective
+# Contributions & retrospective
+
+## Contributions
+
+- **Klara Kaleb** — project lead + editorial direction; the core pipeline — **Scoper**
+  (scoping, recall→precision, citation snowball), **Contributor** (contribution/claim
+  extraction), **Cartographer** (cross-paper atlas + consensus edges) — the atlas viewer,
+  groundedness / SciFact evals, and the writeup.
+- **Harit Vishwakarma** — the web application (nav rail, Papers, agentic **Ask**,
+  **Report**, streaming chat across model backends), the self-auditing **Eval** system
+  (multi-judge scorecard, cross-judge agreement, calibration), the D3 graph viz +
+  collections UI, ingestion / dedup, a fast headless LLM backend, and deployment.
+- **Yee Whye Teh** — whole-paper Markdown rendering (LaTeX math + figures), Scoper
+  abstract-repair (recovering foundational papers), method-comparison tooling and tests.
+- **Claude (Claude Code — primarily Claude Opus 4.8, with Sonnet 4.6 and Haiku 4.5)** —
+  most of the implementation grunt-work under human direction: pipeline code, the
+  `prior view` CLI, scripts, docs and the writeup, research synthesis, and the release
+  engineering.
+
+## How we worked — a candid retrospective
 
 Prior was built **human-in-the-lead, Claude-in-the-loop** over a two-week sprint. Because
 the Anthropic brief is about *model behaviour on agentic-research tasks* — and because
 Prior's whole point is honesty — here's a frank account of how the collaboration actually
 went: what Claude (via Claude Code) did well, and where it needed a human hand.
 
-## What Claude did well
+### What Claude did well
 
 - **Implementation volume.** The bulk of the pipeline, the `prior view` CLI, the scripts,
-  the docs, and this writeup — drafted fast and iterated on.
+  the docs, and the writeup — drafted fast and iterated on.
 - **Release engineering.** Scrubbing secrets from git history, squashing to a clean public
   commit, archiving the full history privately *first*, and verifying every step via fresh
   clones — with deliberate pauses before each irreversible force-push.
@@ -20,7 +39,7 @@ went: what Claude (via Claude Code) did well, and where it needed a human hand.
 - **Executing cleanly once a problem was named** — e.g. excising an institutional-access
   fetch path from both the code *and* the history.
 
-## Where it needed steering
+### Where it needed steering
 
 - **Over- and under-claiming.** It called a real limitation "model noise, don't trust it"
   (an overstatement — corrected), and it initially *under*-sold a key PNAS result as "just

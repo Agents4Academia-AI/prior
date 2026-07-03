@@ -5,6 +5,10 @@
 > contradictions surfaced and confidence made explicit — that you can query and
 > navigate visually.
 
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+[![Python ≥3.11](https://img.shields.io/badge/python-%E2%89%A53.11-blue.svg)](https://www.python.org/)
+[![Release v06.26](https://img.shields.io/badge/release-v06.26-2ea44f.svg)](https://github.com/Agents4Academia-AI/prior/releases/tag/v06.26)
+
 **Team 6** (merged with Team 4): Klara · Harit
 **Hackathon:** [Agents4Academia](https://agents4academia.github.io), 14–26 Jun 2026 · **Release `v06.26`**
 
@@ -16,11 +20,10 @@
 
 ### The problem
 
-Most "research agents" answer a literature question by Googling, skimming
-snippets, and writing a fluent paragraph. You get an answer you **can't audit**:
-no way to see which paper each statement came from, whether the sources actually
-agree, or how much to trust it. For real research that's a non-starter — the
-provenance *is* the product.
+Ask most AI research tools a literature question and you get a fluent paragraph
+synthesised from snippets — but not one you can **audit**: no easy way to see which
+paper each statement came from, whether the sources actually agree, or how much to
+trust it. For real research, that provenance *is* the product.
 
 **Prior makes a different bet:** don't summarise, **build a graph**. Read primary
 sources (OpenAlex + arXiv), extract each paper's *contributions* and *claims*
@@ -32,6 +35,10 @@ Longer term, a map of what's **claimed, contested, and missing** is the *substra
 a research system needs to judge **which phenomena deserve attention and what
 questions to ask of them** — the call that comes *prior* to any task. Prior doesn't
 make that call yet; it makes it **auditable** for whoever (or whatever) does.
+
+Prior ships as an **open tool to reuse and improve** — not a demo. Build an atlas of your
+own topic in one command (`prior build`), lift any single stage into your own project, and
+send improvements back via PR.
 
 ---
 
@@ -57,15 +64,13 @@ design split it into per-paper "local" and cross-paper "global" layers; in the
 end we shipped the cross-paper atlas as the product, with per-paper provenance
 reachable from every node).
 
-```
-Scoper  ──▶  Contributor  ──▶  Cartographer  ──▶  Navigator
-topic →      full text →       contributions →     query + render
-scoped       contributions     cross-paper graph   • state of the field
-corpus       + claims          (supports/extends/   • trace to origin
-(recall →     + provenance      refines/contradicts, • web view / corpus / report
- precision +                    consensus tiers)
- snowball to
- saturation)
+```mermaid
+flowchart LR
+  T([topic]) --> S["Scoper<br/>scope · recall→precision · snowball"]
+  S --> C["Contributor<br/>contributions + claims + provenance"]
+  C --> K["Cartographer<br/>cross-paper atlas<br/>supports · builds_on · refines · contradicts<br/>consensus tiers"]
+  K --> N["Navigator<br/>state of the field · trace to origin · render"]
+  N --> UI([Graph · Papers · Eval · Report · Ask])
 ```
 
 - **Scoper** — topic → a scoped corpus (recall-then-precision + citation
@@ -87,14 +92,6 @@ per-cluster **knowledge frontiers** (expand a community into a lineage: foundati
 work at the centre, the frontier at the rim):
 
 ![Contributions view, then a community expanded as a knowledge frontier.](docs/prior-frontier.gif)
-
-The other three views:
-
-- **Papers** — every source with its contribution & claim counts.
-- **Eval** — the atlas audits itself: per-judge correctness (each model / human
-  annotator is a column), cross-judge agreement, and calibration.
-- **Report** — a system report generated live from the running graph; it reads
-  like a paper.
 
 ### The atlas
 
@@ -238,14 +235,21 @@ Each step makes the map better at flagging *which* phenomena deserve attention a
 3. **Negative & null results** — give each claim a polarity (positive / negative /
    null / mixed) so the atlas captures what *didn't* work, countering publication
    bias (`contradicts` already half-captures this).
-4. **Contradiction as its own agent** — lift precision past the ~50% floor: the
+4. **Decompose relation extraction — the easiest win.** Relations are the weak link
+   (21–53%). The Cartographer currently labels a contribution against ~6 candidates in
+   one call; that batching raises the *relational complexity*, where LLMs degrade and
+   don't recover with scale ([Fesser et al. 2026, *REL*](https://arxiv.org/abs/2604.12176)).
+   Split it into lower-arity calls — *is there a relation? · what type? · which
+   direction?* — go pairwise for the hard cases, and keep anchoring direction to
+   publication year.
+5. **Contradiction as its own agent** — lift precision past the ~50% floor: the
    "significance everywhere vs. nowhere" selection problem, head-on.
-5. **Contribution merging + novelty** — cluster equivalent contributions into
+6. **Contribution merging + novelty** — cluster equivalent contributions into
    canonical nodes; novelty (a phenomenon no one has yet addressed) falls out of the merge.
-6. **Gap surfacing — a coverage view, not the graph.** Absence is invisible in a
+7. **Gap surfacing — a coverage view, not the graph.** Absence is invisible in a
    node-link layout; a method × task (or community × claim-type) matrix makes
    under-studied cells pop, plus a Navigator "what's under-supported?" query.
-7. **Citation-aware Cartographer** (once the citation graph is backfilled) ·
+8. **Citation-aware Cartographer** (once the citation graph is backfilled) ·
    **hosted demo** (STORM-style).
 
 Contributions welcome — start from any reusable stage above, see
@@ -254,24 +258,11 @@ progress log in `claude-progress.md`.
 
 ## End notes
 
-### Contributions
+### Credits
 
-- **Klara Kaleb** — project lead + editorial direction; the core pipeline — **Scoper**
-  (scoping, recall→precision, citation snowball), **Contributor** (contribution/claim
-  extraction), **Cartographer** (cross-paper atlas + consensus edges) — the atlas
-  viewer, groundedness / SciFact evals, and the writeup.
-- **Harit Vishwakarma** — the web application (nav rail, Papers, agentic **Ask**,
-  **Report**, streaming chat across model backends), the self-auditing **Eval** system
-  (multi-judge scorecard, cross-judge agreement, calibration), the D3 graph viz +
-  collections UI, ingestion / dedup, a fast headless LLM backend, and deployment.
-- **Yee Whye Teh** — whole-paper Markdown rendering (LaTeX math + figures), Scoper
-  abstract-repair (recovering foundational papers), method-comparison tooling and tests.
-- **Claude (Claude Code)** — most of the implementation grunt-work under human
-  direction: pipeline code, the `prior view` CLI, scripts, docs and this writeup,
-  research synthesis, and the release engineering.
-
-A candid account of how the human + Claude collaboration actually went — what worked
-and where the model needed steering — is in **[RETRO.md](RETRO.md)**.
+**Klara Kaleb · Harit Vishwakarma · Yee Whye Teh**, with **Claude (Claude Code, mostly
+Opus 4.8)**. Who-did-what and a candid human + Claude retrospective:
+**[RETRO.md](RETRO.md)**.
 
 ### Links
 
@@ -283,12 +274,18 @@ and where the model needed steering — is in **[RETRO.md](RETRO.md)**.
 Built during [Agents4Academia](https://github.com/Agents4Academia-AI), 14–26 June
 2026. Code **Apache-2.0**; graph/atlas data (`data/`) **CC-BY-4.0**.
 
-**Adjacent & prior work:** ORKG (TIB Hannover) · NLPContributionGraph (SemEval
-2021) · AutoSci/OmegaWiki · FutureHouse PaperQA2/Aviary · Papers with Code
-(Meta → Hugging Face) · scite.ai (supporting/contradicting *Smart Citations*) ·
-Elicit (Ought) · STORM (Stanford) · Connected Papers / ResearchRabbit ·
-Open Knowledge Format (Google, 2026) · OpenAlex / arXiv / Semantic Scholar.
+**Adjacent & prior work:** [ORKG](https://orkg.org) (TIB Hannover) ·
+[NLPContributionGraph](https://ncg-task.github.io/) (SemEval 2021) ·
+[AutoSci](https://github.com/skyllwt/AutoSci) (knowledge-graph long-term memory) ·
+FutureHouse [PaperQA2](https://github.com/Future-House/paper-qa) / Aviary ·
+[Papers with Code](https://paperswithcode.co) (Meta → Hugging Face) ·
+[scite.ai](https://scite.ai) (supporting / contradicting *Smart Citations*) ·
+[Elicit](https://elicit.com) (Ought) · [STORM](https://github.com/stanford-oval/storm)
+(Stanford) · [Connected Papers](https://www.connectedpapers.com) /
+[ResearchRabbit](https://www.researchrabbit.ai) · Open Knowledge Format (Google, 2026) ·
+[OpenAlex](https://openalex.org) / [arXiv](https://arxiv.org) /
+[Semantic Scholar](https://www.semanticscholar.org).
 
-**Inspiration:** Mastrandrea et al. 2010 (IPCC AR5 uncertainty guidance) · IPBES
-assessment guide · Parkinson 2026, *"Writing science that humans and machines can
-read."*
+**Inspiration:** Mastrandrea et al. 2010 (IPCC AR5 uncertainty guidance) ·
+[IPBES assessment guide](https://www.ipbes.net) · Parkinson 2026, *"Writing science
+that humans and machines can read."*
