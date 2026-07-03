@@ -256,8 +256,6 @@ progress log in `claude-progress.md`.
 
 ### Contributions
 
-Reconstructed from the (privately archived) commit history:
-
 - **Klara Kaleb** — project lead + editorial direction; the core pipeline — **Scoper**
   (scoping, recall→precision, citation snowball), **Contributor** (contribution/claim
   extraction), **Cartographer** (cross-paper atlas + consensus edges) — the atlas
