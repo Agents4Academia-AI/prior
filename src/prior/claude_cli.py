@@ -97,7 +97,10 @@ def run_json(
             child.send("y")
             child.send("\r")
             time.sleep(2)
-        time.sleep(1.5)
+        # Settle until the input box is actually ready: since CLI ~2.1.x the
+        # welcome banner (what's-new, plugin notices) renders for several
+        # seconds after "Welcome", and text typed too early is swallowed.
+        time.sleep(float(os.environ.get("PRIOR_CLI_SETTLE", "6")))
 
         msg = (
             f"Read the file {infile} and follow its instructions exactly. "

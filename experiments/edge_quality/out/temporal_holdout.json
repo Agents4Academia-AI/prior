@@ -1,0 +1,12 @@
+{
+ "split": "2025-01-01",
+ "early_contribs": 153,
+ "late_contribs": 428,
+ "late_to_early_lineage_edges": 52,
+ "median_antecedent_degree_percentile": 0.467,
+ "frac_antecedents_in_top_degree_quartile": 0.327,
+ "chance_levels": {
+  "median_percentile": 0.5,
+  "top_quartile_frac": 0.25
+ }
+}
