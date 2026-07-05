@@ -18,7 +18,7 @@ OUT = Path(__file__).parent / "out"
 def main() -> None:
     edges: dict[tuple[str, str], str] = {}
     cov = {}
-    for name, tag in (("citations_core.json", "api"), ("citations_fulltext.json", "fulltext")):
+    for name, tag in (("citations_core.json", "api"), ("citations_fulltext.json", "fulltext"), ("citations_bbl.json", "bbl")):
         f = OUT / name
         if not f.exists():
             print(f"({name} missing — skipped)")

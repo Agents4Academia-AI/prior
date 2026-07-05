@@ -165,7 +165,29 @@ def main() -> None:
         print(f"[C] + citation-proposed pairs: {len(extra)}", flush=True)
         pairs |= extra
 
+    ctx_map: dict = {}
+    ctx_f = OUT / "citation_contexts.json"
+    if args.arm == "C" and ctx_f.exists():
+        ctx_map = json.load(open(ctx_f))
+        print(f"[C] citation contexts for {len(ctx_map)} pairs", flush=True)
+
+    def _with_contexts(line: str, citer: str, citee: str) -> str:
+        for c in ctx_map.get(f"{citer}->{citee}", [])[:2]:
+            line += f'\nCITATION CONTEXT (from the citing paper): "...{c[:450]}..."'
+        return line
+
     def cited_ctx(pair: frozenset) -> str | None:
+        a, b = sorted(pair)
+        pa, pb = by_id[a]["paper_id"], by_id[b]["paper_id"]
+        if (pa, pb) in cites:
+            return _with_contexts(
+                "PAPER CITATION: the paper of the first contribution CITES the paper of the second.", pa, pb)
+        if (pb, pa) in cites:
+            return _with_contexts(
+                "PAPER CITATION: the paper of the second contribution CITES the paper of the first.", pb, pa)
+        return None
+
+    def _old_cited_ctx(pair: frozenset) -> str | None:  # superseded above
         a, b = sorted(pair)
         pa, pb = by_id[a]["paper_id"], by_id[b]["paper_id"]
         if (pa, pb) in cites:
