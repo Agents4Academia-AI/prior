@@ -1,0 +1,10 @@
+{
+ "edges": [],
+ "coverage": {
+  "papers": 152,
+  "sources_fetched": 0,
+  "with_bbl_or_bib": 0,
+  "intra_corpus_edges": 0
+ },
+ "method": "arXiv e-print .bbl/.bib matched on arXiv ids + normalized titles"
+}
