@@ -48,7 +48,7 @@ def fetch_source(aid: str) -> bytes | None:
     f = CACHE / f"{aid.replace('/', '_')}.bin"
     if f.exists():
         return f.read_bytes() or None
-    url = f"https://export.arxiv.org/e-print/{aid}"
+    url = f"https://arxiv.org/src/{aid}"
     try:
         req = urllib.request.Request(url, headers={"User-Agent": "prior-edge-quality (mailto:kaleb.klara97@gmail.com)"})
         with urllib.request.urlopen(req, timeout=60) as r:
