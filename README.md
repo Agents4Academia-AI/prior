@@ -41,9 +41,8 @@ corpus's own bibliographies, the **median cited work is 13 months old**, and onl
 quarter of references reach anything under six months — even in one of the
 fastest-moving fields there is. Prior's atlas runs about **twice as fresh**: nearly
 half of its relations connect papers published within six months of each other,
-because it maps relations from the claims themselves instead of waiting for the
-citation record — the structure citation-based tools like Connected Papers or
-Litmaps can't yet see.
+because it maps relations from the claims themselves instead of waiting for
+citations to form — a view above the citation record.
 
 ## Quickstart
 
