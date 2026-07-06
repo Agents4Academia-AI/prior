@@ -34,6 +34,15 @@ provenance, link them across the literature (supports / builds_on / refines /
 contested, and missing** is the substrate for judging which questions to ask next —
 Prior doesn't make that call; it makes it **auditable** for whoever does.
 
+**Why now.** When the hackathon's participants — working researchers — were asked
+about their core workflow frustration, the most common answer was *"I can't keep up
+with the literature."* And the standard instrument for keeping up is structurally
+behind: citation graphs take months to form, while fast fields move in weeks. In
+Prior's demo atlas, **nearly half of the relations connect papers published within
+six months of each other** — too contemporaneous to cite one another, and therefore
+invisible to citation-based tools like Connected Papers or Litmaps. Prior maps that
+structure from the claims themselves, before the citation record catches up.
+
 ## Quickstart
 
 Full runbook in **[docs/RUNNING.md](docs/RUNNING.md)**. Short version:
