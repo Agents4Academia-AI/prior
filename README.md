@@ -135,8 +135,9 @@ coverage), **Useful** (novelty recall). On the flagship atlas, a multi-judge sco
 (Claude, Qwen, Gemma… + human annotators) puts correctness at ~**53–80%** on
 contributions and ~**63–85%** on claims, but only **21–53% on relations** — quantifying
 that *relation extraction is the weak link*. These are **self-evals** — a smoke test,
-not independent proof; a ~140-item human-annotation track is the real cross-check.
-Details: **[docs/EVAL.md](docs/EVAL.md)**.
+not independent proof. Proper independent evaluation, and improving relation
+extraction itself, are the next milestones — both already scoped out in
+**[docs/EVAL.md](docs/EVAL.md)** and **[ROADMAP.md](ROADMAP.md)**.
 
 **Limitations, honestly** (the Anthropic deliverable is a failure-modes report — ours):
 
