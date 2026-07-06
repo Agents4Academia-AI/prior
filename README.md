@@ -36,12 +36,14 @@ Prior doesn't make that call; it makes it **auditable** for whoever does.
 
 **Why now.** When the hackathon's participants — working researchers — were asked
 about their core workflow frustration, the most common answer was *"I can't keep up
-with the literature."* And the standard instrument for keeping up is structurally
-behind: citation graphs take months to form, while fast fields move in weeks. In
-Prior's demo atlas, **nearly half of the relations connect papers published within
-six months of each other** — too contemporaneous to cite one another, and therefore
-invisible to citation-based tools like Connected Papers or Litmaps. Prior maps that
-structure from the claims themselves, before the citation record catches up.
+with the literature."* The citation record lags that reality: measured across this
+corpus's own bibliographies, the **median cited work is 13 months old**, and only a
+quarter of references reach anything under six months — even in one of the
+fastest-moving fields there is. Prior's atlas runs about **twice as fresh**: nearly
+half of its relations connect papers published within six months of each other,
+because it maps relations from the claims themselves instead of waiting for the
+citation record — the structure citation-based tools like Connected Papers or
+Litmaps can't yet see.
 
 ## Quickstart
 
