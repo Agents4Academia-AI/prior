@@ -49,13 +49,11 @@ def fetch_source(aid: str) -> bytes | None:
     if f.exists():
         return f.read_bytes() or None
     url = f"https://arxiv.org/src/{aid}"
-    try:
-        req = urllib.request.Request(url, headers={"User-Agent": "prior-edge-quality (mailto:kaleb.klara97@gmail.com)"})
-        with urllib.request.urlopen(req, timeout=60) as r:
-            data = r.read()
-    except Exception as e:  # noqa: BLE001
-        print(f"  {aid}: fetch failed ({type(e).__name__})", flush=True)
-        data = b""
+    import subprocess
+    r = subprocess.run(["curl", "-sL", "-m", "60", url], capture_output=True)
+    data = r.stdout if r.returncode == 0 else b""
+    if not data:
+        print(f"  {aid}: fetch failed (curl rc={r.returncode})", flush=True)
     CACHE.mkdir(parents=True, exist_ok=True)
     f.write_bytes(data)
     time.sleep(3.0)                                       # arXiv politeness
