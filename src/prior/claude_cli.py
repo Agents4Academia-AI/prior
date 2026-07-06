@@ -111,13 +111,19 @@ def run_json(
         time.sleep(0.5)
         child.send("\r")
 
-        text = _poll_text(outfile, timeout=timeout)
+        text = _poll_text(outfile, timeout=timeout, child=child)
         if text is not None:
             # extract_json tolerates ```json fences / trailing prose in the file.
             return extract_json(text)
 
         # Fallback: model printed instead of writing — try to scrape the screen.
         raw = (child.before or "") + _drain(child)
+        if os.environ.get("PRIOR_CLI_DEBUG"):
+            dbg = os.path.join(tempfile.gettempdir(),
+                               f"prior_dbg_{os.getpid()}_{next(_counter)}.txt")
+            with open(dbg, "w") as dh:
+                dh.write(f"alive={child.isalive()} outfile_exists={os.path.exists(outfile)} "
+                         f"timeout={timeout}\nMSG: {msg}\n=== SCREEN ===\n{raw}")
         return extract_json(raw)
     finally:
         try:
@@ -132,12 +138,22 @@ def run_json(
                 pass
 
 
-def _poll_text(path: str, *, timeout: int) -> Optional[str]:
+def _poll_text(path: str, *, timeout: int,
+               child: "pexpect.spawn | None" = None) -> Optional[str]:
     """Wait for the output file to appear and stop growing, then return its
-    text. Returns None if it never appears within `timeout`."""
+    text. Returns None if it never appears within `timeout`.
+
+    While waiting, keep draining the child's pty: the TUI redraws constantly,
+    and if nobody reads the master side the kernel buffer fills and the CLI
+    blocks on write — frozen mid-turn, so the outfile never gets written."""
     deadline = time.time() + timeout
     last = -1
     while time.time() < deadline:
+        if child is not None:
+            try:
+                child.read_nonblocking(size=65536, timeout=0.05)
+            except Exception:
+                pass
         if os.path.exists(path):
             size = os.path.getsize(path)
             if size > 0 and size == last:        # non-empty and stable => done
