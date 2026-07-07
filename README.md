@@ -148,6 +148,12 @@ are citation-confirmed at 17%, rising to ~30% once the younger paper is a year
 old — the edges land where citations later form. Even this deliberately simple
 first mapping carries structure the citation record independently confirms.
 
+We anticipate this setup to do well on the simpler relations; the harder,
+more valuable ones — true lineage (`builds_on` / `refines`) and genuine
+`contradicts` — need more information per pair (citation context, methods-level
+detail): the devil is in the details there, and that's where the
+[roadmap](ROADMAP.md) goes.
+
 **Limitations**:
 
 - **Contributions are self-proclaimed, not audited** — we take papers at their word.
