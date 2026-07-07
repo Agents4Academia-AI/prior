@@ -139,12 +139,14 @@ not independent proof. Proper independent evaluation, and improving relation
 extraction itself, are the next milestones — both already scoped out in
 **[docs/EVAL.md](docs/EVAL.md)** and **[ROADMAP.md](ROADMAP.md)**.
 
-One check involves no LLM judge at all: the citation record. Atlas relations are
-**~4× more likely than random paper pairs to link papers that cite each other**
-(measured against a citation graph mined from the corpus's own LaTeX
-bibliographies) — and the agreement grows as the field catches up: pairs too
-young to cite each other are citation-confirmed at 17%, rising to ~30% once the
-younger paper is a year old. The edges land where citations later form.
+One check involves no LLM judge at all: the citation record (mined independently
+from the corpus's own LaTeX bibliographies). It corroborates the graph in both
+directions. **Backwards**, against citations that already exist: atlas relations
+are **~4× more likely than random paper pairs to link papers that cite each
+other**. **Forwards**, as a prediction: pairs still too young to cite each other
+are citation-confirmed at 17%, rising to ~30% once the younger paper is a year
+old — the edges land where citations later form. Even this deliberately simple
+first mapping carries structure the citation record independently confirms.
 
 **Limitations**:
 
