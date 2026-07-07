@@ -78,6 +78,25 @@ What we learned (details in `out/*.json`, run `diff_arms.py` to reproduce):
 5. **LLM-free forward validation**: semantic pairs too young to cite each other
    are citation-confirmed at 17%, rising to ~30% after a year — 4× the random
    baseline at every age. The graph anticipates the citation record.
+6. **Only the citation-aware graph is anticipatory** (temporal holdout: does
+   new work attach to already-central early nodes? chance = 0.50 median /
+   25% top-quartile):
+
+   | graph | lineage edges | median antecedent pct | top-quartile |
+   |---|---|---|---|
+   | A (shipped) | 52 | 0.51 | 31% |
+   | B (decomposed only) | 42 | 0.46 | 21% |
+   | **C (citation-aware)** | **237** | **0.755** | **51%** |
+   | C substantive-only | 237 | 0.748 | 50% |
+
+   A and B are null — decomposition alone does NOT restore structure; the
+   citation signal is the ingredient that makes the graph a usable prior.
+   Honest caveat for any writeup: part of C's signal is inherited
+   preferential attachment from the citation network itself, so frame it as
+   "semantic-only graphs miss the field's real accumulation structure;
+   the citation-aware graph recovers it" — not as magic foresight.
+   Reproduce: `temporal_holdout.py --bundle <staged dir>` (staged B/C bundles
+   live in `out/b_atlas`, `out/c_atlas`, `out/c_atlas_core`).
 
 ## The menu (roughly in order of value-for-effort)
 
@@ -97,6 +116,21 @@ What we learned (details in `out/*.json`, run `diff_arms.py` to reproduce):
    already does this deterministically — port it into the Cartographer.
 5. **Richer per-pair evidence for lineage.** Citation contexts helped; method
    sections, shared-benchmark detection, and author overlap are unexplored.
+6. **Go deeper on citation awareness — the biggest open seam.** Finding 6
+   says the citation signal is what makes the graph anticipatory, and we've
+   barely scratched it. Concretely unexplored: using MORE contexts per pair
+   (we cap at 2×450 chars); section-position of the citation (intro vs
+   methods vs baselines — a strong type prior); citation *intent*
+   classification as its own stage (scite-style supporting/contrasting/
+   mentioning) before relation labeling; coverage for the 9 non-arXiv papers
+   (no LaTeX source — need another channel); and the two-layer design
+   (citation edges as facts, semantic relations as assertions) which is
+   sketched in the 2026-07-07 session notes but not built.
+
+There is also a second experiment on this branch: `experiments/vocab_collapse/`
+(raw-LLM parametric memory vs the atlas as a census — Artiles et al.,
+arXiv:2603.01092 analog). Same harness, same iteration loop; results land in
+its `out/collapse_summary.json`.
 
 ## Your iteration loop
 
