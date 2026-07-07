@@ -146,7 +146,7 @@ bibliographies) — and the agreement grows as the field catches up: pairs too
 young to cite each other are citation-confirmed at 17%, rising to ~30% once the
 younger paper is a year old. The edges land where citations later form.
 
-**Limitations, honestly** (the Anthropic deliverable is a failure-modes report — ours):
+**Limitations**:
 
 - **Contributions are self-proclaimed, not audited** — we take papers at their word.
 - **Grounding is semantic, not verbatim** — quotes are faithful paraphrases, not exact spans.
