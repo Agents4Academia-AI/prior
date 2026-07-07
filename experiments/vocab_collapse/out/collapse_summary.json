@@ -1,0 +1,172 @@
+{
+ "memory": {
+  "calls": 36,
+  "claims": 540,
+  "mentions": 539,
+  "generic_claims": 1,
+  "distinct_ideas": 375,
+  "concentration": {
+   "calls_with_top10_idea": "36/36 (100%)",
+   "top10_share_of_mentions": 0.241,
+   "mean_pairwise_call_jaccard": 0.062,
+   "top10_ideas": [
+    {
+     "idea": "openalex:W4402952666::k00",
+     "n": 28,
+     "text": "The AI Scientist \u2014 an end-to-end, fully automated pipeline in which a frontier LLM generates research ideas, s"
+    },
+    {
+     "idea": "openalex:W4365211632::k00",
+     "n": 22,
+     "text": "An Intelligent Agent system that combines multiple large language models to autonomously design, plan, and exe"
+    },
+    {
+     "idea": "openalex:W4403795293::k00",
+     "n": 15,
+     "text": "PaperQA2, a retrieval-augmented generation agent with agentic tool use (paper search, evidence gathering with "
+    },
+    {
+     "idea": "openalex:W4411120082::k00",
+     "n": 11,
+     "text": "ResearchAgent \u2014 an LLM-powered system that automatically identifies novel research problems, proposes methods,"
+    },
+    {
+     "idea": "openalex:W4400734098::k01",
+     "n": 11,
+     "text": "LLM-generated feedback on research papers overlaps with individual human peer reviews at rates comparable to t"
+    },
+    {
+     "idea": "openalex:W4416043407::k00",
+     "n": 11,
+     "text": "An AI co-scientist \u2014 a multi-agent system built on Gemini 2.0 that uses a generate, debate, and evolve approac"
+    },
+    {
+     "idea": "openalex:W4394647523::k00",
+     "n": 10,
+     "text": "HypoGeniC \u2014 an iterative hypothesis generation algorithm for LLMs inspired by the upper confidence bound (UCB)"
+    },
+    {
+     "idea": "openalex:W4403586302::k01",
+     "n": 8,
+     "text": "In a large-scale blind evaluation by over 100 NLP researchers, LLM-generated research ideas are rated as signi"
+    },
+    {
+     "idea": "openalex:W4405599065::k00",
+     "n": 7,
+     "text": "SciAgents\u2014a multi-agent framework that integrates large-scale ontological knowledge graphs with specialized LL"
+    },
+    {
+     "idea": "openalex:W4416035220::k00",
+     "n": 7,
+     "text": "Agent Laboratory \u2014 an autonomous LLM-based pipeline that accepts a human-provided research idea and completes "
+    }
+   ]
+  },
+  "coverage": {
+   "atlas_contributions_recalled": "51/581 (9%)",
+   "out_of_atlas_ideas": 324,
+   "by_community": {
+    "unclustered (isolated)": "11/165",
+    "Peer review": "13/82",
+    "Autonomous systems": "6/70",
+    "Hypothesis generation": "3/55",
+    "Benchmarks & eval": "6/52",
+    "Multi-agent orchestration": "4/50",
+    "Domain-science agents": "4/28",
+    "Idea novelty / eval": "1/27",
+    "RAG / literature-QA": "2/27",
+    "Safety / risk": "1/25"
+   },
+   "by_age": {
+    "<6mo": "7/194 (4%)",
+    "6-12mo": "3/99 (3%)",
+    "12mo+": "41/288 (14%)"
+   }
+  }
+ },
+ "search": {
+  "calls": 36,
+  "claims": 540,
+  "mentions": 539,
+  "generic_claims": 1,
+  "distinct_ideas": 307,
+  "concentration": {
+   "calls_with_top10_idea": "36/36 (100%)",
+   "top10_share_of_mentions": 0.317,
+   "mean_pairwise_call_jaccard": 0.109,
+   "top10_ideas": [
+    {
+     "idea": "openalex:W4402952666::k00",
+     "n": 33,
+     "text": "The AI Scientist \u2014 an end-to-end, fully automated pipeline in which a frontier LLM generates research ideas, s"
+    },
+    {
+     "idea": "openalex:W4414827381::k00",
+     "n": 23,
+     "text": "The AI Scientist-v2 \u2014 an end-to-end agentic system for automated scientific discovery that eliminates reliance"
+    },
+    {
+     "idea": "openalex:W4416035220::k00",
+     "n": 23,
+     "text": "Agent Laboratory \u2014 an autonomous LLM-based pipeline that accepts a human-provided research idea and completes "
+    },
+    {
+     "idea": "arxiv:2504.01848v3::k00",
+     "n": 19,
+     "text": "PaperBench \u2014 a benchmark of 20 ICML 2024 Spotlight and Oral papers with hierarchically decomposed, author-appr"
+    },
+    {
+     "idea": "openalex:W4403324055::k00",
+     "n": 19,
+     "text": "ScienceAgentBench \u2014 a benchmark of 102 code-generation tasks drawn from 44 peer-reviewed publications across f"
+    },
+    {
+     "idea": "openalex:W4416043407::k00",
+     "n": 13,
+     "text": "An AI co-scientist \u2014 a multi-agent system built on Gemini 2.0 that uses a generate, debate, and evolve approac"
+    },
+    {
+     "idea": "openalex:W4404783497::k00",
+     "n": 12,
+     "text": "AgentReview \u2014 an LLM agent-based simulation framework that models the full peer review pipeline (reviewer asse"
+    },
+    {
+     "idea": "openalex:W4403707291::k00",
+     "n": 11,
+     "text": "CORE-Bench \u2014 a benchmark of 270 tasks derived from 90 scientific papers across computer science, social scienc"
+    },
+    {
+     "idea": "openalex:W4365211632::k00",
+     "n": 10,
+     "text": "An Intelligent Agent system that combines multiple large language models to autonomously design, plan, and exe"
+    },
+    {
+     "idea": "openalex:W4411120082::k00",
+     "n": 8,
+     "text": "ResearchAgent \u2014 an LLM-powered system that automatically identifies novel research problems, proposes methods,"
+    }
+   ]
+  },
+  "coverage": {
+   "atlas_contributions_recalled": "65/581 (11%)",
+   "out_of_atlas_ideas": 242,
+   "by_community": {
+    "unclustered (isolated)": "15/165",
+    "Peer review": "7/82",
+    "Autonomous systems": "14/70",
+    "Hypothesis generation": "5/55",
+    "Benchmarks & eval": "12/52",
+    "Multi-agent orchestration": "6/50",
+    "Domain-science agents": "4/28",
+    "Idea novelty / eval": "1/27",
+    "RAG / literature-QA": "0/27",
+    "Safety / risk": "1/25"
+   },
+   "by_age": {
+    "<6mo": "10/194 (5%)",
+    "6-12mo": "8/99 (8%)",
+    "12mo+": "47/288 (16%)"
+   }
+  }
+ }
+}
