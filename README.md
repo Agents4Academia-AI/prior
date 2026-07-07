@@ -103,6 +103,9 @@ community, timeline, and per-cluster knowledge-frontier lenses:
 as a lineage — foundational work at the centre, the current frontier at the rim —
 then a node opened to its statement, source paper, and supporting quote.*
 
+How the communities are computed, their stats, and two LLM-free checks that they're
+real structure: **[docs/CLUSTERS.md](docs/CLUSTERS.md)**.
+
 ## The flagship atlas — *agents for the scientific process*
 
 Prior's flagship build maps **the hackathon's own field** — the tool mapping the
