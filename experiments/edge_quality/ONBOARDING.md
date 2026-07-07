@@ -98,6 +98,42 @@ What we learned (details in `out/*.json`, run `diff_arms.py` to reproduce):
    Reproduce: `temporal_holdout.py --bundle <staged dir>` (staged B/C bundles
    live in `out/b_atlas`, `out/c_atlas`, `out/c_atlas_core`).
 
+## YOUR PROJECT — join citation-verification into Prior
+
+The scoped summer project: bring **[citation_verification](https://github.com/Agents4Academia-AI/citation_verification)**
+(Team 2's hackathon agent: for a (claim, citation) pair — is the reference real,
+is the metadata right, does the cited paper actually support the claim?) into
+Prior as a first-class stage. Everything below it in "the menu" is supporting
+material for this.
+
+Why this project: the experiment results say the citation signal is what makes
+the graph trustworthy AND anticipatory (findings 3, 5, 6) — but Prior currently
+*mines* citations without *verifying* anything against them. citation-verification
+is the missing verifier, already built, already public.
+
+Suggested milestones (each independently shippable):
+
+1. **Resolve** — port c-v's reference resolution (DOI ↔ arXiv-id ↔ OpenAlex-id
+   + metadata validation) into Prior's ingestion. Immediate payoff: a citation
+   channel for the 9 non-arXiv papers (currently orphans) and a normalized
+   citation graph.
+2. **Verified edges** — run c-v-style support checks on Prior's relation edges:
+   given the two contributions' verbatim quotes, does the evidence actually
+   support the asserted relation? Each edge gains a verification stamp
+   ({verified / disputed / unverifiable}) as a new trust tier. The WEEK_2
+   "verification-stamp schema" sketch is exactly this.
+3. **Citation-intent stage** — apply c-v's support-judgment to the 525 mined
+   citation contexts (out/citation_contexts.json): classify each citation as
+   supporting / contrasting / mentioning (scite-style) BEFORE relation
+   labeling, and feed the intent in as a prior on edge type.
+4. **Measure it** — re-run the existing judge harness on stamped vs unstamped
+   edges. Success criterion: precision lift on the verified subset (baselines
+   in the table above; contradicts precision is the headline number to move).
+
+Stretch: package the stamp schema so ANY atlas (or any org project) can consume
+c-v as an enricher — the shared-substrate idea from the org's library RFC
+(github.com/Agents4Academia-AI/.github issue #1).
+
 ## The menu (roughly in order of value-for-effort)
 
 1. **Rebuild the shipped bundle with the current Cartographer.** The code in
