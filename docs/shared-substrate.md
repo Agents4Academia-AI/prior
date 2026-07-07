@@ -143,7 +143,7 @@ is a verification in the stack, so Prior's **Assessor weights evidence by
 *verification depth*, not citations** — the calibrated confidence is literally
 aggregated from the cohort's verification work. Prior's job is to expose the
 **interface** (the verification slots + a query API); the teams fill the stack.
-See the verification-stamp schema in [`WEEK_2.md`](../WEEK_2.md).
+See the verification-stamp schema in [`WEEK_2.md`](project/WEEK_2.md).
 
 ---
 

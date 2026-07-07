@@ -38,7 +38,7 @@ propose / our contributions are…"), excluding background, definitions, surveys
 of open problems, and descriptions of others' work. Run with `prior
 contributions`. The atlas-aware **novelty** assessment (merge equivalent claims
 across papers, flag overstated novelty against chronology) is the deferred next
-step — see `WEEK_2.md`, alongside the designed **Auditor** agent (claim-fidelity
+step — see `docs/project/WEEK_2.md`, alongside the designed **Auditor** agent (claim-fidelity
 + citation honesty real/relevant/fair).
 
 The shared **atlas** (`atlas.py`) is a property graph persisted as JSON

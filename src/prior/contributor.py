@@ -6,7 +6,7 @@ isolates what the paper claims for ITSELF — anchored on the explicit
 self-declaration in the abstract/intro ("we propose…", "our contributions are…").
 
 This is step 1 of the contribution pipeline. Assessing *true* novelty against the
-atlas (merge + chronology) is deferred — see WEEK_2.md.
+atlas (merge + chronology) is deferred — see docs/project/WEEK_2.md.
 """
 
 from __future__ import annotations
