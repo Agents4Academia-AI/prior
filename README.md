@@ -164,7 +164,7 @@ their corpus). Take whichever you need:
 
 The full-text stage's free channels (arXiv, OpenAlex OA, Unpaywall) need **no keys**.
 Metadata and the graph are redistributable; raw closed-access full text is **cited,
-not shipped** — see **[SHARING.md](SHARING.md)**.
+not shipped** — see **[docs/project/SHARING.md](docs/project/SHARING.md)**.
 
 ## Roadmap
 
@@ -180,7 +180,7 @@ Full detail in **[ROADMAP.md](ROADMAP.md)** — headlines:
 ## Credits & links
 
 **Klara Kaleb · Harit Vishwakarma · Yee Whye Teh · Claude** (Claude Code, mostly
-Opus 4.8). Who-did-what and a candid human + Claude retrospective: **[RETRO.md](RETRO.md)**.
+Opus 4.8). Who-did-what and a candid human + Claude retrospective: **[docs/project/RETRO.md](docs/project/RETRO.md)**.
 Slides: [hackathon deck](https://docs.google.com/presentation/d/1ESDmlK8z3T8XWKAdn_xdJVWpP079jkP1iKCl95wjQLo/edit).
 
 Built during [Agents4Academia](https://github.com/Agents4Academia-AI), 14–26 June 2026.
