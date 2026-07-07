@@ -41,9 +41,8 @@ corpus's own bibliographies, the **median cited work is 13 months old**, and onl
 quarter of references reach anything under six months — even in one of the
 fastest-moving fields there is. Prior's atlas runs about **twice as fresh**: nearly
 half of its relations connect papers published within six months of each other,
-because it maps relations from the claims themselves instead of waiting for the
-citation record — the structure citation-based tools like Connected Papers or
-Litmaps can't yet see.
+because it maps relations from the claims themselves instead of waiting for
+citations to form — a view above the citation record.
 
 ## Quickstart
 
@@ -104,6 +103,9 @@ community, timeline, and per-cluster knowledge-frontier lenses:
 as a lineage — foundational work at the centre, the current frontier at the rim —
 then a node opened to its statement, source paper, and supporting quote.*
 
+How the communities are computed, their stats, and two LLM-free checks that they're
+real structure: **[docs/CLUSTERS.md](docs/CLUSTERS.md)**.
+
 ## The flagship atlas — *agents for the scientific process*
 
 Prior's flagship build maps **the hackathon's own field** — the tool mapping the
@@ -136,10 +138,26 @@ coverage), **Useful** (novelty recall). On the flagship atlas, a multi-judge sco
 (Claude, Qwen, Gemma… + human annotators) puts correctness at ~**53–80%** on
 contributions and ~**63–85%** on claims, but only **21–53% on relations** — quantifying
 that *relation extraction is the weak link*. These are **self-evals** — a smoke test,
-not independent proof; a ~140-item human-annotation track is the real cross-check.
-Details: **[docs/EVAL.md](docs/EVAL.md)**.
+not independent proof. Proper independent evaluation, and improving relation
+extraction itself, are the next milestones — both already scoped out in
+**[docs/EVAL.md](docs/EVAL.md)** and **[ROADMAP.md](ROADMAP.md)**.
 
-**Limitations, honestly** (the Anthropic deliverable is a failure-modes report — ours):
+One check involves no LLM judge at all: the citation record (mined independently
+from the corpus's own LaTeX bibliographies). It corroborates the graph in both
+directions. **Backwards**, against citations that already exist: atlas relations
+are **~4× more likely than random paper pairs to link papers that cite each
+other**. **Forwards**, as a prediction: pairs still too young to cite each other
+are citation-confirmed at 17%, rising to ~30% once the younger paper is a year
+old — the edges land where citations later form. Even this deliberately simple
+first mapping carries structure the citation record independently confirms.
+
+We anticipate this setup to do well on the simpler relations; the harder,
+more valuable ones — true lineage (`builds_on` / `refines`) and genuine
+`contradicts` — need more information per pair (citation context, methods-level
+detail): the devil is in the details there, and that's where the
+[roadmap](ROADMAP.md) goes.
+
+**Limitations**:
 
 - **Contributions are self-proclaimed, not audited** — we take papers at their word.
 - **Grounding is semantic, not verbatim** — quotes are faithful paraphrases, not exact spans.
