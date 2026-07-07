@@ -56,12 +56,20 @@ SYSTEM = ("You answer from your own knowledge of the research literature. "
           "hedging, no preamble.")
 
 SCHEMA = {"type": "object",
-          "properties": {"claims": {"type": "array", "items": {"type": "string"}}},
+          "properties": {"claims": {"type": "array", "items": {"type": "string"}},
+                         "queries": {"type": "array", "items": {"type": "string"}}},
           "required": ["claims"]}
+
+SEARCH_PREFIX = ("IMPORTANT: before answering, run at least 3 web searches "
+                 "(use your WebSearch tool) to survey the CURRENT literature "
+                 "on this topic. Base your list on what search surfaces — not "
+                 "just your memory. Report the queries you used in the "
+                 "'queries' field.\n\n")
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
+    ap.add_argument("--arm", choices=("memory", "search"), default="memory")
     ap.add_argument("--calls-per-prompt", type=int, default=12)
     ap.add_argument("--k", type=int, default=15)
     ap.add_argument("--model", default=os.environ.get("PRIOR_COLLAPSE_MODEL", "claude-sonnet-4-6"))
@@ -74,22 +82,25 @@ def main() -> None:
         for line in open(CKPT):
             if line.strip():
                 r = json.loads(line)
-                done.add((r["prompt"], r["idx"]))
+                done.add((r.get("arm", "memory"), r["prompt"], r["idx"]))
 
     tasks = [(p, i) for p in PROMPTS for i in range(args.calls_per_prompt)
-             if (p, i) not in done]
+             if (args.arm, p, i) not in done]
     print(f"calls to run: {len(tasks)} (done: {len(done)})", flush=True)
 
     lock = threading.Lock()
 
     def run(p: str, i: int) -> dict:
-        out = llm.structured(
-            model=args.model, system=SYSTEM,
-            user=PROMPTS[p].format(topic=TOPIC, k=args.k),
-            schema=SCHEMA, max_tokens=2400,
-            timeout=int(os.environ.get("PRIOR_MAP_CALL_TIMEOUT", "180")))
+        user = PROMPTS[p].format(topic=TOPIC, k=args.k)
+        timeout = int(os.environ.get("PRIOR_MAP_CALL_TIMEOUT",
+                                     "420" if args.arm == "search" else "180"))
+        if args.arm == "search":
+            user = SEARCH_PREFIX + user
+        out = llm.structured(model=args.model, system=SYSTEM, user=user,
+                             schema=SCHEMA, max_tokens=2400, timeout=timeout)
         claims = [c.strip() for c in out.get("claims", []) if isinstance(c, str) and c.strip()]
-        return {"prompt": p, "idx": i, "model": args.model, "claims": claims}
+        return {"arm": args.arm, "prompt": p, "idx": i, "model": args.model,
+                "claims": claims, "queries": out.get("queries", [])}
 
     n = 0
     with ThreadPoolExecutor(max_workers=args.workers) as pool:

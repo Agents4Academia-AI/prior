@@ -1,21 +1,20 @@
 #!/usr/bin/env python3
 """Vocabulary-collapse experiment — stage 3: analysis (no LLM).
 
+Arms: "memory" (parametric only) and "search" (model instructed to WebSearch
+before answering — the default config of research agents today). Analysis is
+per-arm, same metrics, so the two are directly comparable against the atlas.
+
 Ideas = matched atlas contribution ids; unmatched non-generic claims are
-greedily clustered by token-Jaccard so repeated out-of-atlas ideas still count
-as one idea.
+greedily clustered by token-Jaccard so repeated out-of-atlas ideas count once.
 
-Reports:
-  CONCENTRATION (the Artiles-style collapse signal)
-    - % of calls containing >=1 of the overall top-10 ideas
-    - share of all mentions taken by the top-10 ideas
-    - distinct ideas / total mentions; mean pairwise call overlap (Jaccard)
-  COVERAGE (census vs smear)
-    - % of the 581 atlas contributions ever produced
-    - recall by community (clusters.json) and by contribution age
-    - generic-claim rate and out-of-atlas rate
+Reports per arm:
+  CONCENTRATION — % of calls containing >=1 top-10 idea (Artiles-style),
+    top-10 share of mentions, distinct ideas, mean pairwise call Jaccard.
+  COVERAGE — % of the 581 atlas contributions ever produced; recall by
+    community and by contribution age; generic + out-of-atlas rates.
 
-Usage: python3 analyze_collapse.py --bundle ../../../prior-core-v0.2 [--clusters out/clusters.json]
+Usage: python3 analyze_collapse.py --bundle ../../../prior-core-v0.2
 """
 from __future__ import annotations
 
@@ -37,28 +36,15 @@ def jac(a: set, b: set) -> float:
     return len(a & b) / max(len(a | b), 1)
 
 
-def main() -> None:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--bundle", required=True)
-    ap.add_argument("--clusters", default=str(OUT / "clusters.json"))
-    ap.add_argument("--dup-threshold", type=float, default=0.55)
-    args = ap.parse_args()
-
-    contribs = json.load(open(Path(args.bundle) / "contributions_core_grounded.json"))
-    if isinstance(contribs, dict):
-        contribs = contribs.get("contributions", contribs)
-    byid = {c["id"]: c for c in contribs}
-
-    rows = [json.loads(l) for l in open(OUT / "matches.jsonl") if l.strip()]
-
-    # idea id per claim: atlas id, or a cluster id over unmatched non-generic claims
+def analyse(rows: list, byid: dict, contribs: list, clusters_path: str,
+            dup_threshold: float) -> dict:
     unmatched = [r for r in rows if r["match"] == "none" and not r.get("generic")]
-    reps: list[tuple[str, set]] = []          # (cluster_id, token set of representative)
-    cluster_of: dict[str, str] = {}
+    reps: list = []                      # (cluster_id, token set)
+    cluster_of: dict = {}
     for r in unmatched:
         t = _tok(r["claim"])
         for cid, rt in reps:
-            if jac(t, rt) >= args.dup_threshold:
+            if jac(t, rt) >= dup_threshold:
                 cluster_of[r["key"]] = cid
                 break
         else:
@@ -66,20 +52,20 @@ def main() -> None:
             reps.append((cid, t))
             cluster_of[r["key"]] = cid
 
-    def idea(r) -> str | None:
+    def idea(r):
         if r["match"] != "none":
             return r["match"]
         if r.get("generic"):
             return None
         return cluster_of[r["key"]]
 
-    # per-call idea sets
-    calls: dict[str, set] = defaultdict(set)
+    calls: dict = defaultdict(set)
     freq: Counter = Counter()
     n_generic = 0
     for r in rows:
         i = idea(r)
-        call = "#".join(r["key"].split("#")[:2])
+        parts = r["key"].split("#")
+        call = "#".join(parts[:-1])      # arm-qualified call id
         if i is None:
             n_generic += 1
             continue
@@ -91,13 +77,10 @@ def main() -> None:
     mentions = sum(freq.values())
     top10_share = sum(freq[i] for i in top10) / max(mentions, 1)
     pair_j = [jac(a, b) for a, b in itertools.combinations(calls.values(), 2)]
-
     matched_ids = {i for i in freq if i in byid}
-    n_out = len(reps)
 
-    # coverage by community
     comm_recall = {}
-    cpath = Path(args.clusters)
+    cpath = Path(clusters_path)
     if cpath.exists():
         cl = json.loads(cpath.read_text())
         assign = cl["assignment"]
@@ -111,8 +94,7 @@ def main() -> None:
         comm_recall = {label.get(k, str(k)): f"{hit[k]}/{tot[k]}"
                        for k in sorted(tot, key=lambda x: -tot[x])}
 
-    # coverage by contribution age (months at NOW)
-    def age_mo(c) -> int | None:
+    def age_mo(c):
         d = c.get("date")
         if not d or len(str(d)) < 7:
             return None
@@ -130,7 +112,7 @@ def main() -> None:
         if c["id"] in matched_ids:
             age_hit[b] += 1
 
-    res = {
+    return {
         "calls": len(calls), "claims": len(rows), "mentions": mentions,
         "generic_claims": n_generic,
         "distinct_ideas": len(freq),
@@ -141,17 +123,39 @@ def main() -> None:
             "top10_ideas": [
                 {"idea": i, "n": freq[i],
                  "text": (byid[i]["statement"][:110] if i in byid
-                          else next(r["claim"][:110] for r in unmatched if cluster_of[r["key"]] == i))}
+                          else next(r["claim"][:110] for r in unmatched
+                                    if cluster_of[r["key"]] == i))}
                 for i in sorted(top10, key=lambda x: -freq[x])],
         },
         "coverage": {
             "atlas_contributions_recalled": f"{len(matched_ids)}/{len(contribs)} ({100*len(matched_ids)/len(contribs):.0f}%)",
-            "out_of_atlas_ideas": n_out,
+            "out_of_atlas_ideas": len(reps),
             "by_community": comm_recall,
             "by_age": {b: f"{age_hit[b]}/{age_tot[b]} ({100*age_hit[b]/max(age_tot[b],1):.0f}%)"
                        for b in ("<6mo", "6-12mo", "12mo+")},
         },
     }
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--bundle", required=True)
+    ap.add_argument("--clusters", default=str(OUT / "clusters.json"))
+    ap.add_argument("--dup-threshold", type=float, default=0.55)
+    args = ap.parse_args()
+
+    contribs = json.load(open(Path(args.bundle) / "contributions_core_grounded.json"))
+    if isinstance(contribs, dict):
+        contribs = contribs.get("contributions", contribs)
+    byid = {c["id"]: c for c in contribs}
+
+    rows = [json.loads(l) for l in open(OUT / "matches.jsonl") if l.strip()]
+    arms: dict = defaultdict(list)
+    for r in rows:
+        arms["search" if r["key"].startswith("search#") else "memory"].append(r)
+
+    res = {arm: analyse(sub, byid, contribs, args.clusters, args.dup_threshold)
+           for arm, sub in sorted(arms.items()) if sub}
     (OUT / "collapse_summary.json").write_text(json.dumps(res, indent=1))
     print(json.dumps(res, indent=1))
     print(f"\n-> {OUT/'collapse_summary.json'}")

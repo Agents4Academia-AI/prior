@@ -78,7 +78,9 @@ def main() -> None:
             continue
         g = json.loads(line)
         for j, claim in enumerate(g["claims"]):
-            key = f"{g['prompt']}#{g['idx']}#{j}"
+            arm = g.get("arm", "memory")
+            key = (f"search#{g['prompt']}#{g['idx']}#{j}" if arm == "search"
+                   else f"{g['prompt']}#{g['idx']}#{j}")
             if key not in done:
                 tasks.append((key, claim))
     print(f"claims to match: {len(tasks)} (done: {len(done)})", flush=True)
