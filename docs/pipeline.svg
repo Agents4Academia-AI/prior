@@ -1,13 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1360 250" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif" role="img" aria-label="Prior pipeline, topic to atlas: SCOPE (Scoper), EXTRACT (Contributor), CONNECT (Cartographer), NAVIGATE (Navigator)">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1360 250" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif" role="img" aria-label="Prior pipeline, topic to answers: SCOPE (Scoper), EXTRACT (Contributor), CONNECT (Cartographer), NAVIGATE (Navigator)">
 <defs><marker id="ah" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#bc4b2f"/></marker></defs>
 <rect width="1360" height="250" fill="#faf6ec"/>
 <line x1="128" y1="118" x2="311" y2="118" stroke="#bc4b2f" stroke-width="2.5" stroke-dasharray="5 8" stroke-linecap="round" marker-end="url(#ah)"/>
 <line x1="341" y1="118" x2="547" y2="118" stroke="#bc4b2f" stroke-width="2.5" stroke-dasharray="5 8" stroke-linecap="round" marker-end="url(#ah)"/>
 <line x1="577" y1="118" x2="783" y2="118" stroke="#bc4b2f" stroke-width="2.5" stroke-dasharray="5 8" stroke-linecap="round" marker-end="url(#ah)"/>
 <line x1="813" y1="118" x2="1019" y2="118" stroke="#bc4b2f" stroke-width="2.5" stroke-dasharray="5 8" stroke-linecap="round" marker-end="url(#ah)"/>
-<line x1="1049" y1="118" x2="1228" y2="118" stroke="#bc4b2f" stroke-width="2.5" stroke-dasharray="5 8" stroke-linecap="round" marker-end="url(#ah)"/>
+<line x1="1049" y1="118" x2="1222" y2="118" stroke="#bc4b2f" stroke-width="2.5" stroke-dasharray="5 8" stroke-linecap="round" marker-end="url(#ah)"/>
 <text x="92" y="124" text-anchor="middle" font-size="19" font-weight="700" fill="#2b2b2b">topic</text>
-<text x="1268" y="124" text-anchor="middle" font-size="19" font-weight="700" fill="#2b2b2b">atlas</text>
+<text x="1262" y="124" text-anchor="middle" font-size="19" font-weight="700" fill="#2b2b2b">answers</text>
 <text x="326" y="90" text-anchor="middle" font-size="14" font-weight="700" letter-spacing="1.6" fill="#2b2b2b">SCOPE</text>
 <circle cx="326" cy="118" r="7.5" fill="#bc4b2f" stroke="#faf6ec" stroke-width="2.5"/>
 <text x="326" y="162" text-anchor="middle" font-size="22" font-weight="700" fill="#2b2b2b">Scoper</text>
