@@ -71,7 +71,7 @@ Contributing: **[CONTRIBUTING.md](CONTRIBUTING.md)**.
 
 One **contribution atlas**, four agents:
 
-![Prior pipeline — SCOPE (Scoper) · EXTRACT (Contributor) · CONNECT (Cartographer) · NAVIGATE (Navigator), topic → atlas → answers](docs/pipeline.svg)
+![Prior pipeline — SCOPE (Scoper) · EXTRACT (Contributor) · CONNECT (Cartographer) · NAVIGATE (Navigator), topic → answers](docs/pipeline.svg)
 
 - **Scoper** — topic → a scoped corpus (recall-then-precision + citation snowball to
   saturation + completeness checks).

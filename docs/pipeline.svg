@@ -5,7 +5,7 @@
 <line x1="341" y1="118" x2="547" y2="118" stroke="#bc4b2f" stroke-width="2.5" stroke-dasharray="5 8" stroke-linecap="round" marker-end="url(#ah)"/>
 <line x1="577" y1="118" x2="783" y2="118" stroke="#bc4b2f" stroke-width="2.5" stroke-dasharray="5 8" stroke-linecap="round" marker-end="url(#ah)"/>
 <line x1="813" y1="118" x2="1019" y2="118" stroke="#bc4b2f" stroke-width="2.5" stroke-dasharray="5 8" stroke-linecap="round" marker-end="url(#ah)"/>
-<line x1="1049" y1="118" x2="1222" y2="118" stroke="#bc4b2f" stroke-width="2.5" stroke-dasharray="5 8" stroke-linecap="round" marker-end="url(#ah)"/>
+<line x1="1049" y1="118" x2="1208" y2="118" stroke="#bc4b2f" stroke-width="2.5" stroke-dasharray="5 8" stroke-linecap="round" marker-end="url(#ah)"/>
 <text x="92" y="124" text-anchor="middle" font-size="19" font-weight="700" fill="#2b2b2b">topic</text>
 <text x="1262" y="124" text-anchor="middle" font-size="19" font-weight="700" fill="#2b2b2b">answers</text>
 <text x="326" y="90" text-anchor="middle" font-size="14" font-weight="700" letter-spacing="1.6" fill="#2b2b2b">SCOPE</text>
