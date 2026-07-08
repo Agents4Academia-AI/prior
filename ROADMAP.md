@@ -22,6 +22,7 @@ Where Prior goes next, grouped by what each cluster improves. (Summary in the
   everywhere vs. nowhere" selection problem, head-on.
 - **Eval as a gate** — make the key-free eval scorecard a *blocking* CI check, so a PR that
   regresses faithfulness / grounding / relation numbers fails and quality only ratchets up.
+- **Citation verification integration** — firstly port c-v's reference resolution into the ingestion of prior, and then run similiar support checks to them on our edges,(check that the evidence actually supports asserted relation between contribution quotes) giving each edge a stamp in the procsess. Then apply c-v's support judgement to the 525 mined contexts and classify each before relation labelling, feeding this in as a prior on edge type. Finally measure and hope for a precision lift.
 
 ## Coverage & sources — what's in the graph
 
