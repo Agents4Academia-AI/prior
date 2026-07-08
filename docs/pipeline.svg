@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1360 300" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif" role="img" aria-label="Prior pipeline: SCOPE (Scoper), EXTRACT (Contributor), CONNECT (Cartographer), NAVIGATE (Navigator)">
+<rect width="1360" height="300" fill="#faf6ec"/>
+<line x1="60" y1="148" x2="1300" y2="148" stroke="#bc4b2f" stroke-width="2.5" stroke-dasharray="5 9" stroke-linecap="round"/>
+<text x="56" y="152" text-anchor="end" font-size="12.5" font-style="italic" fill="#6b6a63">topic</text>
+<text x="1304" y="152" text-anchor="start" font-size="12.5" font-style="italic" fill="#6b6a63">atlas</text>
+<text x="260" y="118" text-anchor="middle" font-size="14" font-weight="700" letter-spacing="1.6" fill="#2b2b2b">SCOPE</text>
+<circle cx="260" cy="148" r="7.5" fill="#bc4b2f" stroke="#faf6ec" stroke-width="2.5"/>
+<text x="260" y="194" text-anchor="middle" font-size="22" font-weight="700" fill="#2b2b2b">Scoper</text>
+<text x="260" y="220" text-anchor="middle" font-size="13" fill="#6b6a63">topic → a scoped corpus</text>
+<text x="260" y="239" text-anchor="middle" font-size="13" fill="#6b6a63">(recall→precision + snowball)</text>
+<text x="540" y="118" text-anchor="middle" font-size="14" font-weight="700" letter-spacing="1.6" fill="#2b2b2b">EXTRACT</text>
+<circle cx="540" cy="148" r="7.5" fill="#bc4b2f" stroke="#faf6ec" stroke-width="2.5"/>
+<text x="540" y="194" text-anchor="middle" font-size="22" font-weight="700" fill="#2b2b2b">Contributor</text>
+<text x="540" y="220" text-anchor="middle" font-size="13" fill="#6b6a63">contributions &amp; claims,</text>
+<text x="540" y="239" text-anchor="middle" font-size="13" fill="#6b6a63">each with quote provenance</text>
+<text x="820" y="118" text-anchor="middle" font-size="14" font-weight="700" letter-spacing="1.6" fill="#2b2b2b">CONNECT</text>
+<circle cx="820" cy="148" r="7.5" fill="#bc4b2f" stroke="#faf6ec" stroke-width="2.5"/>
+<text x="820" y="194" text-anchor="middle" font-size="22" font-weight="700" fill="#2b2b2b">Cartographer</text>
+<text x="820" y="220" text-anchor="middle" font-size="13" fill="#6b6a63">cross-paper atlas: supports ·</text>
+<text x="820" y="239" text-anchor="middle" font-size="13" fill="#6b6a63">builds_on · refines · contradicts,</text>
+<text x="820" y="258" text-anchor="middle" font-size="13" fill="#6b6a63">with consensus tiers</text>
+<text x="1100" y="118" text-anchor="middle" font-size="14" font-weight="700" letter-spacing="1.6" fill="#2b2b2b">NAVIGATE</text>
+<circle cx="1100" cy="148" r="7.5" fill="#bc4b2f" stroke="#faf6ec" stroke-width="2.5"/>
+<text x="1100" y="194" text-anchor="middle" font-size="22" font-weight="700" fill="#2b2b2b">Navigator</text>
+<text x="1100" y="220" text-anchor="middle" font-size="13" fill="#6b6a63">state of the field · trace</text>
+<text x="1100" y="239" text-anchor="middle" font-size="13" fill="#6b6a63">a concept to its origin · render</text>
+<text x="680" y="280" text-anchor="middle" font-size="13" fill="#6b6a63">Outputs — <tspan fill="#2b2b2b" font-weight="600">Graph · Papers · Eval · Report · Ask</tspan></text>
+</svg>
