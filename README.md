@@ -78,6 +78,18 @@ flowchart LR
   C --> K["Cartographer<br/>cross-paper atlas<br/>supports · builds_on · refines · contradicts<br/>consensus tiers"]
   K --> N["Navigator<br/>state of the field · trace to origin · render"]
   N --> UI([Graph · Papers · Eval · Report · Ask])
+
+  classDef io fill:#e9d8a6,stroke:#c9772f,color:#2b2b2b;
+  classDef s  fill:#2a9d8f,stroke:#1f7a6f,color:#ffffff;
+  classDef c  fill:#6a9b6e,stroke:#4f7a52,color:#ffffff;
+  classDef k  fill:#c79a3b,stroke:#a67d27,color:#ffffff;
+  classDef n  fill:#bc4b2f,stroke:#9e3b22,color:#ffffff;
+  class T,UI io;
+  class S s;
+  class C c;
+  class K k;
+  class N n;
+  linkStyle default stroke:#c9b89a,stroke-width:2.5px;
 ```
 
 - **Scoper** — topic → a scoped corpus (recall-then-precision + citation snowball to
