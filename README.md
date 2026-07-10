@@ -52,15 +52,15 @@ Full runbook in **[docs/RUNNING.md](docs/RUNNING.md)**. Short version:
 pip install -e ".[graph]"                     # core + local embeddings (no Neo4j server needed)
 
 # ── see it in 10 seconds: the shipped atlas — no API key, no database ──
-prior view --open                             # opens the bundled atlas as one HTML file
+prior view --open                             # bundled atlas in the tabbed viewer (Contributions · Communities · Timeline)
 
 # ── build your own atlas of a topic (needs an LLM) ──
 export PRIOR_LLM_BACKEND=claude-cli           # credit-free (Claude Code login); or set ANTHROPIC_API_KEY
-prior build "diffusion models for planning"   # → data/atlas/atlas.json
-prior view --open                             # → your atlas, one self-contained HTML viewer
+prior build "diffusion models for planning"   # → data/atlas/atlas.json (+ graph.json)
+prior view --open                             # → your atlas, same tabbed viewer, one self-contained HTML file
 
 # ── or the full web app (persistent + queryable) ──
-pip install -e ".[graph,web]" && docker compose up -d   # adds the web API + Neo4j
+pip install -e ".[graph,web]" && docker compose up -d   # adds the web API + Neo4j (Docker required)
 prior serve --port 8078                        # then run the frontend (see RUNNING.md)
 ```
 

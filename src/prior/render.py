@@ -148,13 +148,14 @@ def _layout(contribs: list, comm_of: dict, cluster_ids: list) -> dict:
 
 
 def _build_payload(collection: str, papers: dict, contribs: list, edges: list,
-                   comm_of: dict, legend: list) -> dict:
-    topic = ""
-    with graph.session() as s:
-        rec = s.run("MATCH (c:Collection {name:$n}) RETURN c.topic AS t",
-                    n=collection).single()
-        if rec:
-            topic = rec["t"] or ""
+                   comm_of: dict, legend: list, topic: Optional[str] = None) -> dict:
+    if topic is None:                        # None -> look it up in Neo4j (live path)
+        topic = ""
+        with graph.session() as s:
+            rec = s.run("MATCH (c:Collection {name:$n}) RETURN c.topic AS t",
+                        n=collection).single()
+            if rec:
+                topic = rec["t"] or ""
     ids = {c["id"] for c in contribs}
     deg = Counter()
     for e in edges:
@@ -271,3 +272,26 @@ def payload(collection: str, *, min_trust: float = 0.0, max_nodes: int = 0,
         with _LOCK:
             cached = _CACHE[collection]
     return _filtered(cached, min_trust=min_trust, max_nodes=max_nodes, year_max=year_max)
+
+
+def payload_from_atlas(atlas) -> dict:
+    """Build the D3 viewer payload (the `graph.json` shape) directly from an
+    in-memory ``Atlas`` — no Neo4j, no server. This is what lets ``prior build``
+    ship the *same* tabbed viewer (Contributions / Communities / Timeline) for a
+    user's own corpus as the bundled demo, instead of the plainer classic view.
+
+    Reuses the canonical clustering / layout so the offline payload matches the
+    live one; only the global (contribution↔contribution) edges become links."""
+    papers = {p.id: {"id": p.id, "title": p.title, "year": p.year,
+                     "authors": p.authors, "url": p.url,
+                     "date": p.date, "dprec": p.date_precision}
+              for p in atlas.papers.values()}
+    contribs = [{"id": k.id, "paper_id": k.paper_id, "statement": k.summary(),
+                 "kind": k.kind, "quote": k.quote}
+                for k in atlas.contributions.values()]
+    edges = [{"src": e.src, "dst": e.dst, "rel": e.relation, "trust": e.confidence,
+              "tier": "", "evidence": e.evidence, "directed": True}
+             for e in atlas.edges if e.level == "global"]
+    comm_of, legend = _cluster(contribs, edges)
+    return _build_payload("", papers, contribs, edges, comm_of, legend,
+                          topic=atlas.topic)

@@ -208,7 +208,22 @@ def build(topic: str, *, max_papers: int | None = None, relate: bool = True,
     path = atlas.save()
     progress(f"      {atlas.summary()}")
     progress(f"saved -> {path}")
+    _write_graph_json(atlas, progress=progress)
     return atlas
+
+
+def _write_graph_json(atlas: Atlas, *, progress=print) -> None:
+    """Emit `data/atlas/graph.json` so `prior view` shows this atlas in the same
+    tabbed D3 viewer as the bundled demo (not the plainer classic view). Best
+    effort: the viewer payload needs the [graph] extra (neo4j import), so a
+    core-only install just keeps atlas.json + the classic view."""
+    try:
+        from . import render
+        out = config.ATLAS / "graph.json"
+        out.write_text(json.dumps(render.payload_from_atlas(atlas)))
+        progress(f"      wrote {out} (tabbed viewer)")
+    except Exception as e:  # noqa: BLE001 — never fail a build over the viewer payload
+        progress(f"      (graph.json skipped — classic view only: {e})")
 
 
 # ── full-text + exploration stages (integrated onto the read_all / graph model) ──
