@@ -197,10 +197,14 @@ def main(argv: list[str] | None = None) -> int:
             p = render_html.render_evolution(out_path=out)
         elif args.contributions:
             p = render_html.render_contributions(out_path=out)
-        elif not args.classic:
-            p = render_html.render_global(out_path=out)
-        else:
+        elif args.classic:
             p = render_html.render(out_path=out)
+        elif (config.ATLAS / "graph.json").exists():
+            p = render_html.render_global(out_path=out)          # user built a graph payload
+        elif (config.ATLAS / "atlas.json").exists():
+            p = render_html.render(out_path=out)                 # user's own atlas → classic view
+        else:
+            p = render_html.render_global(out_path=out)          # nothing built → bundled AI-scientist demo
         print(f"wrote {p}")
         if args.open_:
             import webbrowser
