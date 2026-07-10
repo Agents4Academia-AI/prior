@@ -394,3 +394,22 @@ def render_evolution(out_path: Path | None = None) -> Path:
 
 if __name__ == "__main__":
     print(render())
+
+
+def render_global(graph_path: Path | None = None, out_path: Path | None = None) -> Path:
+    """Standalone tabbed D3 viewer (Contributions · Communities · Timeline) with the
+    ``graph.json`` payload embedded inline — one self-contained HTML, no server."""
+    import importlib.resources as _ir
+    if graph_path is not None:
+        data = Path(graph_path).read_text()
+    elif (config.ATLAS / "graph.json").exists():
+        data = (config.ATLAS / "graph.json").read_text()          # the user's own build
+    else:
+        data = (_ir.files("prior") / "assets" / "graph.json").read_text()   # bundled demo
+    template = (_ir.files("prior") / "assets" / "viewer.html").read_text()
+    inject = ("window.__ATLAS__=" + data + ";\n(async function(){\n"
+              "  if(window.__ATLAS__){boot(window.__ATLAS__);return;}")
+    html = template.replace("(async function(){", inject, 1)
+    out_path = out_path or (config.ATLAS / "view.html")
+    out_path.write_text(html)
+    return out_path
