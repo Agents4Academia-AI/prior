@@ -128,6 +128,8 @@ def main(argv: list[str] | None = None) -> int:
                         help="open the rendered file in a browser")
     p_view.add_argument("--evolution", action="store_true",
                         help="staged reveal: papers -> contributions -> relations")
+    p_view.add_argument("--classic", action="store_true",
+                        help="classic vis-network view instead of the D3 tabbed viewer")
     p_view.add_argument("--contributions", action="store_true",
                         help="contributions graph (needs contributions.json)")
 
@@ -195,6 +197,8 @@ def main(argv: list[str] | None = None) -> int:
             p = render_html.render_evolution(out_path=out)
         elif args.contributions:
             p = render_html.render_contributions(out_path=out)
+        elif not args.classic:
+            p = render_html.render_global(out_path=out)
         else:
             p = render_html.render(out_path=out)
         print(f"wrote {p}")

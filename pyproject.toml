@@ -33,6 +33,9 @@ fullpaper = ["pymupdf>=1.24", "pymupdf4llm>=0.0.17"]
 [project.scripts]
 prior = "prior.cli:main"
 
+[tool.setuptools.package-data]
+prior = ["assets/*.html", "assets/*.json"]
+
 [tool.setuptools.packages.find]
 where = ["src"]
 
