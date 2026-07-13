@@ -116,12 +116,15 @@ Communities are **emergent, not hand-drawn** (greedy-modularity over consensus e
 keyword-vote labels — deterministic, no LLM). And the **73 `contradicts` edges**
 surface genuine tensions; one the atlas flags automatically:
 
-> **"LLM reviewing-agents give useful, iterative peer review"** ⟂ **"LLM-as-judge
-> scores for open-ended scientific ideation systematically exceed PhD-level expert
-> ratings by 3–4 points"**
+> **"LLM-generated research ideas are judged _more novel_ than expert humans'"**
+> — Si et al. (Stanford), *Can LLMs Generate Novel Research Ideas?*, 2024
+> **⟂**
+> **"A quarter of AI-generated research proposals are _plagiarized_ — borrowed from
+> existing work without attribution"**
+> — Gupta & Pruthi, *All That Glitters is Not Novel*, ACL 2025
 
-— whether LLMs can reliably *evaluate* science is itself contested: exactly the kind
-of open question Prior is built to surface.
+Whether LLMs can produce genuinely novel science is contested — exactly the kind of
+open question Prior is built to make visible.
 
 ## Does it hold up?
 
