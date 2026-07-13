@@ -1,0 +1,27 @@
+{
+  "non_primary": ["arxiv:2602.13855v1", "arxiv:2605.03202", "arxiv:2604.23593"],
+  "entries": [
+    {
+      "id": "arxiv:2602.13855v1",
+      "title": "From Fluent to Verifiable: Claim-Level Auditability for Deep Research Agents",
+      "reason": "self-framed perspective ('This perspective proposes...') — position piece, not a primary empirical/methodological contribution",
+      "confirmed_by": "auditor (prior-evals/docs/scoper-primary-filter-handoff.md) + Klara",
+      "date": "2026-06-24"
+    },
+    {
+      "id": "arxiv:2605.03202",
+      "title": "Stop Automating Peer Review Without Rigorous Evaluation",
+      "reason": "self-described position paper (argues against automating peer review without rigorous evaluation)",
+      "confirmed_by": "primary-only sweep (Sonnet) + Klara",
+      "date": "2026-06-24"
+    },
+    {
+      "id": "arxiv:2604.23593",
+      "title": "When AI reviews science: Can we trust the referee?",
+      "reason": "perspective/opinion piece ('can we trust the referee?'), not a primary contribution",
+      "confirmed_by": "primary-only sweep (Sonnet) + Klara",
+      "date": "2026-06-24"
+    }
+  ],
+  "note": "Core-definition exclusions (primary-sources-only). Source data (papers.jsonl, full contributions.json) is UNTOUCHED; this only filters the materialized core artifacts. Reversible: remove an id here and rebuild. The 'Pilot Audit' (arxiv:2605.21404v1) was reviewed and KEPT as a primary empirical meta-study."
+}
