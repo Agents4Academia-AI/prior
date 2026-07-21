@@ -1,5 +1,22 @@
 # Cartographer edge-quality — student onboarding
 
+> **⚠️ Read this first — what is already done, and what your job is**
+>
+> 1. **The citation graph is already built.** `out/citations_core.json`
+>    (711 intra-corpus edges) and `out/citation_contexts.json` (525 pairs) are
+>    finished outputs. Do **not** re-run the mining scripts or rebuild the graph
+>    with any other tool — treat those files as inputs.
+> 2. **Your project starts at the "YOUR PROJECT" section below.** It is to port
+>    pieces of Team 2's **RefWarden**
+>    ([`citation_verification`](https://github.com/Agents4Academia-AI/citation_verification))
+>    into Prior as a *verification* stage — not to run RefWarden standalone, and
+>    not to redo citation mining with it.
+> 3. If RefWarden's resolver finds citation edges the 711 don't have, that's a
+>    known coverage gap (fuzzy-title resolution + PDF ingestion for the 9
+>    non-arXiv papers) — report the diff, don't silently swap graphs. Note
+>    RefWarden counts one row per **(claim, citation) site**; dedupe to directed
+>    (citer, citee) pairs and drop out-of-corpus citees before comparing counts.
+
 Welcome! This branch (`exp/edge-quality`) is a complete workbench for the most
 valuable open problem in Prior: **making the Cartographer's cross-paper
 relations trustworthy**. The public README says it plainly — relations are the
@@ -100,7 +117,8 @@ What we learned (details in `out/*.json`, run `diff_arms.py` to reproduce):
 
 ## YOUR PROJECT — join citation-verification into Prior
 
-The scoped summer project: bring **[citation_verification](https://github.com/Agents4Academia-AI/citation_verification)**
+The scoped summer project: bring **RefWarden** —
+**[citation_verification](https://github.com/Agents4Academia-AI/citation_verification)** —
 (Team 2's hackathon agent: for a (claim, citation) pair — is the reference real,
 is the metadata right, does the cited paper actually support the claim?) into
 Prior as a first-class stage. Everything below it in "the menu" is supporting
@@ -113,10 +131,13 @@ is the missing verifier, already built, already public.
 
 Suggested milestones (each independently shippable):
 
-1. **Resolve** — port c-v's reference resolution (DOI ↔ arXiv-id ↔ OpenAlex-id
-   + metadata validation) into Prior's ingestion. Immediate payoff: a citation
-   channel for the 9 non-arXiv papers (currently orphans) and a normalized
-   citation graph.
+1. **Port RefWarden's identifier resolution into Prior's ingestion** (DOI ↔
+   arXiv-id ↔ OpenAlex-id + fuzzy-title, + metadata validation). This is a
+   *code port*, not a graph rebuild — the payoff is a citation channel for the
+   9 non-arXiv papers (currently orphans) and normalized ids at ingest time.
+   Extra edges it recovers over `citations_core.json` get *added via
+   merge_citations.py* as a fourth source, with provenance, after the
+   dedupe/in-corpus filtering described in the box at the top.
 2. **Verified edges** — run c-v-style support checks on Prior's relation edges:
    given the two contributions' verbatim quotes, does the evidence actually
    support the asserted relation? Each edge gains a verification stamp
