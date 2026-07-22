@@ -93,6 +93,13 @@ FULLPAPER_MAX_PAGES = int(os.environ.get("PRIOR_FULLPAPER_MAX_PAGES", "0"))
 # Drop raster images smaller than this (px, either side) — icons, rules, logos.
 FULLPAPER_MIN_IMAGE_PX = int(os.environ.get("PRIOR_FULLPAPER_MIN_IMAGE_PX", "50"))
 
+# ── Citation resolution (edge_quality milestone 1) ────────────────────────────────
+# OFF by default: when set, cartographer.build runs the resolver stage
+# (prior.citelinks) after link_citations, adding resolver-derived `cites` edges
+# from reference text. Needs the optional `.[resolve]` dependency; without it the
+# stage no-ops, so a default build is byte-identical to before.
+RESOLVE_CITATIONS = _flag("PRIOR_RESOLVE_CITATIONS", False)
+
 # ── Annotation / auth ───────────────────────────────────────────────────────────
 # users.json maps username -> {"password": "...", "admin": true|false}. When the file
 # is absent, auth runs in OPEN dev mode (any name, no password, non-admin).

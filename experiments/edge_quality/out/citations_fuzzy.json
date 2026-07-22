@@ -1,0 +1,111 @@
+{
+ "edges": [
+  [
+   "arxiv:2505.24785v2",
+   "openalex:W4405599065"
+  ],
+  [
+   "arxiv:2507.02694",
+   "openalex:W4404783497"
+  ],
+  [
+   "arxiv:2602.15112v2",
+   "openalex:W4416034681"
+  ],
+  [
+   "arxiv:2605.29468",
+   "openalex:W4417287919"
+  ],
+  [
+   "arxiv:2606.00644",
+   "openalex:W4417287919"
+  ],
+  [
+   "arxiv:2606.11851",
+   "openalex:W4417287919"
+  ],
+  [
+   "arxiv:2606.13670",
+   "openalex:W4417287919"
+  ],
+  [
+   "openalex:W4404350150",
+   "openalex:W4404783497"
+  ],
+  [
+   "openalex:W4404573571",
+   "openalex:W4404782918"
+  ],
+  [
+   "openalex:W4405035007",
+   "openalex:W4404783497"
+  ],
+  [
+   "openalex:W4407760093",
+   "arxiv:2411.15114v2"
+  ],
+  [
+   "openalex:W4407806895",
+   "arxiv:2411.15114v2"
+  ],
+  [
+   "openalex:W4414587939",
+   "openalex:W4403586302"
+  ],
+  [
+   "openalex:W4414587939",
+   "openalex:W4404783497"
+  ],
+  [
+   "openalex:W4414587939",
+   "openalex:W4411120082"
+  ],
+  [
+   "openalex:W4414827381",
+   "openalex:W4403586302"
+  ],
+  [
+   "openalex:W4415108068",
+   "openalex:W4404350150"
+  ],
+  [
+   "openalex:W4415108068",
+   "openalex:W4411120082"
+  ],
+  [
+   "openalex:W4416026872",
+   "openalex:W4404783497"
+  ]
+ ],
+ "edge_source": {
+  "arxiv:2505.24785v2->openalex:W4405599065": "fuzzy_title",
+  "arxiv:2507.02694->openalex:W4404783497": "fuzzy_title",
+  "arxiv:2602.15112v2->openalex:W4416034681": "fuzzy_title",
+  "arxiv:2605.29468->openalex:W4417287919": "fuzzy_title",
+  "arxiv:2606.00644->openalex:W4417287919": "fuzzy_title",
+  "arxiv:2606.11851->openalex:W4417287919": "fuzzy_title",
+  "arxiv:2606.13670->openalex:W4417287919": "fuzzy_title",
+  "openalex:W4404350150->openalex:W4404783497": "fuzzy_title",
+  "openalex:W4404573571->openalex:W4404782918": "fuzzy_title",
+  "openalex:W4405035007->openalex:W4404783497": "fuzzy_title",
+  "openalex:W4407760093->arxiv:2411.15114v2": "fuzzy_title",
+  "openalex:W4407806895->arxiv:2411.15114v2": "fuzzy_title",
+  "openalex:W4414587939->openalex:W4403586302": "fuzzy_title",
+  "openalex:W4414587939->openalex:W4404783497": "fuzzy_title",
+  "openalex:W4414587939->openalex:W4411120082": "fuzzy_title",
+  "openalex:W4414827381->openalex:W4403586302": "fuzzy_title",
+  "openalex:W4415108068->openalex:W4404350150": "fuzzy_title",
+  "openalex:W4415108068->openalex:W4411120082": "fuzzy_title",
+  "openalex:W4416026872->openalex:W4404783497": "fuzzy_title"
+ },
+ "coverage": {
+  "papers": 152,
+  "arxiv_sources_with_bbl": 96,
+  "fuzzy_threshold": 90,
+  "fuzzy_edges_found": 35,
+  "already_in_core": 16,
+  "net_new_added": 19,
+  "intra_corpus_edges": 19
+ },
+ "method": "rapidfuzz partial_ratio>=90 of a corpus title within a segmented reference entry, over raw arXiv .bbl/.bib; endpoints are existing corpus node ids; all 19 manually verified, 0 twins. See scratchpad/fuzzy_probe.py + out/fuzzy_probe_report.json"
+}

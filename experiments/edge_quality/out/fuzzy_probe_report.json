@@ -1,0 +1,167 @@
+{
+  "threshold": 90,
+  "sources_fetched": 101,
+  "with_bbl_or_bib": 96,
+  "tallies": {
+    "arxiv_id": 405,
+    "exact_title": 231,
+    "fuzzy_title": 35
+  },
+  "fuzzy_total": 35,
+  "fuzzy_known": 16,
+  "fuzzy_new": 19,
+  "fuzzy_new_edges": [
+    {
+      "citer": "openalex:W4414827381",
+      "citee": "openalex:W4403586302",
+      "score": 98.9,
+      "citer_title": "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via",
+      "citee_title": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with",
+      "entry": "si et al 2025 si yang and hashimoto si2025can chenglei si diyi yang and tatsunori hashimoto can llm s generate novel research ideas a large scale human study with 100 nlp researchers in the thirteenth"
+    },
+    {
+      "citer": "openalex:W4414587939",
+      "citee": "openalex:W4403586302",
+      "score": 98.9,
+      "citer_title": "MLR-Bench: Evaluating AI Agents on Open-Ended Machine Learning Researc",
+      "citee_title": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with",
+      "entry": "si2025can chenglei si diyi yang and tatsunori hashimoto can llm s generate novel research ideas a large scale human study with 100 nlp researchers in the thirteenth international conference on learnin"
+    },
+    {
+      "citer": "openalex:W4404573571",
+      "citee": "openalex:W4404782918",
+      "score": 98.2,
+      "citer_title": "AIGS: Generating Science from AI-Powered Automated Falsification",
+      "citee_title": "LLMs Assist NLP Researchers: Critique Paper (Meta-)Reviewing",
+      "entry": "du et al 2024 du wang zhao deng liu lou zou narayanan venkit zhang srinath zhang gupta li li wang liu liu gao xia xing jiayang wang su shah guo gu li wei wang cheng ranathunga fang fu liu huang blanco"
+    },
+    {
+      "citer": "openalex:W4414587939",
+      "citee": "openalex:W4411120082",
+      "score": 98.0,
+      "citer_title": "MLR-Bench: Evaluating AI Agents on Open-Ended Machine Learning Researc",
+      "citee_title": "ResearchAgent: Iterative Research Idea Generation over Scientific Lite",
+      "entry": "baek etal 2025 researchagent jinheon baek sujay kumar jauhar silviu cucerzan and sung ju hwang r esearch a gent iterative research idea generation over scientific literature with large language models"
+    },
+    {
+      "citer": "openalex:W4415108068",
+      "citee": "openalex:W4411120082",
+      "score": 98.0,
+      "citer_title": "AlphaEvolve: A coding agent for scientific and algorithmic discovery",
+      "citee_title": "ResearchAgent: Iterative Research Idea Generation over Scientific Lite",
+      "entry": "inproceedings wang2024researchagent title research a gent iterative research idea generation over scientific literature with large language models author wang haorui and skreta marta and ser cher tian"
+    },
+    {
+      "citer": "arxiv:2602.15112v2",
+      "citee": "openalex:W4416034681",
+      "score": 97.6,
+      "citer_title": "ResearchGym: Evaluating Language Model Agents on Real-World AI Researc",
+      "citee_title": "Chain of Ideas: Revolutionizing Research Via Novel Idea Development wi",
+      "entry": "article li2024chain title chain of ideas revolutionizing research in novel idea development with llm agents author li long and xu weiwen and guo jiayan and zhao ruochen and li xinxuan and yuan yuqian "
+    },
+    {
+      "citer": "openalex:W4415108068",
+      "citee": "openalex:W4404350150",
+      "score": 96.9,
+      "citer_title": "AlphaEvolve: A coding agent for scientific and algorithmic discovery",
+      "citee_title": "CycleResearcher: Improving Automated Research via Automated Review",
+      "entry": "inproceedings weng2025cycle title cycle r esearcher improving automated research via automated review author weng yixuan and zhu minjun and bao guangsheng and zhang hongbo and wang jindong and zhang y"
+    },
+    {
+      "citer": "openalex:W4416026872",
+      "citee": "openalex:W4404783497",
+      "score": 96.6,
+      "citer_title": "Jr. AI Scientist and Its Risk Report: Autonomous Scientific Exploratio",
+      "citee_title": "AgentReview: Exploring Peer Review Dynamics with LLM Agents",
+      "entry": "inproceedings jin2024agentreviewexploringpeerreview title a gent r eview exploring peer review dynamics with llm agents author jin yiqiao and zhao qinlin and wang yiyang and chen hao and zhu kaijie an"
+    },
+    {
+      "citer": "openalex:W4414587939",
+      "citee": "openalex:W4404783497",
+      "score": 96.6,
+      "citer_title": "MLR-Bench: Evaluating AI Agents on Open-Ended Machine Learning Researc",
+      "citee_title": "AgentReview: Exploring Peer Review Dynamics with LLM Agents",
+      "entry": "jin etal 2024 agentreview yiqiao jin qinlin zhao yiyang wang hao chen kaijie zhu yijia xiao and jindong wang a gent r eview exploring peer review dynamics with llm agents in proceedings of the 2024 co"
+    },
+    {
+      "citer": "openalex:W4404350150",
+      "citee": "openalex:W4404783497",
+      "score": 96.6,
+      "citer_title": "CycleResearcher: Improving Automated Research via Automated Review",
+      "citee_title": "AgentReview: Exploring Peer Review Dynamics with LLM Agents",
+      "entry": "inproceedings jin2024agentreviewexploringpeerreview title a gent r eview exploring peer review dynamics with llm agents author jin yiqiao and zhao qinlin and wang yiyang and chen hao and zhu kaijie an"
+    },
+    {
+      "citer": "openalex:W4405035007",
+      "citee": "openalex:W4404783497",
+      "score": 96.6,
+      "citer_title": "Are We There Yet? Revealing the Risks of Utilizing Large Language Mode",
+      "citee_title": "AgentReview: Exploring Peer Review Dynamics with LLM Agents",
+      "entry": "jin2024agentreview yiqiao jin qinlin zhao yiyang wang hao chen kaijie zhu yijia xiao and jindong wang a gent r eview exploring peer review dynamics with llm agents in yaser al onaizan mohit bansal and"
+    },
+    {
+      "citer": "arxiv:2507.02694",
+      "citee": "openalex:W4404783497",
+      "score": 96.6,
+      "citer_title": "Can LLMs Identify Critical Limitations within Scientific Research? A S",
+      "citee_title": "AgentReview: Exploring Peer Review Dynamics with LLM Agents",
+      "entry": "inproceedings jin etal 2024 agentreview title a gent r eview exploring peer review dynamics with llm agents author jin yiqiao and zhao qinlin and wang yiyang and chen hao and zhu kaijie and xiao yijia"
+    },
+    {
+      "citer": "openalex:W4407806895",
+      "citee": "arxiv:2411.15114v2",
+      "score": 94.7,
+      "citer_title": "MLGym: A New Framework and Benchmark for Advancing AI Research Agents",
+      "citee_title": "RE-Bench: Evaluating frontier AI R&D capabilities of language model ag",
+      "entry": "metr 2024 rebench metr metr evaluating frontier ai r d capabilities of language model agents against human experts 11 2024 url https metr org blog 2024 11 22 evaluating r d capabilities of llms"
+    },
+    {
+      "citer": "openalex:W4407760093",
+      "citee": "arxiv:2411.15114v2",
+      "score": 94.7,
+      "citer_title": "AIDE: AI-Driven Exploration in the Space of Code",
+      "citee_title": "RE-Bench: Evaluating frontier AI R&D capabilities of language model ag",
+      "entry": "metr 2024 rebench metr evaluating frontier ai r d capabilities of language model agents against human experts https metr org blog 2024 11 22 evaluating r d capabilities of llms 2024 blog post november"
+    },
+    {
+      "citer": "arxiv:2606.13670",
+      "citee": "openalex:W4417287919",
+      "score": 93.5,
+      "citer_title": "Automated reproducibility assessments in the social and behavioral sci",
+      "citee_title": "Robin: A multi-agent system for automating scientific discovery",
+      "entry": "article ghareeb 2026 title a multi agent system for automating scientific discovery author ghareeb ali essam and chang benjamin and mitchener ludovico and yiu angela and szostkiewicz caralyn j and shv"
+    },
+    {
+      "citer": "arxiv:2606.11851",
+      "citee": "openalex:W4417287919",
+      "score": 93.5,
+      "citer_title": "StatefulDiscovery: Evidence-Calibrated Claim Formation in Open-Ended S",
+      "citee_title": "Robin: A multi-agent system for automating scientific discovery",
+      "entry": "ghareeb et al 2026 ghareeb chang mitchener yiu szostkiewicz vdovic kim hinks retchin he laurent zhang gallardo sellmyer weissman white and rodriques ghareeb2026multiagent ali essam ghareeb benjamin ch"
+    },
+    {
+      "citer": "arxiv:2606.00644",
+      "citee": "openalex:W4417287919",
+      "score": 93.5,
+      "citer_title": "ForeSci: Evaluating LLM Agents for Forward-Looking AI Research Judgmen",
+      "citee_title": "Robin: A multi-agent system for automating scientific discovery",
+      "entry": "article ghareeb2026multi title a multi agent system for automating scientific discovery author ghareeb ali essam and chang benjamin and mitchener ludovico and yiu angela and szostkiewicz caralyn j and"
+    },
+    {
+      "citer": "arxiv:2605.29468",
+      "citee": "openalex:W4417287919",
+      "score": 93.5,
+      "citer_title": "SciIntBench: Measuring LLM Compliance with Research Integrity Norms Un",
+      "citee_title": "Robin: A multi-agent system for automating scientific discovery",
+      "entry": "article ghareeb2026multi title a multi agent system for automating scientific discovery author ghareeb ali essam and chang benjamin and mitchener ludovico and yiu angela and szostkiewicz caralyn j and"
+    },
+    {
+      "citer": "arxiv:2505.24785v2",
+      "citee": "openalex:W4405599065",
+      "score": 91.3,
+      "citer_title": "EXP-Bench: Can AI Conduct AI Research Experiments?",
+      "citee_title": "SciAgents: Automating Scientific Discovery Through Bioinspired Multi\u2010A",
+      "entry": "sciagents a ghafarollahi and m j buehler sciagents automating scientific discovery through multi agent intelligent graph reasoning 2024"
+    }
+  ]
+}

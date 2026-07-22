@@ -146,6 +146,11 @@ def build(papers: list[Paper], reading: ReadResult, *, topic: str = "",
     for e in reading.local_edges:
         atlas.add_edge(e)
     atlas.link_citations()
+    if config.RESOLVE_CITATIONS:
+        # Opt-in second citation channel: resolve reference text into `cites`
+        # edges the referenced_works-only pass can't see. No-ops without .[resolve].
+        from . import citelinks
+        citelinks.resolve_and_link(atlas)
 
     if relate and len(reading.contributions) > 1:
         _relate_global(atlas, reading.contributions, k, model)

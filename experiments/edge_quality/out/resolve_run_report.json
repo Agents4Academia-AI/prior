@@ -1,0 +1,53 @@
+{
+  "seconds": 25467.6,
+  "papers": 152,
+  "non_arxiv": 50,
+  "distinct_references": 2838,
+  "references_resolved": 2473,
+  "baseline_referenced_works_edges": 50,
+  "resolved_edges_added": 449,
+  "resolved_edges_to_non_arxiv_nodes": 23,
+  "resolved_edges_not_in_citations_core": 16,
+  "non_arxiv_orphans_baseline": 22,
+  "non_arxiv_orphans_after": 13,
+  "non_arxiv_orphans_reconnected": 9,
+  "reconnectable_13_recovered_count": 9,
+  "reconnectable_13_recovered": [
+    "openalex:W4400448985",
+    "openalex:W4400734098",
+    "openalex:W4401042723",
+    "openalex:W4402683796",
+    "openalex:W4404782918",
+    "openalex:W4404783497",
+    "openalex:W4412889957",
+    "openalex:W7126046125",
+    "openalex:W7143351253"
+  ],
+  "isolated_9_touched_should_be_zero": [],
+  "reconnected_ids": [
+    "openalex:W4400448985",
+    "openalex:W4400734098",
+    "openalex:W4401042723",
+    "openalex:W4402683796",
+    "openalex:W4404782918",
+    "openalex:W4404783497",
+    "openalex:W4412889957",
+    "openalex:W7126046125",
+    "openalex:W7143351253"
+  ],
+  "still_orphaned_ids": [
+    "openalex:W4390587881",
+    "openalex:W4394769973",
+    "openalex:W4401336365",
+    "openalex:W4402580984",
+    "openalex:W4405599065",
+    "openalex:W4405954117",
+    "openalex:W4411120014",
+    "openalex:W4411120114",
+    "openalex:W7134059863",
+    "openalex:W7159637053",
+    "openalex:W7161113436",
+    "openalex:W7162773597",
+    "openalex:W7163647947"
+  ]
+}

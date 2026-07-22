@@ -29,6 +29,16 @@ web = ["fastapi>=0.110", "uvicorn[standard]>=0.27"]
 # Rich whole-paper Markdown renders (scripts/fullpaper.py): structure-aware PDF →
 # Markdown with figures. The arXiv-HTML path (math + figures) needs no extra deps.
 fullpaper = ["pymupdf>=1.24", "pymupdf4llm>=0.0.17"]
+# Reference resolution (edge_quality milestone 1): reuse citation_verification's
+# MultiSourceResolver to turn a raw bibliography reference into a canonical
+# DOI/arXiv/OpenAlex id. SHA-pinned so Prior's build is reproducible and CI-safe
+# (no sibling checkout). [sources] pulls `requests`, unlocking the OpenAlex/DBLP/
+# S2 grounding sources — the ones that reach non-arXiv OpenAlex ids. The pinned
+# package's own base deps (pydantic/rapidfuzz/…) install transitively; no SDK.
+#   pip install -e ".[resolve]"
+resolve = [
+    "citation-verifier[sources] @ git+https://github.com/Agents4Academia-AI/citation_verification@52c109c10701d685e28c417b283e740c6cd43773",
+]
 
 [project.scripts]
 prior = "prior.cli:main"
