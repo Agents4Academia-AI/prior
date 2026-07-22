@@ -21,6 +21,7 @@ data/fulltext/
 data/fullpaper/
 compare/
 data/atlas/*
+data/refresh/    # weekly-scan runtime state (watermarks, pending batches, version log)
 !data/raw/.gitkeep
 !data/atlas/.gitkeep
 # shared snapshot so collaborators can start without rebuilding (the demo atlas)

@@ -26,9 +26,13 @@ from .models import Contribution
 from .sources import arxiv, openalex
 
 
-def _have(paper_id: str) -> bool:
+def _have(paper) -> bool:
+    """In the graph already — under this source id OR as the same work from
+    another source/version (work_id = normalised-title hash)."""
     with graph.session() as s:
-        return s.run("MATCH (p:Paper {id:$id}) RETURN p LIMIT 1", id=paper_id).single() is not None
+        return s.run("MATCH (p:Paper) WHERE p.id = $id OR p.work_id = $w "
+                     "RETURN p LIMIT 1",
+                     id=paper.id, w=paper.work_id()).single() is not None
 
 
 def _discover_topic(topic: str, n: int) -> list:
@@ -119,7 +123,7 @@ def run(topics: list[str] | None = None, *, topic_defs: list[str] | None = None,
         seen = set()
         frontier = []
         for p in _discover(topics, topic_defs, per_topic, progress):
-            if p.id in seen or _have(p.id):
+            if p.id in seen or _have(p):
                 continue
             seen.add(p.id)
             frontier.append(p)

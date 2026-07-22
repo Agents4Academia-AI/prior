@@ -108,14 +108,25 @@ def _to_paper(w: dict) -> Paper:
 
 
 def search(query: str, *, max_papers: int = config.DEFAULT_MAX_PAPERS,
-           require_abstract: bool = True, exclude_reviews: bool = True) -> list[Paper]:
-    """Search works by relevance; keep primary research with usable abstracts."""
+           require_abstract: bool = True, exclude_reviews: bool = True,
+           from_date: str | None = None) -> list[Paper]:
+    """Search works by relevance; keep primary research with usable abstracts.
+    With `from_date` (YYYY-MM-DD), restrict to works published since then —
+    relevance rank buries recent papers under years of established work, so
+    freshness scans need the date window. Relevance sort still applies WITHIN
+    the window (date-desc there floods results with weak lexical matches)."""
     params = _params() | {
         "search": query,
         "per_page": min(max_papers * 3, 200),   # over-fetch: reviews get filtered
         "sort": "relevance_score:desc",
         "select": _SELECT,
     }
+    if from_date:
+        import datetime as _dt
+        # Cap at today: date-desc sort otherwise leads with far-future
+        # placeholder dates publishers assign to forthcoming works.
+        params["filter"] = (f"from_publication_date:{from_date},"
+                            f"to_publication_date:{_dt.date.today().isoformat()}")
     r = _get(API, params)
     r.raise_for_status()
     papers: list[Paper] = []

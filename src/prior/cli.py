@@ -85,6 +85,25 @@ def main(argv: list[str] | None = None) -> int:
     p_dmn.add_argument("--watch", action="store_true", help="loop forever")
     p_dmn.add_argument("--interval", type=int, default=300)
 
+    p_ref = sub.add_parser("refresh", help="keep the atlas fresh: scan → review → approve")
+    ref_sub = p_ref.add_subparsers(dest="ref_cmd", required=True)
+    r_scan = ref_sub.add_parser("scan", help="date-windowed search of watched topics → pending batch")
+    r_scan.add_argument("--topic", action="append", default=[], dest="topics", required=True,
+                        help="topic to scan (repeatable); new topics get a 30-day lookback")
+    r_scan.add_argument("--per-topic", type=int, default=25)
+    r_prop = ref_sub.add_parser("propose", help="manually queue specific arXiv papers")
+    r_prop.add_argument("arxiv_ids", nargs="+")
+    r_prop.add_argument("--topic", default="manual")
+    ref_sub.add_parser("pending", help="list papers awaiting review")
+    r_appr = ref_sub.add_parser("approve", help="ingest a reviewed batch; stamps a graph version")
+    r_appr.add_argument("batch_id")
+    r_appr.add_argument("--skip", action="append", type=int, default=[],
+                        help="index (from `pending`) to leave out (repeatable)")
+    r_appr.add_argument("--workers", type=int, default=4)
+    r_rb = ref_sub.add_parser("rollback", help="remove every paper added in a version")
+    r_rb.add_argument("version", type=int)
+    ref_sub.add_parser("log", help="show the graph version log")
+
     p_col = sub.add_parser("collection", help="manage named paper collections")
     col_sub = p_col.add_subparsers(dest="col_cmd", required=True)
     c_load = col_sub.add_parser("load", help="load a release bundle as a collection")
@@ -225,6 +244,23 @@ def main(argv: list[str] | None = None) -> int:
         daemon.run(args.topics, topic_defs=args.topic_defs, rounds=args.rounds,
                    per_topic=args.per_topic, workers=args.workers,
                    watch=args.watch, interval=args.interval)
+    elif args.cmd == "refresh":
+        from . import refresh
+        if args.ref_cmd == "scan":
+            refresh.scan(args.topics, per_topic=args.per_topic)
+        elif args.ref_cmd == "propose":
+            refresh.propose(args.arxiv_ids, topic=args.topic)
+        elif args.ref_cmd == "pending":
+            refresh.pending()
+        elif args.ref_cmd == "approve":
+            refresh.approve(args.batch_id, skip=args.skip, workers=args.workers)
+        elif args.ref_cmd == "rollback":
+            refresh.rollback(args.version)
+        elif args.ref_cmd == "log":
+            import json as _json
+            for e in refresh._load(refresh.VERSIONS, []):
+                print(f"  v{e['version']}  {e['date']}  {e['batch']}  "
+                      f"+{len(e['papers'])} papers  {_json.dumps(e['graph_after'])}")
     elif args.cmd == "collection":
         from . import collections as colmod
         if args.col_cmd == "load":

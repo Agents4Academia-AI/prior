@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import re
 from dataclasses import dataclass, field, asdict
 from typing import Optional
@@ -58,8 +59,19 @@ class Paper:
         t = " ".join(re.sub(r"[^a-z0-9]", " ", (self.title or "").lower()).split())
         return f"title:{t}" if len(t) >= 8 else self.id
 
+    def work_id(self) -> str:
+        """Stable source-independent identifier for the WORK (vs `id`, which names
+        one source's record of it). Hash of the normalised title, so the arXiv
+        preprint, its v2, and the published OpenAlex record all share one
+        work_id while keeping their own ids as provenance. Papers whose title
+        is too short to trust inherit their source id (no cross-source link)."""
+        k = self.key()
+        if not k.startswith("title:"):
+            return self.id
+        return "work:" + hashlib.sha1(k.encode()).hexdigest()[:16]
+
     def to_dict(self) -> dict:
-        return asdict(self)
+        return asdict(self) | {"work_id": self.work_id()}
 
     @classmethod
     def from_dict(cls, d: dict) -> "Paper":

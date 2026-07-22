@@ -66,6 +66,8 @@ def setup_schema() -> None:
                       OPTIONS {{indexConfig: {{
                         `vector.dimensions`: {dim},
                         `vector.similarity_function`: 'cosine' }}}}""")
+        # Source-independent work identity (same paper across arXiv/OpenAlex/versions).
+        s.run("CREATE INDEX paper_work IF NOT EXISTS FOR (p:Paper) ON (p.work_id)")
         # Human annotations (graph enrichment) — keyed by target, queried by index.
         s.run("CREATE CONSTRAINT annotation_id IF NOT EXISTS "
               "FOR (n:Annotation) REQUIRE n.id IS UNIQUE")
@@ -82,7 +84,7 @@ def upsert_paper(p: dict) -> None:
                  SET n += $props""",
               id=p["id"], props={k: p.get(k) for k in
                   ("title", "year", "venue", "doi", "url", "cited_by_count",
-                   "is_review", "abstract", "authors")})
+                   "is_review", "abstract", "authors", "work_id")})
 
 
 def upsert_contribution(k: dict, embedding: Optional[list[float]] = None) -> None:
@@ -143,7 +145,8 @@ def bulk_load(papers: list[dict], contributions: list[dict], claims: list[dict],
         s.run("UNWIND $rows AS r MERGE (p:Paper {id:r.id}) SET p += r.props",
               rows=[{"id": p["id"], "props": {**{k: p.get(k) for k in
                     ("title", "year", "venue", "doi", "url", "cited_by_count",
-                     "is_review", "abstract", "authors", "date", "date_precision")},
+                     "is_review", "abstract", "authors", "date", "date_precision",
+                     "work_id")},
                     "collection": collection}} for p in papers])
 
         s.run("""UNWIND $rows AS r
@@ -263,6 +266,13 @@ def clear_contrib_edges(collection: str) -> int:
     with session() as s:
         return s.run("""MATCH (:Contribution {collection:$c})-[r]->(:Contribution {collection:$c})
                         DELETE r RETURN count(r) AS n""", c=collection).single()["n"]
+
+
+def have_work(work_id: str) -> bool:
+    """Is this WORK already in the graph under any source id/version?"""
+    with session() as s:
+        return s.run("MATCH (p:Paper {work_id:$w}) RETURN p LIMIT 1",
+                     w=work_id).single() is not None
 
 
 def have_paper(paper_id: str) -> bool:

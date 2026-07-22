@@ -15,8 +15,31 @@ from .. import config, dates
 from ..models import Paper
 from ._filters import looks_like_review
 
-API = "http://export.arxiv.org/api/query"
+API = "https://export.arxiv.org/api/query"
 NS = {"atom": "http://www.w3.org/2005/Atom"}
+
+
+def _get(params: dict, *, tries: int = 4) -> requests.Response:
+    """arXiv throttles aggressively (429/503 even at modest rates); back off and
+    honour Retry-After so unattended refresh runs survive it."""
+    import time
+    err: Exception | None = None
+    for i in range(tries):
+        try:
+            r = requests.get(API, params=params,
+                             headers={"User-Agent": config.USER_AGENT},
+                             timeout=config.HTTP_TIMEOUT)
+        except requests.RequestException as e:   # timeouts/conn resets during outages
+            err, r = e, None
+        if r is not None and r.status_code not in (429, 503):
+            r.raise_for_status()
+            return r
+        wait = float(r.headers.get("Retry-After") or 0) if r is not None else 0
+        time.sleep(min(wait or 5 * (i + 1), 60))
+    if r is None:
+        raise err  # type: ignore[misc]
+    r.raise_for_status()
+    return r
 
 
 def _to_paper(entry: ET.Element) -> Paper:
@@ -63,10 +86,7 @@ def fetch_ids(arxiv_ids: list[str], *, batch: int = 50) -> dict[str, Paper]:
         chunk = clean[k:k + batch]
         params = {"id_list": ",".join(chunk), "max_results": len(chunk)}
         try:
-            r = requests.get(API, params=params,
-                             headers={"User-Agent": config.USER_AGENT},
-                             timeout=config.HTTP_TIMEOUT)
-            r.raise_for_status()
+            r = _get(params)
         except requests.RequestException:
             continue
         for e in ET.fromstring(r.text).findall("atom:entry", NS):
@@ -74,6 +94,38 @@ def fetch_ids(arxiv_ids: list[str], *, batch: int = 50) -> dict[str, Paper]:
             out[p.id] = p
         time.sleep(1.0)                          # be polite to arXiv
     return out
+
+
+def fetch_abs(arxiv_id: str) -> Paper | None:
+    """Fallback metadata fetch from the arxiv.org abs page — the export API
+    lags days behind new listings and has outages; the abs page is live the
+    moment a paper is announced. Abstract/title come from the page's citation_*
+    meta tags, so no fragile HTML parsing."""
+    aid = arxiv_id.split(":")[-1]
+    try:
+        r = requests.get(f"https://arxiv.org/abs/{aid}",
+                         headers={"User-Agent": config.USER_AGENT},
+                         timeout=config.HTTP_TIMEOUT)
+        r.raise_for_status()
+    except requests.RequestException:
+        return None
+    meta = dict(re.findall(
+        r'<meta name="citation_([a-z_]+)" content="([^"]*)"', r.text))
+    title = meta.get("title", "")
+    if not title:
+        return None
+    authors = [m for m in re.findall(
+        r'<meta name="citation_author" content="([^"]*)"', r.text)]
+    date = (meta.get("date") or meta.get("online_date") or "").replace("/", "-")
+    return Paper(
+        id=f"arxiv:{aid.split('v')[0]}", source="arxiv", title=title,
+        abstract=meta.get("abstract", ""), url=f"https://arxiv.org/abs/{aid}",
+        year=int(date[:4]) if date[:4].isdigit() else None, authors=authors,
+        pdf_url=meta.get("pdf_url", ""),
+        is_review=looks_like_review(title, ""),
+        date=date, date_precision="day" if date else "",
+        date_source="arxiv_abs" if date else "",
+    )
 
 
 def find_id_by_title(title: str) -> str | None:
@@ -104,16 +156,20 @@ def find_id_by_title(title: str) -> str | None:
 
 
 def search(query: str, *, max_papers: int = config.DEFAULT_MAX_PAPERS,
-           exclude_reviews: bool = True) -> list[Paper]:
+           exclude_reviews: bool = True, from_date: str | None = None) -> list[Paper]:
+    query_str = f"all:{query}"
+    if from_date:
+        # Date window (YYYY-MM-DD) for freshness scans. Relevance sort still
+        # applies WITHIN the window — date sort floods weak lexical matches.
+        start = from_date.replace("-", "") + "0000"
+        query_str = f"({query_str}) AND submittedDate:[{start} TO 209912312359]"
     params = {
-        "search_query": f"all:{query}",
+        "search_query": query_str,
         "start": 0,
         "max_results": max_papers * 2,   # over-fetch: reviews get filtered
         "sortBy": "relevance",
     }
-    r = requests.get(API, params=params, headers={"User-Agent": config.USER_AGENT},
-                     timeout=config.HTTP_TIMEOUT)
-    r.raise_for_status()
+    r = _get(params)
     root = ET.fromstring(r.text)
     papers = [_to_paper(e) for e in root.findall("atom:entry", NS)]
     if exclude_reviews:
