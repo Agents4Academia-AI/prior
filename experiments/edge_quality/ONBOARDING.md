@@ -3,17 +3,22 @@
 > **⚠️ Read this first — what is already done, and what your job is**
 >
 > 1. **The citation graph is already built.** `out/citations_core.json`
->    (711 intra-corpus edges) and `out/citation_contexts.json` (525 pairs) are
->    finished outputs. Do **not** re-run the mining scripts or rebuild the graph
->    with any other tool — treat those files as inputs.
+>    (661 deduped, directed intra-corpus edges: 383 bbl-only + 278 api; 680
+>    after the fuzzy-title batch landed via merge_citations.py) and
+>    `out/citation_contexts.json` (525 pairs) are finished outputs. Do **not**
+>    re-run the mining scripts or rebuild the graph with any other tool — treat
+>    those files as inputs. Counts in this doc can drift — the JSON's own
+>    `coverage.merged_edges` field is the source of truth:
+>    `python3 -c "import json; print(json.load(open('out/citations_core.json'))['coverage'])"`
 > 2. **Your project starts at the "YOUR PROJECT" section below.** It is to port
 >    pieces of Team 2's **RefWarden**
 >    ([`citation_verification`](https://github.com/Agents4Academia-AI/citation_verification))
 >    into Prior as a *verification* stage — not to run RefWarden standalone, and
 >    not to redo citation mining with it.
-> 3. If RefWarden's resolver finds citation edges the 711 don't have, that's a
->    known coverage gap (fuzzy-title resolution + PDF ingestion for the 9
->    non-arXiv papers) — report the diff, don't silently swap graphs. Note
+> 3. If RefWarden's resolver finds citation edges the core graph doesn't have,
+>    that's a known coverage gap (fuzzy-title resolution — confirmed: +19 real
+>    edges — plus PDF ingestion for the ~51 papers without arXiv LaTeX sources;
+>    96/152 yielded bbl/bib) — report the diff, don't silently swap graphs. Note
 >    RefWarden counts one row per **(claim, citation) site**; dedupe to directed
 >    (citer, citee) pairs and drop out-of-corpus citees before comparing counts.
 
@@ -41,7 +46,7 @@ experiments/edge_quality/
   │   fetch_arxiv_bbl.py           arXiv LaTeX sources → .bbl/.bib bibliographies
   │   scan_fulltext_citations.py   arXiv-id/title scan of cached fulltexts
   │   backfill_citations.py        OpenAlex + Semantic Scholar APIs
-  │   merge_citations.py           3-way union → out/citations_core.json (711 edges)
+  │   merge_citations.py           3-way union → out/citations_core.json (661 edges)
   │   extract_citation_contexts.py ±320-char windows around \cite{} → 525 pairs
   ├─ Relation labeling
   │   relate_decomposed.py         Arms B/C: ONE pair per LLM call
@@ -131,13 +136,20 @@ is the missing verifier, already built, already public.
 
 Suggested milestones (each independently shippable):
 
-1. **Port RefWarden's identifier resolution into Prior's ingestion** (DOI ↔
-   arXiv-id ↔ OpenAlex-id + fuzzy-title, + metadata validation). This is a
-   *code port*, not a graph rebuild — the payoff is a citation channel for the
-   9 non-arXiv papers (currently orphans) and normalized ids at ingest time.
-   Extra edges it recovers over `citations_core.json` get *added via
-   merge_citations.py* as a fourth source, with provenance, after the
-   dedupe/in-corpus filtering described in the box at the top.
+1. **Port RefWarden's reference resolution into `academia-core`, then wire
+   Prior to it.** Lift RefWarden's `grounding/` layer (`resolver.py` +
+   `paper_lookup.py`, optionally `url_validate.py`) into the org's shared
+   [`academia-core`](https://github.com/Agents4Academia-AI/academia-core)
+   library — it's already import-safe, LLM-free, and one-dep (rapidfuzz).
+   Credit Team 2 in the module docstring and commit. Scope discipline: the
+   grounding layer ONLY — verification stages and `CitationRecord` stay in
+   RefWarden. Then Prior consumes it twice: at ingestion (normalized ids +
+   a citation channel for the ~51 non-arXiv orphan papers) and as a fourth
+   mining source via `merge_citations.py` — extra edges over
+   `citations_core.json` are *added with provenance* after the
+   dedupe/in-corpus filtering described in the box at the top, never a graph
+   swap. (Later, optionally: a PR offering RefWarden the core version —
+   their call whether to take it.)
 2. **Verified edges** — run c-v-style support checks on Prior's relation edges:
    given the two contributions' verbatim quotes, does the evidence actually
    support the asserted relation? Each edge gains a verification stamp
@@ -179,7 +191,7 @@ c-v as an enricher — the shared-substrate idea from the org's library RFC
    (we cap at 2×450 chars); section-position of the citation (intro vs
    methods vs baselines — a strong type prior); citation *intent*
    classification as its own stage (scite-style supporting/contrasting/
-   mentioning) before relation labeling; coverage for the 9 non-arXiv papers
+   mentioning) before relation labeling; coverage for the ~51 non-arXiv papers
    (no LaTeX source — need another channel); and the two-layer design
    (citation edges as facts, semantic relations as assertions) which is
    sketched in the 2026-07-07 session notes but not built.
