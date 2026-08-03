@@ -1,0 +1,602 @@
+{
+ "arxiv:2602.15112v2->arxiv:2510.27598#1": {
+  "intent": "compares_contrasts",
+  "confidence": 0.85,
+  "justification": "Positions its single-GPU reproducible setup against the cluster-scale compute 'required in prior works'.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2511.10902->openalex:W4404350150#0": {
+  "intent": "compares_contrasts",
+  "confidence": 0.7,
+  "justification": "Target appears as a row in a feature-comparison table of prior systems.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2512.15567v2->openalex:W4402952666#0": {
+  "intent": "background",
+  "confidence": 0.8,
+  "justification": "Cited as an example that LLMs can assist human-in-the-loop scientific discovery, no reuse or contrast.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2510.21652v2->openalex:W4404573571#0": {
+  "intent": "background",
+  "confidence": 0.85,
+  "justification": "Listed as an example of specialized science-specific agents motivating the benchmark need.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2605.28655->arxiv:2511.02824v2#0": {
+  "intent": "background",
+  "confidence": 0.8,
+  "justification": "Cited to describe general agent capabilities before the paper's 'However' critique of the field.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4414837761->openalex:W4403324055#1": {
+  "intent": "background",
+  "confidence": 0.85,
+  "justification": "Cited as an instance of LLM agents assisting in data analysis, contextual framing.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2605.26081->arxiv:2506.11763#1": {
+  "intent": "uses_extends",
+  "confidence": 0.95,
+  "justification": "'We evaluate on DeepResearch Bench' \u2014 adopts the target benchmark and its RACE metrics.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2505.24785v2->arxiv:2504.01848v3#0": {
+  "intent": "uses_extends",
+  "confidence": 0.8,
+  "justification": "IterativeAgent from the target is run as an evaluated agent on the citing paper's benchmark.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2602.15112v2->openalex:W4403324055#1": {
+  "intent": "compares_contrasts",
+  "confidence": 0.7,
+  "justification": "Appears as a row in a benchmark comparison table against the citing paper's benchmark.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4402952811->openalex:W4402952666#0": {
+  "intent": "compares_contrasts",
+  "confidence": 0.75,
+  "justification": "'Different from all the above (and concurrent to AI Scientist)' explicitly distinguishes its own framework.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2504.01848v3->arxiv:2411.15114v2#1": {
+  "intent": "compares_contrasts",
+  "confidence": 0.95,
+  "justification": "Explicitly states PaperBench covers broader, longer-horizon tasks than RE-Bench.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2509.14778v2->arxiv:2505.24785v2#0": {
+  "intent": "uses_extends",
+  "confidence": 0.6,
+  "justification": "Marker attached to a dataset the citing paper selects and evaluates its system on.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2511.06309v2->openalex:W4416035220#0": {
+  "intent": "background",
+  "confidence": 0.85,
+  "justification": "Cited as an example of pipeline-based automated research methods in a related-work survey listing.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2411.15114v2->openalex:W4399597648#1": {
+  "intent": "background",
+  "confidence": 0.88,
+  "justification": "Listed among prior applications of LLMs to scientific domains ('virtual scientific discovery') as related work context.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4404355537->openalex:W4394647523#1": {
+  "intent": "compares_contrasts",
+  "confidence": 0.82,
+  "justification": "Explicit 'Our approach differs by...' positioning against the target's iterative prompting method.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4403795293->openalex:W4402345509#1": {
+  "intent": "uses_extends",
+  "confidence": 0.8,
+  "justification": "The citing paper reuses the LitQA question-construction/annotation protocol from the target ('see [CITED:TARGET]').",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4416026872->openalex:W4416043407#0": {
+  "intent": "compares_contrasts",
+  "confidence": 0.72,
+  "justification": "Contrasts the target's human-AI collaboration emphasis with the citing paper's end-to-end research-cycle focus ('instead of focusing on...').",
+  "model": "claude-opus-5"
+ },
+ "openalex:W7154716562->openalex:W4394647523#0": {
+  "intent": "background",
+  "confidence": 0.86,
+  "justification": "Cited as an instance of LLM-enabled hypothesis generation in a context/motivation list.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2507.02694->openalex:W4390784029#1": {
+  "intent": "uses_extends",
+  "confidence": 0.88,
+  "justification": "Adopts MARG's directional intersection operators for its own evaluation metrics ('We refer to MARG and define').",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2511.19399v3->arxiv:2506.11763#1": {
+  "intent": "uses_extends",
+  "confidence": 0.72,
+  "justification": "DeepResearchBench is used as one of the evaluation benchmarks for the citing paper's model.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2505.24785v2->openalex:W4399116274#0": {
+  "intent": "uses_extends",
+  "confidence": 0.6,
+  "justification": "The target appears as an entry/paper included in the citing paper's constructed dataset table.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4405035007->openalex:W4402952666#1": {
+  "intent": "uses_extends",
+  "confidence": 0.8,
+  "justification": "Builds its manipulation experiments upon the established reviewing pipelines from the target.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2510.24591v2->openalex:W4403707291#0": {
+  "intent": "compares_contrasts",
+  "confidence": 0.85,
+  "justification": "States a limitation of CORE-Bench ('does not evaluate agents on from-scratch implementation') relative to the citing benchmark.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4417070798->openalex:W4414827381#0": {
+  "intent": "uses_extends",
+  "confidence": 0.83,
+  "justification": "The AI Scientist v2 is one of the systems the citing paper evaluates under its experimental design.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2511.19399v3->arxiv:2506.11763#0": {
+  "intent": "uses_extends",
+  "confidence": 0.93,
+  "justification": "Citing paper adopts the benchmark's judge/evidence-snippet evaluation protocol 'as detailed in' the target.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2603.08127v1->openalex:W7126046125#1": {
+  "intent": "background",
+  "confidence": 0.92,
+  "justification": "Listed neutrally as an example of multi-agent iterative collaboration systems in related work.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2504.01848v3->openalex:W4403707291#1": {
+  "intent": "compares_contrasts",
+  "confidence": 0.95,
+  "justification": "'In contrast, PaperBench...' explicitly positions its own benchmark against CORE-Bench.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2603.08127v1->openalex:W4416035220#1": {
+  "intent": "background",
+  "confidence": 0.88,
+  "justification": "Cited as part of a general trend toward end-to-end scientific discovery agents, described neutrally.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4416540539->openalex:W4394647523#0": {
+  "intent": "uses_extends",
+  "confidence": 0.95,
+  "justification": "Adopts the target's official code release, prompts, and reported hyperparameters.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2507.18901v1->openalex:W4403707291#1": {
+  "intent": "compares_contrasts",
+  "confidence": 0.94,
+  "justification": "'Our work goes beyond ... as seen in existing work like CORE-Bench' distinguishes its scope from the target.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4415036172->arxiv:2504.01848v3#1": {
+  "intent": "uses_extends",
+  "confidence": 0.9,
+  "justification": "Evaluates its own system on PaperBench Code-Dev, adapting its pipeline to that benchmark's setup.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2606.11447->arxiv:2504.01848v3#0": {
+  "intent": "background",
+  "confidence": 0.7,
+  "justification": "Reports PaperBench's agent vs human scores as context on prior reproducibility performance.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2606.11447->arxiv:2504.01848v3#1": {
+  "intent": "compares_contrasts",
+  "confidence": 0.85,
+  "justification": "States its own reproduction rates 'considerably exceed those reported' on the target benchmark.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4414827381->openalex:W4407760093#1": {
+  "intent": "background",
+  "confidence": 0.75,
+  "justification": "AIDE described neutrally as a recent advance in LLM code generation with tree search.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2506.22026->openalex:W4403586302#0": {
+  "intent": "uses_extends",
+  "confidence": 0.94,
+  "justification": "'we follow [TARGET] and employ a query-based retrieval method' adopts the target's procedure.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4402952811->openalex:W4404783497#0": {
+  "intent": "background",
+  "confidence": 0.85,
+  "justification": "Listed neutrally among related systems incorporating expert feedback in related work.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4402952666->openalex:W4411120082#1": {
+  "intent": "compares_contrasts",
+  "confidence": 0.78,
+  "justification": "Cited as proposing ideas 'but do not execute them,' positioning the citing paper's fuller system against it.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2511.02824v2->openalex:W4414827381#0": {
+  "intent": "uses_extends",
+  "confidence": 0.72,
+  "justification": "Cited in methods as the resource used for cell-type annotation alignment.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4416026872->arxiv:2503.08569#0": {
+  "intent": "uses_extends",
+  "confidence": 0.9,
+  "justification": "DeepReviewer is employed as the automated evaluation tool for the citing paper's outputs.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4403795293->openalex:W4389761608#0": {
+  "intent": "uses_extends",
+  "confidence": 0.85,
+  "justification": "'Inspired by PaperQA' \u2014 PaperQA2 builds directly on the target system.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4404355537->openalex:W4394647523#0": {
+  "intent": "background",
+  "confidence": 0.85,
+  "justification": "Cited as general motivating evidence that LLMs can generate hypotheses from literature.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2505.24785v2->openalex:W4402952666#1": {
+  "intent": "compares_contrasts",
+  "confidence": 0.88,
+  "justification": "'However, their solution has limited...' critiques the target's limitations relative to the citing work.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2601.21654v3->arxiv:2506.11763#0": {
+  "intent": "compares_contrasts",
+  "confidence": 0.75,
+  "justification": "Cited as holistic report-scoring evaluation whose 'principal limitation' the citing paper identifies.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4407806895->openalex:W4399597648#0": {
+  "intent": "background",
+  "confidence": 0.72,
+  "justification": "Cited as part of the broader community effort context motivating the work.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4402952811->arxiv:2503.08569#1": {
+  "intent": "background",
+  "confidence": 0.82,
+  "justification": "Listed neutrally among related human-in-the-loop LLM research systems.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2603.20884v3->arxiv:2503.08569#0": {
+  "intent": "compares_contrasts",
+  "confidence": 0.7,
+  "justification": "Included as an AI reviewer baseline system tested against in the evaluation.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2511.02824v2->openalex:W4403795293#1": {
+  "intent": "uses_extends",
+  "confidence": 0.9,
+  "justification": "The literature search agent is a component instantiated within Kosmos.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2602.15112v2->openalex:W4416540539#0": {
+  "intent": "compares_contrasts",
+  "confidence": 0.72,
+  "justification": "Listed as a benchmark row in a comparison table of existing benchmarks.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2503.08569->openalex:W4402952666#1": {
+  "intent": "background",
+  "confidence": 0.82,
+  "justification": "AI-Scientist listed as an exemplar of one prior approach line, described neutrally.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2603.28589v1->arxiv:2505.18705v1#1": {
+  "intent": "uses_extends",
+  "confidence": 0.82,
+  "justification": "'Inspired by [CITED:TARGET], the Surveyor then performs structured synthesis' \u2014 method adopted.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2511.02824v2->openalex:W4402952666#0": {
+  "intent": "compares_contrasts",
+  "confidence": 0.8,
+  "justification": "'but remains limited to machine learning research' states a limitation positioning the citing system against it.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4402952811->arxiv:2503.08569#0": {
+  "intent": "background",
+  "confidence": 0.85,
+  "justification": "Listed in related-work enumeration of systems incorporating expert feedback, neutrally.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W7131078049->openalex:W4411932316#0": {
+  "intent": "background",
+  "confidence": 0.78,
+  "justification": "Cited to support a general introductory statement about LLM agents orchestrating tool-based workflows.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4417287919->openalex:W4403795293#0": {
+  "intent": "uses_extends",
+  "confidence": 0.85,
+  "justification": "Robin 'utilizes' the cited literature-search agents (Crow/Falcon) as components.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4414827381->arxiv:2411.15114v2#0": {
+  "intent": "uses_extends",
+  "confidence": 0.72,
+  "justification": "Their tree-search approach is 'inspired by' the cited work and incorporated into all stages.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2605.28655->openalex:W4416043407#0": {
+  "intent": "background",
+  "confidence": 0.8,
+  "justification": "Cited to support a general statement about agent capabilities in the motivation section.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2511.19399v3->arxiv:2504.21776#1": {
+  "intent": "uses_extends",
+  "confidence": 0.88,
+  "justification": "'Following prior work [CITED:TARGET], we use an LLM judge' \u2014 adopts its evaluation protocol.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4402952811->openalex:W4402952666#1": {
+  "intent": "background",
+  "confidence": 0.7,
+  "justification": "Described as concurrent work with a neutral summary of its framework.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2602.15112v2->arxiv:2505.24785v2#0": {
+  "intent": "compares_contrasts",
+  "confidence": 0.65,
+  "justification": "Appears as a row in a benchmark comparison table contrasting features against the citing work.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2602.15112v2->openalex:W4403324055#0": {
+  "intent": "compares_contrasts",
+  "confidence": 0.65,
+  "justification": "Listed as a row in the comparison table of benchmarks with feature-by-feature contrast.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2510.21652v2->openalex:W4403707291#1": {
+  "intent": "uses_extends",
+  "confidence": 0.78,
+  "justification": "The suite incorporates CORE-Bench-Hard as one of its evals, noting it omits GPU-requiring tasks from the original.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4402345509->openalex:W4389761608#1": {
+  "intent": "uses_extends",
+  "confidence": 0.62,
+  "justification": "'We have previously shown ... on a smaller subset of LitQA2' builds directly on the target's LitQA benchmark and findings.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2510.27598->arxiv:2411.15114v2#0": {
+  "intent": "compares_contrasts",
+  "confidence": 0.72,
+  "justification": "RE-Bench appears as a row in a feature-comparison table positioning the citing benchmark against prior ones.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4416540539->arxiv:2410.17309v3#0": {
+  "intent": "uses_extends",
+  "confidence": 0.88,
+  "justification": "'We adopt the method design from [TARGET]' with its default hyperparameters and prompts.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2605.28655->openalex:W4411005431#0": {
+  "intent": "compares_contrasts",
+  "confidence": 0.62,
+  "justification": "Biomni is rerun as a baseline under a unified compute setting for head-to-head comparison.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2505.18705v1->openalex:W4402952666#1": {
+  "intent": "background",
+  "confidence": 0.85,
+  "justification": "Related-work description of AI Scientist as the first automated discovery system, with no reuse or contrast.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2511.19399v3->arxiv:2510.21652v2#0": {
+  "intent": "uses_extends",
+  "confidence": 0.92,
+  "justification": "'We use the official code ... to evaluate our method and the baselines' following the target's judging protocol.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4404350150->openalex:W4399555023#0": {
+  "intent": "uses_extends",
+  "confidence": 0.6,
+  "justification": "'We implemented SafetyLock [TARGET] before releasing open-source weights' indicates applying the cited method.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4416540539->arxiv:2410.17309v3#1": {
+  "intent": "uses_extends",
+  "confidence": 0.9,
+  "justification": "'We adopt the exact implementations ... in their official code release' and reported hyperparameters.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2507.02694->openalex:W4403586302#0": {
+  "intent": "background",
+  "confidence": 0.88,
+  "justification": "Cited in a list of example LLM scientific capabilities ('improving idea generation').",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4407806895->openalex:W4403324055#0": {
+  "intent": "compares_contrasts",
+  "confidence": 0.55,
+  "justification": "Positions its own script-based evaluation design relative to the target ('also use ... whereas MLE-Bench').",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4416540539->openalex:W4399597648#1": {
+  "intent": "background",
+  "confidence": 0.85,
+  "justification": "Neutral listing among other related benchmarks describing what it assesses.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2602.15112v2->arxiv:2504.09702v3#1": {
+  "intent": "background",
+  "confidence": 0.8,
+  "justification": "Cited as an example of prior small benchmarks justifying design choice, without reuse or direct comparison.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4414587939->openalex:W4416034681#0": {
+  "intent": "compares_contrasts",
+  "confidence": 0.72,
+  "justification": "States Chain-of-Ideas 'stops short of enabling end-to-end execution', a limitation framing the citing work's gap.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2510.27598->openalex:W4403324055#1": {
+  "intent": "background",
+  "confidence": 0.75,
+  "justification": "Cited to motivate the question of end-to-end research workflows and evaluation.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W7154716562->openalex:W4411005431#1": {
+  "intent": "compares_contrasts",
+  "confidence": 0.88,
+  "justification": "Biomni is one of the systems benchmarked against CoDaS in a blinded expert evaluation.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2601.22638v2->openalex:W4404783497#1": {
+  "intent": "uses_extends",
+  "confidence": 0.9,
+  "justification": "Merges AgentReview's evaluation set into their ScholarEval dataset.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2603.28589v1->openalex:W4416043407#0": {
+  "intent": "background",
+  "confidence": 0.72,
+  "justification": "Neutral description of AI co-scientist among related frameworks in related work.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2511.06309v2->openalex:W4415108068#1": {
+  "intent": "compares_contrasts",
+  "confidence": 0.87,
+  "justification": "AlphaEvolve's circle-packing numbers listed as the prior best against the citing system's results.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4390784029->openalex:W4400734098#0": {
+  "intent": "compares_contrasts",
+  "confidence": 0.92,
+  "justification": "Reports the target method produced only 0.3 good comments versus their method's 3.7.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2606.11851->openalex:W4411005431#0": {
+  "intent": "compares_contrasts",
+  "confidence": 0.85,
+  "justification": "Biomni is described as a baseline in the results table against the authors' agent.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4417070798->openalex:W4416035220#0": {
+  "intent": "uses_extends",
+  "confidence": 0.6,
+  "justification": "Agent Laboratory is the system they run and audit under their experimental design.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2507.16280->arxiv:2504.01848v3#0": {
+  "intent": "compares_contrasts",
+  "confidence": 0.6,
+  "justification": "Cited amid the claim that existing frameworks fail to capture insight generation, motivating their new benchmark.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2605.29468->openalex:W4403324055#0": {
+  "intent": "compares_contrasts",
+  "confidence": 0.78,
+  "justification": "Says such benchmarks focus on task performance rather than research-integrity constraints, distinguishing the citing work.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4414587939->openalex:W4414827381#1": {
+  "intent": "background",
+  "confidence": 0.85,
+  "justification": "Cited as 'recent works have shown promising results' motivating the gap.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4402952811->arxiv:2505.18705v1#0": {
+  "intent": "background",
+  "confidence": 0.86,
+  "justification": "Neutral listing of later works following a similar staged design.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2510.24591v2->openalex:W4403324055#0": {
+  "intent": "compares_contrasts",
+  "confidence": 0.6,
+  "justification": "Listed among benchmarks whose scope ReplicationBench explicitly 'differs' from (shorter horizon).",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4414587939->openalex:W4414827381#0": {
+  "intent": "compares_contrasts",
+  "confidence": 0.93,
+  "justification": "Explicitly evaluates AI Scientist V2 and compares its performance with their MLR-Agent.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4403006832->openalex:W4400734098#0": {
+  "intent": "background",
+  "confidence": 0.87,
+  "justification": "Cited as previous work on LLM capabilities to review academic papers.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2602.15112v2->arxiv:2411.15114v2#0": {
+  "intent": "compares_contrasts",
+  "confidence": 0.62,
+  "justification": "Framed as an existing evaluation covering only a fragment with 'little headroom', positioning the new benchmark.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2601.22638v2->arxiv:2503.08569#1": {
+  "intent": "uses_extends",
+  "confidence": 0.92,
+  "justification": "Merges DeepReview-Bench's evaluation set into their own ScholarEval dataset.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2508.10308->openalex:W4402683796#1": {
+  "intent": "background",
+  "confidence": 0.83,
+  "justification": "Descriptive related-work mention of DeepReviewer's SFT long-CoT training.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4403795293->openalex:W4389761608#1": {
+  "intent": "uses_extends",
+  "confidence": 0.94,
+  "justification": "Directly reuses PaperQA's PromptCollection object and tooling in their configuration.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2507.02004v1->openalex:W4411005431#1": {
+  "intent": "compares_contrasts",
+  "confidence": 0.93,
+  "justification": "Chosen as a domain-specific baseline for direct comparison with STELLA.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4417070798->openalex:W4417287919#1": {
+  "intent": "background",
+  "confidence": 0.8,
+  "justification": "Neutral survey-style description of Robin's different research target versus other prior systems.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4416026872->arxiv:2505.18705v1#1": {
+  "intent": "compares_contrasts",
+  "confidence": 0.87,
+  "justification": "States 'our work differs from prior studies' in key aspects.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2507.02004v1->openalex:W4402345509#0": {
+  "intent": "uses_extends",
+  "confidence": 0.8,
+  "justification": "STELLA is evaluated on the target's biomedical benchmark suite, reusing it as evaluation resource.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2508.10308->openalex:W4404782918#1": {
+  "intent": "background",
+  "confidence": 0.75,
+  "justification": "Cited in a related-work rundown of prior LLM reviewers, described neutrally before a general 'challenges remain' remark.",
+  "model": "claude-opus-5"
+ },
+ "openalex:W4403345771->openalex:W4399116274#0": {
+  "intent": "compares_contrasts",
+  "confidence": 0.82,
+  "justification": "Critiques the target's Turker-based evaluation as unable to lead to novel discovery, contrasting with the citing paper's rediscovery result.",
+  "model": "claude-opus-5"
+ },
+ "arxiv:2511.10902->arxiv:2506.07642#1": {
+  "intent": "compares_contrasts",
+  "confidence": 0.78,
+  "justification": "Cites the target's acknowledged lack of multimodal input as a limitation its own multimodal system bridges.",
+  "model": "claude-opus-5"
+ }
+}

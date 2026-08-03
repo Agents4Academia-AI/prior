@@ -1,0 +1,1459 @@
+{
+ "__done__openalex:W4402952666": {
+  "in_s2": false
+ },
+ "__done__openalex:W4414827381": {
+  "in_s2": false
+ },
+ "openalex:W4416026872->arxiv:2511.02824v2": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Kosmos: An AI Scientist for Autonomous Discovery"
+ },
+ "openalex:W4416026872->arxiv:2510.26887v1": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The Denario project: Deep knowledge AI agents for scientific discovery"
+ },
+ "openalex:W4416026872->openalex:W4417070798": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The More You Automate, the Less You See: Hidden Pitfalls of AI Scientist Systems"
+ },
+ "openalex:W4416026872->openalex:W4415108068": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "AlphaEvolve: A coding agent for scientific and algorithmic discovery"
+ },
+ "openalex:W4416026872->arxiv:2505.18705v1": {
+  "s2_intents": [],
+  "isInfluential": true,
+  "s2_title": "AI-Researcher: Autonomous Scientific Innovation"
+ },
+ "openalex:W4416026872->openalex:W4414827381": {
+  "s2_intents": [],
+  "isInfluential": true,
+  "s2_title": "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search"
+ },
+ "openalex:W4416026872->arxiv:2504.01848v3": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "PaperBench: Evaluating AI's Ability to Replicate AI Research"
+ },
+ "openalex:W4416026872->arxiv:2503.08569": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "DeepReview: Improving LLM-based Paper Review with Human-like Deep Thinking Process"
+ },
+ "openalex:W4416026872->openalex:W4416043407": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Accelerating scientific discovery with Co-Scientist"
+ },
+ "openalex:W4416026872->openalex:W4404350150": {
+  "s2_intents": [],
+  "isInfluential": true,
+  "s2_title": "CycleResearcher: Improving Automated Research via Automated Review"
+ },
+ "openalex:W4416026872->openalex:W4403707291": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "CORE-Bench: Fostering the Credibility of Published Research Through a Computational Reproducibility Agent Benchmark"
+ },
+ "openalex:W4416026872->openalex:W4403586302": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers"
+ },
+ "openalex:W4416026872->openalex:W4402952666": {
+  "s2_intents": [],
+  "isInfluential": true,
+  "s2_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery"
+ },
+ "__done__openalex:W4416026872": {
+  "in_s2": true
+ },
+ "arxiv:2410.17309v3->openalex:W4403586302": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers"
+ },
+ "arxiv:2410.17309v3->openalex:W4402952811": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "MLR-Copilot: Autonomous Machine Learning Research based on Large Language Models Agents"
+ },
+ "arxiv:2410.17309v3->openalex:W4402952666": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery"
+ },
+ "arxiv:2410.17309v3->openalex:W4399597648": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "DISCOVERYWORLD: A Virtual Environment for Developing and Evaluating Automated Scientific Discovery Agents"
+ },
+ "__done__arxiv:2410.17309v3": {
+  "in_s2": true
+ },
+ "arxiv:2604.11543v1->arxiv:2506.22026": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Literature-Grounded Novelty Assessment of Scientific Ideas"
+ },
+ "arxiv:2604.11543v1->openalex:W4404350150": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "CycleResearcher: Improving Automated Research via Automated Review"
+ },
+ "arxiv:2604.11543v1->openalex:W4412889809": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Many Heads Are Better Than One: Improved Scientific Idea Generation by A LLM-Based Multi-Agent System"
+ },
+ "arxiv:2604.11543v1->openalex:W4390784029": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "MARG: Multi-Agent Review Generation for Scientific Papers"
+ },
+ "__done__arxiv:2604.11543v1": {
+  "in_s2": true
+ },
+ "__done__openalex:W4389761608": {
+  "in_s2": true
+ },
+ "__done__arxiv:2502.12510v1": {
+  "in_s2": false
+ },
+ "openalex:W4403795293->openalex:W4402345509": {
+  "s2_intents": [
+   "background"
+  ],
+  "isInfluential": false,
+  "s2_title": "LAB-Bench: Measuring Capabilities of Language Models for Biology Research"
+ },
+ "openalex:W4403795293->openalex:W4389761608": {
+  "s2_intents": [
+   "methodology"
+  ],
+  "isInfluential": false,
+  "s2_title": "PaperQA: Retrieval-Augmented Generative Agent for Scientific Research"
+ },
+ "__done__openalex:W4403795293": {
+  "in_s2": true
+ },
+ "arxiv:2603.20884v3->arxiv:2511.10902": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Multimodal Peer Review Simulation with Actionable To-Do Recommendations for Community-Aware Manuscript Revisions"
+ },
+ "arxiv:2603.20884v3->openalex:W4415238296": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "MMReview: A Multidisciplinary and Multimodal Benchmark for LLM-Based Peer Review Automation"
+ },
+ "arxiv:2603.20884v3->arxiv:2508.10308": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "ReviewRL: Towards Automated Scientific Review with RL"
+ },
+ "arxiv:2603.20884v3->arxiv:2506.11763": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "DeepResearch Bench: A Comprehensive Benchmark for Deep Research Agents"
+ },
+ "arxiv:2603.20884v3->arxiv:2504.21776": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "WebThinker: Empowering Large Reasoning Models with Deep Research Capability"
+ },
+ "arxiv:2603.20884v3->arxiv:2503.08569": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "DeepReview: Improving LLM-based Paper Review with Human-like Deep Thinking Process"
+ },
+ "arxiv:2603.20884v3->openalex:W4404350150": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "CycleResearcher: Improving Automated Research via Automated Review"
+ },
+ "arxiv:2603.20884v3->openalex:W4399555023": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Peer Review as A Multi-Turn and Long-Context Dialogue with Role-Based Interactions"
+ },
+ "__done__arxiv:2603.20884v3": {
+  "in_s2": true
+ },
+ "__done__openalex:W4403586302": {
+  "in_s2": false
+ },
+ "openalex:W4417070798->openalex:W4417287919": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Robin: A multi-agent system for automating scientific discovery"
+ },
+ "openalex:W4417070798->openalex:W4416035220": {
+  "s2_intents": [],
+  "isInfluential": true,
+  "s2_title": "Agent Laboratory: Using LLM Agents as Research Assistants"
+ },
+ "openalex:W4417070798->openalex:W4390784029": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "MARG: Multi-Agent Review Generation for Scientific Papers"
+ },
+ "__done__openalex:W4417070798": {
+  "in_s2": true
+ },
+ "openalex:W4403006832->openalex:W4402952666": {
+  "s2_intents": [
+   "background"
+  ],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery"
+ },
+ "openalex:W4403006832->openalex:W4399555023": {
+  "s2_intents": [
+   "background"
+  ],
+  "isInfluential": false,
+  "s2_title": "Peer Review as A Multi-Turn and Long-Context Dialogue with Role-Based Interactions"
+ },
+ "openalex:W4403006832->openalex:W4384261641": {
+  "s2_intents": [
+   "background"
+  ],
+  "isInfluential": false,
+  "s2_title": "GPT4 is Slightly Helpful for Peer-Review Assistance: A Pilot Study"
+ },
+ "__done__openalex:W4403006832": {
+  "in_s2": true
+ },
+ "openalex:W4407806895->openalex:W4403324055": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "ScienceAgentBench: Toward Rigorous Assessment of Language Agents for Data-Driven Scientific Discovery"
+ },
+ "openalex:W4407806895->openalex:W4403586302": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers"
+ },
+ "openalex:W4407806895->openalex:W4402952666": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery"
+ },
+ "openalex:W4407806895->openalex:W4399597648": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "DISCOVERYWORLD: A Virtual Environment for Developing and Evaluating Automated Scientific Discovery Agents"
+ },
+ "__done__openalex:W4407806895": {
+  "in_s2": true
+ },
+ "__done__openalex:W4407632372": {
+  "in_s2": false
+ },
+ "openalex:W4415036172->arxiv:2504.01848v3": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "PaperBench: Evaluating AI's Ability to Replicate AI Research"
+ },
+ "openalex:W4415036172->openalex:W4416035220": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Agent Laboratory: Using LLM Agents as Research Assistants"
+ },
+ "openalex:W4415036172->openalex:W4404350150": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "CycleResearcher: Improving Automated Research via Automated Review"
+ },
+ "openalex:W4415036172->openalex:W4403707291": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "CORE-Bench: Fostering the Credibility of Published Research Through a Computational Reproducibility Agent Benchmark"
+ },
+ "openalex:W4415036172->openalex:W4403586302": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers"
+ },
+ "__done__openalex:W4415036172": {
+  "in_s2": true
+ },
+ "__done__openalex:W4403324055": {
+  "in_s2": false
+ },
+ "openalex:W4414837761->openalex:W4416035220": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Agent Laboratory: Using LLM Agents as Research Assistants"
+ },
+ "openalex:W4414837761->openalex:W4403324055": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "ScienceAgentBench: Toward Rigorous Assessment of Language Agents for Data-Driven Scientific Discovery"
+ },
+ "openalex:W4414837761->openalex:W4403006832": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "AI-Driven Review Systems: Evaluating LLMs in Scalable and Bias-Aware Academic Reviews"
+ },
+ "openalex:W4414837761->openalex:W4402952666": {
+  "s2_intents": [],
+  "isInfluential": true,
+  "s2_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery"
+ },
+ "openalex:W4414837761->openalex:W4394647523": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Hypothesis Generation with Large Language Models"
+ },
+ "__done__openalex:W4414837761": {
+  "in_s2": true
+ },
+ "__done__openalex:W4404573571": {
+  "in_s2": false
+ },
+ "openalex:W4414587939->openalex:W4414827381": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search"
+ },
+ "openalex:W4414587939->openalex:W4416035220": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Agent Laboratory: Using LLM Agents as Research Assistants"
+ },
+ "openalex:W4414587939->openalex:W4405561462": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "OpenReviewer: A Specialized Large Language Model for Generating Critical Scientific Paper Reviews"
+ },
+ "openalex:W4414587939->arxiv:2411.15114v2": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "RE-Bench: Evaluating frontier AI R&D capabilities of language model agents against human experts"
+ },
+ "openalex:W4414587939->openalex:W4404350150": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "CycleResearcher: Improving Automated Research via Automated Review"
+ },
+ "openalex:W4414587939->openalex:W4402952666": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery"
+ },
+ "__done__openalex:W4414587939": {
+  "in_s2": true
+ },
+ "openalex:W4403707291->openalex:W4402952666": {
+  "s2_intents": [],
+  "isInfluential": true,
+  "s2_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery"
+ },
+ "__done__openalex:W4403707291": {
+  "in_s2": true
+ },
+ "openalex:W4404350150->openalex:W4403586302": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers"
+ },
+ "openalex:W4404350150->openalex:W4402952811": {
+  "s2_intents": [
+   "background"
+  ],
+  "isInfluential": false,
+  "s2_title": "MLR-Copilot: Autonomous Machine Learning Research based on Large Language Models Agents"
+ },
+ "openalex:W4404350150->openalex:W4403006832": {
+  "s2_intents": [
+   "methodology"
+  ],
+  "isInfluential": false,
+  "s2_title": "AI-Driven Review Systems: Evaluating LLMs in Scalable and Bias-Aware Academic Reviews"
+ },
+ "openalex:W4404350150->openalex:W4402952666": {
+  "s2_intents": [],
+  "isInfluential": true,
+  "s2_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery"
+ },
+ "openalex:W4404350150->openalex:W4390784029": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "MARG: Multi-Agent Review Generation for Scientific Papers"
+ },
+ "openalex:W4404350150->openalex:W4384261641": {
+  "s2_intents": [
+   "background"
+  ],
+  "isInfluential": false,
+  "s2_title": "GPT4 is Slightly Helpful for Peer-Review Assistance: A Pilot Study"
+ },
+ "__done__openalex:W4404350150": {
+  "in_s2": true
+ },
+ "arxiv:2504.01848v3->arxiv:2411.15114v2": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "RE-Bench: Evaluating frontier AI R&D capabilities of language model agents against human experts"
+ },
+ "arxiv:2504.01848v3->openalex:W4403707291": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "CORE-Bench: Fostering the Credibility of Published Research Through a Computational Reproducibility Agent Benchmark"
+ },
+ "arxiv:2504.01848v3->openalex:W4403586302": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers"
+ },
+ "arxiv:2504.01848v3->openalex:W4399597648": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "DISCOVERYWORLD: A Virtual Environment for Developing and Evaluating Automated Scientific Discovery Agents"
+ },
+ "__done__arxiv:2504.01848v3": {
+  "in_s2": true
+ },
+ "arxiv:2604.04074v3->openalex:W4415036172": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "AutoReproduce: Automatic AI Experiment Reproduction with Paper Lineage"
+ },
+ "arxiv:2604.04074v3->openalex:W4404350150": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "CycleResearcher: Improving Automated Research via Automated Review"
+ },
+ "arxiv:2604.04074v3->openalex:W4402952666": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery"
+ },
+ "arxiv:2604.04074v3->openalex:W4389761608": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "PaperQA: Retrieval-Augmented Generative Agent for Scientific Research"
+ },
+ "__done__arxiv:2604.04074v3": {
+  "in_s2": true
+ },
+ "__done__openalex:W4405035007": {
+  "in_s2": false
+ },
+ "arxiv:2507.18901v1->openalex:W4403707291": {
+  "s2_intents": [],
+  "isInfluential": true,
+  "s2_title": "CORE-Bench: Fostering the Credibility of Published Research Through a Computational Reproducibility Agent Benchmark"
+ },
+ "__done__arxiv:2507.18901v1": {
+  "in_s2": true
+ },
+ "arxiv:2505.18705v1->openalex:W4414827381": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search"
+ },
+ "arxiv:2505.18705v1->openalex:W4416043407": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Accelerating scientific discovery with Co-Scientist"
+ },
+ "arxiv:2505.18705v1->openalex:W4416035220": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Agent Laboratory: Using LLM Agents as Research Assistants"
+ },
+ "arxiv:2505.18705v1->openalex:W4404350150": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "CycleResearcher: Improving Automated Research via Automated Review"
+ },
+ "arxiv:2505.18705v1->openalex:W4403586302": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers"
+ },
+ "arxiv:2505.18705v1->openalex:W4402952666": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery"
+ },
+ "__done__arxiv:2505.18705v1": {
+  "in_s2": true
+ },
+ "__done__arxiv:2511.06309v2": {
+  "in_s2": false
+ },
+ "arxiv:2510.24591v2->openalex:W4414827381": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search"
+ },
+ "arxiv:2510.24591v2->arxiv:2504.01848v3": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "PaperBench: Evaluating AI's Ability to Replicate AI Research"
+ },
+ "arxiv:2510.24591v2->arxiv:2411.15114v2": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "RE-Bench: Evaluating frontier AI R&D capabilities of language model agents against human experts"
+ },
+ "arxiv:2510.24591v2->openalex:W4412889809": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Many Heads Are Better Than One: Improved Scientific Idea Generation by A LLM-Based Multi-Agent System"
+ },
+ "arxiv:2510.24591v2->openalex:W4403707291": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "CORE-Bench: Fostering the Credibility of Published Research Through a Computational Reproducibility Agent Benchmark"
+ },
+ "arxiv:2510.24591v2->openalex:W4402952666": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery"
+ },
+ "arxiv:2510.24591v2->openalex:W4402345509": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "LAB-Bench: Measuring Capabilities of Language Models for Biology Research"
+ },
+ "__done__arxiv:2510.24591v2": {
+  "in_s2": true
+ },
+ "arxiv:2505.24785v2->arxiv:2504.01848v3": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "PaperBench: Evaluating AI's Ability to Replicate AI Research"
+ },
+ "arxiv:2505.24785v2->openalex:W4416035220": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Agent Laboratory: Using LLM Agents as Research Assistants"
+ },
+ "arxiv:2505.24785v2->openalex:W4402952811": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "MLR-Copilot: Autonomous Machine Learning Research based on Large Language Models Agents"
+ },
+ "arxiv:2505.24785v2->openalex:W4402952666": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery"
+ },
+ "arxiv:2505.24785v2->openalex:W4402345509": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "LAB-Bench: Measuring Capabilities of Language Models for Biology Research"
+ },
+ "arxiv:2505.24785v2->openalex:W4389761608": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "PaperQA: Retrieval-Augmented Generative Agent for Scientific Research"
+ },
+ "__done__arxiv:2505.24785v2": {
+  "in_s2": true
+ },
+ "__done__arxiv:2510.21652v2": {
+  "in_s2": false
+ },
+ "arxiv:2504.09702v3->openalex:W4414827381": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search"
+ },
+ "arxiv:2504.09702v3->openalex:W4407806895": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "MLGym: A New Framework and Benchmark for Advancing AI Research Agents"
+ },
+ "arxiv:2504.09702v3->openalex:W4407760093": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "AIDE: AI-Driven Exploration in the Space of Code"
+ },
+ "arxiv:2504.09702v3->openalex:W4416035220": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Agent Laboratory: Using LLM Agents as Research Assistants"
+ },
+ "arxiv:2504.09702v3->arxiv:2411.15114v2": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "RE-Bench: Evaluating frontier AI R&D capabilities of language model agents against human experts"
+ },
+ "arxiv:2504.09702v3->openalex:W4403586302": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers"
+ },
+ "arxiv:2504.09702v3->openalex:W4402952811": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "MLR-Copilot: Autonomous Machine Learning Research based on Large Language Models Agents"
+ },
+ "arxiv:2504.09702v3->openalex:W4402952666": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery"
+ },
+ "__done__arxiv:2504.09702v3": {
+  "in_s2": true
+ },
+ "__done__openalex:W4390784029": {
+  "in_s2": false
+ },
+ "openalex:W4399555023->openalex:W4384261641": {
+  "s2_intents": [
+   "result"
+  ],
+  "isInfluential": false,
+  "s2_title": "GPT4 is Slightly Helpful for Peer-Review Assistance: A Pilot Study"
+ },
+ "__done__openalex:W4399555023": {
+  "in_s2": true
+ },
+ "openalex:W4405468016->openalex:W4403006832": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "AI-Driven Review Systems: Evaluating LLMs in Scalable and Bias-Aware Academic Reviews"
+ },
+ "openalex:W4405468016->openalex:W4402952666": {
+  "s2_intents": [],
+  "isInfluential": true,
+  "s2_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery"
+ },
+ "openalex:W4405468016->openalex:W4399555023": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Peer Review as A Multi-Turn and Long-Context Dialogue with Role-Based Interactions"
+ },
+ "openalex:W4405468016->openalex:W4384261641": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "GPT4 is Slightly Helpful for Peer-Review Assistance: A Pilot Study"
+ },
+ "__done__openalex:W4405468016": {
+  "in_s2": true
+ },
+ "openalex:W4405561462->openalex:W4405035007": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Are We There Yet? Revealing the Risks of Utilizing Large Language Models in Scholarly Peer Review"
+ },
+ "openalex:W4405561462->openalex:W4402952666": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery"
+ },
+ "__done__openalex:W4405561462": {
+  "in_s2": true
+ },
+ "__done__arxiv:2511.19399v3": {
+  "in_s2": false
+ },
+ "__done__arxiv:2512.15567v2": {
+  "in_s2": false
+ },
+ "__done__arxiv:2602.15112v2": {
+  "in_s2": false
+ },
+ "arxiv:2601.21654v3->arxiv:2506.11763": {
+  "s2_intents": [],
+  "isInfluential": true,
+  "s2_title": "DeepResearch Bench: A Comprehensive Benchmark for Deep Research Agents"
+ },
+ "__done__arxiv:2601.21654v3": {
+  "in_s2": true
+ },
+ "__done__arxiv:2411.15114v2": {
+  "in_s2": false
+ },
+ "arxiv:2511.02824v2->openalex:W4417287919": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Robin: A multi-agent system for automating scientific discovery"
+ },
+ "arxiv:2511.02824v2->openalex:W4411932316": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "El Agente: An Autonomous Agent for Quantum Chemistry"
+ },
+ "arxiv:2511.02824v2->openalex:W4403795293": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Language agents achieve superhuman synthesis of scientific knowledge"
+ },
+ "arxiv:2511.02824v2->openalex:W4402952666": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery"
+ },
+ "__done__arxiv:2511.02824v2": {
+  "in_s2": true
+ },
+ "arxiv:2603.26499v2->openalex:W4415108068": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "AlphaEvolve: A coding agent for scientific and algorithmic discovery"
+ },
+ "arxiv:2603.26499v2->openalex:W4414827381": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search"
+ },
+ "arxiv:2603.26499v2->openalex:W4407760093": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "AIDE: AI-Driven Exploration in the Space of Code"
+ },
+ "__done__arxiv:2603.26499v2": {
+  "in_s2": true
+ },
+ "arxiv:2601.22638v2->openalex:W4415238296": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "MMReview: A Multidisciplinary and Multimodal Benchmark for LLM-Based Peer Review Automation"
+ },
+ "arxiv:2601.22638v2->arxiv:2508.10308": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "ReviewRL: Towards Automated Scientific Review with RL"
+ },
+ "arxiv:2601.22638v2->openalex:W4414827381": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search"
+ },
+ "arxiv:2601.22638v2->arxiv:2503.08569": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "DeepReview: Improving LLM-based Paper Review with Human-like Deep Thinking Process"
+ },
+ "arxiv:2601.22638v2->openalex:W4405561462": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "OpenReviewer: A Specialized Large Language Model for Generating Critical Scientific Paper Reviews"
+ },
+ "arxiv:2601.22638v2->openalex:W4404350150": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "CycleResearcher: Improving Automated Research via Automated Review"
+ },
+ "arxiv:2601.22638v2->openalex:W4403795293": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Language agents achieve superhuman synthesis of scientific knowledge"
+ },
+ "__done__arxiv:2601.22638v2": {
+  "in_s2": true
+ },
+ "__done__arxiv:2407.00466v1": {
+  "in_s2": false
+ },
+ "__done__openalex:W4402345509": {
+  "in_s2": true
+ },
+ "openalex:W4415238296->openalex:W4399555023": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Peer Review as A Multi-Turn and Long-Context Dialogue with Role-Based Interactions"
+ },
+ "openalex:W4415238296->openalex:W4390784029": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "MARG: Multi-Agent Review Generation for Scientific Papers"
+ },
+ "openalex:W4415238296->openalex:W4384261641": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "GPT4 is Slightly Helpful for Peer-Review Assistance: A Pilot Study"
+ },
+ "__done__openalex:W4415238296": {
+  "in_s2": true
+ },
+ "openalex:W4402952811->openalex:W4402952666": {
+  "s2_intents": [
+   "methodology"
+  ],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery"
+ },
+ "__done__openalex:W4402952811": {
+  "in_s2": true
+ },
+ "openalex:W4415108068->openalex:W4416043407": {
+  "s2_intents": [],
+  "isInfluential": true,
+  "s2_title": "Accelerating scientific discovery with Co-Scientist"
+ },
+ "openalex:W4415108068->openalex:W4403345771": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "MOOSE-Chem: Large Language Models for Rediscovering Unseen Chemistry Scientific Hypotheses"
+ },
+ "openalex:W4415108068->openalex:W4403586302": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers"
+ },
+ "openalex:W4415108068->openalex:W4399116274": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Interesting Scientific Idea Generation using Knowledge Graphs and LLMs: Evaluations with 100 Research Group Leaders"
+ },
+ "openalex:W4415108068->openalex:W4394647523": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Hypothesis Generation with Large Language Models"
+ },
+ "__done__openalex:W4415108068": {
+  "in_s2": true
+ },
+ "__done__openalex:W7154716562": {
+  "in_s2": false
+ },
+ "__done__openalex:W7131078049": {
+  "in_s2": false
+ },
+ "openalex:W7119027942->arxiv:2511.02824v2": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Kosmos: An AI Scientist for Autonomous Discovery"
+ },
+ "openalex:W7119027942->openalex:W4415108068": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "AlphaEvolve: A coding agent for scientific and algorithmic discovery"
+ },
+ "openalex:W7119027942->openalex:W4411005431": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Biomni: A General-Purpose Biomedical AI Agent"
+ },
+ "__done__openalex:W7119027942": {
+  "in_s2": true
+ },
+ "__done__openalex:W4404355537": {
+  "in_s2": true
+ },
+ "openalex:W4403345771->openalex:W4403586302": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers"
+ },
+ "openalex:W4403345771->openalex:W4402952811": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "MLR-Copilot: Autonomous Machine Learning Research based on Large Language Models Agents"
+ },
+ "openalex:W4403345771->openalex:W4402952666": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery"
+ },
+ "__done__openalex:W4403345771": {
+  "in_s2": true
+ },
+ "__done__openalex:W4394647523": {
+  "in_s2": true
+ },
+ "openalex:W4416540539->arxiv:2410.17309v3": {
+  "s2_intents": [],
+  "isInfluential": true,
+  "s2_title": "Literature Meets Data: A Synergistic Approach to Hypothesis Generation"
+ },
+ "openalex:W4416540539->openalex:W4402952811": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "MLR-Copilot: Autonomous Machine Learning Research based on Large Language Models Agents"
+ },
+ "openalex:W4416540539->openalex:W4402952666": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery"
+ },
+ "openalex:W4416540539->openalex:W4399597648": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "DISCOVERYWORLD: A Virtual Environment for Developing and Evaluating Automated Scientific Discovery Agents"
+ },
+ "openalex:W4416540539->openalex:W4394647523": {
+  "s2_intents": [],
+  "isInfluential": true,
+  "s2_title": "Hypothesis Generation with Large Language Models"
+ },
+ "__done__openalex:W4416540539": {
+  "in_s2": true
+ },
+ "openalex:W4416611770->openalex:W4416035220": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Agent Laboratory: Using LLM Agents as Research Assistants"
+ },
+ "openalex:W4416611770->openalex:W4404350150": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "CycleResearcher: Improving Automated Research via Automated Review"
+ },
+ "openalex:W4416611770->openalex:W4402952666": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery"
+ },
+ "__done__openalex:W4416611770": {
+  "in_s2": true
+ },
+ "openalex:W4417287919->openalex:W4407632372": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Automated Hypothesis Validation with Agentic Sequential Falsifications"
+ },
+ "openalex:W4417287919->openalex:W4403795293": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Language agents achieve superhuman synthesis of scientific knowledge"
+ },
+ "openalex:W4417287919->openalex:W4402952666": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery"
+ },
+ "__done__openalex:W4417287919": {
+  "in_s2": true
+ },
+ "__done__arxiv:2507.02694": {
+  "in_s2": false
+ },
+ "arxiv:2506.22026->openalex:W4405468016": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Generative Adversarial Reviews: When LLMs Become the Critic"
+ },
+ "arxiv:2506.22026->openalex:W4412889809": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Many Heads Are Better Than One: Improved Scientific Idea Generation by A LLM-Based Multi-Agent System"
+ },
+ "arxiv:2506.22026->openalex:W4403586302": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers"
+ },
+ "arxiv:2506.22026->openalex:W4402952666": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery"
+ },
+ "__done__arxiv:2506.22026": {
+  "in_s2": true
+ },
+ "arxiv:2506.07642->openalex:W4404350150": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "CycleResearcher: Improving Automated Research via Automated Review"
+ },
+ "arxiv:2506.07642->openalex:W4402952666": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery"
+ },
+ "arxiv:2506.07642->openalex:W4390784029": {
+  "s2_intents": [],
+  "isInfluential": true,
+  "s2_title": "MARG: Multi-Agent Review Generation for Scientific Papers"
+ },
+ "__done__arxiv:2506.07642": {
+  "in_s2": true
+ },
+ "arxiv:2503.08569->openalex:W4405035007": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Are We There Yet? Revealing the Risks of Utilizing Large Language Models in Scholarly Peer Review"
+ },
+ "arxiv:2503.08569->openalex:W4404350150": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "CycleResearcher: Improving Automated Research via Automated Review"
+ },
+ "arxiv:2503.08569->openalex:W4403006832": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "AI-Driven Review Systems: Evaluating LLMs in Scalable and Bias-Aware Academic Reviews"
+ },
+ "arxiv:2503.08569->openalex:W4402952666": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery"
+ },
+ "arxiv:2503.08569->openalex:W4399555023": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Peer Review as A Multi-Turn and Long-Context Dialogue with Role-Based Interactions"
+ },
+ "arxiv:2503.08569->openalex:W4390784029": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "MARG: Multi-Agent Review Generation for Scientific Papers"
+ },
+ "arxiv:2503.08569->openalex:W4365211632": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Emergent autonomous scientific research capabilities of large language models"
+ },
+ "__done__arxiv:2503.08569": {
+  "in_s2": true
+ },
+ "arxiv:2511.10902->arxiv:2506.07642": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "TreeReview: A Dynamic Tree of Questions Framework for Deep and Efficient LLM-based Scientific Peer Review"
+ },
+ "arxiv:2511.10902->openalex:W4405561462": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "OpenReviewer: A Specialized Large Language Model for Generating Critical Scientific Paper Reviews"
+ },
+ "arxiv:2511.10902->openalex:W4404350150": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "CycleResearcher: Improving Automated Research via Automated Review"
+ },
+ "arxiv:2511.10902->openalex:W4390784029": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "MARG: Multi-Agent Review Generation for Scientific Papers"
+ },
+ "__done__arxiv:2511.10902": {
+  "in_s2": true
+ },
+ "arxiv:2508.10308->arxiv:2504.21776": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "WebThinker: Empowering Large Reasoning Models with Deep Research Capability"
+ },
+ "arxiv:2508.10308->openalex:W4404350150": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "CycleResearcher: Improving Automated Research via Automated Review"
+ },
+ "arxiv:2508.10308->openalex:W4402952666": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery"
+ },
+ "__done__arxiv:2508.10308": {
+  "in_s2": true
+ },
+ "arxiv:2506.11763->arxiv:2504.21776": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "WebThinker: Empowering Large Reasoning Models with Deep Research Capability"
+ },
+ "arxiv:2506.11763->openalex:W4416035220": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Agent Laboratory: Using LLM Agents as Research Assistants"
+ },
+ "arxiv:2506.11763->openalex:W4403324055": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "ScienceAgentBench: Toward Rigorous Assessment of Language Agents for Data-Driven Scientific Discovery"
+ },
+ "arxiv:2506.11763->openalex:W4402345509": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "LAB-Bench: Measuring Capabilities of Language Models for Biology Research"
+ },
+ "__done__arxiv:2506.11763": {
+  "in_s2": true
+ },
+ "arxiv:2606.13670->openalex:W7140287209": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Towards end-to-end automation of AI research"
+ },
+ "__done__arxiv:2606.13670": {
+  "in_s2": true
+ },
+ "arxiv:2606.11851->openalex:W7140287209": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Towards end-to-end automation of AI research"
+ },
+ "arxiv:2606.11851->openalex:W4411005431": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Biomni: A General-Purpose Biomedical AI Agent"
+ },
+ "arxiv:2606.11851->openalex:W4404350150": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "CycleResearcher: Improving Automated Research via Automated Review"
+ },
+ "__done__arxiv:2606.11851": {
+  "in_s2": true
+ },
+ "arxiv:2606.11447->openalex:W7140287209": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Towards end-to-end automation of AI research"
+ },
+ "arxiv:2606.11447->arxiv:2507.18901v1": {
+  "s2_intents": [],
+  "isInfluential": true,
+  "s2_title": "REPRO-Bench: Can Agentic AI Systems Assess the Reproducibility of Social Science Research?"
+ },
+ "arxiv:2606.11447->openalex:W4417152112": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "SciSciGPT: advancing human\u2013AI collaboration in the science of science"
+ },
+ "arxiv:2606.11447->arxiv:2504.01848v3": {
+  "s2_intents": [],
+  "isInfluential": true,
+  "s2_title": "PaperBench: Evaluating AI's Ability to Replicate AI Research"
+ },
+ "arxiv:2606.11447->openalex:W4416035220": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Agent Laboratory: Using LLM Agents as Research Assistants"
+ },
+ "arxiv:2606.11447->openalex:W4403707291": {
+  "s2_intents": [],
+  "isInfluential": true,
+  "s2_title": "CORE-Bench: Fostering the Credibility of Published Research Through a Computational Reproducibility Agent Benchmark"
+ },
+ "__done__arxiv:2606.11447": {
+  "in_s2": true
+ },
+ "arxiv:2606.06473->openalex:W7140287209": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Towards end-to-end automation of AI research"
+ },
+ "arxiv:2606.06473->openalex:W4415108068": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "AlphaEvolve: A coding agent for scientific and algorithmic discovery"
+ },
+ "arxiv:2606.06473->openalex:W4407760093": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "AIDE: AI-Driven Exploration in the Space of Code"
+ },
+ "__done__arxiv:2606.06473": {
+  "in_s2": true
+ },
+ "arxiv:2606.02484->openalex:W7140287209": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Towards end-to-end automation of AI research"
+ },
+ "__done__arxiv:2606.02484": {
+  "in_s2": true
+ },
+ "arxiv:2606.00644->openalex:W7140287209": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Towards end-to-end automation of AI research"
+ },
+ "arxiv:2606.00644->openalex:W4414587939": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "MLR-Bench: Evaluating AI Agents on Open-Ended Machine Learning Research"
+ },
+ "arxiv:2606.00644->openalex:W4414827381": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search"
+ },
+ "arxiv:2606.00644->openalex:W4403586302": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers"
+ },
+ "arxiv:2606.00644->openalex:W4389761608": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "PaperQA: Retrieval-Augmented Generative Agent for Scientific Research"
+ },
+ "__done__arxiv:2606.00644": {
+  "in_s2": true
+ },
+ "arxiv:2605.27905->openalex:W7140287209": {
+  "s2_intents": [],
+  "isInfluential": true,
+  "s2_title": "Towards end-to-end automation of AI research"
+ },
+ "arxiv:2605.27905->openalex:W4416035220": {
+  "s2_intents": [],
+  "isInfluential": true,
+  "s2_title": "Agent Laboratory: Using LLM Agents as Research Assistants"
+ },
+ "arxiv:2605.27905->openalex:W4403586302": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers"
+ },
+ "__done__arxiv:2605.27905": {
+  "in_s2": true
+ },
+ "arxiv:2605.28655->openalex:W7143351253": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Empowering AI data scientists using a multi-agent LLM framework with self-evolving capabilities for autonomous, tool-aware biomedical data analyses."
+ },
+ "arxiv:2605.28655->openalex:W7140287209": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Towards end-to-end automation of AI research"
+ },
+ "arxiv:2605.28655->arxiv:2511.02824v2": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Kosmos: An AI Scientist for Autonomous Discovery"
+ },
+ "arxiv:2605.28655->arxiv:2510.21652v2": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "AstaBench: Rigorous Benchmarking of AI Agents with a Scientific Research Suite"
+ },
+ "arxiv:2605.28655->openalex:W4414028042": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "BioML-bench: Evaluation of AI Agents for End-to-End Biomedical ML"
+ },
+ "arxiv:2605.28655->openalex:W4415108068": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "AlphaEvolve: A coding agent for scientific and algorithmic discovery"
+ },
+ "arxiv:2605.28655->openalex:W4411005431": {
+  "s2_intents": [],
+  "isInfluential": true,
+  "s2_title": "Biomni: A General-Purpose Biomedical AI Agent"
+ },
+ "arxiv:2605.28655->openalex:W4417287919": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Robin: A multi-agent system for automating scientific discovery"
+ },
+ "arxiv:2605.28655->openalex:W4416043407": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Accelerating scientific discovery with Co-Scientist"
+ },
+ "arxiv:2605.28655->openalex:W4407760093": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "AIDE: AI-Driven Exploration in the Space of Code"
+ },
+ "arxiv:2605.28655->openalex:W4416035220": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Agent Laboratory: Using LLM Agents as Research Assistants"
+ },
+ "__done__arxiv:2605.28655": {
+  "in_s2": true
+ },
+ "arxiv:2605.26081->openalex:W7140287209": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Towards end-to-end automation of AI research"
+ },
+ "arxiv:2605.26081->arxiv:2506.11763": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "DeepResearch Bench: A Comprehensive Benchmark for Deep Research Agents"
+ },
+ "arxiv:2605.26081->arxiv:2504.21776": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "WebThinker: Empowering Large Reasoning Models with Deep Research Capability"
+ },
+ "__done__arxiv:2605.26081": {
+  "in_s2": true
+ },
+ "__done__arxiv:2510.27598": {
+  "in_s2": false
+ },
+ "arxiv:2507.16280->arxiv:2506.11763": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "DeepResearch Bench: A Comprehensive Benchmark for Deep Research Agents"
+ },
+ "arxiv:2507.16280->openalex:W4402952666": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery"
+ },
+ "__done__arxiv:2507.16280": {
+  "in_s2": true
+ },
+ "arxiv:2605.29468->openalex:W7140287209": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Towards end-to-end automation of AI research"
+ },
+ "__done__arxiv:2605.29468": {
+  "in_s2": true
+ },
+ "arxiv:2603.17216v1->openalex:W4414587939": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "MLR-Bench: Evaluating AI Agents on Open-Ended Machine Learning Research"
+ },
+ "arxiv:2603.17216v1->arxiv:2504.09702v3": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "MLRC-Bench: Can Language Agents Solve Machine Learning Research Challenges?"
+ },
+ "arxiv:2603.17216v1->arxiv:2504.01848v3": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "PaperBench: Evaluating AI's Ability to Replicate AI Research"
+ },
+ "arxiv:2603.17216v1->arxiv:2503.08569": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "DeepReview: Improving LLM-based Paper Review with Human-like Deep Thinking Process"
+ },
+ "arxiv:2603.17216v1->openalex:W4402952666": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery"
+ },
+ "__done__arxiv:2603.17216v1": {
+  "in_s2": true
+ },
+ "arxiv:2602.12984v2->openalex:W4399597648": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "DISCOVERYWORLD: A Virtual Environment for Developing and Evaluating Automated Scientific Discovery Agents"
+ },
+ "__done__arxiv:2602.12984v2": {
+  "in_s2": true
+ },
+ "arxiv:2603.28589v1->arxiv:2509.23426v2": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Democratizing AI scientists using ToolUniverse"
+ },
+ "arxiv:2603.28589v1->arxiv:2505.18705v1": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "AI-Researcher: Autonomous Scientific Innovation"
+ },
+ "arxiv:2603.28589v1->openalex:W4416043407": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Accelerating scientific discovery with Co-Scientist"
+ },
+ "arxiv:2603.28589v1->openalex:W4416035220": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Agent Laboratory: Using LLM Agents as Research Assistants"
+ },
+ "__done__arxiv:2603.28589v1": {
+  "in_s2": true
+ },
+ "arxiv:2603.08127v1->arxiv:2507.16280": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "ResearcherBench: Evaluating Deep AI Research Systems on the Frontiers of Scientific Inquiry"
+ },
+ "arxiv:2603.08127v1->openalex:W4416035220": {
+  "s2_intents": [],
+  "isInfluential": true,
+  "s2_title": "Agent Laboratory: Using LLM Agents as Research Assistants"
+ },
+ "arxiv:2603.08127v1->openalex:W4412889809": {
+  "s2_intents": [],
+  "isInfluential": true,
+  "s2_title": "Many Heads Are Better Than One: Improved Scientific Idea Generation by A LLM-Based Multi-Agent System"
+ },
+ "arxiv:2603.08127v1->openalex:W4403586302": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers"
+ },
+ "__done__arxiv:2603.08127v1": {
+  "in_s2": true
+ },
+ "__done__arxiv:2508.15126v2": {
+  "in_s2": false
+ },
+ "arxiv:2509.14778v2->openalex:W4414837761": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Curie: Toward Rigorous and Automated Scientific Experimentation with AI Agents"
+ },
+ "arxiv:2509.14778v2->openalex:W4416035220": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Agent Laboratory: Using LLM Agents as Research Assistants"
+ },
+ "arxiv:2509.14778v2->openalex:W4403586302": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers"
+ },
+ "arxiv:2509.14778v2->openalex:W4402952666": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery"
+ },
+ "arxiv:2509.14778v2->openalex:W4399597648": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "DISCOVERYWORLD: A Virtual Environment for Developing and Evaluating Automated Scientific Discovery Agents"
+ },
+ "arxiv:2509.14778v2->openalex:W4389761608": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "PaperQA: Retrieval-Augmented Generative Agent for Scientific Research"
+ },
+ "__done__arxiv:2509.14778v2": {
+  "in_s2": true
+ },
+ "__done__arxiv:2507.02004v1": {
+  "in_s2": false
+ },
+ "arxiv:2505.17968v1->arxiv:2504.01848v3": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "PaperBench: Evaluating AI's Ability to Replicate AI Research"
+ },
+ "arxiv:2505.17968v1->openalex:W4416043407": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Accelerating scientific discovery with Co-Scientist"
+ },
+ "arxiv:2505.17968v1->openalex:W4416035220": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Agent Laboratory: Using LLM Agents as Research Assistants"
+ },
+ "arxiv:2505.17968v1->openalex:W4403586302": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers"
+ },
+ "arxiv:2505.17968v1->openalex:W4402952666": {
+  "s2_intents": [],
+  "isInfluential": false,
+  "s2_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery"
+ },
+ "__done__arxiv:2505.17968v1": {
+  "in_s2": true
+ }
+}
