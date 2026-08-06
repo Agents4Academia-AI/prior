@@ -53,7 +53,7 @@ except Exception:
 REPO = Path(__file__).resolve().parents[2]
 OUT = REPO / "experiments" / "edge_quality" / "out"
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # for `import type_intents`
-import type_intents as ti  # reuse parse_intent, class list, edge_id
+import prior.type_intents as ti  # reuse parse_intent, class list, edge_id
 
 _INTENTS = list(ti._INTENTS)  # ("background", "uses_extends", "compares_contrasts")
 
