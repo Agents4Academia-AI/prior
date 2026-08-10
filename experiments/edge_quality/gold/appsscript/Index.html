@@ -24,12 +24,13 @@ body{padding-bottom:calc(230px + env(safe-area-inset-bottom))}
      padding:8px 12px 6px}
 .bar{height:4px; background:var(--bd); border-radius:3px; overflow:hidden; margin-bottom:6px}
 .bar i{display:block; height:100%; background:var(--accent); width:0; transition:width .25s}
-.meta{display:flex; align-items:center; gap:10px; font-size:12.5px; color:var(--dim)}
+.meta{display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--dim); flex-wrap:wrap}
 .meta b{color:var(--tx); font-weight:600}
 .meta .sp{margin-left:auto; display:flex; gap:6px}
 .tbtn{border:1px solid var(--bd); background:var(--card); color:var(--dim); border-radius:7px;
       padding:4px 9px; font-size:12px; cursor:pointer; font-family:var(--sans)}
 .tbtn.on{border-color:var(--accent); color:var(--accent)}
+.who{font-weight:600; color:var(--accent); cursor:pointer}
 
 /* ── card ── */
 .wrap{padding:12px}
@@ -48,6 +49,31 @@ details summary:before{content:"▸ "}
 details[open] summary:before{content:"▾ "}
 details .body{font-size:13.5px; line-height:1.55; color:var(--dim); margin-top:8px; white-space:pre-wrap}
 .mono{font-family:var(--mono); font-size:11px; color:var(--faint); word-break:break-all; margin-top:8px}
+
+/* ── definitions overlay ── */
+.sheetpanel{position:fixed; inset:0; z-index:40; background:var(--bg); overflow-y:auto;
+            padding:16px 14px calc(24px + env(safe-area-inset-bottom)); display:none}
+.sheetpanel.on{display:block}
+.sheetpanel h2{font-size:16px; margin:0 0 4px}
+.sheetpanel .close{position:sticky; top:0; float:right; border:1px solid var(--bd); background:var(--card);
+                   color:var(--dim); border-radius:7px; padding:5px 11px; font-size:13px; cursor:pointer}
+.def{border:1px solid var(--bd); border-left-width:4px; background:var(--card); border-radius:9px;
+     padding:11px 12px; margin:10px 0}
+.def h3{margin:0 0 5px; font-size:14px; font-family:var(--mono)}
+.def p{margin:0 0 6px; font-size:13.5px; line-height:1.5; color:var(--dim)}
+.def .eg{font-size:12.5px; color:var(--faint); font-style:italic}
+.def.b{border-left-color:var(--bg1)} .def.b h3{color:var(--bg1)}
+.def.u{border-left-color:var(--bg2)} .def.u h3{color:var(--bg2)}
+.def.c{border-left-color:var(--bg3)} .def.c h3{color:var(--bg3)}
+.rule{font-size:13px; line-height:1.55; color:var(--dim); margin:7px 0}
+.rule b{color:var(--tx)}
+
+/* ── chooser ── */
+.pick{position:fixed; inset:0; z-index:50; background:var(--bg); display:none;
+      flex-direction:column; justify-content:center; padding:26px}
+.pick.on{display:flex}
+.pick h1{font-size:19px; margin:0 0 6px}
+.pick p{font-size:13.5px; color:var(--dim); margin:0 0 18px; line-height:1.5}
 
 /* ── dock ── */
 .dock{position:fixed; left:0; right:0; bottom:0; z-index:10; background:var(--bg);
@@ -77,11 +103,11 @@ textarea{width:100%; border:1px solid var(--bd); background:var(--card); color:v
          border-radius:9px; padding:9px; font-size:14px; font-family:var(--sans); resize:vertical; min-height:52px}
 .toast{position:fixed; left:50%; transform:translateX(-50%); bottom:calc(250px + env(safe-area-inset-bottom));
        background:var(--tx); color:var(--bg); padding:8px 14px; border-radius:20px; font-size:13px;
-       z-index:30; opacity:0; pointer-events:none; transition:opacity .2s}
+       z-index:60; opacity:0; pointer-events:none; transition:opacity .2s; max-width:88%; text-align:center}
 .toast.show{opacity:.95}
 .veil{position:fixed; inset:0; background:var(--bg); opacity:.6; z-index:20; display:none}
 .veil.on{display:block}
-.done{font-size:11.5px; color:var(--accent); margin-left:6px}
+.done{font-size:11.5px; color:var(--accent)}
 </style>
 </head>
 <body>
@@ -89,11 +115,14 @@ textarea{width:100%; border:1px solid var(--bd); background:var(--card); color:v
 <div class="top">
   <div class="bar"><i id="prog"></i></div>
   <div class="meta">
-    <span><b id="pDone">0</b> / <span id="pTotal">0</span> labelled</span>
+    <span class="who" id="pWho" onclick="switchWho()">—</span>
     <span>·</span>
-    <span>#<b id="pRank">—</b></span>
+    <span><b id="pDone">0</b> / <span id="pTotal">0</span></span>
+    <span>·</span>
+    <span>#<b id="pNum">—</b></span>
     <span id="pEdit" class="done"></span>
     <span class="sp">
+      <button class="tbtn" onclick="showDefs(1)">definitions</button>
       <button class="tbtn" id="bFast" onclick="toggleFast()">fast</button>
       <button class="tbtn" onclick="jump()">jump</button>
     </span>
@@ -120,6 +149,67 @@ textarea{width:100%; border:1px solid var(--bd); background:var(--card); color:v
   </div>
 </div>
 
+<!-- ── category definitions ── -->
+<div class="sheetpanel" id="defs">
+  <button class="close" onclick="showDefs(0)">close</button>
+  <h2>Category definitions</h2>
+  <p style="font-size:13px;color:var(--dim);margin:2px 0 4px">
+    Classify <b>why the citing paper cites the one work marked [THIS CITATION]</b>. Other
+    citations in the passage are context only — do not classify those. Judge from the passage
+    and the cited abstract, never from your own knowledge of the papers.
+  </p>
+
+  <div class="def b">
+    <h3>background</h3>
+    <p>The target is cited as general context, prior art, motivation, or a passing mention.
+       The citing work neither builds on it nor singles it out for critique.</p>
+    <p><b>Includes grouped critique:</b> if the target is lumped with other papers to describe a
+       general limitation of the field, it is still background.</p>
+    <div class="eg">“current systems [THIS CITATION] struggle with X” · “while these studies show
+       Y, they lack Z” · “unlike these prior works…”</div>
+  </div>
+
+  <div class="def u">
+    <h3>uses_extends</h3>
+    <p>The citing work <b>explicitly uses, adopts, or builds on</b> the target. The text must show
+       active first-person adoption. Merely describing the target's mechanics in detail is
+       <b>not</b> enough.</p>
+    <div class="eg">“we use the dataset from [THIS CITATION]” · “following the framework of
+       [THIS CITATION]” · “we reuse their evaluation protocol”</div>
+  </div>
+
+  <div class="def c">
+    <h3>compares_contrasts</h3>
+    <p>The citing work sets <b>its own</b> approach or results <b>against the target specifically</b>:
+       distinguishes itself from the target alone, critiques a limitation of the target, or reports
+       a differing result.</p>
+    <div class="eg">“unlike [THIS CITATION]” · “our work differs from [THIS CITATION]” ·
+       “we outperform [THIS CITATION]”</div>
+  </div>
+
+  <h2 style="margin-top:16px">Tie-breakers</h2>
+  <div class="rule"><b>The grouping rule.</b> If the contrastive cue (“However…”, “In contrast…”)
+    applies to a whole group or to “the current state of the art”, choose <b>background</b>. The
+    contrast must single out the target itself.</div>
+  <div class="rule"><b>Baselines.</b> Target cited as a competing method to beat or compare
+    results against → <b>compares_contrasts</b>. Target cited because you adopted its protocol,
+    dataset or code to run those tests → <b>uses_extends</b>.</div>
+  <div class="rule"><b>background vs compares_contrasts.</b> Genuinely unsure → <b>background</b>,
+    unless there is an explicit contrastive cue tied to the target alone.</div>
+  <div class="rule"><b>background vs uses_extends.</b> Ask whether the citing authors' own method
+    relies on that work to function. If yes → <b>uses_extends</b>.</div>
+  <div class="rule"><b>Multiple intents in one passage?</b> Pick the one that <b>dominates</b> at
+    this citation. Too garbled or generic to tell → <b>background</b>, and say so in the notes.</div>
+</div>
+
+<!-- ── who are you? ── -->
+<div class="pick" id="pick">
+  <h1>Who's labelling?</h1>
+  <p>Pick your name once — it's remembered on this device. Each labeller writes to their own
+     columns, so you can't overwrite anyone else.</p>
+  <div id="pickBtns"></div>
+</div>
+
 <div class="dock">
   <button class="btn" data-v="background"         onclick="pick('intent','background')">background<span class="n">1</span></button>
   <button class="btn" data-v="uses_extends"       onclick="pick('intent','uses_extends')">uses_extends<span class="n">2</span></button>
@@ -139,12 +229,12 @@ textarea{width:100%; border:1px solid var(--bd); background:var(--card); color:v
       <button class="btn" data-a="priority" data-v="helpful"    onclick="pick('priority','helpful')">helpful</button>
     </div>
     <div class="k">notes</div>
-    <textarea id="notes" placeholder="why this was hard, which fork it hits…"></textarea>
+    <textarea id="notes" placeholder="why this was hard, which tie-breaker you used…"></textarea>
   </div>
 
   <div class="mini" style="margin-bottom:7px">
     <button id="bExtras" onclick="toggleExtras()">+ all three</button>
-    <button onclick="go(cur.rank-1)">← back</button>
+    <button onclick="go(cur.pos-1)">← back</button>
     <button onclick="doSkip()">skip</button>
   </div>
   <div class="mini">
@@ -156,17 +246,19 @@ textarea{width:100%; border:1px solid var(--bd); background:var(--card); color:v
 <div class="toast" id="toast"></div>
 
 <script>
-var cur = {rank:1}, sel = {intent:'', support:'', priority:''}, t0 = Date.now();
+var WHO = '<?= who ?>';
+var cur = {pos:0}, sel = {intent:'', support:'', priority:''};
 var fast = localStorage.getItem('fast') !== '0';
 var busy = false;
 
 function $(id){ return document.getElementById(id); }
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function toast(m){ var t=$('toast'); t.textContent=m; t.className='toast show';
-  setTimeout(function(){ t.className='toast'; }, 1600); }
+  setTimeout(function(){ t.className='toast'; }, 2600); }
 function lock(on){ busy=on; $('veil').className = on?'veil on':'veil'; $('bSave').disabled=on; }
 function fail(e){ lock(false); toast('⚠ ' + (e && e.message ? e.message : e)); }
 
+function showDefs(on){ $('defs').className = on ? 'sheetpanel on' : 'sheetpanel'; }
 function toggleFast(){ fast=!fast; localStorage.setItem('fast', fast?'1':'0'); paintFast(); }
 function paintFast(){ $('bFast').className = fast ? 'tbtn on' : 'tbtn'; }
 
@@ -180,30 +272,23 @@ function toggleExtras(){
 function pick(axis, val){
   sel[axis] = (sel[axis] === val) ? '' : val;
   paintSel();
-  // fast path: one tap = save + advance, but only when the extra axes aren't in play
   if (axis === 'intent' && sel[axis] && fast && $('extras').className !== 'open') save();
 }
 
 function paintSel(){
-  var bs = document.querySelectorAll('.btn');
+  var bs = document.querySelectorAll('.dock .btn');
   for (var i=0;i<bs.length;i++){
     var b = bs[i], axis = b.getAttribute('data-a') || 'intent';
     b.className = (sel[axis] && sel[axis] === b.getAttribute('data-v')) ? 'btn sel' : 'btn';
   }
 }
 
-function renderClaim(txt){
-  var h = esc(txt)
-    .replace(/\[CITED:TARGET\]/g, '<mark>[THIS CITATION]</mark>')
-    .replace(/\[CITED\]/g, '<span class="oth">[other]</span>');
-  $('claim').innerHTML = h;
-}
-
 function render(d){
-  cur = d; t0 = Date.now();
+  cur = d;
   sel = {intent: d.existing.intent === 'SKIP' ? '' : (d.existing.intent||''),
          support: d.existing.support||'', priority: d.existing.priority||''};
   $('notes').value = d.existing.notes || '';
+  $('pWho').textContent = d.labeller;
   $('cgT').textContent = d.citing.title;
   $('cgS').textContent = [d.citing.year, d.citing.authors].filter(Boolean).join(' · ');
   $('cdT').textContent = d.cited.title;
@@ -212,28 +297,30 @@ function render(d){
   $('cdA').textContent = d.cited.abstract || '(none)';
   $('ckey').textContent = d.cite_key + '  ·  ' + d.site_key;
   $('sIdx').textContent = '(site ' + d.site_idx + ' of ' + d.n_sites + ' on this edge)';
-  renderClaim(d.claim);
+  $('claim').innerHTML = esc(d.claim)
+    .replace(/\[CITED:TARGET\]/g, '<mark>[THIS CITATION]</mark>')
+    .replace(/\[CITED\]/g, '<span class="oth">[other]</span>');
   $('dCited').open = false; $('dCiting').open = false;
-  $('pRank').textContent = d.rank;
+  $('pNum').textContent = d.num;
   $('pDone').textContent = d.state.labelled;
   $('pTotal').textContent = d.state.total;
   $('prog').style.width = (100 * d.state.labelled / d.state.total) + '%';
   $('pEdit').textContent = d.existing.intent
-      ? (d.existing.intent === 'SKIP' ? '· skipped' : '· already labelled (editing)') : '';
+      ? (d.existing.intent === 'SKIP' ? '· skipped' : '· editing') : '';
   paintSel();
   window.scrollTo(0,0);
   lock(false);
 }
 
-function go(rank){
-  if (busy || rank < 1) return;
+function go(pos){
+  if (busy || pos < 0) return;
   lock(true);
-  google.script.run.withSuccessHandler(render).withFailureHandler(fail).getSite(rank);
+  google.script.run.withSuccessHandler(render).withFailureHandler(fail).getSite(WHO, pos);
 }
 
 function payload(){
-  return {rank: cur.rank, site_key: cur.site_key, intent: sel.intent, support: sel.support,
-          priority: sel.priority, notes: $('notes').value, seconds: (Date.now()-t0)/1000};
+  return {who: WHO, pos: cur.pos, site_key: cur.site_key, intent: sel.intent,
+          support: sel.support, priority: sel.priority, notes: $('notes').value};
 }
 
 function save(){
@@ -250,8 +337,8 @@ function doSkip(){
 }
 
 function jump(){
-  var r = prompt('Jump to queue rank (1–' + ($('pTotal').textContent||'809') + '):', cur.rank);
-  if (r) go(parseInt(r, 10));
+  var r = prompt('Jump to # (1–' + ($('pTotal').textContent||'?') + '):', cur.num);
+  if (r) go(parseInt(r, 10) - 1);
 }
 
 document.addEventListener('keydown', function(e){
@@ -260,16 +347,46 @@ document.addEventListener('keydown', function(e){
   if (e.key === '2') pick('intent','uses_extends');
   if (e.key === '3') pick('intent','compares_contrasts');
   if (e.key === 'Enter') save();
-  if (e.key === 'ArrowLeft') go(cur.rank - 1);
-  if (e.key === 'ArrowRight') go(cur.rank + 1);
+  if (e.key === 'ArrowLeft') go(cur.pos - 1);
+  if (e.key === 'ArrowRight') go(cur.pos + 1);
+  if (e.key === 'Escape') showDefs(0);
 });
+
+// ── boot: identify the labeller, then load ────────────────────────────────
+function boot(who){
+  WHO = who;
+  localStorage.setItem('who', who);
+  $('pick').className = 'pick';
+  lock(true);
+  google.script.run.withSuccessHandler(render).withFailureHandler(fail).getStart(who);
+}
+
+function switchWho(){
+  localStorage.removeItem('who');
+  chooser();
+}
+
+function chooser(){
+  $('pick').className = 'pick on';
+  lock(false);
+  google.script.run.withSuccessHandler(function(list){
+    var host = $('pickBtns');
+    host.innerHTML = '';
+    list.forEach(function(l){
+      var b = document.createElement('button');
+      b.className = 'btn';
+      b.innerHTML = l.name + '<span class="n">' +
+        (l.scope === 'all' ? 'all 809 sites' : l.scope + ' block only') + '</span>';
+      b.onclick = function(){ boot(l.id); };
+      host.appendChild(b);
+    });
+  }).withFailureHandler(fail).getLabellers();
+}
 
 paintFast();
 if (localStorage.getItem('extras') === '1') toggleExtras();
-lock(true);
-google.script.run.withSuccessHandler(function(st){
-  google.script.run.withSuccessHandler(render).withFailureHandler(fail).getSite(st.firstOpen);
-}).withFailureHandler(fail).getState();
+var remembered = WHO || localStorage.getItem('who') || '';
+if (remembered) boot(remembered); else chooser();
 </script>
 </body>
 </html>

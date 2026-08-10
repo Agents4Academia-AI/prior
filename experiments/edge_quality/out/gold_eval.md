@@ -63,7 +63,11 @@ On 12 labelled hard cases: **ours right 6**, **Opus right 5**, neither 1.
 | bibtex_valid = False (blob) | 8 | 87.5% |
 | citee abstract ok | 110 | 93.6% |
 
-## 6. Misses (13)
+## 6. Inter-annotator agreement (random_eval block)
+
+_only one labeller has entries — add the `H_`/`K_` columns and share the `?who=` links to get an agreement number._
+
+## 7. Misses (13)
 
 #### arxiv:2602.15112v2->openalex:W4414827381#0  ·  `random_eval`
 - **citing:** ResearchGym: Evaluating Language Model Agents on Real-World AI Research (2026)

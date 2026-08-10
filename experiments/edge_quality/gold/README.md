@@ -111,8 +111,10 @@ have 810 rows (809 + header), and columns E–L (`gold_intent` … `revision`) a
 9. **Save** (💾 / Ctrl-S). You should now have exactly two files: `Code.gs` and `Index.html`.
 10. **Deploy > New deployment**. Click the ⚙️ next to "Select type" → **Web app**.
     - Description: `gold labeller`
-    - Execute as: **Me**
-    - Who has access: **Only myself**
+    - Execute as: **Me** ← must stay "Me" (see §8: it's what keeps other labellers out
+      of the sheet, where the judge columns are in plain sight)
+    - Who has access: **Anyone with a Google account** (use "Only myself" if you're the
+      only labeller)
     - **Deploy**.
 11. **Authorize access** → pick your account → you'll hit *"Google hasn't verified this
     app"*. Expected, it's your own script: **Advanced > Go to <project name> (unsafe) >
@@ -142,8 +144,12 @@ The app opens at the first unlabelled site in queue order.
 - **skip** writes `SKIP` (so it won't be served again; the scorer ignores it). Skipping a
   site you've already labelled does nothing but move on.
 - **back** / **jump** to revisit. Re-opening a labelled site pre-loads your answer and
-  the header says *already labelled (editing)*; saving bumps `revision`.
-- Desktop keys: `1` `2` `3` = intent, `Enter` = save, `←` `→` = move.
+  the header says *editing*.
+- **definitions** (top bar) opens the full category rubric — the three class definitions
+  with examples, plus the tie-breakers, transcribed from the judge's own prompt in
+  `type_intents.py`. `Esc` closes it.
+- Desktop keys: `1` `2` `3` = intent, `Enter` = save, `←` `→` = move, `Esc` = close
+  definitions.
 - Abstracts are collapsed by default — tap **Cited paper abstract** (the evidence the
   judge saw) or **Citing paper abstract**.
 - In the claim, `[CITED:TARGET]` renders as a highlighted **[THIS CITATION]** and other
@@ -216,14 +222,94 @@ Keep `--seed 17` and the same block sizes across refreshes.
 
 ---
 
-## 7. Notes
+## 7. Adding cross-check labellers (H and K)
 
-- **Second labeller?** Change `LABELLER` in `Code.gs`, and in the deployment set access to
-  *Anyone with a Google account* (still "Execute as: Me", so they never need sheet
-  access). Two people writing the same tab will overwrite each other — give the second
-  person their own copy of the sheet if you want double-annotation and an IAA number.
+Two more people label **the same 80 `random_eval` sites** to give an inter-annotator
+agreement number. They work on **your existing sheet** — no second copy, no re-import, your
+existing labels never move. Each labeller writes into their **own prefixed columns**, so
+nobody can overwrite anybody.
+
+| labeller | link | writes to | sees |
+|---|---|---|---|
+| you | `…/exec?who=callum` | `gold_intent`, `gold_support`, `gold_priority`, `gold_notes` | all 809 |
+| H | `…/exec?who=h` | `H_gold_intent`, `H_gold_support`, `H_gold_priority`, `H_gold_notes` | the 80 `random_eval` sites |
+| K | `…/exec?who=k` | `K_gold_intent`, `K_gold_support`, `K_gold_priority`, `K_gold_notes` | the 80 `random_eval` sites |
+
+H and K start at #1 of 80 because their own column is empty — your progress is invisible to
+them, and theirs to you.
+
+### A. Add eight columns to the `sites` tab
+
+Type these into **row 1**, one per column, to the right of your last column. Spelling must
+match exactly (case included). **Position doesn't matter** — the app finds columns by
+header name, which is why moving `gold_intent` to Z and adding `Gold=Judge?` didn't break
+anything.
+
+```
+H_gold_intent   H_gold_support   H_gold_priority   H_gold_notes
+K_gold_intent   K_gold_support   K_gold_priority   K_gold_notes
+```
+
+Leave the 809 cells beneath them empty. Nothing else in the sheet changes.
+
+> The app writes a `revision` counter only if a `revision` column exists, and no longer
+> writes `labelled_at` or `seconds` at all — the two time columns are gone from the
+> exporter too, so a refresh (§6) won't put them back.
+
+### B. Update the two script files
+
+Paste the current `appsscript/Code.gs` and `appsscript/Index.html` over the versions in
+**Extensions > Apps Script**, save, then **Deploy > Manage deployments > ✏️ > Version: New
+version > Deploy**. Same URL.
+
+### C. Open the deployment up (this is why their link failed)
+
+Your deployment is set to **Who has access: Only myself**, so anyone else gets a Google
+sign-in wall or "you need permission" — nothing to do with the code.
+
+**Deploy > Manage deployments > ✏️ > Who has access: _Anyone with a Google account_ >
+Deploy.** Keep **Execute as: Me**.
+
+Then send each person their own link — the **`/exec`** URL with `?who=h` or `?who=k`
+appended. Three things to know:
+
+- **Don't send the `/dev` URL.** It only works for people with edit access to the *script*.
+  The shareable one ends in `/exec`.
+- **They do not need access to the spreadsheet, and must not be given it.** "Execute as:
+  Me" means the script touches the sheet with your permissions. That is exactly what keeps
+  labelling blind — the judge columns are sitting in plain sight in the sheet, so anyone
+  with sheet access could look up the answer.
+- **You don't need their emails** for this. "Anyone with a Google account" means any signed-in
+  Google user with the link; you never enumerate addresses. (If you'd rather lock it down to
+  exactly two people, that needs sheet-level sharing, which breaks the blinding above — so
+  don't.)
+
+If someone opens the bare `/exec` link with no `?who=`, the app shows a "Who's labelling?"
+chooser and remembers the answer on that device. The header shows their name; tapping it
+switches. It's honour-system, not enforced — fine for three known collaborators.
+
+### D. Score it
+
+`score_gold.py` picks the extra columns up automatically and adds a **§6 Inter-annotator
+agreement** section: each labeller's accuracy against the judge, pairwise agreement and
+Cohen's κ for all three pairs, and the judge's accuracy against a **majority-vote gold**
+over the 80. It stays silent when only you have labelled.
+
+> **Should H and K see the definitions panel?** Yes — that's what makes this an agreement
+> number on *your annotation guidelines*. It measures whether the taxonomy can be applied
+> consistently by different people, which is the question the two forks raise. It does not
+> measure whether the taxonomy is self-evident without guidelines; that would need a
+> clean-room rubric, which is what the stage-B Opus check already did.
+
+---
+
+## 8. Notes
 - **Speed.** Each tap is a round-trip to Google (~0.3–1 s). The dock stays put and dims
   while saving.
+- **Adding a fourth labeller** = one line in `LABELLERS` in `Code.gs`, the matching line in
+  `LABELLERS`/`LABEL_PREFIXES` in `export_gold_sheet.py` and `score_gold.py`, and four
+  columns in the sheet. `scope: 'all'` for the full queue, `scope: 'random_eval'` for the
+  80-site cross-check block.
 - **`sheet.csv` is derived** — regenerate it rather than editing it; the Sheet is the copy
   that holds your labels.
 - **Shell gotcha (PowerShell).** `\` is *not* a line-continuation in PowerShell — it gets

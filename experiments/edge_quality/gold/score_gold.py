@@ -32,6 +32,19 @@ ROOT = Path(__file__).resolve().parents[3]
 OUT = ROOT / "experiments" / "edge_quality" / "out"
 CLASSES = ("background", "uses_extends", "compares_contrasts")
 SKIP = "SKIP"
+# (column prefix, display name) — keep in sync with LABELLERS in appsscript/Code.gs
+LABELLERS = (("", "Callum"), ("H_", "Labeller H"), ("K_", "Labeller K"))
+
+
+def kappa(pairs: list[tuple[str, str]]) -> float:
+    """Cohen's kappa, unweighted."""
+    n = len(pairs)
+    if not n:
+        return 0.0
+    po = sum(1 for a, b in pairs if a == b) / n
+    ca, cb = Counter(a for a, _ in pairs), Counter(b for _, b in pairs)
+    pe = sum((ca[c] / n) * (cb[c] / n) for c in set(ca) | set(cb))
+    return (po - pe) / (1 - pe) if pe < 1 else 1.0
 
 
 def wilson(k: int, n: int, z: float = 1.96) -> tuple[float, float]:
@@ -192,9 +205,69 @@ def main() -> None:
             w(f"| {name} | {len(sub)} | {pct(a / len(sub))} |")
     w("")
 
-    # ── 6. every miss, for eyeballing ────────────────────────────────────
+    # ── 6. inter-annotator agreement on the random_eval block ────────────
+    w("## 6. Inter-annotator agreement (random_eval block)\n")
+    present = [(p, n) for p, n in LABELLERS
+               if any((r.get(p + "gold_intent") or "").strip() not in ("", SKIP)
+                      for r in sites.values())]
+    rnd_all = [r for r in sites.values() if r["sample_type"] == "random_eval"]
+
+    if len(present) < 2:
+        w("_only one labeller has entries — add the `H_`/`K_` columns and share the "
+          "`?who=` links to get an agreement number._\n")
+    else:
+        w("| labeller | labelled | accuracy vs judge |")
+        w("|---|---|---|")
+        for p, name in present:
+            sub = [r for r in rnd_all if (r.get(p + "gold_intent") or "").strip() not in ("", SKIP)]
+            a = sum(1 for r in sub if r[p + "gold_intent"].strip() == r["judge_intent"])
+            w(f"| {name} | {len(sub)}/{len(rnd_all)} | "
+              + (f"{pct(a / len(sub))}" if sub else "—") + " |")
+        w("")
+
+        w("| pair | both labelled | agreement | Cohen's κ |")
+        w("|---|---|---|---|")
+        for i in range(len(present)):
+            for j in range(i + 1, len(present)):
+                (p1, n1), (p2, n2) = present[i], present[j]
+                pairs = [(r[p1 + "gold_intent"].strip(), r[p2 + "gold_intent"].strip())
+                         for r in rnd_all
+                         if (r.get(p1 + "gold_intent") or "").strip() not in ("", SKIP)
+                         and (r.get(p2 + "gold_intent") or "").strip() not in ("", SKIP)]
+                if not pairs:
+                    w(f"| {n1} × {n2} | 0 | — | — |")
+                    continue
+                agree = sum(1 for a, b in pairs if a == b)
+                w(f"| {n1} × {n2} | {len(pairs)} | {pct(agree / len(pairs))} | "
+                  f"{kappa(pairs):.3f} |")
+        w("")
+
+        # majority vote across all present labellers
+        maj_rows, tie = [], 0
+        for r in rnd_all:
+            votes = [(r.get(p + "gold_intent") or "").strip() for p, _ in present]
+            votes = [v for v in votes if v and v != SKIP]
+            if len(votes) < 2:
+                continue
+            top = Counter(votes).most_common()
+            if len(top) > 1 and top[0][1] == top[1][1]:
+                tie += 1
+                continue
+            maj_rows.append((top[0][0], r["judge_intent"]))
+        if maj_rows:
+            a = sum(1 for g, j in maj_rows if g == j)
+            lo3, hi3 = wilson(a, len(maj_rows))
+            w(f"**Judge accuracy vs majority-vote gold: {pct(a / len(maj_rows))}** "
+              f"({a}/{len(maj_rows)}), 95% CI [{pct(lo3)}, {pct(hi3)}]"
+              + (f" · {tie} site{'s' if tie != 1 else ''} had no majority "
+                 f"(annotators three ways split)" if tie else "") + "\n")
+        w("> κ is Cohen's, unweighted, over the three intent classes. Two humans landing near "
+          "the ours-vs-Opus κ of 0.79 would say the residual disagreement is the taxonomy, "
+          "not the judge.\n")
+
+    # ── 7. every miss, for eyeballing ────────────────────────────────────
     miss = [r for r in lab if r["gold_intent"] != r["judge_intent"]]
-    w(f"## 6. Misses ({len(miss)})\n")
+    w(f"## 7. Misses ({len(miss)})\n")
     for r in miss:
         w(f"#### {r['site_key']}  ·  `{r['sample_type']}`")
         w(f"- **citing:** {r['citing_title']} ({r['citing_year']})")

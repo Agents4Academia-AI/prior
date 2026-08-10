@@ -40,8 +40,12 @@ OUT = ROOT / "experiments" / "edge_quality" / "out"
 DATA = ROOT / "data" / "prior-core-v0.2"
 CLASSES = ("background", "uses_extends", "compares_contrasts")
 
-GOLD_COLS = ["gold_intent", "gold_support", "gold_priority", "gold_notes",
-             "labeller", "labelled_at", "seconds", "revision"]
+# One set of gold columns per labeller. "" is the primary (Callum); the others are the
+# cross-check annotators, who work the random_eval block only. Keep in sync with
+# LABELLERS in appsscript/Code.gs.
+LABEL_PREFIXES = ("", "H_", "K_")
+GOLD_FIELDS = ("gold_intent", "gold_support", "gold_priority", "gold_notes")
+GOLD_COLS = [p + f for p in LABEL_PREFIXES for f in GOLD_FIELDS] + ["revision"]
 
 # A cell starting with one of these is parsed as a formula by Sheets on import.
 FORMULA_LEAD = ("=", "+", "@")
