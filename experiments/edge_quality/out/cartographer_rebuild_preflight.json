@@ -1,0 +1,9 @@
+{
+  "manifest": "/Users/kk1918_1/projects/Otto/worktrees/prior-cartographer-integration/experiments/edge_quality/out/cartographer_rebuild_candidates.json",
+  "n_candidates": 2188,
+  "model": "sonnet",
+  "fulltext_chars": 60000,
+  "passages_per_paper": 4,
+  "with_two_fulltexts": 2187,
+  "with_citation_passage": 950
+}
