@@ -58,4 +58,3 @@ Thorough citation resolution must run in this order:
 5. check incoming citation APIs against the same work matcher;
 6. localize body markers where possible and retain bibliography/API-only tiers;
 7. audit residual isolates without promoting unsupported fuzzy matches.
-
