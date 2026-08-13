@@ -232,12 +232,14 @@ _PREPRINT_PREFIXES = {"10.1101", "10.64898", "10.26434", "10.21203", "10.20944",
                       "10.48550", "10.3929", "10.5281", "10.2139"}
 
 
-def fetch_fulltext(papers: list[Paper], *, workers: int = 12, progress=print) -> dict:
+def fetch_fulltext(papers: list[Paper], *, workers: int = 12, progress=print,
+                   require_bibliography: bool = False) -> dict:
     """Pre-stage: cache raw full text for `papers` in PARALLEL (no LLM), so the
     parallel reader (read_all -> reader.read -> fulltext.fetch) reads locally
     instead of re-fetching. Delegates to the standalone fulltext.fetch_many."""
     config.ensure_dirs()
-    return fulltext.fetch_many(papers, workers=workers, progress=progress)
+    return fulltext.fetch_many(papers, workers=workers, progress=progress,
+                               require_bibliography=require_bibliography)
 
 
 def enrich_arxiv_twins(papers: list[Paper], *, throttle: float = 1.0, progress=print) -> int:

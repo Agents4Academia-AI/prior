@@ -26,6 +26,12 @@ def test_html_to_text_strips_tags_and_scripts():
     assert fulltext._html_to_text(html) == "We propose AR-RAG ."
 
 
+def test_html_to_text_preserves_bibliography_boundaries():
+    html = "<p>Body [1].</p><h2>References</h2><p>[1] A. Author. Paper, 2024.</p>"
+    assert fulltext._html_to_text(html).splitlines() == [
+        "Body [1].", "References", "[1] A. Author. Paper, 2024."]
+
+
 def test_arxiv_id_extraction():
     p = Paper(id="arxiv:2506.06962v3", source="arxiv", title="t", abstract="a", url="")
     assert fulltext._arxiv_id_of(p) == "2506.06962"
@@ -35,6 +41,38 @@ def test_arxiv_id_extraction():
     p3 = Paper(id="openalex:W2", source="openalex", title="t", abstract="a", url="",
                pdf_url="https://aclanthology.org/2024.naacl.19.pdf")
     assert fulltext._arxiv_id_of(p3) is None
+
+
+def test_bibliography_fetch_falls_back_from_stub_html_to_pdf(monkeypatch):
+    paper = Paper(id="arxiv:2501.00001", source="arxiv", title="Test", abstract="a", url="")
+    monkeypatch.setattr(fulltext, "_arxiv_html", lambda _aid: "abstract stub")
+    pdf = ("body " * 3000 + "\nReferences\n"
+           "[1] A. One. First paper. 2020.\n[2] B. Two. Second paper. 2021.")
+    monkeypatch.setattr(fulltext, "_arxiv_pdf", lambda _aid: pdf)
+    text, source, audit = fulltext.fetch_for_bibliography(paper)
+    assert text == pdf and source == "arxiv_pdf"
+    assert [a["bibliography_status"] for a in audit] == ["short_or_stub", "parsed"]
+
+
+def test_bibliography_fetch_keeps_better_existing_text_when_retries_fail(monkeypatch):
+    paper = Paper(id="arxiv:2501.00001", source="arxiv", title="Test", abstract="a", url="")
+    existing = "body " * 3000 + "\nReferences\nAppendix navigation only"
+    monkeypatch.setattr(fulltext, "_arxiv_html", lambda _aid: "stub")
+    monkeypatch.setattr(fulltext, "_arxiv_pdf", lambda _aid: None)
+    monkeypatch.setattr(fulltext, "_arxiv_search", lambda _title: None)
+    text, source, audit = fulltext.fetch_for_bibliography(paper, existing_text=existing)
+    assert text == existing and source == "existing"
+    assert audit[0]["bibliography_status"] == "heading_without_reference_block"
+
+
+def test_fulltext_quality_flags_incomplete_representations():
+    assert fulltext.fulltext_quality("")["flags"] == ["full_text_unavailable"]
+    assert fulltext.fulltext_quality("abstract stub")["flags"] == ["likely_stub_or_truncated"]
+    complete = ("body " * 3000 + "\nReferences\n"
+                "[1] A. One. First paper. 2020.\n[2] B. Two. Second paper. 2021.")
+    quality = fulltext.fulltext_quality(complete)
+    assert quality["complete_for_citation_analysis"] is True
+    assert quality["reference_count"] == 2
 
 
 # ── contribution agent ──────────────────────────────────────────────────────

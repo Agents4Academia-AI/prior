@@ -32,5 +32,5 @@ def test_first_hop_seeds_include_low_cited_bridge(monkeypatch):
     assert "BRIDGE" not in {s.id for s in scoper.high_yield_seeds(hubs + [bridge])}
 
     scoper.explore("topic", hops=1, recover_rounds=0, use_prefilter=False,
-                   repair_abstracts=False, progress=lambda m: None)
+                   repair_abstracts=False, resolve_versions=False, progress=lambda m: None)
     assert "BRIDGE" in seen["hop1"]      # but the first snowball hop DOES seed from it
