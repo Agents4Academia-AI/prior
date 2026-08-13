@@ -26,13 +26,36 @@ import asyncio
 import json
 import os
 import re
+import threading
 import time
+from datetime import datetime, timezone
+from pathlib import Path
 from typing import TYPE_CHECKING, Any, Optional
 
 if TYPE_CHECKING:  # only the "api" backend needs the SDK; keep import lazy
     import anthropic
 
 _client: "Optional[anthropic.Anthropic]" = None
+_usage_lock = threading.Lock()
+
+
+def _log_api_usage(resp, model: str) -> None:
+    """Append exact Anthropic usage when PRIOR_USAGE_LOG is configured."""
+    destination = os.environ.get("PRIOR_USAGE_LOG")
+    if not destination:
+        return
+    usage = resp.usage.model_dump() if hasattr(resp.usage, "model_dump") else {
+        key: getattr(resp.usage, key) for key in
+        ("input_tokens", "output_tokens", "cache_creation_input_tokens",
+         "cache_read_input_tokens") if hasattr(resp.usage, key)
+    }
+    row = {"timestamp": datetime.now(timezone.utc).isoformat(),
+           "response_id": getattr(resp, "id", None), "model": model, **usage}
+    path = Path(destination)
+    with _usage_lock:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open("a") as handle:
+            handle.write(json.dumps(row) + "\n")
 
 
 def client(api_key: str | None = None) -> "anthropic.Anthropic":
@@ -226,12 +249,17 @@ def _structured_api(*, model, system, user, schema, tool_name, max_tokens, retri
                 tool_choice={"type": "tool", "name": tool_name},
                 messages=[{"role": "user", "content": user}],
             )
+            _log_api_usage(resp, model)
             for block in resp.content:
                 if block.type == "tool_use" and block.name == tool_name:
                     return block.input  # type: ignore[return-value]
             raise ValueError("model did not call the emit tool")
         except anthropic.AuthenticationError as e:  # bad/expired key — don't retry, surface clearly
             raise RuntimeError(f"Invalid Anthropic API key: {e}") from e
+        except anthropic.BadRequestError as e:
+            # Invalid requests and organisation spend caps cannot recover through
+            # exponential retry; fail immediately so batch workers stop wasting calls.
+            raise RuntimeError(f"Anthropic rejected the request: {e}") from e
         except (anthropic.RateLimitError, anthropic.APIStatusError) as e:
             last_err = e
             time.sleep(2 ** attempt)
