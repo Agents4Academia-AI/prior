@@ -1,0 +1,3 @@
+out/eprints/
+out/*.log
+out/gold_export/
