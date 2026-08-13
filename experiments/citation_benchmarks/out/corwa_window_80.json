@@ -1,0 +1,325 @@
+{
+  "dataset": "/private/tmp/prior-citation-benchmarks/CORWA/data/CORWA_test.jsonl",
+  "window_each_side": 80,
+  "paragraphs": 1164,
+  "by_span_type": {
+    "Dominant": {
+      "gold_spans": 1463,
+      "markers_located": 1292,
+      "marker_coverage": 0.8831,
+      "mean_precision": 0.5943,
+      "mean_recall": 0.6618,
+      "mean_f1": 0.5925
+    },
+    "Reference": {
+      "gold_spans": 1844,
+      "markers_located": 1643,
+      "marker_coverage": 0.891,
+      "mean_precision": 0.4211,
+      "mean_recall": 0.9747,
+      "mean_f1": 0.55
+    }
+  },
+  "examples": [
+    {
+      "paragraph_id": "201740743_2",
+      "span_type": "Dominant",
+      "gold": [
+        140,
+        403
+      ],
+      "predicted": [
+        60,
+        241
+      ],
+      "precision": 0.5580110497237569,
+      "recall": 0.3840304182509506,
+      "f1": 0.4549549549549549
+    },
+    {
+      "paragraph_id": "201740743_2",
+      "span_type": "Dominant",
+      "gold": [
+        410,
+        699
+      ],
+      "predicted": [
+        424,
+        608
+      ],
+      "precision": 1.0,
+      "recall": 0.6366782006920415,
+      "f1": 0.7780126849894292
+    },
+    {
+      "paragraph_id": "201740743_2",
+      "span_type": "Dominant",
+      "gold": [
+        744,
+        898
+      ],
+      "predicted": [
+        664,
+        845
+      ],
+      "precision": 0.5580110497237569,
+      "recall": 0.6558441558441559,
+      "f1": 0.6029850746268657
+    },
+    {
+      "paragraph_id": "201740743_2",
+      "span_type": "Reference",
+      "gold": [
+        1111,
+        1199
+      ],
+      "predicted": [
+        1041,
+        1223
+      ],
+      "precision": 0.4835164835164835,
+      "recall": 1.0,
+      "f1": 0.6518518518518518
+    },
+    {
+      "paragraph_id": "201740743_2",
+      "span_type": "Dominant",
+      "gold": [
+        1276,
+        1644
+      ],
+      "predicted": [
+        1253,
+        1429
+      ],
+      "precision": 0.8693181818181818,
+      "recall": 0.4157608695652174,
+      "f1": 0.5625
+    },
+    {
+      "paragraph_id": "201740743_2",
+      "span_type": "Dominant",
+      "gold": [
+        1651,
+        1743
+      ],
+      "predicted": [
+        1646,
+        1823
+      ],
+      "precision": 0.519774011299435,
+      "recall": 1.0,
+      "f1": 0.6840148698884758
+    },
+    {
+      "paragraph_id": "201740743_2",
+      "span_type": "Dominant",
+      "gold": [
+        1752,
+        2089
+      ],
+      "predicted": [
+        1672,
+        1864
+      ],
+      "precision": 0.5833333333333334,
+      "recall": 0.3323442136498516,
+      "f1": 0.4234404536862003
+    },
+    {
+      "paragraph_id": "201740743_1",
+      "span_type": "Dominant",
+      "gold": [
+        6,
+        253
+      ],
+      "predicted": [
+        0,
+        125
+      ],
+      "precision": 0.952,
+      "recall": 0.4817813765182186,
+      "f1": 0.6397849462365591
+    },
+    {
+      "paragraph_id": "201740743_1",
+      "span_type": "Dominant",
+      "gold": [
+        260,
+        523
+      ],
+      "predicted": [
+        180,
+        361
+      ],
+      "precision": 0.5580110497237569,
+      "recall": 0.3840304182509506,
+      "f1": 0.4549549549549549
+    },
+    {
+      "paragraph_id": "201740743_1",
+      "span_type": "Dominant",
+      "gold": [
+        530,
+        834
+      ],
+      "predicted": [
+        495,
+        679
+      ],
+      "precision": 0.8097826086956522,
+      "recall": 0.4901315789473684,
+      "f1": 0.610655737704918
+    },
+    {
+      "paragraph_id": "184482991_4",
+      "span_type": "Dominant",
+      "gold": [
+        68,
+        177
+      ],
+      "predicted": [
+        0,
+        171
+      ],
+      "precision": 0.6023391812865497,
+      "recall": 0.944954128440367,
+      "f1": 0.7357142857142857
+    },
+    {
+      "paragraph_id": "184482991_3",
+      "span_type": "Dominant",
+      "gold": [
+        94,
+        339
+      ],
+      "predicted": [
+        76,
+        263
+      ],
+      "precision": 0.9037433155080213,
+      "recall": 0.689795918367347,
+      "f1": 0.7824074074074074
+    },
+    {
+      "paragraph_id": "184482991_2",
+      "span_type": "Dominant",
+      "gold": [
+        8,
+        238
+      ],
+      "predicted": [
+        0,
+        175
+      ],
+      "precision": 0.9542857142857143,
+      "recall": 0.7260869565217392,
+      "f1": 0.8246913580246914
+    },
+    {
+      "paragraph_id": "184482991_1",
+      "span_type": "Dominant",
+      "gold": [
+        68,
+        271
+      ],
+      "predicted": [
+        0,
+        174
+      ],
+      "precision": 0.6091954022988506,
+      "recall": 0.5221674876847291,
+      "f1": 0.5623342175066314
+    },
+    {
+      "paragraph_id": "184482991_1",
+      "span_type": "Dominant",
+      "gold": [
+        309,
+        559
+      ],
+      "predicted": [
+        268,
+        455
+      ],
+      "precision": 0.7807486631016043,
+      "recall": 0.584,
+      "f1": 0.6681922196796338
+    },
+    {
+      "paragraph_id": "184482991_1",
+      "span_type": "Reference",
+      "gold": [
+        864,
+        993
+      ],
+      "predicted": [
+        894,
+        997
+      ],
+      "precision": 0.9611650485436893,
+      "recall": 0.7674418604651163,
+      "f1": 0.853448275862069
+    },
+    {
+      "paragraph_id": "201058633_2",
+      "span_type": "Reference",
+      "gold": [
+        292,
+        446
+      ],
+      "predicted": [
+        312,
+        492
+      ],
+      "precision": 0.7444444444444445,
+      "recall": 0.8701298701298701,
+      "f1": 0.8023952095808383
+    },
+    {
+      "paragraph_id": "201058633_1",
+      "span_type": "Dominant",
+      "gold": [
+        43,
+        865
+      ],
+      "predicted": [
+        0,
+        160
+      ],
+      "precision": 0.73125,
+      "recall": 0.14233576642335766,
+      "f1": 0.23828920570264764
+    },
+    {
+      "paragraph_id": "201058633_0",
+      "span_type": "Reference",
+      "gold": [
+        43,
+        167
+      ],
+      "predicted": [
+        0,
+        179
+      ],
+      "precision": 0.6927374301675978,
+      "recall": 1.0,
+      "f1": 0.8184818481848186
+    },
+    {
+      "paragraph_id": "201058633_0",
+      "span_type": "Dominant",
+      "gold": [
+        600,
+        785
+      ],
+      "predicted": [
+        541,
+        720
+      ],
+      "precision": 0.6703910614525139,
+      "recall": 0.6486486486486487,
+      "f1": 0.6593406593406593
+    }
+  ]
+}
