@@ -90,6 +90,103 @@ def files_of(blob: bytes) -> dict[str, str]:
     return out
 
 
+def bbl_entries(text: str) -> list[tuple[str, str]]:
+    """Parse bounded ``\\bibitem`` records without crossing the bibliography.
+
+    arXiv source bundles sometimes append comments or a complete ``.bib`` after
+    ``\\end{thebibliography}``. The old end-of-input regex fused that material
+    into the final item and allowed unrelated titles to resolve against it.
+    """
+    begin = re.search(r"\\begin\s*\{thebibliography\}(?:\s*\{[^}]*\})?", text)
+    if begin:
+        text = text[begin.end():]
+    end = re.search(r"\\end\s*\{thebibliography\}", text)
+    if end:
+        text = text[:end.start()]
+    markers = list(re.finditer(r"\\bibitem(?:\[[^\]]*\])?\{([^}]+)\}", text))
+    entries = []
+    for i, marker in enumerate(markers):
+        stop = markers[i + 1].start() if i + 1 < len(markers) else len(text)
+        body = text[marker.end():stop].strip()
+        if body:
+            entries.append((marker.group(1).strip(), body))
+    return entries
+
+
+def bibtex_entries(text: str) -> list[tuple[str, str]]:
+    """Parse BibTeX records using balanced delimiters, not newline heuristics."""
+    starts = re.compile(r"@(?:article|book|booklet|conference|dataset|inbook|"
+                        r"incollection|inproceedings|manual|mastersthesis|misc|"
+                        r"phdthesis|proceedings|techreport|unpublished)\s*([({])", re.I)
+    entries = []
+    pos = 0
+    while match := starts.search(text, pos):
+        opening = match.group(1)
+        closing = "}" if opening == "{" else ")"
+        depth, quoted, escaped, end = 1, False, False, None
+        for i in range(match.end(), len(text)):
+            char = text[i]
+            if escaped:
+                escaped = False
+                continue
+            if char == "\\":
+                escaped = True
+                continue
+            if char == '"':
+                quoted = not quoted
+                continue
+            if quoted:
+                continue
+            if char == opening:
+                depth += 1
+            elif char == closing:
+                depth -= 1
+                if depth == 0:
+                    end = i
+                    break
+        if end is None:
+            break  # malformed trailing entry is rejected, never fused onward
+        payload = text[match.end():end]
+        key_match = re.match(r"\s*([^,\s]+)\s*,", payload)
+        if key_match:
+            entries.append((key_match.group(1), payload[key_match.end():].strip()))
+        pos = end + 1
+    return entries
+
+
+def bibliography_entries(files: dict[str, str]) -> list[tuple[str, str]]:
+    """Parse every bibliography file independently and reject conflicting keys."""
+    by_key: dict[str, set[str]] = {}
+    for name, text in files.items():
+        lower = name.lower()
+        parsed = bbl_entries(text) if lower.endswith(".bbl") else (
+            bibtex_entries(text) if lower.endswith(".bib") else [])
+        for key, body in parsed:
+            clean = re.sub(r"\s+", " ", body).strip()
+            by_key.setdefault(key, set()).add(clean)
+    return [(key, next(iter(bodies))) for key, bodies in by_key.items()
+            if len(bodies) == 1]
+
+
+def match_entries(entries: list[tuple[str, str]], signatures: dict[str, dict],
+                  citing_id: str) -> dict[str, tuple[str, str]]:
+    """Return only one-to-one target/entry matches; ambiguity creates no edge."""
+    target_hits: dict[str, list[tuple[str, str]]] = {}
+    for key, body in entries:
+        body_norm = norm(body)
+        hits = []
+        for target_id, signature in signatures.items():
+            if target_id == citing_id:
+                continue
+            if ((signature["arx"] and signature["arx"] in body)
+                    or (signature["title"] and signature["title"] in body_norm)):
+                hits.append(target_id)
+        if len(hits) == 1:  # one entry mentioning multiple corpus works is ambiguous
+            target_hits.setdefault(hits[0], []).append((key, body))
+    return {target: matches[0] for target, matches in target_hits.items()
+            if len(matches) == 1}
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--papers", required=True)
@@ -114,25 +211,18 @@ def main() -> None:
         if not cache.exists() or not cache.stat().st_size:
             continue
         fs = files_of(cache.read_bytes())
-        bibs = "\n".join(v for k, v in fs.items() if k.lower().endswith((".bbl", ".bib")))
         texs = "\n".join(v for k, v in fs.items() if k.lower().endswith(".tex"))
-        if not bibs or not texs:
+        entries = bibliography_entries(fs)
+        if not entries or not texs:
             continue
-        # split bibliography into entries with their keys
-        entries = re.findall(r"\\bibitem(?:\[[^\]]*\])?\{([^}]+)\}(.*?)(?=\\bibitem|\Z)", bibs, re.S) \
-                + re.findall(r"@\w+\{([^,]+),(.*?)\n\}", bibs, re.S)
+        matches = match_entries(entries, sig, p["id"])
         for q in papers:
             if q["id"] == p["id"]:
                 continue
-            s = sig[q["id"]]
-            key = bib_body = None
-            for k, body in entries:
-                if (s["arx"] and s["arx"] in body) or (s["title"] and s["title"] in norm(body)):
-                    key = k.strip()
-                    bib_body = re.sub(r"\s+", " ", body).strip()   # the citing paper's raw \bibitem/@entry
-                    break
-            if not key:
+            matched = matches.get(q["id"])
+            if not matched:
                 continue
+            key, bib_body = matched
             ctxs = []
             for m in re.finditer(r"\\cite[a-z]*\*?(?:\[[^\]]*\])?\{([^}]*)\}", texs):
                 if key in [x.strip() for x in m.group(1).split(",")]:
