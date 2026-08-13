@@ -92,42 +92,85 @@ def _dedup_cross_source(papers: list[Paper]) -> list[Paper]:
 
 
 def gather_candidates(queries: list[str], *, per_query: int = 25,
-                      use_arxiv: bool = True, use_s2: bool = True,
-                      progress=print) -> list[Paper]:
+                      use_openalex: bool = True, use_arxiv: bool = True,
+                      use_s2: bool = True,
+                      progress=print, observe=None) -> list[Paper]:
     """Resilient multi-source recall: OpenAlex + arXiv + Semantic Scholar. A
     source that errors (rate-limit, timeout) on one query is skipped, not fatal;
     arXiv and S2 are paced to respect their public limits. Cross-source
     duplicates are collapsed by title at the end."""
     import time
     papers: dict[str, Paper] = {}
-    for q in queries:
+    observed: list[Paper] = []
+
+    def search_source(source: str, query: str, limit: int, search_fn) -> None:
+        request = {
+            "kind": "retrieval_request", "source": source, "query": query,
+            "parameters": {"max_papers": limit},
+        }
+        if observe:
+            observe(request)
         try:
-            for p in openalex.search(q, max_papers=per_query):
-                papers.setdefault(p.id, p)
-        except Exception as e:  # noqa: BLE001
-            progress(f"  openalex error on '{q[:40]}': {e}")
+            results = search_fn(query, max_papers=limit)
+            for rank, paper in enumerate(results, 1):
+                observed.append(paper)
+                papers.setdefault(paper.id, paper)
+                if observe:
+                    observe({
+                        "kind": "retrieval_result", "source": source, "query": query,
+                        "source_rank": rank, "paper": paper,
+                    })
+        except Exception as error:  # noqa: BLE001
+            if observe:
+                observe({
+                    "kind": "source_failure", "source": source, "query": query,
+                    "error_type": type(error).__name__, "message": str(error)[:500],
+                    "retry_or_fallback": "continue_with_remaining_sources",
+                })
+            raise
+
+    for q in queries:
+        if use_openalex:
+            try:
+                search_source("openalex", q, per_query, openalex.search)
+            except Exception as e:  # noqa: BLE001
+                progress(f"  openalex error on '{q[:40]}': {e}")
         if use_arxiv:
             try:
-                for p in arxiv.search(q, max_papers=max(4, per_query // 5)):
-                    papers.setdefault(p.id, p)
+                search_source("arxiv", q, max(4, per_query // 5), arxiv.search)
                 time.sleep(1.0)   # be polite to arXiv
             except Exception as e:  # noqa: BLE001
                 progress(f"  arxiv skip '{q[:40]}': {e}")
         if use_s2:
             try:
-                for p in semanticscholar.search(q, max_papers=max(6, per_query // 2)):
-                    papers.setdefault(p.id, p)
-                time.sleep(1.1)   # S2 public pool is throttled
+                search_source(
+                    "semanticscholar", q, max(6, per_query // 2),
+                    semanticscholar.search,
+                )
             except Exception as e:  # noqa: BLE001
                 progress(f"  s2 skip '{q[:40]}': {e}")
         progress(f"  query '{q[:50]}' → pool now {len(papers)}")
-    return _dedup_cross_source(list(papers.values()))
+    deduped = _dedup_cross_source(list(papers.values()))
+    if observe:
+        variants: dict[str, list[Paper]] = {}
+        for paper in observed:
+            variants.setdefault(paper.key(), []).append(paper)
+        retained = {paper.key(): paper for paper in deduped}
+        for key, copies in variants.items():
+            unique_ids = list(dict.fromkeys(paper.id for paper in copies))
+            if len(unique_ids) > 1:
+                observe({
+                    "kind": "deduplication", "work_key": key,
+                    "retained_id": retained[key].id, "variant_ids": unique_ids,
+                    "basis": "canonical_work_key",
+                })
+    return deduped
 
 
 # ── stage 2b: citation snowball (recall, the high-leverage step) ─────────────
 def snowball(seeds: list[Paper], *, corpus: list[Paper] | None = None,
              anchor_k: int = 25, per_paper: int = 40,
-             progress=print) -> tuple[list[Paper], set[str]]:
+             progress=print, observe=None, hop: int = 1) -> tuple[list[Paper], set[str]]:
     """One-hop citation expansion of a seed set (OpenAlex): backward references
     of all seeds + forward cited-by of the most-cited anchors. Finds the
     connected cluster that keyword search misses.
@@ -145,11 +188,19 @@ def snowball(seeds: list[Paper], *, corpus: list[Paper] | None = None,
     reached: set[str] = set()
 
     # backward — references are OpenAlex ids; match them against corpus ids
-    all_refs = list(dict.fromkeys(
-        r for p in seeds for r in p.referenced_works if r.startswith("openalex:")))
+    ref_seeds: dict[str, list[Paper]] = {}
+    for seed in seeds:
+        for ref in seed.referenced_works:
+            if ref.startswith("openalex:"):
+                ref_seeds.setdefault(ref, []).append(seed)
+    all_refs = list(ref_seeds)
     reached |= {id_to_key[r] for r in all_refs if r in known_ids}   # ref → corpus paper
     for _pid, p in openalex.fetch_many([r for r in all_refs if r not in known_ids]).items():
         k = p.key()
+        for seed in ref_seeds.get(p.id, []):
+            if observe:
+                observe({"source": "openalex", "hop": hop, "direction": "backward",
+                         "seed": seed, "paper": p, "endpoint": "works/filter:ids.openalex"})
         if k in known_keys:
             reached.add(k)
         elif k not in new:
@@ -161,6 +212,9 @@ def snowball(seeds: list[Paper], *, corpus: list[Paper] | None = None,
                      key=lambda p: -p.cited_by_count)[:anchor_k]
     for p in anchors:
         for cp in openalex.cited_by(p.id, max_results=per_paper):
+            if observe:
+                observe({"source": "openalex", "hop": hop, "direction": "forward",
+                         "seed": p, "paper": cp, "endpoint": "works/filter:cites"})
             k = cp.key()
             if k in known_keys:
                 reached.add(k)
@@ -183,7 +237,7 @@ def _s2_id(p: Paper) -> str | None:
 
 def snowball_s2(seeds: list[Paper], *, corpus: list[Paper] | None = None,
                 anchor_k: int = 40, per_paper: int = 40,
-                recent_year: int = 2024, progress=print
+                recent_year: int = 2024, progress=print, observe=None, hop: int = 1
                 ) -> tuple[list[Paper], set[str]]:
     """Citation snowball via Semantic Scholar — the path for the RECENT frontier,
     where OpenAlex has no citation edges yet. Anchors on recent / arXiv-keyed
@@ -201,9 +255,16 @@ def snowball_s2(seeds: list[Paper], *, corpus: list[Paper] | None = None,
         sid = _s2_id(p)
         if not sid:
             continue
-        neighbours = (semanticscholar.references(sid, max_results=per_paper)
-                      + semanticscholar.citations(sid, max_results=per_paper))
-        for cp in neighbours:
+        neighbours = [
+            ("backward", cp) for cp in semanticscholar.references(sid, max_results=per_paper)
+        ] + [
+            ("forward", cp) for cp in semanticscholar.citations(sid, max_results=per_paper)
+        ]
+        for direction, cp in neighbours:
+            if observe:
+                observe({"source": "semanticscholar", "hop": hop,
+                         "direction": direction, "seed": p, "paper": cp,
+                         "endpoint": f"paper/{{seed}}/{'references' if direction == 'backward' else 'citations'}"})
             k = cp.key()
             if k in known_keys:
                 reached.add(k)

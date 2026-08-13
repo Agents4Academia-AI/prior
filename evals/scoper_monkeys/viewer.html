@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Prior · Scoper search trail</title>
+  <style>
+    :root {
+      color-scheme: dark; --ink:#e6edf0; --muted:#93a5ad; --faint:#526771;
+      --paper:#0d171d; --panel:#111e25; --line:#29404a; --cyan:#5dc8e8;
+      --green:#6ed29a; --orange:#eaa465; --grey:#71838b; --violet:#ab8ce8;
+      font:14px/1.45 "Avenir Next",Avenir,"Segoe UI",sans-serif;
+    }
+    *{box-sizing:border-box} body{margin:0;background:var(--paper);color:var(--ink);overflow:hidden}
+    button,input{font:inherit} button{color:inherit} #scene{position:fixed;inset:118px 400px 0 0}
+    header{position:fixed;inset:0 400px auto 0;height:118px;padding:17px 22px 12px;
+      border-bottom:1px solid var(--line);background:rgba(13,23,29,.97);z-index:3}
+    .mast{display:flex;align-items:baseline;gap:14px}.eyebrow{font:600 10px/1.2 ui-monospace,SFMono-Regular,monospace;
+      letter-spacing:.17em;color:var(--cyan);text-transform:uppercase}.mast h1{font:500 22px/1.2 Georgia,serif;margin:0}
+    .mast p{margin:0;color:var(--muted);font-size:12px}.controls{display:flex;gap:8px;margin-top:13px;align-items:center}
+    .control{background:#14242c;border:1px solid #31505d;border-radius:4px;padding:7px 10px}
+    input[type=search]{min-width:260px;color:var(--ink);outline:none}.control:focus{border-color:var(--cyan)}
+    button.control{cursor:pointer}button.control:hover{background:#19303a}.grow{flex:1}.count{color:var(--muted);font:11px ui-monospace,monospace}
+    aside{position:fixed;right:0;top:0;bottom:0;width:400px;background:var(--panel);border-left:1px solid var(--line);
+      overflow:auto;z-index:4} .aside-head{position:sticky;top:0;background:rgba(17,30,37,.97);padding:20px 22px 15px;
+      border-bottom:1px solid var(--line);z-index:2}.aside-head h2{font:500 19px Georgia,serif;margin:5px 0}.aside-head p{margin:0;color:var(--muted);font-size:12px}
+    #detail{padding:18px 22px 40px}.blank{border:1px dashed #38515b;padding:18px;color:var(--muted)}
+    .warning{background:#2a2119;border-left:3px solid var(--orange);padding:10px 12px;color:#dfc6ae;margin:0 0 16px}
+    .section{margin:0 0 20px}.section h3{font:600 10px ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;
+      color:var(--faint);margin:0 0 8px}.title{font:500 18px/1.32 Georgia,serif;margin:0 0 5px}.sub{color:var(--muted);margin:0}
+    dl{margin:0}.fact{display:grid;grid-template-columns:118px 1fr;gap:10px;padding:7px 0;border-bottom:1px solid #20343d}
+    dt{color:var(--muted)}dd{margin:0;overflow-wrap:anywhere}.pill{display:inline-block;padding:2px 7px;border-radius:10px;font-size:11px;
+      background:#263a43}.pill.kept{color:var(--green)}.pill.dropped{color:var(--orange)}.pill.unknown{color:#b3c0c5}
+    .quote{margin:0;padding:10px 12px;background:#0b151a;border-left:2px solid #3e5964;color:#c5d1d6}
+    .sources{margin:0;padding-left:18px;color:#bccbd1}.sources li{margin:5px 0}.raw-toggle{border:0;background:none;color:var(--cyan);padding:0;cursor:pointer}
+    pre{display:none;white-space:pre-wrap;word-break:break-word;padding:10px;background:#081116;border:1px solid #253c46;
+      font:10px/1.45 ui-monospace,monospace;max-height:260px;overflow:auto}.metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
+    .metric{background:#0b161b;padding:9px;border:1px solid #203640}.metric b{display:block;font:500 20px Georgia,serif}.metric span{color:var(--muted);font-size:11px}
+    #stageRail{position:fixed;left:0;right:400px;bottom:0;height:50px;display:flex;align-items:center;justify-content:center;
+      gap:6px;pointer-events:none;z-index:2}.stage-button{pointer-events:auto;border:1px solid #31505d;background:rgba(13,23,29,.92);
+      padding:6px 9px;border-radius:3px;cursor:pointer;font-size:11px}.stage-button.active{border-color:var(--cyan);color:var(--cyan)}
+    .legend{display:flex;gap:12px;color:var(--muted);font-size:11px}.dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px}
+    #status{position:fixed;left:22px;bottom:58px;background:rgba(13,23,29,.9);padding:6px 9px;color:var(--muted);font-size:11px;z-index:2}
+    @media(max-width:900px){aside{width:340px}#scene,header{right:340px}.mast p{display:none}input[type=search]{min-width:120px}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="mast"><span class="eyebrow">Prior / Scoper</span><h1>The search trail</h1><p>Checkpoint growth and recoverable decisions</p></div>
+    <div class="controls">
+      <input class="control" id="search" type="search" placeholder="Find a paper by title…">
+      <select class="control" id="decision"><option value="all">All decisions</option><option value="kept">Included</option><option value="dropped">Excluded</option><option value="unknown">Not recorded</option></select>
+      <button class="control" id="reset">Show all</button><span class="grow"></span>
+      <div class="legend"><span><i class="dot" style="background:var(--green)"></i>included</span><span><i class="dot" style="background:var(--orange)"></i>excluded</span><span><i class="dot" style="background:var(--grey)"></i>unknown</span></div>
+      <span class="count" id="visibleCount"></span>
+    </div>
+  </header>
+  <main id="scene"></main>
+  <aside><div class="aside-head"><span class="eyebrow">Inspector</span><h2 id="panelTitle">Run overview</h2><p id="panelHint">Select a checkpoint or paper to isolate its evidence.</p></div><div id="detail"><div class="blank">Loading ledger…</div></div></aside>
+  <div id="stageRail"></div><div id="status">Drag to orbit · scroll to zoom · click to isolate</div>
+  <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}</script>
+  <script type="module">
+    import * as THREE from 'three'; import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+    const $=s=>document.querySelector(s), mount=$('#scene'), renderer=new THREE.WebGLRenderer({antialias:true});
+    renderer.setPixelRatio(Math.min(devicePixelRatio,2)); mount.appendChild(renderer.domElement);
+    const scene=new THREE.Scene(); scene.background=new THREE.Color(0x0d171d); scene.fog=new THREE.FogExp2(0x0d171d,.0038);
+    const camera=new THREE.PerspectiveCamera(48,1,.1,4000); camera.position.set(0,70,170);
+    const controls=new OrbitControls(camera,renderer.domElement); controls.enableDamping=true; controls.target.set(0,-12,0);
+    scene.add(new THREE.HemisphereLight(0xd7f4ff,0x172229,2.4));
+    const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2(); let group=new THREE.Group();scene.add(group);
+    let state={rows:[],manifest:null,branches:[],papers:new Map(),meshes:[],branchMeshes:new Map(),selected:null,filters:{query:'',decision:'all'}};
+    const colors={kept:0x6ed29a,dropped:0xeaa465,unknown:0x71838b,branch:0x5dc8e8};
+    function resize(){let w=mount.clientWidth,h=mount.clientHeight;renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix()}addEventListener('resize',resize);resize();
+    renderer.setAnimationLoop(()=>{controls.update();renderer.render(scene,camera)});
+    const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    function parse(text){const rows=text.split(/\r?\n/).filter(x=>x.trim()).map((x,i)=>{try{return JSON.parse(x)}catch{throw Error(`Invalid JSON at line ${i+1}`)}});if(rows[0]?.schema_version!=='prior.scoper-ledger/1.0')throw Error('This is not a prior.scoper-ledger/1.0 file.');return rows}
+    function mat(color){return new THREE.MeshStandardMaterial({color,roughness:.68,metalness:.05,transparent:true,opacity:1})}
+    function addLine(a,b,color=0x5dc8e8){let g=new THREE.BufferGeometry().setFromPoints([a,b]),l=new THREE.Line(g,new THREE.LineBasicMaterial({color,transparent:true,opacity:.8}));l.visible=false;group.add(l);return l}
+    function build(rows){scene.remove(group);group=new THREE.Group();scene.add(group);state.rows=rows;state.manifest=rows[0];state.meshes=[];state.branchMeshes=new Map();state.papers=new Map();
+      const decisions=new Map(rows.filter(e=>e.event==='decision').map(e=>[e.work_key,e]));
+      const queryEvents=rows.filter(e=>e.event==='query'),snapshots=new Map(rows.filter(e=>e.event==='branch_snapshot').map(e=>[e.branch_id,e]));
+      const retrievals=new Map();rows.filter(e=>['retrieval_result','citation_path'].includes(e.event)).forEach(e=>{if(!retrievals.has(e.branch_id))retrievals.set(e.branch_id,[]);retrievals.get(e.branch_id).push(e)});
+      state.branches=queryEvents.map((q,i)=>({q,snapshot:snapshots.get(q.branch_id),index:i}));
+      const gap=70,origin=-(state.branches.length-1)*gap/2;
+      state.branches.forEach(({q,snapshot,index})=>{const x=origin+index*gap,pos=new THREE.Vector3(x,34,0),radius=3.4+Math.sqrt(snapshot?.globally_new||0)*.08;
+        const mesh=new THREE.Mesh(new THREE.IcosahedronGeometry(radius,2),mat(colors.branch));mesh.position.copy(pos);mesh.userData={type:'branch',q,snapshot,index,links:[]};group.add(mesh);state.meshes.push(mesh);state.branchMeshes.set(q.branch_id,mesh);
+        const items=retrievals.get(q.branch_id)||[],cols=Math.max(8,Math.ceil(Math.sqrt(items.length*1.8)));items.forEach((e,j)=>{let decision=decisions.get(e.work_key),status=decision?.decision||'unknown';
+          let col=j%cols,row=Math.floor(j/cols),px=x+(col-(cols-1)/2)*2.05,py=19-row*2.05,pz=((col+row)%2?1:-1)*(2+(j%5)*.38);
+          const pm=new THREE.Mesh(new THREE.SphereGeometry(.72,10,8),mat(colors[status]));pm.position.set(px,py,pz);let link=addLine(pos,pm.position);
+          pm.userData={type:'paper',event:e,decision,status,branch:q,link,title:e.paper?.title||e.work_key};mesh.userData.links.push({mesh:pm,line:link});group.add(pm);state.meshes.push(pm);state.papers.set(e.work_key,pm)});
+      });
+      const seedEvent=rows.find(e=>e.event==='seed');if(seedEvent&&state.branches.length){let first=state.branchMeshes.get(state.branches[0].q.branch_id),citationMeshes=state.branches.slice(1).map(b=>state.branchMeshes.get(b.q.branch_id));
+        let seedPos=new THREE.Vector3(first.position.x+gap*.48,54,0),seedMesh=new THREE.Mesh(new THREE.OctahedronGeometry(4.8,1),mat(0xab8ce8));seedMesh.position.copy(seedPos);seedMesh.userData={type:'seed',event:seedEvent};group.add(seedMesh);state.meshes.push(seedMesh);
+        let backbone=addLine(first.position,seedPos,0xab8ce8);backbone.visible=true;citationMeshes.forEach(m=>{let l=addLine(seedPos,m.position,0xab8ce8);l.visible=true});}
+      makeRail();resetView();showOverview();applyFilters();}
+    function makeRail(){$('#stageRail').innerHTML=state.branches.map(({q},i)=>`<button class="stage-button" data-i="${i}">${i+1} · ${esc(q.branch_id.replace('legacy:',''))}</button>`).join('');document.querySelectorAll('.stage-button').forEach(b=>b.onclick=()=>select(state.branchMeshes.get(state.branches[+b.dataset.i].q.branch_id)))}
+    function metric(label,value){return `<div class="metric"><b>${esc(value)}</b><span>${esc(label)}</span></div>`}function facts(items){return `<dl>${items.map(([a,b])=>`<div class="fact"><dt>${esc(a)}</dt><dd>${b}</dd></div>`).join('')}</dl>`}
+    function raw(data){const id='raw-'+Math.random().toString(36).slice(2);return `<button class="raw-toggle" data-raw="${id}">Show ledger record</button><pre id="${id}">${esc(JSON.stringify(data,null,2))}</pre>`}
+    function wireRaw() {document.querySelectorAll('[data-raw]').forEach(b=>b.onclick=()=>{let p=document.getElementById(b.dataset.raw),open=p.style.display==='block';p.style.display=open?'none':'block';b.textContent=open?'Show ledger record':'Hide ledger record'})}
+    function showOverview(){let last=state.rows.filter(e=>e.event==='snapshot').at(-1),missing=state.manifest.missing_provenance||[];$('#panelTitle').textContent='Run overview';$('#panelHint').textContent='Select a checkpoint or paper to isolate its evidence.';
+      $('#detail').innerHTML=`${state.manifest.reconstructed?'<p class="warning"><b>Reconstructed history.</b> Snapshot differences are observed; causal search paths are not.</p>':''}<section class="section"><h3>Recovered state</h3><div class="metrics">${metric('papers',state.papers.size)}${metric('checkpoints',state.branches.length)}${metric('recorded corpus',last?.corpus??'—')}${metric('ledger events',state.rows.length)}</div></section>${missing.length?`<section class="section"><h3>Not recoverable</h3><ul class="sources">${missing.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>`:''}<section class="section"><h3>How to read this</h3><p class="quote">Columns are historical checkpoints. Dots below each checkpoint are papers first observed in that preserved snapshot. Position within a tray has no semantic meaning.</p></section>${raw(state.manifest)}`;wireRaw()}
+    function showBranch(d){let s=d.snapshot,q=d.q;$('#panelTitle').textContent=`Checkpoint ${d.index+1}`;$('#panelHint').textContent=q.branch_id;
+      $('#detail').innerHTML=`<p class="warning">This is a preserved snapshot delta, not a proven causal search branch.</p><section class="section"><h3>Observed growth</h3><div class="metrics">${metric('new papers',s?.globally_new??'—')}${metric('included later',s?.newly_included??'—')}${metric('snapshot total',s?.returned_unique??'—')}${metric('recorded yield',s?`${(s.eligible_yield*100).toFixed(1)}%`:'—')}</div></section><section class="section"><h3>Checkpoint</h3>${facts([['Label',esc(q.branch_id.replace('legacy:',''))],['Query',esc((q.queries||[]).join(' · '))],['Evidence basis',esc(s?.attribution||'not recorded')],['Motivation',esc(q.motivation||'not recorded')]])}</section>${raw({query:q,snapshot:s})}`;wireRaw()}
+    function showPaper(d){let p=d.event.paper||{},dec=d.decision,status=d.status;$('#panelTitle').textContent='Paper';$('#panelHint').textContent=d.branch.branch_id;
+      $('#detail').innerHTML=`<section class="section"><h3>Bibliographic record</h3><p class="title">${esc(p.title||'Untitled')}</p><p class="sub">${esc((p.authors||[]).slice(0,5).join(', ')||'Authors not recorded')}${p.year?' · '+esc(p.year):''}</p></section><section class="section"><h3>Screening</h3><p><span class="pill ${status}">${status==='kept'?'Included':status==='dropped'?'Excluded':'Decision not recorded'}</span></p>${dec?.reason?`<p class="quote">${esc(dec.reason)}</p>`:''}</section><section class="section"><h3>Discovery record</h3>${facts([['Checkpoint',esc(d.branch.branch_id.replace('legacy:',''))],['Source',esc(d.event.source||p.source||'not recorded')],['Direction',esc(d.event.direction||'query search')],['Seed',esc(d.event.seed?.title||'not applicable')],['Original query',esc(d.event.query||'not recorded')],['Rank',esc(d.event.rank_basis||d.event.source_rank||'not recorded')],['Stable key',esc(d.event.work_key)]])}</section>${raw({retrieval:d.event,decision:dec})}`;wireRaw()}
+    function showSeed(d){let p=d.event.paper||{};$('#panelTitle').textContent='Canonical seed';$('#panelHint').textContent=d.event.canonical_artifact;$('#detail').innerHTML=`<section class="section"><h3>Bridge paper</h3><p class="title">${esc(p.title)}</p><p class="sub">${esc((p.authors||[]).slice(0,5).join(', '))} · ${esc(p.year||'')}</p></section><section class="section"><h3>Role in this trace</h3><p class="quote">This user-selected paper connects the probe search to separate backward-reference and forward-citation branches.</p>${facts([['Canonical artifact',esc(d.event.canonical_artifact)],['Seed role',esc(d.event.seed_role)],['Record source',esc(d.event.seed_record_source)]])}</section>${raw(d.event)}`;wireRaw()}
+    function resetHighlight(){state.meshes.forEach(m=>{m.material.opacity=1;m.scale.setScalar(1)});group.children.filter(x=>x.type==='Line').forEach(l=>l.visible=false);document.querySelectorAll('.stage-button').forEach(b=>b.classList.remove('active'));state.selected=null}
+    function select(mesh){resetHighlight();state.selected=mesh;state.meshes.forEach(m=>m.material.opacity=.1);mesh.material.opacity=1;mesh.scale.setScalar(1.4);
+      if(mesh.userData.type==='branch'){mesh.userData.links.forEach(x=>{x.mesh.material.opacity=1;x.line.visible=true});document.querySelector(`.stage-button[data-i="${mesh.userData.index}"]`)?.classList.add('active');showBranch(mesh.userData)}
+      else if(mesh.userData.type==='paper'){let branch=state.branchMeshes.get(mesh.userData.branch.branch_id);branch.material.opacity=1;branch.scale.setScalar(1.25);mesh.userData.link.visible=true;showPaper(mesh.userData)}else showSeed(mesh.userData);applyFilters(true)}
+    function resetView(){resetHighlight();camera.position.set(0,62,Math.max(145,state.branches.length*34));controls.target.set(0,-10,0);showOverview();applyFilters()}
+    function applyFilters(preserve=false){let q=state.filters.query.toLowerCase(),decision=state.filters.decision,visible=0;state.meshes.forEach(m=>{if(m.userData.type==='branch')return;let ok=(!q||m.userData.title.toLowerCase().includes(q))&&(decision==='all'||m.userData.status===decision);m.visible=ok;if(m.userData.link)m.userData.link.visible=false;if(ok)visible++});
+      if(preserve&&state.selected){let d=state.selected.userData;if(d.type==='branch')d.links.forEach(x=>{if(x.mesh.visible)x.line.visible=true});else if(state.selected.visible)d.link.visible=true}$('#visibleCount').textContent=`${visible.toLocaleString()} papers`}
+    $('#search').oninput=e=>{state.filters.query=e.target.value;resetHighlight();applyFilters();if(e.target.value){let hits=[...state.papers.values()].filter(m=>m.visible);if(hits.length===1)select(hits[0])}};$('#decision').onchange=e=>{state.filters.decision=e.target.value;resetHighlight();applyFilters()};$('#reset').onclick=()=>{$('#search').value='';$('#decision').value='all';state.filters={query:'',decision:'all'};resetView()};
+    renderer.domElement.addEventListener('click',e=>{let r=renderer.domElement.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width*2-1,-((e.clientY-r.top)/r.height*2-1));raycaster.setFromCamera(pointer,camera);let hit=raycaster.intersectObjects(state.meshes.filter(m=>m.visible))[0];if(hit)select(hit.object)});
+    addEventListener('error',e=>{$('#detail').innerHTML=`<p class="warning">${esc(e.message)}</p>`});addEventListener('unhandledrejection',e=>{$('#detail').innerHTML=`<p class="warning">${esc(e.reason?.message||e.reason)}</p>`});
+    const ledgerUrl=new URLSearchParams(location.search).get('ledger');if(ledgerUrl)fetch(ledgerUrl).then(r=>{if(!r.ok)throw Error(`Ledger HTTP ${r.status}`);return r.text()}).then(t=>build(parse(t))).catch(e=>{$('#detail').innerHTML=`<p class="warning">${esc(e.message)}</p>`});else $('#detail').innerHTML='<div class="blank">Add <code>?ledger=filename.jsonl</code> to the URL to load a ledger.</div>';
+  </script>
+</body>
+</html>

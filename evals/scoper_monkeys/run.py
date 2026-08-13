@@ -15,6 +15,9 @@ from prior.models import Paper  # noqa: E402
 from prior.sources import openalex  # noqa: E402
 
 from common import load_gold  # noqa: E402
+from ledger import (  # noqa: E402
+    SCHEMA_VERSION, code_version, new_run_id, sha256_text, utc_now, validate_event,
+)
 
 
 STAGE_ORDER = [
@@ -38,11 +41,21 @@ class Recorder:
         path.parent.mkdir(parents=True, exist_ok=True)
         self.handle = path.open("w")
         self.order = 0
+        self.run_id = new_run_id()
         self.first_seen: dict[str, str] = {}
 
     def emit(self, event: str, **fields) -> None:
         self.order += 1
-        row = {"event": event, "order": self.order, **fields}
+        row = {
+            "schema_version": SCHEMA_VERSION,
+            "run_id": self.run_id,
+            "event_id": f"{self.run_id}:e{self.order:06d}",
+            "event": event,
+            "order": self.order,
+            "recorded_at": utc_now(),
+            **fields,
+        }
+        validate_event(row)
         self.handle.write(json.dumps(row, ensure_ascii=False) + "\n")
         self.handle.flush()
 
@@ -68,6 +81,16 @@ class Recorder:
     def close(self) -> None:
         self.handle.close()
 
+    def retrieval_observer(self, branch_id: str, stage: str):
+        def observe(event: dict) -> None:
+            kind = event.pop("kind")
+            paper = event.get("paper")
+            if paper is not None:
+                event["work_key"] = paper.key()
+                event["paper"] = paper.to_dict()
+            self.emit(kind, branch_id=branch_id, stage=stage, **event)
+        return observe
+
 
 def _dedup(papers: list[Paper]) -> list[Paper]:
     return scoper._dedup_cross_source(papers)
@@ -92,6 +115,51 @@ def _scope_stage(topic: str, stage: str, candidates: list[Paper], recorder: Reco
     return kept, dropped
 
 
+def _gather_query_branches(queries: list[str], *, stage: str, kind: str,
+                           motivation: str, per_query: int, cutoff: int | None,
+                           recorder: Recorder, known_before: set[str], progress=print):
+    """Gather each query as an auditable branch and retain overlap for attribution."""
+    pooled: list[Paper] = []
+    branches: list[tuple[str, str, list[Paper]]] = []
+    for index, query in enumerate(queries, 1):
+        branch_id = f"{stage}:q{index:03d}"
+        recorder.emit("query", stage=stage, branch_id=branch_id, kind=kind,
+                      queries=[query], motivation=motivation)
+        papers = _before_cutoff(scoper.gather_candidates(
+            [query], per_query=per_query, progress=progress,
+            observe=recorder.retrieval_observer(branch_id, stage),
+        ), cutoff)
+        branches.append((branch_id, query, papers))
+        pooled.extend(papers)
+    pool = _dedup(pooled)
+    first_branch: dict[str, str] = {}
+    for branch_id, _query, papers in branches:
+        for paper in papers:
+            first_branch.setdefault(paper.key(), branch_id)
+    return pool, branches, first_branch
+
+
+def _record_branch_growth(recorder: Recorder, *, stage: str, branches,
+                          first_branch: dict[str, str], known_before: set[str], kept,
+                          corpus_before: int) -> None:
+    kept_keys = {paper.key() for paper, _ in kept}
+    running_corpus = corpus_before
+    for branch_id, query, papers in branches:
+        keys = {paper.key() for paper in papers}
+        new_keys = {key for key in keys if key not in known_before
+                    and first_branch.get(key) == branch_id}
+        new_kept = new_keys & kept_keys
+        running_corpus += len(new_kept)
+        recorder.emit(
+            "branch_snapshot", branch_id=branch_id, stage=stage, query=query,
+            attribution="first_observed", returned_unique=len(keys),
+            globally_new=len(new_keys), rediscovered=len(keys - new_keys),
+            newly_included=len(new_kept),
+            eligible_yield=len(new_kept) / max(1, len(new_keys)),
+            corpus_after=running_corpus,
+        )
+
+
 def collect(args) -> None:
     topic = Path(args.topic_file).read_text()
     gold = load_gold(args.gold)
@@ -113,13 +181,16 @@ def collect(args) -> None:
             raise RuntimeError("no queries generated or supplied")
 
         recorder.emit(
-            "manifest", case=args.case, topic_file=str(args.topic_file),
-            gold_file=str(args.gold), gold_n=len(gold), queries=queries,
-            cutoff_year=args.cutoff_year, per_query=args.per_query,
-            recover_rounds=args.recover_rounds, hops=args.hops,
-            use_prefilter=not args.no_prefilter, epsilon=args.epsilon,
+            "manifest", case=args.case, scope=topic, scope_sha256=sha256_text(topic),
+            topic_file=str(args.topic_file), gold_file=str(args.gold), gold_n=len(gold),
+            code_version=code_version(ROOT),
+            parameters={
+                "cutoff_year": args.cutoff_year, "per_query": args.per_query,
+                "recover_rounds": args.recover_rounds, "hops": args.hops,
+                "use_prefilter": not args.no_prefilter, "epsilon": args.epsilon,
+                "model": args.model, "sources": ["openalex", "arxiv", "semanticscholar"],
+            },
         )
-
         # Monkey baseline: one literal OpenAlex query.
         single = _before_cutoff(
             openalex.search(queries[0], max_papers=args.per_query), args.cutoff_year
@@ -127,14 +198,20 @@ def collect(args) -> None:
         recorder.candidates("single_query", single, "openalex")
 
         # Multi-source, multi-query search and one common scope decision.
-        search_pool = _before_cutoff(
-            scoper.gather_candidates(queries, per_query=args.per_query, progress=progress),
-            args.cutoff_year,
+        search_pool, branches, first_branch = _gather_query_branches(
+            queries, stage="multi_query", kind="probe",
+            motivation="Initial probe derived from the frozen scope.",
+            per_query=args.per_query, cutoff=args.cutoff_year, recorder=recorder,
+            known_before=set(), progress=progress,
         )
         recorder.candidates("multi_query", search_pool, "search")
         kept, dropped = _scope_stage(
             topic, "multi_query", search_pool, recorder, model=args.model,
             use_prefilter=not args.no_prefilter, progress=progress,
+        )
+        _record_branch_growth(
+            recorder, stage="multi_query", branches=branches,
+            first_branch=first_branch, known_before=set(), kept=kept, corpus_before=0,
         )
         corpus = [paper for paper, _ in kept]
         known = {paper.key() for paper in search_pool}
@@ -159,11 +236,13 @@ def collect(args) -> None:
                               corpus=len(corpus), stop_triggered=True,
                               stop_reason="no_followup_queries")
                 break
-            pool = _before_cutoff(
-                scoper.gather_candidates(
-                    followups, per_query=args.per_query, progress=progress
-                ),
-                args.cutoff_year,
+            known_before = set(known)
+            pool, branches, first_branch = _gather_query_branches(
+                followups, stage=stage, kind="reformulation",
+                motivation=(f"After {len(corpus)} included and {len(all_dropped)} "
+                            "excluded records, the Scoper identified a retrieval gap."),
+                per_query=args.per_query, cutoff=args.cutoff_year, recorder=recorder,
+                known_before=known_before, progress=progress,
             )
             new = [paper for paper in pool if paper.key() not in known]
             recorder.candidates(stage, new, "adaptive_search")
@@ -172,6 +251,10 @@ def collect(args) -> None:
             newly_kept, newly_dropped = _scope_stage(
                 topic, stage, new, recorder, model=args.model,
                 use_prefilter=not args.no_prefilter, progress=progress,
+            )
+            _record_branch_growth(
+                recorder, stage=stage, branches=branches, first_branch=first_branch,
+                known_before=known_before, kept=newly_kept, corpus_before=len(corpus),
             )
             corpus.extend(paper for paper, _ in newly_kept)
             all_dropped.extend(newly_dropped)
@@ -247,4 +330,3 @@ def parser() -> argparse.ArgumentParser:
 
 if __name__ == "__main__":
     collect(parser().parse_args())
-

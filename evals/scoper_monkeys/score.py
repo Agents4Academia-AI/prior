@@ -121,6 +121,15 @@ def analyse(events: list[dict], gold, *, title_threshold: float = 0.82) -> dict:
             "estimated_recall": (event.get("completeness") or {}).get("recall"),
         })
 
+    branches = [
+        {key: event.get(key) for key in (
+            "branch_id", "stage", "query", "returned_unique", "globally_new",
+            "rediscovered", "newly_included", "eligible_yield", "corpus_after",
+            "attribution",
+        )}
+        for event in events if event.get("event") == "branch_snapshot"
+    ]
+
     for row in gold_rows:
         if not row["found"]:
             row["automatic_diagnosis"] = "not_retrieved_or_not_indexed"
@@ -143,6 +152,7 @@ def analyse(events: list[dict], gold, *, title_threshold: float = 0.82) -> dict:
         "cumulative": cumulative,
         "budgets": budgets,
         "stopping": snapshots,
+        "branches": branches,
         "gold": gold_rows,
     }
 
@@ -177,6 +187,18 @@ def _markdown(report: dict) -> str:
             f"| {row['screened']} | {row['gold_accepted']} | "
             f"{row['accepted_recall']:.1%} |"
         )
+    if report.get("branches"):
+        lines += [
+            "", "## Query-branch growth", "",
+            "| branch | returned | globally new | rediscovered | newly included | yield | corpus |",
+            "|---|---:|---:|---:|---:|---:|---:|",
+        ]
+        for row in report["branches"]:
+            lines.append(
+                f"| {row['branch_id']} | {row['returned_unique']} | {row['globally_new']} | "
+                f"{row['rediscovered']} | {row['newly_included']} | "
+                f"{row['eligible_yield']:.1%} | {row['corpus_after']} |"
+            )
     lines += [
         "",
         "## Stopping calibration",

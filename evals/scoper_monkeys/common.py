@@ -147,9 +147,13 @@ def best_gold_match(
 
 
 def load_events(path: str | Path) -> list[dict]:
-    return [
+    events = [
         json.loads(line)
         for line in Path(path).read_text().splitlines()
         if line.strip()
     ]
-
+    # Legacy traces remain scoreable; versioned ledgers are validated before use.
+    if events and "schema_version" in events[0]:
+        from ledger import validate_ledger
+        validate_ledger(events)
+    return events

@@ -12,6 +12,8 @@ arXiv source; otherwise `s2:<paperId>`.
 from __future__ import annotations
 
 import os
+import random
+import threading
 import time
 
 import requests
@@ -27,6 +29,29 @@ FIELDS = ("title,abstract,year,authors,externalIds,citationCount,"
 
 
 _KEY_DISABLED = False     # set once if the key is rejected (expired/invalid)
+_RATE_LOCK = threading.Lock()
+_LAST_REQUEST = {"slow": 0.0, "standard": 0.0}
+_MIN_INTERVAL = {"slow": 1.05, "standard": 0.11}
+
+
+def _rate_tier(url: str) -> str:
+    """S2 documents search/batch/recommendations at 1 rps; other calls at 10 rps."""
+    return "slow" if (
+        url == SEARCH or url.endswith("/batch") or "/recommendations" in url
+    ) else "standard"
+
+
+def _pace(url: str, *, observe=None) -> None:
+    tier = _rate_tier(url)
+    with _RATE_LOCK:
+        now = time.monotonic()
+        wait = max(0.0, _MIN_INTERVAL[tier] - (now - _LAST_REQUEST[tier]))
+        if wait:
+            if observe:
+                observe({"kind": "rate_limit_wait", "source": "semanticscholar",
+                         "tier": tier, "wait_seconds": wait, "reason": "proactive"})
+            time.sleep(wait)
+        _LAST_REQUEST[tier] = time.monotonic()
 
 
 def _key() -> str:
@@ -70,21 +95,37 @@ def _to_paper(it: dict) -> Paper:
     ))
 
 
-def _get(url: str, params: dict, *, tries: int = 6):
+def _get(url: str, params: dict, *, tries: int = 6, observe=None):
     """GET with backoff. A rejected key (401/403, e.g. expired) disables the key
     and retries keyless — a dead key must never silently break S2. The keyless
     pool 429s readily, so a patient retry recovers most requests."""
     global _KEY_DISABLED
     delay = 3.0
     last = None
-    for _ in range(tries):
+    for attempt in range(1, tries + 1):
+        _pace(url, observe=observe)
         last = requests.get(url, params=params, headers=_headers(),
                             timeout=config.HTTP_TIMEOUT)
+        if observe:
+            observe({"kind": "request_attempt", "source": "semanticscholar",
+                     "tier": _rate_tier(url), "attempt": attempt,
+                     "status_code": last.status_code, "url": url})
         if last.status_code in (401, 403) and _key() and not _KEY_DISABLED:
             _KEY_DISABLED = True                   # key rejected → fall back keyless
             continue
         if last.status_code == 429:
-            time.sleep(delay)
+            retry_after = last.headers.get("Retry-After")
+            try:
+                wait = float(retry_after) if retry_after else delay
+            except ValueError:
+                wait = delay
+            wait = max(wait, delay) + random.uniform(0.0, 0.25)
+            if observe:
+                observe({"kind": "rate_limit_wait", "source": "semanticscholar",
+                         "tier": _rate_tier(url), "wait_seconds": wait,
+                         "reason": "http_429", "attempt": attempt,
+                         "retry_after": retry_after or ""})
+            time.sleep(wait)
             delay *= 1.7
             continue
         last.raise_for_status()
