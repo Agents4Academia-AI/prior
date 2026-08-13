@@ -14,7 +14,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "src"))
-from prior import llm  # noqa: E402
+from prior import config, llm  # noqa: E402
 
 BUNDLE = ROOT / "data" / "prior-core-v0.2"
 OUT = Path(__file__).parent / "out"
@@ -24,6 +24,7 @@ DEFAULT_FULLTEXT = Path(
 WORD = re.compile(r"[a-z0-9]+")
 RELATIONS = ["supports", "builds_on", "refines", "contradicts",
              "related", "none", "unclear"]
+PROMPT_VERSION = "cartographer-evidence-v1"
 
 SYSTEM = """You are rebuilding a scientific contribution graph from a frozen
 candidate set. Classify exactly one contribution pair using only supplied evidence.
@@ -113,7 +114,7 @@ def main() -> None:
     parser.add_argument("--manifest", type=Path,
                         default=OUT / "cartographer_rebuild_candidates.json")
     parser.add_argument("--fulltext-dir", type=Path, default=DEFAULT_FULLTEXT)
-    parser.add_argument("--model", default="sonnet")
+    parser.add_argument("--model", default=config.CARTOGRAPHER_MODEL)
     parser.add_argument("--workers", type=int, default=3)
     parser.add_argument("--timeout", type=int, default=180)
     parser.add_argument("--fulltext-chars", type=int, default=60000)
@@ -177,6 +178,7 @@ def main() -> None:
             "has_fulltext_a": bool(fulltext(pa)), "has_fulltext_b": bool(fulltext(pb)),
             "n_citation_passages": len(citation_passages),
             "n_retrieved_a": len(passages_a), "n_retrieved_b": len(passages_b),
+            "_available_evidence_ids": [eid for eid, text in evidence if text],
         }
         return prompt, metadata
 
@@ -205,14 +207,28 @@ def main() -> None:
         result = llm.structured(model=args.model, system=SYSTEM, user=prompt,
                                 schema=SCHEMA, tool_name="emit_relation",
                                 max_tokens=650, timeout=args.timeout, retries=3)
+        available = set(metadata.pop("_available_evidence_ids"))
+        cited = result.get("evidence_ids", [])
+        invalid_evidence = sorted(set(cited) - available)
+        relation, direction = result.get("relation"), result.get("direction")
+        valid_directions = {
+            "supports": {"symmetric"}, "contradicts": {"symmetric"},
+            "builds_on": {"a_to_b", "b_to_a"},
+            "refines": {"a_to_b", "b_to_a"},
+            "related": {"none"}, "none": {"none"},
+            "unclear": {"none", "unclear"},
+        }
         return {
             "candidate_id": candidate["candidate_id"],
             "a": candidate["a"], "b": candidate["b"],
             "channels": candidate["channels"],
+            "model": args.model, "prompt_version": PROMPT_VERSION,
             "citation_directions": [
                 [row["citing_id"], row["cited_id"]] for row in candidate["citations"]
             ],
             **metadata, **result,
+            "invalid_evidence_ids": invalid_evidence,
+            "direction_valid": direction in valid_directions.get(relation, set()),
         }
 
     print(f"label phase: {len(todo)} remaining / {len(candidates)}", flush=True)
