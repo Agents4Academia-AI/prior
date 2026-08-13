@@ -1,0 +1,278 @@
+[
+ {
+  "key": "arxiv:2603.20884v3|arxiv:2604.11543v1",
+  "region": "semantic_only",
+  "a": "arxiv:2603.20884v3",
+  "b": "arxiv:2604.11543v1",
+  "semantic_edges": [
+   {
+    "src": "arxiv:2604.11543v1::k02",
+    "dst": "arxiv:2603.20884v3::k00",
+    "relation": "supports",
+    "confidence": 0.55,
+    "evidence": "A benchmarks LLM novelty evaluation limitations, motivating systems like MemoNoveltyAgent that aim to produce faithful novelty assessments.",
+    "similarity": 0.586,
+    "opus_confidence": 0.55,
+    "trust": 0.79,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   },
+   {
+    "src": "arxiv:2604.11543v1::k00",
+    "dst": "arxiv:2603.20884v3::k01",
+    "relation": "supports",
+    "confidence": 0.5,
+    "evidence": "NovBench benchmark enables evaluating novelty assessment; A's memory method targets faithful novelty reports \u2014 benchmark supports evaluating such methods.",
+    "similarity": 0.532,
+    "opus_confidence": 0.5,
+    "trust": 0.74,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   },
+   {
+    "src": "arxiv:2604.11543v1::k01",
+    "dst": "arxiv:2603.20884v3::k02",
+    "relation": "supports",
+    "confidence": 0.55,
+    "evidence": "Both propose evaluation methods for LLM-generated novelty review text that go beyond lexical metrics; complementary evaluation approaches.",
+    "similarity": 0.564,
+    "opus_confidence": 0.55,
+    "trust": 0.79,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   },
+   {
+    "src": "arxiv:2604.11543v1::k00",
+    "dst": "arxiv:2603.20884v3::k02",
+    "relation": "supports",
+    "confidence": 0.5,
+    "evidence": "NovBench benchmark and the RAG checklist evaluation method both target assessment of novelty review quality; mutually supportive.",
+    "similarity": 0.608,
+    "opus_confidence": 0.5,
+    "trust": 0.74,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   },
+   {
+    "src": "arxiv:2604.11543v1::k02",
+    "dst": "arxiv:2603.20884v3::k02",
+    "relation": "supports",
+    "confidence": 0.55,
+    "evidence": "Both concern LLM-based novelty evaluation; B's reliable evaluation method addresses the gap A exposes, broadly compatible.",
+    "similarity": 0.567,
+    "opus_confidence": 0.55,
+    "trust": 0.55,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [],
+     "n_confirm": 0,
+     "tier": "opus_only",
+     "dissent": {
+      "haiku": "builds_on"
+     }
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   }
+  ],
+  "citation": null
+ },
+ {
+  "key": "arxiv:2504.09702v3|openalex:W4402952666",
+  "region": "citation_only",
+  "a": "arxiv:2504.09702v3",
+  "b": "openalex:W4402952666",
+  "semantic_edges": [],
+  "citation": {
+   "citing_id": "arxiv:2504.09702v3",
+   "cited_id": "openalex:W4402952666",
+   "cite_key": "DBLP:journals/corr/abs-2408-06292",
+   "sites": [
+    {
+     "intent": "background",
+     "confidence": 0.6,
+     "justification": "Descriptive table row cataloging AI Scientist's evaluation method alongside other systems, no singled-out contrast",
+     "claim": "gin tabular l|cccc|ccc & Problem\\ & Method\\ & Experiment\\ & Code\\ & Evaluation\\\\ Method & Evaluation\\ & Evaluation\\\\ Type \\\\ AI Scientist\\\\[CITED:TARGET] & & & & & LLM \\&\\ Judge &Paper & LLM-as-a-Judge \\\\ 1-8 Can LLMs Generate\\ Research Ideas?\\\\[CITED] & & & & &Human Judge &Idea Proposal & LLM-as-a-Judge \\\\"
+    },
+    {
+     "intent": "background",
+     "confidence": 0.6,
+     "justification": "Descriptive comparison-table entry listing method features, not a targeted critique",
+     "claim": "& Problem\\ & Method\\ & Experiment\\ & Code\\ & Evaluation\\\\ Method & Evaluation\\ & Compute\\ & Continual\\ \\\\ AI Scientist [CITED:TARGET] & & & & & LLM \\&\\ Judge &Paper & \\\\ 1-9 Can LLMs Generate Novel\\ Ideas? [CITED] & & & & &Human Judge & Idea\\ \\\\ 1-9"
+    }
+   ],
+   "intent": "background",
+   "intent_distribution": {
+    "background": 2
+   },
+   "n_sites": 2,
+   "typed": {
+    "citing_id": "arxiv:2504.09702v3",
+    "cited_id": "openalex:W4402952666",
+    "cite_key": "DBLP:journals/corr/abs-2408-06292",
+    "sites": [
+     {
+      "supports_claim": "supports",
+      "priority": "obligatory",
+      "confidence": 0.8,
+      "justification": "Evidence matches: AI Scientist produces full papers with automated LLM-as-judge review, as tabulated.",
+      "claim": "gin tabular l|cccc|ccc & Problem\\ & Method\\ & Experiment\\ & Code\\ & Evaluation\\\\ Method & Evaluation\\ & Evaluation\\\\ Type \\\\ AI Scientist\\\\[CITED:TARGET] & & & & & LLM \\&\\ Judge &Paper & LLM-as-a-Judge \\\\ 1-8 Can LLMs Generate\\ Research Ideas?\\\\[CITED] & & & & &Human Judge &Idea Proposal & LLM-as-a-Judge \\\\"
+     },
+     {
+      "supports_claim": "supports",
+      "priority": "obligatory",
+      "confidence": 0.8,
+      "justification": "Same table entry; evidence confirms AI Scientist's paper output and LLM-judge evaluation.",
+      "claim": "& Problem\\ & Method\\ & Experiment\\ & Code\\ & Evaluation\\\\ Method & Evaluation\\ & Compute\\ & Continual\\ \\\\ AI Scientist [CITED:TARGET] & & & & & LLM \\&\\ Judge &Paper & \\\\ 1-9 Can LLMs Generate Novel\\ Ideas? [CITED] & & & & &Human Judge & Idea\\ \\\\ 1-9"
+     }
+    ],
+    "support": "supports",
+    "any_does_not": false,
+    "priority": "obligatory",
+    "n_sites": 2
+   }
+  }
+ },
+ {
+  "key": "arxiv:2411.15114v2|arxiv:2504.01848v3",
+  "region": "both",
+  "a": "arxiv:2411.15114v2",
+  "b": "arxiv:2504.01848v3",
+  "semantic_edges": [
+   {
+    "src": "arxiv:2504.01848v3::k03",
+    "dst": "arxiv:2411.15114v2::k00",
+    "relation": "supports",
+    "confidence": 0.6,
+    "evidence": "Both establish gaps between AI agents and human experts on ML research/engineering tasks via benchmarks; RE-Bench's human comparison aligns with PaperBench's human-vs-AI gap finding.",
+    "similarity": 0.689,
+    "opus_confidence": 0.6,
+    "trust": 0.84,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   },
+   {
+    "src": "arxiv:2504.01848v3::k03",
+    "dst": "arxiv:2411.15114v2::k02",
+    "relation": "supports",
+    "confidence": 0.6,
+    "evidence": "Both quantify the gap between AI agents and human experts on ML research; B's time-horizon finding complements A's replication gap showing humans surpass AI at longer horizons.",
+    "similarity": 0.607,
+    "opus_confidence": 0.6,
+    "trust": 0.84,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   }
+  ],
+  "citation": {
+   "citing_id": "arxiv:2504.01848v3",
+   "cited_id": "arxiv:2411.15114v2",
+   "cite_key": "wijk2024re",
+   "sites": [
+    {
+     "intent": "background",
+     "confidence": 0.65,
+     "justification": "States own result is 'consistent with' target's prior finding, corroboration not contrast or adoption.",
+     "claim": "e-and-baseline . We observe that o1 initially outperforms the human baseline during the early stages of the replication attempt, but humans start outperforming the AI agent after 24 hours. This trend of agents initially outperforming humans but falling behind at longer time horizons is consistent with previous results [CITED:TARGET]. Notably, o1's scores mostly plateau after the first hour, suggesting that the model is proficient at writing a lot of code quickly at the beginning of the attempt, but fails to effectively work beyond this time horizon to strategize how to improve its submission. Human scores are slow to rise in the initial hours, pe"
+    },
+    {
+     "intent": "compares_contrasts",
+     "confidence": 0.85,
+     "justification": "Directly contrasts RE-Bench's self-contained tasks with PaperBench's broader scope.",
+     "claim": "MLE-bench [CITED], MLAgentBench [CITED], and DSBench [CITED] evaluate agents on Kaggle competitions. Many Kaggle competitions are dated and relatively simple ML challenges, whereas PaperBench only contains tasks relevant to modern machine learning research. RE-Bench [CITED:TARGET] proposes 7 challenging open-ended ML research engineering tasks for agents to solve. We expect PaperBench to cover a broader range of sub-tasks over a longer horizon of work compared to the more self-contained tasks proposed in RE-Bench. Additionally, RE-Bench provides agents with a ``scoring function\" on most tasks t"
+    }
+   ],
+   "intent": "compares_contrasts",
+   "intent_distribution": {
+    "background": 1,
+    "compares_contrasts": 1
+   },
+   "n_sites": 2,
+   "typed": {
+    "citing_id": "arxiv:2504.01848v3",
+    "cited_id": "arxiv:2411.15114v2",
+    "cite_key": "wijk2024re",
+    "sites": [
+     {
+      "supports_claim": "supports",
+      "priority": "obligatory",
+      "confidence": 0.9,
+      "justification": "RE-Bench finds agents outscore humans at 2h but humans exceed agents at 8h/32h, matching the horizon claim.",
+      "claim": "e-and-baseline . We observe that o1 initially outperforms the human baseline during the early stages of the replication attempt, but humans start outperforming the AI agent after 24 hours. This trend of agents initially outperforming humans but falling behind at longer time horizons is consistent with previous results [CITED:TARGET]. Notably, o1's scores mostly plateau after the first hour, sugges"
+     },
+     {
+      "supports_claim": "supports",
+      "priority": "obligatory",
+      "confidence": 0.95,
+      "justification": "RE-Bench consists of 7 challenging open-ended ML research engineering environments.",
+      "claim": "MLE-bench [CITED], MLAgentBench [CITED], and DSBench [CITED] evaluate agents on Kaggle competitions. Many Kaggle competitions are dated and relatively simple ML challenges, whereas PaperBench only contains tasks relevant to modern machine learning research. RE-Bench [CITED:TARGET] proposes 7 challenging open-ended ML research engineering tasks for agents to solve. We expect PaperBench to cover a b"
+     }
+    ],
+    "support": "supports",
+    "any_does_not": false,
+    "priority": "obligatory",
+    "n_sites": 2
+   }
+  }
+ }
+]

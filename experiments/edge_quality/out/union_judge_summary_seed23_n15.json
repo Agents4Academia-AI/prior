@@ -1,0 +1,48 @@
+{
+ "semantic_only": {
+  "n": 15,
+  "judge_relations": {
+   "related": 9,
+   "supports": 2,
+   "refines": 2,
+   "none": 1,
+   "builds_on": 1
+  },
+  "substantive_rate": 0.933,
+  "current_type_exact_match": 0.2,
+  "citation_changes": {
+   "no_citation": 15
+  },
+  "intent_agreement": 0.0
+ },
+ "citation_only": {
+  "n": 15,
+  "judge_relations": {
+   "related": 11,
+   "refines": 3,
+   "none": 1
+  },
+  "substantive_rate": 0.933,
+  "current_type_exact_match": null,
+  "citation_changes": {
+   "no_change": 13,
+   "strengthens": 2
+  },
+  "intent_agreement": 0.667
+ },
+ "both": {
+  "n": 15,
+  "judge_relations": {
+   "refines": 5,
+   "related": 6,
+   "builds_on": 4
+  },
+  "substantive_rate": 1.0,
+  "current_type_exact_match": 0.133,
+  "citation_changes": {
+   "no_change": 7,
+   "strengthens": 8
+  },
+  "intent_agreement": 0.533
+ }
+}

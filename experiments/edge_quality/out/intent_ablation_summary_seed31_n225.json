@@ -1,0 +1,46 @@
+{
+ "n_edges": 225,
+ "conditions": {
+  "SC": {
+   "n": 225,
+   "predictions": {
+    "related": 122,
+    "builds_on": 54,
+    "none": 29,
+    "refines": 14,
+    "supports": 4,
+    "unclear": 2
+   },
+   "verdicts": {
+    "correct": 191,
+    "wrong_type": 26,
+    "no_relation": 8
+   },
+   "correct_rate": 0.849,
+   "mean_label_confidence": 0.627
+  }
+ },
+ "paired": {
+  "S_to_SC": {
+   "n": 0,
+   "improved": 0,
+   "worsened": 0,
+   "unchanged": 0,
+   "label_changed": 0
+  },
+  "SC_to_SCI": {
+   "n": 0,
+   "improved": 0,
+   "worsened": 0,
+   "unchanged": 0,
+   "label_changed": 0
+  },
+  "S_to_SCI": {
+   "n": 0,
+   "improved": 0,
+   "worsened": 0,
+   "unchanged": 0,
+   "label_changed": 0
+  }
+ }
+}

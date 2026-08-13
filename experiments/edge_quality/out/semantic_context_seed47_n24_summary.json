@@ -1,0 +1,108 @@
+{
+  "run": "semantic_context_seed47_n24",
+  "n_edges": 24,
+  "conditions": {
+    "C": {
+      "n_predictions": 24,
+      "relations": {
+        "contradicts": 2,
+        "related": 19,
+        "builds_on": 2,
+        "supports": 1
+      },
+      "n_judged": 6,
+      "existence": {
+        "yes": 5,
+        "unclear": 1
+      },
+      "type_correct": {
+        "no": 6
+      },
+      "direction_correct": {
+        "no": 3,
+        "not_applicable": 3
+      },
+      "evidence_sufficient": {
+        "no": 5,
+        "yes": 1
+      }
+    },
+    "CQ": {
+      "n_predictions": 24,
+      "relations": {
+        "related": 20,
+        "builds_on": 2,
+        "supports": 1,
+        "contradicts": 1
+      },
+      "n_judged": 6,
+      "existence": {
+        "yes": 5,
+        "unclear": 1
+      },
+      "type_correct": {
+        "no": 3,
+        "yes": 3
+      },
+      "direction_correct": {
+        "not_applicable": 3,
+        "no": 2,
+        "yes": 1
+      },
+      "evidence_sufficient": {
+        "yes": 3,
+        "no": 2,
+        "unclear": 1
+      }
+    },
+    "R": {
+      "n_predictions": 24,
+      "relations": {
+        "related": 20,
+        "builds_on": 2,
+        "supports": 1,
+        "contradicts": 1
+      },
+      "n_judged": 6,
+      "existence": {
+        "yes": 6
+      },
+      "type_correct": {
+        "no": 3,
+        "yes": 3
+      },
+      "direction_correct": {
+        "not_applicable": 2,
+        "yes": 4
+      },
+      "evidence_sufficient": {
+        "yes": 6
+      }
+    },
+    "F": {
+      "n_predictions": 24,
+      "relations": {
+        "related": 21,
+        "builds_on": 2,
+        "contradicts": 1
+      },
+      "n_judged": 24,
+      "existence": {
+        "yes": 24
+      },
+      "type_correct": {
+        "no": 18,
+        "yes": 6
+      },
+      "direction_correct": {
+        "not_applicable": 15,
+        "yes": 8,
+        "no": 1
+      },
+      "evidence_sufficient": {
+        "yes": 21,
+        "no": 3
+      }
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "run": "semantic_context_seed47_n24",
+  "n_edges": 24,
+  "conditions": {
+    "C": {
+      "n_predictions": 24,
+      "relations": {
+        "contradicts": 2,
+        "related": 19,
+        "builds_on": 2,
+        "supports": 1
+      },
+      "n_judged": 0,
+      "existence": {},
+      "type_correct": {},
+      "direction_correct": {},
+      "evidence_sufficient": {}
+    },
+    "CQ": {
+      "n_predictions": 24,
+      "relations": {
+        "related": 20,
+        "builds_on": 2,
+        "supports": 1,
+        "contradicts": 1
+      },
+      "n_judged": 0,
+      "existence": {},
+      "type_correct": {},
+      "direction_correct": {},
+      "evidence_sufficient": {}
+    },
+    "R": {
+      "n_predictions": 24,
+      "relations": {
+        "related": 20,
+        "builds_on": 2,
+        "supports": 1,
+        "contradicts": 1
+      },
+      "n_judged": 0,
+      "existence": {},
+      "type_correct": {},
+      "direction_correct": {},
+      "evidence_sufficient": {}
+    },
+    "F": {
+      "n_predictions": 24,
+      "relations": {
+        "related": 21,
+        "builds_on": 2,
+        "contradicts": 1
+      },
+      "n_judged": 24,
+      "existence": {
+        "yes": 24
+      },
+      "type_correct": {
+        "yes": 20,
+        "no": 4
+      },
+      "direction_correct": {
+        "not_applicable": 22,
+        "yes": 2
+      },
+      "evidence_sufficient": {
+        "yes": 24
+      }
+    }
+  }
+}

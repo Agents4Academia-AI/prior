@@ -1,0 +1,122 @@
+[
+ {
+  "edge_id": "e291:openalex:W4404350150::k02->arxiv:2604.04074v3::k01",
+  "pair": "arxiv:2604.04074v3|openalex:W4404350150",
+  "current_relation": "contradicts",
+  "intent": "background",
+  "src": "openalex:W4404350150::k02",
+  "dst": "arxiv:2604.04074v3::k01"
+ },
+ {
+  "edge_id": "e16:openalex:W4416026872::k01->openalex:W4414827381::k00",
+  "pair": "openalex:W4414827381|openalex:W4416026872",
+  "current_relation": "refines",
+  "intent": "background",
+  "src": "openalex:W4416026872::k01",
+  "dst": "openalex:W4414827381::k00"
+ },
+ {
+  "edge_id": "e428:arxiv:2505.24785v2::k00->arxiv:2602.15112v2::k01",
+  "pair": "arxiv:2505.24785v2|arxiv:2602.15112v2",
+  "current_relation": "supports",
+  "intent": "background",
+  "src": "arxiv:2505.24785v2::k00",
+  "dst": "arxiv:2602.15112v2::k01"
+ },
+ {
+  "edge_id": "e92:openalex:W4403795293::k01->openalex:W4402345509::k04",
+  "pair": "openalex:W4402345509|openalex:W4403795293",
+  "current_relation": "refines",
+  "intent": "uses_extends",
+  "src": "openalex:W4403795293::k01",
+  "dst": "openalex:W4402345509::k04"
+ },
+ {
+  "edge_id": "e444:arxiv:2511.02824v2::k00->openalex:W4414827381::k00",
+  "pair": "arxiv:2511.02824v2|openalex:W4414827381",
+  "current_relation": "builds_on",
+  "intent": "uses_extends",
+  "src": "arxiv:2511.02824v2::k00",
+  "dst": "openalex:W4414827381::k00"
+ },
+ {
+  "edge_id": "e303:arxiv:2606.11447::k00->arxiv:2507.18901v1::k00",
+  "pair": "arxiv:2507.18901v1|arxiv:2606.11447",
+  "current_relation": "builds_on",
+  "intent": "compares_contrasts",
+  "src": "arxiv:2606.11447::k00",
+  "dst": "arxiv:2507.18901v1::k00"
+ },
+ {
+  "edge_id": "e617:arxiv:2504.21776::k03->arxiv:2511.19399v3::k04",
+  "pair": "arxiv:2504.21776|arxiv:2511.19399v3",
+  "current_relation": "supports",
+  "intent": "compares_contrasts",
+  "src": "arxiv:2504.21776::k03",
+  "dst": "arxiv:2511.19399v3::k04"
+ },
+ {
+  "edge_id": "e631:arxiv:2504.01848v3::k03->arxiv:2606.11447::k01",
+  "pair": "arxiv:2504.01848v3|arxiv:2606.11447",
+  "current_relation": "contradicts",
+  "intent": "compares_contrasts",
+  "src": "arxiv:2504.01848v3::k03",
+  "dst": "arxiv:2606.11447::k01"
+ },
+ {
+  "edge_id": "e589:arxiv:2410.17309v3::k01->openalex:W4394647523::k01",
+  "pair": "arxiv:2410.17309v3|openalex:W4394647523",
+  "current_relation": "supports",
+  "intent": "uses_extends",
+  "src": "arxiv:2410.17309v3::k01",
+  "dst": "openalex:W4394647523::k01"
+ },
+ {
+  "edge_id": "e50:arxiv:2604.11543v1::k02->arxiv:2506.22026::k02",
+  "pair": "arxiv:2506.22026|arxiv:2604.11543v1",
+  "current_relation": "builds_on",
+  "intent": "background",
+  "src": "arxiv:2604.11543v1::k02",
+  "dst": "arxiv:2506.22026::k02"
+ },
+ {
+  "edge_id": "e972:openalex:W4405035007::k03->openalex:W4400734098::k02",
+  "pair": "openalex:W4400734098|openalex:W4405035007",
+  "current_relation": "contradicts",
+  "intent": "background",
+  "src": "openalex:W4405035007::k03",
+  "dst": "openalex:W4400734098::k02"
+ },
+ {
+  "edge_id": "e354:arxiv:2606.06473::k03->openalex:W4407760093::k01",
+  "pair": "arxiv:2606.06473|openalex:W4407760093",
+  "current_relation": "refines",
+  "intent": "background",
+  "src": "arxiv:2606.06473::k03",
+  "dst": "openalex:W4407760093::k01"
+ },
+ {
+  "edge_id": "e205:openalex:W4407806895::k02->arxiv:2510.21652v2::k02",
+  "pair": "arxiv:2510.21652v2|openalex:W4407806895",
+  "current_relation": "supports",
+  "intent": "background",
+  "src": "openalex:W4407806895::k02",
+  "dst": "arxiv:2510.21652v2::k02"
+ },
+ {
+  "edge_id": "e316:arxiv:2603.28589v1::k02->arxiv:2505.18705v1::k03",
+  "pair": "arxiv:2505.18705v1|arxiv:2603.28589v1",
+  "current_relation": "builds_on",
+  "intent": "uses_extends",
+  "src": "arxiv:2603.28589v1::k02",
+  "dst": "arxiv:2505.18705v1::k03"
+ },
+ {
+  "edge_id": "e3:openalex:W4414827381::k00->openalex:W4402952666::k00",
+  "pair": "openalex:W4402952666|openalex:W4414827381",
+  "current_relation": "builds_on",
+  "intent": "compares_contrasts",
+  "src": "openalex:W4414827381::k00",
+  "dst": "openalex:W4402952666::k00"
+ }
+]

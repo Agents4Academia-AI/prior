@@ -1,0 +1,3506 @@
+[
+ {
+  "edge_id": "e634:arxiv:2511.02824v2::k03->arxiv:2606.11447::k02",
+  "pair": "arxiv:2511.02824v2|arxiv:2606.11447",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "arxiv:2511.02824v2::k03",
+  "dst": "arxiv:2606.11447::k02"
+ },
+ {
+  "edge_id": "e439:openalex:W4404573571::k03->arxiv:2411.15114v2::k02",
+  "pair": "arxiv:2411.15114v2|openalex:W4404573571",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4404573571::k03",
+  "dst": "arxiv:2411.15114v2::k02"
+ },
+ {
+  "edge_id": "e737:openalex:W7143351253::k02->arxiv:2507.02004v1::k01",
+  "pair": "arxiv:2507.02004v1|openalex:W7143351253",
+  "current_relation": "refines",
+  "intent": null,
+  "src": "openalex:W7143351253::k02",
+  "dst": "arxiv:2507.02004v1::k01"
+ },
+ {
+  "edge_id": "e469:arxiv:2601.22638v2::k01->openalex:W4405468016::k03",
+  "pair": "arxiv:2601.22638v2|openalex:W4405468016",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2601.22638v2::k01",
+  "dst": "openalex:W4405468016::k03"
+ },
+ {
+  "edge_id": "e630:openalex:W4403324055::k03->arxiv:2606.11447::k01",
+  "pair": "arxiv:2606.11447|openalex:W4403324055",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "openalex:W4403324055::k03",
+  "dst": "arxiv:2606.11447::k01"
+ },
+ {
+  "edge_id": "e455:arxiv:2511.02824v2::k03->openalex:W4386827094::k01",
+  "pair": "arxiv:2511.02824v2|openalex:W4386827094",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2511.02824v2::k03",
+  "dst": "openalex:W4386827094::k01"
+ },
+ {
+  "edge_id": "e433:arxiv:2603.26499v2::k04->arxiv:2602.15112v2::k02",
+  "pair": "arxiv:2602.15112v2|arxiv:2603.26499v2",
+  "current_relation": "refines",
+  "intent": null,
+  "src": "arxiv:2603.26499v2::k04",
+  "dst": "arxiv:2602.15112v2::k02"
+ },
+ {
+  "edge_id": "e74:arxiv:2510.26887v1::k00->openalex:W4416043407::k00",
+  "pair": "arxiv:2510.26887v1|openalex:W4416043407",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2510.26887v1::k00",
+  "dst": "openalex:W4416043407::k00"
+ },
+ {
+  "edge_id": "e633:arxiv:2504.09702v3::k01->arxiv:2606.11447::k01",
+  "pair": "arxiv:2504.09702v3|arxiv:2606.11447",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "arxiv:2504.09702v3::k01",
+  "dst": "arxiv:2606.11447::k01"
+ },
+ {
+  "edge_id": "e81:arxiv:2510.26887v1::k01->openalex:W4403795293::k02",
+  "pair": "arxiv:2510.26887v1|openalex:W4403795293",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2510.26887v1::k01",
+  "dst": "openalex:W4403795293::k02"
+ },
+ {
+  "edge_id": "e852:openalex:W7143351253::k00->openalex:W4411005431::k02",
+  "pair": "openalex:W4411005431|openalex:W7143351253",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W7143351253::k00",
+  "dst": "openalex:W4411005431::k02"
+ },
+ {
+  "edge_id": "e124:openalex:W4403586302::k01->openalex:W4412889957::k00",
+  "pair": "openalex:W4403586302|openalex:W4412889957",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "openalex:W4403586302::k01",
+  "dst": "openalex:W4412889957::k00"
+ },
+ {
+  "edge_id": "e360:openalex:W4407760093::k03->openalex:W4415108068::k03",
+  "pair": "openalex:W4407760093|openalex:W4415108068",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4407760093::k03",
+  "dst": "openalex:W4415108068::k03"
+ },
+ {
+  "edge_id": "e573:openalex:W4416034681::k00->openalex:W4404355537::k00",
+  "pair": "openalex:W4404355537|openalex:W4416034681",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4416034681::k00",
+  "dst": "openalex:W4404355537::k00"
+ },
+ {
+  "edge_id": "e151:openalex:W7140287209::k01->openalex:W4402952811::k02",
+  "pair": "openalex:W4402952811|openalex:W7140287209",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "openalex:W7140287209::k01",
+  "dst": "openalex:W4402952811::k02"
+ },
+ {
+  "edge_id": "e576:openalex:W4404355537::k02->arxiv:2603.28589v1::k01",
+  "pair": "arxiv:2603.28589v1|openalex:W4404355537",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4404355537::k02",
+  "dst": "arxiv:2603.28589v1::k01"
+ },
+ {
+  "edge_id": "e948:arxiv:2507.02694::k03->openalex:W4404782918::k00",
+  "pair": "arxiv:2507.02694|openalex:W4404782918",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2507.02694::k03",
+  "dst": "openalex:W4404782918::k00"
+ },
+ {
+  "edge_id": "e408:openalex:W4404782918::k02->openalex:W4400734098::k02",
+  "pair": "openalex:W4400734098|openalex:W4404782918",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "openalex:W4404782918::k02",
+  "dst": "openalex:W4400734098::k02"
+ },
+ {
+  "edge_id": "e492:openalex:W4415238296::k00->arxiv:2511.10902::k02",
+  "pair": "arxiv:2511.10902|openalex:W4415238296",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4415238296::k00",
+  "dst": "arxiv:2511.10902::k02"
+ },
+ {
+  "edge_id": "e738:openalex:W7143351253::k00->arxiv:2507.02004v1::k01",
+  "pair": "arxiv:2507.02004v1|openalex:W7143351253",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W7143351253::k00",
+  "dst": "arxiv:2507.02004v1::k01"
+ },
+ {
+  "edge_id": "e324:arxiv:2511.06309v2::k01->arxiv:2511.02824v2::k01",
+  "pair": "arxiv:2511.02824v2|arxiv:2511.06309v2",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "arxiv:2511.06309v2::k01",
+  "dst": "arxiv:2511.02824v2::k01"
+ },
+ {
+  "edge_id": "e223:openalex:W4415036172::k01->openalex:W4414837761::k02",
+  "pair": "openalex:W4414837761|openalex:W4415036172",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4415036172::k01",
+  "dst": "openalex:W4414837761::k02"
+ },
+ {
+  "edge_id": "e755:openalex:W7143351253::k00->openalex:W4411932316::k01",
+  "pair": "openalex:W4411932316|openalex:W7143351253",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W7143351253::k00",
+  "dst": "openalex:W4411932316::k01"
+ },
+ {
+  "edge_id": "e571:openalex:W4402952811::k03->openalex:W4401042723::k02",
+  "pair": "openalex:W4401042723|openalex:W4402952811",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "openalex:W4402952811::k03",
+  "dst": "openalex:W4401042723::k02"
+ },
+ {
+  "edge_id": "e229:openalex:W4399597648::k03->openalex:W4414587939::k02",
+  "pair": "openalex:W4399597648|openalex:W4414587939",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4399597648::k03",
+  "dst": "openalex:W4414587939::k02"
+ },
+ {
+  "edge_id": "e968:openalex:W4400734098::k00->openalex:W4402683796::k03",
+  "pair": "openalex:W4400734098|openalex:W4402683796",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4400734098::k00",
+  "dst": "openalex:W4402683796::k03"
+ },
+ {
+  "edge_id": "e411:openalex:W4414587939::k01->openalex:W4404782918::k03",
+  "pair": "openalex:W4404782918|openalex:W4414587939",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "openalex:W4414587939::k01",
+  "dst": "openalex:W4404782918::k03"
+ },
+ {
+  "edge_id": "e503:openalex:W4416034681::k00->openalex:W4401042723::k02",
+  "pair": "openalex:W4401042723|openalex:W4416034681",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4416034681::k00",
+  "dst": "openalex:W4401042723::k02"
+ },
+ {
+  "edge_id": "e265:openalex:W4414837761::k01->openalex:W4403707291::k00",
+  "pair": "openalex:W4403707291|openalex:W4414837761",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4414837761::k01",
+  "dst": "openalex:W4403707291::k00"
+ },
+ {
+  "edge_id": "e570:arxiv:2505.18705v1::k00->openalex:W4401042723::k02",
+  "pair": "arxiv:2505.18705v1|openalex:W4401042723",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "arxiv:2505.18705v1::k00",
+  "dst": "openalex:W4401042723::k02"
+ },
+ {
+  "edge_id": "e9:openalex:W4402952666::k02->openalex:W7140287209::k02",
+  "pair": "openalex:W4402952666|openalex:W7140287209",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4402952666::k02",
+  "dst": "openalex:W7140287209::k02"
+ },
+ {
+  "edge_id": "e850:openalex:W7143351253::k00->openalex:W4411005431::k00",
+  "pair": "openalex:W4411005431|openalex:W7143351253",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W7143351253::k00",
+  "dst": "openalex:W4411005431::k00"
+ },
+ {
+  "edge_id": "e669:arxiv:2605.27905::k03->arxiv:2603.08127v1::k02",
+  "pair": "arxiv:2603.08127v1|arxiv:2605.27905",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "arxiv:2605.27905::k03",
+  "dst": "arxiv:2603.08127v1::k02"
+ },
+ {
+  "edge_id": "e712:arxiv:2505.24785v2::k00->arxiv:2603.28589v1::k03",
+  "pair": "arxiv:2505.24785v2|arxiv:2603.28589v1",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2505.24785v2::k00",
+  "dst": "arxiv:2603.28589v1::k03"
+ },
+ {
+  "edge_id": "e363:openalex:W4415108068::k00->openalex:W4407760093::k03",
+  "pair": "openalex:W4407760093|openalex:W4415108068",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4415108068::k00",
+  "dst": "openalex:W4407760093::k03"
+ },
+ {
+  "edge_id": "e207:openalex:W4407806895::k03->openalex:W4416035327::k03",
+  "pair": "openalex:W4407806895|openalex:W4416035327",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "openalex:W4407806895::k03",
+  "dst": "openalex:W4416035327::k03"
+ },
+ {
+  "edge_id": "e186:openalex:W4403006832::k03->openalex:W4404783497::k00",
+  "pair": "openalex:W4403006832|openalex:W4404783497",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4403006832::k03",
+  "dst": "openalex:W4404783497::k00"
+ },
+ {
+  "edge_id": "e641:arxiv:2606.06473::k00->arxiv:2507.02004v1::k00",
+  "pair": "arxiv:2507.02004v1|arxiv:2606.06473",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2606.06473::k00",
+  "dst": "arxiv:2507.02004v1::k00"
+ },
+ {
+  "edge_id": "e407:openalex:W4404782918::k02->openalex:W4400734098::k01",
+  "pair": "openalex:W4400734098|openalex:W4404782918",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "openalex:W4404782918::k02",
+  "dst": "openalex:W4400734098::k01"
+ },
+ {
+  "edge_id": "e204:openalex:W4407806895::k01->openalex:W4402952811::k03",
+  "pair": "openalex:W4402952811|openalex:W4407806895",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4407806895::k01",
+  "dst": "openalex:W4402952811::k03"
+ },
+ {
+  "edge_id": "e328:arxiv:2510.24591v2::k01->arxiv:2505.18705v1::k01",
+  "pair": "arxiv:2505.18705v1|arxiv:2510.24591v2",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2510.24591v2::k01",
+  "dst": "arxiv:2505.18705v1::k01"
+ },
+ {
+  "edge_id": "e452:arxiv:2511.02824v2::k02->arxiv:2605.27905::k01",
+  "pair": "arxiv:2511.02824v2|arxiv:2605.27905",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "arxiv:2511.02824v2::k02",
+  "dst": "arxiv:2605.27905::k01"
+ },
+ {
+  "edge_id": "e874:openalex:W4416043407::k00->openalex:W7161731996::k00",
+  "pair": "openalex:W4416043407|openalex:W7161731996",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4416043407::k00",
+  "dst": "openalex:W7161731996::k00"
+ },
+ {
+  "edge_id": "e25:openalex:W7140287209::k00->openalex:W4416026872::k02",
+  "pair": "openalex:W4416026872|openalex:W7140287209",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W7140287209::k00",
+  "dst": "openalex:W4416026872::k02"
+ },
+ {
+  "edge_id": "e468:openalex:W4417070798::k01->arxiv:2603.26499v2::k04",
+  "pair": "arxiv:2603.26499v2|openalex:W4417070798",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "openalex:W4417070798::k01",
+  "dst": "arxiv:2603.26499v2::k04"
+ },
+ {
+  "edge_id": "e198:openalex:W4407806895::k01->openalex:W4414587939::k00",
+  "pair": "openalex:W4407806895|openalex:W4414587939",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4407806895::k01",
+  "dst": "openalex:W4414587939::k00"
+ },
+ {
+  "edge_id": "e392:openalex:W4414587939::k01->openalex:W4405468016::k04",
+  "pair": "openalex:W4405468016|openalex:W4414587939",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4414587939::k01",
+  "dst": "openalex:W4405468016::k04"
+ },
+ {
+  "edge_id": "e163:openalex:W4417070798::k01->arxiv:2511.02824v2::k03",
+  "pair": "arxiv:2511.02824v2|openalex:W4417070798",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "openalex:W4417070798::k01",
+  "dst": "arxiv:2511.02824v2::k03"
+ },
+ {
+  "edge_id": "e724:openalex:W7140287209::k03->arxiv:2508.15126v2::k03",
+  "pair": "arxiv:2508.15126v2|openalex:W7140287209",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W7140287209::k03",
+  "dst": "arxiv:2508.15126v2::k03"
+ },
+ {
+  "edge_id": "e295:arxiv:2604.04074v3::k02->arxiv:2601.22638v2::k01",
+  "pair": "arxiv:2601.22638v2|arxiv:2604.04074v3",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2604.04074v3::k02",
+  "dst": "arxiv:2601.22638v2::k01"
+ },
+ {
+  "edge_id": "e228:openalex:W4403324055::k03->arxiv:2603.08127v1::k02",
+  "pair": "arxiv:2603.08127v1|openalex:W4403324055",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "openalex:W4403324055::k03",
+  "dst": "arxiv:2603.08127v1::k02"
+ },
+ {
+  "edge_id": "e726:openalex:W4414827381::k00->arxiv:2509.14778v2::k01",
+  "pair": "arxiv:2509.14778v2|openalex:W4414827381",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4414827381::k00",
+  "dst": "arxiv:2509.14778v2::k01"
+ },
+ {
+  "edge_id": "e355:openalex:W4415108068::k00->openalex:W4407760093::k01",
+  "pair": "openalex:W4407760093|openalex:W4415108068",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4415108068::k00",
+  "dst": "openalex:W4407760093::k01"
+ },
+ {
+  "edge_id": "e177:openalex:W4403006832::k01->openalex:W4404782918::k02",
+  "pair": "openalex:W4403006832|openalex:W4404782918",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "openalex:W4403006832::k01",
+  "dst": "openalex:W4404782918::k02"
+ },
+ {
+  "edge_id": "e488:openalex:W4402345509::k02->openalex:W4414028042::k03",
+  "pair": "openalex:W4402345509|openalex:W4414028042",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4402345509::k02",
+  "dst": "openalex:W4414028042::k03"
+ },
+ {
+  "edge_id": "e259:openalex:W4414587939::k02->openalex:W4386827094::k01",
+  "pair": "openalex:W4386827094|openalex:W4414587939",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4414587939::k02",
+  "dst": "openalex:W4386827094::k01"
+ },
+ {
+  "edge_id": "e861:arxiv:2510.27598::k02->openalex:W7131078049::k03",
+  "pair": "arxiv:2510.27598|openalex:W7131078049",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "arxiv:2510.27598::k02",
+  "dst": "openalex:W7131078049::k03"
+ },
+ {
+  "edge_id": "e921:openalex:W4399555023::k01->arxiv:2506.07642::k01",
+  "pair": "arxiv:2506.07642|openalex:W4399555023",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4399555023::k01",
+  "dst": "arxiv:2506.07642::k01"
+ },
+ {
+  "edge_id": "e951:arxiv:2507.02694::k04->arxiv:2506.22026::k00",
+  "pair": "arxiv:2506.22026|arxiv:2507.02694",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2507.02694::k04",
+  "dst": "arxiv:2506.22026::k00"
+ },
+ {
+  "edge_id": "e649:arxiv:2504.09702v3::k01->arxiv:2606.06473::k04",
+  "pair": "arxiv:2504.09702v3|arxiv:2606.06473",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "arxiv:2504.09702v3::k01",
+  "dst": "arxiv:2606.06473::k04"
+ },
+ {
+  "edge_id": "e111:arxiv:2604.11543v1::k01->arxiv:2603.20884v3::k02",
+  "pair": "arxiv:2603.20884v3|arxiv:2604.11543v1",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2604.11543v1::k01",
+  "dst": "arxiv:2603.20884v3::k02"
+ },
+ {
+  "edge_id": "e370:openalex:W4390784029::k00->openalex:W4404783497::k00",
+  "pair": "openalex:W4390784029|openalex:W4404783497",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4390784029::k00",
+  "dst": "openalex:W4404783497::k00"
+ },
+ {
+  "edge_id": "e220:openalex:W4412889957::k03->openalex:W4400734098::k01",
+  "pair": "openalex:W4400734098|openalex:W4412889957",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "openalex:W4412889957::k03",
+  "dst": "openalex:W4400734098::k01"
+ },
+ {
+  "edge_id": "e375:openalex:W4390784029::k03->openalex:W4405561462::k02",
+  "pair": "openalex:W4390784029|openalex:W4405561462",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4390784029::k03",
+  "dst": "openalex:W4405561462::k02"
+ },
+ {
+  "edge_id": "e523:openalex:W4416043407::k00->openalex:W4386827094::k01",
+  "pair": "openalex:W4386827094|openalex:W4416043407",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4416043407::k00",
+  "dst": "openalex:W4386827094::k01"
+ },
+ {
+  "edge_id": "e857:arxiv:2511.19399v3::k01->arxiv:2507.16280::k03",
+  "pair": "arxiv:2507.16280|arxiv:2511.19399v3",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "arxiv:2511.19399v3::k01",
+  "dst": "arxiv:2507.16280::k03"
+ },
+ {
+  "edge_id": "e366:openalex:W4384261641::k00->openalex:W4405561462::k02",
+  "pair": "openalex:W4384261641|openalex:W4405561462",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4384261641::k00",
+  "dst": "openalex:W4405561462::k02"
+ },
+ {
+  "edge_id": "e645:arxiv:2606.06473::k01->openalex:W4414827381::k00",
+  "pair": "arxiv:2606.06473|openalex:W4414827381",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2606.06473::k01",
+  "dst": "openalex:W4414827381::k00"
+ },
+ {
+  "edge_id": "e152:openalex:W7140287209::k01->openalex:W4414587939::k02",
+  "pair": "openalex:W4414587939|openalex:W7140287209",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "openalex:W7140287209::k01",
+  "dst": "openalex:W4414587939::k02"
+ },
+ {
+  "edge_id": "e329:arxiv:2510.24591v2::k01->arxiv:2606.11447::k02",
+  "pair": "arxiv:2510.24591v2|arxiv:2606.11447",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2510.24591v2::k01",
+  "dst": "arxiv:2606.11447::k02"
+ },
+ {
+  "edge_id": "e379:openalex:W4405468016::k04->openalex:W4404783497::k00",
+  "pair": "openalex:W4404783497|openalex:W4405468016",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4405468016::k04",
+  "dst": "openalex:W4404783497::k00"
+ },
+ {
+  "edge_id": "e678:arxiv:2605.28655::k01->openalex:W7126046125::k03",
+  "pair": "arxiv:2605.28655|openalex:W7126046125",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "arxiv:2605.28655::k01",
+  "dst": "openalex:W7126046125::k03"
+ },
+ {
+  "edge_id": "e26:openalex:W4416026872::k03->openalex:W4416611770::k03",
+  "pair": "openalex:W4416026872|openalex:W4416611770",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4416026872::k03",
+  "dst": "openalex:W4416611770::k03"
+ },
+ {
+  "edge_id": "e987:openalex:W7126046125::k00->openalex:W4386827094::k01",
+  "pair": "openalex:W4386827094|openalex:W7126046125",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W7126046125::k00",
+  "dst": "openalex:W4386827094::k01"
+ },
+ {
+  "edge_id": "e130:openalex:W4403586302::k03->openalex:W4401042723::k02",
+  "pair": "openalex:W4401042723|openalex:W4403586302",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "openalex:W4403586302::k03",
+  "dst": "openalex:W4401042723::k02"
+ },
+ {
+  "edge_id": "e661:arxiv:2606.00644::k01->arxiv:2507.16280::k02",
+  "pair": "arxiv:2507.16280|arxiv:2606.00644",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2606.00644::k01",
+  "dst": "arxiv:2507.16280::k02"
+ },
+ {
+  "edge_id": "e944:openalex:W7134120420::k00->openalex:W4416035327::k02",
+  "pair": "openalex:W4416035327|openalex:W7134120420",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W7134120420::k00",
+  "dst": "openalex:W4416035327::k02"
+ },
+ {
+  "edge_id": "e465:arxiv:2603.26499v2::k03->arxiv:2510.27598::k02",
+  "pair": "arxiv:2510.27598|arxiv:2603.26499v2",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "arxiv:2603.26499v2::k03",
+  "dst": "arxiv:2510.27598::k02"
+ },
+ {
+  "edge_id": "e683:openalex:W4416035220::k00->arxiv:2510.27598::k01",
+  "pair": "arxiv:2510.27598|openalex:W4416035220",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4416035220::k00",
+  "dst": "arxiv:2510.27598::k01"
+ },
+ {
+  "edge_id": "e697:arxiv:2603.17216v1::k01->openalex:W4402952811::k02",
+  "pair": "arxiv:2603.17216v1|openalex:W4402952811",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2603.17216v1::k01",
+  "dst": "openalex:W4402952811::k02"
+ },
+ {
+  "edge_id": "e262:openalex:W4414587939::k03->arxiv:2606.11447::k01",
+  "pair": "arxiv:2606.11447|openalex:W4414587939",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "openalex:W4414587939::k03",
+  "dst": "arxiv:2606.11447::k01"
+ },
+ {
+  "edge_id": "e217:openalex:W4412889957::k01->arxiv:2508.15126v2::k02",
+  "pair": "arxiv:2508.15126v2|openalex:W4412889957",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4412889957::k01",
+  "dst": "arxiv:2508.15126v2::k02"
+ },
+ {
+  "edge_id": "e950:arxiv:2507.02694::k04->openalex:W4401042723::k01",
+  "pair": "arxiv:2507.02694|openalex:W4401042723",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2507.02694::k04",
+  "dst": "openalex:W4401042723::k01"
+ },
+ {
+  "edge_id": "e670:arxiv:2605.27905::k04->arxiv:2603.08127v1::k02",
+  "pair": "arxiv:2603.08127v1|arxiv:2605.27905",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "arxiv:2605.27905::k04",
+  "dst": "arxiv:2603.08127v1::k02"
+ },
+ {
+  "edge_id": "e484:arxiv:2509.23426v2::k02->arxiv:2507.02004v1::k01",
+  "pair": "arxiv:2507.02004v1|arxiv:2509.23426v2",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2509.23426v2::k02",
+  "dst": "arxiv:2507.02004v1::k01"
+ },
+ {
+  "edge_id": "e149:openalex:W7140287209::k01->openalex:W4416026872::k00",
+  "pair": "openalex:W4416026872|openalex:W7140287209",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W7140287209::k01",
+  "dst": "openalex:W4416026872::k00"
+ },
+ {
+  "edge_id": "e766:openalex:W4407806895::k03->arxiv:2511.19399v3::k04",
+  "pair": "arxiv:2511.19399v3|openalex:W4407806895",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "openalex:W4407806895::k03",
+  "dst": "arxiv:2511.19399v3::k04"
+ },
+ {
+  "edge_id": "e622:openalex:W4399597648::k02->arxiv:2606.11851::k00",
+  "pair": "arxiv:2606.11851|openalex:W4399597648",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4399597648::k02",
+  "dst": "arxiv:2606.11851::k00"
+ },
+ {
+  "edge_id": "e171:openalex:W4405561462::k00->openalex:W4403006832::k00",
+  "pair": "openalex:W4403006832|openalex:W4405561462",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4405561462::k00",
+  "dst": "openalex:W4403006832::k00"
+ },
+ {
+  "edge_id": "e321:arxiv:2511.06309v2::k00->arxiv:2511.02824v2::k01",
+  "pair": "arxiv:2511.02824v2|arxiv:2511.06309v2",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "arxiv:2511.06309v2::k00",
+  "dst": "arxiv:2511.02824v2::k01"
+ },
+ {
+  "edge_id": "e288:arxiv:2504.01848v3::k03->arxiv:2504.09702v3::k01",
+  "pair": "arxiv:2504.01848v3|arxiv:2504.09702v3",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2504.01848v3::k03",
+  "dst": "arxiv:2504.09702v3::k01"
+ },
+ {
+  "edge_id": "e858:openalex:W7131078049::k01->arxiv:2509.23426v2::k01",
+  "pair": "arxiv:2509.23426v2|openalex:W7131078049",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W7131078049::k01",
+  "dst": "arxiv:2509.23426v2::k01"
+ },
+ {
+  "edge_id": "e477:arxiv:2407.00466v1::k03->openalex:W4411005431::k03",
+  "pair": "arxiv:2407.00466v1|openalex:W4411005431",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "arxiv:2407.00466v1::k03",
+  "dst": "openalex:W4411005431::k03"
+ },
+ {
+  "edge_id": "e624:openalex:W4399597648::k03->arxiv:2606.11851::k01",
+  "pair": "arxiv:2606.11851|openalex:W4399597648",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4399597648::k03",
+  "dst": "arxiv:2606.11851::k01"
+ },
+ {
+  "edge_id": "e923:arxiv:2511.10902::k00->openalex:W4404783497::k00",
+  "pair": "arxiv:2511.10902|openalex:W4404783497",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2511.10902::k00",
+  "dst": "openalex:W4404783497::k00"
+ },
+ {
+  "edge_id": "e458:arxiv:2504.01848v3::k03->arxiv:2603.26499v2::k00",
+  "pair": "arxiv:2504.01848v3|arxiv:2603.26499v2",
+  "current_relation": "contradicts",
+  "intent": null,
+  "src": "arxiv:2504.01848v3::k03",
+  "dst": "arxiv:2603.26499v2::k00"
+ },
+ {
+  "edge_id": "e212:openalex:W4407806895::k03->arxiv:2512.15567v2::k01",
+  "pair": "arxiv:2512.15567v2|openalex:W4407806895",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4407806895::k03",
+  "dst": "arxiv:2512.15567v2::k01"
+ },
+ {
+  "edge_id": "e974:arxiv:2606.06473::k00->openalex:W7143351253::k01",
+  "pair": "arxiv:2606.06473|openalex:W7143351253",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2606.06473::k00",
+  "dst": "openalex:W7143351253::k01"
+ },
+ {
+  "edge_id": "e897:arxiv:2503.08569::k03->arxiv:2506.07642::k01",
+  "pair": "arxiv:2503.08569|arxiv:2506.07642",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2503.08569::k03",
+  "dst": "arxiv:2506.07642::k01"
+ },
+ {
+  "edge_id": "e702:arxiv:2603.28589v1::k00->arxiv:2509.14778v2::k00",
+  "pair": "arxiv:2509.14778v2|arxiv:2603.28589v1",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2603.28589v1::k00",
+  "dst": "arxiv:2509.14778v2::k00"
+ },
+ {
+  "edge_id": "e740:arxiv:2507.02004v1::k02->openalex:W7161731996::k01",
+  "pair": "arxiv:2507.02004v1|openalex:W7161731996",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2507.02004v1::k02",
+  "dst": "openalex:W7161731996::k01"
+ },
+ {
+  "edge_id": "e482:arxiv:2509.23426v2::k00->arxiv:2507.02004v1::k01",
+  "pair": "arxiv:2507.02004v1|arxiv:2509.23426v2",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2509.23426v2::k00",
+  "dst": "arxiv:2507.02004v1::k01"
+ },
+ {
+  "edge_id": "e767:arxiv:2511.19399v3::k04->arxiv:2507.16280::k00",
+  "pair": "arxiv:2507.16280|arxiv:2511.19399v3",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2511.19399v3::k04",
+  "dst": "arxiv:2507.16280::k00"
+ },
+ {
+  "edge_id": "e268:arxiv:2505.18705v1::k01->openalex:W4403707291::k00",
+  "pair": "arxiv:2505.18705v1|openalex:W4403707291",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2505.18705v1::k01",
+  "dst": "openalex:W4403707291::k00"
+ },
+ {
+  "edge_id": "e745:openalex:W4389761608::k01->arxiv:2507.02004v1::k03",
+  "pair": "arxiv:2507.02004v1|openalex:W4389761608",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4389761608::k01",
+  "dst": "arxiv:2507.02004v1::k03"
+ },
+ {
+  "edge_id": "e348:openalex:W4415108068::k00->openalex:W4407760093::k00",
+  "pair": "openalex:W4407760093|openalex:W4415108068",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4415108068::k00",
+  "dst": "openalex:W4407760093::k00"
+ },
+ {
+  "edge_id": "e112:arxiv:2604.11543v1::k00->arxiv:2603.20884v3::k02",
+  "pair": "arxiv:2603.20884v3|arxiv:2604.11543v1",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2604.11543v1::k00",
+  "dst": "arxiv:2603.20884v3::k02"
+ },
+ {
+  "edge_id": "e751:openalex:W4411932316::k00->openalex:W4411005431::k02",
+  "pair": "openalex:W4411005431|openalex:W4411932316",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4411932316::k00",
+  "dst": "openalex:W4411005431::k02"
+ },
+ {
+  "edge_id": "e182:openalex:W4403006832::k02->openalex:W4404782918::k02",
+  "pair": "openalex:W4403006832|openalex:W4404782918",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4403006832::k02",
+  "dst": "openalex:W4404782918::k02"
+ },
+ {
+  "edge_id": "e224:arxiv:2510.24591v2::k01->openalex:W4415036172::k01",
+  "pair": "arxiv:2510.24591v2|openalex:W4415036172",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2510.24591v2::k01",
+  "dst": "openalex:W4415036172::k01"
+ },
+ {
+  "edge_id": "e4:openalex:W4402952666::k00->openalex:W7140287209::k00",
+  "pair": "openalex:W4402952666|openalex:W7140287209",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4402952666::k00",
+  "dst": "openalex:W7140287209::k00"
+ },
+ {
+  "edge_id": "e179:openalex:W4405561462::k00->openalex:W4403006832::k01",
+  "pair": "openalex:W4403006832|openalex:W4405561462",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4405561462::k00",
+  "dst": "openalex:W4403006832::k01"
+ },
+ {
+  "edge_id": "e406:openalex:W4404782918::k01->openalex:W4400734098::k01",
+  "pair": "openalex:W4400734098|openalex:W4404782918",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4404782918::k01",
+  "dst": "openalex:W4400734098::k01"
+ },
+ {
+  "edge_id": "e435:arxiv:2601.21654v3::k02->arxiv:2504.21776::k02",
+  "pair": "arxiv:2504.21776|arxiv:2601.21654v3",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2601.21654v3::k02",
+  "dst": "arxiv:2504.21776::k02"
+ },
+ {
+  "edge_id": "e105:arxiv:2603.20884v3::k00->openalex:W4401042723::k01",
+  "pair": "arxiv:2603.20884v3|openalex:W4401042723",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2603.20884v3::k00",
+  "dst": "openalex:W4401042723::k01"
+ },
+ {
+  "edge_id": "e266:arxiv:2505.24785v2::k00->openalex:W4403707291::k00",
+  "pair": "arxiv:2505.24785v2|openalex:W4403707291",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2505.24785v2::k00",
+  "dst": "openalex:W4403707291::k00"
+ },
+ {
+  "edge_id": "e860:openalex:W4365211632::k00->openalex:W7131078049::k03",
+  "pair": "openalex:W4365211632|openalex:W7131078049",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4365211632::k00",
+  "dst": "openalex:W7131078049::k03"
+ },
+ {
+  "edge_id": "e675:arxiv:2605.28655::k00->openalex:W7126046125::k00",
+  "pair": "arxiv:2605.28655|openalex:W7126046125",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2605.28655::k00",
+  "dst": "openalex:W7126046125::k00"
+ },
+ {
+  "edge_id": "e36:openalex:W4411120082::k03->openalex:W4400734098::k02",
+  "pair": "openalex:W4400734098|openalex:W4411120082",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4411120082::k03",
+  "dst": "openalex:W4400734098::k02"
+ },
+ {
+  "edge_id": "e412:openalex:W4417152112::k00->arxiv:2505.18705v1::k00",
+  "pair": "arxiv:2505.18705v1|openalex:W4417152112",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4417152112::k00",
+  "dst": "arxiv:2505.18705v1::k00"
+ },
+ {
+  "edge_id": "e934:openalex:W4416035327::k02->arxiv:2506.22026::k00",
+  "pair": "arxiv:2506.22026|openalex:W4416035327",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4416035327::k02",
+  "dst": "arxiv:2506.22026::k00"
+ },
+ {
+  "edge_id": "e166:arxiv:2606.13670::k00->openalex:W4417070798::k02",
+  "pair": "arxiv:2606.13670|openalex:W4417070798",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2606.13670::k00",
+  "dst": "openalex:W4417070798::k02"
+ },
+ {
+  "edge_id": "e109:arxiv:2603.20884v3::k01->openalex:W4401042723::k01",
+  "pair": "arxiv:2603.20884v3|openalex:W4401042723",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2603.20884v3::k01",
+  "dst": "openalex:W4401042723::k01"
+ },
+ {
+  "edge_id": "e256:openalex:W4414587939::k01->openalex:W4404782918::k00",
+  "pair": "openalex:W4404782918|openalex:W4414587939",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4414587939::k01",
+  "dst": "openalex:W4404782918::k00"
+ },
+ {
+  "edge_id": "e486:arxiv:2509.23426v2::k02->openalex:W7143351253::k02",
+  "pair": "arxiv:2509.23426v2|openalex:W7143351253",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2509.23426v2::k02",
+  "dst": "openalex:W7143351253::k02"
+ },
+ {
+  "edge_id": "e351:openalex:W4407760093::k00->openalex:W4402952666::k00",
+  "pair": "openalex:W4402952666|openalex:W4407760093",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4407760093::k00",
+  "dst": "openalex:W4402952666::k00"
+ },
+ {
+  "edge_id": "e165:openalex:W4417070798::k02->arxiv:2505.24785v2::k02",
+  "pair": "arxiv:2505.24785v2|openalex:W4417070798",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4417070798::k02",
+  "dst": "arxiv:2505.24785v2::k02"
+ },
+ {
+  "edge_id": "e514:openalex:W4414587939::k02->openalex:W4402952811::k00",
+  "pair": "openalex:W4402952811|openalex:W4414587939",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4414587939::k02",
+  "dst": "openalex:W4402952811::k00"
+ },
+ {
+  "edge_id": "e158:openalex:W7140287209::k04->arxiv:2511.02824v2::k02",
+  "pair": "arxiv:2511.02824v2|openalex:W7140287209",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W7140287209::k04",
+  "dst": "arxiv:2511.02824v2::k02"
+ },
+ {
+  "edge_id": "e71:arxiv:2510.26887v1::k00->openalex:W4386827094::k01",
+  "pair": "arxiv:2510.26887v1|openalex:W4386827094",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2510.26887v1::k00",
+  "dst": "openalex:W4386827094::k01"
+ },
+ {
+  "edge_id": "e466:arxiv:2603.26499v2::k03->openalex:W4402952811::k03",
+  "pair": "arxiv:2603.26499v2|openalex:W4402952811",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2603.26499v2::k03",
+  "dst": "openalex:W4402952811::k03"
+ },
+ {
+  "edge_id": "e290:arxiv:2604.04074v3::k00->arxiv:2601.22638v2::k01",
+  "pair": "arxiv:2601.22638v2|arxiv:2604.04074v3",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2604.04074v3::k00",
+  "dst": "arxiv:2601.22638v2::k01"
+ },
+ {
+  "edge_id": "e722:arxiv:2605.27905::k00->arxiv:2508.15126v2::k02",
+  "pair": "arxiv:2508.15126v2|arxiv:2605.27905",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2605.27905::k00",
+  "dst": "arxiv:2508.15126v2::k02"
+ },
+ {
+  "edge_id": "e73:arxiv:2510.26887v1::k00->arxiv:2505.18705v1::k00",
+  "pair": "arxiv:2505.18705v1|arxiv:2510.26887v1",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2510.26887v1::k00",
+  "dst": "arxiv:2505.18705v1::k00"
+ },
+ {
+  "edge_id": "e886:openalex:W4416043407::k01->openalex:W7161731996::k03",
+  "pair": "openalex:W4416043407|openalex:W7161731996",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4416043407::k01",
+  "dst": "openalex:W7161731996::k03"
+ },
+ {
+  "edge_id": "e703:openalex:W7140287209::k00->arxiv:2603.28589v1::k00",
+  "pair": "arxiv:2603.28589v1|openalex:W7140287209",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W7140287209::k00",
+  "dst": "arxiv:2603.28589v1::k00"
+ },
+ {
+  "edge_id": "e294:arxiv:2502.12510v1::k02->arxiv:2604.04074v3::k01",
+  "pair": "arxiv:2502.12510v1|arxiv:2604.04074v3",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2502.12510v1::k02",
+  "dst": "arxiv:2604.04074v3::k01"
+ },
+ {
+  "edge_id": "e216:openalex:W4407632372::k01->openalex:W4403006832::k02",
+  "pair": "openalex:W4403006832|openalex:W4407632372",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4407632372::k01",
+  "dst": "openalex:W4403006832::k02"
+ },
+ {
+  "edge_id": "e106:arxiv:2603.20884v3::k00->arxiv:2506.22026::k00",
+  "pair": "arxiv:2506.22026|arxiv:2603.20884v3",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2603.20884v3::k00",
+  "dst": "arxiv:2506.22026::k00"
+ },
+ {
+  "edge_id": "e347:openalex:W4407760093::k00->openalex:W4402952811::k02",
+  "pair": "openalex:W4402952811|openalex:W4407760093",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4407760093::k00",
+  "dst": "openalex:W4402952811::k02"
+ },
+ {
+  "edge_id": "e733:arxiv:2603.08127v1::k02->arxiv:2507.02004v1::k00",
+  "pair": "arxiv:2507.02004v1|arxiv:2603.08127v1",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2603.08127v1::k02",
+  "dst": "arxiv:2507.02004v1::k00"
+ },
+ {
+  "edge_id": "e213:openalex:W4417152112::k01->openalex:W4407806895::k04",
+  "pair": "openalex:W4407806895|openalex:W4417152112",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4417152112::k01",
+  "dst": "openalex:W4407806895::k04"
+ },
+ {
+  "edge_id": "e467:openalex:W4417070798::k00->arxiv:2603.26499v2::k04",
+  "pair": "arxiv:2603.26499v2|openalex:W4417070798",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4417070798::k00",
+  "dst": "arxiv:2603.26499v2::k04"
+ },
+ {
+  "edge_id": "e278:openalex:W4405468016::k03->openalex:W4404350150::k00",
+  "pair": "openalex:W4404350150|openalex:W4405468016",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4405468016::k03",
+  "dst": "openalex:W4404350150::k00"
+ },
+ {
+  "edge_id": "e718:arxiv:2603.08127v1::k01->arxiv:2507.02004v1::k02",
+  "pair": "arxiv:2507.02004v1|arxiv:2603.08127v1",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2603.08127v1::k01",
+  "dst": "arxiv:2507.02004v1::k02"
+ },
+ {
+  "edge_id": "e257:openalex:W4414587939::k02->arxiv:2505.18705v1::k00",
+  "pair": "arxiv:2505.18705v1|openalex:W4414587939",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4414587939::k02",
+  "dst": "arxiv:2505.18705v1::k00"
+ },
+ {
+  "edge_id": "e440:openalex:W4417070798::k00->arxiv:2411.15114v2::k03",
+  "pair": "arxiv:2411.15114v2|openalex:W4417070798",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4417070798::k00",
+  "dst": "arxiv:2411.15114v2::k03"
+ },
+ {
+  "edge_id": "e330:arxiv:2510.24591v2::k01->openalex:W4414837761::k01",
+  "pair": "arxiv:2510.24591v2|openalex:W4414837761",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2510.24591v2::k01",
+  "dst": "openalex:W4414837761::k01"
+ },
+ {
+  "edge_id": "e154:openalex:W7140287209::k02->openalex:W4405468016::k04",
+  "pair": "openalex:W4405468016|openalex:W7140287209",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W7140287209::k02",
+  "dst": "openalex:W4405468016::k04"
+ },
+ {
+  "edge_id": "e946:arxiv:2507.02694::k02->openalex:W4412889957::k01",
+  "pair": "arxiv:2507.02694|openalex:W4412889957",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2507.02694::k02",
+  "dst": "openalex:W4412889957::k01"
+ },
+ {
+  "edge_id": "e489:arxiv:2512.15567v2::k01->openalex:W4402345509::k02",
+  "pair": "arxiv:2512.15567v2|openalex:W4402345509",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2512.15567v2::k01",
+  "dst": "openalex:W4402345509::k02"
+ },
+ {
+  "edge_id": "e494:arxiv:2508.15126v2::k02->openalex:W4399116274::k02",
+  "pair": "arxiv:2508.15126v2|openalex:W4399116274",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2508.15126v2::k02",
+  "dst": "openalex:W4399116274::k02"
+ },
+ {
+  "edge_id": "e32:openalex:W4411120082::k02->openalex:W4414587939::k01",
+  "pair": "openalex:W4411120082|openalex:W4414587939",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4411120082::k02",
+  "dst": "openalex:W4414587939::k01"
+ },
+ {
+  "edge_id": "e676:arxiv:2605.28655::k00->openalex:W4386827094::k01",
+  "pair": "arxiv:2605.28655|openalex:W4386827094",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2605.28655::k00",
+  "dst": "openalex:W4386827094::k01"
+ },
+ {
+  "edge_id": "e170:openalex:W4403006832::k00->openalex:W4414587939::k01",
+  "pair": "openalex:W4403006832|openalex:W4414587939",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4403006832::k00",
+  "dst": "openalex:W4414587939::k01"
+ },
+ {
+  "edge_id": "e432:arxiv:2602.15112v2::k02->arxiv:2511.02824v2::k01",
+  "pair": "arxiv:2511.02824v2|arxiv:2602.15112v2",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2602.15112v2::k02",
+  "dst": "arxiv:2511.02824v2::k01"
+ },
+ {
+  "edge_id": "e2:openalex:W4402952666::k00->openalex:W7140287209::k03",
+  "pair": "openalex:W4402952666|openalex:W7140287209",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4402952666::k00",
+  "dst": "openalex:W7140287209::k03"
+ },
+ {
+  "edge_id": "e550:openalex:W4415148250::k00->openalex:W4404573571::k00",
+  "pair": "openalex:W4404573571|openalex:W4415148250",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4415148250::k00",
+  "dst": "openalex:W4404573571::k00"
+ },
+ {
+  "edge_id": "e784:openalex:W4414587939::k01->arxiv:2506.11763::k03",
+  "pair": "arxiv:2506.11763|openalex:W4414587939",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4414587939::k01",
+  "dst": "arxiv:2506.11763::k03"
+ },
+ {
+  "edge_id": "e89:openalex:W4416035220::k01->openalex:W4402952666::k00",
+  "pair": "openalex:W4402952666|openalex:W4416035220",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4416035220::k01",
+  "dst": "openalex:W4402952666::k00"
+ },
+ {
+  "edge_id": "e759:arxiv:2606.13670::k00->openalex:W4411932316::k03",
+  "pair": "arxiv:2606.13670|openalex:W4411932316",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2606.13670::k00",
+  "dst": "openalex:W4411932316::k03"
+ },
+ {
+  "edge_id": "e449:arxiv:2511.02824v2::k01->arxiv:2505.18705v1::k00",
+  "pair": "arxiv:2505.18705v1|arxiv:2511.02824v2",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2511.02824v2::k01",
+  "dst": "arxiv:2505.18705v1::k00"
+ },
+ {
+  "edge_id": "e705:openalex:W4404573571::k03->arxiv:2603.28589v1::k00",
+  "pair": "arxiv:2603.28589v1|openalex:W4404573571",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4404573571::k03",
+  "dst": "arxiv:2603.28589v1::k00"
+ },
+ {
+  "edge_id": "e596:openalex:W4416540539::k01->openalex:W4403586302::k00",
+  "pair": "openalex:W4403586302|openalex:W4416540539",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4416540539::k01",
+  "dst": "openalex:W4403586302::k00"
+ },
+ {
+  "edge_id": "e34:openalex:W4411120082::k02->openalex:W4400734098::k02",
+  "pair": "openalex:W4400734098|openalex:W4411120082",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4411120082::k02",
+  "dst": "openalex:W4400734098::k02"
+ },
+ {
+  "edge_id": "e453:openalex:W7140287209::k00->arxiv:2511.02824v2::k02",
+  "pair": "arxiv:2511.02824v2|openalex:W7140287209",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W7140287209::k00",
+  "dst": "arxiv:2511.02824v2::k02"
+ },
+ {
+  "edge_id": "e786:arxiv:2606.00644::k02->arxiv:2605.26081::k00",
+  "pair": "arxiv:2605.26081|arxiv:2606.00644",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2606.00644::k02",
+  "dst": "arxiv:2605.26081::k00"
+ },
+ {
+  "edge_id": "e72:arxiv:2510.26887v1::k00->openalex:W4414587939::k02",
+  "pair": "arxiv:2510.26887v1|openalex:W4414587939",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2510.26887v1::k00",
+  "dst": "openalex:W4414587939::k02"
+ },
+ {
+  "edge_id": "e451:openalex:W4404573571::k03->arxiv:2511.02824v2::k02",
+  "pair": "arxiv:2511.02824v2|openalex:W4404573571",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4404573571::k03",
+  "dst": "arxiv:2511.02824v2::k02"
+ },
+ {
+  "edge_id": "e490:openalex:W4415238296::k00->openalex:W4404350150::k01",
+  "pair": "openalex:W4404350150|openalex:W4415238296",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4415238296::k00",
+  "dst": "openalex:W4404350150::k01"
+ },
+ {
+  "edge_id": "e357:openalex:W4407760093::k02->openalex:W4414028042::k00",
+  "pair": "openalex:W4407760093|openalex:W4414028042",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4407760093::k02",
+  "dst": "openalex:W4414028042::k00"
+ },
+ {
+  "edge_id": "e701:arxiv:2603.28589v1::k00->openalex:W4414587939::k02",
+  "pair": "arxiv:2603.28589v1|openalex:W4414587939",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2603.28589v1::k00",
+  "dst": "openalex:W4414587939::k02"
+ },
+ {
+  "edge_id": "e140:openalex:W4400448985::k02->openalex:W4416540539::k02",
+  "pair": "openalex:W4400448985|openalex:W4416540539",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4400448985::k02",
+  "dst": "openalex:W4416540539::k02"
+ },
+ {
+  "edge_id": "e988:openalex:W7126046125::k03->openalex:W4416035220::k00",
+  "pair": "openalex:W4416035220|openalex:W7126046125",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W7126046125::k03",
+  "dst": "openalex:W4416035220::k00"
+ },
+ {
+  "edge_id": "e667:arxiv:2505.24785v2::k02->arxiv:2606.00644::k02",
+  "pair": "arxiv:2505.24785v2|arxiv:2606.00644",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2505.24785v2::k02",
+  "dst": "arxiv:2606.00644::k02"
+ },
+ {
+  "edge_id": "e459:arxiv:2603.26499v2::k01->arxiv:2602.15112v2::k00",
+  "pair": "arxiv:2602.15112v2|arxiv:2603.26499v2",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2603.26499v2::k01",
+  "dst": "arxiv:2602.15112v2::k00"
+ },
+ {
+  "edge_id": "e472:arxiv:2601.22638v2::k04->arxiv:2506.07642::k01",
+  "pair": "arxiv:2506.07642|arxiv:2601.22638v2",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2601.22638v2::k04",
+  "dst": "arxiv:2506.07642::k01"
+ },
+ {
+  "edge_id": "e267:arxiv:2504.09702v3::k00->openalex:W4403707291::k00",
+  "pair": "arxiv:2504.09702v3|openalex:W4403707291",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2504.09702v3::k00",
+  "dst": "openalex:W4403707291::k00"
+ },
+ {
+  "edge_id": "e918:openalex:W4404355537::k01->openalex:W4386827094::k00",
+  "pair": "openalex:W4386827094|openalex:W4404355537",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4404355537::k01",
+  "dst": "openalex:W4386827094::k00"
+ },
+ {
+  "edge_id": "e443:openalex:W7140287209::k00->arxiv:2511.02824v2::k00",
+  "pair": "arxiv:2511.02824v2|openalex:W7140287209",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W7140287209::k00",
+  "dst": "arxiv:2511.02824v2::k00"
+ },
+ {
+  "edge_id": "e160:openalex:W4417070798::k00->arxiv:2602.15112v2::k02",
+  "pair": "arxiv:2602.15112v2|openalex:W4417070798",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4417070798::k00",
+  "dst": "arxiv:2602.15112v2::k02"
+ },
+ {
+  "edge_id": "e378:openalex:W4405468016::k03->openalex:W4404783497::k00",
+  "pair": "openalex:W4404783497|openalex:W4405468016",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4405468016::k03",
+  "dst": "openalex:W4404783497::k00"
+ },
+ {
+  "edge_id": "e156:openalex:W7140287209::k03->arxiv:2511.02824v2::k03",
+  "pair": "arxiv:2511.02824v2|openalex:W7140287209",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W7140287209::k03",
+  "dst": "arxiv:2511.02824v2::k03"
+ },
+ {
+  "edge_id": "e446:arxiv:2511.02824v2::k00->openalex:W4414587939::k02",
+  "pair": "arxiv:2511.02824v2|openalex:W4414587939",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2511.02824v2::k00",
+  "dst": "openalex:W4414587939::k02"
+ },
+ {
+  "edge_id": "e871:arxiv:2509.14778v2::k02->openalex:W7154716562::k01",
+  "pair": "arxiv:2509.14778v2|openalex:W7154716562",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2509.14778v2::k02",
+  "dst": "openalex:W7154716562::k01"
+ },
+ {
+  "edge_id": "e659:arxiv:2606.00644::k01->arxiv:2506.11763::k01",
+  "pair": "arxiv:2506.11763|arxiv:2606.00644",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2606.00644::k01",
+  "dst": "arxiv:2506.11763::k01"
+ },
+ {
+  "edge_id": "e18:openalex:W4414827381::k02->openalex:W7140287209::k03",
+  "pair": "openalex:W4414827381|openalex:W7140287209",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4414827381::k02",
+  "dst": "openalex:W7140287209::k03"
+ },
+ {
+  "edge_id": "e87:openalex:W7126046125::k00->openalex:W4416035220::k00",
+  "pair": "openalex:W4416035220|openalex:W7126046125",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W7126046125::k00",
+  "dst": "openalex:W4416035220::k00"
+ },
+ {
+  "edge_id": "e681:arxiv:2510.27598::k01->arxiv:2511.19399v3::k03",
+  "pair": "arxiv:2510.27598|arxiv:2511.19399v3",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2510.27598::k01",
+  "dst": "arxiv:2511.19399v3::k03"
+ },
+ {
+  "edge_id": "e401:openalex:W4405561462::k01->openalex:W4403006832::k00",
+  "pair": "openalex:W4403006832|openalex:W4405561462",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4405561462::k01",
+  "dst": "openalex:W4403006832::k00"
+ },
+ {
+  "edge_id": "e527:openalex:W4416043407::k02->openalex:W7161731996::k02",
+  "pair": "openalex:W4416043407|openalex:W7161731996",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4416043407::k02",
+  "dst": "openalex:W7161731996::k02"
+ },
+ {
+  "edge_id": "e495:arxiv:2605.27905::k00->openalex:W4399116274::k02",
+  "pair": "arxiv:2605.27905|openalex:W4399116274",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2605.27905::k00",
+  "dst": "openalex:W4399116274::k02"
+ },
+ {
+  "edge_id": "e390:openalex:W4405468016::k02->arxiv:2503.08569::k00",
+  "pair": "arxiv:2503.08569|openalex:W4405468016",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4405468016::k02",
+  "dst": "arxiv:2503.08569::k00"
+ },
+ {
+  "edge_id": "e150:openalex:W7140287209::k01->openalex:W4414827381::k00",
+  "pair": "openalex:W4414827381|openalex:W7140287209",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W7140287209::k01",
+  "dst": "openalex:W4414827381::k00"
+ },
+ {
+  "edge_id": "e533:arxiv:2509.23426v2::k04->openalex:W4416043407::k03",
+  "pair": "arxiv:2509.23426v2|openalex:W4416043407",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2509.23426v2::k04",
+  "dst": "openalex:W4416043407::k03"
+ },
+ {
+  "edge_id": "e258:arxiv:2603.08127v1::k02->openalex:W4414587939::k02",
+  "pair": "arxiv:2603.08127v1|openalex:W4414587939",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2603.08127v1::k02",
+  "dst": "openalex:W4414587939::k02"
+ },
+ {
+  "edge_id": "e743:arxiv:2603.08127v1::k02->arxiv:2507.02004v1::k02",
+  "pair": "arxiv:2507.02004v1|arxiv:2603.08127v1",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2603.08127v1::k02",
+  "dst": "arxiv:2507.02004v1::k02"
+ },
+ {
+  "edge_id": "e292:arxiv:2604.04074v3::k01->arxiv:2601.22638v2::k01",
+  "pair": "arxiv:2601.22638v2|arxiv:2604.04074v3",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2604.04074v3::k01",
+  "dst": "arxiv:2601.22638v2::k01"
+ },
+ {
+  "edge_id": "e554:openalex:W4365211632::k00->openalex:W4415148250::k04",
+  "pair": "openalex:W4365211632|openalex:W4415148250",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4365211632::k00",
+  "dst": "openalex:W4415148250::k04"
+ },
+ {
+  "edge_id": "e389:openalex:W4405468016::k01->openalex:W4404783497::k00",
+  "pair": "openalex:W4404783497|openalex:W4405468016",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4405468016::k01",
+  "dst": "openalex:W4404783497::k00"
+ },
+ {
+  "edge_id": "e76:arxiv:2510.26887v1::k01->arxiv:2511.02824v2::k03",
+  "pair": "arxiv:2510.26887v1|arxiv:2511.02824v2",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2510.26887v1::k01",
+  "dst": "arxiv:2511.02824v2::k03"
+ },
+ {
+  "edge_id": "e851:openalex:W7143351253::k00->openalex:W4411005431::k01",
+  "pair": "openalex:W4411005431|openalex:W7143351253",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W7143351253::k00",
+  "dst": "openalex:W4411005431::k01"
+ },
+ {
+  "edge_id": "e574:openalex:W4404355537::k01->openalex:W4403345771::k04",
+  "pair": "openalex:W4403345771|openalex:W4404355537",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4404355537::k01",
+  "dst": "openalex:W4403345771::k04"
+ },
+ {
+  "edge_id": "e21:openalex:W7140287209::k00->openalex:W4414827381::k03",
+  "pair": "openalex:W4414827381|openalex:W7140287209",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W7140287209::k00",
+  "dst": "openalex:W4414827381::k03"
+ },
+ {
+  "edge_id": "e388:openalex:W4405468016::k00->openalex:W4405561462::k02",
+  "pair": "openalex:W4405468016|openalex:W4405561462",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4405468016::k00",
+  "dst": "openalex:W4405561462::k02"
+ },
+ {
+  "edge_id": "e856:arxiv:2601.21654v3::k04->arxiv:2507.16280::k03",
+  "pair": "arxiv:2507.16280|arxiv:2601.21654v3",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2601.21654v3::k04",
+  "dst": "arxiv:2507.16280::k03"
+ },
+ {
+  "edge_id": "e356:openalex:W4407760093::k02->arxiv:2411.15114v2::k00",
+  "pair": "arxiv:2411.15114v2|openalex:W4407760093",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4407760093::k02",
+  "dst": "arxiv:2411.15114v2::k00"
+ },
+ {
+  "edge_id": "e888:openalex:W7161731996::k03->arxiv:2603.08127v1::k01",
+  "pair": "arxiv:2603.08127v1|openalex:W7161731996",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W7161731996::k03",
+  "dst": "arxiv:2603.08127v1::k01"
+ },
+ {
+  "edge_id": "e731:arxiv:2603.28589v1::k00->arxiv:2509.14778v2::k03",
+  "pair": "arxiv:2509.14778v2|arxiv:2603.28589v1",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2603.28589v1::k00",
+  "dst": "arxiv:2509.14778v2::k03"
+ },
+ {
+  "edge_id": "e499:openalex:W4411120082::k00->openalex:W4412889809::k00",
+  "pair": "openalex:W4411120082|openalex:W4412889809",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4411120082::k00",
+  "dst": "openalex:W4412889809::k00"
+ },
+ {
+  "edge_id": "e250:openalex:W4414587939::k00->arxiv:2504.09702v3::k00",
+  "pair": "arxiv:2504.09702v3|openalex:W4414587939",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4414587939::k00",
+  "dst": "arxiv:2504.09702v3::k00"
+ },
+ {
+  "edge_id": "e335:arxiv:2505.18705v1::k01->arxiv:2505.24785v2::k01",
+  "pair": "arxiv:2505.18705v1|arxiv:2505.24785v2",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2505.18705v1::k01",
+  "dst": "arxiv:2505.24785v2::k01"
+ },
+ {
+  "edge_id": "e695:openalex:W4415036172::k01->arxiv:2603.17216v1::k01",
+  "pair": "arxiv:2603.17216v1|openalex:W4415036172",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4415036172::k01",
+  "dst": "arxiv:2603.17216v1::k01"
+ },
+ {
+  "edge_id": "e975:arxiv:2603.08127v1::k02->openalex:W7143351253::k01",
+  "pair": "arxiv:2603.08127v1|openalex:W7143351253",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2603.08127v1::k02",
+  "dst": "openalex:W7143351253::k01"
+ },
+ {
+  "edge_id": "e746:openalex:W4407806895::k03->arxiv:2505.17968v1::k01",
+  "pair": "arxiv:2505.17968v1|openalex:W4407806895",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4407806895::k03",
+  "dst": "arxiv:2505.17968v1::k01"
+ },
+ {
+  "edge_id": "e497:arxiv:2605.27905::k00->openalex:W4399116274::k03",
+  "pair": "arxiv:2605.27905|openalex:W4399116274",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2605.27905::k00",
+  "dst": "openalex:W4399116274::k03"
+ },
+ {
+  "edge_id": "e115:arxiv:2603.20884v3::k02->arxiv:2506.22026::k03",
+  "pair": "arxiv:2506.22026|arxiv:2603.20884v3",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2603.20884v3::k02",
+  "dst": "arxiv:2506.22026::k03"
+ },
+ {
+  "edge_id": "e521:openalex:W4415108068::k02->openalex:W4407760093::k01",
+  "pair": "openalex:W4407760093|openalex:W4415108068",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4415108068::k02",
+  "dst": "openalex:W4407760093::k01"
+ },
+ {
+  "edge_id": "e967:openalex:W4384261641::k00->openalex:W4400734098::k00",
+  "pair": "openalex:W4384261641|openalex:W4400734098",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4384261641::k00",
+  "dst": "openalex:W4400734098::k00"
+ },
+ {
+  "edge_id": "e70:arxiv:2603.08127v1::k02->arxiv:2510.26887v1::k00",
+  "pair": "arxiv:2510.26887v1|arxiv:2603.08127v1",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2603.08127v1::k02",
+  "dst": "arxiv:2510.26887v1::k00"
+ },
+ {
+  "edge_id": "e145:openalex:W7140287209::k00->openalex:W4404573571::k03",
+  "pair": "openalex:W4404573571|openalex:W7140287209",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W7140287209::k00",
+  "dst": "openalex:W4404573571::k03"
+ },
+ {
+  "edge_id": "e146:openalex:W7140287209::k00->openalex:W4414827381::k00",
+  "pair": "openalex:W4414827381|openalex:W7140287209",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W7140287209::k00",
+  "dst": "openalex:W4414827381::k00"
+ },
+ {
+  "edge_id": "e578:openalex:W4404355537::k01->openalex:W4403345771::k02",
+  "pair": "openalex:W4403345771|openalex:W4404355537",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4404355537::k01",
+  "dst": "openalex:W4403345771::k02"
+ },
+ {
+  "edge_id": "e238:openalex:W4414827381::k00->openalex:W4404573571::k01",
+  "pair": "openalex:W4404573571|openalex:W4414827381",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4414827381::k00",
+  "dst": "openalex:W4404573571::k01"
+ },
+ {
+  "edge_id": "e579:openalex:W4404355537::k01->openalex:W4403345771::k03",
+  "pair": "openalex:W4403345771|openalex:W4404355537",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4404355537::k01",
+  "dst": "openalex:W4403345771::k03"
+ },
+ {
+  "edge_id": "e640:arxiv:2606.06473::k00->openalex:W4414827381::k00",
+  "pair": "arxiv:2606.06473|openalex:W4414827381",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2606.06473::k00",
+  "dst": "openalex:W4414827381::k00"
+ },
+ {
+  "edge_id": "e782:arxiv:2606.00644::k02->arxiv:2506.11763::k02",
+  "pair": "arxiv:2506.11763|arxiv:2606.00644",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2606.00644::k02",
+  "dst": "arxiv:2506.11763::k02"
+ },
+ {
+  "edge_id": "e487:arxiv:2509.23426v2::k04->openalex:W4411005431::k00",
+  "pair": "arxiv:2509.23426v2|openalex:W4411005431",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2509.23426v2::k04",
+  "dst": "openalex:W4411005431::k00"
+ },
+ {
+  "edge_id": "e749:arxiv:2512.15567v2::k01->arxiv:2505.17968v1::k01",
+  "pair": "arxiv:2505.17968v1|arxiv:2512.15567v2",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2512.15567v2::k01",
+  "dst": "arxiv:2505.17968v1::k01"
+ },
+ {
+  "edge_id": "e602:openalex:W4416026872::k03->openalex:W4416611770::k00",
+  "pair": "openalex:W4416026872|openalex:W4416611770",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "openalex:W4416026872::k03",
+  "dst": "openalex:W4416611770::k00"
+ },
+ {
+  "edge_id": "e367:openalex:W4384261641::k00->openalex:W4402683796::k04",
+  "pair": "openalex:W4384261641|openalex:W4402683796",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4384261641::k00",
+  "dst": "openalex:W4402683796::k04"
+ },
+ {
+  "edge_id": "e289:arxiv:2604.04074v3::k00->arxiv:2503.08569::k00",
+  "pair": "arxiv:2503.08569|arxiv:2604.04074v3",
+  "current_relation": "builds_on",
+  "intent": null,
+  "src": "arxiv:2604.04074v3::k00",
+  "dst": "arxiv:2503.08569::k00"
+ },
+ {
+  "edge_id": "e734:arxiv:2507.02004v1::k00->openalex:W7143351253::k00",
+  "pair": "arxiv:2507.02004v1|openalex:W7143351253",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2507.02004v1::k00",
+  "dst": "openalex:W7143351253::k00"
+ },
+ {
+  "edge_id": "e713:openalex:W4414587939::k00->arxiv:2603.28589v1::k03",
+  "pair": "arxiv:2603.28589v1|openalex:W4414587939",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4414587939::k00",
+  "dst": "arxiv:2603.28589v1::k03"
+ },
+ {
+  "edge_id": "e10:openalex:W4414827381::k00->openalex:W4386827094::k01",
+  "pair": "openalex:W4386827094|openalex:W4414827381",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4414827381::k00",
+  "dst": "openalex:W4386827094::k01"
+ },
+ {
+  "edge_id": "e242:openalex:W4404573571::k03->openalex:W4417287919::k00",
+  "pair": "openalex:W4404573571|openalex:W4417287919",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4404573571::k03",
+  "dst": "openalex:W4417287919::k00"
+ },
+ {
+  "edge_id": "e362:openalex:W4407760093::k03->arxiv:2411.15114v2::k00",
+  "pair": "arxiv:2411.15114v2|openalex:W4407760093",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4407760093::k03",
+  "dst": "arxiv:2411.15114v2::k00"
+ },
+ {
+  "edge_id": "e248:openalex:W4414587939::k00->arxiv:2505.18705v1::k01",
+  "pair": "arxiv:2505.18705v1|openalex:W4414587939",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4414587939::k00",
+  "dst": "arxiv:2505.18705v1::k01"
+ },
+ {
+  "edge_id": "e308:arxiv:2505.18705v1::k00->openalex:W4386827094::k01",
+  "pair": "arxiv:2505.18705v1|openalex:W4386827094",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2505.18705v1::k00",
+  "dst": "openalex:W4386827094::k01"
+ },
+ {
+  "edge_id": "e668:openalex:W4401042723::k02->arxiv:2605.27905::k02",
+  "pair": "arxiv:2605.27905|openalex:W4401042723",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4401042723::k02",
+  "dst": "arxiv:2605.27905::k02"
+ },
+ {
+  "edge_id": "e894:openalex:W4405561462::k00->arxiv:2503.08569::k00",
+  "pair": "arxiv:2503.08569|openalex:W4405561462",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4405561462::k00",
+  "dst": "arxiv:2503.08569::k00"
+ },
+ {
+  "edge_id": "e693:openalex:W4405035007::k04->arxiv:2605.29468::k01",
+  "pair": "arxiv:2605.29468|openalex:W4405035007",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4405035007::k04",
+  "dst": "arxiv:2605.29468::k01"
+ },
+ {
+  "edge_id": "e230:openalex:W4399597648::k03->arxiv:2606.11851::k02",
+  "pair": "arxiv:2606.11851|openalex:W4399597648",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4399597648::k03",
+  "dst": "arxiv:2606.11851::k02"
+ },
+ {
+  "edge_id": "e369:openalex:W4384261641::k01->openalex:W4400734098::k00",
+  "pair": "openalex:W4384261641|openalex:W4400734098",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4384261641::k01",
+  "dst": "openalex:W4400734098::k00"
+ },
+ {
+  "edge_id": "e311:arxiv:2505.18705v1::k01->arxiv:2411.15114v2::k00",
+  "pair": "arxiv:2411.15114v2|arxiv:2505.18705v1",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2505.18705v1::k01",
+  "dst": "arxiv:2411.15114v2::k00"
+ },
+ {
+  "edge_id": "e108:arxiv:2604.11543v1::k00->arxiv:2603.20884v3::k01",
+  "pair": "arxiv:2603.20884v3|arxiv:2604.11543v1",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2604.11543v1::k00",
+  "dst": "arxiv:2603.20884v3::k01"
+ },
+ {
+  "edge_id": "e305:arxiv:2507.18901v1::k01->arxiv:2510.24591v2::k01",
+  "pair": "arxiv:2507.18901v1|arxiv:2510.24591v2",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2507.18901v1::k01",
+  "dst": "arxiv:2510.24591v2::k01"
+ },
+ {
+  "edge_id": "e118:openalex:W4403586302::k00->openalex:W4416035327::k02",
+  "pair": "openalex:W4403586302|openalex:W4416035327",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4403586302::k00",
+  "dst": "openalex:W4416035327::k02"
+ },
+ {
+  "edge_id": "e382:openalex:W4390784029::k01->openalex:W4402683796::k00",
+  "pair": "openalex:W4390784029|openalex:W4402683796",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4390784029::k01",
+  "dst": "openalex:W4402683796::k00"
+ },
+ {
+  "edge_id": "e33:openalex:W4411120082::k02->openalex:W4403006832::k01",
+  "pair": "openalex:W4403006832|openalex:W4411120082",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4411120082::k02",
+  "dst": "openalex:W4403006832::k01"
+ },
+ {
+  "edge_id": "e779:openalex:W4414587939::k01->arxiv:2506.11763::k01",
+  "pair": "arxiv:2506.11763|openalex:W4414587939",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4414587939::k01",
+  "dst": "arxiv:2506.11763::k01"
+ },
+ {
+  "edge_id": "e700:arxiv:2603.17216v1::k02->arxiv:2602.12984v2::k03",
+  "pair": "arxiv:2602.12984v2|arxiv:2603.17216v1",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2603.17216v1::k02",
+  "dst": "arxiv:2602.12984v2::k03"
+ },
+ {
+  "edge_id": "e241:openalex:W4404573571::k03->arxiv:2505.18705v1::k00",
+  "pair": "arxiv:2505.18705v1|openalex:W4404573571",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4404573571::k03",
+  "dst": "arxiv:2505.18705v1::k00"
+ },
+ {
+  "edge_id": "e753:arxiv:2606.06473::k00->openalex:W4411932316::k00",
+  "pair": "arxiv:2606.06473|openalex:W4411932316",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2606.06473::k00",
+  "dst": "openalex:W4411932316::k00"
+ },
+ {
+  "edge_id": "e568:openalex:W4416035220::k02->openalex:W4401042723::k00",
+  "pair": "openalex:W4401042723|openalex:W4416035220",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4416035220::k02",
+  "dst": "openalex:W4401042723::k00"
+ },
+ {
+  "edge_id": "e293:arxiv:2604.04074v3::k01->openalex:W4405035007::k04",
+  "pair": "arxiv:2604.04074v3|openalex:W4405035007",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2604.04074v3::k01",
+  "dst": "openalex:W4405035007::k04"
+ },
+ {
+  "edge_id": "e12:openalex:W4414827381::k00->openalex:W4417287919::k00",
+  "pair": "openalex:W4414827381|openalex:W4417287919",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4414827381::k00",
+  "dst": "openalex:W4417287919::k00"
+ },
+ {
+  "edge_id": "e37:openalex:W4411120082::k03->openalex:W4400734098::k01",
+  "pair": "openalex:W4400734098|openalex:W4411120082",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4411120082::k03",
+  "dst": "openalex:W4400734098::k01"
+ },
+ {
+  "edge_id": "e247:openalex:W4414587939::k00->arxiv:2505.24785v2::k00",
+  "pair": "arxiv:2505.24785v2|openalex:W4414587939",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4414587939::k00",
+  "dst": "arxiv:2505.24785v2::k00"
+ },
+ {
+  "edge_id": "e646:arxiv:2606.06473::k02->openalex:W7143351253::k01",
+  "pair": "arxiv:2606.06473|openalex:W7143351253",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2606.06473::k02",
+  "dst": "openalex:W7143351253::k01"
+ },
+ {
+  "edge_id": "e245:openalex:W4404573571::k03->openalex:W4414587939::k02",
+  "pair": "openalex:W4404573571|openalex:W4414587939",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4404573571::k03",
+  "dst": "openalex:W4414587939::k02"
+ },
+ {
+  "edge_id": "e193:openalex:W4407806895::k00->openalex:W4402952811::k03",
+  "pair": "openalex:W4402952811|openalex:W4407806895",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4407806895::k00",
+  "dst": "openalex:W4402952811::k03"
+ },
+ {
+  "edge_id": "e373:openalex:W4390784029::k01->openalex:W4402683796::k01",
+  "pair": "openalex:W4390784029|openalex:W4402683796",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4390784029::k01",
+  "dst": "openalex:W4402683796::k01"
+ },
+ {
+  "edge_id": "e225:openalex:W7140287209::k01->openalex:W4403324055::k01",
+  "pair": "openalex:W4403324055|openalex:W7140287209",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W7140287209::k01",
+  "dst": "openalex:W4403324055::k01"
+ },
+ {
+  "edge_id": "e424:openalex:W4399597648::k03->arxiv:2512.15567v2::k02",
+  "pair": "arxiv:2512.15567v2|openalex:W4399597648",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4399597648::k03",
+  "dst": "arxiv:2512.15567v2::k02"
+ },
+ {
+  "edge_id": "e500:openalex:W4412889809::k01->openalex:W4401042723::k02",
+  "pair": "openalex:W4401042723|openalex:W4412889809",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4412889809::k01",
+  "dst": "openalex:W4401042723::k02"
+ },
+ {
+  "edge_id": "e91:openalex:W4403795293::k01->arxiv:2507.02004v1::k03",
+  "pair": "arxiv:2507.02004v1|openalex:W4403795293",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4403795293::k01",
+  "dst": "arxiv:2507.02004v1::k03"
+ },
+ {
+  "edge_id": "e218:openalex:W4412889957::k03->openalex:W4404782918::k01",
+  "pair": "openalex:W4404782918|openalex:W4412889957",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4412889957::k03",
+  "dst": "openalex:W4404782918::k01"
+ },
+ {
+  "edge_id": "e319:arxiv:2505.18705v1::k04->openalex:W4401042723::k02",
+  "pair": "arxiv:2505.18705v1|openalex:W4401042723",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2505.18705v1::k04",
+  "dst": "openalex:W4401042723::k02"
+ },
+ {
+  "edge_id": "e626:openalex:W4399597648::k02->arxiv:2606.11851::k02",
+  "pair": "arxiv:2606.11851|openalex:W4399597648",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4399597648::k02",
+  "dst": "arxiv:2606.11851::k02"
+ },
+ {
+  "edge_id": "e887:arxiv:2605.28655::k01->openalex:W7161731996::k03",
+  "pair": "arxiv:2605.28655|openalex:W7161731996",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2605.28655::k01",
+  "dst": "openalex:W7161731996::k03"
+ },
+ {
+  "edge_id": "e402:openalex:W4405561462::k02->openalex:W4404782918::k03",
+  "pair": "openalex:W4404782918|openalex:W4405561462",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4405561462::k02",
+  "dst": "openalex:W4404782918::k03"
+ },
+ {
+  "edge_id": "e595:openalex:W4404355537::k01->openalex:W4416540539::k00",
+  "pair": "openalex:W4404355537|openalex:W4416540539",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4404355537::k01",
+  "dst": "openalex:W4416540539::k00"
+ },
+ {
+  "edge_id": "e153:openalex:W7140287209::k02->openalex:W4414587939::k01",
+  "pair": "openalex:W4414587939|openalex:W7140287209",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W7140287209::k02",
+  "dst": "openalex:W4414587939::k01"
+ },
+ {
+  "edge_id": "e635:openalex:W4414587939::k03->arxiv:2606.11447::k03",
+  "pair": "arxiv:2606.11447|openalex:W4414587939",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4414587939::k03",
+  "dst": "arxiv:2606.11447::k03"
+ },
+ {
+  "edge_id": "e353:openalex:W7140287209::k01->openalex:W4407760093::k01",
+  "pair": "openalex:W4407760093|openalex:W7140287209",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W7140287209::k01",
+  "dst": "openalex:W4407760093::k01"
+ },
+ {
+  "edge_id": "e364:openalex:W7140287209::k01->openalex:W4407760093::k03",
+  "pair": "openalex:W4407760093|openalex:W7140287209",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W7140287209::k01",
+  "dst": "openalex:W4407760093::k03"
+ },
+ {
+  "edge_id": "e742:arxiv:2507.02004v1::k02->openalex:W7126046125::k01",
+  "pair": "arxiv:2507.02004v1|openalex:W7126046125",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2507.02004v1::k02",
+  "dst": "openalex:W7126046125::k01"
+ },
+ {
+  "edge_id": "e380:arxiv:2502.12510v1::k02->openalex:W4404783497::k02",
+  "pair": "arxiv:2502.12510v1|openalex:W4404783497",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2502.12510v1::k02",
+  "dst": "openalex:W4404783497::k02"
+ },
+ {
+  "edge_id": "e877:arxiv:2505.18705v1::k00->openalex:W7161731996::k00",
+  "pair": "arxiv:2505.18705v1|openalex:W7161731996",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2505.18705v1::k00",
+  "dst": "openalex:W7161731996::k00"
+ },
+ {
+  "edge_id": "e377:openalex:W4404783497::k00->openalex:W4405468016::k00",
+  "pair": "openalex:W4404783497|openalex:W4405468016",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4404783497::k00",
+  "dst": "openalex:W4405468016::k00"
+ },
+ {
+  "edge_id": "e880:openalex:W4414837761::k02->openalex:W7161731996::k01",
+  "pair": "openalex:W4414837761|openalex:W7161731996",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4414837761::k02",
+  "dst": "openalex:W7161731996::k01"
+ },
+ {
+  "edge_id": "e196:openalex:W4407806895::k00->openalex:W4407760093::k00",
+  "pair": "openalex:W4407760093|openalex:W4407806895",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4407806895::k00",
+  "dst": "openalex:W4407760093::k00"
+ },
+ {
+  "edge_id": "e757:openalex:W4411932316::k03->openalex:W4411005431::k02",
+  "pair": "openalex:W4411005431|openalex:W4411932316",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4411932316::k03",
+  "dst": "openalex:W4411005431::k02"
+ },
+ {
+  "edge_id": "e128:openalex:W4403586302::k02->openalex:W7134120420::k01",
+  "pair": "openalex:W4403586302|openalex:W7134120420",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4403586302::k02",
+  "dst": "openalex:W7134120420::k01"
+ },
+ {
+  "edge_id": "e859:arxiv:2603.26499v2::k03->openalex:W7131078049::k03",
+  "pair": "arxiv:2603.26499v2|openalex:W7131078049",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2603.26499v2::k03",
+  "dst": "openalex:W7131078049::k03"
+ },
+ {
+  "edge_id": "e385:openalex:W4402683796::k03->openalex:W4404782918::k00",
+  "pair": "openalex:W4402683796|openalex:W4404782918",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4402683796::k03",
+  "dst": "openalex:W4404782918::k00"
+ },
+ {
+  "edge_id": "e895:openalex:W4405561462::k00->arxiv:2503.08569::k02",
+  "pair": "arxiv:2503.08569|openalex:W4405561462",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4405561462::k00",
+  "dst": "arxiv:2503.08569::k02"
+ },
+ {
+  "edge_id": "e82:arxiv:2510.26887v1::k02->openalex:W4404573571::k03",
+  "pair": "arxiv:2510.26887v1|openalex:W4404573571",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2510.26887v1::k02",
+  "dst": "openalex:W4404573571::k03"
+ },
+ {
+  "edge_id": "e22:openalex:W4416026872::k02->openalex:W7140287209::k03",
+  "pair": "openalex:W4416026872|openalex:W7140287209",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4416026872::k02",
+  "dst": "openalex:W7140287209::k03"
+ },
+ {
+  "edge_id": "e690:openalex:W4416611770::k01->arxiv:2605.29468::k00",
+  "pair": "arxiv:2605.29468|openalex:W4416611770",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4416611770::k01",
+  "dst": "arxiv:2605.29468::k00"
+ },
+ {
+  "edge_id": "e307:arxiv:2505.18705v1::k00->openalex:W4417287919::k00",
+  "pair": "arxiv:2505.18705v1|openalex:W4417287919",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2505.18705v1::k00",
+  "dst": "openalex:W4417287919::k00"
+ },
+ {
+  "edge_id": "e882:openalex:W7161731996::k01->openalex:W7126046125::k01",
+  "pair": "openalex:W7126046125|openalex:W7161731996",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W7161731996::k01",
+  "dst": "openalex:W7126046125::k01"
+ },
+ {
+  "edge_id": "e400:openalex:W4404783497::k01->openalex:W4405561462::k00",
+  "pair": "openalex:W4404783497|openalex:W4405561462",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4404783497::k01",
+  "dst": "openalex:W4405561462::k00"
+ },
+ {
+  "edge_id": "e244:openalex:W4404573571::k03->arxiv:2511.02824v2::k03",
+  "pair": "arxiv:2511.02824v2|openalex:W4404573571",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4404573571::k03",
+  "dst": "arxiv:2511.02824v2::k03"
+ },
+ {
+  "edge_id": "e674:openalex:W4404573571::k03->arxiv:2605.28655::k00",
+  "pair": "arxiv:2605.28655|openalex:W4404573571",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4404573571::k03",
+  "dst": "arxiv:2605.28655::k00"
+ },
+ {
+  "edge_id": "e8:openalex:W4402952666::k02->openalex:W7140287209::k03",
+  "pair": "openalex:W4402952666|openalex:W7140287209",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4402952666::k02",
+  "dst": "openalex:W7140287209::k03"
+ },
+ {
+  "edge_id": "e879:openalex:W7161731996::k01->openalex:W7126046125::k03",
+  "pair": "openalex:W7126046125|openalex:W7161731996",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W7161731996::k01",
+  "dst": "openalex:W7126046125::k03"
+ },
+ {
+  "edge_id": "e227:openalex:W4403324055::k02->openalex:W4403345771::k03",
+  "pair": "openalex:W4403324055|openalex:W4403345771",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4403324055::k02",
+  "dst": "openalex:W4403345771::k03"
+ },
+ {
+  "edge_id": "e323:openalex:W4404573571::k03->arxiv:2511.06309v2::k01",
+  "pair": "arxiv:2511.06309v2|openalex:W4404573571",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4404573571::k03",
+  "dst": "arxiv:2511.06309v2::k01"
+ },
+ {
+  "edge_id": "e638:arxiv:2606.06473::k00->arxiv:2603.08127v1::k02",
+  "pair": "arxiv:2603.08127v1|arxiv:2606.06473",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2606.06473::k00",
+  "dst": "arxiv:2603.08127v1::k02"
+ },
+ {
+  "edge_id": "e169:openalex:W4403006832::k00->openalex:W4404783497::k00",
+  "pair": "openalex:W4403006832|openalex:W4404783497",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4403006832::k00",
+  "dst": "openalex:W4404783497::k00"
+ },
+ {
+  "edge_id": "e969:openalex:W4402683796::k03->openalex:W4400734098::k01",
+  "pair": "openalex:W4400734098|openalex:W4402683796",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4402683796::k03",
+  "dst": "openalex:W4400734098::k01"
+ },
+ {
+  "edge_id": "e526:openalex:W4416043407::k01->openalex:W7161731996::k01",
+  "pair": "openalex:W4416043407|openalex:W7161731996",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4416043407::k01",
+  "dst": "openalex:W7161731996::k01"
+ },
+ {
+  "edge_id": "e426:arxiv:2504.01848v3::k03->arxiv:2602.15112v2::k01",
+  "pair": "arxiv:2504.01848v3|arxiv:2602.15112v2",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2504.01848v3::k03",
+  "dst": "arxiv:2602.15112v2::k01"
+ },
+ {
+  "edge_id": "e104:arxiv:2603.20884v3::k00->arxiv:2506.22026::k02",
+  "pair": "arxiv:2506.22026|arxiv:2603.20884v3",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2603.20884v3::k00",
+  "dst": "arxiv:2506.22026::k02"
+ },
+ {
+  "edge_id": "e338:arxiv:2505.24785v2::k02->arxiv:2504.09702v3::k01",
+  "pair": "arxiv:2504.09702v3|arxiv:2505.24785v2",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2505.24785v2::k02",
+  "dst": "arxiv:2504.09702v3::k01"
+ },
+ {
+  "edge_id": "e77:openalex:W4414827381::k00->arxiv:2510.26887v1::k01",
+  "pair": "arxiv:2510.26887v1|openalex:W4414827381",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4414827381::k00",
+  "dst": "arxiv:2510.26887v1::k01"
+ },
+ {
+  "edge_id": "e19:openalex:W4414827381::k02->openalex:W4402683796::k04",
+  "pair": "openalex:W4402683796|openalex:W4414827381",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4414827381::k02",
+  "dst": "openalex:W4402683796::k04"
+ },
+ {
+  "edge_id": "e403:openalex:W4405561462::k02->openalex:W4404782918::k02",
+  "pair": "openalex:W4404782918|openalex:W4405561462",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4405561462::k02",
+  "dst": "openalex:W4404782918::k02"
+ },
+ {
+  "edge_id": "e456:arxiv:2505.18705v1::k00->arxiv:2511.02824v2::k03",
+  "pair": "arxiv:2505.18705v1|arxiv:2511.02824v2",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2505.18705v1::k00",
+  "dst": "arxiv:2511.02824v2::k03"
+ },
+ {
+  "edge_id": "e345:openalex:W4365211632::k01->openalex:W4415148250::k03",
+  "pair": "openalex:W4365211632|openalex:W4415148250",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4365211632::k01",
+  "dst": "openalex:W4415148250::k03"
+ },
+ {
+  "edge_id": "e524:openalex:W4404573571::k03->openalex:W4416043407::k00",
+  "pair": "openalex:W4404573571|openalex:W4416043407",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4404573571::k03",
+  "dst": "openalex:W4416043407::k00"
+ },
+ {
+  "edge_id": "e639:arxiv:2606.06473::k00->arxiv:2603.08127v1::k00",
+  "pair": "arxiv:2603.08127v1|arxiv:2606.06473",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2606.06473::k00",
+  "dst": "arxiv:2603.08127v1::k00"
+ },
+ {
+  "edge_id": "e900:openalex:W4414587939::k00->openalex:W4414028042::k00",
+  "pair": "openalex:W4414028042|openalex:W4414587939",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4414587939::k00",
+  "dst": "openalex:W4414028042::k00"
+ },
+ {
+  "edge_id": "e359:openalex:W4414587939::k00->openalex:W4407760093::k02",
+  "pair": "openalex:W4407760093|openalex:W4414587939",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4414587939::k00",
+  "dst": "openalex:W4407760093::k02"
+ },
+ {
+  "edge_id": "e431:openalex:W4390784029::k04->arxiv:2602.15112v2::k02",
+  "pair": "arxiv:2602.15112v2|openalex:W4390784029",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4390784029::k04",
+  "dst": "arxiv:2602.15112v2::k02"
+ },
+ {
+  "edge_id": "e352:openalex:W4407760093::k01->openalex:W4402952811::k02",
+  "pair": "openalex:W4402952811|openalex:W4407760093",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4407760093::k01",
+  "dst": "openalex:W4402952811::k02"
+ },
+ {
+  "edge_id": "e27:openalex:W4416026872::k03->openalex:W4416611770::k01",
+  "pair": "openalex:W4416026872|openalex:W4416611770",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4416026872::k03",
+  "dst": "openalex:W4416611770::k01"
+ },
+ {
+  "edge_id": "e325:arxiv:2511.06309v2::k01->arxiv:2606.06473::k04",
+  "pair": "arxiv:2511.06309v2|arxiv:2606.06473",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2511.06309v2::k01",
+  "dst": "arxiv:2606.06473::k04"
+ },
+ {
+  "edge_id": "e107:arxiv:2604.11543v1::k02->arxiv:2603.20884v3::k00",
+  "pair": "arxiv:2603.20884v3|arxiv:2604.11543v1",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2604.11543v1::k02",
+  "dst": "arxiv:2603.20884v3::k00"
+ },
+ {
+  "edge_id": "e592:openalex:W4403345771::k04->openalex:W4394647523::k02",
+  "pair": "openalex:W4394647523|openalex:W4403345771",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4403345771::k04",
+  "dst": "openalex:W4394647523::k02"
+ },
+ {
+  "edge_id": "e110:arxiv:2603.20884v3::k01->arxiv:2506.22026::k02",
+  "pair": "arxiv:2506.22026|arxiv:2603.20884v3",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2603.20884v3::k01",
+  "dst": "arxiv:2506.22026::k02"
+ },
+ {
+  "edge_id": "e650:arxiv:2606.06473::k04->arxiv:2605.28655::k01",
+  "pair": "arxiv:2605.28655|arxiv:2606.06473",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2606.06473::k04",
+  "dst": "arxiv:2605.28655::k01"
+ },
+ {
+  "edge_id": "e620:arxiv:2507.18901v1::k02->arxiv:2606.13670::k02",
+  "pair": "arxiv:2507.18901v1|arxiv:2606.13670",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2507.18901v1::k02",
+  "dst": "arxiv:2606.13670::k02"
+ },
+ {
+  "edge_id": "e662:openalex:W4403006832::k01->arxiv:2606.00644::k01",
+  "pair": "arxiv:2606.00644|openalex:W4403006832",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4403006832::k01",
+  "dst": "arxiv:2606.00644::k01"
+ },
+ {
+  "edge_id": "e692:openalex:W4403006832::k02->arxiv:2605.29468::k01",
+  "pair": "arxiv:2605.29468|openalex:W4403006832",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4403006832::k02",
+  "dst": "arxiv:2605.29468::k01"
+ },
+ {
+  "edge_id": "e457:arxiv:2602.15112v2::k00->arxiv:2603.26499v2::k00",
+  "pair": "arxiv:2602.15112v2|arxiv:2603.26499v2",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2602.15112v2::k00",
+  "dst": "arxiv:2603.26499v2::k00"
+ },
+ {
+  "edge_id": "e65:arxiv:2502.12510v1::k02->openalex:W4404782918::k03",
+  "pair": "arxiv:2502.12510v1|openalex:W4404782918",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2502.12510v1::k02",
+  "dst": "openalex:W4404782918::k03"
+ },
+ {
+  "edge_id": "e760:openalex:W4415036172::k01->openalex:W4411932316::k03",
+  "pair": "openalex:W4411932316|openalex:W4415036172",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4415036172::k01",
+  "dst": "openalex:W4411932316::k03"
+ },
+ {
+  "edge_id": "e883:arxiv:2603.08127v1::k01->openalex:W7161731996::k02",
+  "pair": "arxiv:2603.08127v1|openalex:W7161731996",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2603.08127v1::k01",
+  "dst": "openalex:W7161731996::k02"
+ },
+ {
+  "edge_id": "e765:arxiv:2407.00466v1::k02->arxiv:2511.19399v3::k02",
+  "pair": "arxiv:2407.00466v1|arxiv:2511.19399v3",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2407.00466v1::k02",
+  "dst": "arxiv:2511.19399v3::k02"
+ },
+ {
+  "edge_id": "e684:arxiv:2510.27598::k01->arxiv:2602.12984v2::k00",
+  "pair": "arxiv:2510.27598|arxiv:2602.12984v2",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2510.27598::k01",
+  "dst": "arxiv:2602.12984v2::k00"
+ },
+ {
+  "edge_id": "e23:openalex:W4416026872::k02->openalex:W4404573571::k03",
+  "pair": "openalex:W4404573571|openalex:W4416026872",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4416026872::k02",
+  "dst": "openalex:W4404573571::k03"
+ },
+ {
+  "edge_id": "e260:openalex:W4403324055::k03->openalex:W4414587939::k03",
+  "pair": "openalex:W4403324055|openalex:W4414587939",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4403324055::k03",
+  "dst": "openalex:W4414587939::k03"
+ },
+ {
+  "edge_id": "e306:arxiv:2504.01848v3::k03->arxiv:2507.18901v1::k01",
+  "pair": "arxiv:2504.01848v3|arxiv:2507.18901v1",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2504.01848v3::k03",
+  "dst": "arxiv:2507.18901v1::k01"
+ },
+ {
+  "edge_id": "e719:openalex:W4404573571::k03->arxiv:2603.08127v1::k01",
+  "pair": "arxiv:2603.08127v1|openalex:W4404573571",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4404573571::k03",
+  "dst": "arxiv:2603.08127v1::k01"
+ },
+ {
+  "edge_id": "e619:arxiv:2507.18901v1::k00->arxiv:2606.13670::k02",
+  "pair": "arxiv:2507.18901v1|arxiv:2606.13670",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2507.18901v1::k00",
+  "dst": "arxiv:2606.13670::k02"
+ },
+ {
+  "edge_id": "e127:openalex:W4403586302::k02->openalex:W4401042723::k02",
+  "pair": "openalex:W4401042723|openalex:W4403586302",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4403586302::k02",
+  "dst": "openalex:W4401042723::k02"
+ },
+ {
+  "edge_id": "e310:arxiv:2505.18705v1::k01->arxiv:2505.24785v2::k00",
+  "pair": "arxiv:2505.18705v1|arxiv:2505.24785v2",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2505.18705v1::k01",
+  "dst": "arxiv:2505.24785v2::k00"
+ },
+ {
+  "edge_id": "e78:arxiv:2510.26887v1::k01->arxiv:2505.18705v1::k00",
+  "pair": "arxiv:2505.18705v1|arxiv:2510.26887v1",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2510.26887v1::k01",
+  "dst": "arxiv:2505.18705v1::k00"
+ },
+ {
+  "edge_id": "e120:openalex:W4403586302::k01->openalex:W4416035327::k02",
+  "pair": "openalex:W4403586302|openalex:W4416035327",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4403586302::k01",
+  "dst": "openalex:W4416035327::k02"
+ },
+ {
+  "edge_id": "e709:arxiv:2603.28589v1::k02->arxiv:2509.14778v2::k03",
+  "pair": "arxiv:2509.14778v2|arxiv:2603.28589v1",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2603.28589v1::k02",
+  "dst": "arxiv:2509.14778v2::k03"
+ },
+ {
+  "edge_id": "e691:openalex:W4405035007::k01->arxiv:2605.29468::k01",
+  "pair": "arxiv:2605.29468|openalex:W4405035007",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4405035007::k01",
+  "dst": "arxiv:2605.29468::k01"
+ },
+ {
+  "edge_id": "e924:openalex:W4415238296::k01->arxiv:2511.10902::k02",
+  "pair": "arxiv:2511.10902|openalex:W4415238296",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4415238296::k01",
+  "dst": "arxiv:2511.10902::k02"
+ },
+ {
+  "edge_id": "e255:openalex:W7140287209::k03->openalex:W4414587939::k01",
+  "pair": "openalex:W4414587939|openalex:W7140287209",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W7140287209::k03",
+  "dst": "openalex:W4414587939::k01"
+ },
+ {
+  "edge_id": "e481:openalex:W4402952666::k00->arxiv:2509.23426v2::k00",
+  "pair": "arxiv:2509.23426v2|openalex:W4402952666",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4402952666::k00",
+  "dst": "arxiv:2509.23426v2::k00"
+ },
+ {
+  "edge_id": "e694:arxiv:2505.24785v2::k01->arxiv:2603.17216v1::k00",
+  "pair": "arxiv:2505.24785v2|arxiv:2603.17216v1",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2505.24785v2::k01",
+  "dst": "arxiv:2603.17216v1::k00"
+ },
+ {
+  "edge_id": "e491:openalex:W4404350150::k02->openalex:W4415238296::k00",
+  "pair": "openalex:W4404350150|openalex:W4415238296",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4404350150::k02",
+  "dst": "openalex:W4415238296::k00"
+ },
+ {
+  "edge_id": "e243:openalex:W4404573571::k03->arxiv:2603.08127v1::k02",
+  "pair": "arxiv:2603.08127v1|openalex:W4404573571",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4404573571::k03",
+  "dst": "arxiv:2603.08127v1::k02"
+ },
+ {
+  "edge_id": "e410:arxiv:2502.12510v1::k01->openalex:W4404782918::k03",
+  "pair": "arxiv:2502.12510v1|openalex:W4404782918",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2502.12510v1::k01",
+  "dst": "openalex:W4404782918::k03"
+ },
+ {
+  "edge_id": "e618:arxiv:2606.13670::k02->arxiv:2606.11447::k00",
+  "pair": "arxiv:2606.11447|arxiv:2606.13670",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2606.13670::k02",
+  "dst": "arxiv:2606.11447::k00"
+ },
+ {
+  "edge_id": "e17:openalex:W4414827381::k01->openalex:W7140287209::k03",
+  "pair": "openalex:W4414827381|openalex:W7140287209",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4414827381::k01",
+  "dst": "openalex:W7140287209::k03"
+ },
+ {
+  "edge_id": "e741:arxiv:2507.02004v1::k02->openalex:W7161731996::k03",
+  "pair": "arxiv:2507.02004v1|openalex:W7161731996",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2507.02004v1::k02",
+  "dst": "openalex:W7161731996::k03"
+ },
+ {
+  "edge_id": "e750:arxiv:2603.26499v2::k03->arxiv:2505.17968v1::k02",
+  "pair": "arxiv:2505.17968v1|arxiv:2603.26499v2",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2603.26499v2::k03",
+  "dst": "arxiv:2505.17968v1::k02"
+ },
+ {
+  "edge_id": "e60:arxiv:2502.12510v1::k01->openalex:W4415238296::k02",
+  "pair": "arxiv:2502.12510v1|openalex:W4415238296",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2502.12510v1::k01",
+  "dst": "openalex:W4415238296::k02"
+ },
+ {
+  "edge_id": "e721:openalex:W7140287209::k03->arxiv:2508.15126v2::k01",
+  "pair": "arxiv:2508.15126v2|openalex:W7140287209",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W7140287209::k03",
+  "dst": "arxiv:2508.15126v2::k01"
+ },
+ {
+  "edge_id": "e483:openalex:W4414827381::k00->arxiv:2509.23426v2::k00",
+  "pair": "arxiv:2509.23426v2|openalex:W4414827381",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4414827381::k00",
+  "dst": "arxiv:2509.23426v2::k00"
+ },
+ {
+  "edge_id": "e708:arxiv:2603.28589v1::k01->openalex:W7161731996::k00",
+  "pair": "arxiv:2603.28589v1|openalex:W7161731996",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2603.28589v1::k01",
+  "dst": "openalex:W7161731996::k00"
+ },
+ {
+  "edge_id": "e374:openalex:W4390784029::k01->openalex:W4402683796::k04",
+  "pair": "openalex:W4390784029|openalex:W4402683796",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4390784029::k01",
+  "dst": "openalex:W4402683796::k04"
+ },
+ {
+  "edge_id": "e447:arxiv:2511.02824v2::k01->openalex:W7126046125::k03",
+  "pair": "arxiv:2511.02824v2|openalex:W7126046125",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2511.02824v2::k01",
+  "dst": "openalex:W7126046125::k03"
+ },
+ {
+  "edge_id": "e381:openalex:W4405035007::k03->openalex:W4404783497::k02",
+  "pair": "openalex:W4404783497|openalex:W4405035007",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4405035007::k03",
+  "dst": "openalex:W4404783497::k02"
+ },
+ {
+  "edge_id": "e114:arxiv:2603.20884v3::k02->arxiv:2506.22026::k02",
+  "pair": "arxiv:2506.22026|arxiv:2603.20884v3",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2603.20884v3::k02",
+  "dst": "arxiv:2506.22026::k02"
+ },
+ {
+  "edge_id": "e884:arxiv:2507.02004v1::k02->openalex:W7161731996::k02",
+  "pair": "arxiv:2507.02004v1|openalex:W7161731996",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2507.02004v1::k02",
+  "dst": "openalex:W7161731996::k02"
+ },
+ {
+  "edge_id": "e203:openalex:W4407806895::k01->arxiv:2411.15114v2::k00",
+  "pair": "arxiv:2411.15114v2|openalex:W4407806895",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4407806895::k01",
+  "dst": "arxiv:2411.15114v2::k00"
+ },
+ {
+  "edge_id": "e585:openalex:W4416043407::k02->openalex:W4394647523::k00",
+  "pair": "openalex:W4394647523|openalex:W4416043407",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4416043407::k02",
+  "dst": "openalex:W4394647523::k00"
+ },
+ {
+  "edge_id": "e615:arxiv:2504.21776::k03->openalex:W7126046125::k01",
+  "pair": "arxiv:2504.21776|openalex:W7126046125",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2504.21776::k03",
+  "dst": "openalex:W7126046125::k01"
+ },
+ {
+  "edge_id": "e64:arxiv:2502.12510v1::k01->openalex:W4415238296::k01",
+  "pair": "arxiv:2502.12510v1|openalex:W4415238296",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2502.12510v1::k01",
+  "dst": "openalex:W4415238296::k01"
+ },
+ {
+  "edge_id": "e569:openalex:W4401042723::k01->arxiv:2506.22026::k00",
+  "pair": "arxiv:2506.22026|openalex:W4401042723",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4401042723::k01",
+  "dst": "arxiv:2506.22026::k00"
+ },
+ {
+  "edge_id": "e143:openalex:W7140287209::k00->arxiv:2505.18705v1::k00",
+  "pair": "arxiv:2505.18705v1|openalex:W7140287209",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W7140287209::k00",
+  "dst": "arxiv:2505.18705v1::k00"
+ },
+ {
+  "edge_id": "e211:openalex:W4407806895::k03->openalex:W7134120420::k02",
+  "pair": "openalex:W4407806895|openalex:W7134120420",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4407806895::k03",
+  "dst": "openalex:W7134120420::k02"
+ },
+ {
+  "edge_id": "e637:arxiv:2606.06473::k00->arxiv:2603.08127v1::k01",
+  "pair": "arxiv:2603.08127v1|arxiv:2606.06473",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2606.06473::k00",
+  "dst": "arxiv:2603.08127v1::k01"
+ },
+ {
+  "edge_id": "e462:arxiv:2603.26499v2::k02->arxiv:2510.21652v2::k01",
+  "pair": "arxiv:2510.21652v2|arxiv:2603.26499v2",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2603.26499v2::k02",
+  "dst": "arxiv:2510.21652v2::k01"
+ },
+ {
+  "edge_id": "e461:arxiv:2603.26499v2::k02->arxiv:2510.21652v2::k02",
+  "pair": "arxiv:2510.21652v2|arxiv:2603.26499v2",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2603.26499v2::k02",
+  "dst": "arxiv:2510.21652v2::k02"
+ },
+ {
+  "edge_id": "e728:openalex:W4417070798::k00->arxiv:2509.14778v2::k02",
+  "pair": "arxiv:2509.14778v2|openalex:W4417070798",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4417070798::k00",
+  "dst": "arxiv:2509.14778v2::k02"
+ },
+ {
+  "edge_id": "e873:openalex:W7161731996::k00->openalex:W4386827094::k01",
+  "pair": "openalex:W4386827094|openalex:W7161731996",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W7161731996::k00",
+  "dst": "openalex:W4386827094::k01"
+ },
+ {
+  "edge_id": "e387:openalex:W4414587939::k01->openalex:W4405468016::k00",
+  "pair": "openalex:W4405468016|openalex:W4414587939",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4414587939::k01",
+  "dst": "openalex:W4405468016::k00"
+ },
+ {
+  "edge_id": "e221:openalex:W4415036172::k00->arxiv:2505.24785v2::k01",
+  "pair": "arxiv:2505.24785v2|openalex:W4415036172",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4415036172::k00",
+  "dst": "arxiv:2505.24785v2::k01"
+ },
+ {
+  "edge_id": "e758:openalex:W4402952811::k02->openalex:W4411932316::k03",
+  "pair": "openalex:W4402952811|openalex:W4411932316",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4402952811::k02",
+  "dst": "openalex:W4411932316::k03"
+ },
+ {
+  "edge_id": "e222:openalex:W4415036172::k00->openalex:W4402952811::k02",
+  "pair": "openalex:W4402952811|openalex:W4415036172",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4415036172::k00",
+  "dst": "openalex:W4402952811::k02"
+ },
+ {
+  "edge_id": "e173:openalex:W4403006832::k00->openalex:W4404782918::k00",
+  "pair": "openalex:W4403006832|openalex:W4404782918",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4403006832::k00",
+  "dst": "openalex:W4404782918::k00"
+ },
+ {
+  "edge_id": "e878:openalex:W4417287919::k00->openalex:W7161731996::k00",
+  "pair": "openalex:W4417287919|openalex:W7161731996",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4417287919::k00",
+  "dst": "openalex:W7161731996::k00"
+ },
+ {
+  "edge_id": "e331:arxiv:2510.24591v2::k01->arxiv:2602.15112v2::k01",
+  "pair": "arxiv:2510.24591v2|arxiv:2602.15112v2",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2510.24591v2::k01",
+  "dst": "arxiv:2602.15112v2::k01"
+ },
+ {
+  "edge_id": "e147:openalex:W7140287209::k00->openalex:W4386827094::k01",
+  "pair": "openalex:W4386827094|openalex:W7140287209",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W7140287209::k00",
+  "dst": "openalex:W4386827094::k01"
+ },
+ {
+  "edge_id": "e625:openalex:W4399597648::k00->arxiv:2606.11851::k02",
+  "pair": "arxiv:2606.11851|openalex:W4399597648",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4399597648::k00",
+  "dst": "arxiv:2606.11851::k02"
+ },
+ {
+  "edge_id": "e460:arxiv:2603.26499v2::k01->openalex:W7161731996::k01",
+  "pair": "arxiv:2603.26499v2|openalex:W7161731996",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2603.26499v2::k01",
+  "dst": "openalex:W7161731996::k01"
+ },
+ {
+  "edge_id": "e219:openalex:W4412889957::k03->openalex:W4404782918::k02",
+  "pair": "openalex:W4404782918|openalex:W4412889957",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4412889957::k03",
+  "dst": "openalex:W4404782918::k02"
+ },
+ {
+  "edge_id": "e119:openalex:W4403586302::k00->openalex:W4416035327::k01",
+  "pair": "openalex:W4403586302|openalex:W4416035327",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4403586302::k00",
+  "dst": "openalex:W4416035327::k01"
+ },
+ {
+  "edge_id": "e535:arxiv:2509.23426v2::k04->openalex:W4416043407::k04",
+  "pair": "arxiv:2509.23426v2|openalex:W4416043407",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2509.23426v2::k04",
+  "dst": "openalex:W4416043407::k04"
+ },
+ {
+  "edge_id": "e663:arxiv:2606.00644::k01->arxiv:2506.11763::k03",
+  "pair": "arxiv:2506.11763|arxiv:2606.00644",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2606.00644::k01",
+  "dst": "arxiv:2506.11763::k03"
+ },
+ {
+  "edge_id": "e279:openalex:W4404350150::k01->openalex:W4404783497::k01",
+  "pair": "openalex:W4404350150|openalex:W4404783497",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4404350150::k01",
+  "dst": "openalex:W4404783497::k01"
+ },
+ {
+  "edge_id": "e783:openalex:W4403795293::k02->arxiv:2506.11763::k03",
+  "pair": "arxiv:2506.11763|openalex:W4403795293",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4403795293::k02",
+  "dst": "arxiv:2506.11763::k03"
+ },
+ {
+  "edge_id": "e671:openalex:W4401042723::k02->arxiv:2605.27905::k04",
+  "pair": "arxiv:2605.27905|openalex:W4401042723",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4401042723::k02",
+  "dst": "arxiv:2605.27905::k04"
+ },
+ {
+  "edge_id": "e113:arxiv:2604.11543v1::k02->arxiv:2603.20884v3::k02",
+  "pair": "arxiv:2603.20884v3|arxiv:2604.11543v1",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2604.11543v1::k02",
+  "dst": "arxiv:2603.20884v3::k02"
+ },
+ {
+  "edge_id": "e30:openalex:W4411120082::k00->openalex:W4401042723::k02",
+  "pair": "openalex:W4401042723|openalex:W4411120082",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4411120082::k00",
+  "dst": "openalex:W4401042723::k02"
+ },
+ {
+  "edge_id": "e572:openalex:W4400448985::k02->openalex:W4404355537::k00",
+  "pair": "openalex:W4400448985|openalex:W4404355537",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4400448985::k02",
+  "dst": "openalex:W4404355537::k00"
+ },
+ {
+  "edge_id": "e898:openalex:W4402683796::k03->arxiv:2503.08569::k03",
+  "pair": "arxiv:2503.08569|openalex:W4402683796",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4402683796::k03",
+  "dst": "arxiv:2503.08569::k03"
+ },
+ {
+  "edge_id": "e881:arxiv:2511.02824v2::k01->openalex:W7161731996::k01",
+  "pair": "arxiv:2511.02824v2|openalex:W7161731996",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2511.02824v2::k01",
+  "dst": "openalex:W7161731996::k01"
+ },
+ {
+  "edge_id": "e175:openalex:W4403006832::k01->openalex:W4414587939::k01",
+  "pair": "openalex:W4403006832|openalex:W4414587939",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4403006832::k01",
+  "dst": "openalex:W4414587939::k01"
+ },
+ {
+  "edge_id": "e516:openalex:W4414587939::k02->openalex:W4402952811::k03",
+  "pair": "openalex:W4402952811|openalex:W4414587939",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4414587939::k02",
+  "dst": "openalex:W4402952811::k03"
+ },
+ {
+  "edge_id": "e240:openalex:W4404573571::k03->openalex:W4386827094::k01",
+  "pair": "openalex:W4386827094|openalex:W4404573571",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4404573571::k03",
+  "dst": "openalex:W4386827094::k01"
+ },
+ {
+  "edge_id": "e75:arxiv:2510.26887v1::k00->openalex:W4404573571::k03",
+  "pair": "arxiv:2510.26887v1|openalex:W4404573571",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2510.26887v1::k00",
+  "dst": "openalex:W4404573571::k03"
+ },
+ {
+  "edge_id": "e79:arxiv:2510.26887v1::k01->openalex:W7140287209::k03",
+  "pair": "arxiv:2510.26887v1|openalex:W7140287209",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2510.26887v1::k01",
+  "dst": "openalex:W7140287209::k03"
+ },
+ {
+  "edge_id": "e636:openalex:W4415148250::k04->arxiv:2606.11447::k03",
+  "pair": "arxiv:2606.11447|openalex:W4415148250",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4415148250::k04",
+  "dst": "arxiv:2606.11447::k03"
+ },
+ {
+  "edge_id": "e296:openalex:W4405035007::k00->arxiv:2605.29468::k02",
+  "pair": "arxiv:2605.29468|openalex:W4405035007",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4405035007::k00",
+  "dst": "arxiv:2605.29468::k02"
+ },
+ {
+  "edge_id": "e281:openalex:W7140287209::k03->openalex:W4404350150::k02",
+  "pair": "openalex:W4404350150|openalex:W7140287209",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W7140287209::k03",
+  "dst": "openalex:W4404350150::k02"
+ },
+ {
+  "edge_id": "e346:openalex:W4365211632::k01->openalex:W4416611770::k02",
+  "pair": "openalex:W4365211632|openalex:W4416611770",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4365211632::k01",
+  "dst": "openalex:W4416611770::k02"
+ },
+ {
+  "edge_id": "e528:openalex:W4416043407::k02->openalex:W7161731996::k03",
+  "pair": "openalex:W4416043407|openalex:W7161731996",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4416043407::k02",
+  "dst": "openalex:W7161731996::k03"
+ },
+ {
+  "edge_id": "e603:openalex:W4416611770::k02->arxiv:2605.29468::k00",
+  "pair": "arxiv:2605.29468|openalex:W4416611770",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4416611770::k02",
+  "dst": "arxiv:2605.29468::k00"
+ },
+ {
+  "edge_id": "e470:arxiv:2601.22638v2::k02->arxiv:2506.07642::k01",
+  "pair": "arxiv:2506.07642|arxiv:2601.22638v2",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2601.22638v2::k02",
+  "dst": "arxiv:2506.07642::k01"
+ },
+ {
+  "edge_id": "e263:openalex:W4414587939::k03->arxiv:2510.24591v2::k01",
+  "pair": "arxiv:2510.24591v2|openalex:W4414587939",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4414587939::k03",
+  "dst": "arxiv:2510.24591v2::k01"
+ },
+ {
+  "edge_id": "e254:openalex:W4414587939::k01->openalex:W4415238296::k01",
+  "pair": "openalex:W4414587939|openalex:W4415238296",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4414587939::k01",
+  "dst": "openalex:W4415238296::k01"
+ },
+ {
+  "edge_id": "e485:arxiv:2509.23426v2::k02->arxiv:2602.12984v2::k02",
+  "pair": "arxiv:2509.23426v2|arxiv:2602.12984v2",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2509.23426v2::k02",
+  "dst": "arxiv:2602.12984v2::k02"
+ },
+ {
+  "edge_id": "e621:openalex:W4399597648::k03->arxiv:2606.11851::k00",
+  "pair": "arxiv:2606.11851|openalex:W4399597648",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4399597648::k03",
+  "dst": "arxiv:2606.11851::k00"
+ },
+ {
+  "edge_id": "e20:openalex:W4414827381::k02->arxiv:2510.26887v1::k01",
+  "pair": "arxiv:2510.26887v1|openalex:W4414827381",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4414827381::k02",
+  "dst": "arxiv:2510.26887v1::k01"
+ },
+ {
+  "edge_id": "e155:openalex:W7140287209::k03->openalex:W4402683796::k04",
+  "pair": "openalex:W4402683796|openalex:W7140287209",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W7140287209::k03",
+  "dst": "openalex:W4402683796::k04"
+ },
+ {
+  "edge_id": "e117:openalex:W4403586302::k00->openalex:W4416034681::k01",
+  "pair": "openalex:W4403586302|openalex:W4416034681",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4403586302::k00",
+  "dst": "openalex:W4416034681::k01"
+ },
+ {
+  "edge_id": "e261:openalex:W4414587939::k03->arxiv:2504.09702v3::k02",
+  "pair": "arxiv:2504.09702v3|openalex:W4414587939",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4414587939::k03",
+  "dst": "arxiv:2504.09702v3::k02"
+ },
+ {
+  "edge_id": "e628:arxiv:2510.24591v2::k01->arxiv:2606.11447::k00",
+  "pair": "arxiv:2510.24591v2|arxiv:2606.11447",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2510.24591v2::k01",
+  "dst": "arxiv:2606.11447::k00"
+ },
+ {
+  "edge_id": "e781:openalex:W4403795293::k04->arxiv:2506.11763::k02",
+  "pair": "arxiv:2506.11763|openalex:W4403795293",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4403795293::k04",
+  "dst": "arxiv:2506.11763::k02"
+ },
+ {
+  "edge_id": "e688:arxiv:2504.09702v3::k01->arxiv:2510.27598::k02",
+  "pair": "arxiv:2504.09702v3|arxiv:2510.27598",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2504.09702v3::k01",
+  "dst": "arxiv:2510.27598::k02"
+ },
+ {
+  "edge_id": "e903:openalex:W4414028042::k03->openalex:W7143351253::k00",
+  "pair": "openalex:W4414028042|openalex:W7143351253",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4414028042::k03",
+  "dst": "openalex:W7143351253::k00"
+ },
+ {
+  "edge_id": "e901:openalex:W4407806895::k01->openalex:W4414028042::k00",
+  "pair": "openalex:W4407806895|openalex:W4414028042",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4407806895::k01",
+  "dst": "openalex:W4414028042::k00"
+ },
+ {
+  "edge_id": "e180:openalex:W4403006832::k01->openalex:W4405561462::k02",
+  "pair": "openalex:W4403006832|openalex:W4405561462",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4403006832::k01",
+  "dst": "openalex:W4405561462::k02"
+ },
+ {
+  "edge_id": "e80:arxiv:2510.26887v1::k01->openalex:W7140287209::k00",
+  "pair": "arxiv:2510.26887v1|openalex:W7140287209",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2510.26887v1::k01",
+  "dst": "openalex:W7140287209::k00"
+ },
+ {
+  "edge_id": "e31:openalex:W4411120082::k01->openalex:W4399116274::k04",
+  "pair": "openalex:W4399116274|openalex:W4411120082",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4411120082::k01",
+  "dst": "openalex:W4399116274::k04"
+ },
+ {
+  "edge_id": "e195:openalex:W4407806895::k00->openalex:W4414587939::k00",
+  "pair": "openalex:W4407806895|openalex:W4414587939",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4407806895::k00",
+  "dst": "openalex:W4414587939::k00"
+ },
+ {
+  "edge_id": "e920:openalex:W4399555023::k00->arxiv:2506.07642::k00",
+  "pair": "arxiv:2506.07642|openalex:W4399555023",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4399555023::k00",
+  "dst": "arxiv:2506.07642::k00"
+ },
+ {
+  "edge_id": "e317:arxiv:2505.18705v1::k03->openalex:W4390784029::k02",
+  "pair": "arxiv:2505.18705v1|openalex:W4390784029",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2505.18705v1::k03",
+  "dst": "openalex:W4390784029::k02"
+ },
+ {
+  "edge_id": "e854:openalex:W4414587939::k01->arxiv:2507.16280::k02",
+  "pair": "arxiv:2507.16280|openalex:W4414587939",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4414587939::k01",
+  "dst": "arxiv:2507.16280::k02"
+ },
+ {
+  "edge_id": "e943:openalex:W4403586302::k00->openalex:W7134120420::k00",
+  "pair": "openalex:W4403586302|openalex:W7134120420",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4403586302::k00",
+  "dst": "openalex:W7134120420::k00"
+ },
+ {
+  "edge_id": "e183:openalex:W4403006832::k02->openalex:W4405561462::k02",
+  "pair": "openalex:W4403006832|openalex:W4405561462",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4403006832::k02",
+  "dst": "openalex:W4405561462::k02"
+ },
+ {
+  "edge_id": "e49:arxiv:2604.11543v1::k02->arxiv:2504.09702v3::k02",
+  "pair": "arxiv:2504.09702v3|arxiv:2604.11543v1",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2604.11543v1::k02",
+  "dst": "arxiv:2504.09702v3::k02"
+ },
+ {
+  "edge_id": "e184:openalex:W4403006832::k02->openalex:W4404782918::k00",
+  "pair": "openalex:W4403006832|openalex:W4404782918",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4403006832::k02",
+  "dst": "openalex:W4404782918::k00"
+ },
+ {
+  "edge_id": "e605:openalex:W4417287919::k00->openalex:W4386827094::k01",
+  "pair": "openalex:W4386827094|openalex:W4417287919",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4417287919::k00",
+  "dst": "openalex:W4386827094::k01"
+ },
+ {
+  "edge_id": "e148:openalex:W7140287209::k00->arxiv:2511.02824v2::k03",
+  "pair": "arxiv:2511.02824v2|openalex:W7140287209",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W7140287209::k00",
+  "dst": "arxiv:2511.02824v2::k03"
+ },
+ {
+  "edge_id": "e710:arxiv:2603.28589v1::k03->openalex:W4414028042::k00",
+  "pair": "arxiv:2603.28589v1|openalex:W4414028042",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "arxiv:2603.28589v1::k03",
+  "dst": "openalex:W4414028042::k00"
+ },
+ {
+  "edge_id": "e15:openalex:W4414827381::k00->openalex:W4404573571::k03",
+  "pair": "openalex:W4404573571|openalex:W4414827381",
+  "current_relation": "supports",
+  "intent": null,
+  "src": "openalex:W4414827381::k00",
+  "dst": "openalex:W4404573571::k03"
+ }
+]

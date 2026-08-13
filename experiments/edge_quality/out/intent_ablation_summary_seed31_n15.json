@@ -1,0 +1,77 @@
+{
+ "n_edges": 15,
+ "conditions": {
+  "S": {
+   "n": 15,
+   "predictions": {
+    "supports": 2,
+    "builds_on": 4,
+    "related": 7,
+    "contradicts": 2
+   },
+   "verdicts": {
+    "wrong_type": 10,
+    "correct": 3,
+    "no_relation": 2
+   },
+   "correct_rate": 0.2,
+   "mean_label_confidence": 0.633
+  },
+  "SC": {
+   "n": 15,
+   "predictions": {
+    "related": 8,
+    "builds_on": 2,
+    "refines": 2,
+    "none": 3
+   },
+   "verdicts": {
+    "correct": 13,
+    "no_relation": 1,
+    "wrong_type": 1
+   },
+   "correct_rate": 0.867,
+   "mean_label_confidence": 0.608
+  },
+  "SCI": {
+   "n": 15,
+   "predictions": {
+    "refines": 3,
+    "builds_on": 6,
+    "related": 4,
+    "none": 1,
+    "unclear": 1
+   },
+   "verdicts": {
+    "correct": 13,
+    "wrong_type": 1,
+    "no_relation": 1
+   },
+   "correct_rate": 0.867,
+   "mean_label_confidence": 0.625
+  }
+ },
+ "paired": {
+  "S_to_SC": {
+   "n": 15,
+   "improved": 10,
+   "worsened": 0,
+   "unchanged": 5,
+   "label_changed": 13
+  },
+  "SC_to_SCI": {
+   "n": 15,
+   "improved": 2,
+   "worsened": 2,
+   "unchanged": 11,
+   "label_changed": 11
+  },
+  "S_to_SCI": {
+   "n": 15,
+   "improved": 10,
+   "worsened": 0,
+   "unchanged": 5,
+   "label_changed": 12
+  }
+ }
+}

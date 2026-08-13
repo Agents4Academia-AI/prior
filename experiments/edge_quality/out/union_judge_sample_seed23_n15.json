@@ -1,0 +1,3040 @@
+[
+ {
+  "key": "arxiv:2603.20884v3|arxiv:2604.11543v1",
+  "region": "semantic_only",
+  "a": "arxiv:2603.20884v3",
+  "b": "arxiv:2604.11543v1",
+  "semantic_edges": [
+   {
+    "src": "arxiv:2604.11543v1::k02",
+    "dst": "arxiv:2603.20884v3::k00",
+    "relation": "supports",
+    "confidence": 0.55,
+    "evidence": "A benchmarks LLM novelty evaluation limitations, motivating systems like MemoNoveltyAgent that aim to produce faithful novelty assessments.",
+    "similarity": 0.586,
+    "opus_confidence": 0.55,
+    "trust": 0.79,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   },
+   {
+    "src": "arxiv:2604.11543v1::k00",
+    "dst": "arxiv:2603.20884v3::k01",
+    "relation": "supports",
+    "confidence": 0.5,
+    "evidence": "NovBench benchmark enables evaluating novelty assessment; A's memory method targets faithful novelty reports \u2014 benchmark supports evaluating such methods.",
+    "similarity": 0.532,
+    "opus_confidence": 0.5,
+    "trust": 0.74,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   },
+   {
+    "src": "arxiv:2604.11543v1::k01",
+    "dst": "arxiv:2603.20884v3::k02",
+    "relation": "supports",
+    "confidence": 0.55,
+    "evidence": "Both propose evaluation methods for LLM-generated novelty review text that go beyond lexical metrics; complementary evaluation approaches.",
+    "similarity": 0.564,
+    "opus_confidence": 0.55,
+    "trust": 0.79,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   },
+   {
+    "src": "arxiv:2604.11543v1::k00",
+    "dst": "arxiv:2603.20884v3::k02",
+    "relation": "supports",
+    "confidence": 0.5,
+    "evidence": "NovBench benchmark and the RAG checklist evaluation method both target assessment of novelty review quality; mutually supportive.",
+    "similarity": 0.608,
+    "opus_confidence": 0.5,
+    "trust": 0.74,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   },
+   {
+    "src": "arxiv:2604.11543v1::k02",
+    "dst": "arxiv:2603.20884v3::k02",
+    "relation": "supports",
+    "confidence": 0.55,
+    "evidence": "Both concern LLM-based novelty evaluation; B's reliable evaluation method addresses the gap A exposes, broadly compatible.",
+    "similarity": 0.567,
+    "opus_confidence": 0.55,
+    "trust": 0.55,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [],
+     "n_confirm": 0,
+     "tier": "opus_only",
+     "dissent": {
+      "haiku": "builds_on"
+     }
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   }
+  ],
+  "citation": null
+ },
+ {
+  "key": "arxiv:2505.18705v1|openalex:W4417152112",
+  "region": "semantic_only",
+  "a": "arxiv:2505.18705v1",
+  "b": "openalex:W4417152112",
+  "semantic_edges": [
+   {
+    "src": "openalex:W4417152112::k00",
+    "dst": "arxiv:2505.18705v1::k00",
+    "relation": "builds_on",
+    "confidence": 0.55,
+    "evidence": "Both are autonomous multi-agent research systems; SciSciGPT is a specialized instance similar in concept to AI-Researcher's general pipeline. Related approaches but distinct systems.",
+    "similarity": 0.669,
+    "opus_confidence": 0.55,
+    "trust": 0.67,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "haiku"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {
+      "sonnet": "supports"
+     }
+    },
+    "directed": true,
+    "precedence": "by_date"
+   }
+  ],
+  "citation": null
+ },
+ {
+  "key": "arxiv:2502.12510v1|openalex:W4404782918",
+  "region": "semantic_only",
+  "a": "arxiv:2502.12510v1",
+  "b": "openalex:W4404782918",
+  "semantic_edges": [
+   {
+    "src": "arxiv:2502.12510v1::k02",
+    "dst": "openalex:W4404782918::k03",
+    "relation": "supports",
+    "confidence": 0.5,
+    "evidence": "Both report LLM shortcomings in meta-reviewing tasks; B's finding that LLMs cannot match human meta-reviewers aligns with A's identified meta-review biases.",
+    "similarity": 0.667,
+    "opus_confidence": 0.5,
+    "trust": 0.62,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "haiku"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   },
+   {
+    "src": "arxiv:2502.12510v1::k01",
+    "dst": "openalex:W4404782918::k03",
+    "relation": "supports",
+    "confidence": 0.55,
+    "evidence": "A perturbation framework diagnoses LLM robustness incl. meta-reviewer role; B finds LLMs fall short at meta-reviewing \u2014 A's approach could surface and B's finding agrees on LLM weakness.",
+    "similarity": 0.633,
+    "opus_confidence": 0.55,
+    "trust": 0.67,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {
+      "haiku": "builds_on"
+     }
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   }
+  ],
+  "citation": null
+ },
+ {
+  "key": "arxiv:2603.28589v1|openalex:W4414587939",
+  "region": "semantic_only",
+  "a": "arxiv:2603.28589v1",
+  "b": "openalex:W4414587939",
+  "semantic_edges": [
+   {
+    "src": "arxiv:2603.28589v1::k00",
+    "dst": "openalex:W4414587939::k02",
+    "relation": "builds_on",
+    "confidence": 0.55,
+    "evidence": "Both are modular end-to-end autonomous research scaffolds with idea/experiment/writing stages; Medical AI Scientist is a domain-specialized instance of the general research-agent paradigm MLR-Agent baselines.",
+    "similarity": 0.669,
+    "opus_confidence": 0.55,
+    "trust": 0.67,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "haiku"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {
+      "sonnet": "supports"
+     }
+    },
+    "directed": true,
+    "precedence": "by_date"
+   },
+   {
+    "src": "openalex:W4414587939::k00",
+    "dst": "arxiv:2603.28589v1::k03",
+    "relation": "supports",
+    "confidence": 0.5,
+    "evidence": "Both are benchmarks evaluating AI research agents across stepwise/end-to-end research pipeline; complementary, MLR-Bench general ML, Med-AI Bench medical.",
+    "similarity": 0.615,
+    "opus_confidence": 0.5,
+    "trust": 0.62,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {
+      "haiku": "builds_on"
+     }
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   }
+  ],
+  "citation": null
+ },
+ {
+  "key": "openalex:W4401042723|openalex:W4416035220",
+  "region": "semantic_only",
+  "a": "openalex:W4401042723",
+  "b": "openalex:W4416035220",
+  "semantic_edges": [
+   {
+    "src": "openalex:W4416035220::k02",
+    "dst": "openalex:W4401042723::k00",
+    "relation": "supports",
+    "confidence": 0.5,
+    "evidence": "A claims human-in-the-loop co-pilot mode improves research quality over autonomous; B is an interactive co-pilot system \u2014 both endorse the co-pilot/interactive paradigm.",
+    "similarity": 0.538,
+    "opus_confidence": 0.5,
+    "trust": 0.62,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {
+      "haiku": "builds_on"
+     }
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   }
+  ],
+  "citation": null
+ },
+ {
+  "key": "openalex:W4386827094|openalex:W4417287919",
+  "region": "semantic_only",
+  "a": "openalex:W4386827094",
+  "b": "openalex:W4417287919",
+  "semantic_edges": [
+   {
+    "src": "openalex:W4417287919::k00",
+    "dst": "openalex:W4386827094::k01",
+    "relation": "supports",
+    "confidence": 0.55,
+    "evidence": "Both describe multi-agent end-to-end scientific discovery frameworks integrating hypothesis generation, experimentation, and review; conceptually aligned approaches.",
+    "similarity": 0.752,
+    "opus_confidence": 0.55,
+    "trust": 0.55,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [],
+     "n_confirm": 0,
+     "tier": "opus_only",
+     "dissent": {
+      "sonnet": "builds_on",
+      "haiku": "builds_on"
+     }
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   }
+  ],
+  "citation": null
+ },
+ {
+  "key": "openalex:W4407760093|openalex:W4415108068",
+  "region": "semantic_only",
+  "a": "openalex:W4407760093",
+  "b": "openalex:W4415108068",
+  "semantic_edges": [
+   {
+    "src": "openalex:W4415108068::k00",
+    "dst": "openalex:W4407760093::k00",
+    "relation": "builds_on",
+    "confidence": 0.55,
+    "evidence": "Both frame code improvement as a search guided by automated evaluation; AlphaEvolve generalizes to an evolutionary multi-LLM pipeline for scientific/algorithmic discovery, extending AIDE's tree-search code-optimization paradigm.",
+    "similarity": 0.597,
+    "opus_confidence": 0.55,
+    "trust": 0.67,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "haiku"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {
+      "sonnet": "supports"
+     }
+    },
+    "directed": true,
+    "precedence": "by_date"
+   },
+   {
+    "src": "openalex:W4415108068::k00",
+    "dst": "openalex:W4407760093::k01",
+    "relation": "builds_on",
+    "confidence": 0.5,
+    "evidence": "AlphaEvolve is an evolutionary code optimization agent in the same family; it extends LLM-driven iterative code improvement, related to the solution-tree search of A.",
+    "similarity": 0.583,
+    "opus_confidence": 0.5,
+    "trust": 0.74,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": true,
+    "precedence": "by_date"
+   },
+   {
+    "src": "openalex:W4407760093::k03",
+    "dst": "openalex:W4415108068::k03",
+    "relation": "supports",
+    "confidence": 0.45,
+    "evidence": "Both demonstrate LLM-driven code optimization yielding gains; tree-search vs evolutionary, on different tasks, but both show measurable real-world improvements.",
+    "similarity": 0.545,
+    "opus_confidence": 0.45,
+    "trust": 0.69,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   },
+   {
+    "src": "openalex:W4415108068::k00",
+    "dst": "openalex:W4407760093::k03",
+    "relation": "builds_on",
+    "confidence": 0.45,
+    "evidence": "A's tree-search code optimization and B's evolutionary AlphaEvolve are related LLM code-optimization approaches; A claims state-of-the-art that may compare against this family.",
+    "similarity": 0.536,
+    "opus_confidence": 0.45,
+    "trust": 0.45,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [],
+     "n_confirm": 0,
+     "tier": "opus_only",
+     "dissent": {
+      "sonnet": "supports",
+      "haiku": "supports"
+     }
+    },
+    "directed": true,
+    "precedence": "by_date"
+   },
+   {
+    "src": "openalex:W4415108068::k02",
+    "dst": "openalex:W4407760093::k01",
+    "relation": "builds_on",
+    "confidence": 0.4,
+    "evidence": "A describes solution-tree search for code-space optimization; B is evolutionary code search for math problems \u2014 A's method could underlie or relate to B's search, but link is weak.",
+    "similarity": 0.46,
+    "opus_confidence": 0.4,
+    "trust": 0.4,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [],
+     "n_confirm": 0,
+     "tier": "opus_only",
+     "dissent": {
+      "sonnet": "supports",
+      "haiku": "supports"
+     }
+    },
+    "directed": true,
+    "precedence": "by_date"
+   }
+  ],
+  "citation": null
+ },
+ {
+  "key": "openalex:W4365211632|openalex:W4415148250",
+  "region": "semantic_only",
+  "a": "openalex:W4365211632",
+  "b": "openalex:W4415148250",
+  "semantic_edges": [
+   {
+    "src": "openalex:W4365211632::k01",
+    "dst": "openalex:W4415148250::k03",
+    "relation": "supports",
+    "confidence": 0.55,
+    "evidence": "B documents 'sleepwalking' safety-alignment failures of lab LLM agents, providing concrete evidence relevant to A's safety analysis and call for preventive measures.",
+    "similarity": 0.557,
+    "opus_confidence": 0.55,
+    "trust": 0.79,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   },
+   {
+    "src": "openalex:W4365211632::k00",
+    "dst": "openalex:W4415148250::k04",
+    "relation": "supports",
+    "confidence": 0.55,
+    "evidence": "A is a multi-LLM agent system for executing experiments; B's claim that multi-agent outperforms single-agent in lab automation is supported by the existence/success of such a system.",
+    "similarity": 0.555,
+    "opus_confidence": 0.55,
+    "trust": 0.67,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {
+      "haiku": "builds_on"
+     }
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   }
+  ],
+  "citation": null
+ },
+ {
+  "key": "arxiv:2507.02004v1|openalex:W4403795293",
+  "region": "semantic_only",
+  "a": "arxiv:2507.02004v1",
+  "b": "openalex:W4403795293",
+  "semantic_edges": [
+   {
+    "src": "openalex:W4403795293::k01",
+    "dst": "arxiv:2507.02004v1::k03",
+    "relation": "supports",
+    "confidence": 0.55,
+    "evidence": "B reports accuracy on LAB-Bench LitQA, the same benchmark family A describes; B is an evaluation result on the benchmark A defines.",
+    "similarity": 0.679,
+    "opus_confidence": 0.55,
+    "trust": 0.67,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   }
+  ],
+  "citation": null
+ },
+ {
+  "key": "arxiv:2510.24591v2|openalex:W4414837761",
+  "region": "semantic_only",
+  "a": "arxiv:2510.24591v2",
+  "b": "openalex:W4414837761",
+  "semantic_edges": [
+   {
+    "src": "arxiv:2510.24591v2::k01",
+    "dst": "openalex:W4414837761::k01",
+    "relation": "builds_on",
+    "confidence": 0.5,
+    "evidence": "Both concern objectively scorable evaluation of AI agents on research/experimentation tasks; related approaches to result-graded scientific agent evaluation.",
+    "similarity": 0.667,
+    "opus_confidence": 0.5,
+    "trust": 0.62,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "haiku"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {
+      "sonnet": "supports"
+     }
+    },
+    "directed": true,
+    "precedence": "by_date"
+   }
+  ],
+  "citation": null
+ },
+ {
+  "key": "arxiv:2602.15112v2|arxiv:2603.26499v2",
+  "region": "semantic_only",
+  "a": "arxiv:2602.15112v2",
+  "b": "arxiv:2603.26499v2",
+  "semantic_edges": [
+   {
+    "src": "arxiv:2603.26499v2::k04",
+    "dst": "arxiv:2602.15112v2::k02",
+    "relation": "refines",
+    "confidence": 0.55,
+    "evidence": "B narrows/corrects a specific mechanism (overfitting attributed to evaluation noise) relevant to A's overconfidence/long-horizon failures, adding a condition on the cause.",
+    "similarity": 0.546,
+    "opus_confidence": 0.55,
+    "trust": 0.67,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {}
+    },
+    "directed": true,
+    "precedence": "by_date"
+   },
+   {
+    "src": "arxiv:2602.15112v2::k00",
+    "dst": "arxiv:2603.26499v2::k00",
+    "relation": "supports",
+    "confidence": 0.5,
+    "evidence": "ResearchGym benchmark evaluates AI agents on closed-loop research surpassing human baselines; AIRA_2 is an agent exceeding human SOTA on tasks \u2014 benchmark and agent results corroborate the claim that agents can surpass humans.",
+    "similarity": 0.622,
+    "opus_confidence": 0.5,
+    "trust": 0.62,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   },
+   {
+    "src": "arxiv:2603.26499v2::k01",
+    "dst": "arxiv:2602.15112v2::k00",
+    "relation": "builds_on",
+    "confidence": 0.45,
+    "evidence": "ResearchGym uses containerized execution feasible on a single GPU; B is an async multi-GPU containerized execution framework \u2014 both address containerized execution infrastructure for research agents.",
+    "similarity": 0.652,
+    "opus_confidence": 0.45,
+    "trust": 0.57,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "haiku"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {
+      "sonnet": "supports"
+     }
+    },
+    "directed": true,
+    "precedence": "by_date"
+   }
+  ],
+  "citation": null
+ },
+ {
+  "key": "openalex:W4402952811|openalex:W4414587939",
+  "region": "semantic_only",
+  "a": "openalex:W4402952811",
+  "b": "openalex:W4414587939",
+  "semantic_edges": [
+   {
+    "src": "openalex:W4414587939::k02",
+    "dst": "openalex:W4402952811::k00",
+    "relation": "builds_on",
+    "confidence": 0.55,
+    "evidence": "Both are modular/staged autonomous ML research agents with idea generation, experimentation, and writing/execution phases; MLR-Agent is a baseline scaffold resembling MLR-Copilot's framework.",
+    "similarity": 0.591,
+    "opus_confidence": 0.55,
+    "trust": 0.79,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": true,
+    "precedence": "by_date"
+   },
+   {
+    "src": "openalex:W4414587939::k02",
+    "dst": "openalex:W4402952811::k03",
+    "relation": "supports",
+    "confidence": 0.5,
+    "evidence": "A is the MLR-Agent scaffold; B is empirical evaluation showing LLM-agent pipelines with RL-tuned idea generation complete the research cycle \u2014 likely the agent evaluated, providing supporting evidence.",
+    "similarity": 0.672,
+    "opus_confidence": 0.5,
+    "trust": 0.74,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   }
+  ],
+  "citation": null
+ },
+ {
+  "key": "arxiv:2502.12510v1|arxiv:2604.04074v3",
+  "region": "semantic_only",
+  "a": "arxiv:2502.12510v1",
+  "b": "arxiv:2604.04074v3",
+  "semantic_edges": [
+   {
+    "src": "arxiv:2502.12510v1::k02",
+    "dst": "arxiv:2604.04074v3::k01",
+    "relation": "supports",
+    "confidence": 0.55,
+    "evidence": "A documents biases in decision-making LLM review pipelines, supporting B's argument to withhold accept-reject decisions and audit claims instead.",
+    "similarity": 0.585,
+    "opus_confidence": 0.55,
+    "trust": 0.79,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   }
+  ],
+  "citation": null
+ },
+ {
+  "key": "arxiv:2510.27598|openalex:W7131078049",
+  "region": "semantic_only",
+  "a": "arxiv:2510.27598",
+  "b": "openalex:W7131078049",
+  "semantic_edges": [
+   {
+    "src": "arxiv:2510.27598::k02",
+    "dst": "openalex:W7131078049::k03",
+    "relation": "contradicts",
+    "confidence": 0.55,
+    "evidence": "A finds LLM agents fail at long-horizon research tasks; B claims single-LLM agents robustly perform complex multi-step computations. These present opposing assessments of agent reliability.",
+    "similarity": 0.501,
+    "opus_confidence": 0.55,
+    "trust": 0.79,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   }
+  ],
+  "citation": null
+ },
+ {
+  "key": "openalex:W4403006832|openalex:W4405561462",
+  "region": "semantic_only",
+  "a": "openalex:W4403006832",
+  "b": "openalex:W4405561462",
+  "semantic_edges": [
+   {
+    "src": "openalex:W4405561462::k00",
+    "dst": "openalex:W4403006832::k00",
+    "relation": "builds_on",
+    "confidence": 0.5,
+    "evidence": "A's OpenReviewer relates to fine-tuned review-generation models like Llama-OpenReviewer; same research thread on automated review generation.",
+    "similarity": 0.714,
+    "opus_confidence": 0.5,
+    "trust": 0.62,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "haiku"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {
+      "sonnet": "supports"
+     }
+    },
+    "directed": true,
+    "precedence": "by_date"
+   },
+   {
+    "src": "openalex:W4405561462::k00",
+    "dst": "openalex:W4403006832::k01",
+    "relation": "builds_on",
+    "confidence": 0.4,
+    "evidence": "Both involve fine-tuned LLMs for academic reviewing; A predicts preferences, B generates reviews. Related thread but different tasks.",
+    "similarity": 0.667,
+    "opus_confidence": 0.4,
+    "trust": 0.52,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "haiku"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {
+      "sonnet": "supports"
+     }
+    },
+    "directed": true,
+    "precedence": "by_date"
+   },
+   {
+    "src": "openalex:W4403006832::k01",
+    "dst": "openalex:W4405561462::k02",
+    "relation": "supports",
+    "confidence": 0.45,
+    "evidence": "Both about LLM reviewers and human alignment via fine-tuning; B's finding on fine-tuning closing the gap aligns with A's preference-based evaluation work.",
+    "similarity": 0.649,
+    "opus_confidence": 0.45,
+    "trust": 0.69,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   },
+   {
+    "src": "openalex:W4403006832::k02",
+    "dst": "openalex:W4405561462::k02",
+    "relation": "supports",
+    "confidence": 0.5,
+    "evidence": "B finds LLM reviewers too lenient (a blind spot), which is the kind of limitation A's error-injection method aims to discover.",
+    "similarity": 0.67,
+    "opus_confidence": 0.5,
+    "trust": 0.74,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   },
+   {
+    "src": "openalex:W4405561462::k01",
+    "dst": "openalex:W4403006832::k00",
+    "relation": "builds_on",
+    "confidence": 0.75,
+    "evidence": "The integrated suite (OpenReviewer, Papers with Reviews, Reviewer Arena) incorporates OpenReviewer as a component, so it extends/embeds the standalone system.",
+    "similarity": 0.62,
+    "opus_confidence": 0.75,
+    "trust": 0.87,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {
+      "haiku": "refines"
+     }
+    },
+    "directed": true,
+    "precedence": "by_date"
+   }
+  ],
+  "citation": null
+ },
+ {
+  "key": "arxiv:2411.15114v2|openalex:W4402952811",
+  "region": "citation_only",
+  "a": "arxiv:2411.15114v2",
+  "b": "openalex:W4402952811",
+  "semantic_edges": [],
+  "citation": {
+   "citing_id": "arxiv:2411.15114v2",
+   "cited_id": "openalex:W4402952811",
+   "cite_key": "li2024mlrcopilotautonomousmachinelearning",
+   "sites": [
+    {
+     "intent": "background",
+     "confidence": 0.8,
+     "justification": "Cited within a general enumeration of ML research tasks LLMs are used for.",
+     "claim": "ot allow the LLM to choose what tools to use. Focusing in on code generation, LLMs have been used to do autonomous machine learning research, neural architecture search, data science problems, paper reproduction, writing research papers, and reward function design, including preference optimization for LLM fine-tuning [CITED:TARGET]. LLMs for science. Besides machine learning, LLMs have also been applied to R\\&D in other scientific domains to assist with coding, chemical synthesis, biology, and virtual scientific discovery tian2024scicoderesearchcodingbenchmark, ma2024sciagenttoolaugmentedlanguagemodels,bran2023chemcrowaugmentin"
+    }
+   ],
+   "intent": "background",
+   "intent_distribution": {
+    "background": 1
+   },
+   "n_sites": 1,
+   "typed": {
+    "citing_id": "arxiv:2411.15114v2",
+    "cited_id": "openalex:W4402952811",
+    "cite_key": "li2024mlrcopilotautonomousmachinelearning",
+    "sites": [
+     {
+      "supports_claim": "supports",
+      "priority": "helpful",
+      "confidence": 0.65,
+      "justification": "MLR-Copilot is described as an autonomous ML research framework, matching the 'autonomous machine learning research' item in the cited list.",
+      "claim": "ot allow the LLM to choose what tools to use. Focusing in on code generation, LLMs have been used to do autonomous machine learning research, neural architecture search, data science problems, paper reproduction, writing research papers, and reward function design, including preference optimization for LLM fine-tuning [CITED:TARGET]. LLMs for science. Besides machine learning, LLMs have also been "
+     }
+    ],
+    "support": "supports",
+    "any_does_not": false,
+    "priority": "helpful",
+    "n_sites": 1
+   }
+  }
+ },
+ {
+  "key": "arxiv:2505.17968v1|openalex:W4403586302",
+  "region": "citation_only",
+  "a": "arxiv:2505.17968v1",
+  "b": "openalex:W4403586302",
+  "semantic_edges": [],
+  "citation": {
+   "citing_id": "arxiv:2505.17968v1",
+   "cited_id": "openalex:W4403586302",
+   "cite_key": "si2024can",
+   "sites": [
+    {
+     "intent": "background",
+     "confidence": 0.85,
+     "justification": "Listed among a group of categorized prior work (ideation) as general background.",
+     "claim": "e demonstrate interventions allow LLMs to solve for themselves in reverse-engineering tasks. LLMs for Automating the Scientific Process LLMs as AI Scientists? With the rapid advances in LLMs, recent work has explored using them to automate different parts of the scientific process such as ideation [CITED:TARGET], assistance [CITED], writing research papers [CITED], or emulating AI scientists in simulated environments [CITED]. Additionally, multi-modal and multi-agent AI models have driven significant progress in applications such as protein science"
+    }
+   ],
+   "intent": "background",
+   "intent_distribution": {
+    "background": 1
+   },
+   "n_sites": 1,
+   "typed": {
+    "citing_id": "arxiv:2505.17968v1",
+    "cited_id": "openalex:W4403586302",
+    "cite_key": "si2024can",
+    "sites": [
+     {
+      "supports_claim": "supports",
+      "priority": "helpful",
+      "confidence": 0.85,
+      "justification": "Evidence is directly about an LLM ideation agent generating research ideas, matching the 'ideation' citation category.",
+      "claim": "e demonstrate interventions allow LLMs to solve for themselves in reverse-engineering tasks. LLMs for Automating the Scientific Process LLMs as AI Scientists? With the rapid advances in LLMs, recent work has explored using them to automate different parts of the scientific process such as ideation [CITED:TARGET], assistance [CITED], writing research papers [CITED], or emulating AI scientists in si"
+     }
+    ],
+    "support": "supports",
+    "any_does_not": false,
+    "priority": "helpful",
+    "n_sites": 1
+   }
+  }
+ },
+ {
+  "key": "arxiv:2504.09702v3|openalex:W4403324055",
+  "region": "citation_only",
+  "a": "arxiv:2504.09702v3",
+  "b": "openalex:W4403324055",
+  "semantic_edges": [],
+  "citation": {
+   "citing_id": "arxiv:2504.09702v3",
+   "cited_id": "openalex:W4403324055",
+   "cite_key": "DBLP:journals/corr/abs-2410-05080",
+   "sites": [
+    {
+     "intent": "background",
+     "confidence": 0.65,
+     "justification": "Grouped with DiscoveryBench under a shared limitation ('lack granularity'), critique applies to the pair, not the target alone.",
+     "claim": ":conf/icml/HuangVLL24 and MLE-Bench [CITED] evaluate agents on Kaggle-style ML tasks but prioritize code implementation over novel research contributions. MLE-Bench requires the final submission to be a CSV file, limiting the data modality. Broader benchmarks such as ScienceAgentBench [CITED:TARGET] and DiscoveryBench [CITED] span multiple scientific domains but lack granularity for ML-specific challenges, while CHIME [CITED] and OpenD5 [CITED] target auxiliary tasks like literature review or hypothesis generation."
+    }
+   ],
+   "intent": "background",
+   "intent_distribution": {
+    "background": 1
+   },
+   "n_sites": 1,
+   "typed": {
+    "citing_id": "arxiv:2504.09702v3",
+    "cited_id": "openalex:W4403324055",
+    "cite_key": "DBLP:journals/corr/abs-2410-05080",
+    "sites": [
+     {
+      "supports_claim": "partial",
+      "priority": "obligatory",
+      "confidence": 0.55,
+      "justification": "Evidence confirms ScienceAgentBench spans multiple scientific disciplines (4 disciplines, 102 tasks), but doesn't state it 'lacks granularity for ML-specific challenges'.",
+      "claim": ":conf/icml/HuangVLL24 and MLE-Bench [CITED] evaluate agents on Kaggle-style ML tasks but prioritize code implementation over novel research contributions. MLE-Bench requires the final submission to be a CSV file, limiting the data modality. Broader benchmarks such as ScienceAgentBench [CITED:TARGET] and DiscoveryBench [CITED] span multiple scientific domains but lack granularity for ML-specific ch"
+     }
+    ],
+    "support": "partial",
+    "any_does_not": false,
+    "priority": "obligatory",
+    "n_sites": 1
+   }
+  }
+ },
+ {
+  "key": "openalex:W4404350150|openalex:W4414827381",
+  "region": "citation_only",
+  "a": "openalex:W4404350150",
+  "b": "openalex:W4414827381",
+  "semantic_edges": [],
+  "citation": {
+   "citing_id": "openalex:W4414827381",
+   "cited_id": "openalex:W4404350150",
+   "cite_key": "weng2025cycleresearcher",
+   "sites": [
+    {
+     "intent": "compares_contrasts",
+     "confidence": 0.75,
+     "justification": "Singles out target's narrow scope ('explicitly excluding experimental execution').",
+     "claim": "itep AI-Researcher , capable of autonomously navigating the entire research pipeline. Subsequent works, however, often incorporate varying degrees of human oversight, as demonstrated by Intology [CITED] and Carl [CITED]. Other systems narrow the scope; for example, CycleResearcher [CITED:TARGET] focuses specifically on the path from idea generation to manuscript drafting, explicitly excluding experimental execution. Alternative approaches include protocol designs for experiments in self-driving laboratories that do not rely on large language models (LLMs) or use them in complementary roles shi2025hiera"
+    }
+   ],
+   "intent": "compares_contrasts",
+   "intent_distribution": {
+    "compares_contrasts": 1
+   },
+   "n_sites": 1,
+   "typed": {
+    "citing_id": "openalex:W4414827381",
+    "cited_id": "openalex:W4404350150",
+    "cite_key": "weng2025cycleresearcher",
+    "sites": [
+     {
+      "supports_claim": "partial",
+      "priority": "obligatory",
+      "confidence": 0.6,
+      "justification": "CycleResearcher covers literature-to-manuscript and review but the abstract does not explicitly state it excludes experimental execution.",
+      "claim": "itep AI-Researcher , capable of autonomously navigating the entire research pipeline. Subsequent works, however, often incorporate varying degrees of human oversight, as demonstrated by Intology [CITED] and Carl [CITED]. Other systems narrow the scope; for example, CycleResearcher [CITED:TARGET] focuses specifically on the path from idea generation to manuscript drafting, explicitly excluding expe"
+     }
+    ],
+    "support": "partial",
+    "any_does_not": false,
+    "priority": "obligatory",
+    "n_sites": 1
+   }
+  }
+ },
+ {
+  "key": "arxiv:2606.11851|openalex:W4402952666",
+  "region": "citation_only",
+  "a": "arxiv:2606.11851",
+  "b": "openalex:W4402952666",
+  "semantic_edges": [],
+  "citation": {
+   "citing_id": "arxiv:2606.11851",
+   "cited_id": "openalex:W4402952666",
+   "cite_key": "zhou2026autonomousagents",
+   "sites": [
+    {
+     "intent": "background",
+     "confidence": 0.75,
+     "justification": "General motivating statement about autonomous research agents automating workflows.",
+     "claim": "mailto:yangly6@sustech.edu.cn yangly6@sustech.edu.cn paperabstract Introduction sec:intro Autonomous research agents increasingly automate complex scientific workflows, including literature synthesis, hypothesis generation, experiment planning, and paper writing [CITED:TARGET]. However, most existing systems operate within a goal-driven paradigm, anchored by predefined targets such as a specific disease mechanism or a benchmark metric. In contrast, open-ended data-driven discovery presents a more unconstrained challenge [CITED]: given a dataset and broad scientific"
+    },
+    {
+     "intent": "background",
+     "confidence": 0.7,
+     "justification": "Grouped generic statement preceding a list of specific contrasted frameworks.",
+     "claim": "pen-ended discovery tasks and introduce a claim-level evaluation protocol that separates evidential support from discovery value and compares claim formation under a finite budget. Related Work Evolutionary Research Agents Autonomous research systems increasingly automate the scientific process [CITED:TARGET]. Frameworks such as Kosmos [CITED], DeepScientist [CITED], and AutoSOTA [CITED] further coordinate long-horizon discovery around shared contexts or benchmark targets. In parallel, evolutionary search agents iteratively propose and select candidate program varian"
+    }
+   ],
+   "intent": "background",
+   "intent_distribution": {
+    "background": 2
+   },
+   "n_sites": 2,
+   "typed": {
+    "citing_id": "arxiv:2606.11851",
+    "cited_id": "openalex:W4402952666",
+    "cite_key": "zhou2026autonomousagents",
+    "sites": [
+     {
+      "supports_claim": "supports",
+      "priority": "obligatory",
+      "confidence": 0.8,
+      "justification": "AI Scientist automates idea generation, experiment execution, and paper writing, matching claimed literature synthesis/hypothesis generation/experiment planning/paper writing automation.",
+      "claim": "mailto:yangly6@sustech.edu.cn yangly6@sustech.edu.cn paperabstract Introduction sec:intro Autonomous research agents increasingly automate complex scientific workflows, including literature synthesis, hypothesis generation, experiment planning, and paper writing [CITED:TARGET]. However, most existing systems operate within a goal-driven paradigm, anchored by predefined targets such as a specific d"
+     },
+     {
+      "supports_claim": "supports",
+      "priority": "obligatory",
+      "confidence": 0.75,
+      "justification": "AI Scientist automates the scientific process end-to-end, matching the claim it exemplifies.",
+      "claim": "pen-ended discovery tasks and introduce a claim-level evaluation protocol that separates evidential support from discovery value and compares claim formation under a finite budget. Related Work Evolutionary Research Agents Autonomous research systems increasingly automate the scientific process [CITED:TARGET]. Frameworks such as Kosmos [CITED], DeepScientist [CITED], and AutoSOTA [CITED] further c"
+     }
+    ],
+    "support": "supports",
+    "any_does_not": false,
+    "priority": "obligatory",
+    "n_sites": 2
+   }
+  }
+ },
+ {
+  "key": "arxiv:2603.28589v1|openalex:W4416043407",
+  "region": "citation_only",
+  "a": "arxiv:2603.28589v1",
+  "b": "openalex:W4416043407",
+  "semantic_edges": [],
+  "citation": {
+   "citing_id": "arxiv:2603.28589v1",
+   "cited_id": "openalex:W4416043407",
+   "cite_key": "aicoscientist2025",
+   "sites": [
+    {
+     "intent": "compares_contrasts",
+     "confidence": 0.75,
+     "justification": "'In contrast, Google's AI co-scientist... operates as a collaborator' explicitly contrasts it with the previously described Agent Laboratory.",
+     "claim": "y balance exploration and exploitation to discover novel methods. Agent Laboratory [CITED] extends this by automating the execution and reporting of user-provided ideas, acting as an accelerator for human researchers rather than an independent ideator. In contrast, Google's AI co-scientist [CITED:TARGET] operates as a collaborator in a \"scientist-in-the-loop\" paradigm, leveraging models like Gemini to assist domain experts with hypothesis generation. Alongside these frameworks, complementary toolkits have been developed to support AI agent systems by enhancing resource integration and accessibility. ToolUniverse"
+    }
+   ],
+   "intent": "compares_contrasts",
+   "intent_distribution": {
+    "compares_contrasts": 1
+   },
+   "n_sites": 1,
+   "typed": {
+    "citing_id": "arxiv:2603.28589v1",
+    "cited_id": "openalex:W4416043407",
+    "cite_key": "aicoscientist2025",
+    "sites": [
+     {
+      "supports_claim": "supports",
+      "priority": "helpful",
+      "confidence": 0.9,
+      "justification": "Evidence confirms Gemini-based AI co-scientist assisting domain experts with hypothesis generation, matching the claim.",
+      "claim": "y balance exploration and exploitation to discover novel methods. Agent Laboratory [CITED] extends this by automating the execution and reporting of user-provided ideas, acting as an accelerator for human researchers rather than an independent ideator. In contrast, Google's AI co-scientist [CITED:TARGET] operates as a collaborator in a \"scientist-in-the-loop\" paradigm, leveraging models like Gemin"
+     }
+    ],
+    "support": "supports",
+    "any_does_not": false,
+    "priority": "helpful",
+    "n_sites": 1
+   }
+  }
+ },
+ {
+  "key": "arxiv:2411.15114v2|openalex:W4399597648",
+  "region": "citation_only",
+  "a": "arxiv:2411.15114v2",
+  "b": "openalex:W4399597648",
+  "semantic_edges": [],
+  "citation": {
+   "citing_id": "arxiv:2411.15114v2",
+   "cited_id": "openalex:W4399597648",
+   "cite_key": "jansen2024discoveryworldvirtualenvironmentdeveloping",
+   "sites": [
+    {
+     "intent": "background",
+     "confidence": 0.65,
+     "justification": "Appears as one row among many benchmarks in a generic comparison table.",
+     "claim": "& & SWE-bench verified has time estimates based on researcher judgment. & 500 & 5m-4h \\\\ WebArena [CITED] & & & 812 & 2m \\\\ ML-Agent-Bench [CITED] & & & 13 & - \\\\ DISCOVERYWORLD [CITED:TARGET] & & The program used to collect human data appears to contain additional UI elements (e.g an inventory) compared to the images provided to vision-enabled AI agents, though these differences are minor. & 120 & 1h \\\\ H-ARC-AGI [CITED] & & & 800 &"
+    },
+    {
+     "intent": "background",
+     "confidence": 0.8,
+     "justification": "Generic mention within a list of scientific-domain applications of LLMs.",
+     "claim": "anlevelrewarddesign, faldor2024omniepicopenendednessmodelshuman,lu2024discoveringpreferenceoptimizationalgorithms . LLMs for science. Besides machine learning, LLMs have also been applied to R\\&D in other scientific domains to assist with coding, chemical synthesis, biology, and virtual scientific discovery [CITED:TARGET]. Also relevant to our work is the field of automated machine learning (AutoML), which also seeks to automate machine learning model development, including hyperparameter and model architecture selection. However, standard AutoML techniques are less applicable to LLMs, due to the greater complexity of LLM training and"
+    }
+   ],
+   "intent": "background",
+   "intent_distribution": {
+    "background": 2
+   },
+   "n_sites": 2,
+   "typed": {
+    "citing_id": "arxiv:2411.15114v2",
+    "cited_id": "openalex:W4399597648",
+    "cite_key": "jansen2024discoveryworldvirtualenvironmentdeveloping",
+    "sites": [
+     {
+      "supports_claim": "supports",
+      "priority": "obligatory",
+      "confidence": 0.85,
+      "justification": "Evidence states DISCOVERYWORLD includes 120 challenge tasks, matching the table's '120' figure.",
+      "claim": "& & SWE-bench verified has time estimates based on researcher judgment. & 500 & 5m-4h \\\\ WebArena [CITED] & & & 812 & 2m \\\\ ML-Agent-Bench [CITED] & & & 13 & - \\\\ DISCOVERYWORLD [CITED:TARGET] & & The program used to collect human data appears to contain additional UI elements (e.g an inventory) compared to the images provided to vision-enabled AI agents, though these differences are minor. & 120 "
+     },
+     {
+      "supports_claim": "supports",
+      "priority": "helpful",
+      "confidence": 0.75,
+      "justification": "DiscoveryWorld is a virtual environment for scientific discovery (radioisotope dating, rocket science, proteomics), matching 'virtual scientific discovery'.",
+      "claim": "anlevelrewarddesign, faldor2024omniepicopenendednessmodelshuman,lu2024discoveringpreferenceoptimizationalgorithms . LLMs for science. Besides machine learning, LLMs have also been applied to R\\&D in other scientific domains to assist with coding, chemical synthesis, biology, and virtual scientific discovery [CITED:TARGET]. Also relevant to our work is the field of automated machine learning (AutoM"
+     }
+    ],
+    "support": "supports",
+    "any_does_not": false,
+    "priority": "obligatory",
+    "n_sites": 2
+   }
+  }
+ },
+ {
+  "key": "arxiv:2606.13670|openalex:W4414827381",
+  "region": "citation_only",
+  "a": "arxiv:2606.13670",
+  "b": "openalex:W4414827381",
+  "semantic_edges": [],
+  "citation": {
+   "citing_id": "arxiv:2606.13670",
+   "cited_id": "openalex:W4414827381",
+   "cite_key": "Yamada.2025",
+   "sites": [
+    {
+     "intent": "background",
+     "confidence": 0.75,
+     "justification": "Cited as one example supporting a general trend statement about LLM use in science.",
+     "claim": ". LLMs as solution + RQs One way to make reproducibility assessments scalable is to automate the reanalysis itself. Recent advances in large language models (LLMs) have produced systems with strong coding capabilities [CITED] and growing use in scientific programming, data analysis, and research assistance [CITED:TARGET]. Here, we propose using LLMs as automated analysts for reproducibility assessment. In principle, such systems can process study materials and generate executable analysis code, which could reduce the extensive manual effort currently required for data and reproducibility checks [CITED] and make such checks f"
+    }
+   ],
+   "intent": "background",
+   "intent_distribution": {
+    "background": 1
+   },
+   "n_sites": 1,
+   "typed": {
+    "citing_id": "arxiv:2606.13670",
+    "cited_id": "openalex:W4414827381",
+    "cite_key": "Yamada.2025",
+    "sites": [
+     {
+      "supports_claim": "supports",
+      "priority": "helpful",
+      "confidence": 0.65,
+      "justification": "AI Scientist-v2 performs scientific experimentation, data analysis, and manuscript writing, matching 'growing use in scientific programming, data analysis, and research assistance'.",
+      "claim": ". LLMs as solution + RQs One way to make reproducibility assessments scalable is to automate the reanalysis itself. Recent advances in large language models (LLMs) have produced systems with strong coding capabilities [CITED] and growing use in scientific programming, data analysis, and research assistance [CITED:TARGET]. Here, we propose using LLMs as automated analysts for reproducibility assess"
+     }
+    ],
+    "support": "supports",
+    "any_does_not": false,
+    "priority": "helpful",
+    "n_sites": 1
+   }
+  }
+ },
+ {
+  "key": "openalex:W4402952666|openalex:W4416026872",
+  "region": "citation_only",
+  "a": "openalex:W4402952666",
+  "b": "openalex:W4416026872",
+  "semantic_edges": [],
+  "citation": {
+   "citing_id": "openalex:W4416026872",
+   "cited_id": "openalex:W4402952666",
+   "cite_key": "lu2024ai",
+   "sites": [
+    {
+     "intent": "background",
+     "confidence": 0.7,
+     "justification": "Grouped as 'several works' with a limitation applied to the whole group, not the target alone.",
+     "claim": "rged. Through such a platform, developers of AI Scientist systems are encouraged to engage in responsible research and development, ensuring both the protection of the academic ecosystem and the long-term sustainability of scientific progress. In recent years, several works have explored the concept of AI Scientists [CITED:TARGET]. However, the quality of research papers produced by these systems remains insufficient. One major reason is that the problem setting of achieving fully automated science is overly ambitious and often lacks clearly defined scientific goals for AI Scientists. Without a specific goal, these systems tend to generate undi"
+    },
+    {
+     "intent": "background",
+     "confidence": 0.7,
+     "justification": "Limitation ('limited to small-scale code experiments') attributed to 'current systems' generally, not target specifically.",
+     "claim": "y automated science is overly ambitious and often lacks clearly defined scientific goals for AI Scientists. Without a specific goal, these systems tend to generate undirected discoveries that appear to lack genuine scientific value. Another limitation is that current systems are limited to small-scale code experiments [CITED:TARGET], lacking the scale and complexity needed for meaningful science. Achieving real scientific contributions requires not just ideas but strong implementation capability to handle complex codebases. As an initial step toward enabling AI Scientists to produce genuine scientific value, we can take inspiration from how stud"
+    }
+   ],
+   "intent": "background",
+   "intent_distribution": {
+    "background": 2
+   },
+   "n_sites": 2,
+   "typed": {
+    "citing_id": "openalex:W4416026872",
+    "cited_id": "openalex:W4402952666",
+    "cite_key": "lu2024ai",
+    "sites": [
+     {
+      "supports_claim": "supports",
+      "priority": "obligatory",
+      "confidence": 0.85,
+      "justification": "AI Scientist is a canonical work exploring the AI Scientist concept.",
+      "claim": "rged. Through such a platform, developers of AI Scientist systems are encouraged to engage in responsible research and development, ensuring both the protection of the academic ecosystem and the long-term sustainability of scientific progress. In recent years, several works have explored the concept of AI Scientists [CITED:TARGET]. However, the quality of research papers produced by these systems "
+     },
+     {
+      "supports_claim": "partial",
+      "priority": "obligatory",
+      "confidence": 0.6,
+      "justification": "Abstract describes small ML experiments at <$15/paper, on-topic but 'limited to small-scale' is the citing critique not stated by evidence.",
+      "claim": "y automated science is overly ambitious and often lacks clearly defined scientific goals for AI Scientists. Without a specific goal, these systems tend to generate undirected discoveries that appear to lack genuine scientific value. Another limitation is that current systems are limited to small-scale code experiments [CITED:TARGET], lacking the scale and complexity needed for meaningful science. "
+     }
+    ],
+    "support": "supports",
+    "any_does_not": false,
+    "priority": "obligatory",
+    "n_sites": 2
+   }
+  }
+ },
+ {
+  "key": "openalex:W4407806895|openalex:W4411120082",
+  "region": "citation_only",
+  "a": "openalex:W4407806895",
+  "b": "openalex:W4411120082",
+  "semantic_edges": [],
+  "citation": {
+   "citing_id": "openalex:W4407806895",
+   "cited_id": "openalex:W4411120082",
+   "cite_key": "baekResearchAgentIterativeResearch2024",
+   "sites": [
+    {
+     "intent": "background",
+     "confidence": 0.75,
+     "justification": "Target cited generically as part of a broad shift toward end-to-end automation, no specific critique or adoption.",
+     "claim": "tep yangSWEagentAgentComputerInterfaces2024 and benchmarks like SWE-Bench [CITED]. These developments signal a broader shift toward end-to-end automation of knowledge-intensive tasks, wherein LLMs can navigate software environments and iteratively refine their outputs based on real-time feedback [CITED:TARGET]. Why is it interesting and important? Motivated by the rapid progress of LLM research, the scientific community has turned its attention to harnessing these models for the entire research lifecycle\u2014from hypothesis generation to experimentation and analysis si2024llmsgeneratenovelresearch, jansenDISC"
+    },
+    {
+     "intent": "compares_contrasts",
+     "confidence": 0.62,
+     "justification": "Singles out ResearchAgent and notes it is evaluated solely with subjective human preference, a specific limitation.",
+     "claim": "ontamination and agent shortcut issues. Comparing different baselines, including pure LLMs with prompting, authors state that execution feedback is necessary for agents to generate useful solutions. The idea of execution feedback and iterative improvement for research tasks has been proposed in ResearchAgent [CITED:TARGET]. Agentic concept-based approach with literature-based discovery shows great improvement for end-to-end iterative solution generation, also supported by knowledge-based vs random facts ablations. The agent is evaluated solely with subjective human preference annotation and automatic human preference evals. While cover"
+    }
+   ],
+   "intent": "compares_contrasts",
+   "intent_distribution": {
+    "background": 1,
+    "compares_contrasts": 1
+   },
+   "n_sites": 2,
+   "typed": {
+    "citing_id": "openalex:W4407806895",
+    "cited_id": "openalex:W4411120082",
+    "cite_key": "baekResearchAgentIterativeResearch2024",
+    "sites": [
+     {
+      "supports_claim": "partial",
+      "priority": "helpful",
+      "confidence": 0.4,
+      "justification": "Evidence supports iterative refinement based on feedback but does not describe LLMs 'navigating software environments'.",
+      "claim": "tep yangSWEagentAgentComputerInterfaces2024 and benchmarks like SWE-Bench [CITED]. These developments signal a broader shift toward end-to-end automation of knowledge-intensive tasks, wherein LLMs can navigate software environments and iteratively refine their outputs based on real-time feedback [CITED:TARGET]. Why is it interesting and important? Motivated by the rapid progress of LLM research, t"
+     },
+     {
+      "supports_claim": "supports",
+      "priority": "helpful",
+      "confidence": 0.7,
+      "justification": "Evidence explicitly describes iterative refinement based on reviewing-agent feedback, matching 'execution feedback and iterative improvement'.",
+      "claim": "ontamination and agent shortcut issues. Comparing different baselines, including pure LLMs with prompting, authors state that execution feedback is necessary for agents to generate useful solutions. The idea of execution feedback and iterative improvement for research tasks has been proposed in ResearchAgent [CITED:TARGET]. Agentic concept-based approach with literature-based discovery shows great"
+     }
+    ],
+    "support": "supports",
+    "any_does_not": false,
+    "priority": "helpful",
+    "n_sites": 2
+   }
+  }
+ },
+ {
+  "key": "arxiv:2604.04074v3|openalex:W4402952666",
+  "region": "citation_only",
+  "a": "arxiv:2604.04074v3",
+  "b": "openalex:W4402952666",
+  "semantic_edges": [],
+  "citation": {
+   "citing_id": "arxiv:2604.04074v3",
+   "cited_id": "openalex:W4402952666",
+   "cite_key": "Lu2024TheAS",
+   "sites": [
+    {
+     "intent": "background",
+     "confidence": 0.75,
+     "justification": "Critique of reviewer modules applies jointly to AI Scientist and CycleResearcher as a group, not singled out.",
+     "claim": "RG [CITED], OpenReviewer [CITED], DeepReview [CITED], and ReviewerToo [CITED], which add aspect prompting, multi-agent discussion, fine-tuning, retrieval, or structured reasoning. End-to-end research agents such as The AI Scientist [CITED:TARGET] and CycleResearcher [CITED] couple paper drafting with an automated reviewer in a research-review-refinement loop, but their reviewer modules still produce judgments primarily from the generated manuscript. A separate strand models peer review itself as a multi-agent or committee process, captu"
+    }
+   ],
+   "intent": "background",
+   "intent_distribution": {
+    "background": 1
+   },
+   "n_sites": 1,
+   "typed": {
+    "citing_id": "arxiv:2604.04074v3",
+    "cited_id": "openalex:W4402952666",
+    "cite_key": "Lu2024TheAS",
+    "sites": [
+     {
+      "supports_claim": "supports",
+      "priority": "obligatory",
+      "confidence": 0.9,
+      "justification": "The AI Scientist couples paper drafting with a simulated automated review in an iterative loop.",
+      "claim": "RG [CITED], OpenReviewer [CITED], DeepReview [CITED], and ReviewerToo [CITED], which add aspect prompting, multi-agent discussion, fine-tuning, retrieval, or structured reasoning. End-to-end research agents such as The AI Scientist [CITED:TARGET] and CycleResearcher [CITED] couple paper drafting with an automated reviewer in a research-review-refinement loop, but their reviewer modules still produ"
+     }
+    ],
+    "support": "supports",
+    "any_does_not": false,
+    "priority": "obligatory",
+    "n_sites": 1
+   }
+  }
+ },
+ {
+  "key": "arxiv:2601.22638v2|openalex:W4400734098",
+  "region": "citation_only",
+  "a": "arxiv:2601.22638v2",
+  "b": "openalex:W4400734098",
+  "semantic_edges": [],
+  "citation": {
+   "citing_id": "arxiv:2601.22638v2",
+   "cited_id": "openalex:W4400734098",
+   "cite_key": "liang2024can",
+   "sites": [
+    {
+     "intent": "background",
+     "confidence": 0.85,
+     "justification": "Cited generically as motivation for the literature-verification bottleneck, not singled out.",
+     "claim": "inct operational bottlenecks: authors wait months to receive actionable feedback on their manuscripts, while area chairs and reviewers face extreme fatigue attempting to rigorously audit technical soundness, manually hunt down missing baselines, and verify state-of-the-art claims in a rapidly evolving literature space [CITED:TARGET]. Consequently, the community has turned to Large Language Models (LLMs) to assist in the evaluation of scientific manuscripts [CITED]. Early approaches primarily focused on fine-tuning models on static datasets of paper-review pairs [CITED]. While these system"
+    },
+    {
+     "intent": "background",
+     "confidence": 0.8,
+     "justification": "Generic mention of early works using pre-trained models, no specific critique or adoption.",
+     "claim": "Related Work LLM-based Automated Reviewing. The application of LLMs to scientific peer review has evolved rapidly from simple text classification to complex generation tasks. Early works focused on predicting acceptance decisions or generating short summaries using standard pre-trained models [CITED:TARGET]. As models scaled, researchers began exploring fine-tuning strategies to align outputs with professional standards. [CITED] introduced CycleResearcher , a predecessor to more complex reasoning models, where the review model was fine-tuned directly on human reviews without simulating the"
+    }
+   ],
+   "intent": "background",
+   "intent_distribution": {
+    "background": 2
+   },
+   "n_sites": 2,
+   "typed": {
+    "citing_id": "arxiv:2601.22638v2",
+    "cited_id": "openalex:W4400734098",
+    "cite_key": "liang2024can",
+    "sites": [
+     {
+      "supports_claim": "partial",
+      "priority": "helpful",
+      "confidence": 0.5,
+      "justification": "Evidence discusses difficulty obtaining timely peer review, matching the general bottleneck claim, but doesn't mention SOTA-claim verification specifically.",
+      "claim": "inct operational bottlenecks: authors wait months to receive actionable feedback on their manuscripts, while area chairs and reviewers face extreme fatigue attempting to rigorously audit technical soundness, manually hunt down missing baselines, and verify state-of-the-art claims in a rapidly evolving literature space [CITED:TARGET]. Consequently, the community has turned to Large Language Models "
+     },
+     {
+      "supports_claim": "does_not",
+      "priority": "helpful",
+      "confidence": 0.55,
+      "justification": "contradicts: evidence describes GPT-4 generating detailed full-PDF feedback comments, not 'predicting acceptance decisions or generating short summaries using standard pre-trained models' as claimed for 'early works'.",
+      "claim": "Related Work LLM-based Automated Reviewing. The application of LLMs to scientific peer review has evolved rapidly from simple text classification to complex generation tasks. Early works focused on predicting acceptance decisions or generating short summaries using standard pre-trained models [CITED:TARGET]. As models scaled, researchers began exploring fine-tuning strategies to align outputs with"
+     }
+    ],
+    "support": "partial",
+    "any_does_not": true,
+    "priority": "helpful",
+    "n_sites": 2
+   }
+  }
+ },
+ {
+  "key": "openalex:W4415108068|openalex:W7119027942",
+  "region": "citation_only",
+  "a": "openalex:W4415108068",
+  "b": "openalex:W7119027942",
+  "semantic_edges": [],
+  "citation": {
+   "citing_id": "openalex:W7119027942",
+   "cited_id": "openalex:W4415108068",
+   "cite_key": "novikov_alphaevolve_2025",
+   "sites": [
+    {
+     "intent": "background",
+     "confidence": 0.75,
+     "justification": "Grouped in a list of domain-specific agent progress citations, contrast applies to whole group not target alone.",
+     "claim": "-based execution, and dynamic domain knowledge comprehension for automated CFD workflows. overview figure* Although significant progress has been made in developing such agents for both general research contexts [CITED] and specialized fields such as mathematics [CITED:TARGET], chemistry [CITED], and life sciences [CITED], the combustion research community notably still lacks a practical and accessible AI agent system. Such a system must integrate domain-specific knowledge with robust execution capabilities to effectively handle expertise-intensive tools"
+    }
+   ],
+   "intent": "background",
+   "intent_distribution": {
+    "background": 1
+   },
+   "n_sites": 1,
+   "typed": {
+    "citing_id": "openalex:W7119027942",
+    "cited_id": "openalex:W4415108068",
+    "cite_key": "novikov_alphaevolve_2025",
+    "sites": [
+     {
+      "supports_claim": "supports",
+      "priority": "helpful",
+      "confidence": 0.7,
+      "justification": "AlphaEvolve's discoveries in mathematics (e.g., matrix multiplication algorithm) directly support the 'specialized fields such as mathematics' claim.",
+      "claim": "-based execution, and dynamic domain knowledge comprehension for automated CFD workflows. overview figure* Although significant progress has been made in developing such agents for both general research contexts [CITED] and specialized fields such as mathematics [CITED:TARGET], chemistry [CITED], and life sciences [CITED], the combustion research community notably still lacks a practical and acces"
+     }
+    ],
+    "support": "supports",
+    "any_does_not": false,
+    "priority": "helpful",
+    "n_sites": 1
+   }
+  }
+ },
+ {
+  "key": "arxiv:2504.01848v3|arxiv:2510.21652v2",
+  "region": "citation_only",
+  "a": "arxiv:2504.01848v3",
+  "b": "arxiv:2510.21652v2",
+  "semantic_edges": [],
+  "citation": {
+   "citing_id": "arxiv:2510.21652v2",
+   "cited_id": "arxiv:2504.01848v3",
+   "cite_key": "starace2025paperbench",
+   "sites": [
+    {
+     "intent": "background",
+     "confidence": 0.85,
+     "justification": "Listed as example of 'research reproduction' in a grouped list of sub-problems",
+     "claim": "been developed, often focusing on particular sub-problems in the full research pipeline, including scientific coding and execution [CITED], data analysis [CITED], research reproduction [CITED:TARGET], ideation and hypothesis generation [CITED], and literature retrieval and understanding [CITED], among others [CITED]. spans many of these task categories, and provides the"
+    }
+   ],
+   "intent": "background",
+   "intent_distribution": {
+    "background": 1
+   },
+   "n_sites": 1,
+   "typed": {
+    "citing_id": "arxiv:2510.21652v2",
+    "cited_id": "arxiv:2504.01848v3",
+    "cite_key": "starace2025paperbench",
+    "sites": [
+     {
+      "supports_claim": "supports",
+      "priority": "helpful",
+      "confidence": 0.75,
+      "justification": "PaperBench evaluates AI replication of research papers, matching the 'research reproduction' category.",
+      "claim": "been developed, often focusing on particular sub-problems in the full research pipeline, including scientific coding and execution [CITED], data analysis [CITED], research reproduction [CITED:TARGET], ideation and hypothesis generation [CITED], and literature retrieval and understanding [CITED], among others [CITED]. spans many of these task categories, and provides the"
+     }
+    ],
+    "support": "supports",
+    "any_does_not": false,
+    "priority": "helpful",
+    "n_sites": 1
+   }
+  }
+ },
+ {
+  "key": "arxiv:2507.02694|openalex:W4403586302",
+  "region": "citation_only",
+  "a": "arxiv:2507.02694",
+  "b": "openalex:W4403586302",
+  "semantic_edges": [],
+  "citation": {
+   "citing_id": "arxiv:2507.02694",
+   "cited_id": "openalex:W4403586302",
+   "cite_key": "si2024can",
+   "sites": [
+    {
+     "intent": "background",
+     "confidence": 0.8,
+     "justification": "Listed as one example capability ('improving idea generation') among several cited works.",
+     "claim": "rated remarkable capabilities across a variety of scientific tasks, such as answering questions about scientific papers [CITED], writing scientific papers [CITED], retrieving related works [CITED], improving idea generation [CITED:TARGET], and generating code to perform data-driven discovery [CITED]. Meanwhile, there is increasing interest in exploring the potential of LLMs to assist with or generate peer reviews [CITED], which can be used to provide quick and"
+    },
+    {
+     "intent": "background",
+     "confidence": 0.75,
+     "justification": "General motivating statement about LLMs enhancing research workflows, not a specific adoption or contrast.",
+     "claim": "e more contextually relevant and actionable suggestions. itemize Related Work Peer-Review Generation Recent advances in LLMs have significantly influenced scientific research, offering tools to streamline and enhance researchers' workflows across various stages of the scientific pipeline [CITED:TARGET]. Researchers have also extensively explored the potential of LLMs in automated peer review generation, employing various approaches such as guiding LLMs with single prompts [CITED], adopting two-stage review generation frameworks with question-guided prompts [CITED], and leveraging multi-a"
+    }
+   ],
+   "intent": "background",
+   "intent_distribution": {
+    "background": 2
+   },
+   "n_sites": 2,
+   "typed": {
+    "citing_id": "arxiv:2507.02694",
+    "cited_id": "openalex:W4403586302",
+    "cite_key": "si2024can",
+    "sites": [
+     {
+      "supports_claim": "supports",
+      "priority": "helpful",
+      "confidence": 0.85,
+      "justification": "Paper directly studies LLM research idea generation, matching 'improving idea generation'.",
+      "claim": "rated remarkable capabilities across a variety of scientific tasks, such as answering questions about scientific papers [CITED], writing scientific papers [CITED], retrieving related works [CITED], improving idea generation [CITED:TARGET], and generating code to perform data-driven discovery [CITED]. Meanwhile, there is increasing interest in exploring the potential of LLMs to assist with or gener"
+     },
+     {
+      "supports_claim": "partial",
+      "priority": "helpful",
+      "confidence": 0.45,
+      "justification": "Paper covers only the ideation stage, narrower than the claimed 'various stages of the scientific pipeline'.",
+      "claim": "e more contextually relevant and actionable suggestions. itemize Related Work Peer-Review Generation Recent advances in LLMs have significantly influenced scientific research, offering tools to streamline and enhance researchers' workflows across various stages of the scientific pipeline [CITED:TARGET]. Researchers have also extensively explored the potential of LLMs in automated peer review gener"
+     }
+    ],
+    "support": "supports",
+    "any_does_not": false,
+    "priority": "helpful",
+    "n_sites": 2
+   }
+  }
+ },
+ {
+  "key": "openalex:W4403006832|openalex:W4405035007",
+  "region": "both",
+  "a": "openalex:W4403006832",
+  "b": "openalex:W4405035007",
+  "semantic_edges": [
+   {
+    "src": "openalex:W4403006832::k02",
+    "dst": "openalex:W4405035007::k03",
+    "relation": "supports",
+    "confidence": 0.7,
+    "evidence": "Both identify flaws/blind spots in LLM reviewers via injecting altered inputs; B's title-only hallucination finding is exactly the kind of blind spot A's method discovers.",
+    "similarity": 0.684,
+    "opus_confidence": 0.7,
+    "trust": 0.94,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   },
+   {
+    "src": "openalex:W4403006832::k02",
+    "dst": "openalex:W4405035007::k01",
+    "relation": "supports",
+    "confidence": 0.6,
+    "evidence": "Both study LLM reviewer susceptibility to manipulation via injected/disclosed content; A's error-injection method and B's self-disclosure manipulation align on revealing LLM review blind spots.",
+    "similarity": 0.618,
+    "opus_confidence": 0.6,
+    "trust": 0.72,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {
+      "haiku": "builds_on"
+     }
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   },
+   {
+    "src": "openalex:W4403006832::k02",
+    "dst": "openalex:W4405035007::k02",
+    "relation": "supports",
+    "confidence": 0.55,
+    "evidence": "Both study vulnerabilities of LLM reviewing via injected errors/manipulation; A's blind-spot discovery and B's systemic manipulation impact align on the same risk theme.",
+    "similarity": 0.623,
+    "opus_confidence": 0.55,
+    "trust": 0.67,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {
+      "haiku": "builds_on"
+     }
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   },
+   {
+    "src": "openalex:W4403006832::k02",
+    "dst": "openalex:W4405035007::k04",
+    "relation": "supports",
+    "confidence": 0.7,
+    "evidence": "A's error-injection diagnostic method and B's comprehensive vulnerability analysis both demonstrate LLM peer review weaknesses via injection; B's explicit injection attack component aligns with A.",
+    "similarity": 0.65,
+    "opus_confidence": 0.7,
+    "trust": 0.82,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {
+      "haiku": "builds_on"
+     }
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   }
+  ],
+  "citation": {
+   "citing_id": "openalex:W4405035007",
+   "cited_id": "openalex:W4403006832",
+   "cite_key": "tyser2024ai",
+   "sites": [
+    {
+     "intent": "background",
+     "confidence": 0.7,
+     "justification": "General motivating mention of automated pipelines using LLMs to review manuscripts.",
+     "claim": "ve emerged as promising tools in this realm, attracting significant attention due to their extraordinary capability for understanding and generating natural language [CITED]. Researchers have proposed automated pipelines using LLMs such as GPT-4 to review scientific manuscripts [CITED:TARGET], with studies showing substantial overlap between LLM-generated reviews and those produced by human reviewers (e.g., over 30\\ overlap on Nature journals) [CITED]. Additionally, research has documented the increasing reliance on LLMs in writing peer reviews for AI conferences: for four recent AI conference"
+    }
+   ],
+   "intent": "background",
+   "intent_distribution": {
+    "background": 1
+   },
+   "n_sites": 1,
+   "typed": {
+    "citing_id": "openalex:W4405035007",
+    "cited_id": "openalex:W4403006832",
+    "cite_key": "tyser2024ai",
+    "sites": [
+     {
+      "supports_claim": "supports",
+      "priority": "obligatory",
+      "confidence": 0.82,
+      "justification": "This work builds LLM reviewing systems for arXiv/Nature papers, matching the automated-review-pipeline claim.",
+      "claim": "ve emerged as promising tools in this realm, attracting significant attention due to their extraordinary capability for understanding and generating natural language [CITED]. Researchers have proposed automated pipelines using LLMs such as GPT-4 to review scientific manuscripts [CITED:TARGET], with studies showing substantial overlap between LLM-generated reviews and those produced by human review"
+     }
+    ],
+    "support": "supports",
+    "any_does_not": false,
+    "priority": "obligatory",
+    "n_sites": 1
+   }
+  }
+ },
+ {
+  "key": "arxiv:2411.15114v2|arxiv:2505.24785v2",
+  "region": "both",
+  "a": "arxiv:2411.15114v2",
+  "b": "arxiv:2505.24785v2",
+  "semantic_edges": [
+   {
+    "src": "arxiv:2505.24785v2::k00",
+    "dst": "arxiv:2411.15114v2::k00",
+    "relation": "builds_on",
+    "confidence": 0.55,
+    "evidence": "Both are benchmarks for AI agents on ML/research engineering tasks derived from top publications with continuous/multi-metric scoring; related benchmark efforts.",
+    "similarity": 0.711,
+    "opus_confidence": 0.55,
+    "trust": 0.67,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "haiku"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {
+      "sonnet": "supports"
+     }
+    },
+    "directed": true,
+    "precedence": "by_date"
+   }
+  ],
+  "citation": {
+   "citing_id": "arxiv:2505.24785v2",
+   "cited_id": "arxiv:2411.15114v2",
+   "cite_key": "zhu2024unmaskingimprovingdatacredibility",
+   "sites": [
+    {
+     "intent": "background",
+     "confidence": 0.7,
+     "justification": "Garbled table row listing the target with no explicit relational cue.",
+     "claim": "ro-shot Anomaly Detection[CITED] & 339 & 150 & Deep Learning LLMs & propose an architecture & memory: 24GB; GPU: RTX 3090; amount: 1 & 5 & 3 & 1 \\\\ 19388 & Unmasking and Improving Data Credibility: A Study with Datasets for Training Harmless Language Models[CITED:TARGET] & 2706 & 20 & Social Aspects Accountability & Other & standard resources + 1 GPU recommended & 3 & 3 & 6 \\\\ 17776 & RepoBench: Benchmarking Repository-Level Code Auto-Completion Systems[CITED] & 145 & 139 & Deep Learning LLMs & propose a data"
+    }
+   ],
+   "intent": "background",
+   "intent_distribution": {
+    "background": 1
+   },
+   "n_sites": 1,
+   "typed": {
+    "citing_id": "arxiv:2505.24785v2",
+    "cited_id": "arxiv:2411.15114v2",
+    "cite_key": "zhu2024unmaskingimprovingdatacredibility",
+    "sites": [
+     {
+      "supports_claim": "does_not",
+      "priority": "helpful",
+      "confidence": 0.7,
+      "justification": "off-topic: evidence is RE-Bench, not the cited table title 'Unmasking and Improving Data Credibility' about harmless-LM datasets.",
+      "claim": "ro-shot Anomaly Detection[CITED] & 339 & 150 & Deep Learning LLMs & propose an architecture & memory: 24GB; GPU: RTX 3090; amount: 1 & 5 & 3 & 1 \\\\ 19388 & Unmasking and Improving Data Credibility: A Study with Datasets for Training Harmless Language Models[CITED:TARGET] & 2706 & 20 & Social Aspects Accountability & Other & standard resources + 1 GPU recommended & 3 & 3 & 6 \\\\ 17776 & RepoBench: B"
+     }
+    ],
+    "support": "does_not",
+    "any_does_not": true,
+    "priority": "helpful",
+    "n_sites": 1
+   }
+  }
+ },
+ {
+  "key": "arxiv:2606.00644|openalex:W4414587939",
+  "region": "both",
+  "a": "arxiv:2606.00644",
+  "b": "openalex:W4414587939",
+  "semantic_edges": [
+   {
+    "src": "openalex:W4414587939::k01",
+    "dst": "arxiv:2606.00644::k01",
+    "relation": "supports",
+    "confidence": 0.5,
+    "evidence": "Both are automated evaluation frameworks for AI-generated research validated to align with human experts; MLR-Judge's approach of LLM reviewers matching human agreement supports the feasibility of the multi-signal protocol's human-validated judgement.",
+    "similarity": 0.569,
+    "opus_confidence": 0.5,
+    "trust": 0.62,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {
+      "haiku": "builds_on"
+     }
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   }
+  ],
+  "citation": {
+   "citing_id": "arxiv:2606.00644",
+   "cited_id": "openalex:W4414587939",
+   "cite_key": "chen2025mlrbench",
+   "sites": [
+    {
+     "intent": "background",
+     "confidence": 0.7,
+     "justification": "Generic mention of research agents deployed for workflow execution.",
+     "claim": "becomes tomorrow's baseline. The value of a research decision ( e.g. , which bottleneck to attack, which direction is worth a six-month commitment) often lies in anticipating where the field is going. As autonomous research agents are increasingly deployed for ideation, planning, and scientific workflow execution [CITED:TARGET], they are being asked to participate in this forward-looking decision layer. Whether current LLM agents can make defensible, evidence-grounded research judgements about an as-yet-unwritten future is therefore a central open question. Existing benchmarks do not fully answer this question. Prior work has mostly evaluat"
+    },
+    {
+     "intent": "background",
+     "confidence": 0.68,
+     "justification": "Grouped under 'execute research workflows' category among several cited works.",
+     "claim": "a central open question. Existing benchmarks do not fully answer this question. Prior work has mostly evaluated whether AI systems can answer questions over papers, synthesize literature [CITED], use tools [CITED], execute research workflows [CITED:TARGET], or generate components of future papers, such as related work, contribution content, citations, and impact [CITED]. None of these tasks asks whether an agent can produce an open-ended research decision, such as picking a bottleneck, ranking a research agenda, or selecting a venue, using only the e"
+    }
+   ],
+   "intent": "background",
+   "intent_distribution": {
+    "background": 2
+   },
+   "n_sites": 2,
+   "typed": {
+    "citing_id": "arxiv:2606.00644",
+    "cited_id": "openalex:W4414587939",
+    "cite_key": "chen2025mlrbench",
+    "sites": [
+     {
+      "supports_claim": "partial",
+      "priority": "helpful",
+      "confidence": 0.4,
+      "justification": "MLR-Bench is a benchmark for evaluating research agents rather than itself a deployed research agent, only loosely matching the claim.",
+      "claim": "becomes tomorrow's baseline. The value of a research decision ( e.g. , which bottleneck to attack, which direction is worth a six-month commitment) often lies in anticipating where the field is going. As autonomous research agents are increasingly deployed for ideation, planning, and scientific workflow execution [CITED:TARGET], they are being asked to participate in this forward-looking decision "
+     },
+     {
+      "supports_claim": "supports",
+      "priority": "obligatory",
+      "confidence": 0.7,
+      "justification": "MLR-Bench evaluates agents executing full research workflows (idea to paper writing), matching 'execute research workflows'.",
+      "claim": "a central open question. Existing benchmarks do not fully answer this question. Prior work has mostly evaluated whether AI systems can answer questions over papers, synthesize literature [CITED], use tools [CITED], execute research workflows [CITED:TARGET], or generate components of future papers, such as related work, contribution content, citations, and impact [CITED]. None of these tasks asks w"
+     }
+    ],
+    "support": "supports",
+    "any_does_not": false,
+    "priority": "obligatory",
+    "n_sites": 2
+   }
+  }
+ },
+ {
+  "key": "arxiv:2508.10308|openalex:W4404350150",
+  "region": "both",
+  "a": "arxiv:2508.10308",
+  "b": "openalex:W4404350150",
+  "semantic_edges": [
+   {
+    "src": "arxiv:2508.10308::k01",
+    "dst": "openalex:W4404350150::k00",
+    "relation": "builds_on",
+    "confidence": 0.5,
+    "evidence": "B's composite reward combining rule-based and judge-model rewards extends the reward-model approach used in CycleReviewer for review-generation RL.",
+    "similarity": 0.584,
+    "opus_confidence": 0.5,
+    "trust": 0.62,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "haiku"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {
+      "sonnet": "supports"
+     }
+    },
+    "directed": true,
+    "precedence": "by_date"
+   },
+   {
+    "src": "openalex:W4404350150::k00",
+    "dst": "arxiv:2508.10308::k00",
+    "relation": "supports",
+    "confidence": 0.55,
+    "evidence": "Both are RL frameworks for scientific review generation with reward models; closely related methods.",
+    "similarity": 0.598,
+    "opus_confidence": 0.55,
+    "trust": 0.67,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {
+      "haiku": "builds_on"
+     }
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   }
+  ],
+  "citation": {
+   "citing_id": "arxiv:2508.10308",
+   "cited_id": "openalex:W4404350150",
+   "cite_key": "weng2024cycleresearcher",
+   "sites": [
+    {
+     "intent": "background",
+     "confidence": 0.65,
+     "justification": "Generic capability claim about LLM-based review with target as passing example.",
+     "claim": "val fig:model-based-eval figure Recent advances in large language models (LLMs) have created promising opportunities for AI-assisted scientific assessment. These models can analyze complex scientific texts, identify methodological strengths and weaknesses, and generate structured feedback at scale [CITED:TARGET]. However, existing approaches to automated paper reviewing face three significant challenges. First, they often struggle to maintain factual accuracy and provide evidence-based critiques that connect the paper to relevant prior work [CITED]. Second, they tend to overestimate paper quality, assigning rating"
+    },
+    {
+     "intent": "background",
+     "confidence": 0.65,
+     "justification": "Descriptive summary of CycleResearcher grouped with The AI Scientist, no adoption or lone contrast.",
+     "claim": "d foundational datasets and benchmarks for review generation and analysis. Building upon these resources, systems like Reviewer2 [CITED] proposed a two-stage framework involving aspect prompt generation and review generation to improve the specificity and coverage of generated reviews. CycleResearcher [CITED:TARGET] and The AI Scientist [CITED] have introduced end-to-end frameworks that simulate the entire research lifecycle, including manuscript drafting and iterative peer review, where their reviewer modules are trained via supervised fine-tuning or operate through agentic inference. More recently, DeepReviewer"
+    }
+   ],
+   "intent": "background",
+   "intent_distribution": {
+    "background": 2
+   },
+   "n_sites": 2,
+   "typed": {
+    "citing_id": "arxiv:2508.10308",
+    "cited_id": "openalex:W4404350150",
+    "cite_key": "weng2024cycleresearcher",
+    "sites": [
+     {
+      "supports_claim": "partial",
+      "priority": "obligatory",
+      "confidence": 0.6,
+      "justification": "CycleReviewer provides iterative feedback and predicts paper scores, related to but narrower than the general 'structured feedback at scale' claim.",
+      "claim": "val fig:model-based-eval figure Recent advances in large language models (LLMs) have created promising opportunities for AI-assisted scientific assessment. These models can analyze complex scientific texts, identify methodological strengths and weaknesses, and generate structured feedback at scale [CITED:TARGET]. However, existing approaches to automated paper reviewing face three significant chal"
+     },
+     {
+      "supports_claim": "supports",
+      "priority": "obligatory",
+      "confidence": 0.8,
+      "justification": "Evidence confirms CycleResearcher/CycleReviewer form an end-to-end framework covering manuscript preparation and iterative peer review via preference/RL training.",
+      "claim": "d foundational datasets and benchmarks for review generation and analysis. Building upon these resources, systems like Reviewer2 [CITED] proposed a two-stage framework involving aspect prompt generation and review generation to improve the specificity and coverage of generated reviews. CycleResearcher [CITED:TARGET] and The AI Scientist [CITED] have introduced end-to-end frameworks that simulate t"
+     }
+    ],
+    "support": "supports",
+    "any_does_not": false,
+    "priority": "obligatory",
+    "n_sites": 2
+   }
+  }
+ },
+ {
+  "key": "openalex:W4389761608|openalex:W4403795293",
+  "region": "both",
+  "a": "openalex:W4389761608",
+  "b": "openalex:W4403795293",
+  "semantic_edges": [
+   {
+    "src": "openalex:W4403795293::k00",
+    "dst": "openalex:W4389761608::k00",
+    "relation": "builds_on",
+    "confidence": 0.95,
+    "evidence": "PaperQA2 is explicitly the successor agent extending PaperQA's RAG tool-based design.",
+    "similarity": 0.802,
+    "opus_confidence": 0.95,
+    "trust": 0.99,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": true,
+    "precedence": "by_date"
+   },
+   {
+    "src": "openalex:W4403795293::k01",
+    "dst": "openalex:W4389761608::k01",
+    "relation": "builds_on",
+    "confidence": 0.95,
+    "evidence": "LitQA2 is explicitly the successor benchmark extending LitQA's full-text retrieval evaluation.",
+    "similarity": 0.751,
+    "opus_confidence": 0.95,
+    "trust": 0.99,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": true,
+    "precedence": "by_date"
+   },
+   {
+    "src": "openalex:W4389761608::k01",
+    "dst": "openalex:W4403795293::k00",
+    "relation": "supports",
+    "confidence": 0.7,
+    "evidence": "PaperQA2 is evaluated on full-literature retrieval tasks like LitQA; the benchmark supports evaluation of such agents. Same lineage (LitQA used to evaluate PaperQA).",
+    "similarity": 0.641,
+    "opus_confidence": 0.7,
+    "trust": 0.94,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   },
+   {
+    "src": "openalex:W4389761608::k02",
+    "dst": "openalex:W4403795293::k00",
+    "relation": "supports",
+    "confidence": 0.72,
+    "evidence": "Both describe agent-based RAG systems for scientific literature that match or exceed expert/strong-LLM performance; B (PaperQA2) is likely the same or closely related system as A.",
+    "similarity": 0.59,
+    "opus_confidence": 0.72,
+    "trust": 0.96,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   },
+   {
+    "src": "openalex:W4389761608::k03",
+    "dst": "openalex:W4403795293::k00",
+    "relation": "supports",
+    "confidence": 0.85,
+    "evidence": "A describes a RAG agent matching expert humans in accuracy/time at lower cost; B (PaperQA2) is the agent achieving expert-level literature performance. Strongly aligned, likely same work.",
+    "similarity": 0.691,
+    "opus_confidence": 0.85,
+    "trust": 0.99,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   },
+   {
+    "src": "openalex:W4389761608::k03",
+    "dst": "openalex:W4403795293::k02",
+    "relation": "supports",
+    "confidence": 0.8,
+    "evidence": "B provides the human-AI comparison methodology with unrestricted human baselines used to establish A's claim of matching experts in accuracy and time.",
+    "similarity": 0.653,
+    "opus_confidence": 0.8,
+    "trust": 0.8,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [],
+     "n_confirm": 0,
+     "tier": "opus_only",
+     "dissent": {
+      "sonnet": "builds_on",
+      "haiku": "builds_on"
+     }
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   },
+   {
+    "src": "openalex:W4389761608::k03",
+    "dst": "openalex:W4403795293::k01",
+    "relation": "supports",
+    "confidence": 0.78,
+    "evidence": "B (LitQA2) is a full-literature retrieval benchmark with direct human comparison, matching A's claim of matching experts on a full-text retrieval benchmark.",
+    "similarity": 0.592,
+    "opus_confidence": 0.78,
+    "trust": 0.9,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "haiku"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {
+      "sonnet": "builds_on"
+     }
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   }
+  ],
+  "citation": {
+   "citing_id": "openalex:W4403795293",
+   "cited_id": "openalex:W4389761608",
+   "cite_key": "lala2023paperqa",
+   "sites": [
+    {
+     "intent": "uses_extends",
+     "confidence": 0.85,
+     "justification": "'Inspired by PaperQA' and PaperQA2 is explicitly built as its successor/extension.",
+     "claim": "sponse. As scientific literature is quite large, identifying the correct snippet is a challenge. Strategies like using metadata or hierarchical indexing can improve retrieval in this setting[CITED], but finding the correct paper for a task often requires iterating and revising queries. Inspired by PaperQA[CITED:TARGET], PaperQA2 is a RAG agent that treats retrieval and response generation as a multi-step agent task[CITED] instead of a direct procedure. PaperQA2 decomposes RAG into tools , allowing it to revise its search parameters and to generate and examine candidate answers before producing a final"
+    },
+    {
+     "intent": "uses_extends",
+     "confidence": 0.88,
+     "justification": "Directly reuses the PromptCollection object/infrastructure from PaperQA.",
+     "claim": "24-04-09 . summary\\_llm : The LLM used for the RCS step in the gather evidence tool, must be a valid Anthropic, OpenAI, or Gemini model identifier. This parameter was varied for the model ablations in fig:litqa_performance . prompts : A PromptCollection object from PaperQA [CITED:TARGET], which allows for specification of prompts in each tool, as well as features like turning off RCS (via prompts.skip\\_summarization ). The No RCS Model ablation used this input as well as the WikiCrow prompts. max\\_sources : The number of top ranked sources to be included in the generate"
+    }
+   ],
+   "intent": "uses_extends",
+   "intent_distribution": {
+    "uses_extends": 2
+   },
+   "n_sites": 2,
+   "typed": {
+    "citing_id": "openalex:W4403795293",
+    "cited_id": "openalex:W4389761608",
+    "cite_key": "lala2023paperqa",
+    "sites": [
+     {
+      "supports_claim": "supports",
+      "priority": "obligatory",
+      "confidence": 0.9,
+      "justification": "PaperQA is described as a RAG agent for scientific literature, matching the inspiration claim.",
+      "claim": "sponse. As scientific literature is quite large, identifying the correct snippet is a challenge. Strategies like using metadata or hierarchical indexing can improve retrieval in this setting[CITED], but finding the correct paper for a task often requires iterating and revising queries. Inspired by PaperQA[CITED:TARGET], PaperQA2 is a RAG agent that treats retrieval and response generation as a mul"
+     },
+     {
+      "supports_claim": "inconclusive",
+      "priority": "obligatory",
+      "confidence": 0.5,
+      "justification": "Abstract confirms PaperQA exists but not the specific PromptCollection component detail.",
+      "claim": "24-04-09 . summary\\_llm : The LLM used for the RCS step in the gather evidence tool, must be a valid Anthropic, OpenAI, or Gemini model identifier. This parameter was varied for the model ablations in fig:litqa_performance . prompts : A PromptCollection object from PaperQA [CITED:TARGET], which allows for specification of prompts in each tool, as well as features like turning off RCS (via prompts."
+     }
+    ],
+    "support": "supports",
+    "any_does_not": false,
+    "priority": "obligatory",
+    "n_sites": 2
+   }
+  }
+ },
+ {
+  "key": "arxiv:2504.21776|arxiv:2511.19399v3",
+  "region": "both",
+  "a": "arxiv:2504.21776",
+  "b": "arxiv:2511.19399v3",
+  "semantic_edges": [
+   {
+    "src": "arxiv:2504.21776::k03",
+    "dst": "arxiv:2511.19399v3::k04",
+    "relation": "supports",
+    "confidence": 0.55,
+    "evidence": "Both train models via RL on deep research tasks to better utilize/select research tools; closely aligned in goal and method.",
+    "similarity": 0.454,
+    "opus_confidence": 0.55,
+    "trust": 0.67,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {
+      "haiku": "builds_on"
+     }
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   }
+  ],
+  "citation": {
+   "citing_id": "arxiv:2511.19399v3",
+   "cited_id": "arxiv:2504.21776",
+   "cite_key": "li2025webthinker",
+   "sites": [
+    {
+     "intent": "compares_contrasts",
+     "confidence": 0.75,
+     "justification": "Target's reliance on static/proprietary components is singled out before 'In contrast, our work presents...'",
+     "claim": "ons/discussion Related Works Deep research agents. Recent work on DR agents often focuses on short-form QA [CITED]. While some systems target long-form research tasks, they typically rely on static workflows or proprietary components [CITED:TARGET], offer limited tool support, or do not fully release code and data. We provide additional discussion of these related works in Appendix app:related_works . In contrast, our work presents a fully open deep research framework that is trained and evaluated on realistic long-form tasks, natively supports multi-too"
+    },
+    {
+     "intent": "uses_extends",
+     "confidence": 0.9,
+     "justification": "'Following prior work' explicitly adopts the target's LLM-judge evaluation protocol",
+     "claim": "ph responses. We therefore evaluate how well our SFT and RL models generalize to short-form queries. Datasets. We evaluate short-form QA on SimpleQA [CITED], WebWalkerQA [CITED], and 2Wiki [CITED]. Following prior work [CITED:TARGET], we use an LLM judge to assess answer correctness and report Pass@1 accuracy with GPT-4.1 as the LLM judge. For efficiency, we evaluate on 1 , 000 randomly sampled questions each from SimpleQA and 2Wiki. Results. Table tab:short_form_results shows that performs competitively on short-"
+    }
+   ],
+   "intent": "compares_contrasts",
+   "intent_distribution": {
+    "compares_contrasts": 1,
+    "uses_extends": 1
+   },
+   "n_sites": 2,
+   "typed": {
+    "citing_id": "arxiv:2511.19399v3",
+    "cited_id": "arxiv:2504.21776",
+    "cite_key": "li2025webthinker",
+    "sites": [
+     {
+      "supports_claim": "does_not",
+      "priority": "obligatory",
+      "confidence": 0.55,
+      "justification": "contradicts: WebThinker's abstract describes an autonomous, dynamic, open-source (RL-trained) system, not the 'static workflows or proprietary components' the claim attributes to it.",
+      "claim": "ons/discussion Related Works Deep research agents. Recent work on DR agents often focuses on short-form QA [CITED]. While some systems target long-form research tasks, they typically rely on static workflows or proprietary components [CITED:TARGET], offer limited tool support, or do not fully release code and data. We provide additional discussion of these related works in Appendix app:related_wor"
+     },
+     {
+      "supports_claim": "inconclusive",
+      "priority": "obligatory",
+      "confidence": 0.5,
+      "justification": "Abstract lists benchmarks evaluated (GAIA, GPQA, WebWalkerQA, HLE) but doesn't mention using an LLM judge with GPT-4.1 for Pass@1 accuracy.",
+      "claim": "ph responses. We therefore evaluate how well our SFT and RL models generalize to short-form queries. Datasets. We evaluate short-form QA on SimpleQA [CITED], WebWalkerQA [CITED], and 2Wiki [CITED]. Following prior work [CITED:TARGET], we use an LLM judge to assess answer correctness and report Pass@1 accuracy with GPT-4.1 as the LLM judge. For efficiency, we evaluate on 1 , 000 randomly sampled qu"
+     }
+    ],
+    "support": "does_not",
+    "any_does_not": true,
+    "priority": "obligatory",
+    "n_sites": 2
+   }
+  }
+ },
+ {
+  "key": "arxiv:2606.06473|openalex:W7140287209",
+  "region": "both",
+  "a": "arxiv:2606.06473",
+  "b": "openalex:W7140287209",
+  "semantic_edges": [
+   {
+    "src": "arxiv:2606.06473::k01",
+    "dst": "openalex:W7140287209::k01",
+    "relation": "builds_on",
+    "confidence": 0.55,
+    "evidence": "A uses agentic tree search for open-ended code/hypothesis exploration; MCGS is a concrete improvement to tree-based search that A's approach could employ.",
+    "similarity": 0.46,
+    "opus_confidence": 0.55,
+    "trust": 0.55,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [],
+     "n_confirm": 0,
+     "tier": "opus_only",
+     "dissent": {}
+    },
+    "directed": true,
+    "precedence": "by_date"
+   },
+   {
+    "src": "arxiv:2606.06473::k03",
+    "dst": "openalex:W7140287209::k01",
+    "relation": "builds_on",
+    "confidence": 0.55,
+    "evidence": "Both concern long-horizon code optimization agents; A's tree-search execution and B's editing-mode selection are complementary components of such agents.",
+    "similarity": 0.535,
+    "opus_confidence": 0.55,
+    "trust": 0.67,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {
+      "haiku": "supports"
+     }
+    },
+    "directed": true,
+    "precedence": "by_date"
+   }
+  ],
+  "citation": {
+   "citing_id": "arxiv:2606.06473",
+   "cited_id": "openalex:W7140287209",
+   "cite_key": "aiscientist",
+   "sites": [
+    {
+     "intent": "background",
+     "confidence": 0.8,
+     "justification": "Listed as one example application area among several cited works.",
+     "claim": "is reshaping scientific research and complex engineering, leading to the paradigm of AI for Science [CITED]. With the continued advancement of large language models (LLMs), LLM-based agent systems [CITED] are now being applied to long-horizon autonomous tasks such as scientific discovery [CITED:TARGET], automated experimentation [CITED], and end-to-end algorithm design [CITED]. Unlike single-turn reasoning, these scenarios involve open search spaces and limited time budgets, where agents must continually generate solutions, execute code, evaluate outcomes, and adjust strate"
+    }
+   ],
+   "intent": "background",
+   "intent_distribution": {
+    "background": 1
+   },
+   "n_sites": 1,
+   "typed": {
+    "citing_id": "arxiv:2606.06473",
+    "cited_id": "openalex:W7140287209",
+    "cite_key": "aiscientist",
+    "sites": [
+     {
+      "supports_claim": "supports",
+      "priority": "helpful",
+      "confidence": 0.55,
+      "justification": "The AI Scientist automates the scientific research process, matching 'agent systems applied to scientific discovery'.",
+      "claim": "is reshaping scientific research and complex engineering, leading to the paradigm of AI for Science [CITED]. With the continued advancement of large language models (LLMs), LLM-based agent systems [CITED] are now being applied to long-horizon autonomous tasks such as scientific discovery [CITED:TARGET], automated experimentation [CITED], and end-to-end algorithm design [CITED]. Unlike single-turn "
+     }
+    ],
+    "support": "supports",
+    "any_does_not": false,
+    "priority": "helpful",
+    "n_sites": 1
+   }
+  }
+ },
+ {
+  "key": "arxiv:2505.18705v1|openalex:W4414827381",
+  "region": "both",
+  "a": "arxiv:2505.18705v1",
+  "b": "openalex:W4414827381",
+  "semantic_edges": [
+   {
+    "src": "openalex:W4414827381::k00",
+    "dst": "arxiv:2505.18705v1::k00",
+    "relation": "supports",
+    "confidence": 0.6,
+    "evidence": "Both are fully autonomous multi-agent systems covering the complete research pipeline; closely parallel contributions.",
+    "similarity": 0.728,
+    "opus_confidence": 0.6,
+    "trust": 0.6,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [],
+     "n_confirm": 0,
+     "tier": "opus_only",
+     "dissent": {
+      "sonnet": "builds_on",
+      "haiku": "builds_on"
+     }
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   }
+  ],
+  "citation": {
+   "citing_id": "arxiv:2505.18705v1",
+   "cited_id": "openalex:W4414827381",
+   "cite_key": "yamada2025aiscientistv2",
+   "sites": [
+    {
+     "intent": "background",
+     "confidence": 0.8,
+     "justification": "Descriptive survey statement about the successor system's capabilities, no adoption or contrast.",
+     "claim": "s capable of conducting entire research processes. The AI Scientist framework [CITED] represents the first system for automated scientific discovery, where frontier language models independently generate research ideas, conduct experiments, and produce scientific papers. Its successor, AI Scientist-v2 [CITED:TARGET], enhanced these capabilities through agentic tree search methodology and eliminated reliance on human-authored code templates, achieving the first peer-reviewed workshop acceptance for a fully AI-generated paper. CycleResearcher [CITED] demonstrates the viability of open-source LLMs for autonomo"
+    },
+    {
+     "intent": "background",
+     "confidence": 0.6,
+     "justification": "'Building on this paradigm' refers to the general paradigm exemplified by the target, not direct technical adoption of the target's system.",
+     "claim": "implementation, experimental validation, and paper writing. fig:overall figure* Multi-Agent System Overview of Recent work has demonstrated the potential of end-to-end AI systems that autonomously generate scientific ideas, conduct experiments, and produce written documentation [CITED:TARGET]. Building on this paradigm, \\ presents a comprehensive framework for autonomous research that systematically progresses through three key stages: i) Literature Review and Idea Generation ; ii) New Algorithm Design, Implementation and Validation and iii) Automated Scientific Documentati"
+    }
+   ],
+   "intent": "background",
+   "intent_distribution": {
+    "background": 2
+   },
+   "n_sites": 2,
+   "typed": {
+    "citing_id": "arxiv:2505.18705v1",
+    "cited_id": "openalex:W4414827381",
+    "cite_key": "yamada2025aiscientistv2",
+    "sites": [
+     {
+      "supports_claim": "supports",
+      "priority": "obligatory",
+      "confidence": 0.92,
+      "justification": "AI Scientist-v2 uses agentic tree search, drops code templates, and achieved first peer-reviewed workshop acceptance, all as claimed.",
+      "claim": "s capable of conducting entire research processes. The AI Scientist framework [CITED] represents the first system for automated scientific discovery, where frontier language models independently generate research ideas, conduct experiments, and produce scientific papers. Its successor, AI Scientist-v2 [CITED:TARGET], enhanced these capabilities through agentic tree search methodology and eliminate"
+     },
+     {
+      "supports_claim": "supports",
+      "priority": "obligatory",
+      "confidence": 0.85,
+      "justification": "It is an end-to-end system autonomously generating ideas, running experiments, and authoring manuscripts.",
+      "claim": "implementation, experimental validation, and paper writing. fig:overall figure* Multi-Agent System Overview of Recent work has demonstrated the potential of end-to-end AI systems that autonomously generate scientific ideas, conduct experiments, and produce written documentation [CITED:TARGET]. Building on this paradigm, \\ presents a comprehensive framework for autonomous research that systematical"
+     }
+    ],
+    "support": "supports",
+    "any_does_not": false,
+    "priority": "obligatory",
+    "n_sites": 2
+   }
+  }
+ },
+ {
+  "key": "openalex:W4400734098|openalex:W4405561462",
+  "region": "both",
+  "a": "openalex:W4400734098",
+  "b": "openalex:W4405561462",
+  "semantic_edges": [
+   {
+    "src": "openalex:W4405561462::k02",
+    "dst": "openalex:W4400734098::k01",
+    "relation": "contradicts",
+    "confidence": 0.55,
+    "evidence": "A says LLMs are systematically too lenient and gap exists with humans; B says LLM feedback overlaps with human reviews at rates comparable to human-human overlap, suggesting parity. These are in tension.",
+    "similarity": 0.623,
+    "opus_confidence": 0.55,
+    "trust": 0.79,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   }
+  ],
+  "citation": {
+   "citing_id": "openalex:W4405561462",
+   "cited_id": "openalex:W4400734098",
+   "cite_key": "can_llm_provide_useful_feedback",
+   "sites": [
+    {
+     "intent": "background",
+     "confidence": 0.72,
+     "justification": "Related-work section describes the target's findings as prior art without adopting or contrasting the citing work's own method",
+     "claim": "ection Review Generation with Large Language Models With the emergence of powerful LLMs, several recent studies have explored their potential for automated review generation. [CITED] conducted experiments using OpenAI's GPT-4 for reviewing papers but found limitations in technical depth and consistency. [CITED:TARGET] show that while LLMs can provide useful feedback, they tend to focus more on writing and presentation issues rather than technical contributions. The AI Scientist [CITED] is a recent framework for fully automated scientific discovery based on GPT4o, including research idea generation, coding, experiment ex"
+    }
+   ],
+   "intent": "background",
+   "intent_distribution": {
+    "background": 1
+   },
+   "n_sites": 1,
+   "typed": {
+    "citing_id": "openalex:W4405561462",
+    "cited_id": "openalex:W4400734098",
+    "cite_key": "can_llm_provide_useful_feedback",
+    "sites": [
+     {
+      "supports_claim": "inconclusive",
+      "priority": "obligatory",
+      "confidence": 0.6,
+      "justification": "Abstract shows GPT-4 feedback overlaps with human reviewers but never states the specific finding that GPT-4 focuses more on writing/presentation than technical contributions.",
+      "claim": "ection Review Generation with Large Language Models With the emergence of powerful LLMs, several recent studies have explored their potential for automated review generation. [CITED] conducted experiments using OpenAI's GPT-4 for reviewing papers but found limitations in technical depth and consistency. [CITED:TARGET] show that while LLMs can provide useful feedback, they tend to focus more on wri"
+     }
+    ],
+    "support": "inconclusive",
+    "any_does_not": false,
+    "priority": "obligatory",
+    "n_sites": 1
+   }
+  }
+ },
+ {
+  "key": "arxiv:2507.18901v1|openalex:W4403707291",
+  "region": "both",
+  "a": "arxiv:2507.18901v1",
+  "b": "openalex:W4403707291",
+  "semantic_edges": [
+   {
+    "src": "arxiv:2507.18901v1::k00",
+    "dst": "openalex:W4403707291::k00",
+    "relation": "builds_on",
+    "confidence": 0.55,
+    "evidence": "Both are reproducibility benchmarks; REPRO-Bench focuses on social science reproduction, related to CORE-Bench's broader reproducibility benchmark.",
+    "similarity": 0.759,
+    "opus_confidence": 0.55,
+    "trust": 0.67,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "haiku"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {
+      "sonnet": "supports"
+     }
+    },
+    "directed": true,
+    "precedence": "by_date"
+   },
+   {
+    "src": "openalex:W4403707291::k00",
+    "dst": "arxiv:2507.18901v1::k01",
+    "relation": "supports",
+    "confidence": 0.6,
+    "evidence": "B reports results of CORE-Agent on a reproducibility task; directly uses/relates to the CORE benchmark line of work assessing reproducibility.",
+    "similarity": 0.638,
+    "opus_confidence": 0.6,
+    "trust": 0.72,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "haiku"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {
+      "sonnet": "builds_on"
+     }
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   },
+   {
+    "src": "openalex:W4403707291::k01",
+    "dst": "arxiv:2507.18901v1::k00",
+    "relation": "supports",
+    "confidence": 0.45,
+    "evidence": "Both about computational reproducibility evaluation; the fast harness supports running benchmarks like REPRO-Bench efficiently.",
+    "similarity": 0.575,
+    "opus_confidence": 0.45,
+    "trust": 0.69,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   },
+   {
+    "src": "openalex:W4403707291::k02",
+    "dst": "arxiv:2507.18901v1::k01",
+    "relation": "supports",
+    "confidence": 0.85,
+    "evidence": "Both describe CORE-Agent achieving ~21% accuracy on reproducibility scoring tasks; the same agent and result, strongly corroborating.",
+    "similarity": 0.549,
+    "opus_confidence": 0.85,
+    "trust": 0.99,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   }
+  ],
+  "citation": {
+   "citing_id": "arxiv:2507.18901v1",
+   "cited_id": "openalex:W4403707291",
+   "cite_key": "siegel2024corebenchfosteringcredibilitypublished",
+   "sites": [
+    {
+     "intent": "compares_contrasts",
+     "confidence": 0.85,
+     "justification": "'unlike existing work [CITED:TARGET] on reproducibility that focuses solely on...' explicitly contrasts own approach with the target.",
+     "claim": "analysis scripts. We review the importance of computational reproducibility in social science research in Section subsec:cr_importance and highlight the limitations of existing benchmarks in evaluating AI agents' ability to assess reproducibility in Section subsec:limi . Furthermore, unlike existing work [CITED:TARGET] on reproducibility that focuses solely on reproducing results using the provided code, we also investigate the validity of the code, including data processing and analysis scripts, adhering to formal guidelines and definitions [CITED]. following the definition by [CITED], which is also advo"
+    },
+    {
+     "intent": "compares_contrasts",
+     "confidence": 0.85,
+     "justification": "'Our work goes beyond simply reproducing results... as seen in existing work like CORE-Bench [CITED:TARGET]' directly contrasts with the target.",
+     "claim": "data processing and analysis scripts, adhering to formal guidelines and definitions [CITED]. following the definition by [CITED], which is also advocated by [CITED]. Our work goes beyond simply reproducing results with the provided code, as seen in existing work like CORE-Bench [CITED:TARGET]. We also investigate the validity of the code, including data processing and analysis scripts, following the definitions proposed by [CITED] and advocated by [CITED]. Furthermore, unlike prior work [CITED] on reproducibility that focuses solely on repr"
+    }
+   ],
+   "intent": "compares_contrasts",
+   "intent_distribution": {
+    "compares_contrasts": 2
+   },
+   "n_sites": 2,
+   "typed": {
+    "citing_id": "arxiv:2507.18901v1",
+    "cited_id": "openalex:W4403707291",
+    "cite_key": "siegel2024corebenchfosteringcredibilitypublished",
+    "sites": [
+     {
+      "supports_claim": "supports",
+      "priority": "obligatory",
+      "confidence": 0.85,
+      "justification": "CORE-Bench focuses on reproducing results using provided code and data, matching the characterization.",
+      "claim": "analysis scripts. We review the importance of computational reproducibility in social science research in Section subsec:cr_importance and highlight the limitations of existing benchmarks in evaluating AI agents' ability to assess reproducibility in Section subsec:limi . Furthermore, unlike existing work [CITED:TARGET] on reproducibility that focuses solely on reproducing results using the provide"
+     },
+     {
+      "supports_claim": "supports",
+      "priority": "obligatory",
+      "confidence": 0.85,
+      "justification": "CORE-Bench is named as reproducing results with provided code, exactly as claimed.",
+      "claim": "data processing and analysis scripts, adhering to formal guidelines and definitions [CITED]. following the definition by [CITED], which is also advocated by [CITED]. Our work goes beyond simply reproducing results with the provided code, as seen in existing work like CORE-Bench [CITED:TARGET]. We also investigate the validity of the code, including data processing and analysis scripts, following t"
+     }
+    ],
+    "support": "supports",
+    "any_does_not": false,
+    "priority": "obligatory",
+    "n_sites": 2
+   }
+  }
+ },
+ {
+  "key": "arxiv:2605.27905|openalex:W4412889809",
+  "region": "both",
+  "a": "arxiv:2605.27905",
+  "b": "openalex:W4412889809",
+  "semantic_edges": [
+   {
+    "src": "openalex:W4412889809::k03",
+    "dst": "arxiv:2605.27905::k00",
+    "relation": "supports",
+    "confidence": 0.4,
+    "evidence": "Both concern AI scientific ideation evaluation; A's findings on multi-agent ideation could be assessed against B's corpus, but distinct contributions.",
+    "similarity": 0.688,
+    "opus_confidence": 0.4,
+    "trust": 0.64,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   }
+  ],
+  "citation": {
+   "citing_id": "arxiv:2605.27905",
+   "cited_id": "openalex:W4412889809",
+   "cite_key": "su2025manyheads",
+   "sites": [
+    {
+     "intent": "background",
+     "confidence": 0.7,
+     "justification": "Descriptive mention of VirSci's mechanism as prior work motivating the citing question, no adoption or direct contrast.",
+     "claim": "stems also target scientific hypothesis and idea generation. AI co-scientist uses generate-debate-evolve mechanisms to formulate, rank, and refine scientific hypotheses [CITED], while VirSci studies how collaboration structure among LLM agents affects the quality of generated scientific ideas [CITED:TARGET]. These systems show that LLM agents can produce complete research artifacts. They also motivate a broader question: when such systems are repeatedly queried from similar starting points, do they diversify scientific search or reinforce nearby directions? Our work studies this consequence of agentic research systems by"
+    }
+   ],
+   "intent": "background",
+   "intent_distribution": {
+    "background": 1
+   },
+   "n_sites": 1,
+   "typed": {
+    "citing_id": "arxiv:2605.27905",
+    "cited_id": "openalex:W4412889809",
+    "cite_key": "su2025manyheads",
+    "sites": [
+     {
+      "supports_claim": "supports",
+      "priority": "obligatory",
+      "confidence": 0.85,
+      "justification": "Evidence confirms VirSci studies how agent collaboration structure affects novelty of generated scientific ideas.",
+      "claim": "stems also target scientific hypothesis and idea generation. AI co-scientist uses generate-debate-evolve mechanisms to formulate, rank, and refine scientific hypotheses [CITED], while VirSci studies how collaboration structure among LLM agents affects the quality of generated scientific ideas [CITED:TARGET]. These systems show that LLM agents can produce complete research artifacts. They also moti"
+     }
+    ],
+    "support": "supports",
+    "any_does_not": false,
+    "priority": "obligatory",
+    "n_sites": 1
+   }
+  }
+ },
+ {
+  "key": "openalex:W4402952666|openalex:W4404573571",
+  "region": "both",
+  "a": "openalex:W4402952666",
+  "b": "openalex:W4404573571",
+  "semantic_edges": [
+   {
+    "src": "openalex:W4402952666::k00",
+    "dst": "openalex:W4404573571::k03",
+    "relation": "supports",
+    "confidence": 0.45,
+    "evidence": "Both describe full-process autonomous AI scientist systems producing scientific discoveries; B's finding supports the general feasibility claim of A.",
+    "similarity": 0.668,
+    "opus_confidence": 0.45,
+    "trust": 0.69,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   },
+   {
+    "src": "openalex:W4404573571::k00",
+    "dst": "openalex:W4402952666::k00",
+    "relation": "builds_on",
+    "confidence": 0.5,
+    "evidence": "Baby-AIGS explicitly adds a FalsificationAgent addressing capabilities missing from prior end-to-end systems like The AI Scientist; plausibly extends that line.",
+    "similarity": 0.588,
+    "opus_confidence": 0.5,
+    "trust": 0.62,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "haiku"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {
+      "sonnet": "supports"
+     }
+    },
+    "directed": true,
+    "precedence": "by_date"
+   }
+  ],
+  "citation": {
+   "citing_id": "openalex:W4404573571",
+   "cited_id": "openalex:W4402952666",
+   "cite_key": "lu2024aiscientist",
+   "sites": [
+    {
+     "intent": "background",
+     "confidence": 0.7,
+     "justification": "Descriptive one-line summary in a categorized survey list, no use or singled-out critique.",
+     "claim": "iterativeresearchidea proposed ... Performance Optimization Agents RD-Agent [CITED] proposed ... Human Copilot MLR-Copilot [CITED] proposed ... Automated AI Agent Scientists AI-Scientist [CITED:TARGET] proposed a fully automated AI driven scientific research framework. Position Papers Pitfalls of Current Systems \u4ece\u6548\u679c\u800c\u975e\u8bbe\u8ba1\u4e0a\u5206\u6790\u7f3a\u9677 AIGS System How Human Conduct Scientific Research In order to put forward an AI Agent system that can autonomously conduct the e"
+    },
+    {
+     "intent": "background",
+     "confidence": 0.65,
+     "justification": "Describes AI Scientist's claims then critiques the whole research line generally, not the target alone.",
+     "claim": "construct end-to-end systems that cover both creativity and executability . MLR-copilot [CITED] takes existing research papers as input, and produces execution results by both generating ideas and implementing experiments. AI Scientist [CITED:TARGET] further claims to be able to organize the generated ideas and experimental results into research papers as the output. This line of research arouses significant excitement in the community, but is feedbacked with controversy: Criticisms include the incremental nature of the generated knowledge ``tweaks\", as well as th"
+    }
+   ],
+   "intent": "background",
+   "intent_distribution": {
+    "background": 2
+   },
+   "n_sites": 2,
+   "typed": {
+    "citing_id": "openalex:W4404573571",
+    "cited_id": "openalex:W4402952666",
+    "cite_key": "lu2024aiscientist",
+    "sites": [
+     {
+      "supports_claim": "supports",
+      "priority": "obligatory",
+      "confidence": 0.95,
+      "justification": "Abstract describes AI Scientist as a fully automatic scientific discovery framework.",
+      "claim": "iterativeresearchidea proposed ... Performance Optimization Agents RD-Agent [CITED] proposed ... Human Copilot MLR-Copilot [CITED] proposed ... Automated AI Agent Scientists AI-Scientist [CITED:TARGET] proposed a fully automated AI driven scientific research framework. Position Papers Pitfalls of Current Systems \u4ece\u6548\u679c\u800c\u975e\u8bbe\u8ba1\u4e0a\u5206\u6790\u7f3a\u9677 AIGS System How Human Conduct Scientific Research In order to put forward"
+     },
+     {
+      "supports_claim": "supports",
+      "priority": "obligatory",
+      "confidence": 0.9,
+      "justification": "Abstract states it writes a full scientific paper from ideas and results.",
+      "claim": "construct end-to-end systems that cover both creativity and executability . MLR-copilot [CITED] takes existing research papers as input, and produces execution results by both generating ideas and implementing experiments. AI Scientist [CITED:TARGET] further claims to be able to organize the generated ideas and experimental results into research papers as the output. This line of research arouses "
+     }
+    ],
+    "support": "supports",
+    "any_does_not": false,
+    "priority": "obligatory",
+    "n_sites": 2
+   }
+  }
+ },
+ {
+  "key": "openalex:W4405035007|openalex:W4405561462",
+  "region": "both",
+  "a": "openalex:W4405035007",
+  "b": "openalex:W4405561462",
+  "semantic_edges": [
+   {
+    "src": "openalex:W4405035007::k03",
+    "dst": "openalex:W4405561462::k02",
+    "relation": "supports",
+    "confidence": 0.55,
+    "evidence": "Both document LLM reviewing flaws leading to inflated/favorable ratings; A's biases and B's leniency both show LLMs over-rate papers.",
+    "similarity": 0.708,
+    "opus_confidence": 0.55,
+    "trust": 0.79,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   }
+  ],
+  "citation": {
+   "citing_id": "openalex:W4405561462",
+   "cited_id": "openalex:W4405035007",
+   "cite_key": "are_we_there_yet",
+   "sites": [
+    {
+     "intent": "background",
+     "confidence": 0.7,
+     "justification": "General statement about ethical concerns raised by automation, part of a broader list.",
+     "claim": "eview, including institutional bias [CITED], gender bias [CITED], and strategic manipulation [CITED]. While automation through NLP offers potential solutions, it also raises new ethical concerns about fairness, transparency, and accountability [CITED:TARGET]. Conclusion We presented OpenReviewer, an open-source system for generating high-quality peer reviews of ML/AI papers. Through careful fine-tuning on expert reviews and evaluation against multiple baselines, we demonstrated that OpenReviewer produces more realistic and critical reviews than general-purpose"
+    }
+   ],
+   "intent": "background",
+   "intent_distribution": {
+    "background": 1
+   },
+   "n_sites": 1,
+   "typed": {
+    "citing_id": "openalex:W4405561462",
+    "cited_id": "openalex:W4405035007",
+    "cite_key": "are_we_there_yet",
+    "sites": [
+     {
+      "supports_claim": "supports",
+      "priority": "obligatory",
+      "confidence": 0.7,
+      "justification": "Evidence directly analyzes vulnerabilities including strategic manipulation of LLM-generated reviews, matching the claim's cited risk.",
+      "claim": "eview, including institutional bias [CITED], gender bias [CITED], and strategic manipulation [CITED]. While automation through NLP offers potential solutions, it also raises new ethical concerns about fairness, transparency, and accountability [CITED:TARGET]. Conclusion We presented OpenReviewer, an open-source system for generating high-quality peer reviews of ML/AI papers. Through careful fine-t"
+     }
+    ],
+    "support": "supports",
+    "any_does_not": false,
+    "priority": "obligatory",
+    "n_sites": 1
+   }
+  }
+ },
+ {
+  "key": "arxiv:2605.28655|openalex:W4417287919",
+  "region": "both",
+  "a": "arxiv:2605.28655",
+  "b": "openalex:W4417287919",
+  "semantic_edges": [
+   {
+    "src": "arxiv:2605.28655::k00",
+    "dst": "openalex:W4417287919::k00",
+    "relation": "builds_on",
+    "confidence": 0.55,
+    "evidence": "Both describe end-to-end multi-agent autonomous scientific discovery systems; AutoScientists' decentralized design is a different approach but in the same lineage as Robin's lab-in-the-loop discovery system.",
+    "similarity": 0.646,
+    "opus_confidence": 0.55,
+    "trust": 0.67,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "haiku"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {
+      "sonnet": "supports"
+     }
+    },
+    "directed": true,
+    "precedence": "by_date"
+   }
+  ],
+  "citation": {
+   "citing_id": "arxiv:2605.28655",
+   "cited_id": "openalex:W4417287919",
+   "cite_key": "ghareeb2025robin",
+   "sites": [
+    {
+     "intent": "background",
+     "confidence": 0.75,
+     "justification": "Grouped with several citations describing general biomedical agent capabilities.",
+     "claim": "dach2025agenticaiscientificdiscovery, liu2025visionautoresearchllm, schmidgall2025agent, bragg2026astabenchrigorousbenchmarkingai, yan2025lmrbenchevaluatingllmagents . Biomedical agents combine multi-step reasoning with biomedical tools, literature grounding, omics analysis, code execution, and evidence reconciliation [CITED:TARGET]. Other systems push toward longer-horizon discovery through repeated cycles of literature search, hypothesis generation, debate, refinement, tool integration, optimization, equation discovery, self-directed exploration, and skill accumulation mitchener2025kosmos, gottweis2025towards, pu2025piflow, ding2025scitoo"
+    }
+   ],
+   "intent": "background",
+   "intent_distribution": {
+    "background": 1
+   },
+   "n_sites": 1,
+   "typed": {
+    "citing_id": "arxiv:2605.28655",
+    "cited_id": "openalex:W4417287919",
+    "cite_key": "ghareeb2025robin",
+    "sites": [
+     {
+      "supports_claim": "partial",
+      "priority": "helpful",
+      "confidence": 0.5,
+      "justification": "Robin integrates literature search with data analysis (multi-step reasoning, literature grounding) but omics analysis, code execution, and evidence reconciliation aren't explicit.",
+      "claim": "dach2025agenticaiscientificdiscovery, liu2025visionautoresearchllm, schmidgall2025agent, bragg2026astabenchrigorousbenchmarkingai, yan2025lmrbenchevaluatingllmagents . Biomedical agents combine multi-step reasoning with biomedical tools, literature grounding, omics analysis, code execution, and evidence reconciliation [CITED:TARGET]. Other systems push toward longer-horizon discovery through repea"
+     }
+    ],
+    "support": "partial",
+    "any_does_not": false,
+    "priority": "helpful",
+    "n_sites": 1
+   }
+  }
+ },
+ {
+  "key": "arxiv:2506.11763|arxiv:2603.20884v3",
+  "region": "both",
+  "a": "arxiv:2506.11763",
+  "b": "arxiv:2603.20884v3",
+  "semantic_edges": [
+   {
+    "src": "arxiv:2603.20884v3::k02",
+    "dst": "arxiv:2506.11763::k01",
+    "relation": "supports",
+    "confidence": 0.4,
+    "evidence": "Both are automated evaluation methods for open-ended/long-form research report generation aligned with human judgment; they propose alternative approaches to a shared problem, but not directly extending each other.",
+    "similarity": 0.499,
+    "opus_confidence": 0.4,
+    "trust": 0.52,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet"
+     ],
+     "n_confirm": 1,
+     "tier": "double",
+     "dissent": {
+      "haiku": "builds_on"
+     }
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   },
+   {
+    "src": "arxiv:2603.20884v3::k02",
+    "dst": "arxiv:2506.11763::k03",
+    "relation": "supports",
+    "confidence": 0.45,
+    "evidence": "Both are human-validated automated evaluation methods for open-ended research report generation; complementary approaches to the same problem.",
+    "similarity": 0.485,
+    "opus_confidence": 0.45,
+    "trust": 0.69,
+    "agreement": {
+     "anchor": "opus",
+     "confirmed_by": [
+      "sonnet",
+      "haiku"
+     ],
+     "n_confirm": 2,
+     "tier": "triple",
+     "dissent": {}
+    },
+    "directed": false,
+    "precedence": "symmetric"
+   }
+  ],
+  "citation": {
+   "citing_id": "arxiv:2603.20884v3",
+   "cited_id": "arxiv:2506.11763",
+   "cite_key": "du2025deepresearchbenchcomprehensivebenchmark",
+   "sites": [
+    {
+     "intent": "uses_extends",
+     "confidence": 0.92,
+     "justification": "Explicitly states 'we follow the core idea of DeepResearchBench' for their citation accuracy protocol.",
+     "claim": "imation. Finally, the reranker selects the top 7 most relevant chunks for each query, which are subsequently provided to the Analyst Agent\u2014and the checklist evaluator\u2014as highly relevant, citation-grounded evidence. Citation Accuracy For Citation Accuracy (CA), we follow the core idea of DeepResearchBench [CITED:TARGET]: citation-bearing claims are extracted from the report, mapped to the cited full-text papers, and judged according to whether the cited source actually supports the claim. Under this protocol, self-validation improves CA from 89.90 to 93.72, while GPT-5 DeepResearch obtains 87.60. This indicates that the Validator and"
+    }
+   ],
+   "intent": "uses_extends",
+   "intent_distribution": {
+    "uses_extends": 1
+   },
+   "n_sites": 1,
+   "typed": {
+    "citing_id": "arxiv:2603.20884v3",
+    "cited_id": "arxiv:2506.11763",
+    "cite_key": "du2025deepresearchbenchcomprehensivebenchmark",
+    "sites": [
+     {
+      "supports_claim": "supports",
+      "priority": "obligatory",
+      "confidence": 0.85,
+      "justification": "DeepResearch Bench evaluates citation accuracy of claims against cited sources, as cited.",
+      "claim": "imation. Finally, the reranker selects the top 7 most relevant chunks for each query, which are subsequently provided to the Analyst Agent\u2014and the checklist evaluator\u2014as highly relevant, citation-grounded evidence. Citation Accuracy For Citation Accuracy (CA), we follow the core idea of DeepResearchBench [CITED:TARGET]: citation-bearing claims are extracted from the report, mapped to the cited ful"
+     }
+    ],
+    "support": "supports",
+    "any_does_not": false,
+    "priority": "obligatory",
+    "n_sites": 1
+   }
+  }
+ }
+]

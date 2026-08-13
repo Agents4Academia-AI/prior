@@ -1,0 +1,38 @@
+{
+ "semantic_only": {
+  "n": 1,
+  "judge_relations": {
+   "related": 1
+  },
+  "substantive_rate": 1.0,
+  "current_type_exact_match": 0.0,
+  "citation_changes": {
+   "no_citation": 1
+  },
+  "intent_agreement": 0.0
+ },
+ "citation_only": {
+  "n": 1,
+  "judge_relations": {
+   "refines": 1
+  },
+  "substantive_rate": 1.0,
+  "current_type_exact_match": null,
+  "citation_changes": {
+   "no_change": 1
+  },
+  "intent_agreement": 0.0
+ },
+ "both": {
+  "n": 1,
+  "judge_relations": {
+   "supports": 1
+  },
+  "substantive_rate": 1.0,
+  "current_type_exact_match": 1.0,
+  "citation_changes": {
+   "strengthens": 1
+  },
+  "intent_agreement": 0.0
+ }
+}

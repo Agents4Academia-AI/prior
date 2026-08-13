@@ -36,7 +36,7 @@ from .llm import extract_json  # reuse the lenient JSON parser
 
 _counter = itertools.count()
 _SPAWN_CMD = "claude"
-_SPAWN_ARGS = ["--ax-screen-reader", "--dangerously-skip-permissions"]
+_SPAWN_ARGS = ["--ax-screen-reader", "--safe-mode", "--dangerously-skip-permissions"]
 
 # Where Claude is launched. CLAUDE.md auto-discovery etc. is harmless here.
 _CWD = str(__import__("pathlib").Path(__file__).resolve().parents[2])
