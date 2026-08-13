@@ -155,17 +155,30 @@ def bibtex_entries(text: str) -> list[tuple[str, str]]:
 
 
 def bibliography_entries(files: dict[str, str]) -> list[tuple[str, str]]:
-    """Parse every bibliography file independently and reject conflicting keys."""
-    by_key: dict[str, set[str]] = {}
+    """Parse files independently; prefer rendered BBL entries over BibTeX source.
+
+    A normal source bundle often contains the same key in both files with
+    deliberately different text (formatted ``.bbl`` versus fielded ``.bib``).
+    That is not ambiguity: the BBL is the record actually connected to ``\\cite``.
+    Conflicting bodies *within* the selected tier still abstain.
+    """
+    bbl_by_key: dict[str, set[str]] = {}
+    bib_by_key: dict[str, set[str]] = {}
     for name, text in files.items():
         lower = name.lower()
-        parsed = bbl_entries(text) if lower.endswith(".bbl") else (
+        is_bbl = lower.endswith(".bbl")
+        parsed = bbl_entries(text) if is_bbl else (
             bibtex_entries(text) if lower.endswith(".bib") else [])
+        target = bbl_by_key if is_bbl else bib_by_key
         for key, body in parsed:
             clean = re.sub(r"\s+", " ", body).strip()
-            by_key.setdefault(key, set()).add(clean)
-    return [(key, next(iter(bodies))) for key, bodies in by_key.items()
-            if len(bodies) == 1]
+            target.setdefault(key, set()).add(clean)
+    out = []
+    for key in dict.fromkeys([*bbl_by_key, *bib_by_key]):
+        bodies = bbl_by_key.get(key) or bib_by_key.get(key) or set()
+        if len(bodies) == 1:
+            out.append((key, next(iter(bodies))))
+    return out
 
 
 def match_entries(entries: list[tuple[str, str]], signatures: dict[str, dict],
