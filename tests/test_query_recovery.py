@@ -34,7 +34,7 @@ def test_recovery_reformulates_and_accumulates(monkeypatch):
 
     corpus, dropped, stats = scoper.explore(
         "topic", hops=0, recover_rounds=2, use_prefilter=False,
-        repair_abstracts=False, progress=lambda m: None)
+        repair_abstracts=False, resolve_versions=False, progress=lambda m: None)
 
     assert n["gather"] == 3            # round 0 + 2 recovery rounds
     assert n["followup"] == 2          # reformulated between the 3 rounds
@@ -53,6 +53,7 @@ def test_recovery_dedups_queries_and_stops(monkeypatch):
 
     monkeypatch.setattr(scoper, "gather_candidates", fake_gather)
     corpus, _, _ = scoper.explore("topic", hops=0, recover_rounds=3, use_prefilter=False,
-                                  repair_abstracts=False, progress=lambda m: None)
+                                  repair_abstracts=False, resolve_versions=False,
+                                  progress=lambda m: None)
     assert g["n"] == 1                 # follow-up query was a dup -> no new round
     assert len(corpus) == 1            # paper deduped by key

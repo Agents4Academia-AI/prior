@@ -17,9 +17,12 @@ Returns the extracted text (intro + body), or None if nothing is accessible.
 from __future__ import annotations
 
 import io
+import html as html_lib
+import json
 import re
 import threading
 import time
+from dataclasses import dataclass
 from urllib.parse import urljoin
 
 import requests
@@ -33,28 +36,56 @@ _throttle_lock = threading.Lock()   # paces rate-sensitive hits across fetch thr
 _last_fetch = 0.0
 
 
+@dataclass(frozen=True)
+class FullTextCandidate:
+    """One independently retrieved representation and its fitness for reuse."""
+
+    text: str
+    source: str
+    bibliography_status: str
+    reference_count: int
+
+    @property
+    def score(self) -> tuple[int, int, int]:
+        status_rank = {
+            "parsed": 5,
+            "reference_block_unsegmented": 4,
+            "heading_without_reference_block": 3,
+            "heading_absent": 2,
+            "short_or_stub": 1,
+            "text_unavailable": 0,
+        }
+        return status_rank.get(self.bibliography_status, 0), self.reference_count, len(self.text)
+
+
 # ── parsing helpers ─────────────────────────────────────────────────────────────
 
 def _html_to_text(html: str) -> str:
     html = re.sub(r"(?is)<(script|style|math|svg).*?</\1>", " ", html)
+    # Preserve document structure. Bibliography headings and entry boundaries
+    # are essential for citation recovery and were previously flattened away.
+    html = re.sub(r"(?is)</?(?:article|section|div|p|h[1-6]|li|tr|br|hr)\b[^>]*>", "\n", html)
     html = re.sub(r"(?s)<[^>]+>", " ", html)
-    html = re.sub(r"&#?\w+;", " ", html)
-    return re.sub(r"\s+", " ", html).strip()
+    html = html_lib.unescape(html)
+    lines = [re.sub(r"[ \t\r\f\v]+", " ", line).strip() for line in html.split("\n")]
+    return re.sub(r"\n{3,}", "\n\n", "\n".join(line for line in lines if line)).strip()
 
 
-def _pdf_text(content: bytes, max_pages: int = 14) -> str | None:
+def _pdf_text(content: bytes, max_pages: int | None = None) -> str | None:
     if not content[:5].startswith(b"%PDF"):          # landing/paywall page, not a PDF
         return None
     text = None
     try:
         import fitz  # PyMuPDF — infers word spacing far better than pypdf
         doc = fitz.open(stream=content, filetype="pdf")
-        text = "\n".join(doc[i].get_text() for i in range(min(max_pages, len(doc))))
+        limit = len(doc) if max_pages is None else min(max_pages, len(doc))
+        text = "\n".join(doc[i].get_text() for i in range(limit))
     except Exception:  # noqa: BLE001 — fall back to pypdf if fitz unavailable/fails
         try:
             from pypdf import PdfReader
             reader = PdfReader(io.BytesIO(content))
-            text = "\n".join((p.extract_text() or "") for p in reader.pages[:max_pages])
+            pages = reader.pages if max_pages is None else reader.pages[:max_pages]
+            text = "\n".join((p.extract_text() or "") for p in pages)
         except Exception:  # noqa: BLE001 — full text is best-effort
             return None
     text = text.replace("ﬁ", "fi").replace("ﬂ", "fl").replace("ﬀ", "ff")
@@ -78,6 +109,50 @@ def _cache_path(paper):
     config.FULLTEXT.mkdir(parents=True, exist_ok=True)
     safe = re.sub(r"[^A-Za-z0-9._-]", "_", paper.id)
     return config.FULLTEXT / f"{safe}.txt"
+
+
+def _quality_path(paper):
+    return _cache_path(paper).with_suffix(".quality.json")
+
+
+def fulltext_quality(text: str | None) -> dict:
+    """Assess whether retrieved text is fit for citation-aware processing."""
+    from .sources.refextract import bibliography_status, reference_entries
+    value = text or ""
+    status = bibliography_status(value)
+    references = len(reference_entries(value)) if value else 0
+    flags = []
+    if status == "text_unavailable":
+        flags.append("full_text_unavailable")
+    elif status == "short_or_stub":
+        flags.append("likely_stub_or_truncated")
+    elif status == "heading_absent":
+        flags.append("bibliography_not_present_in_retrieved_text")
+    elif status == "heading_without_reference_block":
+        flags.append("bibliography_heading_without_entries")
+    elif status == "reference_block_unsegmented":
+        flags.append("bibliography_layout_unsupported")
+    return {"text_chars": len(value), "bibliography_status": status,
+            "reference_count": references,
+            "complete_for_citation_analysis": status == "parsed", "flags": flags}
+
+
+def _cache_text(paper, text: str, source: str, *, attempts: list[dict] | None = None) -> None:
+    _cache_path(paper).write_text(text)
+    manifest = {"paper_id": paper.id, "selected_source": source,
+                **fulltext_quality(text), "attempts": attempts or []}
+    _quality_path(paper).write_text(json.dumps(manifest, indent=2))
+
+
+def cached_quality(paper) -> dict | None:
+    path = _quality_path(paper)
+    if path.exists():
+        try:
+            return json.loads(path.read_text())
+        except (OSError, ValueError):
+            pass
+    text = cached_text(paper)
+    return fulltext_quality(text) if text else None
 
 
 def cached_text(paper) -> str | None:
@@ -117,6 +192,19 @@ def _arxiv_id_of(paper) -> str | None:
     return m.group(1) if m else None
 
 
+def _manifestation_locators(paper) -> tuple[list[str], list[str], list[str]]:
+    """All arXiv ids, PDF URLs and DOIs retained for one canonical work."""
+    arxiv_ids, pdfs, dois = [], [], []
+    for item in paper.all_manifestations():
+        hay = " ".join(str(item.get(k) or "") for k in ("id", "url", "pdf_url", "doi"))
+        match = re.search(r"(?:arxiv[:./]|abs/|pdf/)(\d{4}\.\d{4,5})(?:v\d+)?", hay, re.I)
+        if match: arxiv_ids.append(match.group(1))
+        if item.get("pdf_url"): pdfs.append(item["pdf_url"])
+        value = re.sub(r"^https?://(?:dx\.)?doi\.org/", "", str(item.get("doi") or "").lower())
+        if value: dois.append(value)
+    return list(dict.fromkeys(arxiv_ids)), list(dict.fromkeys(pdfs)), list(dict.fromkeys(dois))
+
+
 def _arxiv_search(title: str) -> str | None:
     """Last-ditch: a paper behind a paywall/repository DOI often has an open arXiv
     twin. Find it by title (arxiv.find_id_by_title) and use its clean HTML/PDF."""
@@ -130,7 +218,7 @@ def _arxiv_search(title: str) -> str | None:
 _PREPRINT_PREFIXES = ("10.1101", "10.64898")   # 10.64898 = openRxiv (bio/medRxiv)
 
 
-def _preprint(doi: str) -> str | None:
+def _preprint_base(doi: str) -> str | None:
     if not any(doi.startswith(p) for p in _PREPRINT_PREFIXES):
         return None
     _throttle()                                # bio/medRxiv rate-limit automated bursts
@@ -140,19 +228,40 @@ def _preprint(doi: str) -> str | None:
         base = r.url.rstrip("/")
     except requests.RequestException:
         return None
-    if "/content/" not in base:
-        return None
-    if text := _oa_pdf(base + ".full.pdf"):    # the rendered PDF
-        return text
+    return base if "/content/" in base else None
+
+
+def _url_text(url: str) -> str | None:
     try:                                       # fall back to the full-text HTML page
-        r = requests.get(base + ".full", headers=_UA, timeout=config.HTTP_TIMEOUT)
-        if r.status_code == 200 and "<html" in r.text[:2000].lower():
+        r = requests.get(url, headers=_UA, timeout=config.HTTP_TIMEOUT)
+        head = r.text[:3000].lower()
+        if r.status_code == 200 and ("<html" in head or "<article" in head):
             text = _html_to_text(r.text)
             if len(text) > 1000:
                 return text
     except requests.RequestException:
         pass
     return None
+
+
+def _preprint(doi: str) -> str | None:
+    base = _preprint_base(doi)
+    if not base:
+        return None
+    return _oa_pdf(base + ".full.pdf") or _url_text(base + ".full")
+
+
+def _doi_html(doi: str) -> str | None:
+    """Try the DOI landing page as full text; quality scoring rejects metadata."""
+    try:
+        r = requests.get(f"https://doi.org/{doi}", headers=_UA,
+                         timeout=config.HTTP_TIMEOUT, allow_redirects=True)
+    except requests.RequestException:
+        return None
+    if r.status_code != 200:
+        return None
+    text = _html_to_text(r.text)
+    return text if len(text) > 1000 else None
 
 
 # ── Elsevier ScienceDirect full-text API (sanctioned TDM route) ──────────────────
@@ -279,20 +388,130 @@ def _meta_pdf(doi: str) -> str | None:
 
 # ── orchestrator ─────────────────────────────────────────────────────────────────
 
-def fetch_with_source(paper, *, use_cache: bool = True) -> tuple[str | None, str]:
+def fetch_with_source(paper, *, use_cache: bool = True,
+                      require_bibliography: bool = False) -> tuple[str | None, str]:
     """Full text plus the channel that produced it. Reads the raw-text cache first
     (channel 'cache'); on a fresh hit, writes the raw text to the cache so it's
     never re-fetched. Channel ∈ {cache, arxiv, arxiv_pdf, oa_pdf, preprint,
     unpaywall, elsevier, springer, wiley, meta_pdf, arxiv_search, none}."""
-    if use_cache and (t := cached_text(paper)):
-        return t, "cache"
+    cached = cached_text(paper) if use_cache else None
+    if cached and not require_bibliography:
+        # Backfill a manifest for caches created before quality tracking existed.
+        if not _quality_path(paper).exists():
+            try:
+                _cache_text(paper, cached, "cache")
+            except OSError:
+                pass
+        return cached, "cache"
+    if require_bibliography:
+        text, src, attempts = fetch_for_bibliography(paper, existing_text=cached)
+        if text:
+            try:
+                _cache_text(paper, text, src, attempts=attempts)
+            except OSError:
+                pass
+        return text, src
     text, src = _fetch_cascade(paper)
     if text:
         try:
-            _cache_path(paper).write_text(text)      # persist raw full text
+            _cache_text(paper, text, src)
         except OSError:
             pass
     return text, src
+
+
+def _candidate(text: str | None, source: str) -> FullTextCandidate | None:
+    if not text:
+        return None
+    # Local import prevents the ordinary full-text path from paying citation
+    # parsing cost or coupling module import order to the optional resolver.
+    from .sources.refextract import bibliography_status, reference_entries
+    return FullTextCandidate(text, source, bibliography_status(text),
+                             len(reference_entries(text)))
+
+
+def fetch_for_bibliography(paper, *, existing_text: str | None = None,
+                           progress=None) -> tuple[str | None, str, list[dict]]:
+    """Try alternate legal representations until a bibliography is recoverable.
+
+    Unlike the normal latency-first cascade, this quality-first path does not
+    stop at the first non-empty response. It retains an audit trail and returns
+    the best representation by parse status, entry count, then text length.
+    The caller decides where to cache it, so a failed retry cannot overwrite a
+    previously useful text.
+    """
+    attempts: list[FullTextCandidate] = []
+    audit: list[dict] = []
+
+    def consider(text: str | None, source: str) -> bool:
+        candidate = _candidate(text, source)
+        if candidate:
+            attempts.append(candidate)
+            audit.append({"source": source, "bibliography_status": candidate.bibliography_status,
+                          "reference_count": candidate.reference_count,
+                          "text_chars": len(candidate.text)})
+            if progress:
+                progress(source, candidate.bibliography_status, candidate.reference_count)
+            return candidate.bibliography_status == "parsed"
+        if progress:
+            progress(source, "text_unavailable", 0)
+        audit.append({"source": source, "bibliography_status": "text_unavailable",
+                      "reference_count": 0, "text_chars": 0})
+        return False
+
+    if existing_text:
+        consider(existing_text, "existing")
+
+    arxiv_ids, pdf_urls, dois = _manifestation_locators(paper)
+    for aid in arxiv_ids:
+        if consider(_arxiv_html(aid), "arxiv_html"):
+            return _best_candidate(attempts, audit)
+        if consider(_arxiv_pdf(aid), "arxiv_pdf"):
+            return _best_candidate(attempts, audit)
+
+    url = paper.pdf_url
+    fresh_url = ""
+    if paper.source == "openalex":
+        fresh = openalex.fetch(paper.id)
+        fresh_url = fresh.pdf_url if fresh else ""
+        if fresh_url and (match := _ARXIV_IN_URL.search(fresh_url)):
+            if consider(_arxiv_html(match.group(1)), "openalex_arxiv_html"):
+                return _best_candidate(attempts, audit)
+    for version_url in pdf_urls:
+        if consider(_oa_pdf(version_url), "manifestation_pdf"):
+            return _best_candidate(attempts, audit)
+    if fresh_url and fresh_url != url and consider(_oa_pdf(fresh_url), "openalex_fresh_oa_pdf"):
+        return _best_candidate(attempts, audit)
+
+    channels = []
+    for doi in dois:
+        preprint_base = _preprint_base(doi)
+        if preprint_base:
+            channels.extend([
+                ("preprint_html", lambda b=preprint_base: _url_text(b + ".full")),
+                ("preprint_xml", lambda b=preprint_base: _url_text(b + ".full.xml")),
+                ("preprint_pdf", lambda b=preprint_base: _oa_pdf(b + ".full.pdf")),
+            ])
+        channels.extend([("doi_html", lambda d=doi: _doi_html(d)),
+                    ("unpaywall", lambda d=doi: _unpaywall(d)),
+                    ("elsevier", lambda d=doi: _elsevier(d)),
+                    ("springer", lambda d=doi: _springer(d)),
+                    ("wiley", lambda d=doi: _wiley(d)),
+                    ("meta_pdf", lambda d=doi: _meta_pdf(d))])
+    for source, retrieve in channels:
+        if consider(retrieve(), source):
+            return _best_candidate(attempts, audit)
+    consider(_arxiv_search(paper.title), "arxiv_search")
+    return _best_candidate(attempts, audit)
+
+
+def _best_candidate(attempts: list[FullTextCandidate], audit: list[dict] | None = None
+                    ) -> tuple[str | None, str, list[dict]]:
+    audit = audit or []
+    if not attempts:
+        return None, "none", audit
+    best = max(attempts, key=lambda candidate: candidate.score)
+    return best.text, best.source, audit
 
 
 def _fetch_cascade(paper) -> tuple[str | None, str]:
@@ -341,7 +560,8 @@ def fetch(paper) -> str | None:
     return fetch_with_source(paper)[0]
 
 
-def fetch_many(papers, *, workers: int = 12, progress=print) -> dict:
+def fetch_many(papers, *, workers: int = 12, progress=print,
+               require_bibliography: bool = False) -> dict:
     """Standalone batch full-text retrieval — the reusable 'obtain full text' stage.
     Runs the cascade over `papers` in PARALLEL (I/O-bound, no LLM), caching each
     success to data/fulltext/. Idempotent (cache hits skip re-fetch). Returns
@@ -350,17 +570,22 @@ def fetch_many(papers, *, workers: int = 12, progress=print) -> dict:
     from collections import Counter
     from concurrent.futures import ThreadPoolExecutor
     channels: Counter = Counter()
+    quality: Counter = Counter()
     papers = list(papers)
 
     def _one(p):
-        return fetch_with_source(p)[1]                  # caches on success; returns channel
+        _text, source = fetch_with_source(p, require_bibliography=require_bibliography)
+        manifest = cached_quality(p) or {"bibliography_status": "text_unavailable"}
+        return source, manifest["bibliography_status"]
 
     with ThreadPoolExecutor(max_workers=workers) as ex:
-        for i, src in enumerate(ex.map(_one, papers), 1):
+        for i, (src, status) in enumerate(ex.map(_one, papers), 1):
             channels[src] += 1
+            quality[status] += 1
             if i % 25 == 0:
                 progress(f"  fetched {i}/{len(papers)} ...")
     got = sum(v for k, v in channels.items() if k not in ("none", "missing_paper"))
     progress(f"  full text: {got}/{len(papers)} cached | "
              + ", ".join(f"{k}:{v}" for k, v in channels.most_common()))
+    progress("  retrieval quality: " + ", ".join(f"{k}:{v}" for k, v in quality.most_common()))
     return dict(channels)

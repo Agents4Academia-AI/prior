@@ -44,6 +44,8 @@ class Paper:
     type: str = ""             # OpenAlex work type: article/review/letter/editorial/
                                # book-chapter/preprint/... — a free non-primary veto
     is_review: bool = False    # survey/review — excluded as non-primary literature
+    # Source-specific records/versions retained under this canonical work.
+    manifestations: list[dict] = field(default_factory=list)
 
     def short_cite(self) -> str:
         first = self.authors[0].split()[-1] if self.authors else "Anon"
@@ -69,6 +71,20 @@ class Paper:
         if not k.startswith("title:"):
             return self.id
         return "work:" + hashlib.sha1(k.encode()).hexdigest()[:16]
+
+    def all_manifestations(self) -> list[dict]:
+        """Return the primary record plus deduplicated alternate manifestations."""
+        primary = {"id": self.id, "source": self.source, "url": self.url,
+                   "pdf_url": self.pdf_url, "doi": self.doi or "",
+                   "date": self.date, "title": self.title}
+        out, seen = [], set()
+        for item in [primary, *self.manifestations]:
+            key = (item.get("id", ""), item.get("url", ""),
+                   item.get("pdf_url", ""), item.get("doi", ""))
+            if key not in seen:
+                seen.add(key)
+                out.append(dict(item))
+        return out
 
     def to_dict(self) -> dict:
         return asdict(self) | {"work_id": self.work_id()}
