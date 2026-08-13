@@ -1,6 +1,6 @@
 """Canonical cross-source key + dedup (the fix for OpenAlex/arXiv/S2 id mismatch)."""
 
-from prior import scoper
+from prior import refresh, scoper
 from prior.models import Paper
 
 TITLE = "The AI Scientist: Towards Fully Automated Open-Ended Discovery"
@@ -48,6 +48,46 @@ def test_manifestations_do_not_change_canonical_work_id():
     paper.manifestations = [{"id": "arxiv:2408.06292v3", "source": "arxiv"}]
     assert paper.work_id() == before
     assert paper.to_dict()["work_id"] == before
+
+
+def test_identity_aliases_normalise_doi_and_arxiv_versions():
+    paper = Paper(id="arxiv:2408.06292v3", source="arxiv", title=TITLE,
+                  abstract="", url="https://arxiv.org/abs/2408.06292v3",
+                  doi="https://doi.org/10.48550/arXiv.2408.06292v3")
+    assert paper.identity_aliases() == [
+        "arxiv:2408.06292", "doi:10.48550/arxiv.2408.06292v3"]
+
+
+def test_identity_aliases_include_alternate_manifestations():
+    paper = _p("openalex:W1", "openalex", TITLE)
+    paper.manifestations = [{"id": "arxiv:2408.06292v2", "source": "arxiv",
+                             "doi": "10.1000/published-paper"}]
+    assert paper.identity_aliases() == [
+        "arxiv:2408.06292", "doi:10.1000/published-paper"]
+
+
+def test_shared_doi_merges_retitled_versions():
+    a = Paper(id="openalex:W1", source="openalex", title="Early preprint title",
+              abstract="", url="", doi="10.1000/the-work")
+    b = Paper(id="s2:abc", source="semanticscholar",
+              title="Substantially revised published title", abstract="", url="",
+              doi="https://doi.org/10.1000/THE-WORK")
+    assert scoper._same_work(a, b)
+
+
+def test_disjoint_dois_prevent_generic_title_collision():
+    a = Paper(id="openalex:W1", source="openalex", title="Editorial",
+              abstract="", url="", doi="10.1000/one")
+    b = Paper(id="openalex:W2", source="openalex", title="Editorial",
+              abstract="", url="", doi="10.1000/two")
+    assert not scoper._same_work(a, b)
+
+
+def test_pending_dedup_prefers_strong_alias_over_title_hash():
+    paper = Paper(id="openalex:W1", source="openalex", title="Editorial",
+                  abstract="", url="", doi="10.1000/one")
+    assert refresh._identity_keys(paper) == {"openalex:W1", "doi:10.1000/one"}
+    assert paper.key() not in refresh._identity_keys(paper)
 
 
 def test_dedup_merges_preprint_with_small_title_change():

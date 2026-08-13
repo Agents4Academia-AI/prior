@@ -84,7 +84,7 @@ def upsert_paper(p: dict) -> None:
                  SET n += $props""",
               id=p["id"], props={k: p.get(k) for k in
                   ("title", "year", "venue", "doi", "url", "cited_by_count",
-                   "is_review", "abstract", "authors", "work_id")})
+                   "is_review", "abstract", "authors", "work_id", "work_aliases")})
 
 
 def upsert_contribution(k: dict, embedding: Optional[list[float]] = None) -> None:
@@ -146,7 +146,7 @@ def bulk_load(papers: list[dict], contributions: list[dict], claims: list[dict],
               rows=[{"id": p["id"], "props": {**{k: p.get(k) for k in
                     ("title", "year", "venue", "doi", "url", "cited_by_count",
                      "is_review", "abstract", "authors", "date", "date_precision",
-                     "work_id")},
+                     "work_id", "work_aliases")},
                     "collection": collection}} for p in papers])
 
         s.run("""UNWIND $rows AS r
@@ -273,6 +273,16 @@ def have_work(work_id: str) -> bool:
     with session() as s:
         return s.run("MATCH (p:Paper {work_id:$w}) RETURN p LIMIT 1",
                      w=work_id).single() is not None
+
+
+def have_work_aliases(aliases: list[str]) -> bool:
+    """Whether any stored paper shares a strong DOI/arXiv work alias."""
+    if not aliases:
+        return False
+    with session() as s:
+        return s.run("""MATCH (p:Paper)
+                        WHERE any(a IN coalesce(p.work_aliases, []) WHERE a IN $aliases)
+                        RETURN p LIMIT 1""", aliases=aliases).single() is not None
 
 
 def have_paper(paper_id: str) -> bool:
