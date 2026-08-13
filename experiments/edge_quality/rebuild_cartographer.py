@@ -6,6 +6,7 @@ import argparse
 import json
 import math
 import re
+import statistics
 import sys
 import threading
 from collections import Counter
@@ -183,6 +184,7 @@ def main() -> None:
         return prompt, metadata
 
     packets = {row["candidate_id"]: packet(row) for row in candidates}
+    prompt_chars = sorted(len(prompt) for prompt, _ in packets.values())
     coverage = Counter()
     for _, metadata in packets.values():
         coverage["with_two_fulltexts"] += metadata["has_fulltext_a"] and metadata["has_fulltext_b"]
@@ -191,6 +193,13 @@ def main() -> None:
         "manifest": str(args.manifest), "n_candidates": len(candidates),
         "model": args.model, "fulltext_chars": args.fulltext_chars,
         "passages_per_paper": args.passages_per_paper, **coverage,
+        "prompt_chars": {
+            "total": sum(prompt_chars),
+            "mean": round(statistics.mean(prompt_chars), 1),
+            "median": round(statistics.median(prompt_chars), 1),
+            "p95": prompt_chars[math.ceil(0.95 * len(prompt_chars)) - 1],
+            "max": max(prompt_chars),
+        },
     }
     preflight_path = OUT / "cartographer_rebuild_preflight.json"
     preflight_path.write_text(json.dumps(preflight, indent=2))

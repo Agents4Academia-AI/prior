@@ -5,5 +5,12 @@
   "fulltext_chars": 60000,
   "passages_per_paper": 4,
   "with_two_fulltexts": 2187,
-  "with_citation_passage": 950
+  "with_citation_passage": 950,
+  "prompt_chars": {
+    "total": 28168239,
+    "mean": 12874.0,
+    "median": 12735.5,
+    "p95": 14004,
+    "max": 14546
+  }
 }
