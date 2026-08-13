@@ -50,13 +50,14 @@ def _save(path: Path, obj) -> None:
 
 
 def _in_graph(paper: Paper, progress=print) -> bool:
-    """Graph-dedup check (by source id OR work_id, so another source's record
-    of the same work counts) that tolerates Neo4j being down/uninstalled —
-    scan and propose must run standalone (approval re-checks via MERGE)."""
+    """Graph-dedup by source id, strong alias, or alias-less title fallback."""
     global _graph_warned
     try:
         from . import graph
-        return graph.have_paper(paper.id) or graph.have_work(paper.work_id())
+        aliases = paper.identity_aliases()
+        return (graph.have_paper(paper.id)
+                or graph.have_work_aliases(aliases)
+                or (not aliases and graph.have_work(paper.work_id())))
     except Exception:  # noqa: BLE001 — driver missing or DB unreachable
         if not _graph_warned:
             progress("  (graph unreachable — skipping already-ingested dedup)")
@@ -68,15 +69,22 @@ _graph_warned = False
 
 
 def _pending_keys() -> set[str]:
-    """Ids AND title-keys of everything already queued — OpenAlex and arXiv key
-    the same paper differently, so cross-source dedup needs Paper.key()."""
+    """Safe identity keys for everything already queued."""
     keys = set()
     if PENDING.exists():
         for f in PENDING.glob("*.json"):
             for row in _load(f, {}).get("papers", []):
                 p = Paper.from_dict(row["paper"])
-                keys |= {p.id, p.key()}
+                aliases = p.identity_aliases()
+                keys.add(p.id)
+                keys.update(aliases or [p.key()])
     return keys
+
+
+def _identity_keys(paper: Paper) -> set[str]:
+    """Keys safe for deduplicating a candidate against a pending batch."""
+    aliases = paper.identity_aliases()
+    return {paper.id, *(aliases or [paper.key()])}
 
 
 def scan(topics: list[str], *, per_topic: int = 25, progress=print) -> Path | None:
@@ -107,8 +115,8 @@ def scan(topics: list[str], *, per_topic: int = 25, progress=print) -> Path | No
         except Exception as e:  # noqa: BLE001
             progress(f"  ! arxiv failed: {e}")
         fresh = [p for p in papers.values()
-                 if not ({p.id, p.key()} & seen) and not _in_graph(p, progress)]
-        seen |= {k for p in fresh for k in (p.id, p.key())}
+                 if not (_identity_keys(p) & seen) and not _in_graph(p, progress)]
+        seen |= {k for p in fresh for k in _identity_keys(p)}
         proposed += [{"topic": t, "paper": p.to_dict(), "status": "proposed"} for p in fresh]
         progress(f"  {len(papers)} found, {len(fresh)} new → proposed")
         if ok:   # both sources down → keep the old watermark so the window re-runs
@@ -140,7 +148,7 @@ def propose(arxiv_ids: list[str], *, topic: str = "manual", progress=print) -> P
             progress(f"  ! could not fetch {aid}")
     seen = _pending_keys()
     fresh = [p for p in fetched.values()
-             if not ({p.id, p.key()} & seen) and not _in_graph(p, progress)]
+             if not (_identity_keys(p) & seen) and not _in_graph(p, progress)]
     if not fresh:
         progress("all already in the graph or pending")
         return None

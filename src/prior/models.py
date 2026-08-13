@@ -73,6 +73,31 @@ class Paper:
             return self.id
         return "work:" + hashlib.sha1(k.encode()).hexdigest()[:16]
 
+    def identity_aliases(self) -> list[str]:
+        """Strong source-independent identifiers observed for this work.
+
+        ``work_id`` remains the migration-stable title hash. These aliases add
+        DOI/arXiv crosswalk identity without silently changing existing graph
+        keys when a manifestation is discovered later.
+        """
+        aliases = set()
+        for item in self.all_manifestations():
+            haystack = " ".join(str(item.get(k) or "") for k in
+                                ("id", "url", "pdf_url", "doi"))
+            for match in re.finditer(
+                    r"(?:arxiv[:./]|abs/|pdf/)(\d{4}\.\d{4,5})(?:v\d+)?",
+                    haystack, re.I):
+                aliases.add("arxiv:" + match.group(1).lower())
+            doi = str(item.get("doi") or "").strip().lower()
+            doi = re.sub(r"^(?:https?://(?:dx\.)?doi\.org/|doi:\s*)", "", doi)
+            doi = doi.rstrip(". /")
+            if doi.startswith("10."):
+                aliases.add("doi:" + doi)
+                match = re.fullmatch(r"10\.48550/arxiv\.(\d{4}\.\d{4,5})(?:v\d+)?", doi)
+                if match:
+                    aliases.add("arxiv:" + match.group(1))
+        return sorted(aliases)
+
     def all_manifestations(self) -> list[dict]:
         """Return the primary record plus deduplicated alternate manifestations."""
         primary = {"id": self.id, "source": self.source, "url": self.url,
@@ -88,7 +113,8 @@ class Paper:
         return out
 
     def to_dict(self) -> dict:
-        return asdict(self) | {"work_id": self.work_id()}
+        return asdict(self) | {"work_id": self.work_id(),
+                              "work_aliases": self.identity_aliases()}
 
     @classmethod
     def from_dict(cls, d: dict) -> "Paper":

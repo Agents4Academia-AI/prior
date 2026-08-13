@@ -27,12 +27,16 @@ from .sources import arxiv, openalex
 
 
 def _have(paper) -> bool:
-    """In the graph already — under this source id OR as the same work from
-    another source/version (work_id = normalised-title hash)."""
+    """In graph by source id, strong alias, or alias-less title fallback."""
+    aliases = paper.identity_aliases()
     with graph.session() as s:
-        return s.run("MATCH (p:Paper) WHERE p.id = $id OR p.work_id = $w "
-                     "RETURN p LIMIT 1",
-                     id=paper.id, w=paper.work_id()).single() is not None
+        return s.run("""MATCH (p:Paper)
+                        WHERE p.id = $id
+                           OR any(a IN coalesce(p.work_aliases, []) WHERE a IN $aliases)
+                           OR (size($aliases) = 0 AND p.work_id = $w)
+                        RETURN p LIMIT 1""",
+                     id=paper.id, aliases=aliases,
+                     w=paper.work_id()).single() is not None
 
 
 def _discover_topic(topic: str, n: int) -> list:

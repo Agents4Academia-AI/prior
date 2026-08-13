@@ -71,6 +71,16 @@ def followup_queries(topic_def: str, kept: list[Paper],
 # ── stage 2: gather candidates (recall) ──────────────────────────────────────
 def _same_work(a: Paper, b: Paper) -> bool:
     """Conservative work-level match across source-specific manifestations."""
+    aliases_a, aliases_b = set(a.identity_aliases()), set(b.identity_aliases())
+    if aliases_a & aliases_b:
+        return True
+    # Two different values in the same strong namespace are evidence against a
+    # merge, even when generic titles collide.
+    for prefix in ("doi:", "arxiv:"):
+        left = {value for value in aliases_a if value.startswith(prefix)}
+        right = {value for value in aliases_b if value.startswith(prefix)}
+        if left and right and left.isdisjoint(right):
+            return False
     if a.key() == b.key():
         return True
     ta = set(a.key().removeprefix("title:").split())
