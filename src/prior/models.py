@@ -40,6 +40,7 @@ class Paper:
     date: str = ""             # full publication date ISO YYYY-MM-DD (month-level chronology)
     date_precision: str = ""   # "day" | "month" | "year" — how much to trust the granularity
     date_source: str = ""      # openalex | arxiv | semanticscholar | arxiv_id | year_fallback
+    abstract_source: str = ""  # provenance for repaired/backfilled abstracts
     pdf_url: str = ""          # open-access full-text PDF, when known
     type: str = ""             # OpenAlex work type: article/review/letter/editorial/
                                # book-chapter/preprint/... — a free non-primary veto

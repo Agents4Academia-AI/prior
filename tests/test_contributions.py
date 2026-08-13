@@ -100,9 +100,12 @@ def test_extract_handles_empty(monkeypatch):
 # ── schema round-trip with new Paper fields ─────────────────────────────────
 def test_paper_roundtrip_with_new_fields_and_old_dicts():
     p = Paper(id="openalex:W1", source="openalex", title="t", abstract="a", url="",
-              pdf_url="http://x/y.pdf", is_review=True)
+              pdf_url="http://x/y.pdf", is_review=True,
+              abstract_source="arxiv:recovered")
     assert Paper.from_dict(p.to_dict()).pdf_url == "http://x/y.pdf"
+    assert Paper.from_dict(p.to_dict()).abstract_source == "arxiv:recovered"
     # old atlas dict without the new fields → defaults, not None
     old = {"id": "W9", "source": "openalex", "title": "t", "abstract": "a", "url": ""}
     p2 = Paper.from_dict(old)
     assert p2.pdf_url == "" and p2.is_review is False
+    assert p2.abstract_source == ""
