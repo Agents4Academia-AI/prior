@@ -90,6 +90,36 @@ def test_pending_dedup_prefers_strong_alias_over_title_hash():
     assert paper.key() not in refresh._identity_keys(paper)
 
 
+def test_gather_observer_preserves_source_selection_and_manifestation_identity(monkeypatch):
+    publisher = Paper(id="openalex:W1", source="openalex", title="Published title",
+                      abstract="abstract", url="", doi="10.1000/shared")
+    preprint = Paper(id="arxiv:2401.00001v2", source="arxiv",
+                     title="A substantially different preprint title",
+                     abstract="abstract", url="", doi="10.1000/shared")
+    calls, events = [], []
+    monkeypatch.setattr(scoper.openalex, "search",
+                        lambda *a, **k: calls.append("openalex") or [publisher])
+    monkeypatch.setattr(scoper.arxiv, "search",
+                        lambda *a, **k: calls.append("arxiv") or [preprint])
+    monkeypatch.setattr("time.sleep", lambda *_: None)
+
+    out = scoper.gather_candidates(["query"], use_s2=False, observe=events.append)
+    assert calls == ["openalex", "arxiv"]
+    assert len(out) == 1 and out[0].id == publisher.id
+    dedup = [event for event in events if event["kind"] == "deduplication"]
+    assert dedup == [{
+        "kind": "deduplication", "work_key": publisher.key(),
+        "retained_id": publisher.id,
+        "variant_ids": [publisher.id, preprint.id],
+        "basis": "strong_identifier_or_conservative_work_match",
+    }]
+
+    calls.clear()
+    assert scoper.gather_candidates(["query"], use_openalex=False,
+                                    use_arxiv=False, use_s2=False) == []
+    assert calls == []
+
+
 def test_dedup_merges_preprint_with_small_title_change():
     publisher = Paper(id="openalex:W1", source="openalex",
         title="SciAgents: Automating Scientific Discovery Through Bioinspired Multi-Agent Intelligent Graph Reasoning",
