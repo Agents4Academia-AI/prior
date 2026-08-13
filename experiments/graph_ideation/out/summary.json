@@ -1,0 +1,40 @@
+{
+  "packets": 15,
+  "ideas": 45,
+  "judged_ideas": 45,
+  "means": {
+    "enriched": {
+      "grounding": 3.933,
+      "coherence": 3.667,
+      "feasibility": 3.133,
+      "corpus_nonredundancy": 3.4
+    },
+    "flat": {
+      "grounding": 3.867,
+      "coherence": 3.8,
+      "feasibility": 3.467,
+      "corpus_nonredundancy": 3.467
+    },
+    "legacy": {
+      "grounding": 3.8,
+      "coherence": 3.533,
+      "feasibility": 3.133,
+      "corpus_nonredundancy": 3.333
+    }
+  },
+  "selection": {
+    "flat": {
+      "mean_pairwise_tfidf": 0.1414,
+      "hard_pairs": 6
+    },
+    "legacy": {
+      "mean_pairwise_tfidf": 0.0662,
+      "hard_pairs": 0
+    },
+    "enriched": {
+      "mean_pairwise_tfidf": 0.081,
+      "hard_pairs": 0
+    }
+  },
+  "caveat": "Corpus-relative pilot; LLM scores are screening evidence, not human validation or true novelty."
+}

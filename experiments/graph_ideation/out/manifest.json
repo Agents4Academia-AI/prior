@@ -1,0 +1,695 @@
+{
+  "schema_version": 1,
+  "prompt_version": "graph-ideation-pilot-v1",
+  "random_seed": 61,
+  "n_seeds": 5,
+  "seeds": [
+    "openalex:W4403795293::k00",
+    "openalex:W7140287209::k00",
+    "openalex:W4404782918::k00",
+    "arxiv:2507.18901v1::k01",
+    "openalex:W7161731996::k01"
+  ],
+  "packets": [
+    {
+      "packet_id": "3afc8b66678c",
+      "seed_id": "openalex:W4403795293::k00",
+      "arm": "flat",
+      "contribution_ids": [
+        "openalex:W4403795293::k00",
+        "openalex:W4389761608::k00",
+        "openalex:W4403586302::k03"
+      ],
+      "pairwise_tfidf": [
+        0.1586,
+        0.0738,
+        0.0602
+      ],
+      "legacy_communities": [
+        0,
+        0,
+        3
+      ],
+      "enriched_communities": [
+        3,
+        3,
+        4
+      ],
+      "hard_pairs": 1,
+      "sources": [
+        {
+          "id": "S1",
+          "contribution_id": "openalex:W4403795293::k00",
+          "statement": "PaperQA2, a retrieval-augmented generation agent with agentic tool use (paper search, evidence gathering with LLM reranking and contextual summarization, citation traversal, and answer generation), matches or exceeds PhD-level subject matter expert performance on scientific literature retrieval and summarization tasks without restricting humans in time, tools, or internet access."
+        },
+        {
+          "id": "S2",
+          "contribution_id": "openalex:W4389761608::k00",
+          "statement": "PaperQA \u2014 a modular, agent-based retrieval-augmented generation system that decomposes RAG into discrete tools (paper search, evidence gathering, answer synthesis) and lets an LLM orchestrate them dynamically, enabling iterative, multi-hop question answering over full-text scientific articles with cited provenance."
+        },
+        {
+          "id": "S3",
+          "contribution_id": "openalex:W4403586302::k03",
+          "statement": "An LLM ideation agent combining retrieval-augmented generation with an overgenerate-and-rerank inference-time scaling strategy produces research ideas rated as more novel than those written by human NLP experts in blind review."
+        }
+      ]
+    },
+    {
+      "packet_id": "25b3f3dbbf70",
+      "seed_id": "openalex:W4403795293::k00",
+      "arm": "legacy",
+      "contribution_ids": [
+        "openalex:W4403795293::k00",
+        "openalex:W4403586302::k03",
+        "openalex:W4401042723::k01"
+      ],
+      "pairwise_tfidf": [
+        0.0738,
+        0.0623,
+        0.0192
+      ],
+      "legacy_communities": [
+        0,
+        3,
+        5
+      ],
+      "enriched_communities": [
+        3,
+        4,
+        2
+      ],
+      "hard_pairs": 0,
+      "sources": [
+        {
+          "id": "S1",
+          "contribution_id": "openalex:W4403795293::k00",
+          "statement": "PaperQA2, a retrieval-augmented generation agent with agentic tool use (paper search, evidence gathering with LLM reranking and contextual summarization, citation traversal, and answer generation), matches or exceeds PhD-level subject matter expert performance on scientific literature retrieval and summarization tasks without restricting humans in time, tools, or internet access."
+        },
+        {
+          "id": "S2",
+          "contribution_id": "openalex:W4403586302::k03",
+          "statement": "An LLM ideation agent combining retrieval-augmented generation with an overgenerate-and-rerank inference-time scaling strategy produces research ideas rated as more novel than those written by human NLP experts in blind review."
+        },
+        {
+          "id": "S3",
+          "contribution_id": "openalex:W4401042723::k01",
+          "statement": "A two-stage aspect-based retrieval pipeline balances precision and recall in scientific literature retrieval for proposal novelty validation, while also handling unanswerability when no retrieved articles sufficiently address a proposal's motivation."
+        }
+      ]
+    },
+    {
+      "packet_id": "bcfcfd98c682",
+      "seed_id": "openalex:W4403795293::k00",
+      "arm": "enriched",
+      "contribution_ids": [
+        "openalex:W4403795293::k00",
+        "openalex:W4403586302::k03",
+        "openalex:W4401042723::k01"
+      ],
+      "pairwise_tfidf": [
+        0.0738,
+        0.0623,
+        0.0192
+      ],
+      "legacy_communities": [
+        0,
+        3,
+        5
+      ],
+      "enriched_communities": [
+        3,
+        4,
+        2
+      ],
+      "hard_pairs": 0,
+      "sources": [
+        {
+          "id": "S1",
+          "contribution_id": "openalex:W4403795293::k00",
+          "statement": "PaperQA2, a retrieval-augmented generation agent with agentic tool use (paper search, evidence gathering with LLM reranking and contextual summarization, citation traversal, and answer generation), matches or exceeds PhD-level subject matter expert performance on scientific literature retrieval and summarization tasks without restricting humans in time, tools, or internet access."
+        },
+        {
+          "id": "S2",
+          "contribution_id": "openalex:W4403586302::k03",
+          "statement": "An LLM ideation agent combining retrieval-augmented generation with an overgenerate-and-rerank inference-time scaling strategy produces research ideas rated as more novel than those written by human NLP experts in blind review."
+        },
+        {
+          "id": "S3",
+          "contribution_id": "openalex:W4401042723::k01",
+          "statement": "A two-stage aspect-based retrieval pipeline balances precision and recall in scientific literature retrieval for proposal novelty validation, while also handling unanswerability when no retrieved articles sufficiently address a proposal's motivation."
+        }
+      ]
+    },
+    {
+      "packet_id": "ba9e20cc3058",
+      "seed_id": "openalex:W7140287209::k00",
+      "arm": "flat",
+      "contribution_ids": [
+        "openalex:W7140287209::k00",
+        "openalex:W4402952666::k00",
+        "openalex:W4416026872::k00"
+      ],
+      "pairwise_tfidf": [
+        0.319,
+        0.1275,
+        0.0847
+      ],
+      "legacy_communities": [
+        1,
+        1,
+        1
+      ],
+      "enriched_communities": [
+        2,
+        1,
+        1
+      ],
+      "hard_pairs": 2,
+      "sources": [
+        {
+          "id": "S1",
+          "contribution_id": "openalex:W7140287209::k00",
+          "statement": "The AI Scientist \u2014 a fully automated, end-to-end scientific research pipeline that autonomously generates research ideas, writes and executes code, runs experiments, analyzes and plots results, writes complete machine-learning conference manuscripts, and performs automated peer review."
+        },
+        {
+          "id": "S2",
+          "contribution_id": "openalex:W4402952666::k00",
+          "statement": "The AI Scientist \u2014 an end-to-end, fully automated pipeline in which a frontier LLM generates research ideas, searches the literature, designs and executes experiments, visualizes results, writes a complete scientific manuscript, and performs self-review in an open-ended loop \u2014 enables autonomous scientific discovery in machine learning at a cost of under $15 per paper."
+        },
+        {
+          "id": "S3",
+          "contribution_id": "openalex:W4416026872::k00",
+          "statement": "Jr. AI Scientist \u2014 an autonomous AI scientist system that, given a baseline paper, its LaTeX source files, and associated codebase from a human mentor, identifies the paper's limitations, formulates improvement hypotheses, iteratively runs experiments on complex multi-file codebases using modern coding agents (e.g., Claude Code), and writes a full research paper from the results."
+        }
+      ]
+    },
+    {
+      "packet_id": "07095ff408e9",
+      "seed_id": "openalex:W7140287209::k00",
+      "arm": "legacy",
+      "contribution_ids": [
+        "openalex:W7140287209::k00",
+        "arxiv:2606.13670::k00",
+        "openalex:W4404350150::k01"
+      ],
+      "pairwise_tfidf": [
+        0.1069,
+        0.0751,
+        0.0148
+      ],
+      "legacy_communities": [
+        1,
+        3,
+        2
+      ],
+      "enriched_communities": [
+        2,
+        0,
+        1
+      ],
+      "hard_pairs": 0,
+      "sources": [
+        {
+          "id": "S1",
+          "contribution_id": "openalex:W7140287209::k00",
+          "statement": "The AI Scientist \u2014 a fully automated, end-to-end scientific research pipeline that autonomously generates research ideas, writes and executes code, runs experiments, analyzes and plots results, writes complete machine-learning conference manuscripts, and performs automated peer review."
+        },
+        {
+          "id": "S2",
+          "contribution_id": "arxiv:2606.13670::k00",
+          "statement": "An agentic LLM pipeline for automated reproducibility assessment that receives a dataset, a focal statistical claim, and contextual information from an article, then independently writes and executes statistical code to reproduce published claims at scale."
+        },
+        {
+          "id": "S3",
+          "contribution_id": "openalex:W4404350150::k01",
+          "statement": "Review-5k and Research-14k \u2014 two large-scale, publicly available datasets capturing real-world machine learning peer review dynamics and full research paper generation \u2014 provide training and evaluation resources for automated academic paper writing and review models."
+        }
+      ]
+    },
+    {
+      "packet_id": "66d6daf4b372",
+      "seed_id": "openalex:W7140287209::k00",
+      "arm": "enriched",
+      "contribution_ids": [
+        "openalex:W7140287209::k00",
+        "openalex:W4402952666::k02",
+        "arxiv:2509.14778v2::k00"
+      ],
+      "pairwise_tfidf": [
+        0.1458,
+        0.1106,
+        0.0399
+      ],
+      "legacy_communities": [
+        1,
+        1,
+        1
+      ],
+      "enriched_communities": [
+        2,
+        1,
+        3
+      ],
+      "hard_pairs": 0,
+      "sources": [
+        {
+          "id": "S1",
+          "contribution_id": "openalex:W7140287209::k00",
+          "statement": "The AI Scientist \u2014 a fully automated, end-to-end scientific research pipeline that autonomously generates research ideas, writes and executes code, runs experiments, analyzes and plots results, writes complete machine-learning conference manuscripts, and performs automated peer review."
+        },
+        {
+          "id": "S2",
+          "contribution_id": "openalex:W4402952666::k02",
+          "statement": "Fully automated LLM-driven scientific discovery can produce novel machine learning papers in diffusion modeling, transformer-based language modeling, and learning dynamics that exceed the acceptance threshold of a top machine learning conference as judged by an automated reviewer."
+        },
+        {
+          "id": "S3",
+          "contribution_id": "arxiv:2509.14778v2::k00",
+          "statement": "OpenLens AI \u2014 a modular, fully automated research agent framework for health informatics \u2014 integrates specialized agents for literature review, data analysis, code generation, and manuscript preparation into an end-to-end pipeline that requires no human intervention."
+        }
+      ]
+    },
+    {
+      "packet_id": "097482828235",
+      "seed_id": "openalex:W4404782918::k00",
+      "arm": "flat",
+      "contribution_ids": [
+        "openalex:W4404782918::k00",
+        "openalex:W4411120114::k01",
+        "openalex:W4404783497::k01"
+      ],
+      "pairwise_tfidf": [
+        0.1597,
+        0.0943,
+        0.1417
+      ],
+      "legacy_communities": [
+        2,
+        2,
+        2
+      ],
+      "enriched_communities": [
+        1,
+        1,
+        1
+      ],
+      "hard_pairs": 1,
+      "sources": [
+        {
+          "id": "S1",
+          "contribution_id": "openalex:W4404782918::k00",
+          "statement": "ReviewCritique \u2014 a dataset of 100 NLP paper submissions paired with both human-written and LLM-generated reviews, where every review is annotated at the sentence level by domain experts (most holding Ph.D. degrees or area-chairing experience) for deficiency labels and explanations \u2014 supports benchmarking of AI-assisted peer review and LLM meta-reviewing capabilities."
+        },
+        {
+          "id": "S2",
+          "contribution_id": "openalex:W4411120114::k01",
+          "statement": "A curated benchmark dataset of 40 ICLR submissions (2020\u20132023) paired with peer-reviewer comments, expert-written meta-reviews, and 480 LLM-generated multi-perspective summaries annotated with 4,800 granular human judgments across five criteria supports evaluation of LLM-assisted meta-reviewing."
+        },
+        {
+          "id": "S3",
+          "contribution_id": "openalex:W4404783497::k01",
+          "statement": "A large-scale synthetic peer review corpus of over 53,800 documents \u2014 including initial reviews, rebuttals, updated reviews, meta-reviews, and final decisions \u2014 generated across more than 500 ICLR submissions spanning four years, supports future computational research on academic peer review."
+        }
+      ]
+    },
+    {
+      "packet_id": "244e14847e12",
+      "seed_id": "openalex:W4404782918::k00",
+      "arm": "legacy",
+      "contribution_ids": [
+        "openalex:W4404782918::k00",
+        "openalex:W4403586302::k01",
+        "openalex:W4402580984::k00"
+      ],
+      "pairwise_tfidf": [
+        0.0921,
+        0.0469,
+        0.0513
+      ],
+      "legacy_communities": [
+        2,
+        3,
+        4
+      ],
+      "enriched_communities": [
+        1,
+        4,
+        4
+      ],
+      "hard_pairs": 0,
+      "sources": [
+        {
+          "id": "S1",
+          "contribution_id": "openalex:W4404782918::k00",
+          "statement": "ReviewCritique \u2014 a dataset of 100 NLP paper submissions paired with both human-written and LLM-generated reviews, where every review is annotated at the sentence level by domain experts (most holding Ph.D. degrees or area-chairing experience) for deficiency labels and explanations \u2014 supports benchmarking of AI-assisted peer review and LLM meta-reviewing capabilities."
+        },
+        {
+          "id": "S2",
+          "contribution_id": "openalex:W4403586302::k01",
+          "statement": "In a large-scale blind evaluation by over 100 NLP researchers, LLM-generated research ideas are rated as significantly more novel (p < 0.05) than ideas written by human experts, while being judged slightly weaker on feasibility \u2014 the first statistically significant conclusion on LLM research ideation capability."
+        },
+        {
+          "id": "S3",
+          "contribution_id": "openalex:W4402580984::k00",
+          "statement": "Fine-tuning GPT-3 on social psychology literature generates research hypotheses rated by domain experts as comparable to human-generated hypotheses in clarity, originality, and impact."
+        }
+      ]
+    },
+    {
+      "packet_id": "5ca56220abf8",
+      "seed_id": "openalex:W4404782918::k00",
+      "arm": "enriched",
+      "contribution_ids": [
+        "openalex:W4404782918::k00",
+        "openalex:W4403586302::k01",
+        "arxiv:2504.01848v3::k02"
+      ],
+      "pairwise_tfidf": [
+        0.0921,
+        0.0503,
+        0.0222
+      ],
+      "legacy_communities": [
+        2,
+        3,
+        3
+      ],
+      "enriched_communities": [
+        1,
+        4,
+        0
+      ],
+      "hard_pairs": 0,
+      "sources": [
+        {
+          "id": "S1",
+          "contribution_id": "openalex:W4404782918::k00",
+          "statement": "ReviewCritique \u2014 a dataset of 100 NLP paper submissions paired with both human-written and LLM-generated reviews, where every review is annotated at the sentence level by domain experts (most holding Ph.D. degrees or area-chairing experience) for deficiency labels and explanations \u2014 supports benchmarking of AI-assisted peer review and LLM meta-reviewing capabilities."
+        },
+        {
+          "id": "S2",
+          "contribution_id": "openalex:W4403586302::k01",
+          "statement": "In a large-scale blind evaluation by over 100 NLP researchers, LLM-generated research ideas are rated as significantly more novel (p < 0.05) than ideas written by human experts, while being judged slightly weaker on feasibility \u2014 the first statistically significant conclusion on LLM research ideation capability."
+        },
+        {
+          "id": "S3",
+          "contribution_id": "arxiv:2504.01848v3::k02",
+          "statement": "JudgeEval \u2014 a dataset of human-expert-graded replication submissions that serves as an auxiliary evaluation for developing and benchmarking automated LLM-based judges of research replication quality."
+        }
+      ]
+    },
+    {
+      "packet_id": "e2877ad063de",
+      "seed_id": "arxiv:2507.18901v1::k01",
+      "arm": "flat",
+      "contribution_ids": [
+        "arxiv:2507.18901v1::k01",
+        "openalex:W4403707291::k02",
+        "arxiv:2509.23426v2::k04"
+      ],
+      "pairwise_tfidf": [
+        0.192,
+        0.0794,
+        0.0
+      ],
+      "legacy_communities": [
+        3,
+        3,
+        0
+      ],
+      "enriched_communities": [
+        0,
+        0,
+        3
+      ],
+      "hard_pairs": 1,
+      "sources": [
+        {
+          "id": "S1",
+          "contribution_id": "arxiv:2507.18901v1::k01",
+          "statement": "State-of-the-art agentic AI systems perform below random-guessing baseline on end-to-end social science reproducibility assessment, with the best evaluated agent (CORE-Agent) reaching only 21.4% accuracy on a four-class scoring task."
+        },
+        {
+          "id": "S2",
+          "contribution_id": "openalex:W4403707291::k02",
+          "statement": "CORE-Agent, a task-specific agent adaptation of AutoGPT, achieves substantially higher accuracy on computational reproducibility tasks than the unmodified generalist AutoGPT, demonstrating that targeted modifications to generalist agents yield significant performance gains, with the best agent reaching only 21% accuracy on the hardest tasks."
+        },
+        {
+          "id": "S3",
+          "contribution_id": "arxiv:2509.23426v2::k04",
+          "statement": "Connecting ToolUniverse to an agentic AI model enables end-to-end therapeutic discovery; in a hypercholesterolemia case study this approach identified a potent drug analog with favorable predicted properties."
+        }
+      ]
+    },
+    {
+      "packet_id": "184b990e2420",
+      "seed_id": "arxiv:2507.18901v1::k01",
+      "arm": "legacy",
+      "contribution_ids": [
+        "arxiv:2507.18901v1::k01",
+        "arxiv:2509.23426v2::k04",
+        "arxiv:2606.08532::k02"
+      ],
+      "pairwise_tfidf": [
+        0.0794,
+        0.0729,
+        0.0495
+      ],
+      "legacy_communities": [
+        3,
+        0,
+        4
+      ],
+      "enriched_communities": [
+        0,
+        3,
+        4
+      ],
+      "hard_pairs": 0,
+      "sources": [
+        {
+          "id": "S1",
+          "contribution_id": "arxiv:2507.18901v1::k01",
+          "statement": "State-of-the-art agentic AI systems perform below random-guessing baseline on end-to-end social science reproducibility assessment, with the best evaluated agent (CORE-Agent) reaching only 21.4% accuracy on a four-class scoring task."
+        },
+        {
+          "id": "S2",
+          "contribution_id": "arxiv:2509.23426v2::k04",
+          "statement": "Connecting ToolUniverse to an agentic AI model enables end-to-end therapeutic discovery; in a hypercholesterolemia case study this approach identified a potent drug analog with favorable predicted properties."
+        },
+        {
+          "id": "S3",
+          "contribution_id": "arxiv:2606.08532::k02",
+          "statement": "Novel algorithms derived from LLM-generated hypotheses that outperform baseline models from highly cited data science papers, providing end-to-end experimental validation of AI-generated scientific hypotheses."
+        }
+      ]
+    },
+    {
+      "packet_id": "23b4fe2b9bb4",
+      "seed_id": "arxiv:2507.18901v1::k01",
+      "arm": "enriched",
+      "contribution_ids": [
+        "arxiv:2507.18901v1::k01",
+        "arxiv:2509.23426v2::k04",
+        "arxiv:2606.08532::k02"
+      ],
+      "pairwise_tfidf": [
+        0.0794,
+        0.0729,
+        0.0495
+      ],
+      "legacy_communities": [
+        3,
+        0,
+        4
+      ],
+      "enriched_communities": [
+        0,
+        3,
+        4
+      ],
+      "hard_pairs": 0,
+      "sources": [
+        {
+          "id": "S1",
+          "contribution_id": "arxiv:2507.18901v1::k01",
+          "statement": "State-of-the-art agentic AI systems perform below random-guessing baseline on end-to-end social science reproducibility assessment, with the best evaluated agent (CORE-Agent) reaching only 21.4% accuracy on a four-class scoring task."
+        },
+        {
+          "id": "S2",
+          "contribution_id": "arxiv:2509.23426v2::k04",
+          "statement": "Connecting ToolUniverse to an agentic AI model enables end-to-end therapeutic discovery; in a hypercholesterolemia case study this approach identified a potent drug analog with favorable predicted properties."
+        },
+        {
+          "id": "S3",
+          "contribution_id": "arxiv:2606.08532::k02",
+          "statement": "Novel algorithms derived from LLM-generated hypotheses that outperform baseline models from highly cited data science papers, providing end-to-end experimental validation of AI-generated scientific hypotheses."
+        }
+      ]
+    },
+    {
+      "packet_id": "67a718220f89",
+      "seed_id": "openalex:W7161731996::k01",
+      "arm": "flat",
+      "contribution_ids": [
+        "openalex:W7161731996::k01",
+        "openalex:W4416043407::k01",
+        "arxiv:2603.28376v1::k02"
+      ],
+      "pairwise_tfidf": [
+        0.3665,
+        0.1754,
+        0.0876
+      ],
+      "legacy_communities": [
+        4,
+        4,
+        0
+      ],
+      "enriched_communities": [
+        2,
+        2,
+        0
+      ],
+      "hard_pairs": 1,
+      "sources": [
+        {
+          "id": "S1",
+          "contribution_id": "openalex:W7161731996::k01",
+          "statement": "A multi-agent architecture with asynchronous task execution framework flexibly allocates computational resources for scientific reasoning, enabling dynamic scaling of test-time compute."
+        },
+        {
+          "id": "S2",
+          "contribution_id": "openalex:W4416043407::k01",
+          "statement": "A multi-agent architecture with an asynchronous task execution framework enables flexible compute scaling for hypothesis-generation pipelines in scientific discovery systems."
+        },
+        {
+          "id": "S3",
+          "contribution_id": "arxiv:2603.28376v1::k02",
+          "statement": "Verifier-guided test-time scaling, in which the deep research agent itself serves as its own verifier during inference and continues reasoning on challenging questions under a controlled tool-call budget, unlocks effective test-time compute scaling without a separate verifier model."
+        }
+      ]
+    },
+    {
+      "packet_id": "3046f9336ee6",
+      "seed_id": "openalex:W7161731996::k01",
+      "arm": "legacy",
+      "contribution_ids": [
+        "openalex:W7161731996::k01",
+        "arxiv:2603.28376v1::k02",
+        "openalex:W4394769973::k00"
+      ],
+      "pairwise_tfidf": [
+        0.1754,
+        0.0632,
+        0.0104
+      ],
+      "legacy_communities": [
+        4,
+        0,
+        1
+      ],
+      "enriched_communities": [
+        2,
+        0,
+        3
+      ],
+      "hard_pairs": 0,
+      "sources": [
+        {
+          "id": "S1",
+          "contribution_id": "openalex:W7161731996::k01",
+          "statement": "A multi-agent architecture with asynchronous task execution framework flexibly allocates computational resources for scientific reasoning, enabling dynamic scaling of test-time compute."
+        },
+        {
+          "id": "S2",
+          "contribution_id": "arxiv:2603.28376v1::k02",
+          "statement": "Verifier-guided test-time scaling, in which the deep research agent itself serves as its own verifier during inference and continues reasoning on challenging questions under a controlled tool-call budget, unlocks effective test-time compute scaling without a separate verifier model."
+        },
+        {
+          "id": "S3",
+          "contribution_id": "openalex:W4394769973::k00",
+          "statement": "A multi-agent architecture coordinating specialized large language model agents to decompose and replicate scientific publication methodologies through sequential tasks of document analysis, literature review, data acquisition, and code generation."
+        }
+      ]
+    },
+    {
+      "packet_id": "090cba89ec42",
+      "seed_id": "openalex:W7161731996::k01",
+      "arm": "enriched",
+      "contribution_ids": [
+        "openalex:W7161731996::k01",
+        "arxiv:2603.28376v1::k02",
+        "arxiv:2507.02004v1::k02"
+      ],
+      "pairwise_tfidf": [
+        0.1754,
+        0.1037,
+        0.1179
+      ],
+      "legacy_communities": [
+        4,
+        0,
+        0
+      ],
+      "enriched_communities": [
+        2,
+        0,
+        3
+      ],
+      "hard_pairs": 0,
+      "sources": [
+        {
+          "id": "S1",
+          "contribution_id": "openalex:W7161731996::k01",
+          "statement": "A multi-agent architecture with asynchronous task execution framework flexibly allocates computational resources for scientific reasoning, enabling dynamic scaling of test-time compute."
+        },
+        {
+          "id": "S2",
+          "contribution_id": "arxiv:2603.28376v1::k02",
+          "statement": "Verifier-guided test-time scaling, in which the deep research agent itself serves as its own verifier during inference and continues reasoning on challenging questions under a controlled tool-call budget, unlocks effective test-time compute scaling without a separate verifier model."
+        },
+        {
+          "id": "S3",
+          "contribution_id": "arxiv:2507.02004v1::k02",
+          "statement": "Self-evolving test-time scaling in biomedical AI: iteratively running a multi-agent system on the same benchmark with increasing computational trials nearly doubles accuracy (14 % \u2192 26 % on Humanity's Last Exam: Biomedicine), demonstrating systematic performance improvement through accumulated reasoning experience."
+        }
+      ]
+    }
+  ],
+  "sampling": "purposive typed-edge stress test; not corpus-representative",
+  "manipulation_check": {
+    "partner_overlaps": [
+      {
+        "seed_id": "openalex:W4403795293::k00",
+        "flat_legacy": 1,
+        "flat_enriched": 1,
+        "legacy_enriched": 2
+      },
+      {
+        "seed_id": "openalex:W7140287209::k00",
+        "flat_legacy": 0,
+        "flat_enriched": 0,
+        "legacy_enriched": 0
+      },
+      {
+        "seed_id": "openalex:W4404782918::k00",
+        "flat_legacy": 0,
+        "flat_enriched": 0,
+        "legacy_enriched": 1
+      },
+      {
+        "seed_id": "arxiv:2507.18901v1::k01",
+        "flat_legacy": 1,
+        "flat_enriched": 1,
+        "legacy_enriched": 2
+      },
+      {
+        "seed_id": "openalex:W7161731996::k01",
+        "flat_legacy": 1,
+        "flat_enriched": 1,
+        "legacy_enriched": 1
+      }
+    ]
+  }
+}
