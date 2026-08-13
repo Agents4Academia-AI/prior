@@ -43,10 +43,19 @@ def test_bibtex_balanced_parser_keeps_multiline_nested_entries_separate():
     assert "Second Title" not in entries[0][1]
 
 
-def test_files_are_parsed_independently_and_conflicting_keys_rejected():
+def test_rendered_bbl_entry_wins_over_different_bib_source_for_same_key():
     files = {
         "refs.bbl": r"\bibitem{same} Correct bounded reference. 2024.",
         "refs.bib": "@article{same, title={Different reference}, year={2024}}",
+    }
+    assert X.bibliography_entries(files) == [
+        ("same", "Correct bounded reference. 2024.")]
+
+
+def test_conflicting_keys_within_same_tier_are_rejected():
+    files = {
+        "one.bbl": r"\bibitem{same} First reference. 2024.",
+        "two.bbl": r"\bibitem{same} Different reference. 2024.",
     }
     assert X.bibliography_entries(files) == []
 
