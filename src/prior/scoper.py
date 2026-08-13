@@ -69,6 +69,32 @@ def followup_queries(topic_def: str, kept: list[Paper],
 
 
 # ── stage 2: gather candidates (recall) ──────────────────────────────────────
+def _same_work(a: Paper, b: Paper) -> bool:
+    """Conservative work-level match across source-specific manifestations."""
+    aliases_a, aliases_b = set(a.identity_aliases()), set(b.identity_aliases())
+    if aliases_a & aliases_b:
+        return True
+    # Two different values in the same strong namespace are evidence against a
+    # merge, even when generic titles collide.
+    for prefix in ("doi:", "arxiv:"):
+        left = {value for value in aliases_a if value.startswith(prefix)}
+        right = {value for value in aliases_b if value.startswith(prefix)}
+        if left and right and left.isdisjoint(right):
+            return False
+    if a.key() == b.key():
+        return True
+    ta = set(a.key().removeprefix("title:").split())
+    tb = set(b.key().removeprefix("title:").split())
+    if not ta or not tb or min(len(ta), len(tb)) < 6:
+        return False
+    containment = len(ta & tb) / min(len(ta), len(tb))
+    if containment < 0.88:
+        return False
+    aa = {name.split()[-1].lower() for name in a.authors if name.split()}
+    ab = {name.split()[-1].lower() for name in b.authors if name.split()}
+    return bool(aa & ab) and (not a.year or not b.year or abs(a.year - b.year) <= 2)
+
+
 def _dedup_cross_source(papers: list[Paper]) -> list[Paper]:
     """Collapse the same paper arriving from different sources (OpenAlex / arXiv /
     S2) by canonical key (Paper.key), preferring OpenAlex (it carries the citation
@@ -77,7 +103,8 @@ def _dedup_cross_source(papers: list[Paper]) -> list[Paper]:
     best: dict[str, Paper] = {}
     variants: dict[str, list[Paper]] = {}
     for p in papers:
-        k = p.key()
+        k = next((key for key, group in variants.items()
+                  if _same_work(p, group[0])), p.key())
         variants.setdefault(k, []).append(p)
         cur = best.get(k)
         if cur is None or rank.get(p.source, 9) < rank.get(cur.source, 9):
@@ -85,10 +112,49 @@ def _dedup_cross_source(papers: list[Paper]) -> list[Paper]:
     # preprint precedence: the kept record adopts the EARLIEST real date across its
     # source variants, so an OpenAlex venue date never overrides an arXiv <published>.
     for k, rec in best.items():
+        merged, seen = [], set()
+        for variant in variants[k]:
+            for item in variant.all_manifestations():
+                signature = (item.get("id", ""), item.get("url", ""),
+                             item.get("pdf_url", ""), item.get("doi", ""))
+                if signature not in seen and item.get("id") != rec.id:
+                    seen.add(signature)
+                    merged.append(item)
+        rec.manifestations = merged
         e = dates.earliest(variants[k])
         if e and (not rec.date or e[0][:7] < rec.date[:7]):
             rec.date, rec.date_precision, rec.date_source = e
     return list(best.values())
+
+
+def resolve_manifestations(papers: list[Paper], *, progress=print) -> list[Paper]:
+    """Attach verified cross-source versions before retrieval and citation joins."""
+    enriched = 0
+    for i, paper in enumerate(papers, 1):
+        before = len(paper.manifestations)
+        variants = [paper]
+        doi = (paper.doi or "").replace("https://doi.org/", "").replace("doi:", "")
+        if doi:
+            candidate = semanticscholar.fetch(f"DOI:{doi}")
+            if candidate and _same_work(paper, candidate):
+                variants.append(candidate)
+        known_arxiv = any(str(item.get("id") or "").startswith("arxiv:")
+                          for item in paper.all_manifestations())
+        if not known_arxiv:
+            aid = arxiv.find_id_by_title(paper.title)
+            if aid:
+                found = arxiv.fetch_ids([aid])
+                candidate = next(iter(found.values()), None)
+                if candidate and _same_work(paper, candidate):
+                    variants.append(candidate)
+        merged = _dedup_cross_source(variants)[0]
+        paper.manifestations = merged.manifestations
+        if len(paper.manifestations) > before:
+            enriched += 1
+        if i % 25 == 0:
+            progress(f"  manifestations: resolved {i}/{len(papers)} works")
+    progress(f"  manifestations: enriched {enriched}/{len(papers)} canonical works")
+    return papers
 
 
 def gather_candidates(queries: list[str], *, per_query: int = 25,
@@ -154,15 +220,18 @@ def gather_candidates(queries: list[str], *, per_query: int = 25,
     if observe:
         variants: dict[str, list[Paper]] = {}
         for paper in observed:
-            variants.setdefault(paper.key(), []).append(paper)
-        retained = {paper.key(): paper for paper in deduped}
+            key = next((key for key, group in variants.items()
+                        if _same_work(paper, group[0])), paper.key())
+            variants.setdefault(key, []).append(paper)
         for key, copies in variants.items():
             unique_ids = list(dict.fromkeys(paper.id for paper in copies))
             if len(unique_ids) > 1:
+                retained = next(paper for paper in deduped
+                                if _same_work(paper, copies[0]))
                 observe({
                     "kind": "deduplication", "work_key": key,
-                    "retained_id": retained[key].id, "variant_ids": unique_ids,
-                    "basis": "canonical_work_key",
+                    "retained_id": retained.id, "variant_ids": unique_ids,
+                    "basis": "strong_identifier_or_conservative_work_match",
                 })
     return deduped
 
@@ -488,6 +557,7 @@ def scope(topic_def: str, candidates: list[Paper], *, model: str | None = None,
 
 def build_scoped_corpus(topic_def: str, *, per_query: int = 25,
                         model: str | None = None, repair_abstracts: bool = True,
+                        resolve_versions: bool = True,
                         progress=print
                         ) -> tuple[list[Paper], list[tuple[Paper, str]]]:
     """Full Scoper run: topic → queries → candidates → scoped corpus.
@@ -503,7 +573,11 @@ def build_scoped_corpus(topic_def: str, *, per_query: int = 25,
     progress("[3/3] scoping (relevance filter) ...")
     kept, dropped = scope(topic_def, candidates, model=model, progress=progress)
     progress(f"      kept {len(kept)} / dropped {len(dropped)}")
-    return [p for p, _ in kept], dropped
+    corpus = [p for p, _ in kept]
+    if resolve_versions:
+        progress("[post] resolving work manifestations ...")
+        resolve_manifestations(corpus, progress=progress)
+    return corpus, dropped
 
 
 def source_preflight(progress=print) -> dict[str, str]:
@@ -547,7 +621,8 @@ def source_preflight(progress=print) -> dict[str, str]:
 def explore(topic_def: str, *, hops: int = 3, per_query: int = 25,
             use_prefilter: bool = True, epsilon: float = 0.03,
             repair_abstracts: bool = True, recover_rounds: int = 5,
-            preflight: bool = True, model: str | None = None, progress=print):
+            preflight: bool = True, resolve_versions: bool = True,
+            model: str | None = None, progress=print):
     """The full exploration pipeline as one call — Stage 1, the agentic stage:
 
       1. recall-then-precision : LLM query variations over OpenAlex+arXiv+S2, then
@@ -645,4 +720,7 @@ def explore(topic_def: str, *, hops: int = 3, per_query: int = 25,
     overlap = len(search_keys & snow_keys)
     est = completeness.capture_recapture(len(search_keys), len(snow_keys), overlap)
     progress(f"  completeness: {est}")
+    if resolve_versions:
+        progress("[post] resolving work manifestations")
+        resolve_manifestations(corpus, progress=progress)
     return corpus, dropped, {"curve": curve, "completeness": est, "n": len(corpus)}

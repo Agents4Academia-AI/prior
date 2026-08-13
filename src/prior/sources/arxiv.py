@@ -8,6 +8,7 @@ that OpenAlex has not yet indexed. Returns Atom XML; parsed with stdlib.
 from __future__ import annotations
 
 import re
+import unicodedata
 import xml.etree.ElementTree as ET
 
 import requests
@@ -134,14 +135,18 @@ def find_id_by_title(title: str) -> str | None:
     confidence title match, else None. OpenAlex often canonicalises a paper to a
     closed publisher/repository edition with no arXiv locator; this recovers the
     open edition so the full-text stage can use it."""
-    import re
-    want = set(re.sub(r"[^a-z0-9]", " ", (title or "").lower()).split())
+    dash_safe = re.sub(r"[‐‑‒–—―]", " ", title or "")
+    clean = unicodedata.normalize("NFKD", dash_safe).encode("ascii", "ignore").decode()
+    words = re.sub(r"[^a-z0-9]", " ", clean.lower()).split()
+    want = set(words)
     if len(want) < 4:
         return None
     try:
-        r = requests.get(API, params={"search_query": f'ti:"{title}"', "max_results": 3},
-                         headers={"User-Agent": config.USER_AGENT}, timeout=config.HTTP_TIMEOUT)
-        r.raise_for_status()
+        # Short normalized phrase survives publisher punctuation and subtitle
+        # changes better than arXiv's brittle exact-title query. `_get` owns the
+        # retry and Retry-After behavior.
+        query = " ".join(words[:4])
+        r = _get({"search_query": f'all:"{query}"', "max_results": 10})
         root = ET.fromstring(r.text)
     except (requests.RequestException, ET.ParseError):
         return None

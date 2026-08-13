@@ -173,6 +173,35 @@ def references(s2_id: str, *, max_results: int = 60) -> list[Paper]:
     return _neighbors(s2_id, "references", max_results=max_results)
 
 
+def reference_external_ids(s2_id: str, *, max_results: int = 1000) -> list[dict]:
+    """Backward-reference identifiers for corpus reconciliation.
+
+    Returns normalized DOI/arXiv fields without independently issuing or pacing
+    requests outside this adapter. Failures remain non-fatal, consistent with
+    the discovery-facing neighbor methods.
+    """
+    out = []
+    offset = 0
+    while len(out) < max_results:
+        params = {"fields": "externalIds", "limit": min(1000, max_results - len(out)),
+                  "offset": offset}
+        try:
+            body = _get(f"{GRAPH}/{s2_id}/references", params).json()
+        except requests.RequestException:
+            break
+        data = body.get("data") or []
+        if not data:
+            break
+        for row in data:
+            ext = (row.get("citedPaper") or {}).get("externalIds") or {}
+            out.append({"doi": ext.get("DOI"), "arx": ext.get("ArXiv")})
+        nxt = body.get("next")
+        if not nxt:
+            break
+        offset = nxt
+    return out
+
+
 def fetch(s2_id: str) -> Paper | None:
     """Fetch one paper's metadata (incl. abstract) by an S2-resolvable id:
     'ARXIV:2006.11239', 'DOI:10.1145/x', or a raw S2 paperId. The repair path uses

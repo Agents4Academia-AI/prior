@@ -40,10 +40,13 @@ class Paper:
     date: str = ""             # full publication date ISO YYYY-MM-DD (month-level chronology)
     date_precision: str = ""   # "day" | "month" | "year" — how much to trust the granularity
     date_source: str = ""      # openalex | arxiv | semanticscholar | arxiv_id | year_fallback
+    abstract_source: str = ""  # provenance for repaired/backfilled abstracts
     pdf_url: str = ""          # open-access full-text PDF, when known
     type: str = ""             # OpenAlex work type: article/review/letter/editorial/
                                # book-chapter/preprint/... — a free non-primary veto
     is_review: bool = False    # survey/review — excluded as non-primary literature
+    # Source-specific records/versions retained under this canonical work.
+    manifestations: list[dict] = field(default_factory=list)
 
     def short_cite(self) -> str:
         first = self.authors[0].split()[-1] if self.authors else "Anon"
@@ -70,8 +73,48 @@ class Paper:
             return self.id
         return "work:" + hashlib.sha1(k.encode()).hexdigest()[:16]
 
+    def identity_aliases(self) -> list[str]:
+        """Strong source-independent identifiers observed for this work.
+
+        ``work_id`` remains the migration-stable title hash. These aliases add
+        DOI/arXiv crosswalk identity without silently changing existing graph
+        keys when a manifestation is discovered later.
+        """
+        aliases = set()
+        for item in self.all_manifestations():
+            haystack = " ".join(str(item.get(k) or "") for k in
+                                ("id", "url", "pdf_url", "doi"))
+            for match in re.finditer(
+                    r"(?:arxiv[:./]|abs/|pdf/)(\d{4}\.\d{4,5})(?:v\d+)?",
+                    haystack, re.I):
+                aliases.add("arxiv:" + match.group(1).lower())
+            doi = str(item.get("doi") or "").strip().lower()
+            doi = re.sub(r"^(?:https?://(?:dx\.)?doi\.org/|doi:\s*)", "", doi)
+            doi = doi.rstrip(". /")
+            if doi.startswith("10."):
+                aliases.add("doi:" + doi)
+                match = re.fullmatch(r"10\.48550/arxiv\.(\d{4}\.\d{4,5})(?:v\d+)?", doi)
+                if match:
+                    aliases.add("arxiv:" + match.group(1))
+        return sorted(aliases)
+
+    def all_manifestations(self) -> list[dict]:
+        """Return the primary record plus deduplicated alternate manifestations."""
+        primary = {"id": self.id, "source": self.source, "url": self.url,
+                   "pdf_url": self.pdf_url, "doi": self.doi or "",
+                   "date": self.date, "title": self.title}
+        out, seen = [], set()
+        for item in [primary, *self.manifestations]:
+            key = (item.get("id", ""), item.get("url", ""),
+                   item.get("pdf_url", ""), item.get("doi", ""))
+            if key not in seen:
+                seen.add(key)
+                out.append(dict(item))
+        return out
+
     def to_dict(self) -> dict:
-        return asdict(self) | {"work_id": self.work_id()}
+        return asdict(self) | {"work_id": self.work_id(),
+                              "work_aliases": self.identity_aliases()}
 
     @classmethod
     def from_dict(cls, d: dict) -> "Paper":

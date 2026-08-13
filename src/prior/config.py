@@ -93,6 +93,10 @@ FULLPAPER_MAX_PAGES = int(os.environ.get("PRIOR_FULLPAPER_MAX_PAGES", "0"))
 # Drop raster images smaller than this (px, either side) — icons, rules, logos.
 FULLPAPER_MIN_IMAGE_PX = int(os.environ.get("PRIOR_FULLPAPER_MIN_IMAGE_PX", "50"))
 
+# Optional citation-resolution stage. Default builds remain unchanged; enabling
+# it requires the `resolve` extra and adds bibliography/incoming citation edges.
+RESOLVE_CITATIONS = _flag("PRIOR_RESOLVE_CITATIONS", False)
+
 # ── Annotation / auth ───────────────────────────────────────────────────────────
 # users.json maps username -> {"password": "...", "admin": true|false}. When the file
 # is absent, auth runs in OPEN dev mode (any name, no password, non-admin).

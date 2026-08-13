@@ -1,29 +1,32 @@
-"""Backfill `work_id` on Paper nodes ingested before the identity existed.
+"""Backfill stable work IDs and strong DOI/arXiv aliases on older Paper nodes.
 
-work_id is the source-independent identity of a WORK (hash of the normalised
-title), letting the arXiv preprint, its v2, and the published OpenAlex record
-be recognised as one paper while each keeps its own id for provenance. New
-ingests carry it automatically (Paper.to_dict); this stamps the back catalogue
-and reports any cross-source duplicates it reveals.
+``work_id`` remains the migration-stable normalized-title hash. Strong aliases
+provide safer cross-source/version matching despite title changes. New ingests
+carry both automatically via ``Paper.to_dict``; this stamps the back catalogue
+and reports title-hash duplicates for manual review.
 
     PYTHONPATH=src python3 scripts/backfill_work_ids.py
 """
 from __future__ import annotations
 
-from collections import Counter
-
 from prior import graph
 from prior.models import Paper
 
 with graph.session() as s:
-    rows = s.run("MATCH (p:Paper) WHERE p.work_id IS NULL "
-                 "RETURN p.id AS id, p.title AS title").data()
-    updates = [{"id": r["id"],
-                "w": Paper(id=r["id"], source="", title=r["title"] or "",
-                           abstract="", url="").work_id()}
-               for r in rows]
+    rows = s.run("""MATCH (p:Paper)
+                    WHERE p.work_id IS NULL OR p.work_aliases IS NULL
+                    RETURN p.id AS id, p.title AS title, p.doi AS doi,
+                           p.url AS url""").data()
+    updates = []
+    for r in rows:
+        paper = Paper(id=r["id"], source="", title=r["title"] or "",
+                      abstract="", url=r.get("url") or "", doi=r.get("doi"))
+        updates.append({"id": r["id"], "w": paper.work_id(),
+                        "aliases": paper.identity_aliases()})
     if updates:
-        s.run("UNWIND $rows AS r MATCH (p:Paper {id:r.id}) SET p.work_id = r.w",
+        s.run("""UNWIND $rows AS r MATCH (p:Paper {id:r.id})
+                 SET p.work_id = coalesce(p.work_id, r.w),
+                     p.work_aliases = r.aliases""",
               rows=updates)
     print(f"backfilled {len(updates)} papers")
 

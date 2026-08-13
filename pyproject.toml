@@ -29,6 +29,12 @@ web = ["fastapi>=0.110", "uvicorn[standard]>=0.27"]
 # Rich whole-paper Markdown renders (scripts/fullpaper.py): structure-aware PDF →
 # Markdown with figures. The arXiv-HTML path (math + figures) needs no extra deps.
 fullpaper = ["pymupdf>=1.24", "pymupdf4llm>=0.0.17"]
+# Reference resolution is optional because ordinary Prior builds remain useful
+# without network-backed bibliography resolution. Pin the reused resolver so
+# citation runs are reproducible rather than dependent on a sibling checkout.
+resolve = [
+    "citation-verifier[sources] @ git+https://github.com/Agents4Academia-AI/citation_verification@52c109c10701d685e28c417b283e740c6cd43773",
+]
 
 [project.scripts]
 prior = "prior.cli:main"

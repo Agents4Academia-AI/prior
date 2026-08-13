@@ -1,0 +1,264 @@
+#!/usr/bin/env python3
+"""Citation CONTEXTS: the text surrounding each intra-corpus in-text citation.
+
+The sentence around a citation is highly informative about relation type
+("we build on [Q]" / "unlike [Q]" / "consistent with [Q]") — scite.ai's
+supporting/contrasting idea. From the cached e-print sources (out/eprints/):
+
+  1. in citer P's .bbl/.bib, find the entry matching corpus paper Q
+     (arXiv id or normalized title) -> its \\bibitem/@entry KEY;
+  2. find \\cite*{...key...} occurrences in P's .tex body;
+  3. extract a ±window of de-TeXed text around each -> contexts.
+
+The citation that resolves to the destination Q is tagged ``[CITED:TARGET]``
+(others stay ``[CITED]``) so a consumer can tell, in a multi-cite sentence,
+which citation is this edge's destination.
+
+Writes:
+  out/citation_contexts.json: {"P->Q": ["...context...", ...]}  (back-compat)
+  out/citation_map.json:      [{citing_id, cited_id, cite_key, bibtex,
+                                contexts:[{text, target_offset}]}, ...]
+    -- the join map from OpenAlex/arXiv edge endpoints to the citing paper's
+       raw \\cite key / BibTeX entry (RefWarden's join key).
+
+Usage: python3 experiments/edge_quality/extract_citation_contexts.py --papers ../prior-core-v0.2/papers_core.jsonl
+"""
+from __future__ import annotations
+
+import argparse
+import gzip
+import io
+import json
+import re
+import tarfile
+from pathlib import Path
+
+OUT = Path(__file__).parent / "out"
+WINDOW = 320          # chars either side of the \cite
+
+
+def arxiv_id_of(p: dict) -> str | None:
+    for f in ("id", "url", "doi", "pdf_url"):
+        m = re.search(r"(?:arxiv[:._/]|abs/|pdf/)(\d{4}\.\d{4,5})", str(p.get(f) or ""), re.I)
+        if m:
+            return m.group(1)
+    return None
+
+
+def norm(s: str) -> str:
+    s = re.sub(r"[{}\\~'\"`^]|\\[a-zA-Z]+", " ", s)
+    return re.sub(r"[^a-z0-9]+", " ", s.lower()).strip()
+
+
+CITE_RE = r"\\cite[a-z]*\*?(?:\[[^\]]*\])?\{[^}]*\}"
+
+
+def detex(s: str) -> str:
+    s = re.sub(CITE_RE, "[CITED]", s)
+    s = re.sub(r"\\[a-zA-Z]+\*?(\[[^\]]*\])?", " ", s)
+    s = re.sub(r"[{}$~%]", " ", s)
+    return re.sub(r"\s+", " ", s).strip()
+
+
+def detex_marked(window: str, target_start: int) -> str:
+    """De-TeX ``window``, tagging the citation whose match begins at
+    ``target_start`` (offset within ``window``) as ``[CITED:TARGET]`` and every
+    other in-text citation as ``[CITED]``. Lets a consumer disambiguate which
+    citation in a multi-cite sentence is the edge's destination."""
+    def repl(mm: "re.Match[str]") -> str:
+        return "[CITED:TARGET]" if mm.start() == target_start else "[CITED]"
+    s = re.sub(CITE_RE, repl, window)          # match offsets are vs. the original window
+    s = re.sub(r"\\[a-zA-Z]+\*?(\[[^\]]*\])?", " ", s)
+    s = re.sub(r"[{}$~%]", " ", s)
+    return re.sub(r"\s+", " ", s).strip()
+
+
+def files_of(blob: bytes) -> dict[str, str]:
+    out = {}
+    try:
+        with tarfile.open(fileobj=io.BytesIO(blob), mode="r:*") as tf:
+            for m in tf.getmembers():
+                if m.name.lower().endswith((".tex", ".bbl", ".bib")):
+                    fh = tf.extractfile(m)
+                    if fh:
+                        out[m.name] = fh.read().decode("utf-8", errors="ignore")
+    except tarfile.TarError:
+        try:
+            out["main.tex"] = gzip.decompress(blob).decode("utf-8", errors="ignore")
+        except OSError:
+            pass
+    return out
+
+
+def bbl_entries(text: str) -> list[tuple[str, str]]:
+    """Parse bounded ``\\bibitem`` records without crossing the bibliography.
+
+    arXiv source bundles sometimes append comments or a complete ``.bib`` after
+    ``\\end{thebibliography}``. The old end-of-input regex fused that material
+    into the final item and allowed unrelated titles to resolve against it.
+    """
+    begin = re.search(r"\\begin\s*\{thebibliography\}(?:\s*\{[^}]*\})?", text)
+    if begin:
+        text = text[begin.end():]
+    end = re.search(r"\\end\s*\{thebibliography\}", text)
+    if end:
+        text = text[:end.start()]
+    markers = list(re.finditer(r"\\bibitem(?:\[[^\]]*\])?\{([^}]+)\}", text))
+    entries = []
+    for i, marker in enumerate(markers):
+        stop = markers[i + 1].start() if i + 1 < len(markers) else len(text)
+        body = text[marker.end():stop].strip()
+        if body:
+            entries.append((marker.group(1).strip(), body))
+    return entries
+
+
+def bibtex_entries(text: str) -> list[tuple[str, str]]:
+    """Parse BibTeX records using balanced delimiters, not newline heuristics."""
+    starts = re.compile(r"@(?:article|book|booklet|conference|dataset|inbook|"
+                        r"incollection|inproceedings|manual|mastersthesis|misc|"
+                        r"phdthesis|proceedings|techreport|unpublished)\s*([({])", re.I)
+    entries = []
+    pos = 0
+    while match := starts.search(text, pos):
+        opening = match.group(1)
+        closing = "}" if opening == "{" else ")"
+        depth, quoted, escaped, end = 1, False, False, None
+        for i in range(match.end(), len(text)):
+            char = text[i]
+            if escaped:
+                escaped = False
+                continue
+            if char == "\\":
+                escaped = True
+                continue
+            if char == '"':
+                quoted = not quoted
+                continue
+            if quoted:
+                continue
+            if char == opening:
+                depth += 1
+            elif char == closing:
+                depth -= 1
+                if depth == 0:
+                    end = i
+                    break
+        if end is None:
+            break  # malformed trailing entry is rejected, never fused onward
+        payload = text[match.end():end]
+        key_match = re.match(r"\s*([^,\s]+)\s*,", payload)
+        if key_match:
+            entries.append((key_match.group(1), payload[key_match.end():].strip()))
+        pos = end + 1
+    return entries
+
+
+def bibliography_entries(files: dict[str, str]) -> list[tuple[str, str]]:
+    """Parse files independently; prefer rendered BBL entries over BibTeX source.
+
+    A normal source bundle often contains the same key in both files with
+    deliberately different text (formatted ``.bbl`` versus fielded ``.bib``).
+    That is not ambiguity: the BBL is the record actually connected to ``\\cite``.
+    Conflicting bodies *within* the selected tier still abstain.
+    """
+    bbl_by_key: dict[str, set[str]] = {}
+    bib_by_key: dict[str, set[str]] = {}
+    for name, text in files.items():
+        lower = name.lower()
+        is_bbl = lower.endswith(".bbl")
+        parsed = bbl_entries(text) if is_bbl else (
+            bibtex_entries(text) if lower.endswith(".bib") else [])
+        target = bbl_by_key if is_bbl else bib_by_key
+        for key, body in parsed:
+            clean = re.sub(r"\s+", " ", body).strip()
+            target.setdefault(key, set()).add(clean)
+    out = []
+    for key in dict.fromkeys([*bbl_by_key, *bib_by_key]):
+        bodies = bbl_by_key.get(key) or bib_by_key.get(key) or set()
+        if len(bodies) == 1:
+            out.append((key, next(iter(bodies))))
+    return out
+
+
+def match_entries(entries: list[tuple[str, str]], signatures: dict[str, dict],
+                  citing_id: str) -> dict[str, tuple[str, str]]:
+    """Return only one-to-one target/entry matches; ambiguity creates no edge."""
+    target_hits: dict[str, list[tuple[str, str]]] = {}
+    for key, body in entries:
+        body_norm = norm(body)
+        hits = []
+        for target_id, signature in signatures.items():
+            if target_id == citing_id:
+                continue
+            if ((signature["arx"] and signature["arx"] in body)
+                    or (signature["title"] and signature["title"] in body_norm)):
+                hits.append(target_id)
+        if len(hits) == 1:  # one entry mentioning multiple corpus works is ambiguous
+            target_hits.setdefault(hits[0], []).append((key, body))
+    return {target: matches[0] for target, matches in target_hits.items()
+            if len(matches) == 1}
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--papers", required=True)
+    args = ap.parse_args()
+    papers = [json.loads(l) for l in open(args.papers) if l.strip()]
+    sig = {p["id"]: {"arx": arxiv_id_of(p),
+                     "title": (t if len(t := norm(p.get("title") or "")) >= 25 else None)}
+           for p in papers}
+
+    contexts: dict[str, list[str]] = {}          # back-compat: {"P->Q": ["...text..."]}
+    records: list[dict] = []                      # join map: one record per cited pair
+    n_pairs = 0
+    for p in papers:
+        aid_v = None
+        for f in ("id", "url", "doi", "pdf_url"):
+            m = re.search(r"(?:arxiv[:._/]|abs/|pdf/)(\d{4}\.\d{4,5}(?:v\d+)?)", str(p.get(f) or ""), re.I)
+            if m:
+                aid_v = m.group(1); break
+        if not aid_v:
+            continue
+        cache = OUT / "eprints" / f"{aid_v.replace('/', '_')}.bin"
+        if not cache.exists() or not cache.stat().st_size:
+            continue
+        fs = files_of(cache.read_bytes())
+        texs = "\n".join(v for k, v in fs.items() if k.lower().endswith(".tex"))
+        entries = bibliography_entries(fs)
+        if not entries or not texs:
+            continue
+        matches = match_entries(entries, sig, p["id"])
+        for q in papers:
+            if q["id"] == p["id"]:
+                continue
+            matched = matches.get(q["id"])
+            if not matched:
+                continue
+            key, bib_body = matched
+            ctxs = []
+            for m in re.finditer(r"\\cite[a-z]*\*?(?:\[[^\]]*\])?\{([^}]*)\}", texs):
+                if key in [x.strip() for x in m.group(1).split(",")]:
+                    a, b = max(0, m.start() - WINDOW), min(len(texs), m.end() + WINDOW)
+                    text = detex_marked(texs[a:b], m.start() - a)
+                    ctxs.append({"text": text, "target_offset": text.find("[CITED:TARGET]")})
+                if len(ctxs) >= 2:
+                    break
+            if ctxs:
+                contexts[f'{p["id"]}->{q["id"]}'] = [c["text"] for c in ctxs]
+                records.append({
+                    "citing_id": p["id"],     # OpenAlex/arXiv id of the citing paper (edge src)
+                    "cited_id": q["id"],      # OpenAlex/arXiv id of the cited paper  (edge dst)
+                    "cite_key": key,          # the \cite key / BibTeX entry key in the citing paper
+                    "bibtex": bib_body,       # raw bibliography entry body for that key
+                    "contexts": ctxs,         # [{text (with [CITED:TARGET]), target_offset}]
+                })
+                n_pairs += 1
+    (OUT / "citation_contexts.json").write_text(json.dumps(contexts, indent=1))
+    (OUT / "citation_map.json").write_text(json.dumps(records, indent=1))
+    print(f"contexts for {n_pairs} citation pairs -> {OUT/'citation_contexts.json'}", flush=True)
+    print(f"join map ({len(records)} records) -> {OUT/'citation_map.json'}", flush=True)
+
+
+if __name__ == "__main__":
+    main()
