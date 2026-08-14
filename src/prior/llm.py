@@ -252,7 +252,11 @@ def _structured_api(*, model, system, user, schema, tool_name, max_tokens, retri
             _log_api_usage(resp, model)
             for block in resp.content:
                 if block.type == "tool_use" and block.name == tool_name:
-                    return block.input  # type: ignore[return-value]
+                    if block.input:
+                        return block.input  # type: ignore[return-value]
+                    raise ValueError(
+                        f"empty {tool_name} payload (stop_reason={resp.stop_reason})"
+                    )
             raise ValueError("model did not call the emit tool")
         except anthropic.AuthenticationError as e:  # bad/expired key — don't retry, surface clearly
             raise RuntimeError(f"Invalid Anthropic API key: {e}") from e

@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import random
 import sys
 import threading
@@ -26,9 +27,9 @@ from prior import config, llm  # noqa: E402
 
 BUNDLE = ROOT / "data" / "prior-core-v0.2"
 EDGE_OUT = ROOT / "experiments" / "edge_quality" / "out"
-OUT = Path(__file__).parent / "out"
+OUT = Path(os.environ.get("PRIOR_IDEATION_OUT", Path(__file__).parent / "out"))
 HARD = {"supports", "builds_on", "refines", "contradicts"}
-ARMS = ("flat", "legacy", "enriched")
+ARMS = ("closed_box", "flat", "legacy", "enriched")
 PROMPT_VERSION = "graph-ideation-pilot-v1"
 
 IDEA_SYSTEM = """You propose concrete research directions in AI-for-science.
@@ -84,7 +85,8 @@ def partition(g: nx.Graph) -> dict[str, int]:
     return {node: i for i, group in enumerate(groups) for node in group}
 
 
-def prepare(seed: int = 61, n_seeds: int = 5) -> dict:
+def prepare(seed: int = 61, n_seeds: int = 5,
+            arms: tuple[str, ...] = ARMS, sampling: str = "stress") -> dict:
     grounded = json.loads((BUNDLE / "contributions_core_grounded.json").read_text())
     contributions = grounded["contributions"]
     by_id = {x["id"]: x for x in contributions}
@@ -131,7 +133,19 @@ def prepare(seed: int = 61, n_seeds: int = 5) -> dict:
                      if pair(cid, x) in hard_pairs), default=0),
                 contribution_degree[cid], -index[cid])
 
-    seeds = [max(xs, key=stress_score) for xs in ranked_groups[:n_seeds]]
+    if sampling == "stress":
+        seeds = [max(xs, key=stress_score) for xs in ranked_groups[:n_seeds]]
+    else:
+        # Deterministic stratification across legacy communities. Within each
+        # community, prefer contributions with some graph context, but do not
+        # select on whether the enriched arm will look favourable.
+        queues = [sorted(xs, key=lambda cid: (-contribution_degree[cid], cid))
+                  for xs in ranked_groups]
+        seeds = []
+        while len(seeds) < n_seeds and any(queues):
+            for queue in queues:
+                if queue and len(seeds) < n_seeds:
+                    seeds.append(queue.pop(0))
 
     def ranked(seed_id: str) -> list[str]:
         i = index[seed_id]
@@ -139,6 +153,8 @@ def prepare(seed: int = 61, n_seeds: int = 5) -> dict:
                       key=lambda cid: (-sims[i, index[cid]], cid))
 
     def choose(seed_id: str, arm: str) -> list[str]:
+        if arm == "closed_box":
+            return [seed_id]
         chosen = [seed_id]
         for cid in ranked(seed_id):
             if any(paper(cid) == paper(x) for x in chosen):
@@ -157,7 +173,7 @@ def prepare(seed: int = 61, n_seeds: int = 5) -> dict:
 
     packets = []
     for seed_id in seeds:
-        for arm in ARMS:
+        for arm in arms:
             cids = choose(seed_id, arm)
             packets.append({
                 "packet_id": hashlib.sha256(f"{seed}:{seed_id}:{arm}".encode()).hexdigest()[:12],
@@ -176,13 +192,15 @@ def prepare(seed: int = 61, n_seeds: int = 5) -> dict:
     for seed_id in seeds:
         rows = {x["arm"]: set(x["contribution_ids"][1:]) for x in packets
                 if x["seed_id"] == seed_id}
-        overlaps.append({"seed_id": seed_id,
-                         "flat_legacy": len(rows["flat"] & rows["legacy"]),
-                         "flat_enriched": len(rows["flat"] & rows["enriched"]),
-                         "legacy_enriched": len(rows["legacy"] & rows["enriched"])})
+        overlaps.append({"seed_id": seed_id, **{
+            f"{a}_{b}": len(rows[a] & rows[b])
+            for i, a in enumerate(arms) for b in arms[i + 1:]}})
     return {"schema_version": 1, "prompt_version": PROMPT_VERSION, "random_seed": seed,
             "n_seeds": len(seeds), "seeds": seeds, "packets": packets,
-            "sampling": "purposive typed-edge stress test; not corpus-representative",
+            "arms": list(arms),
+            "sampling": ("purposive typed-edge stress test; not corpus-representative"
+                         if sampling == "stress" else
+                         "deterministic stratified sample across legacy communities"),
             "manipulation_check": {"partner_overlaps": overlaps}}
 
 
@@ -199,7 +217,15 @@ def generate(manifest: dict, model: str, workers: int) -> None:
 
     def one(packet: dict) -> dict:
         sources = "\n\n".join(f"[{x['id']}] {x['statement']}" for x in packet["sources"])
-        result = llm.structured(model=model, system=IDEA_SYSTEM,
+        system = IDEA_SYSTEM
+        if packet["arm"] == "closed_box":
+            system = """You propose concrete research directions in AI-for-science.
+You receive only a seed topic and no retrieved literature. Produce exactly three
+distinct ideas informed by that seed and your internal knowledge. Each must state
+a testable research question and a minimal evaluation. Do not claim global novelty,
+invent citations, or imply that a literature search has been performed. Use S1 only
+to identify the supplied seed topic."""
+        result = llm.structured(model=model, system=system,
             user=f"SOURCE CONTRIBUTIONS:\n{sources}", schema=IDEA_SCHEMA,
             tool_name="emit_ideas", max_tokens=1400, retries=3, timeout=240)
         return {"packet_id": packet["packet_id"], "seed_id": packet["seed_id"],
@@ -216,7 +242,7 @@ def generate(manifest: dict, model: str, workers: int) -> None:
 
 def judge(manifest: dict, model: str, workers: int, seed: int) -> None:
     generations = {x["packet_id"]: x for x in load_jsonl(OUT / "generations.jsonl")}
-    path = OUT / "judgements.jsonl"
+    path = OUT / os.environ.get("PRIOR_IDEATION_JUDGEMENTS", "judgements.jsonl")
     done = {x["seed_id"] for x in load_jsonl(path)} if path.exists() else set()
     seed_ids = [x for x in manifest["seeds"] if x not in done]
     lock = threading.Lock()
@@ -243,7 +269,14 @@ def judge(manifest: dict, model: str, workers: int, seed: int) -> None:
                              "corpus_nonredundancy", "reason"]}}}, "required": ["scores"]}
         result = llm.structured(model=model, system=JUDGE_SYSTEM,
             user=json.dumps(items), schema=schema, tool_name="emit_scores",
-            max_tokens=2600, retries=3, timeout=300)
+            max_tokens=7000, retries=3, timeout=300)
+        expected = {x["key"] for x in items}
+        received = {x["key"] for x in result.get("scores", [])}
+        metrics = ("grounding", "coherence", "feasibility", "corpus_nonredundancy")
+        if expected != received or any(
+                not isinstance(score.get(metric), int) or not 1 <= score[metric] <= 5
+                for score in result.get("scores", []) for metric in metrics):
+            raise ValueError(f"invalid score payload missing={expected-received} extra={received-expected}")
         arm_by_packet = {x["packet_id"]: x["arm"] for x in manifest["packets"]}
         for score in result["scores"]:
             score["arm"] = arm_by_packet[score["key"].split(":")[0]]
@@ -259,7 +292,8 @@ def judge(manifest: dict, model: str, workers: int, seed: int) -> None:
 
 def summarize(manifest: dict) -> dict:
     generations = load_jsonl(OUT / "generations.jsonl")
-    judgements = load_jsonl(OUT / "judgements.jsonl") if (OUT / "judgements.jsonl").exists() else []
+    judgement_path = OUT / os.environ.get("PRIOR_IDEATION_JUDGEMENTS", "judgements.jsonl")
+    judgements = load_jsonl(judgement_path) if judgement_path.exists() else []
     values = defaultdict(lambda: defaultdict(list))
     for row in judgements:
         for x in row["scores"]:
@@ -271,10 +305,13 @@ def summarize(manifest: dict) -> dict:
               "means": {arm: {m: round(sum(v) / len(v), 3) for m, v in metrics.items()}
                         for arm, metrics in values.items()},
               "selection": {arm: {
-                  "mean_pairwise_tfidf": round(sum(sum(x["pairwise_tfidf"]) / 3
-                      for x in manifest["packets"] if x["arm"] == arm) / manifest["n_seeds"], 4),
+                  "mean_pairwise_tfidf": round(sum(
+                      (sum(x["pairwise_tfidf"]) / len(x["pairwise_tfidf"]))
+                      if x["pairwise_tfidf"] else 0
+                      for x in manifest["packets"] if x["arm"] == arm
+                  ) / manifest["n_seeds"], 4),
                   "hard_pairs": sum(x["hard_pairs"] for x in manifest["packets"] if x["arm"] == arm),
-              } for arm in ARMS},
+              } for arm in manifest["arms"]},
               "caveat": "Corpus-relative pilot; LLM scores are screening evidence, not human validation or true novelty."}
     (OUT / "summary.json").write_text(json.dumps(result, indent=2))
     return result
@@ -285,12 +322,18 @@ def main() -> None:
     parser.add_argument("--stage", choices=("prepare", "generate", "judge", "all"), default="all")
     parser.add_argument("--seed", type=int, default=61)
     parser.add_argument("--n-seeds", type=int, default=5)
+    parser.add_argument("--arms", nargs="+", choices=ARMS, default=list(ARMS))
+    parser.add_argument("--sampling", choices=("stress", "stratified"), default="stress")
+    parser.add_argument("--use-existing-manifest", action="store_true")
     parser.add_argument("--model", default=config.CARTOGRAPHER_MODEL)
     parser.add_argument("--workers", type=int, default=3)
     args = parser.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
-    manifest = prepare(args.seed, args.n_seeds)
-    (OUT / "manifest.json").write_text(json.dumps(manifest, indent=2))
+    if args.use_existing_manifest:
+        manifest = json.loads((OUT / "manifest.json").read_text())
+    else:
+        manifest = prepare(args.seed, args.n_seeds, tuple(args.arms), args.sampling)
+        (OUT / "manifest.json").write_text(json.dumps(manifest, indent=2))
     print(json.dumps({"seeds": manifest["seeds"],
                       "manipulation_check": manifest["manipulation_check"]}, indent=2))
     if args.stage == "prepare":
