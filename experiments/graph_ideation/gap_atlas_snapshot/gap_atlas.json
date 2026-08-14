@@ -1,0 +1,1566 @@
+{
+  "schema_version": "prior-gap-atlas/0.1",
+  "generated_at": "2026-08-14",
+  "topic": "AI agents for the scientific process",
+  "status_policy": {
+    "draft_unverified": "Model-proposed gap; source substrate attached but no human review.",
+    "evidence_checked": "Quotes, contributions, and graph relation checked by a human.",
+    "gap_confirmed": "A fresh search found no prior work that resolves the stated gap.",
+    "disputed": "A reviewer identified a substantive problem or missing source."
+  },
+  "summary": {
+    "cards": 20,
+    "by_type": {
+      "boundary_generalization": 4,
+      "contradiction_resolution": 4,
+      "missing_feedback_loop": 4,
+      "replication_validation": 4,
+      "system_integration": 4
+    },
+    "by_status": {
+      "draft_unverified": 20
+    }
+  },
+  "cards": [
+    {
+      "id": "gap:3449d52437ae",
+      "gap_type": "contradiction_resolution",
+      "status": "draft_unverified",
+      "gap_hypothesis": "The end-to-end automation claims of AI Scientist (S1) and AI Scientist-v2 (S3) directly contradict the empirical ceiling established by DS-1000/SciCode-style benchmarks (S2), which show state-of-the-art agents solve at most 32.4\u201342.2% of essential data-driven scientific coding subtasks \u2014 yet no study has applied the same granular, task-level benchmark methodology from S2 to the specific subtask outputs generated inside the S1/S3 pipelines, leaving unresolved whether the end-to-end systems actually clear the capability bar that S2 shows current agents cannot reach, or whether their apparent success is an artifact of LLM-based self-review masking failures on the same task classes.",
+      "missing_evidence": "Granular, task-level success rates on the same categories of scientific coding tasks measured in S2 (e.g., data wrangling, statistical modeling, result interpretation, figure generation) as they appear within actual runs of the S1/S3 pipelines, evaluated by an objective, non-LLM ground-truth oracle rather than by LLM self-review \u2014 allowing a direct, apples-to-apples comparison of agent capability as measured end-to-end (S1/S3) versus as measured at the subtask level (S2).",
+      "smallest_resolving_study": "Instrument the AI Scientist / AI Scientist-v2 pipeline to log every discrete scientific coding subtask it attempts (data loading, statistical analysis, visualization, etc.) during a fixed set of N \u2265 30 complete paper-generation runs. Map each logged subtask to the taxonomic categories used in S2's benchmark. Evaluate each subtask output against ground-truth solutions using the same automated, execution-based grading rubric from S2 (i.e., not an LLM reviewer). Compute per-category and aggregate pass rates and compare them directly to the 32.4\u201342.2% ceiling reported in S2. A statistically significant gap between end-to-end pass rates and the S2 benchmark ceiling would resolve the contradiction; parity or superiority would validate the automation claims; inferiority would confirm that self-review masks systematic failures.",
+      "model_rationale": "S1 and S3 assert fully autonomous, end-to-end scientific discovery validated by LLM-based self-review; S2 directly and explicitly rejects this by name (citing S1's authors), showing that the best current agents fail on 57\u201368% of the discrete scientific coding tasks that such a pipeline must perform. The contradiction is concrete and empirically testable: either the subtask success rates inside the S1/S3 pipelines exceed the S2 ceiling (refuting S2's generalization) or they do not (refuting S1/S3's automation claims). No existing evidence bridges these two measurement regimes \u2014 end-to-end holistic evaluation vs. granular task-level benchmarking \u2014 making this the single most consequential unresolved conflict across the three contributions.",
+      "evidence": {
+        "sources": [
+          {
+            "source_id": "S1",
+            "paper_id": "openalex:W4402952666",
+            "paper_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery",
+            "paper_year": 2024,
+            "paper_url": "https://openalex.org/W4402952666",
+            "contribution_id": "openalex:W4402952666::k00",
+            "contribution": "The AI Scientist \u2014 an end-to-end, fully automated pipeline in which a frontier LLM generates research ideas, searches the literature, designs and executes experiments, visualizes results, writes a complete scientific manuscript, and performs self-review in an open-ended loop \u2014 enables autonomous scientific discovery in machine learning at a cost of under $15 per paper.",
+            "supporting_quote": "We introduce the first end-to-end framework for fully automated scientific discovery in Machine\nLearning research, enabled by frontier LLMs (Section 3). This fully automated process includes\nidea generation, experiment design, execution, and visualizing and writing up the results into a\nfull manuscript.",
+            "quote_offsets": [
+              8351,
+              8655
+            ],
+            "grounding": 0.99
+          },
+          {
+            "source_id": "S2",
+            "paper_id": "openalex:W4403324055",
+            "paper_title": "ScienceAgentBench: Toward Rigorous Assessment of Language Agents for Data-Driven Scientific Discovery",
+            "paper_year": 2024,
+            "paper_url": "https://openalex.org/W4403324055",
+            "contribution_id": "openalex:W4403324055::k03",
+            "contribution": "State-of-the-art language agents solve at most 32.4% of real-world data-driven scientific coding tasks unaided and 34.3% with expert-provided knowledge; inference-time scaling (OpenAI o1-preview) raises this to 42.2% but at more than 10\u00d7 the cost, while simpler self-debug frameworks outperform interactive CodeAct agents at a fraction of the price \u2014 collectively showing that current agents cannot automate essential tasks in scientific workflows.",
+            "supporting_quote": "the best-performing agent can only solve 32.4% of the tasks independently and 34.3% with expert-provided knowledge. In addition, we evaluate OpenAI o1-preview with direct prompting and self-debug, which can boost the performance to 42.2%, demonstrating the effectiveness of increasing inference-time compute but with more than 10 times the cost of other LLMs. Still, our results underscore the limitations of current language agents in generating code for data-driven discovery, let alone end-to-end automation for scientific research.",
+            "quote_offsets": [
+              3230,
+              3765
+            ],
+            "grounding": 1.0
+          },
+          {
+            "source_id": "S3",
+            "paper_id": "openalex:W4414827381",
+            "paper_title": "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search",
+            "paper_year": 2025,
+            "paper_url": "https://openalex.org/W4414827381",
+            "contribution_id": "openalex:W4414827381::k00",
+            "contribution": "The AI Scientist-v2 \u2014 an end-to-end agentic system for automated scientific discovery that eliminates reliance on human-authored code templates, uses a progressive agentic tree-search methodology managed by a dedicated experiment manager agent, and integrates VLM feedback for iterative figure refinement \u2014 can autonomously formulate hypotheses, design and execute experiments, analyze data, and author complete scientific manuscripts across diverse machine learning domains.",
+            "supporting_quote": "We introduce The AI Scientist-v2, an automated scientific discovery framework enhanced\nby agentic tree search, VLM feedback, and parallel experiment execution. It thereby significantly\nimproves the autonomy, flexibility, and scientific exploration depth of previous systems.",
+            "quote_offsets": [
+              6939,
+              7213
+            ],
+            "grounding": 0.993
+          }
+        ],
+        "graph_relation": "contradicts",
+        "edge_reason": "Contribution A claims a fully automated, end-to-end LLM pipeline can autonomously conduct scientific discovery in ML at low cost, validating the pipeline via an LLM-based reviewer. Contribution B directly and explicitly contests this claim: it constructs a benchmark showing that the best language agents solve at most 32.4\u201342.2% of essential data-driven scientific coding tasks, and explicitly argues that end-to-end automation claims (citing Contribution A by name) outpace actual agent capabilities. Evidence B:004 states \"we contend that\u2026 before claiming they can automate data-driven discovery end-to-end\" and critiques the LLM-based reviewer evaluation approach used in A. Evidence B:007 states results \"suggest language agents cannot yet automate essential tasks in data-driven discovery nor the research pipelines end-to-end, in contrast to claims in recent work such as Lu et al. (2024)\" \u2014 directly referencing Contribution A. CIT:2 further reinforces this, advocating for task-level evaluations \"instead of purely relying on end-to-end evaluations\u2026 using an LLM-based reviewer to assess generated papers.\" This constitutes a genuine empirical and conceptual contradiction between the two contributions on the same construct: whether current LLM agents can automate scientific workflows end-to-end.",
+        "edge_existence_confidence": 0.95,
+        "edge_type_confidence": 0.88
+      },
+      "provenance": {
+        "packet_id": "3449d52437ae",
+        "generator_model": "claude-sonnet-4-6",
+        "generated_from": "motif-balanced, distinct-paper graph packet"
+      },
+      "review": {
+        "gap_confirmed": null,
+        "sources_sufficient": null,
+        "study_actionable": null,
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": "",
+        "disputed_claims": [],
+        "missing_papers": []
+      }
+    },
+    {
+      "id": "gap:9fde6aef01dc",
+      "gap_type": "contradiction_resolution",
+      "status": "draft_unverified",
+      "gap_hypothesis": "S1 (The AI Scientist) claims that fully automated LLM-driven pipelines already produce ML papers exceeding a top-conference acceptance threshold, implying end-to-end scientific workflow automation is achievable today; S2 (ScienceAgentBench) directly contradicts this, reporting that the best agents solve at most 42.2% of individual scientific coding tasks and explicitly states agents \"cannot yet automate essential tasks in data-driven discovery nor the research pipelines end-to-end, in contrast to claims in recent work such as Lu et al. (2024).\" These two findings cannot simultaneously be true as stated: either current LLM agents can meaningfully automate scientific workflows end-to-end (S1) or they cannot (S2). The contradiction is unresolved because the two studies use incomparable evaluation instruments \u2014 S1 uses an LLM-based reviewer judging holistic paper quality across a narrow set of ML sub-topics, while S2 uses per-task programmatic evaluation across 102 real-world scientific coding problems spanning multiple disciplines. It is therefore unknown whether S1's positive result reflects genuine end-to-end capability, an artifact of its LLM-reviewer evaluation methodology, or domain specificity to narrow ML research tasks.",
+      "missing_evidence": "A controlled head-to-head evaluation that applies both evaluation instruments \u2014 (a) the holistic LLM-based paper-quality reviewer used in S1 and (b) the per-task programmatic correctness metrics used in S2 \u2014 to the same set of agent-generated scientific outputs, across both the narrow ML domains tested in S1 and the broader scientific coding domains tested in S2. Without this, it is impossible to determine whether the contradictory conclusions stem from (i) genuine capability differences across scientific domains, (ii) the evaluation methodology inflating or deflating apparent capability, or (iii) both.",
+      "smallest_resolving_study": "Select a matched set of 20\u201330 scientific research tasks: half drawn from the ML sub-domains used in S1 (diffusion modeling, transformer LM, learning dynamics) and half from the non-ML scientific coding tasks in S2's benchmark. Run the same fully automated LLM agent pipeline from S1 on all tasks. For each output, apply both evaluation instruments in parallel: (1) the LLM-based reviewer scoring used in S1 (does the paper exceed acceptance threshold?), and (2) the per-task programmatic correctness metrics from S2 (does the generated code produce scientifically correct results?). A 2\u00d72 analysis of domain (ML vs. non-ML) \u00d7 evaluation method (holistic vs. per-task) will directly test whether the contradiction between S1 and S2 is attributable to evaluation methodology, domain specificity, or both \u2014 resolving whether the claimed end-to-end automation capability is real or an artifact of measurement.",
+      "model_rationale": "S1 and S2 make directly incompatible empirical claims about the same construct (whether current LLM agents can automate scientific workflows end-to-end), but use incommensurable evaluation frameworks, making the source of the contradiction unresolvable from existing evidence. S3's controlled methodology for rigorous head-to-head human-vs-LLM evaluation further highlights that evaluation design choices are themselves consequential, reinforcing that the S1 vs. S2 contradiction is most likely a methodological artifact that can be isolated and resolved by a single controlled cross-evaluation study.",
+      "evidence": {
+        "sources": [
+          {
+            "source_id": "S1",
+            "paper_id": "openalex:W4402952666",
+            "paper_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery",
+            "paper_year": 2024,
+            "paper_url": "https://openalex.org/W4402952666",
+            "contribution_id": "openalex:W4402952666::k02",
+            "contribution": "Fully automated LLM-driven scientific discovery can produce novel machine learning papers in diffusion modeling, transformer-based language modeling, and learning dynamics that exceed the acceptance threshold of a top machine learning conference as judged by an automated reviewer.",
+            "supporting_quote": ". The AI Scientist can produce papers that exceed the\nacceptance threshold at a top machine learning conference as judged by our automated reviewer. This\napproach signifies the beginning of a new era in scientific discovery in machine learning: bringing\nthe transformati",
+            "quote_offsets": [
+              1908,
+              2178
+            ],
+            "grounding": 0.73
+          },
+          {
+            "source_id": "S2",
+            "paper_id": "openalex:W4403324055",
+            "paper_title": "ScienceAgentBench: Toward Rigorous Assessment of Language Agents for Data-Driven Scientific Discovery",
+            "paper_year": 2024,
+            "paper_url": "https://openalex.org/W4403324055",
+            "contribution_id": "openalex:W4403324055::k03",
+            "contribution": "State-of-the-art language agents solve at most 32.4% of real-world data-driven scientific coding tasks unaided and 34.3% with expert-provided knowledge; inference-time scaling (OpenAI o1-preview) raises this to 42.2% but at more than 10\u00d7 the cost, while simpler self-debug frameworks outperform interactive CodeAct agents at a fraction of the price \u2014 collectively showing that current agents cannot automate essential tasks in scientific workflows.",
+            "supporting_quote": "the best-performing agent can only solve 32.4% of the tasks independently and 34.3% with expert-provided knowledge. In addition, we evaluate OpenAI o1-preview with direct prompting and self-debug, which can boost the performance to 42.2%, demonstrating the effectiveness of increasing inference-time compute but with more than 10 times the cost of other LLMs. Still, our results underscore the limitations of current language agents in generating code for data-driven discovery, let alone end-to-end automation for scientific research.",
+            "quote_offsets": [
+              3230,
+              3765
+            ],
+            "grounding": 1.0
+          },
+          {
+            "source_id": "S3",
+            "paper_id": "openalex:W4403586302",
+            "paper_title": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers",
+            "paper_year": 2024,
+            "paper_url": "https://openalex.org/W4403586302",
+            "contribution_id": "openalex:W4403586302::k00",
+            "contribution": "A controlled experimental framework for comparing human and LLM research idea generation \u2014 enforcing style standardization, matched topic distributions, and blind expert review \u2014 enables statistically rigorous head-to-head evaluation of ideation capabilities for the first time.",
+            "supporting_quote": "We address this by establishing an experimental design that evaluates research idea generation while controlling for confounders and performs the first head-to-head comparison between expert NLP researchers and an LLM ideation agent.",
+            "quote_offsets": [
+              3123,
+              3356
+            ],
+            "grounding": 1.0
+          }
+        ],
+        "graph_relation": "contradicts",
+        "edge_reason": "Contribution A (The AI Scientist) claims that fully automated LLM-driven scientific discovery can produce papers exceeding the acceptance threshold of a top ML conference, implying current agents can automate scientific workflows end-to-end. Contribution B (ScienceAgentBench) directly and explicitly contests this claim: it argues that agents solving at most 42.2% of individual scientific coding tasks cannot automate essential steps in scientific workflows, let alone full end-to-end research pipelines. Evidence B:004 directly names Lu et al. (2024) / Contribution A and disputes the claim of end-to-end automation, and CIT:2 explicitly contrasts its approach of careful per-task evaluation against Contribution A's LLM-based reviewer evaluation of generated papers. B:007 reinforces this by stating results \"suggest language agents cannot yet automate essential tasks in data-driven discovery nor the research pipelines end-to-end, in contrast to claims in recent work such as Lu et al. (2024).\" This is a genuine incompatibility in findings about the same construct \u2014 whether LLM agents can currently automate scientific discovery.",
+        "edge_existence_confidence": 0.95,
+        "edge_type_confidence": 0.82
+      },
+      "provenance": {
+        "packet_id": "9fde6aef01dc",
+        "generator_model": "claude-sonnet-4-6",
+        "generated_from": "motif-balanced, distinct-paper graph packet"
+      },
+      "review": {
+        "gap_confirmed": null,
+        "sources_sufficient": null,
+        "study_actionable": null,
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": "",
+        "disputed_claims": [],
+        "missing_papers": []
+      }
+    },
+    {
+      "id": "gap:58468f275b1c",
+      "gap_type": "contradiction_resolution",
+      "status": "draft_unverified",
+      "gap_hypothesis": "There is a direct, unresolved contradiction between DN-Hypo-Pipeline (S1), which reports that LLM-generated hypotheses yield novel algorithms that outperform highly-cited baselines, and MLGym (S2), which finds that frontier LLMs fail to generate novel hypotheses or algorithms beyond hyperparameter tuning on open-ended AI research tasks. S3 partially bridges these by showing occasional but unreliable above-baseline performance (1/15 tasks). The contradiction cannot currently be resolved because no controlled experiment holds the task domain, baseline quality, evaluation protocol, scaffolding, and LLM family constant across both paradigms to determine whether the divergent findings stem from methodological differences (e.g., structured hypothesis scaffolding vs. open-ended prompting, curated vs. open task sets, how \"novel\" and \"outperform\" are operationalized) or reflect a genuine capability boundary.",
+      "missing_evidence": "A head-to-head controlled comparison measuring the same LLMs (e.g., Claude-3.5-Sonnet, GPT-4o) on the same set of AI/data science tasks under two conditions \u2014 (A) the structured hypothesis-generation pipeline used in DN-Hypo-Pipeline and (B) the open-ended agent framework used in MLGym \u2014 using a shared, pre-registered definition of \"novel algorithm\" and \"outperforms baseline,\" with the same baselines drawn from highly-cited papers. Without this, it is impossible to attribute the contradictory results to scaffold design, task selection, evaluation criteria, or an actual LLM capability ceiling.",
+      "smallest_resolving_study": "Select 6\u201310 AI/data science tasks that satisfy both frameworks' eligibility criteria (i.e., have a clearly defined baseline from a high-citation paper and are open-ended enough for MLGym-style evaluation). For each task, run the same set of frontier LLMs (at minimum Claude-3.5-Sonnet and GPT-4o) under two conditions in a within-task, within-model design: Condition A replicates the DN-Hypo-Pipeline structured hypothesis-elicitation and algorithm-derivation scaffold; Condition B replicates the MLGym open-ended agent loop with identical compute budget and iteration limit. Pre-register a binary operationalization of \"novel algorithm that outperforms baseline\" (e.g., statistically significant improvement on a held-out test set, with the proposed method differing from the baseline in at least one non-hyperparameter design choice, as judged by two blinded domain experts). Primary outcome: proportion of tasks where a novel, above-baseline algorithm is produced, compared across the two conditions and between models. This directly tests whether the contradiction is attributable to scaffold design (condition difference) or LLM capability (no condition difference, both near zero or both above zero).",
+      "model_rationale": "S1 and S2 make directly incompatible empirical claims about the same construct \u2014 LLM capacity for novel hypothesis and algorithm generation on AI research tasks \u2014 at the same point in frontier model capability. S3 adds a third, intermediate data point (rare but non-zero above-baseline performance) that is consistent with either side depending on interpretation. The contradiction is concrete and operationalizable: both studies name specific models, specific task types, and specific success criteria, yet reach opposite conclusions. Resolving it requires a controlled experiment that isolates the one most plausible confound (pipeline scaffolding vs. open-ended prompting) while holding all other variables constant, which is the canonical contradiction_resolution study design.",
+      "evidence": {
+        "sources": [
+          {
+            "source_id": "S1",
+            "paper_id": "arxiv:2606.08532",
+            "paper_title": "DN-Hypo-Pipeline: An AI-Driven Workflow for Hypothesis Generation via Large Language Models and Scientific Explanations",
+            "paper_year": 2026,
+            "paper_url": "https://www.semanticscholar.org/paper/cb189d1455fc45c26f9be8b88d4b70f8c661baf4",
+            "contribution_id": "arxiv:2606.08532::k02",
+            "contribution": "Novel algorithms derived from LLM-generated hypotheses that outperform baseline models from highly cited data science papers, providing end-to-end experimental validation of AI-generated scientific hypotheses.",
+            "supporting_quote": "we validated the two highest-scoring generated hypotheses by developing corresponding novel algorithms, which outperformed the baseline models presented in the original papers.",
+            "quote_offsets": [
+              2126,
+              2302
+            ],
+            "grounding": 1.0
+          },
+          {
+            "source_id": "S2",
+            "paper_id": "openalex:W4407806895",
+            "paper_title": "MLGym: A New Framework and Benchmark for Advancing AI Research Agents",
+            "paper_year": 2025,
+            "paper_url": "https://openalex.org/W4407806895",
+            "contribution_id": "openalex:W4407806895::k03",
+            "contribution": "Frontier LLMs (Claude-3.5-Sonnet, Llama-3.1 405B, GPT-4o, o1-preview, Gemini-1.5 Pro) can improve on given baselines primarily through hyperparameter tuning but do not generate novel hypotheses, algorithms, or architectures when evaluated on open-ended AI research tasks.",
+            "supporting_quote": "ng algorithms for training agents on AI research tasks. We find that current frontier models can improve on the given baselines, usually by finding better hyperparameters, but do not generate novel hypotheses, algorithms, architectures, or substantial improvements.",
+            "quote_offsets": [
+              2833,
+              3098
+            ],
+            "grounding": 0.868
+          },
+          {
+            "source_id": "S3",
+            "paper_id": "arxiv:2602.15112v2",
+            "paper_title": "ResearchGym: Evaluating Language Model Agents on Real-World AI Research",
+            "paper_year": 2026,
+            "paper_url": "http://arxiv.org/abs/2602.15112v2",
+            "contribution_id": "arxiv:2602.15112v2::k01",
+            "contribution": "Frontier AI agents exhibit a sharp capability\u2013reliability gap on end-to-end research tasks: a GPT-5-based agent surpasses provided baselines in only 1 of 15 evaluations (6.7%) and completes 26.5% of sub-tasks on average, yet in one run exceeds the human reference solution of an ICML 2025 Spotlight task, showing occasional but unreliable state-of-the-art performance.",
+            "supporting_quote": "improves over provided baselines in only 1 run (6.7%) and completes just 26.5% of sub-tasks on average, with performance plateauing after 9 hours. Yet this single successful run outperforms the human reference solution on an ICML 2025 Spotlight task, demonstrating that current frontier agents can occasionally reach state-of-the-art, but do so unreliably",
+            "quote_offsets": [
+              10962,
+              11317
+            ],
+            "grounding": 0.715
+          }
+        ],
+        "graph_relation": "contradicts",
+        "edge_reason": "Both contributions directly investigate the same central question: whether LLMs can generate novel hypotheses and algorithms that surpass existing baselines in AI/data science research tasks. Contribution A (DN-Hypo-Pipeline) reports that LLM-generated hypotheses led to novel algorithms that outperformed baseline models from highly cited papers [AQ, A:001]. Contribution B (MLGym) directly and explicitly finds the opposite: frontier LLMs (Claude-3.5-Sonnet, GPT-4o, o1-preview, Llama-3.1 405B, Gemini-1.5 Pro) \"do not generate novel hypotheses, algorithms, architectures, or substantial improvements\" beyond hyperparameter tuning [BQ, B:002]. The capability framework in B [B:008, B:009] defines Level 3 as \"novel scientific contribution\" \u2014 the very capability A claims to demonstrate but B finds absent. These findings are genuinely incompatible on the same construct (LLM capacity for novel hypothesis/algorithm generation in AI research), making this a contradicts relationship. The lack of citation between them is consistent with them being independent evaluations arriving at conflicting conclusions.",
+        "edge_existence_confidence": 0.92,
+        "edge_type_confidence": 0.85
+      },
+      "provenance": {
+        "packet_id": "58468f275b1c",
+        "generator_model": "claude-sonnet-4-6",
+        "generated_from": "motif-balanced, distinct-paper graph packet"
+      },
+      "review": {
+        "gap_confirmed": null,
+        "sources_sufficient": null,
+        "study_actionable": null,
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": "",
+        "disputed_claims": [],
+        "missing_papers": []
+      }
+    },
+    {
+      "id": "gap:f136eb3e686c",
+      "gap_type": "contradiction_resolution",
+      "status": "draft_unverified",
+      "gap_hypothesis": "Agentic AI systems show diametrically opposed performance on social science reproducibility tasks \u2014 below random-guessing (21.4%) in end-to-end assessment (S1) versus near-ceiling accuracy (93.4% task-level) in computational reproduction (S2) \u2014 yet it is unknown whether this contradiction reflects a genuine capability difference driven by agent architecture (general-purpose vs. purpose-built coding agent) or by task scope (end-to-end assessment vs. isolated computational reproduction), because no study has held one variable constant while varying the other on a shared benchmark.",
+      "missing_evidence": "A controlled comparison in which both a general-purpose agentic system (matching S1's CORE-Agent class) and a frontier coding agent (matching S2's Claude Code class) are evaluated on the same set of social science reproducibility items, scored under both (a) the end-to-end four-class assessment rubric used in S1/REPRO-Bench and (b) the binary computational-reproduction rubric used in S2, with the S3 faithfulness/correctness framework applied uniformly. Without this 2\u00d72 design (agent type \u00d7 task scope), it is impossible to determine whether the ~70-percentage-point performance gap between S1 and S2 is attributable to agent architecture, task operationalization, or both.",
+      "smallest_resolving_study": "Select 30\u201350 social science papers from REPRO-Bench that have both (i) a scorable end-to-end reproducibility verdict (four-class, as in S1) and (ii) extractable computational reproduction steps (as in S2). Assign each paper to four conditions in a 2\u00d72 factorial design: [CORE-Agent class | Claude Code class] \u00d7 [end-to-end assessment rubric | computational reproduction rubric]. Score all conditions using the S3 faithfulness-and-correctness framework as a common measurement layer. The primary outcome is accuracy per cell; the critical test is the interaction term \u2014 if agent type dominates, the gap persists across both rubrics; if task scope dominates, both agents converge when given the narrower computational-reproduction task. This design directly resolves the contradiction by isolating its source without requiring new benchmarks or human-written rubrics beyond what S1\u2013S3 already provide.",
+      "model_rationale": "S1 and S2 make directly incompatible quantitative claims about agentic AI capability on the same nominal construct (social science reproducibility), with S2 explicitly citing S1's best result (36.6%) as representative of general-purpose agent limitations that frontier coding agents now surpass. S3 provides a shared measurement framework capable of scoring both task types. The three contributions together expose a concrete, testable contradiction whose resolution requires a controlled comparison \u2014 the canonical form of contradiction_resolution \u2014 rather than any new capability development.",
+      "evidence": {
+        "sources": [
+          {
+            "source_id": "S1",
+            "paper_id": "arxiv:2507.18901v1",
+            "paper_title": "REPRO-Bench: Can Agentic AI Systems Assess the Reproducibility of Social Science Research?",
+            "paper_year": 2025,
+            "paper_url": "http://arxiv.org/abs/2507.18901v1",
+            "contribution_id": "arxiv:2507.18901v1::k01",
+            "contribution": "State-of-the-art agentic AI systems perform below random-guessing baseline on end-to-end social science reproducibility assessment, with the best evaluated agent (CORE-Agent) reaching only 21.4% accuracy on a four-class scoring task.",
+            "supporting_quote": "We evaluate three representative AI agents on REPRO-Bench , with the best-performing agent achieving an accuracy of only 21.4%. Building on our empirical analysis, we develop REPRO-Agent , which improves the highes",
+            "quote_offsets": [
+              1961,
+              2176
+            ],
+            "grounding": 0.726
+          },
+          {
+            "source_id": "S2",
+            "paper_id": "arxiv:2606.11447",
+            "paper_title": "AI Coding Agents Can Reproduce Social Science Findings",
+            "paper_year": 2026,
+            "paper_url": "https://www.semanticscholar.org/paper/5e0bff90e232795d0253fe39b86347f25672e726",
+            "contribution_id": "arxiv:2606.11447::k01",
+            "contribution": "Frontier AI coding agents achieve high computational reproducibility on social science findings: Claude Code reaches 93.4% task-level and 78.0% paper-level accuracy, substantially outperforming Codex (62.1% / 35.8%) and considerably exceeding reproduction rates previously reported for general-purpose LLM-based agents on comparable benchmarks.",
+            "supporting_quote": "we find that both can reproduce a large share of social science findings, with Claude Code substantially outperforming Codex. These reproduction rates considerably exceed those previously reported for general-purpose LLM-based agents on comparable reproducibility benchmarks",
+            "quote_offsets": [
+              2708,
+              2982
+            ],
+            "grounding": 1.0
+          },
+          {
+            "source_id": "S3",
+            "paper_id": "arxiv:2510.24591v2",
+            "paper_title": "ReplicationBench: Can AI Agents Replicate Astrophysics Research Papers?",
+            "paper_year": 2025,
+            "paper_url": "http://arxiv.org/abs/2510.24591v2",
+            "contribution_id": "arxiv:2510.24591v2::k01",
+            "contribution": "An evaluation framework for scientific AI agents that measures replication success on end-result-graded, objectively scorable tasks \u2014 assessing both faithfulness (adherence to original methods) and correctness (technical accuracy) \u2014 without requiring extensive human-written rubrics, enabling scalable measurement of agent reliability in computational research.",
+            "supporting_quote": "Evaluation Framework for Scientific Agents: We establish a broader evaluation framework, measuring agent reliability in computational research tasks by measuring replication success on objectively gradable tasks.",
+            "quote_offsets": [
+              7307,
+              7519
+            ],
+            "grounding": 1.0
+          }
+        ],
+        "graph_relation": "contradicts",
+        "edge_reason": "Both contributions directly address the capability of agentic AI systems on social science reproducibility tasks, and their findings are genuinely incompatible. Contribution A reports that the best-performing agent (CORE-Agent) reaches only 21.4% accuracy on REPRO-Bench \u2014 below the 25% random-guessing baseline \u2014 concluding that current agentic AI systems are inadequate for reproducibility assessment (A:005, A:026, AQ). Contribution B reports that frontier coding agents (Claude Code: 93.4% task-level, 78.0% paper-level) achieve high computational reproducibility on social science findings, explicitly framing this as exceeding prior benchmarks where \"best-case performance on reproducibility tasks rarely surpassed 35\u201340% even with task-specific scaffolding\" (B:034, B:035, BQ). Critically, B:018 directly references REPRO-Bench's best result of 36.6% (Contribution A's improved REPRO-Agent) as representative of general-purpose LLM-agent limitations that frontier coding agents now substantially surpass. The two contributions thus offer diametrically opposed pictures of agentic AI capability on the same construct (social science reproducibility), with incompatible quantitative findings on overlapping benchmarks and agent types. The key distinction \u2014 general-purpose vs. purpose-built coding agents and task scope (end-to-end assessment vs. computational reproduction) \u2014 partially mediates the gap, but both contributions frame their results as characterizing agentic AI on social science reproducibility broadly, making the contradiction substantive and direct.",
+        "edge_existence_confidence": 0.92,
+        "edge_type_confidence": 0.82
+      },
+      "provenance": {
+        "packet_id": "f136eb3e686c",
+        "generator_model": "claude-sonnet-4-6",
+        "generated_from": "motif-balanced, distinct-paper graph packet"
+      },
+      "review": {
+        "gap_confirmed": null,
+        "sources_sufficient": null,
+        "study_actionable": null,
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": "",
+        "disputed_claims": [],
+        "missing_papers": []
+      }
+    },
+    {
+      "id": "gap:f549c8bdbc34",
+      "gap_type": "boundary_generalization",
+      "status": "draft_unverified",
+      "gap_hypothesis": "HypoRefine's collaborative literature-grounded hypothesis refinement architecture is validated only on five social-science text-classification tasks that share structural similarities (short-text, label-based classification). It is unknown whether the boundary of this advantage \u2014 specifically the gains over the data-only HypoGeniC backbone \u2014 generalises to domains with qualitatively different hypothesis structures, such as natural-science or biomedical tasks where hypotheses involve quantitative relationships, causal mechanisms, or multi-step reasoning rather than social-construct labels.",
+      "missing_evidence": "Direct performance comparison between HypoRefine and HypoGeniC on at least one non-social-science domain (e.g., biomedical phenotype prediction, clinical NLP, or physical-science classification) where the underlying hypotheses are not social-construct labels but quantitative or mechanistic rules. Without this, the 15.75% and 3.37% gains reported for HypoRefine over literature-only and data-only baselines cannot be attributed to the general architecture rather than to the specific structure of social-science hypothesis spaces.",
+      "smallest_resolving_study": "Take the existing HypoRefine and HypoGeniC implementations unchanged. Select two out-of-domain benchmark datasets whose hypotheses are structurally distinct from social-science labels \u2014 e.g., a biomedical text-classification task (such as PubMed disease subtype classification) and a physical-science task (such as material-property prediction from descriptions). Run both systems under identical conditions (same LLM backbone, same train/test split protocol, same out-of-distribution evaluation setup used in the original five tasks). Compare HypoRefine vs. HypoGeniC accuracy gains and the qualitative form of the generated hypotheses. If the literature-grounding advantage shrinks or reverses, the benefit is boundary-limited to social-science hypothesis structures; if it persists, the architecture generalises beyond its tested domain.",
+      "model_rationale": "S1 establishes HypoRefine's gains over HypoGeniC (S2) exclusively within five social-science classification tasks. S3 (The AI Scientist) demonstrates that automated LLM-based research pipelines can span diverse ML sub-domains, highlighting that domain scope is a meaningful axis of evaluation. Taken together, the three contributions make visible the untested boundary: HypoRefine's literature-grounding mechanism was designed to complement HypoGeniC's data-driven UCB loop, but whether this complementarity holds when hypothesis content shifts from social-construct labels to mechanistic or quantitative rules in other scientific domains is entirely unresolved by the supplied evidence.",
+      "evidence": {
+        "sources": [
+          {
+            "source_id": "S1",
+            "paper_id": "arxiv:2410.17309v3",
+            "paper_title": "Literature Meets Data: A Synergistic Approach to Hypothesis Generation",
+            "paper_year": 2024,
+            "paper_url": "http://arxiv.org/abs/2410.17309v3",
+            "contribution_id": "arxiv:2410.17309v3::k00",
+            "contribution": "HypoRefine \u2014 a method that grounds data-driven hypothesis generation (via HypoGeniC) with literature-based insights through a collaborative agent architecture that refines and maintains a shared hypothesis pool \u2014 outperforms literature-only, data-only, and few-shot baselines on out-of-distribution generalization across five social-science classification tasks (15.75%, 3.37%, and 8.97% gains, respectively).",
+            "supporting_quote": "We propose the first approach to using both literature information and data for LLM-powered hypothesis generation.",
+            "quote_offsets": [
+              8340,
+              8454
+            ],
+            "grounding": 1.0
+          },
+          {
+            "source_id": "S2",
+            "paper_id": "openalex:W4394647523",
+            "paper_title": "Hypothesis Generation with Large Language Models",
+            "paper_year": 2024,
+            "paper_url": "https://openalex.org/W4394647523",
+            "contribution_id": "openalex:W4394647523::k00",
+            "contribution": "HypoGeniC \u2014 an iterative hypothesis generation algorithm for LLMs inspired by the upper confidence bound (UCB) multi-armed bandit framework \u2014 generates and refines data-grounded hypotheses by maintaining a wrong-example bank and a reward-driven exploitation-exploration tradeoff, enabling LLMs to handle arbitrarily large training sets without long-context limitations.",
+            "supporting_quote": "We propose a novel computational framework for generating and evaluating hypotheses with LLMs.",
+            "quote_offsets": [
+              9219,
+              9313
+            ],
+            "grounding": 1.0
+          },
+          {
+            "source_id": "S3",
+            "paper_id": "openalex:W4402952666",
+            "paper_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery",
+            "paper_year": 2024,
+            "paper_url": "https://openalex.org/W4402952666",
+            "contribution_id": "openalex:W4402952666::k00",
+            "contribution": "The AI Scientist \u2014 an end-to-end, fully automated pipeline in which a frontier LLM generates research ideas, searches the literature, designs and executes experiments, visualizes results, writes a complete scientific manuscript, and performs self-review in an open-ended loop \u2014 enables autonomous scientific discovery in machine learning at a cost of under $15 per paper.",
+            "supporting_quote": "We introduce the first end-to-end framework for fully automated scientific discovery in Machine\nLearning research, enabled by frontier LLMs (Section 3). This fully automated process includes\nidea generation, experiment design, execution, and visualizing and writing up the results into a\nfull manuscript.",
+            "quote_offsets": [
+              8351,
+              8655
+            ],
+            "grounding": 0.99
+          }
+        ],
+        "graph_relation": "builds_on",
+        "edge_reason": "HypoRefine (Contribution A) explicitly and directly builds on HypoGeniC (Contribution B) as its data-driven backbone. Evidence is unambiguous: CIT:1 shows A adopts HypoGeniC's algorithm directly (\"our data-driven hypothesis generation adopts in [CITED:TARGET]\"); A:010 describes HypoRefine integrating paper summaries \"with HypoGeniC\" in both initialization and update stages, reusing HypoGeniC's reward function and hypothesis bank update process unchanged; A:005 states \"For the data-driven component, we use HypoGeniC as the backbone\"; and A:002 frames HypoRefine as extending HypoGeniC with literature-based insights. Contribution A does not merely cite B for background \u2014 it structurally incorporates B's algorithm as a core component and extends it with a collaborative literature-based agent architecture.",
+        "edge_existence_confidence": 0.99,
+        "edge_type_confidence": 0.97
+      },
+      "provenance": {
+        "packet_id": "f549c8bdbc34",
+        "generator_model": "claude-sonnet-4-6",
+        "generated_from": "motif-balanced, distinct-paper graph packet"
+      },
+      "review": {
+        "gap_confirmed": null,
+        "sources_sufficient": null,
+        "study_actionable": null,
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": "",
+        "disputed_claims": [],
+        "missing_papers": []
+      }
+    },
+    {
+      "id": "gap:afb648d74975",
+      "gap_type": "boundary_generalization",
+      "status": "draft_unverified",
+      "gap_hypothesis": "It is unknown whether the AI Scientist-v2's template-free, agentic tree-search pipeline generalizes to scientific domains outside machine learning (e.g., biology, chemistry, or physics), or whether its autonomous discovery capabilities remain boundary-limited to the ML settings in which both v1 and v2 were developed and evaluated.",
+      "missing_evidence": "Neither v1 (S1) nor v2 (S2) reports performance, paper quality, or experimental success rates outside machine learning domains. S3's controlled evaluation framework for LLM ideation was also applied only within ML. No evidence exists for how the pipeline behaves when the hypothesis space, experimental tooling, data modalities, or domain conventions differ substantially from ML \u2014 meaning the domain boundary of the system's generalization is entirely untested.",
+      "smallest_resolving_study": "Select two non-ML scientific domains with well-defined experimental tasks and ground-truth benchmarks (e.g., a computational biology task such as protein property prediction, and a chemistry task such as reaction yield optimization). Apply the AI Scientist-v2 pipeline unchanged (no domain-specific tuning) to each domain. Use the S3-style blind expert review protocol \u2014 with style standardization and domain-matched human-authored idea baselines \u2014 to score autonomously generated manuscripts on novelty, correctness, and executability. Compare these scores to v2's published ML-domain scores to determine whether performance is maintained, degraded, or collapses outside ML, thereby establishing the generalization boundary of the agentic pipeline.",
+      "model_rationale": "S1 and S2 together establish a progressively more capable autonomous science pipeline, while S3 provides a rigorous comparative evaluation methodology. However, all three contributions are exclusively scoped to machine learning. The most consequential gap exposed by considering them jointly is that the domain boundary of v2's generalization \u2014 its defining architectural advance over v1 being the removal of ML-specific code templates \u2014 has never been tested. If the pipeline only works within ML, its claim to broad autonomous scientific discovery is boundary-limited in a way no existing evidence can confirm or refute.",
+      "evidence": {
+        "sources": [
+          {
+            "source_id": "S1",
+            "paper_id": "openalex:W4402952666",
+            "paper_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery",
+            "paper_year": 2024,
+            "paper_url": "https://openalex.org/W4402952666",
+            "contribution_id": "openalex:W4402952666::k00",
+            "contribution": "The AI Scientist \u2014 an end-to-end, fully automated pipeline in which a frontier LLM generates research ideas, searches the literature, designs and executes experiments, visualizes results, writes a complete scientific manuscript, and performs self-review in an open-ended loop \u2014 enables autonomous scientific discovery in machine learning at a cost of under $15 per paper.",
+            "supporting_quote": "We introduce the first end-to-end framework for fully automated scientific discovery in Machine\nLearning research, enabled by frontier LLMs (Section 3). This fully automated process includes\nidea generation, experiment design, execution, and visualizing and writing up the results into a\nfull manuscript.",
+            "quote_offsets": [
+              8351,
+              8655
+            ],
+            "grounding": 0.99
+          },
+          {
+            "source_id": "S2",
+            "paper_id": "openalex:W4414827381",
+            "paper_title": "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search",
+            "paper_year": 2025,
+            "paper_url": "https://openalex.org/W4414827381",
+            "contribution_id": "openalex:W4414827381::k00",
+            "contribution": "The AI Scientist-v2 \u2014 an end-to-end agentic system for automated scientific discovery that eliminates reliance on human-authored code templates, uses a progressive agentic tree-search methodology managed by a dedicated experiment manager agent, and integrates VLM feedback for iterative figure refinement \u2014 can autonomously formulate hypotheses, design and execute experiments, analyze data, and author complete scientific manuscripts across diverse machine learning domains.",
+            "supporting_quote": "We introduce The AI Scientist-v2, an automated scientific discovery framework enhanced\nby agentic tree search, VLM feedback, and parallel experiment execution. It thereby significantly\nimproves the autonomy, flexibility, and scientific exploration depth of previous systems.",
+            "quote_offsets": [
+              6939,
+              7213
+            ],
+            "grounding": 0.993
+          },
+          {
+            "source_id": "S3",
+            "paper_id": "openalex:W4403586302",
+            "paper_title": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers",
+            "paper_year": 2024,
+            "paper_url": "https://openalex.org/W4403586302",
+            "contribution_id": "openalex:W4403586302::k00",
+            "contribution": "A controlled experimental framework for comparing human and LLM research idea generation \u2014 enforcing style standardization, matched topic distributions, and blind expert review \u2014 enables statistically rigorous head-to-head evaluation of ideation capabilities for the first time.",
+            "supporting_quote": "We address this by establishing an experimental design that evaluates research idea generation while controlling for confounders and performs the first head-to-head comparison between expert NLP researchers and an LLM ideation agent.",
+            "quote_offsets": [
+              3123,
+              3356
+            ],
+            "grounding": 1.0
+          }
+        ],
+        "graph_relation": "builds_on",
+        "edge_reason": "The AI Scientist-v2 (Contribution B) explicitly and directly extends the original AI Scientist (Contribution A). Evidence is overwhelming: B:000 describes v2 as a successor to \"its predecessor (v1, Lu et al., 2024)\" and enumerates concrete improvements over it; B:001 provides a direct feature-by-feature comparison table contrasting v1 and v2; B:002 states \"The AI Scientist-v1 (Lu et al., 2024) introduced the first AI system that entirely automates scientific discovery\u2026 However, despite representing a significant step forward, The AI Scientist-v1 was subject to limitations,\" and proceeds to describe how v2 addresses each limitation. The citation passages (CIT:1, CIT:2) further confirm that B explicitly identifies A's system as the artifact being extended, noting it \"relied heavily on human-authored code templates\" and other constraints that B's agentic tree-search methodology directly resolves. This is a canonical builds_on relationship: v2 takes v1's pipeline as its foundation and augments it with agentic tree search, VLM feedback, parallel execution, and template-free operation.",
+        "edge_existence_confidence": 0.99,
+        "edge_type_confidence": 0.97
+      },
+      "provenance": {
+        "packet_id": "afb648d74975",
+        "generator_model": "claude-sonnet-4-6",
+        "generated_from": "motif-balanced, distinct-paper graph packet"
+      },
+      "review": {
+        "gap_confirmed": null,
+        "sources_sufficient": null,
+        "study_actionable": null,
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": "",
+        "disputed_claims": [],
+        "missing_papers": []
+      }
+    },
+    {
+      "id": "gap:7be9af90741e",
+      "gap_type": "boundary_generalization",
+      "status": "draft_unverified",
+      "gap_hypothesis": "It is unknown whether the template-free, agentic architecture of AI Scientist-v2 generalizes beyond machine learning to scientific domains with fundamentally different experimental modalities (e.g., wet-lab biology, chemistry, or physics), or whether its performance gains over v1 are specific to the ML-code-execution boundary condition in which both systems were evaluated.",
+      "missing_evidence": "Neither S1 (v2) nor S2/S3 (v1) provide any evaluation of the end-to-end pipeline outside of machine learning tasks. All reported experiments, manuscripts, and peer-review cycles are situated within ML subdomain benchmarks. There is no evidence about how the progressive agentic tree-search, VLM figure-refinement loop, or template-free hypothesis generation perform when the \"experiment\" step cannot be reduced to runnable Python code \u2014 i.e., when it requires physical lab operations, external instrumentation, or multi-day iterative wet-lab protocols. The boundary at which the architecture's autonomy claims hold is entirely untested.",
+      "smallest_resolving_study": "Select two non-ML scientific domains that differ maximally in experimental modality \u2014 one that permits simulation-based execution (e.g., computational chemistry via a Python-callable simulator) and one that does not (e.g., a standard molecular biology assay requiring physical lab steps). Apply both AI Scientist-v1 (as the template-dependent baseline, per S2/S3) and AI Scientist-v2 (template-free, per S1) to an identical, pre-specified hypothesis-generation prompt in each domain. Measure (a) task completion rate (full manuscript produced), (b) hypothesis\u2013experiment alignment score assessed by domain expert reviewers blind to system version, and (c) the proportion of experiment cycles that required human intervention. This 2\u00d72 design (system version \u00d7 domain modality) directly tests whether the autonomy improvements documented in v2 generalize beyond the ML boundary or are artifacts of the code-executable experimental setting shared by both versions.",
+      "model_rationale": "S1 (v2) explicitly claims to eliminate template reliance and improve autonomy and flexibility over S2/S3 (v1), yet all three contributions evaluate exclusively within machine learning domains where experiments are executable as code. Taken together, they expose a sharp but untested boundary: the generalization of the full pipeline \u2014 especially the template-free agentic tree search and VLM feedback loop \u2014 to domains where the experiment-execution step is not a software artifact. This is the most consequential gap because the systems' headline claims (autonomous scientific discovery, not just autonomous ML research) stand or fall on whether this boundary holds.",
+      "evidence": {
+        "sources": [
+          {
+            "source_id": "S1",
+            "paper_id": "openalex:W4414827381",
+            "paper_title": "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search",
+            "paper_year": 2025,
+            "paper_url": "https://openalex.org/W4414827381",
+            "contribution_id": "openalex:W4414827381::k00",
+            "contribution": "The AI Scientist-v2 \u2014 an end-to-end agentic system for automated scientific discovery that eliminates reliance on human-authored code templates, uses a progressive agentic tree-search methodology managed by a dedicated experiment manager agent, and integrates VLM feedback for iterative figure refinement \u2014 can autonomously formulate hypotheses, design and execute experiments, analyze data, and author complete scientific manuscripts across diverse machine learning domains.",
+            "supporting_quote": "We introduce The AI Scientist-v2, an automated scientific discovery framework enhanced\nby agentic tree search, VLM feedback, and parallel experiment execution. It thereby significantly\nimproves the autonomy, flexibility, and scientific exploration depth of previous systems.",
+            "quote_offsets": [
+              6939,
+              7213
+            ],
+            "grounding": 0.993
+          },
+          {
+            "source_id": "S2",
+            "paper_id": "openalex:W7140287209",
+            "paper_title": "Towards end-to-end automation of AI research",
+            "paper_year": 2026,
+            "paper_url": "https://openalex.org/W7140287209",
+            "contribution_id": "openalex:W7140287209::k00",
+            "contribution": "The AI Scientist \u2014 a fully automated, end-to-end scientific research pipeline that autonomously generates research ideas, writes and executes code, runs experiments, analyzes and plots results, writes complete machine-learning conference manuscripts, and performs automated peer review.",
+            "supporting_quote": "ere we present a pipeline for automating the entire scientific process end to \nend. We present The AI Scientist, which creates research ideas, writes code, runs \nexperiments, plots and analyses data, writes the entire scientific manuscript, and \nperforms its own peer revie",
+            "quote_offsets": [
+              586,
+              859
+            ],
+            "grounding": 0.989
+          },
+          {
+            "source_id": "S3",
+            "paper_id": "openalex:W4402952666",
+            "paper_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery",
+            "paper_year": 2024,
+            "paper_url": "https://openalex.org/W4402952666",
+            "contribution_id": "openalex:W4402952666::k00",
+            "contribution": "The AI Scientist \u2014 an end-to-end, fully automated pipeline in which a frontier LLM generates research ideas, searches the literature, designs and executes experiments, visualizes results, writes a complete scientific manuscript, and performs self-review in an open-ended loop \u2014 enables autonomous scientific discovery in machine learning at a cost of under $15 per paper.",
+            "supporting_quote": "We introduce the first end-to-end framework for fully automated scientific discovery in Machine\nLearning research, enabled by frontier LLMs (Section 3). This fully automated process includes\nidea generation, experiment design, execution, and visualizing and writing up the results into a\nfull manuscript.",
+            "quote_offsets": [
+              8351,
+              8655
+            ],
+            "grounding": 0.99
+          }
+        ],
+        "graph_relation": "builds_on",
+        "edge_reason": "Contribution A (AI Scientist-v2) explicitly positions itself as a direct successor and extension of Contribution B (AI Scientist-v1/Lu et al., 2024). Evidence A:000 states it \"eliminates the reliance on human-authored code templates\" compared to \"its predecessor (v1, Lu et al., 2024).\" Evidence A:002 explicitly names \"The AI Scientist-v1 (Lu et al., 2024)\" as the system it extends, describing the limitations it overcomes. Evidence A:001 provides a direct feature comparison table between v1 and v2. Evidence A:013 again cites v1 as the foundational prior work. The AQ quote states v2 \"significantly improves the autonomy, flexibility, and scientific exploration depth of previous systems.\" A builds directly on B's pipeline architecture, extending it with agentic tree search, VLM feedback, and template-free operation.",
+        "edge_existence_confidence": 0.99,
+        "edge_type_confidence": 0.97
+      },
+      "provenance": {
+        "packet_id": "7be9af90741e",
+        "generator_model": "claude-sonnet-4-6",
+        "generated_from": "motif-balanced, distinct-paper graph packet"
+      },
+      "review": {
+        "gap_confirmed": null,
+        "sources_sufficient": null,
+        "study_actionable": null,
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": "",
+        "disputed_claims": [],
+        "missing_papers": []
+      }
+    },
+    {
+      "id": "gap:cde08c88b196",
+      "gap_type": "boundary_generalization",
+      "status": "draft_unverified",
+      "gap_hypothesis": "It is unknown whether the integrated literature-based + data-driven hypothesis generation approach (S1, arxiv:2410.17309v3) retains its generalizability advantage over HypoGeniC alone (S2) when applied to scientific discovery domains beyond the five NLP/behavioral datasets on which it was evaluated \u2014 particularly in the kind of open-ended, multi-disciplinary machine-learning research setting operationalized by The AI Scientist pipeline (S3).",
+      "missing_evidence": "Out-of-distribution accuracy and hypothesis transfer rates for the integrated method versus the HypoGeniC-only baseline across task domains that differ structurally from the original five datasets \u2014 specifically domains characterized by long experimental cycles, heterogeneous literature corpora, and auto-generated training signals, as exemplified by The AI Scientist's autonomous ML research loop.",
+      "smallest_resolving_study": "Instantiate the integrated literature+data-driven hypothesis generator (arxiv:2410.17309v3) and the HypoGeniC baseline (openalex:W4394647523) within The AI Scientist's end-to-end pipeline (openalex:W4402952666) by treating each AI-Scientist-generated experimental result as a labeled training example and the associated literature search outputs as the literature corpus. Run both systems on at least three ML sub-domains (e.g., image classification, language modeling, reinforcement learning) held out from the original five evaluation datasets. Measure out-of-distribution accuracy of generated hypotheses (evaluated by held-out experiment outcomes) and transfer accuracy to a different inference model, comparing the two systems under identical compute budgets. A statistically significant difference in out-of-distribution accuracy would confirm or refute boundary generalization of the integrated approach beyond its original task distribution.",
+      "model_rationale": "S1 demonstrates the integrated method's generalizability advantage across five specific datasets, and S2 provides the HypoGeniC backbone that was the prior state of the art on those tasks. S3 defines a structurally distinct, broader scientific discovery setting with different input modalities, feedback loops, and domain coverage. Considered together, the three contributions reveal that the generalizability claim of S1 has only been tested within a narrow, pre-specified task distribution; whether the advantage holds at the broader boundary defined by open-ended autonomous research (S3) is entirely untested. This is a concrete boundary/generalization gap, not a vague capability request, and it is directly resolvable by the minimal study described.",
+      "evidence": {
+        "sources": [
+          {
+            "source_id": "S1",
+            "paper_id": "arxiv:2410.17309v3",
+            "paper_title": "Literature Meets Data: A Synergistic Approach to Hypothesis Generation",
+            "paper_year": 2024,
+            "paper_url": "http://arxiv.org/abs/2410.17309v3",
+            "contribution_id": "arxiv:2410.17309v3::k01",
+            "contribution": "Automatic evaluation across five datasets shows that integrating literature-based and data-driven hypothesis generation yields the best generalizability, measured by out-of-distribution accuracy, across all task and model configurations, and that the generated hypotheses transfer effectively to different inference models.",
+            "supporting_quote": "mplementation and Baselines 4 Results 4.1 Automatic Evaluation Hypotheses generated by combining information from literature and data achieves the best performance across all task and model configurations ( Table 1 ).",
+            "quote_offsets": [
+              613,
+              831
+            ],
+            "grounding": 0.78
+          },
+          {
+            "source_id": "S2",
+            "paper_id": "openalex:W4394647523",
+            "paper_title": "Hypothesis Generation with Large Language Models",
+            "paper_year": 2024,
+            "paper_url": "https://openalex.org/W4394647523",
+            "contribution_id": "openalex:W4394647523::k00",
+            "contribution": "HypoGeniC \u2014 an iterative hypothesis generation algorithm for LLMs inspired by the upper confidence bound (UCB) multi-armed bandit framework \u2014 generates and refines data-grounded hypotheses by maintaining a wrong-example bank and a reward-driven exploitation-exploration tradeoff, enabling LLMs to handle arbitrarily large training sets without long-context limitations.",
+            "supporting_quote": "We propose a novel computational framework for generating and evaluating hypotheses with LLMs.",
+            "quote_offsets": [
+              9219,
+              9313
+            ],
+            "grounding": 1.0
+          },
+          {
+            "source_id": "S3",
+            "paper_id": "openalex:W4402952666",
+            "paper_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery",
+            "paper_year": 2024,
+            "paper_url": "https://openalex.org/W4402952666",
+            "contribution_id": "openalex:W4402952666::k00",
+            "contribution": "The AI Scientist \u2014 an end-to-end, fully automated pipeline in which a frontier LLM generates research ideas, searches the literature, designs and executes experiments, visualizes results, writes a complete scientific manuscript, and performs self-review in an open-ended loop \u2014 enables autonomous scientific discovery in machine learning at a cost of under $15 per paper.",
+            "supporting_quote": "We introduce the first end-to-end framework for fully automated scientific discovery in Machine\nLearning research, enabled by frontier LLMs (Section 3). This fully automated process includes\nidea generation, experiment design, execution, and visualizing and writing up the results into a\nfull manuscript.",
+            "quote_offsets": [
+              8351,
+              8655
+            ],
+            "grounding": 0.99
+          }
+        ],
+        "graph_relation": "builds_on",
+        "edge_reason": "Contribution A (arxiv:2410.17309v3) explicitly and directly builds on Contribution B (HypoGeniC, openalex:W4394647523). Evidence A:005 states \"For the data-driven component, we use HypoGeniC as the backbone,\" and describes how the literature-based hypothesis agent interacts with HypoGeniC. Evidence A:010 details HypoRefine, which integrates literature summaries with HypoGeniC's pipeline, preserving HypoGeniC's reward function and update process. The citation passage CIT:1 confirms that A's data-driven hypothesis generation \"adopts\" the method in B (HypoGeniC). CIT:2 situates B as the data-driven baseline that A extends by combining it with literature-based approaches. A's central contribution \u2014 the first method integrating literature-based and data-driven hypothesis generation \u2014 explicitly uses HypoGeniC as a core component and extends it rather than merely citing it as background. This is a clear builds_on relationship from A to B.",
+        "edge_existence_confidence": 0.98,
+        "edge_type_confidence": 0.95
+      },
+      "provenance": {
+        "packet_id": "cde08c88b196",
+        "generator_model": "claude-sonnet-4-6",
+        "generated_from": "motif-balanced, distinct-paper graph packet"
+      },
+      "review": {
+        "gap_confirmed": null,
+        "sources_sufficient": null,
+        "study_actionable": null,
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": "",
+        "disputed_claims": [],
+        "missing_papers": []
+      }
+    },
+    {
+      "id": "gap:405774311f40",
+      "gap_type": "replication_validation",
+      "status": "draft_unverified",
+      "gap_hypothesis": "It remains unvalidated whether the peer-review success reported independently by AI Scientist (S2/S3) and AI Scientist-v2 (S1) reflects a reproducible, system-agnostic phenomenon or whether the single passing manuscript in each case is an outlier attributable to idiosyncratic reviewer leniency, workshop-specific standards, or cherry-picking from a larger submission pool.",
+      "missing_evidence": "Neither contribution provides a controlled, pre-registered replication: (a) the full distribution of scores across all AI-generated submissions to the same venue is not disclosed, (b) no independent research group has re-run either pipeline and submitted to the same or an equivalent ICLR workshop to reproduce the pass rate, and (c) no side-by-side comparison of reviewer scores for matched AI-generated vs. human-authored submissions to the same workshop call exists to confirm that the reported threshold-crossing is reliably above chance rather than within normal score variance.",
+      "smallest_resolving_study": "Pre-register a replication study in which two independent labs each run the full AI Scientist (v1, S3) pipeline and the AI Scientist-v2 pipeline (S1) to generate N \u2265 10 manuscripts per system, then submit all manuscripts blind to the same ICLR workshop call (or a directly comparable venue). Record the complete distribution of reviewer scores for all submissions\u2014not only those that pass\u2014and compare pass rates across systems and against a matched control set of human-authored workshop submissions from the same call. A statistically significant pass rate above the human baseline in at least one independent replication would constitute confirmatory evidence; failure to replicate would reveal the original reports as non-representative single-case milestones.",
+      "model_rationale": "S1 and S2/S3 make materially identical empirical claims\u2014AI-generated manuscripts can clear a human peer-review bar at an ICLR workshop\u2014but each rests on a single reported success without disclosure of the full submission distribution, without independent replication by a separate group, and without a controlled human-baseline comparison. The edge evidence explicitly codes this relation as 'supports' (parallel corroboration), meaning neither study extends or corrects the other; together they deepen rather than resolve the question of whether the finding is robustly reproducible. The most consequential missing piece is therefore a pre-registered, multi-system replication with full score disclosure.",
+      "evidence": {
+        "sources": [
+          {
+            "source_id": "S1",
+            "paper_id": "openalex:W4414827381",
+            "paper_title": "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search",
+            "paper_year": 2025,
+            "paper_url": "https://openalex.org/W4414827381",
+            "contribution_id": "openalex:W4414827381::k01",
+            "contribution": "A fully AI-generated manuscript can successfully pass peer review at a recognized machine learning workshop, with one AI-generated submission exceeding the average human acceptance threshold at an ICLR workshop.",
+            "supporting_quote": "We demonstrate, for the first time, that an AI-generated manuscript can successfully pass peer\nreview at a recognized machine learning workshop, marking a critical milestone for AI science.",
+            "quote_offsets": [
+              7217,
+              7406
+            ],
+            "grounding": 0.995
+          },
+          {
+            "source_id": "S2",
+            "paper_id": "openalex:W7140287209",
+            "paper_title": "Towards end-to-end automation of AI research",
+            "paper_year": 2026,
+            "paper_url": "https://openalex.org/W7140287209",
+            "contribution_id": "openalex:W7140287209::k03",
+            "contribution": "AI-generated research manuscripts can pass the first round of peer review at a workshop of a top-tier machine learning conference, demonstrating that fully autonomous scientific output meets a non-trivial human-evaluated quality bar.",
+            "supporting_quote": "ts ideas, execution and presentation are of sufficient \nquality that the manuscript generated by this AI system passed the first round of peer \nreview for a workshop of a\u00a0top-tier machine learning conference",
+            "quote_offsets": [
+              863,
+              1070
+            ],
+            "grounding": 0.986
+          },
+          {
+            "source_id": "S3",
+            "paper_id": "openalex:W4402952666",
+            "paper_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery",
+            "paper_year": 2024,
+            "paper_url": "https://openalex.org/W4402952666",
+            "contribution_id": "openalex:W4402952666::k00",
+            "contribution": "The AI Scientist \u2014 an end-to-end, fully automated pipeline in which a frontier LLM generates research ideas, searches the literature, designs and executes experiments, visualizes results, writes a complete scientific manuscript, and performs self-review in an open-ended loop \u2014 enables autonomous scientific discovery in machine learning at a cost of under $15 per paper.",
+            "supporting_quote": "We introduce the first end-to-end framework for fully automated scientific discovery in Machine\nLearning research, enabled by frontier LLMs (Section 3). This fully automated process includes\nidea generation, experiment design, execution, and visualizing and writing up the results into a\nfull manuscript.",
+            "quote_offsets": [
+              8351,
+              8655
+            ],
+            "grounding": 0.99
+          }
+        ],
+        "graph_relation": "supports",
+        "edge_reason": "Both contributions make the same empirical claim: a fully AI-generated manuscript successfully passed peer review at a workshop of a top-tier machine learning conference (ICLR), establishing a milestone for autonomous AI-driven scientific output. Contribution A (AI Scientist-v2) reports one manuscript exceeding the average human acceptance threshold at the ICBINB@ICLR workshop with a score of 6.33 [A:001, A:008], while Contribution B (AI Scientist, published in Nature) reports passing the first round of peer review at a workshop of a top-tier ML conference [BQ, B:000, B:004]. The core empirical finding \u2014 that an AI system can produce a manuscript of sufficient quality to clear a human peer-review bar at an ICLR workshop \u2014 is materially the same across both contributions. The overlapping author sets (Lu, Lange, Yamada, Hu, Ha, Foerster, Clune) and the shared framing of this as a \"milestone\" [AQ, B:004] further confirm that these are parallel or sequential demonstrations of the same phenomenon. Neither corrects nor extends the other's method in a directional sense; they independently corroborate the same finding, making 'supports' (symmetric) the most defensible relation.",
+        "edge_existence_confidence": 0.97,
+        "edge_type_confidence": 0.88
+      },
+      "provenance": {
+        "packet_id": "405774311f40",
+        "generator_model": "claude-sonnet-4-6",
+        "generated_from": "motif-balanced, distinct-paper graph packet"
+      },
+      "review": {
+        "gap_confirmed": null,
+        "sources_sufficient": null,
+        "study_actionable": null,
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": "",
+        "disputed_claims": [],
+        "missing_papers": []
+      }
+    },
+    {
+      "id": "gap:28bbbad18d75",
+      "gap_type": "replication_validation",
+      "status": "draft_unverified",
+      "gap_hypothesis": "The tournament-evolution self-improving hypothesis generation mechanism reported by S1 and S2 has not been independently validated under the replication framework defined by S3. Specifically, it is unknown whether an AI agent implementing the tournament-evolution process can replicate the core empirical claims of either paper\u2014namely that iterative win/loss-driven hypothesis revision produces measurably higher-quality hypotheses than a non-tournament baseline\u2014when evaluated by an objective, rubric-free framework assessing both faithfulness to original methods and correctness of outcomes.",
+      "missing_evidence": "No study has applied the scalable replication evaluation framework from S3 (end-result-graded, faithfulness + correctness scoring, no extensive human rubrics) to the tournament-evolution hypothesis generation system described in S1 and S2. There is no independent, objectively scored replication confirming that the tournament self-play mechanism actually produces the self-improvement effect claimed, as opposed to an artifact of the specific experimental setup or human evaluation choices used in the original reports.",
+      "smallest_resolving_study": "Implement the tournament-evolution hypothesis generation pipeline as described in S1/S2 (hypothesis competition, win/loss pattern identification, iterative revision via self-play debate) in a controlled computational research domain with objectively scorable ground-truth outcomes (e.g., a well-characterized benchmark in bioinformatics or chemistry). Apply the S3 evaluation framework to score: (1) faithfulness\u2014does the agent's pipeline adhere to the tournament-evolution procedure as specified?\u2014and (2) correctness\u2014do the evolved hypotheses achieve measurably superior scores compared to a non-tournament (single-pass) baseline on the same tasks? Run both conditions with the same underlying model and hyperparameters, across at least three independent task domains included in or analogous to S3's benchmark suite, and report replication success rates, effect sizes, and any failure modes identified by the automated scorer.",
+      "model_rationale": "S1 and S2 report convergent, mutually corroborating findings about the same tournament-evolution mechanism\u2014but their evaluations rely on internal or human-assessed metrics rather than an independent, objective replication framework. S3 provides exactly such a framework (scalable, rubric-free, faithfulness + correctness graded) yet has not been applied to the S1/S2 claims. The most consequential missing evidence is therefore an independent replication of the tournament-evolution self-improvement effect under S3's objective scoring regime, which would either validate or challenge the core empirical claim shared by both concurrent papers.",
+      "evidence": {
+        "sources": [
+          {
+            "source_id": "S1",
+            "paper_id": "openalex:W4416043407",
+            "paper_title": "Towards an AI co-scientist",
+            "paper_year": 2025,
+            "paper_url": "https://openalex.org/W4416043407",
+            "contribution_id": "openalex:W4416043407::k02",
+            "contribution": "A tournament evolution process \u2014 where hypotheses compete, win/loss patterns are identified, and losing hypotheses are iteratively revised \u2014 enables self-improving hypothesis generation in AI-assisted scientific discovery.",
+            "supporting_quote": "ay based scientific debate step for generating novel research hypotheses; tournaments that compare and rank hypotheses via the process of finding win and loss patterns, and a hypothesis evolution process to improve their quality. Fin",
+            "quote_offsets": [
+              8984,
+              9217
+            ],
+            "grounding": 0.807
+          },
+          {
+            "source_id": "S2",
+            "paper_id": "openalex:W7161731996",
+            "paper_title": "Accelerating scientific discovery with Co-Scientist",
+            "paper_year": 2026,
+            "paper_url": "https://openalex.org/W7161731996",
+            "contribution_id": "openalex:W7161731996::k02",
+            "contribution": "Tournament-based evolution using self-play scientific debate iteratively compares, ranks, and refines hypotheses to improve their quality.",
+            "supporting_quote": "a tournament evolution \nprocess for self-improving hypotheses generatio",
+            "quote_offsets": [
+              4366,
+              4437
+            ],
+            "grounding": 0.986
+          },
+          {
+            "source_id": "S3",
+            "paper_id": "arxiv:2510.24591v2",
+            "paper_title": "ReplicationBench: Can AI Agents Replicate Astrophysics Research Papers?",
+            "paper_year": 2025,
+            "paper_url": "http://arxiv.org/abs/2510.24591v2",
+            "contribution_id": "arxiv:2510.24591v2::k01",
+            "contribution": "An evaluation framework for scientific AI agents that measures replication success on end-result-graded, objectively scorable tasks \u2014 assessing both faithfulness (adherence to original methods) and correctness (technical accuracy) \u2014 without requiring extensive human-written rubrics, enabling scalable measurement of agent reliability in computational research.",
+            "supporting_quote": "Evaluation Framework for Scientific Agents: We establish a broader evaluation framework, measuring agent reliability in computational research tasks by measuring replication success on objectively gradable tasks.",
+            "quote_offsets": [
+              7307,
+              7519
+            ],
+            "grounding": 1.0
+          }
+        ],
+        "graph_relation": "supports",
+        "edge_reason": "Both contributions describe an essentially identical mechanism: a tournament evolution process combined with self-play/debate that iteratively compares, ranks, and refines hypotheses to achieve self-improving hypothesis generation. Evidence A:001 and B:005 use nearly verbatim language (\"a tournament evolution process for self-improving hypotheses generation\"), and A:007/AQ describe \"tournaments that compare and rank hypotheses via the process of finding win and loss patterns, and a hypothesis evolution process to improve their quality,\" which is mirrored in BQ and B:025's \"tournament-based selection, and iterative evolution and refinement.\" The two papers (an AI co-scientist / Co-Scientist) appear to be closely related or co-timed versions of the same system (A:012 references \"a co-timed report\"), producing materially corroborating findings about the same tournament-evolution approach. No citation exists between them in the corpus, but the convergent findings mutually corroborate one another, making 'supports' the most defensible relation. 'Builds_on' is not warranted since neither is shown to explicitly extend the other's prior published result; rather they report the same core contribution concurrently.",
+        "edge_existence_confidence": 0.97,
+        "edge_type_confidence": 0.85
+      },
+      "provenance": {
+        "packet_id": "28bbbad18d75",
+        "generator_model": "claude-sonnet-4-6",
+        "generated_from": "motif-balanced, distinct-paper graph packet"
+      },
+      "review": {
+        "gap_confirmed": null,
+        "sources_sufficient": null,
+        "study_actionable": null,
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": "",
+        "disputed_claims": [],
+        "missing_papers": []
+      }
+    },
+    {
+      "id": "gap:9d2fdbd3287a",
+      "gap_type": "replication_validation",
+      "status": "draft_unverified",
+      "gap_hypothesis": "The peer-review passage result reported for The AI Scientist in the 2026 Nature article (S2) has not been independently replicated: both the automated-reviewer threshold result (S1) and the human peer-review passage result (S2) originate from the same overlapping author team describing the same system, so no independent group has confirmed that a fully autonomous LLM-driven pipeline can produce manuscripts that clear a human peer-review bar at a top-tier ML venue.",
+      "missing_evidence": "An independent replication\u2014conducted by a team with no overlap with the original authors\u2014demonstrating that a fully autonomous LLM-based scientific discovery system produces manuscripts that pass at least one round of human peer review at a recognised ML conference or workshop. Crucially, S3 establishes that current agents solve at most 42.2% of real-world scientific coding tasks, suggesting the pipeline may succeed on manuscript quality while failing on underlying scientific task execution; an independent replication would reveal whether the peer-review passage result is robust or an artifact of the specific system, task selection, or evaluation context used by the original team.",
+      "smallest_resolving_study": "An independent research group (no author overlap with S1/S2) runs a fully automated LLM-driven research pipeline\u2014replicating the AI Scientist setup as closely as possible using the published description and any released code\u2014on at least three ML sub-domains (matching S1's domains: diffusion modeling, transformer LM, and learning dynamics). The resulting manuscripts are submitted blind to the same workshop venue or a directly comparable ML workshop. The primary outcome is the fraction of submissions that pass the first round of human peer review, benchmarked against the S2 claim of at least one passing manuscript. A secondary outcome records the fraction of underlying scientific coding sub-tasks successfully completed by the agent, enabling direct comparison with the \u226442.2% ceiling reported in S3 and assessment of whether manuscript quality and task-execution capability are decoupled.",
+      "model_rationale": "S1 and S2 both report the same system's success at meeting peer-review quality bars, but both originate from an overlapping author team; no third-party group has attempted to replicate the core finding. S3 independently establishes that state-of-the-art agents fail the majority of real scientific coding tasks, creating an unresolved tension with the positive peer-review results that only an independent replication can adjudicate. The gap is therefore squarely a replication-validation problem: the most consequential missing piece of evidence is confirmation from an independent team that the peer-review passage result holds under neutral conditions.",
+      "evidence": {
+        "sources": [
+          {
+            "source_id": "S1",
+            "paper_id": "openalex:W4402952666",
+            "paper_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery",
+            "paper_year": 2024,
+            "paper_url": "https://openalex.org/W4402952666",
+            "contribution_id": "openalex:W4402952666::k02",
+            "contribution": "Fully automated LLM-driven scientific discovery can produce novel machine learning papers in diffusion modeling, transformer-based language modeling, and learning dynamics that exceed the acceptance threshold of a top machine learning conference as judged by an automated reviewer.",
+            "supporting_quote": ". The AI Scientist can produce papers that exceed the\nacceptance threshold at a top machine learning conference as judged by our automated reviewer. This\napproach signifies the beginning of a new era in scientific discovery in machine learning: bringing\nthe transformati",
+            "quote_offsets": [
+              1908,
+              2178
+            ],
+            "grounding": 0.73
+          },
+          {
+            "source_id": "S2",
+            "paper_id": "openalex:W7140287209",
+            "paper_title": "Towards end-to-end automation of AI research",
+            "paper_year": 2026,
+            "paper_url": "https://openalex.org/W7140287209",
+            "contribution_id": "openalex:W7140287209::k03",
+            "contribution": "AI-generated research manuscripts can pass the first round of peer review at a workshop of a top-tier machine learning conference, demonstrating that fully autonomous scientific output meets a non-trivial human-evaluated quality bar.",
+            "supporting_quote": "ts ideas, execution and presentation are of sufficient \nquality that the manuscript generated by this AI system passed the first round of peer \nreview for a workshop of a\u00a0top-tier machine learning conference",
+            "quote_offsets": [
+              863,
+              1070
+            ],
+            "grounding": 0.986
+          },
+          {
+            "source_id": "S3",
+            "paper_id": "openalex:W4403324055",
+            "paper_title": "ScienceAgentBench: Toward Rigorous Assessment of Language Agents for Data-Driven Scientific Discovery",
+            "paper_year": 2024,
+            "paper_url": "https://openalex.org/W4403324055",
+            "contribution_id": "openalex:W4403324055::k03",
+            "contribution": "State-of-the-art language agents solve at most 32.4% of real-world data-driven scientific coding tasks unaided and 34.3% with expert-provided knowledge; inference-time scaling (OpenAI o1-preview) raises this to 42.2% but at more than 10\u00d7 the cost, while simpler self-debug frameworks outperform interactive CodeAct agents at a fraction of the price \u2014 collectively showing that current agents cannot automate essential tasks in scientific workflows.",
+            "supporting_quote": "the best-performing agent can only solve 32.4% of the tasks independently and 34.3% with expert-provided knowledge. In addition, we evaluate OpenAI o1-preview with direct prompting and self-debug, which can boost the performance to 42.2%, demonstrating the effectiveness of increasing inference-time compute but with more than 10 times the cost of other LLMs. Still, our results underscore the limitations of current language agents in generating code for data-driven discovery, let alone end-to-end automation for scientific research.",
+            "quote_offsets": [
+              3230,
+              3765
+            ],
+            "grounding": 1.0
+          }
+        ],
+        "graph_relation": "supports",
+        "edge_reason": "Both contributions report the same core empirical finding: The AI Scientist system, which fully automates the scientific research lifecycle using LLMs, produced manuscripts that met or exceeded a peer-review acceptance threshold at a top-tier machine learning conference/workshop. Contribution A (the 2024 preprint) reports that generated papers exceed the acceptance threshold as judged by an automated reviewer (AQ, A:000, A:002), while Contribution B (the 2026 Nature article) reports that an AI-generated manuscript passed the first round of human peer review at a workshop of a top-tier ML conference (BQ, B:000, B:001, B:004). The two contributions are from overlapping author teams (Lu, Lu, Lange, Foerster, Ha, Clune) and describe the same system and its key result from different stages of publication/maturation. The findings materially corroborate each other\u2014both establish that fully autonomous AI scientific output meets a non-trivial quality bar\u2014making 'supports' the most defensible relation. The lack of a direct citation is consistent with the A\u2192B evolution of the same project rather than independent corroboration, but the framing of each as a distinct contribution (automated reviewer threshold vs. human peer-review passage) means 'supports' is more appropriate than 'builds_on', as neither contribution explicitly uses or extends the other's method or artifact in a one-directional sense at the contribution level described.",
+        "edge_existence_confidence": 0.97,
+        "edge_type_confidence": 0.82
+      },
+      "provenance": {
+        "packet_id": "9d2fdbd3287a",
+        "generator_model": "claude-sonnet-4-6",
+        "generated_from": "motif-balanced, distinct-paper graph packet"
+      },
+      "review": {
+        "gap_confirmed": null,
+        "sources_sufficient": null,
+        "study_actionable": null,
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": "",
+        "disputed_claims": [],
+        "missing_papers": []
+      }
+    },
+    {
+      "id": "gap:5f7129d6bddf",
+      "gap_type": "replication_validation",
+      "status": "draft_unverified",
+      "gap_hypothesis": "It is unverified whether the multi-agent, asynchronous task-execution architecture reported independently by the two co-timed AI co-scientist papers (S1, S2) actually replicates in terms of hypothesis quality, compute-scaling behavior, and tournament evolution outcomes when both systems are subjected to identical benchmark inputs, evaluation rubrics, and computational budgets.",
+      "missing_evidence": "A direct, controlled replication study comparing the S1 and S2 systems on the same scientific hypothesis-generation benchmarks under matched conditions (same seed hypotheses, same compute budget, same evaluator). S3 (Robin) demonstrates that an end-to-end autonomous discovery workflow with distinct specialist agents (Crow, Falcon, Finch) can be constructed and evaluated; however, no evidence exists that the near-identical architectural claims of S1 and S2 yield reproducibly equivalent outputs when independently re-run or cross-evaluated, nor that their shared tournament evolution process converges to the same hypothesis rankings across independent instantiations.",
+      "smallest_resolving_study": "Select three to five scientific hypothesis-generation tasks spanning distinct domains (e.g., one used as a benchmark in S1 and one from S2's reported evaluations). Feed identical seed inputs, literature corpora, and compute budgets to both systems. Score all generated hypotheses using a single blinded panel applying the same rubric (e.g., novelty, feasibility, specificity). Record compute-scaling curves (hypothesis quality vs. test-time compute) and tournament bracket outcomes. Test whether the two systems produce statistically indistinguishable hypothesis quality distributions (equivalence test, \u03b4 = 0.2 SD) and whether scaling curves are parallel. This directly resolves whether the matching architectural descriptions in S1 and S2 constitute a genuine replication or merely terminological convergence masking divergent implementations.",
+      "model_rationale": "S1 and S2 describe near-verbatim, co-timed, independently developed systems making materially identical architectural and functional claims. S3 further raises the stakes by demonstrating that an alternative multi-agent design (Robin) with specialist sub-agents achieves end-to-end autonomous discovery. The most consequential missing evidence is therefore whether the claimed equivalence between S1 and S2 holds empirically under controlled conditions \u2014 a classic replication question \u2014 because if their outputs diverge despite identical architectural descriptions, neither system's reported findings can be trusted at face value, and the field cannot adjudicate which (if either) design principle actually drives hypothesis quality or compute-scaling gains.",
+      "evidence": {
+        "sources": [
+          {
+            "source_id": "S1",
+            "paper_id": "openalex:W4416043407",
+            "paper_title": "Towards an AI co-scientist",
+            "paper_year": 2025,
+            "paper_url": "https://openalex.org/W4416043407",
+            "contribution_id": "openalex:W4416043407::k01",
+            "contribution": "A multi-agent architecture with an asynchronous task execution framework enables flexible compute scaling for hypothesis-generation pipelines in scientific discovery systems.",
+            "supporting_quote": "Key contributions include: (1) a multi-agent architecture with an asynchronous task execution framework for flexible compute scaling",
+            "quote_offsets": [
+              1963,
+              2095
+            ],
+            "grounding": 1.0
+          },
+          {
+            "source_id": "S2",
+            "paper_id": "openalex:W7161731996",
+            "paper_title": "Accelerating scientific discovery with Co-Scientist",
+            "paper_year": 2026,
+            "paper_url": "https://openalex.org/W7161731996",
+            "contribution_id": "openalex:W7161731996::k01",
+            "contribution": "A multi-agent architecture with asynchronous task execution framework flexibly allocates computational resources for scientific reasoning, enabling dynamic scaling of test-time compute.",
+            "supporting_quote": "a multi-agent architecture with an \nasynchronous task execution framework for flexible compute scalin",
+            "quote_offsets": [
+              4258,
+              4359
+            ],
+            "grounding": 0.99
+          },
+          {
+            "source_id": "S3",
+            "paper_id": "openalex:W4417287919",
+            "paper_title": "Robin: A multi-agent system for automating scientific discovery",
+            "paper_year": 2025,
+            "paper_url": "https://openalex.org/W4417287919",
+            "contribution_id": "openalex:W4417287919::k00",
+            "contribution": "Robin \u2014 a multi-agent system integrating literature search agents (Crow for concise reviews, Falcon for deep reviews) with an experimental data analysis agent (Finch) \u2014 automates hypothesis generation, experimental design, result interpretation, and iterative hypothesis refinement in a single continuous workflow, constituting the first end-to-end AI system for autonomous scientific discovery within a lab-in-the-loop framework.",
+            "supporting_quote": "we introduce Robin, the first multi-agent system capable of fully automating the key intellectual\nsteps of the scientific process. By integrating literature search agents with data analysis agents,\nRobin can generate hypotheses, propose experiments, interpret experimental results, and generate\nupdated hypotheses, achieving a semi-autonomous approach to scientific discovery",
+            "quote_offsets": [
+              621,
+              996
+            ],
+            "grounding": 0.992
+          }
+        ],
+        "graph_relation": "supports",
+        "edge_reason": "Both contributions describe virtually identical architectural findings: a multi-agent system built on Gemini with an asynchronous task execution framework that enables flexible scaling of test-time compute for scientific hypothesis generation. Evidence AQ and BQ show near-verbatim matching contribution statements. A:001 and B:005 both describe key contribution (1) in identical language (\"a multi-agent architecture with an asynchronous task execution framework for flexible compute scaling\") and share the same tournament evolution process as key contribution (2). A:012 and A:022 further confirm Paper A's system design, while B:009 and B:025 confirm Paper B's. The two papers appear to be co-timed parallel reports (A:012 references \"co-timed report [20, 21]\") describing the same or very closely related systems (AI co-scientist vs. Co-Scientist, both on Gemini), arriving at materially identical architectural findings. Without a citation between them, and given they are parallel/co-timed works rather than one explicitly building on the other, 'supports' is the most defensible classification \u2014 their comparable findings mutually corroborate one another. A 'builds_on' relation is not warranted since neither paper explicitly uses or extends the other's artifact; they appear to be concurrent parallel developments.",
+        "edge_existence_confidence": 0.97,
+        "edge_type_confidence": 0.82
+      },
+      "provenance": {
+        "packet_id": "5f7129d6bddf",
+        "generator_model": "claude-sonnet-4-6",
+        "generated_from": "motif-balanced, distinct-paper graph packet"
+      },
+      "review": {
+        "gap_confirmed": null,
+        "sources_sufficient": null,
+        "study_actionable": null,
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": "",
+        "disputed_claims": [],
+        "missing_papers": []
+      }
+    },
+    {
+      "id": "gap:6fbe13f503dd",
+      "gap_type": "system_integration",
+      "status": "draft_unverified",
+      "gap_hypothesis": "No study has integrated PaperBench, CORE-Bench, and AI Scientist into a unified evaluation pipeline to determine whether an end-to-end autonomous research system (AI Scientist) that generates, executes, and writes up experiments can also pass the structured reproducibility and replication criteria defined by CORE-Bench and PaperBench \u2014 leaving it unknown whether autonomous scientific pipelines produce outputs that satisfy human-interpretable, rubric-graded reproducibility standards.",
+      "missing_evidence": "There is no controlled measurement of AI Scientist outputs scored against (a) CORE-Bench's computational reproducibility tasks and (b) PaperBench's hierarchical replication rubrics. Specifically, it is unknown whether the code, data, and manuscripts autonomously produced by AI Scientist can be reproduced by an independent agent under CORE-Bench conditions (given the repository) or replicated from scratch under PaperBench conditions (without the original codebase), and how these scores compare to human-authored papers evaluated on the same benchmarks.",
+      "smallest_resolving_study": "Run AI Scientist on 5\u201310 open-ended ML research tasks to produce complete paper artifacts (code, data, manuscript). Then: (1) Feed the generated repositories into CORE-Bench's three-difficulty-level evaluation pipeline and record agent accuracy on computational reproducibility tasks. (2) Submit the generated manuscripts (without repositories) to PaperBench's LLM-grader against its hierarchical rubrics and record leaf-criterion pass rates. Compare both scores against a matched set of human-authored CORE-Bench and PaperBench papers as a baseline. The study requires no new benchmark development \u2014 only applying existing grading infrastructure to AI Scientist outputs \u2014 and directly tests whether end-to-end autonomous research integrates with established reproducibility standards.",
+      "model_rationale": "The three contributions occupy adjacent but disconnected layers of the same scientific pipeline: AI Scientist generates research end-to-end, CORE-Bench evaluates whether generated artifacts can be reproduced given the code, and PaperBench evaluates whether results can be replicated from scratch. Each system has been evaluated in isolation; none has been connected to the others. The critical missing link is a measurement of how the full autonomous pipeline (AI Scientist) performs when its outputs are fed into the downstream reproducibility and replication evaluation systems (CORE-Bench, PaperBench), which is a concrete system-integration gap rather than a vague capability question.",
+      "evidence": {
+        "sources": [
+          {
+            "source_id": "S1",
+            "paper_id": "arxiv:2504.01848v3",
+            "paper_title": "PaperBench: Evaluating AI's Ability to Replicate AI Research",
+            "paper_year": 2025,
+            "paper_url": "http://arxiv.org/abs/2504.01848v3",
+            "contribution_id": "arxiv:2504.01848v3::k00",
+            "contribution": "PaperBench \u2014 a benchmark of 20 ICML 2024 Spotlight and Oral papers with hierarchically decomposed, author-approved rubrics (8,316 individually gradable leaf criteria) and an automated LLM-based grading workflow for evaluating AI agents' ability to replicate AI research from scratch.",
+            "supporting_quote": "PaperBench: a benchmark of 20 ML research papers and author-approved rubrics, and an automated grading workflow using LLM-based judges.",
+            "quote_offsets": [
+              6701,
+              6836
+            ],
+            "grounding": 1.0
+          },
+          {
+            "source_id": "S2",
+            "paper_id": "openalex:W4403707291",
+            "paper_title": "CORE-Bench: Fostering the Credibility of Published Research Through a Computational Reproducibility Agent Benchmark",
+            "paper_year": 2024,
+            "paper_url": "https://openalex.org/W4403707291",
+            "contribution_id": "openalex:W4403707291::k00",
+            "contribution": "CORE-Bench \u2014 a benchmark of 270 tasks derived from 90 scientific papers across computer science, social science, and medicine \u2014 measures AI agent accuracy on computational reproducibility at three difficulty levels, covering both language-only and vision-language tasks with Python and R codebases.",
+            "supporting_quote": "CORE-Bench (Computational Reproducibility Benchmark). CORE-Bench comprises 270 tasks derived from 90 papers across computer science, social science, and medicine with Python or R codebases.",
+            "quote_offsets": [
+              10012,
+              10201
+            ],
+            "grounding": 1.0
+          },
+          {
+            "source_id": "S3",
+            "paper_id": "openalex:W4402952666",
+            "paper_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery",
+            "paper_year": 2024,
+            "paper_url": "https://openalex.org/W4402952666",
+            "contribution_id": "openalex:W4402952666::k00",
+            "contribution": "The AI Scientist \u2014 an end-to-end, fully automated pipeline in which a frontier LLM generates research ideas, searches the literature, designs and executes experiments, visualizes results, writes a complete scientific manuscript, and performs self-review in an open-ended loop \u2014 enables autonomous scientific discovery in machine learning at a cost of under $15 per paper.",
+            "supporting_quote": "We introduce the first end-to-end framework for fully automated scientific discovery in Machine\nLearning research, enabled by frontier LLMs (Section 3). This fully automated process includes\nidea generation, experiment design, execution, and visualizing and writing up the results into a\nfull manuscript.",
+            "quote_offsets": [
+              8351,
+              8655
+            ],
+            "grounding": 0.99
+          }
+        ],
+        "graph_relation": "related",
+        "edge_reason": "PaperBench (A) explicitly cites CORE-Bench (B) and characterizes it as \"prior work\" covering the ability to use existing research code \u2014 specifically, CORE-Bench tasks agents to reproduce paper results *given* the repository, whereas PaperBench tasks agents to replicate from scratch. This is a meaningful, substantive relationship: PaperBench defines its own contribution partly in contrast to CORE-Bench, and uses the citation to justify its design choice of disallowing access to original codebases. However, the relationship does not cleanly fit 'builds_on' (PaperBench does not extend CORE-Bench's methods or artifacts) or 'refines' (it does not narrow/correct CORE-Bench's claims) or 'supports'/'contradicts' (different constructs are measured). PaperBench positions itself as a complementary but distinct benchmark in the same space, explicitly differentiating its scope. The most defensible classification is 'related' \u2014 a clear substantive connection (both are AI agent benchmarks for scientific paper reproducibility/replication) without a hard directional type being warranted.",
+        "edge_existence_confidence": 0.97,
+        "edge_type_confidence": 0.72
+      },
+      "provenance": {
+        "packet_id": "6fbe13f503dd",
+        "generator_model": "claude-sonnet-4-6",
+        "generated_from": "motif-balanced, distinct-paper graph packet"
+      },
+      "review": {
+        "gap_confirmed": null,
+        "sources_sufficient": null,
+        "study_actionable": null,
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": "",
+        "disputed_claims": [],
+        "missing_papers": []
+      }
+    },
+    {
+      "id": "gap:3a7f678e5f5a",
+      "gap_type": "system_integration",
+      "status": "draft_unverified",
+      "gap_hypothesis": "No study has integrated the distinct architectural components of AI-Researcher (multi-agent pipeline with role-separated agents), AI Scientist-v2 (agentic tree-search experiment manager + VLM figure-refinement feedback loop), and AI Scientist (cost-bounded self-review loop) into a unified system and measured whether cross-system integration yields additive, subadditive, or superadditive performance on end-to-end autonomous research quality \u2014 leaving it unknown which subsystem combinations actually drive scientific output quality versus being redundant or mutually incompatible.",
+      "missing_evidence": "There is no controlled evidence showing what happens when the multi-agent role decomposition of AI-Researcher is combined with the tree-search experiment manager of AI Scientist-v2 and the self-review loop of AI Scientist. Specifically, no study reports: (1) whether the VLM feedback loop from AI Scientist-v2 and the manuscript self-review loop from AI Scientist can operate jointly without degradation; (2) whether the role-separated agent architecture of AI-Researcher improves or disrupts the tree-search methodology from AI Scientist-v2 when substituted as its orchestration layer; and (3) whether integrating all three subsystems produces manuscripts rated higher in quality than any single system alone on a shared benchmark (e.g., Scientist-Bench).",
+      "smallest_resolving_study": "Construct four system variants on a fixed compute and cost budget: (A) AI-Researcher pipeline alone, (B) AI Scientist-v2 tree-search + VLM loop alone, (C) AI Scientist self-review loop alone, and (D) an integrated system combining AI-Researcher's role-separated multi-agent orchestration, AI Scientist-v2's tree-search experiment manager and VLM figure-refinement, and AI Scientist's self-review loop. Run all four variants on the same set of 10\u201320 research tasks drawn from Scientist-Bench. Evaluate all outputs on identical criteria (hypothesis novelty, experimental validity, manuscript quality, reviewer scores) using both automated metrics and blinded human expert review. Compare variant D against each single-system baseline to determine whether integration is additive, subadditive, or superadditive, and identify which pairwise combinations (tree-search + self-review; multi-agent + VLM loop) are the primary drivers of any performance change.",
+      "model_rationale": "All three sources describe independently developed end-to-end autonomous research systems (AI Scientist, AI Scientist-v2, AI-Researcher) operating in the same paradigm with mutually exclusive architectural choices \u2014 role-separated multi-agent pipelines, agentic tree search, VLM feedback, and self-review loops. The sources treat each other as parallel prior art rather than as integrated components. The most consequential missing evidence is therefore whether these subsystems can be composed into a joint system and whether doing so is beneficial, harmful, or neutral \u2014 a direct system_integration gap that cannot be resolved by any of the three individual contributions as reported.",
+      "evidence": {
+        "sources": [
+          {
+            "source_id": "S1",
+            "paper_id": "arxiv:2505.18705v1",
+            "paper_title": "AI-Researcher: Autonomous Scientific Innovation",
+            "paper_year": 2025,
+            "paper_url": "http://arxiv.org/abs/2505.18705v1",
+            "contribution_id": "arxiv:2505.18705v1::k00",
+            "contribution": "AI-Researcher \u2014 a fully autonomous multi-agent system that orchestrates the complete scientific research pipeline from literature review and hypothesis generation through algorithm implementation, experimental validation, and publication-ready manuscript preparation with minimal human intervention.",
+            "supporting_quote": "we introduce AI-Researcher, a fully autonomous research system that transforms how AI-driven scientific discovery is conducted and evaluated. Our framework seamlessly orchestrates the complete research pipeline\u2013from literature review and hypothesis generation to algorithm implementation and publication-ready manuscript preparation\u2013with minimal human intervention.",
+            "quote_offsets": [
+              2335,
+              2700
+            ],
+            "grounding": 1.0
+          },
+          {
+            "source_id": "S2",
+            "paper_id": "openalex:W4414827381",
+            "paper_title": "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search",
+            "paper_year": 2025,
+            "paper_url": "https://openalex.org/W4414827381",
+            "contribution_id": "openalex:W4414827381::k00",
+            "contribution": "The AI Scientist-v2 \u2014 an end-to-end agentic system for automated scientific discovery that eliminates reliance on human-authored code templates, uses a progressive agentic tree-search methodology managed by a dedicated experiment manager agent, and integrates VLM feedback for iterative figure refinement \u2014 can autonomously formulate hypotheses, design and execute experiments, analyze data, and author complete scientific manuscripts across diverse machine learning domains.",
+            "supporting_quote": "We introduce The AI Scientist-v2, an automated scientific discovery framework enhanced\nby agentic tree search, VLM feedback, and parallel experiment execution. It thereby significantly\nimproves the autonomy, flexibility, and scientific exploration depth of previous systems.",
+            "quote_offsets": [
+              6939,
+              7213
+            ],
+            "grounding": 0.993
+          },
+          {
+            "source_id": "S3",
+            "paper_id": "openalex:W4402952666",
+            "paper_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery",
+            "paper_year": 2024,
+            "paper_url": "https://openalex.org/W4402952666",
+            "contribution_id": "openalex:W4402952666::k00",
+            "contribution": "The AI Scientist \u2014 an end-to-end, fully automated pipeline in which a frontier LLM generates research ideas, searches the literature, designs and executes experiments, visualizes results, writes a complete scientific manuscript, and performs self-review in an open-ended loop \u2014 enables autonomous scientific discovery in machine learning at a cost of under $15 per paper.",
+            "supporting_quote": "We introduce the first end-to-end framework for fully automated scientific discovery in Machine\nLearning research, enabled by frontier LLMs (Section 3). This fully automated process includes\nidea generation, experiment design, execution, and visualizing and writing up the results into a\nfull manuscript.",
+            "quote_offsets": [
+              8351,
+              8655
+            ],
+            "grounding": 0.99
+          }
+        ],
+        "graph_relation": "related",
+        "edge_reason": "AI-Researcher (A) explicitly cites AI Scientist-v2 (B) as foundational prior work in the same paradigm of end-to-end autonomous scientific discovery. Evidence CIT:1 describes B as \"AI Scientist-v2 [CITED:TARGET], enhanced these capabilities through agentic tree search methodology,\" and CIT:2 frames A as \"Building on this paradigm\" established by B. A:017 echoes this framing directly. However, 'builds_on' would require A to materially reuse or extend B's specific methods, artifacts, or results \u2014 the evidence shows A situates itself in the same paradigm and cites B as prior art, but develops its own distinct architecture (multi-agent pipeline, Scientist-Bench benchmark) without demonstrably reusing B's tree-search methodology, VLM feedback loop, or codebase. B:013 (from B's related work) also lists \"AI-Researcher\" as a parallel system in the same landscape, treating it as a co-occurring rather than derivative effort. The relationship is substantive (same research niche, mutual awareness, citation) but the hard 'builds_on' classification is not defensible from the evidence; 'related' is the most accurate type.",
+        "edge_existence_confidence": 0.97,
+        "edge_type_confidence": 0.62
+      },
+      "provenance": {
+        "packet_id": "3a7f678e5f5a",
+        "generator_model": "claude-sonnet-4-6",
+        "generated_from": "motif-balanced, distinct-paper graph packet"
+      },
+      "review": {
+        "gap_confirmed": null,
+        "sources_sufficient": null,
+        "study_actionable": null,
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": "",
+        "disputed_claims": [],
+        "missing_papers": []
+      }
+    },
+    {
+      "id": "gap:f9601b935716",
+      "gap_type": "system_integration",
+      "status": "draft_unverified",
+      "gap_hypothesis": "HypoRefine's collaborative agent architecture for hypothesis generation (grounding data-driven hypotheses with literature-based insights) has never been integrated as the ideation front-end of an end-to-end automated research pipeline such as The AI Scientist or AI Scientist-v2. It is therefore unknown whether substituting HypoRefine's structured, literature-grounded hypothesis refinement for the ad-hoc LLM ideation stage of these pipelines improves the scientific validity and out-of-distribution generalizability of the hypotheses that subsequently drive experiment design, execution, and manuscript authoring.",
+      "missing_evidence": "No study has measured what happens to downstream pipeline outputs (experiment designs, manuscript quality, reviewer scores) when HypoRefine's multi-agent hypothesis refinement loop replaces the native ideation module of an end-to-end autonomous research system. Neither The AI Scientist (v1 or v2) reports hypothesis quality metrics comparable to HypoRefine's out-of-distribution classification gains, and HypoRefine itself was never tested as a component feeding into automated experimentation or paper-writing stages. The integration seam \u2014 passing a refined hypothesis pool from HypoRefine into an experiment manager agent \u2014 has no empirical characterisation.",
+      "smallest_resolving_study": "Take the AI Scientist-v2 pipeline and create two conditions: (A) the unmodified pipeline with its native LLM ideation stage, and (B) a modified pipeline in which HypoRefine's collaborative agent loop (data-driven HypoGeniC + literature-grounding agents + shared hypothesis pool) replaces the ideation stage, with the top-ranked refined hypothesis passed to the experiment manager agent. Run both conditions on a fixed set of social-science ML tasks (matching the five classification domains used in HypoRefine's evaluation) with identical compute budgets. Evaluate: (i) hypothesis quality via the same out-of-distribution held-out classification accuracy metric used in HypoRefine, (ii) downstream manuscript quality via the AI Scientist-v2 automated reviewer scores, and (iii) experiment success rate. A statistically significant improvement in at least two of the three metrics under condition B would confirm that integrating structured hypothesis refinement into an end-to-end pipeline yields compounding benefits beyond either system operating in isolation.",
+      "model_rationale": "Each of the three contributions addresses a distinct stage of automated scientific research: HypoRefine handles structured hypothesis generation and refinement; The AI Scientist (v1) demonstrates end-to-end paper production; AI Scientist-v2 advances template-free agentic experimentation. Together they expose a critical missing joint: no evidence exists for whether a principled hypothesis-refinement front-end (HypoRefine) can be functionally integrated with an end-to-end autonomous research back-end (AI Scientist-v2) to produce better science than either achieves alone. This is a concrete system-integration gap \u2014 two complementary subsystems that address adjacent pipeline stages but have never been wired together and evaluated as a unified system.",
+      "evidence": {
+        "sources": [
+          {
+            "source_id": "S1",
+            "paper_id": "arxiv:2410.17309v3",
+            "paper_title": "Literature Meets Data: A Synergistic Approach to Hypothesis Generation",
+            "paper_year": 2024,
+            "paper_url": "http://arxiv.org/abs/2410.17309v3",
+            "contribution_id": "arxiv:2410.17309v3::k00",
+            "contribution": "HypoRefine \u2014 a method that grounds data-driven hypothesis generation (via HypoGeniC) with literature-based insights through a collaborative agent architecture that refines and maintains a shared hypothesis pool \u2014 outperforms literature-only, data-only, and few-shot baselines on out-of-distribution generalization across five social-science classification tasks (15.75%, 3.37%, and 8.97% gains, respectively).",
+            "supporting_quote": "We propose the first approach to using both literature information and data for LLM-powered hypothesis generation.",
+            "quote_offsets": [
+              8340,
+              8454
+            ],
+            "grounding": 1.0
+          },
+          {
+            "source_id": "S2",
+            "paper_id": "openalex:W4402952666",
+            "paper_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery",
+            "paper_year": 2024,
+            "paper_url": "https://openalex.org/W4402952666",
+            "contribution_id": "openalex:W4402952666::k00",
+            "contribution": "The AI Scientist \u2014 an end-to-end, fully automated pipeline in which a frontier LLM generates research ideas, searches the literature, designs and executes experiments, visualizes results, writes a complete scientific manuscript, and performs self-review in an open-ended loop \u2014 enables autonomous scientific discovery in machine learning at a cost of under $15 per paper.",
+            "supporting_quote": "We introduce the first end-to-end framework for fully automated scientific discovery in Machine\nLearning research, enabled by frontier LLMs (Section 3). This fully automated process includes\nidea generation, experiment design, execution, and visualizing and writing up the results into a\nfull manuscript.",
+            "quote_offsets": [
+              8351,
+              8655
+            ],
+            "grounding": 0.99
+          },
+          {
+            "source_id": "S3",
+            "paper_id": "openalex:W4414827381",
+            "paper_title": "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search",
+            "paper_year": 2025,
+            "paper_url": "https://openalex.org/W4414827381",
+            "contribution_id": "openalex:W4414827381::k00",
+            "contribution": "The AI Scientist-v2 \u2014 an end-to-end agentic system for automated scientific discovery that eliminates reliance on human-authored code templates, uses a progressive agentic tree-search methodology managed by a dedicated experiment manager agent, and integrates VLM feedback for iterative figure refinement \u2014 can autonomously formulate hypotheses, design and execute experiments, analyze data, and author complete scientific manuscripts across diverse machine learning domains.",
+            "supporting_quote": "We introduce The AI Scientist-v2, an automated scientific discovery framework enhanced\nby agentic tree search, VLM feedback, and parallel experiment execution. It thereby significantly\nimproves the autonomy, flexibility, and scientific exploration depth of previous systems.",
+            "quote_offsets": [
+              6939,
+              7213
+            ],
+            "grounding": 0.993
+          }
+        ],
+        "graph_relation": "related",
+        "edge_reason": "HypoRefine (A) cites The AI Scientist (B) explicitly, but only as a background reference in the \"automated scientific research with LLMs\" landscape review \u2014 characterizing it as designing \"an LLM agent to generate full research papers\" \u2014 and then immediately distinguishes its own focus on hypothesis generation from B's end-to-end paper-generation pipeline. Evidence [CIT:arxiv:2410.17309v3->openalex:W4402952666:1] and [A:031] confirm this is a contrast/background citation, not a methodological dependency. A does not build on, refine, or contradict B's findings; it merely acknowledges B as a related effort in the broader space of LLM-assisted science. The two contributions address substantially different problems (hypothesis generation + social-science classification vs. fully automated ML paper writing), share no common empirical constructs, and have no materially corroborating findings. A hard relation type (builds_on, refines, supports, contradicts) is not defensible from the evidence supplied; the relationship is substantive but only topical.",
+        "edge_existence_confidence": 0.95,
+        "edge_type_confidence": 0.82
+      },
+      "provenance": {
+        "packet_id": "f9601b935716",
+        "generator_model": "claude-sonnet-4-6",
+        "generated_from": "motif-balanced, distinct-paper graph packet"
+      },
+      "review": {
+        "gap_confirmed": null,
+        "sources_sufficient": null,
+        "study_actionable": null,
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": "",
+        "disputed_claims": [],
+        "missing_papers": []
+      }
+    },
+    {
+      "id": "gap:b5a3b408fb0c",
+      "gap_type": "system_integration",
+      "status": "draft_unverified",
+      "gap_hypothesis": "No evidence exists for whether MARG's multi-agent review component (S1) produces evaluation signal that is consistent with, or systematically diverges from, blind expert review when embedded as the peer-review stage inside a fully automated end-to-end research pipeline such as The AI Scientist (S3), nor whether that integrated review signal is calibrated against the human-vs-LLM ideation quality baseline established by S2's controlled framework.",
+      "missing_evidence": "Quantitative comparison of review quality and inter-rater agreement between (a) MARG-generated reviews, (b) AI-Scientist self-reviews, and (c) blind human expert reviews, applied to the same set of LLM-generated research outputs evaluated under the style-standardized, topic-matched protocol of S2\u2014revealing whether automated review components can serve as reliable proxies for human evaluation within an integrated autonomous research system.",
+      "smallest_resolving_study": "Draw a sample of ~30\u201350 research ideas and associated mini-papers produced by The AI Scientist pipeline (S3). For each output: (1) collect a blind human expert review using the standardized rubric from S2; (2) collect a MARG multi-agent review (S1); (3) collect The AI Scientist's built-in self-review. Score all three on a common quality rubric (novelty, soundness, clarity). Compute inter-rater agreement (e.g., Krippendorff's \u03b1) and rank-order correlation across the three review sources. This directly tests whether the automated review components in the integrated pipeline are calibrated to the human-expert baseline, requiring no new methodological development beyond combining the three existing systems.",
+      "model_rationale": "Each of the three contributions addresses a distinct stage of an autonomous research workflow\u2014idea generation with human-LLM comparison (S2), long-document peer review via multi-agent LLMs (S1), and end-to-end autonomous research execution with self-review (S3)\u2014yet none of the evidence tests how these components behave when integrated. S3 contains its own self-review loop, S1 provides an independent multi-agent review mechanism, and S2 provides a calibrated human baseline; the critical unknown is whether the review signals these components emit are mutually consistent and grounded against human judgment when operating together as a system. Without this, the review-as-feedback loop inside any autonomous research pipeline remains unvalidated.",
+      "evidence": {
+        "sources": [
+          {
+            "source_id": "S1",
+            "paper_id": "openalex:W4390784029",
+            "paper_title": "MARG: Multi-Agent Review Generation for Scientific Papers",
+            "paper_year": 2024,
+            "paper_url": "https://openalex.org/W4390784029",
+            "contribution_id": "openalex:W4390784029::k00",
+            "contribution": "MARG (Multi-Agent Review Generation) \u2014 a system in which multiple LLM instances each receive a portion of a scientific paper, engage in structured internal discussion, and collectively generate peer-review feedback for papers whose full text exceeds any single LLM's context window.",
+            "supporting_quote": "We propose a novel method (MARG) that can generate high-quality peer-review feedback even for papers longer than the context size of the base model.",
+            "quote_offsets": [
+              6040,
+              6188
+            ],
+            "grounding": 1.0
+          },
+          {
+            "source_id": "S2",
+            "paper_id": "openalex:W4403586302",
+            "paper_title": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers",
+            "paper_year": 2024,
+            "paper_url": "https://openalex.org/W4403586302",
+            "contribution_id": "openalex:W4403586302::k00",
+            "contribution": "A controlled experimental framework for comparing human and LLM research idea generation \u2014 enforcing style standardization, matched topic distributions, and blind expert review \u2014 enables statistically rigorous head-to-head evaluation of ideation capabilities for the first time.",
+            "supporting_quote": "We address this by establishing an experimental design that evaluates research idea generation while controlling for confounders and performs the first head-to-head comparison between expert NLP researchers and an LLM ideation agent.",
+            "quote_offsets": [
+              3123,
+              3356
+            ],
+            "grounding": 1.0
+          },
+          {
+            "source_id": "S3",
+            "paper_id": "openalex:W4402952666",
+            "paper_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery",
+            "paper_year": 2024,
+            "paper_url": "https://openalex.org/W4402952666",
+            "contribution_id": "openalex:W4402952666::k00",
+            "contribution": "The AI Scientist \u2014 an end-to-end, fully automated pipeline in which a frontier LLM generates research ideas, searches the literature, designs and executes experiments, visualizes results, writes a complete scientific manuscript, and performs self-review in an open-ended loop \u2014 enables autonomous scientific discovery in machine learning at a cost of under $15 per paper.",
+            "supporting_quote": "We introduce the first end-to-end framework for fully automated scientific discovery in Machine\nLearning research, enabled by frontier LLMs (Section 3). This fully automated process includes\nidea generation, experiment design, execution, and visualizing and writing up the results into a\nfull manuscript.",
+            "quote_offsets": [
+              8351,
+              8655
+            ],
+            "grounding": 0.99
+          }
+        ],
+        "graph_relation": "related",
+        "edge_reason": "Contribution B (W4403586302) cites Contribution A (W4390784029) twice, but exclusively as background context \u2014 once in a broad enumeration of \"research-related tasks\" LLMs have been applied to (automatic review generation), and once as a named example of a multi-agent review system with automatic and human evaluation. The citation passages (CIT:1, CIT:2) explicitly contrast MARG with the focal work (\"Unlike these works, we tackle the\u2026\"), signalling that the relationship is one of thematic proximity rather than methodological dependency or corroboration. Contribution A addresses peer-review generation under context-window constraints; Contribution B addresses research idea generation with a controlled human-LLM comparison. The two contributions target different tasks (review generation vs. idea generation), use different evaluation designs, and report on different constructs. B does not build on, refine, or contradict A's findings; A's methods or results are not extended or corrected by B. The citation is a background/survey citation establishing the broader landscape of LLM-for-research tasks. A substantive topical relationship exists (both operate in the LLM-for-scientific-research space), but no harder relation (builds_on, refines, supports, contradicts) is defensible from the evidence supplied.",
+        "edge_existence_confidence": 0.95,
+        "edge_type_confidence": 0.82
+      },
+      "provenance": {
+        "packet_id": "b5a3b408fb0c",
+        "generator_model": "claude-sonnet-4-6",
+        "generated_from": "motif-balanced, distinct-paper graph packet"
+      },
+      "review": {
+        "gap_confirmed": null,
+        "sources_sufficient": null,
+        "study_actionable": null,
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": "",
+        "disputed_claims": [],
+        "missing_papers": []
+      }
+    },
+    {
+      "id": "gap:4f1dba767eeb",
+      "gap_type": "missing_feedback_loop",
+      "status": "draft_unverified",
+      "gap_hypothesis": "The AI Scientist (v1 and v2) operates as a fully closed autonomous loop \u2014 generating ideas, running experiments, writing papers, and self-reviewing \u2014 but there is no evidence that the quality signal produced by its self-review stage is fed back to improve upstream stages (idea generation, experimental design, or manuscript writing) within or across research cycles. The controlled human-vs-LLM ideation evaluation (S3) establishes that LLM idea quality can be rigorously measured by blind expert review, yet neither the v1 nor v2 system uses such an external or internalized quality signal as a corrective feedback loop to steer future idea generation or experimental decisions.",
+      "missing_evidence": "No evidence exists that the self-review scores or expert-rated quality signals generated at the end of an AI Scientist research cycle are used to update, re-rank, or prune the upstream idea generation and experimental design decisions in subsequent cycles. Specifically, it is unknown whether closing this feedback loop \u2014 routing manuscript review quality back into the idea-generation and experimental-planning stages \u2014 improves the rated quality of subsequently produced papers relative to the open-loop baseline.",
+      "smallest_resolving_study": "Using the AI Scientist-v2 framework (S2), run two matched cohorts of autonomous research cycles on the same seed topics: (A) the existing open-loop system where self-review output is not used to influence future idea generation or experimental design, and (B) a feedback-closed variant where self-review scores and structured critiques are returned as conditioning context to the idea-generation and experiment-manager agents at the start of each subsequent cycle. After N cycles per cohort, apply the blind expert review protocol from S3 (style-standardized, topic-matched, scored by domain experts) to all produced manuscripts. Compare mean expert-rated novelty, feasibility, and overall quality scores between cohorts A and B using the same statistical tests as S3. This minimal study would directly test whether the missing self-review-to-ideation feedback loop produces measurable quality improvement.",
+      "model_rationale": "S1 and S2 describe end-to-end autonomous systems that include a self-review stage, but neither routes that review signal back upstream to influence idea generation or experimental design \u2014 the loop is structurally open. S3 independently demonstrates that rigorous, blind expert review can produce statistically meaningful quality scores for LLM-generated research. Together, these three contributions expose a concrete missing feedback loop: the review-quality signal exists and is measurable (S3), is generated internally by the system (S1, S2), but is never used to close the cycle and improve earlier stages. This is the most consequential gap because closing it is the mechanistic precondition for genuine iterative self-improvement in autonomous science.",
+      "evidence": {
+        "sources": [
+          {
+            "source_id": "S1",
+            "paper_id": "openalex:W4402952666",
+            "paper_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery",
+            "paper_year": 2024,
+            "paper_url": "https://openalex.org/W4402952666",
+            "contribution_id": "openalex:W4402952666::k00",
+            "contribution": "The AI Scientist \u2014 an end-to-end, fully automated pipeline in which a frontier LLM generates research ideas, searches the literature, designs and executes experiments, visualizes results, writes a complete scientific manuscript, and performs self-review in an open-ended loop \u2014 enables autonomous scientific discovery in machine learning at a cost of under $15 per paper.",
+            "supporting_quote": "We introduce the first end-to-end framework for fully automated scientific discovery in Machine\nLearning research, enabled by frontier LLMs (Section 3). This fully automated process includes\nidea generation, experiment design, execution, and visualizing and writing up the results into a\nfull manuscript.",
+            "quote_offsets": [
+              8351,
+              8655
+            ],
+            "grounding": 0.99
+          },
+          {
+            "source_id": "S2",
+            "paper_id": "openalex:W4414827381",
+            "paper_title": "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search",
+            "paper_year": 2025,
+            "paper_url": "https://openalex.org/W4414827381",
+            "contribution_id": "openalex:W4414827381::k00",
+            "contribution": "The AI Scientist-v2 \u2014 an end-to-end agentic system for automated scientific discovery that eliminates reliance on human-authored code templates, uses a progressive agentic tree-search methodology managed by a dedicated experiment manager agent, and integrates VLM feedback for iterative figure refinement \u2014 can autonomously formulate hypotheses, design and execute experiments, analyze data, and author complete scientific manuscripts across diverse machine learning domains.",
+            "supporting_quote": "We introduce The AI Scientist-v2, an automated scientific discovery framework enhanced\nby agentic tree search, VLM feedback, and parallel experiment execution. It thereby significantly\nimproves the autonomy, flexibility, and scientific exploration depth of previous systems.",
+            "quote_offsets": [
+              6939,
+              7213
+            ],
+            "grounding": 0.993
+          },
+          {
+            "source_id": "S3",
+            "paper_id": "openalex:W4403586302",
+            "paper_title": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers",
+            "paper_year": 2024,
+            "paper_url": "https://openalex.org/W4403586302",
+            "contribution_id": "openalex:W4403586302::k00",
+            "contribution": "A controlled experimental framework for comparing human and LLM research idea generation \u2014 enforcing style standardization, matched topic distributions, and blind expert review \u2014 enables statistically rigorous head-to-head evaluation of ideation capabilities for the first time.",
+            "supporting_quote": "We address this by establishing an experimental design that evaluates research idea generation while controlling for confounders and performs the first head-to-head comparison between expert NLP researchers and an LLM ideation agent.",
+            "quote_offsets": [
+              3123,
+              3356
+            ],
+            "grounding": 1.0
+          }
+        ],
+        "graph_relation": "open_wedge",
+        "edge_reason": "",
+        "edge_existence_confidence": null,
+        "edge_type_confidence": null
+      },
+      "provenance": {
+        "packet_id": "4f1dba767eeb",
+        "generator_model": "claude-sonnet-4-6",
+        "generated_from": "motif-balanced, distinct-paper graph packet"
+      },
+      "review": {
+        "gap_confirmed": null,
+        "sources_sufficient": null,
+        "study_actionable": null,
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": "",
+        "disputed_claims": [],
+        "missing_papers": []
+      }
+    },
+    {
+      "id": "gap:16393ee86bf1",
+      "gap_type": "missing_feedback_loop",
+      "status": "draft_unverified",
+      "gap_hypothesis": "None of the three systems closes the loop between the quality of a system's own outputs and the inputs it uses for subsequent research cycles: AI Scientist (S2) and AI Scientist-v2 (S1) operate in an open-ended loop but use externally fixed quality signals, while Agent Laboratory (S3) incorporates optional human feedback but only at discrete, human-triggered checkpoints. No evidence exists that any system feeds machine-assessable quality metrics from completed papers (e.g., reviewer scores, reproducibility outcomes, or citation-proxy signals) back as an adaptive signal that reshapes hypothesis generation, experiment design, or template selection in the next cycle\u2014meaning compounding self-improvement across iterations has never been demonstrated or measured.",
+      "missing_evidence": "A quantitative demonstration that quality-derived feedback signals from one research cycle (reviewer scores, experiment reproducibility rates, or VLM figure-quality scores) are propagated back to modify the priors, search heuristics, or prompting strategy used in the immediately following cycle, and that this closed loop produces measurably better outputs over successive iterations compared to an open-loop baseline running the same number of cycles.",
+      "smallest_resolving_study": "Run AI Scientist-v2 (chosen because it already integrates VLM feedback for figure refinement, providing the most mature internal quality signal) for N consecutive research cycles (e.g., N=10) on a fixed domain. In the closed-loop condition, extract a scalar quality score from each completed cycle (using the system's own automated review mechanism from S2/S1) and use it to reweight the tree-search exploration policy of the experiment manager agent before the next cycle begins. In the open-loop control condition, run the identical number of cycles with a fixed, unmodified policy. Compare output quality (automated review scores, reproducibility of reported results, and human expert ratings on a blinded subset of papers) across cycles between conditions. If the closed-loop condition shows a statistically significant positive trend in quality across cycles while the open-loop condition does not, the missing feedback loop is confirmed to be causally beneficial.",
+      "model_rationale": "All three systems describe pipelines that terminate each research cycle without routing output-quality signals back as adaptive inputs to the next cycle. S2 and S1 describe \"open-ended loops\" but mean repeated independent runs, not self-modifying loops. S3 relies on optional human intervention rather than a machine-closed loop. The absence of this feedback mechanism means none of the systems can compound improvements autonomously, which is the central unfulfilled promise of a truly autonomous scientific discovery agent. This is a concrete, testable structural gap rather than a capability wish, and it directly follows from reading the three contributions together.",
+      "evidence": {
+        "sources": [
+          {
+            "source_id": "S1",
+            "paper_id": "openalex:W4414827381",
+            "paper_title": "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search",
+            "paper_year": 2025,
+            "paper_url": "https://openalex.org/W4414827381",
+            "contribution_id": "openalex:W4414827381::k00",
+            "contribution": "The AI Scientist-v2 \u2014 an end-to-end agentic system for automated scientific discovery that eliminates reliance on human-authored code templates, uses a progressive agentic tree-search methodology managed by a dedicated experiment manager agent, and integrates VLM feedback for iterative figure refinement \u2014 can autonomously formulate hypotheses, design and execute experiments, analyze data, and author complete scientific manuscripts across diverse machine learning domains.",
+            "supporting_quote": "We introduce The AI Scientist-v2, an automated scientific discovery framework enhanced\nby agentic tree search, VLM feedback, and parallel experiment execution. It thereby significantly\nimproves the autonomy, flexibility, and scientific exploration depth of previous systems.",
+            "quote_offsets": [
+              6939,
+              7213
+            ],
+            "grounding": 0.993
+          },
+          {
+            "source_id": "S2",
+            "paper_id": "openalex:W4402952666",
+            "paper_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery",
+            "paper_year": 2024,
+            "paper_url": "https://openalex.org/W4402952666",
+            "contribution_id": "openalex:W4402952666::k00",
+            "contribution": "The AI Scientist \u2014 an end-to-end, fully automated pipeline in which a frontier LLM generates research ideas, searches the literature, designs and executes experiments, visualizes results, writes a complete scientific manuscript, and performs self-review in an open-ended loop \u2014 enables autonomous scientific discovery in machine learning at a cost of under $15 per paper.",
+            "supporting_quote": "We introduce the first end-to-end framework for fully automated scientific discovery in Machine\nLearning research, enabled by frontier LLMs (Section 3). This fully automated process includes\nidea generation, experiment design, execution, and visualizing and writing up the results into a\nfull manuscript.",
+            "quote_offsets": [
+              8351,
+              8655
+            ],
+            "grounding": 0.99
+          },
+          {
+            "source_id": "S3",
+            "paper_id": "openalex:W4416035220",
+            "paper_title": "Agent Laboratory: Using LLM Agents as Research Assistants",
+            "paper_year": 2025,
+            "paper_url": "https://openalex.org/W4416035220",
+            "contribution_id": "openalex:W4416035220::k00",
+            "contribution": "Agent Laboratory \u2014 an autonomous LLM-based pipeline that accepts a human-provided research idea and completes the full research cycle (literature review, experimentation, and report writing) to produce a code repository and research report, with optional human feedback at each stage.",
+            "supporting_quote": "introduce\nAgent\nLaboratory, an autonomous LLM-\nbased framework capable of completing the\nentire research process. This framework ac-\ncepts a human-provided research idea and pro-\ngresses through three stages\u2013literature review,\nexperimentation, and report writing\u2013in order to\nproduce research, including a code repository\nand a research report, while enabling users to\nprovide feedback and guidance at each stag",
+            "quote_offsets": [
+              707,
+              1117
+            ],
+            "grounding": 0.971
+          }
+        ],
+        "graph_relation": "open_wedge",
+        "edge_reason": "",
+        "edge_existence_confidence": null,
+        "edge_type_confidence": null
+      },
+      "provenance": {
+        "packet_id": "16393ee86bf1",
+        "generator_model": "claude-sonnet-4-6",
+        "generated_from": "motif-balanced, distinct-paper graph packet"
+      },
+      "review": {
+        "gap_confirmed": null,
+        "sources_sufficient": null,
+        "study_actionable": null,
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": "",
+        "disputed_claims": [],
+        "missing_papers": []
+      }
+    },
+    {
+      "id": "gap:4831d905cefb",
+      "gap_type": "missing_feedback_loop",
+      "status": "draft_unverified",
+      "gap_hypothesis": "The AI Scientist's fully automated loop (S2) generates ideas, executes experiments, writes papers, and performs self-review, but there is no feedback mechanism by which the quality signal from expert or peer review is fed back into subsequent ideation or experimental design cycles. S1 establishes that human vs. LLM idea quality can be rigorously measured via blind expert review, yet this measurement is never re-injected into the AI Scientist's pipeline to steer future idea generation. S3 catalogues failure modes across all phases \u2014 including ideation and review \u2014 but does not document whether any review-phase signal loops back to correct upstream ideation failures. The result is a purely open-loop system: review outputs are produced but never consumed by the generator, leaving systematic ideation deficiencies uncorrectable across iterations.",
+      "missing_evidence": "Evidence that the quality scores produced during the AI Scientist's self-review (or an external blind expert review as operationalized in S1) are propagated back as a conditioning signal into the idea-generation and experimental-design phases, and that doing so measurably improves the rated novelty, feasibility, and significance of ideas produced in subsequent autonomous cycles relative to a no-feedback control condition.",
+      "smallest_resolving_study": "Run the AI Scientist pipeline for N autonomous end-to-end cycles on a fixed set of ML research topics. In the feedback condition, after each cycle the blind expert review scores (collected using the standardized rubric from S1) for novelty, feasibility, and significance are concatenated to the idea-generation prompt as structured critiques before the next cycle begins. In the no-feedback (open-loop) control condition, the pipeline runs identically but review scores are withheld from the generator. Compare the distribution of expert-rated idea quality scores across cycles between the two conditions using a mixed-effects model. A statistically significant upward trend in quality scores across cycles in the feedback condition \u2014 absent in the control \u2014 would confirm that closing the review-to-ideation loop improves autonomous scientific discovery.",
+      "model_rationale": "S2 demonstrates a fully automated scientific pipeline, S1 provides the evaluation machinery to rigorously score idea quality, and S3 maps the failure modes that such scoring could correct \u2014 yet no evidence across all three sources shows that review-phase quality signals are ever returned to the ideation phase. This missing feedback loop is the most consequential gap because without it the system cannot self-improve across iterations, rendering the \"open-ended loop\" in S2 open-loop in the direction that matters most for quality.",
+      "evidence": {
+        "sources": [
+          {
+            "source_id": "S1",
+            "paper_id": "openalex:W4403586302",
+            "paper_title": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers",
+            "paper_year": 2024,
+            "paper_url": "https://openalex.org/W4403586302",
+            "contribution_id": "openalex:W4403586302::k00",
+            "contribution": "A controlled experimental framework for comparing human and LLM research idea generation \u2014 enforcing style standardization, matched topic distributions, and blind expert review \u2014 enables statistically rigorous head-to-head evaluation of ideation capabilities for the first time.",
+            "supporting_quote": "We address this by establishing an experimental design that evaluates research idea generation while controlling for confounders and performs the first head-to-head comparison between expert NLP researchers and an LLM ideation agent.",
+            "quote_offsets": [
+              3123,
+              3356
+            ],
+            "grounding": 1.0
+          },
+          {
+            "source_id": "S2",
+            "paper_id": "openalex:W4402952666",
+            "paper_title": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery",
+            "paper_year": 2024,
+            "paper_url": "https://openalex.org/W4402952666",
+            "contribution_id": "openalex:W4402952666::k00",
+            "contribution": "The AI Scientist \u2014 an end-to-end, fully automated pipeline in which a frontier LLM generates research ideas, searches the literature, designs and executes experiments, visualizes results, writes a complete scientific manuscript, and performs self-review in an open-ended loop \u2014 enables autonomous scientific discovery in machine learning at a cost of under $15 per paper.",
+            "supporting_quote": "We introduce the first end-to-end framework for fully automated scientific discovery in Machine\nLearning research, enabled by frontier LLMs (Section 3). This fully automated process includes\nidea generation, experiment design, execution, and visualizing and writing up the results into a\nfull manuscript.",
+            "quote_offsets": [
+              8351,
+              8655
+            ],
+            "grounding": 0.99
+          },
+          {
+            "source_id": "S3",
+            "paper_id": "openalex:W4416026872",
+            "paper_title": "Jr. AI Scientist and Its Risk Report: Autonomous Scientific Exploration from a Baseline Paper",
+            "paper_year": 2025,
+            "paper_url": "https://openalex.org/W4416026872",
+            "contribution_id": "openalex:W4416026872::k03",
+            "contribution": "A comprehensive risk taxonomy for autonomous AI scientist systems, cataloguing concrete failure modes and hazards across the idea-generation, experimentation, writing, and review phases, derived from end-to-end system development and deployment experience.",
+            "supporting_quote": "we comprehensively report various risks identified during development. We believe this study clarifies the current role and limitations of AI Scientist systems, offering insights into the areas that still require human expertise and the risks that may emerge as these systems evolve.",
+            "quote_offsets": [
+              2070,
+              2353
+            ],
+            "grounding": 1.0
+          }
+        ],
+        "graph_relation": "open_wedge",
+        "edge_reason": "",
+        "edge_existence_confidence": null,
+        "edge_type_confidence": null
+      },
+      "provenance": {
+        "packet_id": "4831d905cefb",
+        "generator_model": "claude-sonnet-4-6",
+        "generated_from": "motif-balanced, distinct-paper graph packet"
+      },
+      "review": {
+        "gap_confirmed": null,
+        "sources_sufficient": null,
+        "study_actionable": null,
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": "",
+        "disputed_claims": [],
+        "missing_papers": []
+      }
+    },
+    {
+      "id": "gap:3334995da280",
+      "gap_type": "missing_feedback_loop",
+      "status": "draft_unverified",
+      "gap_hypothesis": "Neither Agent Laboratory (S1), AI Scientist-v2 (S2), nor MLR-Bench (S3) establishes a closed feedback loop in which the benchmark evaluation signal from MLR-Bench is routed back to steer or refine the autonomous research pipeline (Agent Laboratory or AI Scientist-v2) during its execution. The pipelines accept optional human feedback (S1) or VLM figure feedback (S2), but benchmark-derived performance scores measuring idea quality, experimental rigor, and paper quality are never fed back as an automated signal to guide in-progress agentic decisions. As a result, it is unknown whether incorporating structured, benchmark-generated evaluation feedback mid-run improves the quality of autonomously produced research artifacts compared to pipelines that operate without such feedback.",
+      "missing_evidence": "There is no evidence of a closed-loop mechanism in which MLR-Bench's stepwise evaluation scores (idea generation, proposal formulation, experimentation, paper writing) are automatically returned to an autonomous pipeline (Agent Laboratory or AI Scientist-v2) as an in-process reward or corrective signal, nor any measurement of whether such feedback improves final artifact quality relative to a no-feedback baseline.",
+      "smallest_resolving_study": "Select 40 tasks from MLR-Bench (S3) and assign them randomly to two conditions: (A) an autonomous pipeline (e.g., Agent Laboratory, S1) running without benchmark feedback \u2014 the current open-loop baseline \u2014 and (B) the same pipeline augmented with a feedback loop in which MLR-Bench's stepwise evaluator scores each completed stage (idea, proposal, experiment, paper draft) and returns structured critique to the agent before it proceeds to the next stage. Hold all other hyperparameters constant. Measure MLR-Bench end-to-end scores and stepwise sub-scores for both conditions across all 40 tasks. A statistically significant improvement in condition B over condition A would confirm that benchmark-derived evaluation signals constitute a productive feedback loop; equivalence or degradation would indicate the loop provides no benefit or is harmful.",
+      "model_rationale": "S1 and S2 describe autonomous research pipelines that accept only human or VLM-based feedback; S3 provides a structured, multi-stage evaluation framework capable of scoring each phase of the research process. Yet none of the three contributions connects these two systems: the evaluation scores produced by MLR-Bench are never cycled back into the running pipeline as an automated corrective signal. This missing link between evaluator (S3) and executor (S1/S2) is a concrete, actionable feedback loop whose absence means the pipelines cannot self-correct based on objective benchmark criteria \u2014 a consequential gap given that such a loop could substantially raise the quality ceiling of fully autonomous AI research.",
+      "evidence": {
+        "sources": [
+          {
+            "source_id": "S1",
+            "paper_id": "openalex:W4416035220",
+            "paper_title": "Agent Laboratory: Using LLM Agents as Research Assistants",
+            "paper_year": 2025,
+            "paper_url": "https://openalex.org/W4416035220",
+            "contribution_id": "openalex:W4416035220::k00",
+            "contribution": "Agent Laboratory \u2014 an autonomous LLM-based pipeline that accepts a human-provided research idea and completes the full research cycle (literature review, experimentation, and report writing) to produce a code repository and research report, with optional human feedback at each stage.",
+            "supporting_quote": "introduce\nAgent\nLaboratory, an autonomous LLM-\nbased framework capable of completing the\nentire research process. This framework ac-\ncepts a human-provided research idea and pro-\ngresses through three stages\u2013literature review,\nexperimentation, and report writing\u2013in order to\nproduce research, including a code repository\nand a research report, while enabling users to\nprovide feedback and guidance at each stag",
+            "quote_offsets": [
+              707,
+              1117
+            ],
+            "grounding": 0.971
+          },
+          {
+            "source_id": "S2",
+            "paper_id": "openalex:W4414827381",
+            "paper_title": "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search",
+            "paper_year": 2025,
+            "paper_url": "https://openalex.org/W4414827381",
+            "contribution_id": "openalex:W4414827381::k00",
+            "contribution": "The AI Scientist-v2 \u2014 an end-to-end agentic system for automated scientific discovery that eliminates reliance on human-authored code templates, uses a progressive agentic tree-search methodology managed by a dedicated experiment manager agent, and integrates VLM feedback for iterative figure refinement \u2014 can autonomously formulate hypotheses, design and execute experiments, analyze data, and author complete scientific manuscripts across diverse machine learning domains.",
+            "supporting_quote": "We introduce The AI Scientist-v2, an automated scientific discovery framework enhanced\nby agentic tree search, VLM feedback, and parallel experiment execution. It thereby significantly\nimproves the autonomy, flexibility, and scientific exploration depth of previous systems.",
+            "quote_offsets": [
+              6939,
+              7213
+            ],
+            "grounding": 0.993
+          },
+          {
+            "source_id": "S3",
+            "paper_id": "openalex:W4414587939",
+            "paper_title": "MLR-Bench: Evaluating AI Agents on Open-Ended Machine Learning Research",
+            "paper_year": 2025,
+            "paper_url": "https://openalex.org/W4414587939",
+            "contribution_id": "openalex:W4414587939::k00",
+            "contribution": "MLR-Bench \u2014 a benchmark of 201 open-ended machine learning research tasks drawn from NeurIPS, ICLR, and ICML workshops \u2014 enables systematic evaluation of AI research agents across nine ML topic areas with both stepwise (idea generation, proposal formulation, experimentation, paper writing) and end-to-end assessment pipelines.",
+            "supporting_quote": "MLR-Bench : To our knowledge, the most comprehensive evaluation benchmark for AI research agents to date, featuring 201 open-ended ML research tasks, a human-aligned MLR-Judge for automated research quality assessment, and a modular MLR-Agent supporting both stepwise and end-to-end research execution.",
+            "quote_offsets": [
+              8330,
+              8632
+            ],
+            "grounding": 1.0
+          }
+        ],
+        "graph_relation": "open_wedge",
+        "edge_reason": "",
+        "edge_existence_confidence": null,
+        "edge_type_confidence": null
+      },
+      "provenance": {
+        "packet_id": "3334995da280",
+        "generator_model": "claude-sonnet-4-6",
+        "generated_from": "motif-balanced, distinct-paper graph packet"
+      },
+      "review": {
+        "gap_confirmed": null,
+        "sources_sufficient": null,
+        "study_actionable": null,
+        "reviewer": null,
+        "reviewed_at": null,
+        "notes": "",
+        "disputed_claims": [],
+        "missing_papers": []
+      }
+    }
+  ]
+}
