@@ -7,6 +7,11 @@ SPEC = importlib.util.spec_from_file_location("build_gap_atlas", PATH)
 MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(MODULE)
 
+TEMPORAL_PATH = Path(__file__).resolve().parents[1] / "experiments/graph_ideation/temporal_gap_closure.py"
+TEMPORAL_SPEC = importlib.util.spec_from_file_location("temporal_gap_closure", TEMPORAL_PATH)
+TEMPORAL = importlib.util.module_from_spec(TEMPORAL_SPEC)
+TEMPORAL_SPEC.loader.exec_module(TEMPORAL)
+
 
 def test_gap_card_separates_evidence_from_hypothesis():
     manifest = {"packets": [{
@@ -29,3 +34,10 @@ def test_gap_card_separates_evidence_from_hypothesis():
     assert card["gap_hypothesis"] == "Candidate gap"
     assert card["evidence"]["sources"][0]["supporting_quote"] == "Exact quote"
     assert card["review"]["gap_confirmed"] is None
+
+
+def test_temporal_work_key_collapses_arxiv_versions():
+    first = {"id": "arxiv:2501.01234v1", "title": "A Paper"}
+    second = {"id": "openalex:W1", "doi": "https://doi.org/10.48550/arXiv.2501.01234",
+              "title": "A Paper revised"}
+    assert TEMPORAL.work_key(first) == TEMPORAL.work_key(second) == "arxiv:2501.01234"

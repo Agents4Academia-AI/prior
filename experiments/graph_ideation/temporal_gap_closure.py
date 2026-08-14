@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 import random
+import re
 import sys
 import threading
 from collections import Counter, defaultdict
@@ -68,6 +69,23 @@ def append(path: Path, row: dict, lock: threading.Lock) -> None:
         handle.write(json.dumps(row) + "\n")
 
 
+def work_key(paper: dict) -> str:
+    """Best-effort manifestation key used only to prevent temporal leakage.
+
+    Prefer persistent identifiers; otherwise collapse arXiv versions and exact
+    normalized titles. This is conservative: uncertain works remain distinct.
+    """
+    doi = str(paper.get("doi") or "").lower().replace("https://doi.org/", "").strip()
+    arxiv = re.search(r"(?:arxiv[:./]|abs/|pdf/)(\d{4}\.\d{4,5})(?:v\d+)?", " ".join(
+        str(paper.get(k) or "") for k in ("id", "doi", "url", "pdf_url")), re.I)
+    if arxiv:
+        return f"arxiv:{arxiv.group(1)}"
+    if doi:
+        return f"doi:{doi}"
+    title = re.sub(r"[^a-z0-9]+", " ", str(paper.get("title") or "").lower()).strip()
+    return f"title:{title}"
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", type=Path, required=True)
@@ -84,6 +102,8 @@ def main() -> None:
     obj = json.loads((BUNDLE / "contributions_core_grounded.json").read_text())
     contributions = obj["contributions"]
     by_id = {x["id"]: x for x in contributions}
+    papers = {x["id"]: x for x in read_jsonl(BUNDLE / "papers_core.jsonl")}
+    family = {pid: work_key(paper) for pid, paper in papers.items()}
     early = [x for x in contributions if x.get("date") and x["date"] < args.cutoff]
     late = [x for x in contributions if x.get("date") and x["date"] >= args.cutoff]
     early_ids, late_ids = {x["id"] for x in early}, {x["id"] for x in late}
@@ -208,7 +228,10 @@ def main() -> None:
     scores = cosine_similarity(query_matrix, late_matrix)
     candidate_rows = []
     for prediction, row_scores in zip(predictions, scores):
-        top = row_scores.argsort()[::-1][:args.top_k]
+        seed_family = family.get(by_id[prediction["seed_id"]]["paper_id"])
+        eligible_late = [idx for idx in row_scores.argsort()[::-1]
+                         if family.get(late[idx]["paper_id"]) != seed_family]
+        top = eligible_late[:args.top_k]
         for rank, idx in enumerate(top, 1):
             contribution = late[idx]
             key = f"{prediction['packet_id']}:{rank}"
@@ -250,7 +273,10 @@ def main() -> None:
                     user=json.dumps(payload), schema=JUDGE_SCHEMA,
                     tool_name="emit_closure", max_tokens=4200, retries=3)
                 for result_row in result.get("results", []):
-                    if result_row.get("key") in missing:
+                    # Some providers occasionally return a JSON-encoded scalar
+                    # inside an otherwise schema-valid array. Ignore it and let
+                    # the missing-key retry recover the item.
+                    if isinstance(result_row, dict) and result_row.get("key") in missing:
                         collected[result_row["key"]] = result_row
             if chunk_expected != set(collected):
                 raise ValueError(f"invalid closure chunk missing={chunk_expected-set(collected)}")
