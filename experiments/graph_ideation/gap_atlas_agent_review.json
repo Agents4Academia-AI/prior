@@ -1,0 +1,34 @@
+{
+  "schema_version": "prior-gap-atlas-review/0.1",
+  "reviewed_at": "2026-08-14",
+  "reviewer": "Codex (agent review; not human adjudication)",
+  "scope": "Premise/quote inspection, duplicate and manifestation audit, and targeted fresh-search spot checks. Absence claims remain provisional.",
+  "decisions": [
+    {"id":"gap:3449d52437ae","decision":"keep_revise","canonical":"gap:3449d52437ae","notes":"Strong evaluation-comparability question. Reframe from a direct contradiction to an unresolved construct-validity gap: end-to-end paper acceptance and scientific subtask correctness measure different things."},
+    {"id":"gap:9fde6aef01dc","decision":"merge_duplicate","canonical":"gap:3449d52437ae","notes":"Near-duplicate of 3449d52437ae. The third source on human-versus-LLM ideation does not materially establish the central gap."},
+    {"id":"gap:58468f275b1c","decision":"keep_revise","canonical":"gap:58468f275b1c","notes":"Useful controlled-scaffolding comparison. 'Direct contradiction' is too strong because task selection, baseline strength, models, budgets, and novelty definitions differ."},
+    {"id":"gap:f136eb3e686c","decision":"keep_revise","canonical":"gap:f136eb3e686c","notes":"Potentially valuable benchmark-interoperability study. The reported percentages concern different tasks and denominators, so describe a comparability gap rather than contradictory measurements."},
+    {"id":"gap:f549c8bdbc34","decision":"keep_revise","canonical":"gap:f549c8bdbc34","notes":"Cross-domain generalization is plausible and actionable. The AI Scientist source is contextual rather than evidence for HypoRefine's boundary; add domain-specific hypothesis-generation baselines."},
+    {"id":"gap:afb648d74975","decision":"merge_duplicate","canonical":"gap:7be9af90741e","notes":"Same cross-domain AI Scientist-v2 question as 7be9af90741e. The human ideation study is only tangential evidence."},
+    {"id":"gap:7be9af90741e","decision":"keep_revise","canonical":"gap:7be9af90741e","notes":"Keep the domain-transfer question, but do not treat the Nature account and system paper as independent systems. Compare the architecture against domain-native agents and experimental modalities."},
+    {"id":"gap:cde08c88b196","decision":"merge_duplicate","canonical":"gap:f549c8bdbc34","notes":"Substantively duplicates f549c8bdbc34."},
+    {"id":"gap:405774311f40","decision":"merge_duplicate","canonical":"gap:9d2fdbd3287a","notes":"Merge with the independent-validation card. Avoid claiming two independent passing manuscripts; the records describe overlapping systems/authors and differing review settings."},
+    {"id":"gap:28bbbad18d75","decision":"reject","canonical":null,"notes":"The two co-scientist records are manifestations/descriptions of the same underlying work, not independent evidence. ReplicationBench is from a different domain and does not make the proposed replication design minimal."},
+    {"id":"gap:9d2fdbd3287a","decision":"keep_revise","canonical":"gap:9d2fdbd3287a","notes":"Independent replication of peer-review success is a clear, consequential target. Specify repeated blinded submissions, venue policy, reviewer composition, acceptance variance, and preregistered outcomes."},
+    {"id":"gap:5f7129d6bddf","decision":"reject","canonical":null,"notes":"Premise incorrectly treats two records of the Google co-scientist work as independent systems. Robin does not rescue the proposed identical-benchmark comparison."},
+    {"id":"gap:6fbe13f503dd","decision":"keep_revise","canonical":"gap:6fbe13f503dd","notes":"Benchmark interoperability is valuable, but do not require one literal pipeline containing all three artifacts. AstaBench already provides a broader benchmark suite; the sharper gap is whether rankings and failure profiles transfer across end-to-end generation, replication, and reproducibility evaluations."},
+    {"id":"gap:3a7f678e5f5a","decision":"reject","canonical":null,"notes":"Component mash-up without a demonstrated dependency or bottleneck. Combining three systems is not itself a field gap, and attribution would be poorly identified."},
+    {"id":"gap:f9601b935716","decision":"keep","canonical":"gap:f9601b935716","notes":"A clean modular intervention: replace an ideation stage while holding the downstream research pipeline fixed, then measure idea diversity, feasibility, execution success, and final evidence quality."},
+    {"id":"gap:b5a3b408fb0c","decision":"partly_addressed","canonical":"gap:b5a3b408fb0c","notes":"ReviewEval already compares MARG and AI Scientist review outputs against expert-relative criteria. The narrower remaining question is causal: what happens when these reviewer signals steer an end-to-end pipeline?"},
+    {"id":"gap:4f1dba767eeb","decision":"keep_revise","canonical":"gap:4f1dba767eeb","notes":"Keep as an AI Scientist-specific learning-loop question. Broader claims that no feedback-learning evidence exists are outdated; recent lab-in-the-loop and automated-review systems provide adjacent evidence."},
+    {"id":"gap:16393ee86bf1","decision":"merge_duplicate","canonical":"gap:4f1dba767eeb","notes":"Same upstream feedback-learning question as 4f1dba767eeb."},
+    {"id":"gap:4831d905cefb","decision":"merge_duplicate","canonical":"gap:4f1dba767eeb","notes":"Same feedback-loop question. Preserve expert-versus-LLM disagreement as one experimental condition in the canonical card."},
+    {"id":"gap:3334995da280","decision":"keep_revise","canonical":"gap:3334995da280","notes":"Benchmark-guided online adaptation is testable, but frame it as a general intervention rather than requiring these exact three systems. Compare fixed-agent evaluation with evaluation-feedback adaptation under held-out tasks."}
+  ],
+  "fresh_search_findings": [
+    {"finding":"AstaBench already aggregates several scientific-agent evaluations and weakens broad claims that benchmark unification is wholly absent.","url":"https://allenai.org/asta/bench"},
+    {"finding":"ReviewEval directly compares MARG and AI Scientist reviewers on expert-relative review dimensions, partially addressing the review-consistency premise.","url":"https://aclanthology.org/2025.findings-emnlp.1120/"},
+    {"finding":"CycleResearcher uses automated review to improve automated research, so broad no-review-feedback-loop claims are no longer tenable.","url":"https://arxiv.org/abs/2411.00816"},
+    {"finding":"A 2026 lab-in-the-loop study reports controlled evidence that experimental feedback can improve an AI scientist agent, further narrowing broad feedback-loop gaps.","url":"https://arxiv.org/abs/2603.26177"}
+  ]
+}
