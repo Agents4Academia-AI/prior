@@ -1,0 +1,84 @@
+{
+  "coverage": {
+    "graph_contribution_pairs": 989,
+    "citation_sites": 1103,
+    "paper_citation_edges": 644,
+    "matched_citation_sites": 271,
+    "matched_contribution_pairs": 259,
+    "site_pair_observations": 474,
+    "unmatched_citation_sites": 832
+  },
+  "relation_by_site_intent": {
+    "uses_extends": {
+      "builds_on": 59,
+      "related": 5,
+      "supports": 6
+    },
+    "background": {
+      "builds_on": 101,
+      "related": 165,
+      "supports": 53,
+      "contradicts": 8,
+      "refines": 8
+    },
+    "compares_contrasts": {
+      "builds_on": 16,
+      "related": 32,
+      "supports": 9,
+      "refines": 8,
+      "contradicts": 4
+    }
+  },
+  "four_point_audit": {
+    "uses_extends": {
+      "observations": 70,
+      "unique_pairs": 43,
+      "builds_on_observations": 59,
+      "builds_on_unique_pairs": 36
+    },
+    "direction": {
+      "builds_on_observations": 59,
+      "agreeing_observations": 59,
+      "mismatching_observations": 0,
+      "mismatching_unique_pairs": 0
+    },
+    "background": {
+      "observations": 335,
+      "unique_pairs": 217,
+      "hard_relation_observations": 170,
+      "hard_relation_unique_pairs": 107,
+      "hard_using_exact_site_observations": 93,
+      "hard_using_exact_site_unique_pairs": 77
+    },
+    "compares_contrasts": {
+      "observations": 69,
+      "unique_pairs": 57,
+      "contradiction_observations": 4,
+      "contradiction_unique_pairs": 3
+    }
+  },
+  "review_queue": {
+    "observations": 108,
+    "unique_pairs": 85,
+    "by_reason_observations": {
+      "background_passage_supports_hard_relation": 93,
+      "uses_extends_not_builds_on": 11,
+      "comparison_promoted_to_contradiction": 4
+    },
+    "by_reason_unique_pairs": {
+      "background_passage_supports_hard_relation": 77,
+      "comparison_promoted_to_contradiction": 3,
+      "uses_extends_not_builds_on": 7
+    }
+  },
+  "method": {
+    "unit": "citation-site x retained contribution-pair observation",
+    "rollup": "none; mixed-intent paper edges may contribute to multiple intent categories",
+    "hard_relations": [
+      "builds_on",
+      "contradicts",
+      "refines",
+      "supports"
+    ]
+  }
+}
