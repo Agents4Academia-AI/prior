@@ -115,6 +115,8 @@ def main() -> None:
     parser.add_argument("--manifest", type=Path,
                         default=OUT / "cartographer_rebuild_candidates.json")
     parser.add_argument("--fulltext-dir", type=Path, default=DEFAULT_FULLTEXT)
+    parser.add_argument("--context-map", type=Path,
+                        default=OUT / "citation_map.json")
     parser.add_argument("--model", default=config.CARTOGRAPHER_MODEL)
     parser.add_argument("--workers", type=int, default=3)
     parser.add_argument("--timeout", type=int, default=180)
@@ -131,7 +133,8 @@ def main() -> None:
     grounded = json.loads((BUNDLE / "contributions_core_grounded.json").read_text())
     contributions = grounded["contributions"] if isinstance(grounded, dict) else grounded
     by_id = {row["id"]: row for row in contributions}
-    context_rows = json.loads((OUT / "citation_map.json").read_text())
+    context_obj = json.loads(args.context_map.read_text())
+    context_rows = context_obj.get("edges", []) if isinstance(context_obj, dict) else context_obj
     contexts = {(row["citing_id"], row["cited_id"]): row.get("contexts", [])
                 for row in context_rows}
     text_cache = {}
@@ -149,9 +152,10 @@ def main() -> None:
         for citation in candidate["citations"]:
             key = (citation["citing_id"], citation["cited_id"])
             for i, item in enumerate(contexts.get(key, [])[:3], 1):
+                passage = item if isinstance(item, str) else item.get("text", "")
                 citation_passages.append((
                     f"CIT:{citation['citing_id']}->{citation['cited_id']}:{i}",
-                    item.get("text", ""),
+                    passage,
                 ))
         query = " ".join((ca["statement"], cb["statement"],
                           *(text for _, text in citation_passages)))

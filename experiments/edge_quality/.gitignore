@@ -1,3 +1,7 @@
 out/eprints/
 out/*.log
+out/*.ckpt.jsonl
 out/gold_export/
+out/legacy_fulltext_citation_enriched_graph.json
+out/legacy_fulltext_citation_enriched_predictions.jsonl
+out/legacy_fulltext_citation_enriched_v12_predictions.jsonl

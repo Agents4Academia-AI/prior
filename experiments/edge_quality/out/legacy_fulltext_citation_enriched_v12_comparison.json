@@ -1,0 +1,182 @@
+{
+  "validation": {
+    "previous_pairs": 989,
+    "merged_pairs": 989,
+    "corrected_pairs": 34,
+    "duplicates": 0,
+    "invalid_evidence": 0,
+    "corrected_with_citation_passage": 34,
+    "corrected_using_citation_evidence": 32,
+    "normalization": {
+      "related_direction_to_none": 13
+    }
+  },
+  "relations": {
+    "previous_enriched": {
+      "related": 644,
+      "builds_on": 104,
+      "supports": 203,
+      "refines": 10,
+      "contradicts": 27,
+      "none": 1
+    },
+    "incoming_v12": {
+      "related": 639,
+      "builds_on": 109,
+      "supports": 203,
+      "refines": 10,
+      "contradicts": 27,
+      "none": 1
+    },
+    "affected_transitions": {
+      "builds_on -> builds_on": 5,
+      "builds_on -> related": 1,
+      "related -> builds_on": 6,
+      "related -> related": 11,
+      "related -> supports": 3,
+      "supports -> related": 3,
+      "supports -> supports": 5
+    },
+    "affected_exact_agreement": 21,
+    "affected_changed": 13
+  },
+  "changed_pairs": [
+    {
+      "candidate_id": "arxiv:2502.12510v1::k02|openalex:W4404783497::k02",
+      "before": "related",
+      "after": "supports",
+      "citation_evidence_used": true,
+      "reason": "Both contributions document systematic biases that distort peer review outcomes: A identifies LLM-specific vulnerabilities (strong-reject dominance, hostile-critique misinterpretation, rebuttal paradoxes) while B quantifies human reviewer biases (conformity pressure, altruism fatigue, authority effects). The findings are materially corroborating \u2014 both show that review processes are skewed by non-merit factors that inflate or distort acceptance decisions. The citation in A references B in a related-work context on biases in review systems (CIT:2), and both use similar simulation/perturbation frameworks (AgentReview appears in both). The relationship is symmetric since neither explicitly extends the other's method; they independently corroborate the broad claim that peer review is systematically biased. The type confidence is moderate because A focuses on LLM pipelines and B on human reviewer simulation, so the constructs partially overlap rather than being identical."
+    },
+    {
+      "candidate_id": "arxiv:2511.02824v2::k01|openalex:W7165004696::k01",
+      "before": "related",
+      "after": "supports",
+      "citation_evidence_used": true,
+      "reason": "Both contributions describe multi-agent autonomous research systems capable of sustained long-horizon execution. A (Kosmos) achieves this via a structured world model coordinating parallel agents (200+ rollouts, 42k lines of code, 1500 papers). B (Orion) achieves it via a hierarchical terminal+GUI agent architecture with externalized memory (300+ sequential actions). The citation passages show B cites A in the context of prior long-horizon autonomous research agents, and both are described as 'among the first generation' capable of such sustained execution. The findings corroborate each other \u2014 both demonstrate that architectural innovations enabling context management allow AI agents to sustain complex research workflows far beyond prior systems. However, the mechanisms differ (world model parallelism vs. hierarchical GUI+terminal), so 'supports' rather than 'builds_on' is appropriate, as B does not explicitly extend A's method but rather arrives at comparable conclusions via a different architecture."
+    },
+    {
+      "candidate_id": "arxiv:2603.26499v2::k01|openalex:W7161731996::k01",
+      "before": "supports",
+      "after": "related",
+      "citation_evidence_used": false,
+      "reason": "Both contributions share the same architectural motif \u2014 asynchronous multi-agent execution for flexible/scalable compute \u2014 but serve different scientific goals. A (AIRA) applies this to ML experiment execution on GPUs for evolutionary search; B (Co-Scientist) applies it to hypothesis generation in biomedical research. The citation from A to B exists, but the localized citation passage (CIT:1) is a bibliography fragment that does not show A explicitly building on or extending B's method. The shared architectural pattern (async multi-agent + compute scaling) constitutes a substantive relationship, but there is insufficient evidence that A adopted or extended B's specific framework rather than independently arriving at a similar design. 'related' is the most defensible label."
+    },
+    {
+      "candidate_id": "arxiv:2603.28589v1::k01|openalex:W7161731996::k00",
+      "before": "related",
+      "after": "builds_on",
+      "citation_evidence_used": true,
+      "reason": "Contribution A (Medical AI Scientist) describes a clinician-engineer co-reasoning mechanism that explicitly grounds hypothesis generation in verifiable evidence to reduce hallucinations. Contribution B (Co-Scientist) is a structured scientific thinking engine for hypothesis generation conditioned on literature and research objectives. A cites B in its introduction as part of the broader autonomous research framework landscape (CIT passages), and A's co-reasoning mechanism directly addresses a limitation implicit in systems like B (hallucination and traceability). A's approach extends the hypothesis-generation paradigm established by B with a domain-specific (medical) grounding mechanism, indicating A builds on B's foundational framework. The citation is background/landscape rather than direct method reuse, so builds_on is defensible but not certain; related would be the fallback."
+    },
+    {
+      "candidate_id": "arxiv:2604.18805::k00|openalex:W4415148250::k01",
+      "before": "builds_on",
+      "after": "related",
+      "citation_evidence_used": true,
+      "reason": "Contribution A includes AFM experiment execution as one of its eight benchmark domains (A:003), and cites the AFMBench paper (W4415148250) in its reference list (CIT evidence). Both are LLM-agent benchmarks for scientific tasks with overlapping scope. However, the citation context is a bare reference list entry with no localized passage explaining how A uses or extends B's method or results. A includes an AFM domain that may draw on B's tasks, but there is no explicit evidence that A builds on B's benchmark design or results \u2014 it could be independent parallel work that merely cites B as related prior art. A 'builds_on' classification is not defensible without evidence of direct reuse of B's artifacts or methodology. 'related' best captures the substantive topical overlap and co-citation."
+    },
+    {
+      "candidate_id": "openalex:W4384261641::k00|openalex:W4400734098::k00",
+      "before": "related",
+      "after": "builds_on",
+      "citation_evidence_used": true,
+      "reason": "B (W4400734098) explicitly cites A (W4384261641) as one of the small-scale exploratory studies it contrasts against and scales beyond. Evidence CIT:3 directly names Robertson et al. (which is A) as a small-scale predecessor whose 10-participant pilot B explicitly differentiates from with its large-scale systematic analysis. B extends the same research question (can GPT-4 assist peer review?) using a substantially larger and more rigorous pipeline, building on A's foundational finding that GPT-4 can be helpful while moving beyond its limited scope. This is builds_on (B builds on A), not merely related, because B explicitly positions itself relative to A's result and method."
+    },
+    {
+      "candidate_id": "openalex:W4384261641::k01|openalex:W4400734098::k00",
+      "before": "supports",
+      "after": "related",
+      "citation_evidence_used": true,
+      "reason": "B cites A as prior exploratory work (checklist verification / peer-review assistance), but the citation passages treat A as background context alongside several other small-scale studies rather than as a method or artifact that B explicitly extends. B's pipeline is independently designed and evaluated at large scale; it does not reuse A's three-step prompting procedure. Both contributions address GPT-4-based automated peer review and their findings are broadly compatible, but the evidence does not establish that B builds on or is a refinement of A's specific method. 'related' is the most defensible classification."
+    },
+    {
+      "candidate_id": "openalex:W4403586302::k00|openalex:W4416034681::k01",
+      "before": "related",
+      "after": "builds_on",
+      "citation_evidence_used": true,
+      "reason": "B (Idea Arena) explicitly cites and builds on A's finding that LLM-based Likert scale evaluation poorly aligns with human preferences and that LLMs perform better at ranking ideas. B uses this result from A as direct motivation to propose Idea Arena's pairwise ranking protocol. Evidence CIT:2 states 'Si et al. 2024 show this method poorly aligns with human preferences. Instead, they show LLMs perform better in ranking ideas... we propose Idea Arena' \u2014 directly extending A's methodological insight into a new evaluation system."
+    },
+    {
+      "candidate_id": "openalex:W4404783497::k02|openalex:W4405035007::k03",
+      "before": "related",
+      "after": "supports",
+      "citation_evidence_used": true,
+      "reason": "Both contributions document prestige/authority bias corrupting peer review objectivity. Contribution A finds a 27.7% decision shift when author identities are known (human reviewers). Contribution B finds LLMs produce more favorable reviews when authorship is attributed to well-known researchers \u2014 the same construct in a different reviewer type. Evidence [B:007] and [CIT:openalex:W4405035007->openalex:W4404783497:3] confirm B's finding directly parallels A's authority-bias result, materially corroborating it. The citation from B to A appears in background motivation context, not as a direct methodological extension, so builds_on is not defensible. Supports is the strongest defensible relation given the analogous but cross-domain (human vs. LLM) nature of the findings."
+    },
+    {
+      "candidate_id": "openalex:W4407632372::k01|openalex:W7149942558::k04",
+      "before": "related",
+      "after": "builds_on",
+      "citation_evidence_used": true,
+      "reason": "B (W7149942558) explicitly cites A (W4407632372) and positions A's always-valid e-process gates as a component that maps into B's declared inferential checker families with seal nodes. Evidence B:011 states 'always-valid e-process gates map to declared inferential checker families with seal nodes' and describes A as a 'concrete protocol-level instantiation' that B's architecture generalizes. CIT passage confirms B treats A's framework as an essential substrate that B incorporates and extends into a broader certification-and-release governance architecture. This is builds_on with direction b_to_a (B builds on A)."
+    },
+    {
+      "candidate_id": "openalex:W4407760093::k01|openalex:W7140287209::k01",
+      "before": "related",
+      "after": "builds_on",
+      "citation_evidence_used": true,
+      "reason": "B (The AI Scientist) explicitly cites A (AIDE) when describing its template-free, open-ended mode that uses agentic tree search for code optimization. The citation passage in CIT references 'Jiang et al. 2025; Chan et al. 2025' (AIDE authors) in the context of leveraging agentic search for wider scientific exploration. Evidence BQ describes B's template-free mode generating code from scratch and using 'tree search' for experiment execution \u2014 directly paralleling A's solution tree structure. B builds on A's tree-search-based code optimization approach by incorporating it as a component in a broader autonomous research pipeline, making the direction b_to_a (B builds on A)."
+    },
+    {
+      "candidate_id": "openalex:W4407760093::k03|openalex:W7140287209::k01",
+      "before": "related",
+      "after": "builds_on",
+      "citation_evidence_used": true,
+      "reason": "B (The AI Scientist's template-free mode) explicitly leverages agentic tree search for code generation and optimization, and the citation passage in CIT directly references 'Jiang et al. 2025; Chan et al. 2025' in the context of agentic search for open-ended scientific exploration, with Chan et al. corresponding to AIDE (openalex:W4407760093). Evidence BQ and B:006 show B adopts tree search for code optimization in its template-free mode, extending the tree-search approach that A (AIDE) established for ML engineering. This is a builds_on relation where B draws on A's method."
+    },
+    {
+      "candidate_id": "openalex:W4417287919::k00|openalex:W7161731996::k00",
+      "before": "supports",
+      "after": "related",
+      "citation_evidence_used": true,
+      "reason": "Robin (A) cites Co-Scientist (B) in a background survey of LLM systems for hypothesis generation, grouping it among prior systems that 'demonstrated they can generate reasonable hypotheses.' The citation is background/topical rather than a direct methodological reuse: Robin does not explicitly adopt Co-Scientist's architecture or results, and the citation passage is used to motivate Robin's claim that no existing system fully automates the complete scientific process end-to-end. Both systems share the same high-level goal (multi-agent AI for hypothesis generation and scientific discovery) and similar techniques (multi-agent architectures, iterative refinement, literature synthesis), constituting a substantive thematic relationship. However, the evidence does not support builds_on (no explicit reuse of Co-Scientist's methods or artifacts) or supports/contradicts (no comparable empirical findings are compared). 'related' is the most defensible classification."
+    }
+  ],
+  "topology": {
+    "legacy": {
+      "nodes": 581,
+      "edges": 989,
+      "components": 92,
+      "largest_component": 485,
+      "isolates": 86,
+      "bridges": 106,
+      "mean_clustering": 0.1291,
+      "communities": 106,
+      "modularity": 0.7195
+    },
+    "previous_enriched_substantive": {
+      "nodes": 581,
+      "edges": 988,
+      "components": 92,
+      "largest_component": 485,
+      "isolates": 86,
+      "bridges": 108,
+      "mean_clustering": 0.1292,
+      "communities": 105,
+      "modularity": 0.7195
+    },
+    "incoming_v12_substantive": {
+      "nodes": 581,
+      "edges": 988,
+      "components": 92,
+      "largest_component": 485,
+      "isolates": 86,
+      "bridges": 108,
+      "mean_clustering": 0.1292,
+      "communities": 105,
+      "modularity": 0.7195
+    },
+    "incoming_v12_hard": {
+      "nodes": 581,
+      "edges": 349,
+      "components": 311,
+      "largest_component": 212,
+      "isolates": 282,
+      "bridges": 161,
+      "mean_clustering": 0.0397,
+      "communities": 321,
+      "modularity": 0.8309
+    }
+  }
+}

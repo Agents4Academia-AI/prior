@@ -1,0 +1,4653 @@
+{
+  "schema_version": 1,
+  "method": {
+    "candidate_policy": "frozen legacy contribution pairs only",
+    "citation_policy": "attach parent-paper citation evidence without contribution alignment",
+    "reuse_policy": "rerun only prior predictions with no attached citation direction"
+  },
+  "counts": {
+    "candidates": 160
+  },
+  "candidates": [
+    {
+      "candidate_id": "arxiv:2410.17309v3::k00|openalex:W4402580984::k01",
+      "a": "arxiv:2410.17309v3::k00",
+      "b": "openalex:W4402580984::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2410.17309v3::k00",
+          "dst": "openalex:W4402580984::k01",
+          "relation": "supports",
+          "confidence": 0.5,
+          "evidence": "Both concern LLM-based hypothesis generation in social science; B's finding that LLMs produce high-quality hypotheses supports the premise underlying A's hypothesis-generation method.",
+          "similarity": 0.477,
+          "trust": 0.5
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2410.17309v3",
+          "cited_id": "openalex:W4402580984",
+          "localized": false,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2410.17309v3::k00|openalex:W4416540539::k00",
+      "a": "arxiv:2410.17309v3::k00",
+      "b": "openalex:W4416540539::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2410.17309v3::k00",
+          "dst": "openalex:W4416540539::k00",
+          "relation": "supports",
+          "confidence": 0.55,
+          "evidence": "",
+          "similarity": 0.56,
+          "trust": 0.55
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4416540539",
+          "cited_id": "arxiv:2410.17309v3",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2410.17309v3::k01|openalex:W4394647523::k01",
+      "a": "arxiv:2410.17309v3::k01",
+      "b": "openalex:W4394647523::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2410.17309v3::k01",
+          "dst": "openalex:W4394647523::k01",
+          "relation": "supports",
+          "confidence": 0.75,
+          "evidence": "Both report that integrating literature-based and data-driven hypothesis generation yields best generalizability/OOD performance with transferable hypotheses \u2014 strongly consistent findings.",
+          "similarity": 0.523,
+          "trust": 0.99
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2410.17309v3",
+          "cited_id": "openalex:W4394647523",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2410.17309v3::k01|openalex:W4416540539::k00",
+      "a": "arxiv:2410.17309v3::k01",
+      "b": "openalex:W4416540539::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2410.17309v3::k01",
+          "dst": "openalex:W4416540539::k00",
+          "relation": "supports",
+          "confidence": 0.6,
+          "evidence": "",
+          "similarity": 0.631,
+          "trust": 0.84
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4416540539",
+          "cited_id": "arxiv:2410.17309v3",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2410.17309v3::k01|openalex:W4416540539::k01",
+      "a": "arxiv:2410.17309v3::k01",
+      "b": "openalex:W4416540539::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2410.17309v3::k01",
+          "dst": "openalex:W4416540539::k01",
+          "relation": "supports",
+          "confidence": 0.45,
+          "evidence": "",
+          "similarity": 0.602,
+          "trust": 0.57
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4416540539",
+          "cited_id": "arxiv:2410.17309v3",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2410.17309v3::k02|openalex:W4394647523::k00",
+      "a": "arxiv:2410.17309v3::k02",
+      "b": "openalex:W4394647523::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2410.17309v3::k02",
+          "dst": "openalex:W4394647523::k00",
+          "relation": "builds_on",
+          "confidence": 0.6,
+          "evidence": "A evaluates utility of LLM-generated hypotheses for human decisions; both part of HypoGeniC-type research line on hypothesis generation.",
+          "similarity": 0.517,
+          "trust": 0.6
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2410.17309v3",
+          "cited_id": "openalex:W4394647523",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2410.17309v3::k02|openalex:W4394647523::k02",
+      "a": "arxiv:2410.17309v3::k02",
+      "b": "openalex:W4394647523::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2410.17309v3::k02",
+          "dst": "openalex:W4394647523::k02",
+          "relation": "supports",
+          "confidence": 0.5,
+          "evidence": "",
+          "similarity": 0.546,
+          "trust": 0.74
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2410.17309v3",
+          "cited_id": "openalex:W4394647523",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2410.17309v3::k03|openalex:W4416540539::k02",
+      "a": "arxiv:2410.17309v3::k03",
+      "b": "openalex:W4416540539::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2410.17309v3::k03",
+          "dst": "openalex:W4416540539::k02",
+          "relation": "supports",
+          "confidence": 0.78,
+          "evidence": "B finds augmenting data-driven generation with retrieved literature performs best, supporting A's claim that literature and data hypotheses are complementary.",
+          "similarity": 0.533,
+          "trust": 0.99
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4416540539",
+          "cited_id": "arxiv:2410.17309v3",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2411.15114v2::k00|arxiv:2504.01848v3::k03",
+      "a": "arxiv:2411.15114v2::k00",
+      "b": "arxiv:2504.01848v3::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2504.01848v3::k03",
+          "dst": "arxiv:2411.15114v2::k00",
+          "relation": "supports",
+          "confidence": 0.6,
+          "evidence": "Both establish gaps between AI agents and human experts on ML research/engineering tasks via benchmarks; RE-Bench's human comparison aligns with PaperBench's human-vs-AI gap finding.",
+          "similarity": 0.689,
+          "trust": 0.84
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2504.01848v3",
+          "cited_id": "arxiv:2411.15114v2",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2411.15114v2::k00|arxiv:2602.15112v2::k01",
+      "a": "arxiv:2411.15114v2::k00",
+      "b": "arxiv:2602.15112v2::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2602.15112v2::k01",
+          "dst": "arxiv:2411.15114v2::k00",
+          "relation": "supports",
+          "confidence": 0.6,
+          "evidence": "Both compare AI agents to human experts on open-ended ML research tasks; RE-Bench enables exactly the human-vs-agent comparison the other reports.",
+          "similarity": 0.649,
+          "trust": 0.72
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2602.15112v2",
+          "cited_id": "arxiv:2411.15114v2",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2411.15114v2::k02|arxiv:2602.15112v2::k01",
+      "a": "arxiv:2411.15114v2::k02",
+      "b": "arxiv:2602.15112v2::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2602.15112v2::k01",
+          "dst": "arxiv:2411.15114v2::k02",
+          "relation": "supports",
+          "confidence": 0.6,
+          "evidence": "Both find AI agents are unreliable/lag humans on longer research tasks but occasionally exceed; consistent capability-reliability/time-horizon narrative.",
+          "similarity": 0.578,
+          "trust": 0.84
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2602.15112v2",
+          "cited_id": "arxiv:2411.15114v2",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2502.12510v1::k01|openalex:W4403006832::k02",
+      "a": "arxiv:2502.12510v1::k01",
+      "b": "openalex:W4403006832::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2502.12510v1::k01",
+          "dst": "openalex:W4403006832::k02",
+          "relation": "builds_on",
+          "confidence": 0.6,
+          "evidence": "Both inject perturbations/errors into peer review components to diagnose LLM reviewer weaknesses; A is a more structured framework of the general idea B describes.",
+          "similarity": 0.734,
+          "trust": 0.72
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2502.12510v1",
+          "cited_id": "openalex:W4403006832",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2502.12510v1::k01|openalex:W4404782918::k03",
+      "a": "arxiv:2502.12510v1::k01",
+      "b": "openalex:W4404782918::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2502.12510v1::k01",
+          "dst": "openalex:W4404782918::k03",
+          "relation": "supports",
+          "confidence": 0.55,
+          "evidence": "A perturbation framework diagnoses LLM robustness incl. meta-reviewer role; B finds LLMs fall short at meta-reviewing \u2014 A's approach could surface and B's finding agrees on LLM weakness.",
+          "similarity": 0.633,
+          "trust": 0.67
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2502.12510v1",
+          "cited_id": "openalex:W4404782918",
+          "localized": false,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2502.12510v1::k01|openalex:W4405035007::k01",
+      "a": "arxiv:2502.12510v1::k01",
+      "b": "openalex:W4405035007::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2502.12510v1::k01",
+          "dst": "openalex:W4405035007::k01",
+          "relation": "supports",
+          "confidence": 0.6,
+          "evidence": "Both examine LLM robustness to perturbation/manipulation in peer review; B's finding is an instance of the vulnerability A's framework diagnoses.",
+          "similarity": 0.624,
+          "trust": 0.84
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2502.12510v1",
+          "cited_id": "openalex:W4405035007",
+          "localized": false,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2502.12510v1::k01|openalex:W4405035007::k02",
+      "a": "arxiv:2502.12510v1::k01",
+      "b": "openalex:W4405035007::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2502.12510v1::k01",
+          "dst": "openalex:W4405035007::k02",
+          "relation": "supports",
+          "confidence": 0.6,
+          "evidence": "Both examine robustness/vulnerability of LLM review systems to perturbation; B quantifies systemic impact while A provides diagnostic framework.",
+          "similarity": 0.576,
+          "trust": 0.72
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2502.12510v1",
+          "cited_id": "openalex:W4405035007",
+          "localized": false,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2502.12510v1::k01|openalex:W4405035007::k03",
+      "a": "arxiv:2502.12510v1::k01",
+      "b": "openalex:W4405035007::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2502.12510v1::k01",
+          "dst": "openalex:W4405035007::k03",
+          "relation": "supports",
+          "confidence": 0.45,
+          "evidence": "Both concern probing LLM reviewer flaws; B's specific flaw findings are consistent with A's robustness diagnosis aim, though A is a framework not a finding.",
+          "similarity": 0.686,
+          "trust": 0.69
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2502.12510v1",
+          "cited_id": "openalex:W4405035007",
+          "localized": false,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2502.12510v1::k02|openalex:W4403006832::k02",
+      "a": "arxiv:2502.12510v1::k02",
+      "b": "openalex:W4403006832::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2502.12510v1::k02",
+          "dst": "openalex:W4403006832::k02",
+          "relation": "builds_on",
+          "confidence": 0.5,
+          "evidence": "B's error-injection method is a means to discover the kind of LLM reviewing blind spots A documents.",
+          "similarity": 0.636,
+          "trust": 0.5
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2502.12510v1",
+          "cited_id": "openalex:W4403006832",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2502.12510v1::k02|openalex:W4404782918::k03",
+      "a": "arxiv:2502.12510v1::k02",
+      "b": "openalex:W4404782918::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2502.12510v1::k02",
+          "dst": "openalex:W4404782918::k03",
+          "relation": "supports",
+          "confidence": 0.5,
+          "evidence": "Both report LLM shortcomings in meta-reviewing tasks; B's finding that LLMs cannot match human meta-reviewers aligns with A's identified meta-review biases.",
+          "similarity": 0.667,
+          "trust": 0.62
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2502.12510v1",
+          "cited_id": "openalex:W4404782918",
+          "localized": false,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2502.12510v1::k02|openalex:W4405035007::k01",
+      "a": "arxiv:2502.12510v1::k02",
+      "b": "openalex:W4405035007::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2502.12510v1::k02",
+          "dst": "openalex:W4405035007::k01",
+          "relation": "supports",
+          "confidence": 0.7,
+          "evidence": "Both find LLM reviewers susceptible to manipulation via rebuttal/self-disclosure; B's implicit manipulation finding aligns with A's vulnerability to disclosed weaknesses.",
+          "similarity": 0.662,
+          "trust": 0.94
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2502.12510v1",
+          "cited_id": "openalex:W4405035007",
+          "localized": false,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2502.12510v1::k02|openalex:W4405035007::k03",
+      "a": "arxiv:2502.12510v1::k02",
+      "b": "openalex:W4405035007::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2502.12510v1::k02",
+          "dst": "openalex:W4405035007::k03",
+          "relation": "supports",
+          "confidence": 0.6,
+          "evidence": "Both document inherent LLM reviewing flaws/biases; B's hallucination and prestige bias findings reinforce A's vulnerability findings.",
+          "similarity": 0.686,
+          "trust": 0.84
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2502.12510v1",
+          "cited_id": "openalex:W4405035007",
+          "localized": false,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2503.08569::k00|arxiv:2603.20884v3::k02",
+      "a": "arxiv:2503.08569::k00",
+      "b": "arxiv:2603.20884v3::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2603.20884v3::k02",
+          "dst": "arxiv:2503.08569::k00",
+          "relation": "supports",
+          "confidence": 0.5,
+          "evidence": "Both build automated assessment frameworks involving novelty assessment and retrieval; B's DeepReview could incorporate A's evaluation approach.",
+          "similarity": 0.508,
+          "trust": 0.5
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2603.20884v3",
+          "cited_id": "arxiv:2503.08569",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2503.08569::k00|openalex:W4405561462::k00",
+      "a": "arxiv:2503.08569::k00",
+      "b": "openalex:W4405561462::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4405561462::k00",
+          "dst": "arxiv:2503.08569::k00",
+          "relation": "supports",
+          "confidence": 0.55,
+          "evidence": "Both build automated structured peer-review systems emulating expert reviewers; convergent approaches to the same task.",
+          "similarity": 0.588,
+          "trust": 0.79
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2503.08569",
+          "cited_id": "openalex:W4405561462",
+          "localized": false,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2503.08569::k01|arxiv:2508.10308::k00",
+      "a": "arxiv:2503.08569::k01",
+      "b": "arxiv:2508.10308::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2508.10308::k00",
+          "dst": "arxiv:2503.08569::k01",
+          "relation": "builds_on",
+          "confidence": 0.55,
+          "evidence": "ReviewRL is an RL framework for review generation; DeepReview-13K is a structured review dataset that such a framework could train on, plausibly used as training data.",
+          "similarity": 0.607,
+          "trust": 0.67
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2508.10308",
+          "cited_id": "arxiv:2503.08569",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2503.08569::k02|openalex:W4403006832::k00",
+      "a": "arxiv:2503.08569::k02",
+      "b": "openalex:W4403006832::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4403006832::k00",
+          "dst": "arxiv:2503.08569::k02",
+          "relation": "supports",
+          "confidence": 0.5,
+          "evidence": "Both concern LLM-based peer review systems and their evaluation; convergent domain and goals.",
+          "similarity": 0.513,
+          "trust": 0.74
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2503.08569",
+          "cited_id": "openalex:W4403006832",
+          "localized": false,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2503.08569::k03|arxiv:2508.10308::k00",
+      "a": "arxiv:2503.08569::k03",
+      "b": "arxiv:2508.10308::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2508.10308::k00",
+          "dst": "arxiv:2503.08569::k03",
+          "relation": "builds_on",
+          "confidence": 0.5,
+          "evidence": "ReviewRL is a review-generation framework; DeepReview-Bench evaluates such systems, suggesting ReviewRL could be evaluated on it.",
+          "similarity": 0.594,
+          "trust": 0.5
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2508.10308",
+          "cited_id": "arxiv:2503.08569",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2504.01848v3::k02|openalex:W4414587939::k01",
+      "a": "arxiv:2504.01848v3::k02",
+      "b": "openalex:W4414587939::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4414587939::k01",
+          "dst": "arxiv:2504.01848v3::k02",
+          "relation": "supports",
+          "confidence": 0.55,
+          "evidence": "Both develop human-expert-graded benchmarks for LLM-based judges of research quality; corroborating methodologies.",
+          "similarity": 0.664,
+          "trust": 0.55
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4414587939",
+          "cited_id": "arxiv:2504.01848v3",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2504.01848v3::k03|arxiv:2510.24591v2::k01",
+      "a": "arxiv:2504.01848v3::k03",
+      "b": "arxiv:2510.24591v2::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2510.24591v2::k01",
+          "dst": "arxiv:2504.01848v3::k03",
+          "relation": "builds_on",
+          "confidence": 0.5,
+          "evidence": "The rubric-free objective evaluation framework appears to address PaperBench's reliance on extensive human rubrics, offering an alternative evaluation approach for the same replication problem.",
+          "similarity": 0.663,
+          "trust": 0.5
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2510.24591v2",
+          "cited_id": "arxiv:2504.01848v3",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2504.09702v3::k00|openalex:W4407760093::k02",
+      "a": "arxiv:2504.09702v3::k00",
+      "b": "openalex:W4407760093::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2504.09702v3::k00",
+          "dst": "openalex:W4407760093::k02",
+          "relation": "supports",
+          "confidence": 0.55,
+          "evidence": "Both are benchmarks for evaluating ML agents on competition-style ML tasks with performance metrics.",
+          "similarity": 0.542,
+          "trust": 0.67
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2504.09702v3",
+          "cited_id": "openalex:W4407760093",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2504.09702v3::k01|openalex:W4407806895::k00",
+      "a": "arxiv:2504.09702v3::k01",
+      "b": "openalex:W4407806895::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4407806895::k00",
+          "dst": "arxiv:2504.09702v3::k01",
+          "relation": "supports",
+          "confidence": 0.45,
+          "evidence": "B evaluates AI research agents on ML tasks, complementing A's framework for developing/evaluating such agents.",
+          "similarity": 0.643,
+          "trust": 0.57
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2504.09702v3",
+          "cited_id": "openalex:W4407806895",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2504.09702v3::k01|openalex:W4407806895::k01",
+      "a": "arxiv:2504.09702v3::k01",
+      "b": "openalex:W4407806895::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4407806895::k01",
+          "dst": "arxiv:2504.09702v3::k01",
+          "relation": "supports",
+          "confidence": 0.5,
+          "evidence": "Both evaluate AI research agents on ML research tasks and report limited agent capabilities; complementary findings.",
+          "similarity": 0.682,
+          "trust": 0.74
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2504.09702v3",
+          "cited_id": "openalex:W4407806895",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2504.09702v3::k01|openalex:W4407806895::k03",
+      "a": "arxiv:2504.09702v3::k01",
+      "b": "openalex:W4407806895::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4407806895::k03",
+          "dst": "arxiv:2504.09702v3::k01",
+          "relation": "supports",
+          "confidence": 0.8,
+          "evidence": "Both report empirical findings that frontier LLM agents have severe limitations on open-ended AI research tasks, struggling to produce genuine innovation.",
+          "similarity": 0.648,
+          "trust": 0.99
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2504.09702v3",
+          "cited_id": "openalex:W4407806895",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2504.09702v3::k02|openalex:W4402952811::k01",
+      "a": "arxiv:2504.09702v3::k02",
+      "b": "openalex:W4402952811::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2504.09702v3::k02",
+          "dst": "openalex:W4402952811::k01",
+          "relation": "contradicts",
+          "confidence": 0.4,
+          "evidence": "A argues LLM-judged novelty is poorly correlated with effectiveness, undermining LLM-as-judge; B uses multi-dimensional reward models (including novelty and effectiveness) to train an idea agent. There is a tension since A questions the reliability of the very signals B relies on, but they are not directly incompatible claims.",
+          "similarity": 0.643,
+          "trust": 0.64
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2504.09702v3",
+          "cited_id": "openalex:W4402952811",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2504.09702v3::k02|openalex:W4403586302::k02",
+      "a": "arxiv:2504.09702v3::k02",
+      "b": "openalex:W4403586302::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4403586302::k02",
+          "dst": "arxiv:2504.09702v3::k02",
+          "relation": "supports",
+          "confidence": 0.6,
+          "evidence": "Both identify unreliability of LLM self/judge-evaluation of idea quality; consistent findings.",
+          "similarity": 0.682,
+          "trust": 0.84
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2504.09702v3",
+          "cited_id": "openalex:W4403586302",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2504.09702v3::k02|openalex:W4403586302::k03",
+      "a": "arxiv:2504.09702v3::k02",
+      "b": "openalex:W4403586302::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4403586302::k03",
+          "dst": "arxiv:2504.09702v3::k02",
+          "relation": "contradicts",
+          "confidence": 0.6,
+          "evidence": "A claims LLM ideas judged more novel (relying on novelty judgments as meaningful); B argues LLM-judged novelty is poorly correlated with effectiveness, undermining the reliability of such judgments.",
+          "similarity": 0.612,
+          "trust": 0.72
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2504.09702v3",
+          "cited_id": "openalex:W4403586302",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2504.09702v3::k02|openalex:W4403586302::k04",
+      "a": "arxiv:2504.09702v3::k02",
+      "b": "openalex:W4403586302::k04",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4403586302::k04",
+          "dst": "arxiv:2504.09702v3::k02",
+          "relation": "supports",
+          "confidence": 0.55,
+          "evidence": "A proposes ground-truth execution to test whether novelty judgments translate to outcomes; B finds LLM novelty judgments poorly correlate with empirical effectiveness. B's finding aligns with the concern A addresses.",
+          "similarity": 0.64,
+          "trust": 0.79
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2504.09702v3",
+          "cited_id": "openalex:W4403586302",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2504.21776::k03|arxiv:2511.19399v3::k04",
+      "a": "arxiv:2504.21776::k03",
+      "b": "arxiv:2511.19399v3::k04",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2504.21776::k03",
+          "dst": "arxiv:2511.19399v3::k04",
+          "relation": "supports",
+          "confidence": 0.55,
+          "evidence": "Both train models via RL on deep research tasks to better utilize/select research tools; closely aligned in goal and method.",
+          "similarity": 0.454,
+          "trust": 0.67
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2511.19399v3",
+          "cited_id": "arxiv:2504.21776",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2505.18705v1::k01|arxiv:2602.15112v2::k00",
+      "a": "arxiv:2505.18705v1::k01",
+      "b": "arxiv:2602.15112v2::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2505.18705v1::k01",
+          "dst": "arxiv:2602.15112v2::k00",
+          "relation": "supports",
+          "confidence": 0.6,
+          "evidence": "Both are benchmarks for autonomous AI research agents on closed-loop research derived from top venue papers; complementary parallel efforts.",
+          "similarity": 0.681,
+          "trust": 0.72
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2602.15112v2",
+          "cited_id": "arxiv:2505.18705v1",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2505.18705v1::k01|arxiv:2602.15112v2::k01",
+      "a": "arxiv:2505.18705v1::k01",
+      "b": "arxiv:2602.15112v2::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2505.18705v1::k01",
+          "dst": "arxiv:2602.15112v2::k01",
+          "relation": "supports",
+          "confidence": 0.55,
+          "evidence": "Scientist-Bench is a benchmark for autonomous research agents; B reports agent capability gaps measured on such tasks. Complementary.",
+          "similarity": 0.673,
+          "trust": 0.79
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2602.15112v2",
+          "cited_id": "arxiv:2505.18705v1",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2505.18705v1::k01|arxiv:2603.28589v1::k03",
+      "a": "arxiv:2505.18705v1::k01",
+      "b": "arxiv:2603.28589v1::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2603.28589v1::k03",
+          "dst": "arxiv:2505.18705v1::k01",
+          "relation": "builds_on",
+          "confidence": 0.5,
+          "evidence": "Both are benchmarks for autonomous AI research agents; Med-AI Bench extends the benchmark space to medical domain, parallel/complementary to Scientist-Bench.",
+          "similarity": 0.652,
+          "trust": 0.62
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2603.28589v1",
+          "cited_id": "arxiv:2505.18705v1",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2505.18705v1::k02|openalex:W4416026872::k00",
+      "a": "arxiv:2505.18705v1::k02",
+      "b": "openalex:W4416026872::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4416026872::k00",
+          "dst": "arxiv:2505.18705v1::k02",
+          "relation": "builds_on",
+          "confidence": 0.45,
+          "evidence": "Both involve mentor-student style guidance for autonomous research code generation from baseline papers/codebases; the refinement architecture could implement Jr. AI Scientist's mentor-guided approach, but link is loose.",
+          "similarity": 0.565,
+          "trust": 0.45
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4416026872",
+          "cited_id": "arxiv:2505.18705v1",
+          "localized": false,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2505.18705v1::k02|openalex:W4416026872::k01",
+      "a": "arxiv:2505.18705v1::k02",
+      "b": "openalex:W4416026872::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4416026872::k01",
+          "dst": "arxiv:2505.18705v1::k02",
+          "relation": "builds_on",
+          "confidence": 0.4,
+          "evidence": "Both frame autonomous research as mentor-guided; the refinement architecture mirrors mentor-student collaboration, plausibly an instantiation of the Jr. AI Scientist setting, but tenuous.",
+          "similarity": 0.58,
+          "trust": 0.52
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4416026872",
+          "cited_id": "arxiv:2505.18705v1",
+          "localized": false,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2505.18705v1::k03|arxiv:2603.28589v1::k02",
+      "a": "arxiv:2505.18705v1::k03",
+      "b": "arxiv:2603.28589v1::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2603.28589v1::k02",
+          "dst": "arxiv:2505.18705v1::k03",
+          "relation": "builds_on",
+          "confidence": 0.5,
+          "evidence": "Both are hierarchical manuscript composition approaches; B applies a hierarchical composition paradigm in the clinical/medical writing domain, a domain-specific variant of the general approach in A.",
+          "similarity": 0.597,
+          "trust": 0.62
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2603.28589v1",
+          "cited_id": "arxiv:2505.18705v1",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2505.24785v2::k00|arxiv:2602.15112v2::k01",
+      "a": "arxiv:2505.24785v2::k00",
+      "b": "arxiv:2602.15112v2::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2505.24785v2::k00",
+          "dst": "arxiv:2602.15112v2::k01",
+          "relation": "supports",
+          "confidence": 0.6,
+          "evidence": "Both evaluate AI agents on end-to-end research experiments with subtask-level grading; complementary benchmark and findings.",
+          "similarity": 0.666,
+          "trust": 0.84
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2602.15112v2",
+          "cited_id": "arxiv:2505.24785v2",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2505.24785v2::k02|arxiv:2510.27598::k02",
+      "a": "arxiv:2505.24785v2::k02",
+      "b": "arxiv:2510.27598::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2505.24785v2::k02",
+          "dst": "arxiv:2510.27598::k02",
+          "relation": "supports",
+          "confidence": 0.75,
+          "evidence": "Both report that leading LLM agents largely fail on end-to-end research tasks, succeeding on code sub-tasks but failing at design and long-horizon planning.",
+          "similarity": 0.612,
+          "trust": 0.99
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2510.27598",
+          "cited_id": "arxiv:2505.24785v2",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2505.24785v2::k02|openalex:W4402952811::k03",
+      "a": "arxiv:2505.24785v2::k02",
+      "b": "openalex:W4402952811::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2505.24785v2::k02",
+          "dst": "openalex:W4402952811::k03",
+          "relation": "contradicts",
+          "confidence": 0.6,
+          "evidence": "A reports near-zero (0.5%) success of agents on complete executable research experiments; B claims LLM-agent pipelines can complete the full research cycle with executable outcomes. These present conflicting capability assessments.",
+          "similarity": 0.673,
+          "trust": 0.84
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2505.24785v2",
+          "cited_id": "openalex:W4402952811",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2505.24785v2::k02|openalex:W4407806895::k03",
+      "a": "arxiv:2505.24785v2::k02",
+      "b": "openalex:W4407806895::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4407806895::k03",
+          "dst": "arxiv:2505.24785v2::k02",
+          "relation": "supports",
+          "confidence": 0.65,
+          "evidence": "Both report that LLM agents perform poorly / lack genuine research capability on AI research experiment tasks.",
+          "similarity": 0.561,
+          "trust": 0.89
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2505.24785v2",
+          "cited_id": "openalex:W4407806895",
+          "localized": false,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2506.07642::k01|openalex:W4402683796::k04",
+      "a": "arxiv:2506.07642::k01",
+      "b": "openalex:W4402683796::k04",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2506.07642::k01",
+          "dst": "openalex:W4402683796::k04",
+          "relation": "builds_on",
+          "confidence": 0.5,
+          "evidence": "A claims AI feedback can be superior to human reviews; B is a benchmark for evaluating review/feedback generation. Loosely related as B could evaluate the kind of system in A, but distinct contributions.",
+          "similarity": 0.635,
+          "trust": 0.62
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2506.07642",
+          "cited_id": "openalex:W4402683796",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2506.11763::k00|arxiv:2507.16280::k00",
+      "a": "arxiv:2506.11763::k00",
+      "b": "arxiv:2507.16280::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2507.16280::k00",
+          "dst": "arxiv:2506.11763::k00",
+          "relation": "builds_on",
+          "confidence": 0.6,
+          "evidence": "Both are deep research agent benchmarks; ResearcherBench targets frontier unsolved questions extending the deep research evaluation space beyond DeepResearch Bench.",
+          "similarity": 0.731,
+          "trust": 0.72
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2507.16280",
+          "cited_id": "arxiv:2506.11763",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2506.11763::k00|arxiv:2511.19399v3::k04",
+      "a": "arxiv:2506.11763::k00",
+      "b": "arxiv:2511.19399v3::k04",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2511.19399v3::k04",
+          "dst": "arxiv:2506.11763::k00",
+          "relation": "supports",
+          "confidence": 0.5,
+          "evidence": "RLER training method and DeepResearch Bench both about deep research agents; benchmark could evaluate the method.",
+          "similarity": 0.57,
+          "trust": 0.62
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2511.19399v3",
+          "cited_id": "arxiv:2506.11763",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2506.11763::k00|arxiv:2605.26081::k01",
+      "a": "arxiv:2506.11763::k00",
+      "b": "arxiv:2605.26081::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2506.11763::k00",
+          "dst": "arxiv:2605.26081::k01",
+          "relation": "supports",
+          "confidence": 0.7,
+          "evidence": "",
+          "similarity": 0.608,
+          "trust": 0.94
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2605.26081",
+          "cited_id": "arxiv:2506.11763",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2506.11763::k01|arxiv:2507.16280::k02",
+      "a": "arxiv:2506.11763::k01",
+      "b": "arxiv:2507.16280::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2506.11763::k01",
+          "dst": "arxiv:2507.16280::k02",
+          "relation": "supports",
+          "confidence": 0.45,
+          "evidence": "Both are criteria/rubric-driven evaluation frameworks for research report quality, addressing the same evaluation task with similar dimensional scoring approaches.",
+          "similarity": 0.482,
+          "trust": 0.57
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2507.16280",
+          "cited_id": "arxiv:2506.11763",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2506.11763::k01|arxiv:2603.20884v3::k02",
+      "a": "arxiv:2506.11763::k01",
+      "b": "arxiv:2603.20884v3::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2603.20884v3::k02",
+          "dst": "arxiv:2506.11763::k01",
+          "relation": "supports",
+          "confidence": 0.4,
+          "evidence": "Both are automated evaluation methods for open-ended/long-form research report generation aligned with human judgment; they propose alternative approaches to a shared problem, but not directly extending each other.",
+          "similarity": 0.499,
+          "trust": 0.52
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2603.20884v3",
+          "cited_id": "arxiv:2506.11763",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2506.11763::k03|arxiv:2603.20884v3::k02",
+      "a": "arxiv:2506.11763::k03",
+      "b": "arxiv:2603.20884v3::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2603.20884v3::k02",
+          "dst": "arxiv:2506.11763::k03",
+          "relation": "supports",
+          "confidence": 0.45,
+          "evidence": "Both are human-validated automated evaluation methods for open-ended research report generation; complementary approaches to the same problem.",
+          "similarity": 0.485,
+          "trust": 0.69
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2603.20884v3",
+          "cited_id": "arxiv:2506.11763",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2506.22026::k01|arxiv:2604.11543v1::k00",
+      "a": "arxiv:2506.22026::k01",
+      "b": "arxiv:2604.11543v1::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2604.11543v1::k00",
+          "dst": "arxiv:2506.22026::k01",
+          "relation": "supports",
+          "confidence": 0.5,
+          "evidence": "Both relate to benchmarking/operationalizing academic novelty assessment; complementary.",
+          "similarity": 0.48,
+          "trust": 0.74
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2604.11543v1",
+          "cited_id": "arxiv:2506.22026",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2506.22026::k01|arxiv:2604.11543v1::k02",
+      "a": "arxiv:2506.22026::k01",
+      "b": "arxiv:2604.11543v1::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2604.11543v1::k02",
+          "dst": "arxiv:2506.22026::k01",
+          "relation": "supports",
+          "confidence": 0.5,
+          "evidence": "Both concern LLM novelty evaluation; A's benchmarking finding aligns with B's operationalization of novelty assessment.",
+          "similarity": 0.608,
+          "trust": 0.74
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2604.11543v1",
+          "cited_id": "arxiv:2506.22026",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2506.22026::k01|arxiv:2604.11543v1::k03",
+      "a": "arxiv:2506.22026::k01",
+      "b": "arxiv:2604.11543v1::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2604.11543v1::k03",
+          "dst": "arxiv:2506.22026::k01",
+          "relation": "supports",
+          "confidence": 0.45,
+          "evidence": "Both concern LLM novelty evaluation methodology; A's prompting analysis aligns with B's facet operationalization.",
+          "similarity": 0.479,
+          "trust": 0.57
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2604.11543v1",
+          "cited_id": "arxiv:2506.22026",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2506.22026::k02|arxiv:2603.20884v3::k01",
+      "a": "arxiv:2506.22026::k02",
+      "b": "arxiv:2603.20884v3::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2603.20884v3::k01",
+          "dst": "arxiv:2506.22026::k02",
+          "relation": "supports",
+          "confidence": 0.5,
+          "evidence": "Expert-annotated novelty dataset supports evaluation of A's automated novelty report method.",
+          "similarity": 0.568,
+          "trust": 0.74
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2603.20884v3",
+          "cited_id": "arxiv:2506.22026",
+          "localized": false,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2506.22026::k02|arxiv:2603.20884v3::k02",
+      "a": "arxiv:2506.22026::k02",
+      "b": "arxiv:2603.20884v3::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2603.20884v3::k02",
+          "dst": "arxiv:2506.22026::k02",
+          "relation": "supports",
+          "confidence": 0.5,
+          "evidence": "Both are about evaluating novelty; B's expert-annotated dataset could support A's checklist evaluation method, but they are distinct contributions.",
+          "similarity": 0.546,
+          "trust": 0.62
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2603.20884v3",
+          "cited_id": "arxiv:2506.22026",
+          "localized": false,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2506.22026::k02|arxiv:2604.11543v1::k03",
+      "a": "arxiv:2506.22026::k02",
+      "b": "arxiv:2604.11543v1::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2604.11543v1::k03",
+          "dst": "arxiv:2506.22026::k02",
+          "relation": "builds_on",
+          "confidence": 0.5,
+          "evidence": "A's analysis and fine-tuning strategies for novelty evaluation could build on B's expert-annotated novelty dataset.",
+          "similarity": 0.558,
+          "trust": 0.62
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2604.11543v1",
+          "cited_id": "arxiv:2506.22026",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2506.22026::k03|arxiv:2603.20884v3::k02",
+      "a": "arxiv:2506.22026::k03",
+      "b": "arxiv:2603.20884v3::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2603.20884v3::k02",
+          "dst": "arxiv:2506.22026::k03",
+          "relation": "supports",
+          "confidence": 0.5,
+          "evidence": "Both target improving LLM-based novelty evaluation accuracy via methods grounded in evidence/examples; complementary approaches.",
+          "similarity": 0.524,
+          "trust": 0.62
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2603.20884v3",
+          "cited_id": "arxiv:2506.22026",
+          "localized": false,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2506.22026::k03|arxiv:2604.11543v1::k02",
+      "a": "arxiv:2506.22026::k03",
+      "b": "arxiv:2604.11543v1::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2604.11543v1::k02",
+          "dst": "arxiv:2506.22026::k03",
+          "relation": "supports",
+          "confidence": 0.6,
+          "evidence": "A finds LLMs have limited novelty understanding/gaps with humans; B shows expert in-context examples improve LLM novelty evaluation, consistent with A's finding that LLMs need help.",
+          "similarity": 0.753,
+          "trust": 0.84
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2604.11543v1",
+          "cited_id": "arxiv:2506.22026",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2506.22026::k03|arxiv:2604.11543v1::k03",
+      "a": "arxiv:2506.22026::k03",
+      "b": "arxiv:2604.11543v1::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2604.11543v1::k03",
+          "dst": "arxiv:2506.22026::k03",
+          "relation": "supports",
+          "confidence": 0.55,
+          "evidence": "A identifies prompting strategies improving novelty evaluation; B shows expert in-context examples improve novelty evaluation accuracy \u2014 consistent empirical findings.",
+          "similarity": 0.613,
+          "trust": 0.79
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2604.11543v1",
+          "cited_id": "arxiv:2506.22026",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2507.02004v1::k00|openalex:W4411005431::k01",
+      "a": "arxiv:2507.02004v1::k00",
+      "b": "openalex:W4411005431::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2507.02004v1::k00",
+          "dst": "openalex:W4411005431::k01",
+          "relation": "builds_on",
+          "confidence": 0.55,
+          "evidence": "STELLA's Tool Ocean of bioinformatics tools relates to Biomni-E1's unified environment of 150 tools/databases across 25 domains; STELLA could leverage/extend such an environment.",
+          "similarity": 0.607,
+          "trust": 0.67
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2507.02004v1",
+          "cited_id": "openalex:W4411005431",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2507.02004v1::k03|openalex:W4402345509::k00",
+      "a": "arxiv:2507.02004v1::k03",
+      "b": "openalex:W4402345509::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4402345509::k00",
+          "dst": "arxiv:2507.02004v1::k03",
+          "relation": "supports",
+          "confidence": 0.85,
+          "evidence": "B reports state-of-the-art accuracy on LAB-Bench DBQA/LitQA, which is exactly the benchmark A introduces; B is an evaluation result on A's benchmark.",
+          "similarity": 0.614,
+          "trust": 0.85
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2507.02004v1",
+          "cited_id": "openalex:W4402345509",
+          "localized": false,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2507.02694::k01|openalex:W4403006832::k02",
+      "a": "arxiv:2507.02694::k01",
+      "b": "openalex:W4403006832::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2507.02694::k01",
+          "dst": "openalex:W4403006832::k02",
+          "relation": "builds_on",
+          "confidence": 0.55,
+          "evidence": "",
+          "similarity": 0.558,
+          "trust": 0.79
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2507.02694",
+          "cited_id": "openalex:W4403006832",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2507.02694::k03|openalex:W4403006832::k02",
+      "a": "arxiv:2507.02694::k03",
+      "b": "openalex:W4403006832::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2507.02694::k03",
+          "dst": "openalex:W4403006832::k02",
+          "relation": "builds_on",
+          "confidence": 0.5,
+          "evidence": "",
+          "similarity": 0.564,
+          "trust": 0.62
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2507.02694",
+          "cited_id": "openalex:W4403006832",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2507.18901v1::k00|openalex:W4403707291::k00",
+      "a": "arxiv:2507.18901v1::k00",
+      "b": "openalex:W4403707291::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2507.18901v1::k00",
+          "dst": "openalex:W4403707291::k00",
+          "relation": "builds_on",
+          "confidence": 0.55,
+          "evidence": "Both are reproducibility benchmarks; REPRO-Bench focuses on social science reproduction, related to CORE-Bench's broader reproducibility benchmark.",
+          "similarity": 0.759,
+          "trust": 0.67
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2507.18901v1",
+          "cited_id": "openalex:W4403707291",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2507.18901v1::k00|openalex:W4403707291::k01",
+      "a": "arxiv:2507.18901v1::k00",
+      "b": "openalex:W4403707291::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4403707291::k01",
+          "dst": "arxiv:2507.18901v1::k00",
+          "relation": "supports",
+          "confidence": 0.45,
+          "evidence": "Both about computational reproducibility evaluation; the fast harness supports running benchmarks like REPRO-Bench efficiently.",
+          "similarity": 0.575,
+          "trust": 0.69
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2507.18901v1",
+          "cited_id": "openalex:W4403707291",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2507.18901v1::k01|arxiv:2606.11447::k00",
+      "a": "arxiv:2507.18901v1::k01",
+      "b": "arxiv:2606.11447::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2507.18901v1::k01",
+          "dst": "arxiv:2606.11447::k00",
+          "relation": "supports",
+          "confidence": 0.7,
+          "evidence": "A reports poor agent performance on social science reproducibility; B is a social-science reproduction benchmark \u2014 same domain, A's results plausibly use such a benchmark.",
+          "similarity": 0.592,
+          "trust": 0.94
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2606.11447",
+          "cited_id": "arxiv:2507.18901v1",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2507.18901v1::k01|arxiv:2606.11447::k01",
+      "a": "arxiv:2507.18901v1::k01",
+      "b": "arxiv:2606.11447::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2507.18901v1::k01",
+          "dst": "arxiv:2606.11447::k01",
+          "relation": "contradicts",
+          "confidence": 0.6,
+          "evidence": "A claims agents perform below random on social science reproducibility (21.4%); B reports frontier coding agents achieve very high reproducibility (93.4%) on social science findings. These appear to conflict.",
+          "similarity": 0.717,
+          "trust": 0.84
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2606.11447",
+          "cited_id": "arxiv:2507.18901v1",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2507.18901v1::k01|openalex:W4403707291::k00",
+      "a": "arxiv:2507.18901v1::k01",
+      "b": "openalex:W4403707291::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4403707291::k00",
+          "dst": "arxiv:2507.18901v1::k01",
+          "relation": "supports",
+          "confidence": 0.6,
+          "evidence": "B reports results of CORE-Agent on a reproducibility task; directly uses/relates to the CORE benchmark line of work assessing reproducibility.",
+          "similarity": 0.638,
+          "trust": 0.72
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2507.18901v1",
+          "cited_id": "openalex:W4403707291",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2508.10308::k00|openalex:W4404350150::k00",
+      "a": "arxiv:2508.10308::k00",
+      "b": "openalex:W4404350150::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4404350150::k00",
+          "dst": "arxiv:2508.10308::k00",
+          "relation": "supports",
+          "confidence": 0.55,
+          "evidence": "Both are RL frameworks for scientific review generation with reward models; closely related methods.",
+          "similarity": 0.598,
+          "trust": 0.67
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2508.10308",
+          "cited_id": "openalex:W4404350150",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2508.10308::k01|openalex:W4404350150::k00",
+      "a": "arxiv:2508.10308::k01",
+      "b": "openalex:W4404350150::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2508.10308::k01",
+          "dst": "openalex:W4404350150::k00",
+          "relation": "builds_on",
+          "confidence": 0.5,
+          "evidence": "B's composite reward combining rule-based and judge-model rewards extends the reward-model approach used in CycleReviewer for review-generation RL.",
+          "similarity": 0.584,
+          "trust": 0.62
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2508.10308",
+          "cited_id": "openalex:W4404350150",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2509.23426v2::k01|openalex:W7131078049::k01",
+      "a": "arxiv:2509.23426v2::k01",
+      "b": "openalex:W7131078049::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W7131078049::k01",
+          "dst": "arxiv:2509.23426v2::k01",
+          "relation": "builds_on",
+          "confidence": 0.4,
+          "evidence": "Both address standardized tool orchestration for scientific AI; an interaction protocol and object-graph mapping could complement, but as stated they're parallel approaches to the same problem, not clearly extending each other.",
+          "similarity": 0.456,
+          "trust": 0.4
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W7131078049",
+          "cited_id": "arxiv:2509.23426v2",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2510.21652v2::k02|openalex:W4407806895::k02",
+      "a": "arxiv:2510.21652v2::k02",
+      "b": "openalex:W4407806895::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4407806895::k02",
+          "dst": "arxiv:2510.21652v2::k02",
+          "relation": "supports",
+          "confidence": 0.45,
+          "evidence": "Both are tooling/metrics for fair, rigorous agent evaluation; complementary methodological contributions.",
+          "similarity": 0.579,
+          "trust": 0.69
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2510.21652v2",
+          "cited_id": "openalex:W4407806895",
+          "localized": false,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2510.24591v2::k00|openalex:W4399597648::k03",
+      "a": "arxiv:2510.24591v2::k00",
+      "b": "openalex:W4399597648::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4399597648::k03",
+          "dst": "arxiv:2510.24591v2::k00",
+          "relation": "supports",
+          "confidence": 0.45,
+          "evidence": "A claims complete discovery cycles pose novel challenges beyond existing benchmarks; B introduces a replication benchmark for scientific tasks. ReplicationBench could embody or support A's argument about benchmarking discovery, but link is moderate.",
+          "similarity": 0.518,
+          "trust": 0.69
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2510.24591v2",
+          "cited_id": "openalex:W4399597648",
+          "localized": false,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2510.26887v1::k01|openalex:W4414827381::k00",
+      "a": "arxiv:2510.26887v1::k01",
+      "b": "openalex:W4414827381::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4414827381::k00",
+          "dst": "arxiv:2510.26887v1::k01",
+          "relation": "supports",
+          "confidence": 0.45,
+          "evidence": "Both describe autonomous AI scientist systems generating full papers; A benchmarks such systems while B is one such system. Related theme but distinct artifacts.",
+          "similarity": 0.668,
+          "trust": 0.57
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2510.26887v1",
+          "cited_id": "openalex:W4414827381",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2510.27598::k00|openalex:W4407806895::k00",
+      "a": "arxiv:2510.27598::k00",
+      "b": "openalex:W4407806895::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4407806895::k00",
+          "dst": "arxiv:2510.27598::k00",
+          "relation": "supports",
+          "confidence": 0.55,
+          "evidence": "Both are environments/benchmarks for evaluating LLM AI-research agents on open-ended tasks; complementary but independent contributions.",
+          "similarity": 0.58,
+          "trust": 0.67
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2510.27598",
+          "cited_id": "openalex:W4407806895",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2510.27598::k00|openalex:W4407806895::k01",
+      "a": "arxiv:2510.27598::k00",
+      "b": "openalex:W4407806895::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4407806895::k01",
+          "dst": "arxiv:2510.27598::k00",
+          "relation": "supports",
+          "confidence": 0.6,
+          "evidence": "Both are benchmarks of open-ended AI research tasks for evaluating research agents; parallel complementary contributions.",
+          "similarity": 0.674,
+          "trust": 0.72
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2510.27598",
+          "cited_id": "openalex:W4407806895",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2510.27598::k00|openalex:W4407806895::k03",
+      "a": "arxiv:2510.27598::k00",
+      "b": "openalex:W4407806895::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4407806895::k03",
+          "dst": "arxiv:2510.27598::k00",
+          "relation": "supports",
+          "confidence": 0.55,
+          "evidence": "A finds LLMs fail to innovate beyond tuning; B's benchmark explicitly rewards innovation over replication, addressing the gap A identifies. Loosely aligned but distinct contributions.",
+          "similarity": 0.569,
+          "trust": 0.67
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2510.27598",
+          "cited_id": "openalex:W4407806895",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2510.27598::k01|arxiv:2602.15112v2::k00",
+      "a": "arxiv:2510.27598::k01",
+      "b": "arxiv:2602.15112v2::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2602.15112v2::k00",
+          "dst": "arxiv:2510.27598::k01",
+          "relation": "contradicts",
+          "confidence": 0.5,
+          "evidence": "Both named 'ResearchGym' but describe different systems (one a general environment, one a containerized benchmark of five tasks); appear to be conflicting or distinct uses of the same name.",
+          "similarity": 0.621,
+          "trust": 0.5
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2602.15112v2",
+          "cited_id": "arxiv:2510.27598",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2510.27598::k02|openalex:W4407806895::k01",
+      "a": "arxiv:2510.27598::k02",
+      "b": "openalex:W4407806895::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4407806895::k01",
+          "dst": "arxiv:2510.27598::k02",
+          "relation": "supports",
+          "confidence": 0.5,
+          "evidence": "MLGym-Bench provides tasks to evaluate LLM agents on research workflows, consistent with the agent-failure findings; complementary benchmark/evaluation.",
+          "similarity": 0.56,
+          "trust": 0.62
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2510.27598",
+          "cited_id": "openalex:W4407806895",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2511.02824v2::k01|arxiv:2605.28655::k00",
+      "a": "arxiv:2511.02824v2::k01",
+      "b": "arxiv:2605.28655::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2605.28655::k00",
+          "dst": "arxiv:2511.02824v2::k01",
+          "relation": "builds_on",
+          "confidence": 0.5,
+          "evidence": "Both concern coordinating large numbers of parallel scientific agents for long-horizon autonomous research; alternative coordination strategies (structured world model vs. decentralized self-organization).",
+          "similarity": 0.613,
+          "trust": 0.62
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2605.28655",
+          "cited_id": "arxiv:2511.02824v2",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2511.02824v2::k01|openalex:W4416043407::k01",
+      "a": "arxiv:2511.02824v2::k01",
+      "b": "openalex:W4416043407::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2511.02824v2::k01",
+          "dst": "openalex:W4416043407::k01",
+          "relation": "builds_on",
+          "confidence": 0.55,
+          "evidence": "Both describe multi-agent architectures for scaling parallel scientific agents; A's structured world model and B's asynchronous framework address the same coordination/scaling problem.",
+          "similarity": 0.642,
+          "trust": 0.67
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2511.02824v2",
+          "cited_id": "openalex:W4416043407",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2511.02824v2::k02|openalex:W4402952666::k00",
+      "a": "arxiv:2511.02824v2::k02",
+      "b": "openalex:W4402952666::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4402952666::k00",
+          "dst": "arxiv:2511.02824v2::k02",
+          "relation": "supports",
+          "confidence": 0.55,
+          "evidence": "Both describe autonomous AI scientist systems producing discoveries; B's scaling result on discovery cycles is consistent with and supports the feasibility claim of A, though they are different systems.",
+          "similarity": 0.685,
+          "trust": 0.79
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2511.02824v2",
+          "cited_id": "openalex:W4402952666",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2511.02824v2::k03|openalex:W4416026872::k02",
+      "a": "arxiv:2511.02824v2::k03",
+      "b": "openalex:W4416026872::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4416026872::k02",
+          "dst": "arxiv:2511.02824v2::k03",
+          "relation": "supports",
+          "confidence": 0.5,
+          "evidence": "Both report autonomous AI scientists achieving validated quality scientific output, broadly consistent evidence for AI-driven discovery feasibility.",
+          "similarity": 0.654,
+          "trust": 0.74
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4416026872",
+          "cited_id": "arxiv:2511.02824v2",
+          "localized": false,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2511.06309v2::k00|openalex:W7126046125::k00",
+      "a": "arxiv:2511.06309v2::k00",
+      "b": "openalex:W7126046125::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2511.06309v2::k00",
+          "dst": "openalex:W7126046125::k00",
+          "relation": "builds_on",
+          "confidence": 0.55,
+          "evidence": "",
+          "similarity": 0.582,
+          "trust": 0.67
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2511.06309v2",
+          "cited_id": "openalex:W7126046125",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2511.06309v2::k00|openalex:W7126046125::k03",
+      "a": "arxiv:2511.06309v2::k00",
+      "b": "openalex:W7126046125::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2511.06309v2::k00",
+          "dst": "openalex:W7126046125::k03",
+          "relation": "contradicts",
+          "confidence": 0.6,
+          "evidence": "",
+          "similarity": 0.563,
+          "trust": 0.72
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2511.06309v2",
+          "cited_id": "openalex:W7126046125",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2601.22638v2::k03|openalex:W4414827381::k02",
+      "a": "arxiv:2601.22638v2::k03",
+      "b": "openalex:W4414827381::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4414827381::k02",
+          "dst": "arxiv:2601.22638v2::k03",
+          "relation": "supports",
+          "confidence": 0.4,
+          "evidence": "Both concern evaluating automated peer-review quality against human reviews, but A is an analysis and B is a metric; loosely related.",
+          "similarity": 0.596,
+          "trust": 0.4
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2601.22638v2",
+          "cited_id": "openalex:W4414827381",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2601.22638v2::k04|openalex:W4404350150::k02",
+      "a": "arxiv:2601.22638v2::k04",
+      "b": "openalex:W4404350150::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4404350150::k02",
+          "dst": "arxiv:2601.22638v2::k04",
+          "relation": "supports",
+          "confidence": 0.5,
+          "evidence": "Both are automated peer-review models claiming strong performance versus humans/baselines; same research thrust.",
+          "similarity": 0.612,
+          "trust": 0.62
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2601.22638v2",
+          "cited_id": "openalex:W4404350150",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2601.22638v2::k04|openalex:W4415238296::k01",
+      "a": "arxiv:2601.22638v2::k04",
+      "b": "openalex:W4415238296::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2601.22638v2::k04",
+          "dst": "openalex:W4415238296::k01",
+          "relation": "supports",
+          "confidence": 0.5,
+          "evidence": "A is an automated review system; B is an evaluation benchmark suite for automated peer review tasks; complementary.",
+          "similarity": 0.611,
+          "trust": 0.74
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2601.22638v2",
+          "cited_id": "openalex:W4415238296",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2602.15112v2::k00|openalex:W4407806895::k01",
+      "a": "arxiv:2602.15112v2::k00",
+      "b": "openalex:W4407806895::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4407806895::k01",
+          "dst": "arxiv:2602.15112v2::k00",
+          "relation": "supports",
+          "confidence": 0.6,
+          "evidence": "Both are benchmark/execution environments evaluating AI agents on research tasks; complementary parallel efforts.",
+          "similarity": 0.729,
+          "trust": 0.72
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2602.15112v2",
+          "cited_id": "openalex:W4407806895",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2602.15112v2::k01|openalex:W4414587939::k00",
+      "a": "arxiv:2602.15112v2::k01",
+      "b": "openalex:W4414587939::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4414587939::k00",
+          "dst": "arxiv:2602.15112v2::k01",
+          "relation": "supports",
+          "confidence": 0.6,
+          "evidence": "Both concern benchmarks/evaluation of AI research agents on open-ended ML research with end-to-end assessment.",
+          "similarity": 0.626,
+          "trust": 0.84
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2602.15112v2",
+          "cited_id": "openalex:W4414587939",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2603.08127v1::k01|openalex:W4412889809::k03",
+      "a": "arxiv:2603.08127v1::k01",
+      "b": "openalex:W4412889809::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4412889809::k03",
+          "dst": "arxiv:2603.08127v1::k01",
+          "relation": "supports",
+          "confidence": 0.55,
+          "evidence": "Both concern multi-agent approaches improving scientific idea generation; A's findings support B's self-evolution mechanism premise.",
+          "similarity": 0.65,
+          "trust": 0.79
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2603.08127v1",
+          "cited_id": "openalex:W4412889809",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2603.08127v1::k02|openalex:W4412889809::k03",
+      "a": "arxiv:2603.08127v1::k02",
+      "b": "openalex:W4412889809::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4412889809::k03",
+          "dst": "arxiv:2603.08127v1::k02",
+          "relation": "supports",
+          "confidence": 0.55,
+          "evidence": "Both report multi-agent systems improving scientific idea generation quality over baselines; consistent findings, though different systems.",
+          "similarity": 0.695,
+          "trust": 0.67
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2603.08127v1",
+          "cited_id": "openalex:W4412889809",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2603.17216v1::k01|openalex:W4414587939::k03",
+      "a": "arxiv:2603.17216v1::k01",
+      "b": "openalex:W4414587939::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4414587939::k03",
+          "dst": "arxiv:2603.17216v1::k01",
+          "relation": "supports",
+          "confidence": 0.55,
+          "evidence": "A identifies result fabrication/validation failure as a barrier; B's self-debugging verification loop directly addresses validity of synthesized tasks, supporting the motivation.",
+          "similarity": 0.485,
+          "trust": 0.79
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2603.17216v1",
+          "cited_id": "openalex:W4414587939",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2603.17216v1::k02|openalex:W4407806895::k01",
+      "a": "arxiv:2603.17216v1::k02",
+      "b": "openalex:W4407806895::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4407806895::k01",
+          "dst": "arxiv:2603.17216v1::k02",
+          "relation": "supports",
+          "confidence": 0.6,
+          "evidence": "A introduces MLGym-Bench; B reports improvements on the MLGym benchmark, so B uses A's benchmark.",
+          "similarity": 0.501,
+          "trust": 0.72
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2603.17216v1",
+          "cited_id": "openalex:W4407806895",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2603.17216v1::k02|openalex:W4407806895::k02",
+      "a": "arxiv:2603.17216v1::k02",
+      "b": "openalex:W4407806895::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4407806895::k02",
+          "dst": "arxiv:2603.17216v1::k02",
+          "relation": "supports",
+          "confidence": 0.55,
+          "evidence": "A introduces the AUP metric; B reports results measured on the AUP metric, so B uses/depends on A's metric.",
+          "similarity": 0.46,
+          "trust": 0.79
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2603.17216v1",
+          "cited_id": "openalex:W4407806895",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2603.26499v2::k01|openalex:W4415108068::k03",
+      "a": "arxiv:2603.26499v2::k01",
+      "b": "openalex:W4415108068::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2603.26499v2::k01",
+          "dst": "openalex:W4415108068::k03",
+          "relation": "supports",
+          "confidence": 0.5,
+          "evidence": "A's asynchronous multi-GPU infrastructure makes evolutionary ML search tractable; B demonstrates evolutionary code optimization delivering gains across compute stacks \u2014 A provides enabling infrastructure consistent with B's approach.",
+          "similarity": 0.484,
+          "trust": 0.74
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2603.26499v2",
+          "cited_id": "openalex:W4415108068",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2604.04074v3::k01|openalex:W4404350150::k02",
+      "a": "arxiv:2604.04074v3::k01",
+      "b": "openalex:W4404350150::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4404350150::k02",
+          "dst": "arxiv:2604.04074v3::k01",
+          "relation": "contradicts",
+          "confidence": 0.55,
+          "evidence": "A establishes score prediction as the benchmark; B explicitly withholds accept-reject decisions and rejects paper-scoring framing \u2014 genuine tension.",
+          "similarity": 0.592,
+          "trust": 0.79
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2604.04074v3",
+          "cited_id": "openalex:W4404350150",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2604.18805::k03|openalex:W4414587939::k03",
+      "a": "arxiv:2604.18805::k03",
+      "b": "openalex:W4414587939::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4414587939::k03",
+          "dst": "arxiv:2604.18805::k03",
+          "relation": "supports",
+          "confidence": 0.6,
+          "evidence": "A reports agents fabricate/fail to validate results; B argues outcome evaluation misses reasoning failures and reasoning must be targeted. Both highlight limits of outcome reliability.",
+          "similarity": 0.557,
+          "trust": 0.84
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2604.18805",
+          "cited_id": "openalex:W4414587939",
+          "localized": false,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2605.27905::k00|openalex:W4399116274::k02",
+      "a": "arxiv:2605.27905::k00",
+      "b": "openalex:W4399116274::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2605.27905::k00",
+          "dst": "openalex:W4399116274::k02",
+          "relation": "builds_on",
+          "confidence": 0.4,
+          "evidence": "B is a large corpus of AI-generated ideas; A's predictor could use such a corpus, but link is speculative.",
+          "similarity": 0.549,
+          "trust": 0.64
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2605.27905",
+          "cited_id": "openalex:W4399116274",
+          "localized": false,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2605.27905::k00|openalex:W4399116274::k03",
+      "a": "arxiv:2605.27905::k00",
+      "b": "openalex:W4399116274::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2605.27905::k00",
+          "dst": "openalex:W4399116274::k03",
+          "relation": "builds_on",
+          "confidence": 0.4,
+          "evidence": "B is a corpus of AI-generated ideas; A's ranking method could be applied to such a corpus, but speculative.",
+          "similarity": 0.593,
+          "trust": 0.52
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2605.27905",
+          "cited_id": "openalex:W4399116274",
+          "localized": false,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2606.00644::k01|openalex:W4414587939::k01",
+      "a": "arxiv:2606.00644::k01",
+      "b": "openalex:W4414587939::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4414587939::k01",
+          "dst": "arxiv:2606.00644::k01",
+          "relation": "supports",
+          "confidence": 0.5,
+          "evidence": "Both are automated evaluation frameworks for AI-generated research validated to align with human experts; MLR-Judge's approach of LLM reviewers matching human agreement supports the feasibility of the multi-signal protocol's human-validated judgement.",
+          "similarity": 0.569,
+          "trust": 0.62
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2606.00644",
+          "cited_id": "openalex:W4414587939",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2606.00644::k02|openalex:W4403586302::k02",
+      "a": "arxiv:2606.00644::k02",
+      "b": "openalex:W4403586302::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4403586302::k02",
+          "dst": "arxiv:2606.00644::k02",
+          "relation": "supports",
+          "confidence": 0.5,
+          "evidence": "Both document systematic failure modes of LLM research/ideation agents. Different specific failures (diversity/self-eval vs. evidence-decision decoupling) but consistent in showing systematic agent limitations.",
+          "similarity": 0.597,
+          "trust": 0.62
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2606.00644",
+          "cited_id": "openalex:W4403586302",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2606.06473::k00|openalex:W4407760093::k00",
+      "a": "arxiv:2606.06473::k00",
+      "b": "openalex:W4407760093::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2606.06473::k00",
+          "dst": "openalex:W4407760093::k00",
+          "relation": "builds_on",
+          "confidence": 0.55,
+          "evidence": "MLEvolve is a more elaborate self-evolving multi-agent ML discovery framework that generalizes/extends the tree-search code optimization paradigm pioneered by AIDE.",
+          "similarity": 0.57,
+          "trust": 0.79
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2606.06473",
+          "cited_id": "openalex:W4407760093",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2606.06473::k01|openalex:W4407760093::k01",
+      "a": "arxiv:2606.06473::k01",
+      "b": "openalex:W4407760093::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2606.06473::k01",
+          "dst": "openalex:W4407760093::k01",
+          "relation": "builds_on",
+          "confidence": 0.6,
+          "evidence": "A organizes solution search as a tree of executable scripts; MCGS directly extends tree search with cross-branch graph edges and progressive schedule, addressing exactly the isolation in such trees.",
+          "similarity": 0.452,
+          "trust": 0.84
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2606.06473",
+          "cited_id": "openalex:W4407760093",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2606.06473::k01|openalex:W4407760093::k03",
+      "a": "arxiv:2606.06473::k01",
+      "b": "openalex:W4407760093::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4407760093::k03",
+          "dst": "arxiv:2606.06473::k01",
+          "relation": "supports",
+          "confidence": 0.55,
+          "evidence": "A reports tree-search code optimization achieving SOTA; MCGS is an improved tree/graph search method \u2014 both evidence the value of search-based code optimization, plausibly the same line of work.",
+          "similarity": 0.483,
+          "trust": 0.67
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2606.06473",
+          "cited_id": "openalex:W4407760093",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2606.06473::k01|openalex:W7140287209::k01",
+      "a": "arxiv:2606.06473::k01",
+      "b": "openalex:W7140287209::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2606.06473::k01",
+          "dst": "openalex:W7140287209::k01",
+          "relation": "builds_on",
+          "confidence": 0.55,
+          "evidence": "A uses agentic tree search for open-ended code/hypothesis exploration; MCGS is a concrete improvement to tree-based search that A's approach could employ.",
+          "similarity": 0.46,
+          "trust": 0.55
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2606.06473",
+          "cited_id": "openalex:W7140287209",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2606.06473::k03|openalex:W4407760093::k01",
+      "a": "arxiv:2606.06473::k03",
+      "b": "openalex:W4407760093::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2606.06473::k03",
+          "dst": "openalex:W4407760093::k01",
+          "relation": "refines",
+          "confidence": 0.6,
+          "evidence": "B refines the solution-tree search by decoupling planning from code generation and adding editing-mode selection, improving the iteration described in A.",
+          "similarity": 0.521,
+          "trust": 0.6
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2606.06473",
+          "cited_id": "openalex:W4407760093",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2606.06473::k03|openalex:W4415108068::k00",
+      "a": "arxiv:2606.06473::k03",
+      "b": "openalex:W4415108068::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2606.06473::k03",
+          "dst": "openalex:W4415108068::k00",
+          "relation": "builds_on",
+          "confidence": 0.55,
+          "evidence": "AlphaEvolve uses LLM-driven code edits guided by evaluation; B refines code-editing strategy (rewrite/stepwise/diff) for code optimization agents \u2014 same domain, B refines the edit mechanism.",
+          "similarity": 0.461,
+          "trust": 0.55
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2606.06473",
+          "cited_id": "openalex:W4415108068",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2606.06473::k03|openalex:W7140287209::k01",
+      "a": "arxiv:2606.06473::k03",
+      "b": "openalex:W7140287209::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "arxiv:2606.06473::k03",
+          "dst": "openalex:W7140287209::k01",
+          "relation": "builds_on",
+          "confidence": 0.55,
+          "evidence": "Both concern long-horizon code optimization agents; A's tree-search execution and B's editing-mode selection are complementary components of such agents.",
+          "similarity": 0.535,
+          "trust": 0.67
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2606.06473",
+          "cited_id": "openalex:W7140287209",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "arxiv:2606.06473::k04|openalex:W4415108068::k01",
+      "a": "arxiv:2606.06473::k04",
+      "b": "openalex:W4415108068::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4415108068::k01",
+          "dst": "arxiv:2606.06473::k04",
+          "relation": "supports",
+          "confidence": 0.4,
+          "evidence": "B claims to outperform AlphaEvolve on math algorithm optimization tasks; A is a related AlphaEvolve-style math result, but no direct comparison stated between these two specifically. Weak relation.",
+          "similarity": 0.36,
+          "trust": 0.52
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "arxiv:2606.06473",
+          "cited_id": "openalex:W4415108068",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4384261641::k00|openalex:W4404350150::k02",
+      "a": "openalex:W4384261641::k00",
+      "b": "openalex:W4404350150::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4404350150::k02",
+          "dst": "openalex:W4384261641::k00",
+          "relation": "supports",
+          "confidence": 0.55,
+          "evidence": "Both assess AI/automated peer review capability relative to human reviewers, broadly agreeing AI can contribute to peer review.",
+          "similarity": 0.598,
+          "trust": 0.79
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4404350150",
+          "cited_id": "openalex:W4384261641",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4389761608::k00|openalex:W4403795293::k00",
+      "a": "openalex:W4389761608::k00",
+      "b": "openalex:W4403795293::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4403795293::k00",
+          "dst": "openalex:W4389761608::k00",
+          "relation": "builds_on",
+          "confidence": 0.95,
+          "evidence": "PaperQA2 is explicitly the successor agent extending PaperQA's RAG tool-based design.",
+          "similarity": 0.802,
+          "trust": 0.99
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4403795293",
+          "cited_id": "openalex:W4389761608",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4389761608::k01|openalex:W4403795293::k00",
+      "a": "openalex:W4389761608::k01",
+      "b": "openalex:W4403795293::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4389761608::k01",
+          "dst": "openalex:W4403795293::k00",
+          "relation": "supports",
+          "confidence": 0.7,
+          "evidence": "PaperQA2 is evaluated on full-literature retrieval tasks like LitQA; the benchmark supports evaluation of such agents. Same lineage (LitQA used to evaluate PaperQA).",
+          "similarity": 0.641,
+          "trust": 0.94
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4403795293",
+          "cited_id": "openalex:W4389761608",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4389761608::k02|openalex:W4403795293::k00",
+      "a": "openalex:W4389761608::k02",
+      "b": "openalex:W4403795293::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4389761608::k02",
+          "dst": "openalex:W4403795293::k00",
+          "relation": "supports",
+          "confidence": 0.72,
+          "evidence": "Both describe agent-based RAG systems for scientific literature that match or exceed expert/strong-LLM performance; B (PaperQA2) is likely the same or closely related system as A.",
+          "similarity": 0.59,
+          "trust": 0.96
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4403795293",
+          "cited_id": "openalex:W4389761608",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4389761608::k03|openalex:W4403795293::k00",
+      "a": "openalex:W4389761608::k03",
+      "b": "openalex:W4403795293::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4389761608::k03",
+          "dst": "openalex:W4403795293::k00",
+          "relation": "supports",
+          "confidence": 0.85,
+          "evidence": "A describes a RAG agent matching expert humans in accuracy/time at lower cost; B (PaperQA2) is the agent achieving expert-level literature performance. Strongly aligned, likely same work.",
+          "similarity": 0.691,
+          "trust": 0.99
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4403795293",
+          "cited_id": "openalex:W4389761608",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4389761608::k03|openalex:W4403795293::k02",
+      "a": "openalex:W4389761608::k03",
+      "b": "openalex:W4403795293::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4389761608::k03",
+          "dst": "openalex:W4403795293::k02",
+          "relation": "supports",
+          "confidence": 0.8,
+          "evidence": "B provides the human-AI comparison methodology with unrestricted human baselines used to establish A's claim of matching experts in accuracy and time.",
+          "similarity": 0.653,
+          "trust": 0.8
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4403795293",
+          "cited_id": "openalex:W4389761608",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4390784029::k00|openalex:W4400734098::k02",
+      "a": "openalex:W4390784029::k00",
+      "b": "openalex:W4400734098::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4390784029::k00",
+          "dst": "openalex:W4400734098::k02",
+          "relation": "supports",
+          "confidence": 0.5,
+          "evidence": "B's finding that researchers perceive LLM feedback as helpful supports the value of systems like MARG that generate review feedback.",
+          "similarity": 0.542,
+          "trust": 0.62
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4390784029",
+          "cited_id": "openalex:W4400734098",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4394647523::k00|openalex:W4416540539::k00",
+      "a": "openalex:W4394647523::k00",
+      "b": "openalex:W4416540539::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4416540539::k00",
+          "dst": "openalex:W4394647523::k00",
+          "relation": "builds_on",
+          "confidence": 0.7,
+          "evidence": "HypoGeniC (A) is a hypothesis generation method; HypoBench (B) is a benchmark for evaluating such methods \u2014 same research line, B evaluates A-type methods.",
+          "similarity": 0.545,
+          "trust": 0.82
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4416540539",
+          "cited_id": "openalex:W4394647523",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4394647523::k00|openalex:W4416540539::k03",
+      "a": "openalex:W4394647523::k00",
+      "b": "openalex:W4416540539::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4416540539::k03",
+          "dst": "openalex:W4394647523::k00",
+          "relation": "builds_on",
+          "confidence": 0.55,
+          "evidence": "B's synthetic difficulty benchmark evaluates hypothesis discovery methods like HypoGeniC; same research line (HypoBench-related).",
+          "similarity": 0.513,
+          "trust": 0.55
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4416540539",
+          "cited_id": "openalex:W4394647523",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4399116274::k04|openalex:W4411120082::k01",
+      "a": "openalex:W4399116274::k04",
+      "b": "openalex:W4411120082::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4411120082::k01",
+          "dst": "openalex:W4399116274::k04",
+          "relation": "supports",
+          "confidence": 0.6,
+          "evidence": "Both build concept co-occurrence knowledge structures from scientific literature for idea/research generation; B's concrete co-occurrence knowledge graph instantiates the entity-centric store idea in A.",
+          "similarity": 0.588,
+          "trust": 0.72
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4399116274",
+          "cited_id": "openalex:W4411120082",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4399555023::k00|openalex:W4403006832::k03",
+      "a": "openalex:W4399555023::k00",
+      "b": "openalex:W4403006832::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4403006832::k03",
+          "dst": "openalex:W4399555023::k00",
+          "relation": "supports",
+          "confidence": 0.65,
+          "evidence": "Both reformulate peer review as multi-turn dialogue with author/reviewer/decision-maker roles; strongly aligned conceptually.",
+          "similarity": 0.646,
+          "trust": 0.89
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4403006832",
+          "cited_id": "openalex:W4399555023",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4399555023::k01|openalex:W4403006832::k03",
+      "a": "openalex:W4399555023::k01",
+      "b": "openalex:W4403006832::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4403006832::k03",
+          "dst": "openalex:W4399555023::k01",
+          "relation": "builds_on",
+          "confidence": 0.6,
+          "evidence": "A's multi-role multi-turn dialogue framework can be trained/evaluated on ReviewMT, the multi-turn peer-review dataset.",
+          "similarity": 0.605,
+          "trust": 0.72
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4403006832",
+          "cited_id": "openalex:W4399555023",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4399555023::k01|openalex:W4405468016::k03",
+      "a": "openalex:W4399555023::k01",
+      "b": "openalex:W4405468016::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4405468016::k03",
+          "dst": "openalex:W4399555023::k01",
+          "relation": "supports",
+          "confidence": 0.5,
+          "evidence": "ReviewMT supports multi-turn dialogue review systems, which aligns with A's iterative multi-round review approach; loosely supportive.",
+          "similarity": 0.614,
+          "trust": 0.74
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4405468016",
+          "cited_id": "openalex:W4399555023",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4399555023::k02|openalex:W4403006832::k03",
+      "a": "openalex:W4399555023::k02",
+      "b": "openalex:W4403006832::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4403006832::k03",
+          "dst": "openalex:W4399555023::k02",
+          "relation": "supports",
+          "confidence": 0.55,
+          "evidence": "B provides role-specific metrics for multi-turn peer-review dialogues, directly applicable to evaluating A's role-playing framework.",
+          "similarity": 0.668,
+          "trust": 0.67
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4403006832",
+          "cited_id": "openalex:W4399555023",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4399597648::k03|openalex:W4416540539::k03",
+      "a": "openalex:W4399597648::k03",
+      "b": "openalex:W4416540539::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4399597648::k03",
+          "dst": "openalex:W4416540539::k03",
+          "relation": "supports",
+          "confidence": 0.6,
+          "evidence": "Both report current agents struggle with end-to-end discovery; A's qualitative finding aligns with B's quantitative ceiling on hypothesis recovery.",
+          "similarity": 0.57,
+          "trust": 0.84
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4416540539",
+          "cited_id": "openalex:W4399597648",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4400734098::k01|openalex:W4403006832::k01",
+      "a": "openalex:W4400734098::k01",
+      "b": "openalex:W4403006832::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4403006832::k01",
+          "dst": "openalex:W4400734098::k01",
+          "relation": "supports",
+          "confidence": 0.45,
+          "evidence": "Both concern LLM-generated reviews compared to human reviews; B provides evidence of human-comparable overlap that supports proxy evaluation feasibility.",
+          "similarity": 0.691,
+          "trust": 0.69
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4403006832",
+          "cited_id": "openalex:W4400734098",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4400734098::k01|openalex:W4403006832::k04",
+      "a": "openalex:W4400734098::k01",
+      "b": "openalex:W4403006832::k04",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4403006832::k04",
+          "dst": "openalex:W4400734098::k01",
+          "relation": "supports",
+          "confidence": 0.4,
+          "evidence": "B's finding that LLM reviews overlap with humans supports A's premise that LLM-generated reviews are meritful and useful broadly.",
+          "similarity": 0.601,
+          "trust": 0.52
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4403006832",
+          "cited_id": "openalex:W4400734098",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4400734098::k01|openalex:W4405035007::k03",
+      "a": "openalex:W4400734098::k01",
+      "b": "openalex:W4405035007::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4405035007::k03",
+          "dst": "openalex:W4400734098::k01",
+          "relation": "contradicts",
+          "confidence": 0.5,
+          "evidence": "A highlights inherent flaws/biases in LLM peer review; B reports LLM feedback overlaps with human reviews at human-human rates. Tension in quality assessment.",
+          "similarity": 0.641,
+          "trust": 0.74
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4405035007",
+          "cited_id": "openalex:W4400734098",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4400734098::k02|openalex:W4405035007::k03",
+      "a": "openalex:W4400734098::k02",
+      "b": "openalex:W4405035007::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4405035007::k03",
+          "dst": "openalex:W4400734098::k02",
+          "relation": "contradicts",
+          "confidence": 0.6,
+          "evidence": "A reveals serious flaws/biases in LLM peer review; B reports researchers perceive LLM feedback as competitive/superior to human review. Genuine tension on quality.",
+          "similarity": 0.647,
+          "trust": 0.84
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4405035007",
+          "cited_id": "openalex:W4400734098",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4402345509::k00|openalex:W4403795293::k01",
+      "a": "openalex:W4402345509::k00",
+      "b": "openalex:W4403795293::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4403795293::k01",
+          "dst": "openalex:W4402345509::k00",
+          "relation": "builds_on",
+          "confidence": 0.55,
+          "evidence": "LAB-Bench (B) is a broader benchmark suite that includes LitQA-style tasks; LitQA2 (A) extends this lineage of literature QA benchmarks.",
+          "similarity": 0.628,
+          "trust": 0.79
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4403795293",
+          "cited_id": "openalex:W4402345509",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4402345509::k04|openalex:W4403795293::k01",
+      "a": "openalex:W4402345509::k04",
+      "b": "openalex:W4403795293::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4403795293::k01",
+          "dst": "openalex:W4402345509::k04",
+          "relation": "refines",
+          "confidence": 0.6,
+          "evidence": "B argues multiple-choice benchmarks need quality distractors and open-answer validation, adding a methodological condition relevant to A's MCQ benchmark.",
+          "similarity": 0.607,
+          "trust": 0.72
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4403795293",
+          "cited_id": "openalex:W4402345509",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4402952666::k00|openalex:W4404573571::k00",
+      "a": "openalex:W4402952666::k00",
+      "b": "openalex:W4404573571::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4404573571::k00",
+          "dst": "openalex:W4402952666::k00",
+          "relation": "builds_on",
+          "confidence": 0.5,
+          "evidence": "Baby-AIGS explicitly adds a FalsificationAgent addressing capabilities missing from prior end-to-end systems like The AI Scientist; plausibly extends that line.",
+          "similarity": 0.588,
+          "trust": 0.62
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4404573571",
+          "cited_id": "openalex:W4402952666",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4402952811::k02|openalex:W4416035220::k00",
+      "a": "openalex:W4402952811::k02",
+      "b": "openalex:W4416035220::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4416035220::k00",
+          "dst": "openalex:W4402952811::k02",
+          "relation": "supports",
+          "confidence": 0.45,
+          "evidence": "Both LLM-based pipelines that turn research plans into executable code/experiments with optional human-in-loop; complementary components of automated research workflows.",
+          "similarity": 0.71,
+          "trust": 0.57
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4402952811",
+          "cited_id": "openalex:W4416035220",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4402952811::k03|openalex:W4416035220::k01",
+      "a": "openalex:W4402952811::k03",
+      "b": "openalex:W4416035220::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4416035220::k01",
+          "dst": "openalex:W4402952811::k03",
+          "relation": "supports",
+          "confidence": 0.55,
+          "evidence": "Both report empirical results that LLM-agent pipelines can complete the full research cycle with executable outcomes, agreeing on feasibility of autonomous ML research.",
+          "similarity": 0.612,
+          "trust": 0.79
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4402952811",
+          "cited_id": "openalex:W4416035220",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4403006832::k00|openalex:W4405468016::k00",
+      "a": "openalex:W4403006832::k00",
+      "b": "openalex:W4405468016::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4403006832::k00",
+          "dst": "openalex:W4405468016::k00",
+          "relation": "supports",
+          "confidence": 0.6,
+          "evidence": "Both present LLM-agent frameworks for automating peer review with reviewer feedback; parallel systems addressing same goal.",
+          "similarity": 0.636,
+          "trust": 0.84
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4405468016",
+          "cited_id": "openalex:W4403006832",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4403006832::k00|openalex:W4405468016::k03",
+      "a": "openalex:W4403006832::k00",
+      "b": "openalex:W4405468016::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4403006832::k00",
+          "dst": "openalex:W4405468016::k03",
+          "relation": "supports",
+          "confidence": 0.45,
+          "evidence": "Both about LLM-agent automated peer review; B's iterative refinement is a technique within the same domain as A's systems.",
+          "similarity": 0.621,
+          "trust": 0.45
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4405468016",
+          "cited_id": "openalex:W4403006832",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4403006832::k00|openalex:W4405468016::k04",
+      "a": "openalex:W4403006832::k00",
+      "b": "openalex:W4405468016::k04",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4403006832::k00",
+          "dst": "openalex:W4405468016::k04",
+          "relation": "supports",
+          "confidence": 0.45,
+          "evidence": "Both automate LLM peer review; B's meta-reviewer aggregation complements A's review systems. Related domain.",
+          "similarity": 0.655,
+          "trust": 0.45
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4405468016",
+          "cited_id": "openalex:W4403006832",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4403006832::k01|openalex:W4405468016::k04",
+      "a": "openalex:W4403006832::k01",
+      "b": "openalex:W4405468016::k04",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4405468016::k04",
+          "dst": "openalex:W4403006832::k01",
+          "relation": "builds_on",
+          "confidence": 0.45,
+          "evidence": "Both about aggregating/evaluating multiple LLM reviews; B's meta-reviewer aggregation and A's preference-based proxy evaluation are complementary but independent. Weak.",
+          "similarity": 0.645,
+          "trust": 0.69
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4405468016",
+          "cited_id": "openalex:W4403006832",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4403006832::k02|openalex:W4405035007::k01",
+      "a": "openalex:W4403006832::k02",
+      "b": "openalex:W4405035007::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4403006832::k02",
+          "dst": "openalex:W4405035007::k01",
+          "relation": "supports",
+          "confidence": 0.6,
+          "evidence": "Both study LLM reviewer susceptibility to manipulation via injected/disclosed content; A's error-injection method and B's self-disclosure manipulation align on revealing LLM review blind spots.",
+          "similarity": 0.618,
+          "trust": 0.72
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4405035007",
+          "cited_id": "openalex:W4403006832",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4403006832::k02|openalex:W4405035007::k02",
+      "a": "openalex:W4403006832::k02",
+      "b": "openalex:W4405035007::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4403006832::k02",
+          "dst": "openalex:W4405035007::k02",
+          "relation": "supports",
+          "confidence": 0.55,
+          "evidence": "Both study vulnerabilities of LLM reviewing via injected errors/manipulation; A's blind-spot discovery and B's systemic manipulation impact align on the same risk theme.",
+          "similarity": 0.623,
+          "trust": 0.67
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4405035007",
+          "cited_id": "openalex:W4403006832",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4403006832::k02|openalex:W4405035007::k03",
+      "a": "openalex:W4403006832::k02",
+      "b": "openalex:W4405035007::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4403006832::k02",
+          "dst": "openalex:W4405035007::k03",
+          "relation": "supports",
+          "confidence": 0.7,
+          "evidence": "Both identify flaws/blind spots in LLM reviewers via injecting altered inputs; B's title-only hallucination finding is exactly the kind of blind spot A's method discovers.",
+          "similarity": 0.684,
+          "trust": 0.94
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4405035007",
+          "cited_id": "openalex:W4403006832",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4403006832::k02|openalex:W4405035007::k04",
+      "a": "openalex:W4403006832::k02",
+      "b": "openalex:W4405035007::k04",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4403006832::k02",
+          "dst": "openalex:W4405035007::k04",
+          "relation": "supports",
+          "confidence": 0.7,
+          "evidence": "A's error-injection diagnostic method and B's comprehensive vulnerability analysis both demonstrate LLM peer review weaknesses via injection; B's explicit injection attack component aligns with A.",
+          "similarity": 0.65,
+          "trust": 0.82
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4405035007",
+          "cited_id": "openalex:W4403006832",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4403006832::k03|openalex:W4405468016::k03",
+      "a": "openalex:W4403006832::k03",
+      "b": "openalex:W4405468016::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4403006832::k03",
+          "dst": "openalex:W4405468016::k03",
+          "relation": "supports",
+          "confidence": 0.45,
+          "evidence": "Both pursue multi-round/iterative review processes emulating real peer review, sharing the iterative refinement motivation.",
+          "similarity": 0.559,
+          "trust": 0.57
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4405468016",
+          "cited_id": "openalex:W4403006832",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4403006832::k03|openalex:W4415238296::k01",
+      "a": "openalex:W4403006832::k03",
+      "b": "openalex:W4415238296::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4403006832::k03",
+          "dst": "openalex:W4415238296::k01",
+          "relation": "supports",
+          "confidence": 0.4,
+          "evidence": "B is a peer-review evaluation benchmark including step-wise review generation; can assess A's multi-role review generation, though scope differs.",
+          "similarity": 0.57,
+          "trust": 0.52
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4415238296",
+          "cited_id": "openalex:W4403006832",
+          "localized": false,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4403345771::k04|openalex:W4416035327::k03",
+      "a": "openalex:W4403345771::k04",
+      "b": "openalex:W4416035327::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4416035327::k03",
+          "dst": "openalex:W4403345771::k04",
+          "relation": "supports",
+          "confidence": 0.55,
+          "evidence": "Both argue LLMs possess latent capacity to produce novel research ideas/hypotheses; B offers a mechanism consistent with A's finding.",
+          "similarity": 0.675,
+          "trust": 0.79
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4403345771",
+          "cited_id": "openalex:W4416035327",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4403586302::k01|openalex:W4411120082::k02",
+      "a": "openalex:W4403586302::k01",
+      "b": "openalex:W4411120082::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4411120082::k02",
+          "dst": "openalex:W4403586302::k01",
+          "relation": "builds_on",
+          "confidence": 0.45,
+          "evidence": "A uses human-induced criteria to improve ideas; B established LLM ideas can be novel. Loosely related ideation evaluation theme.",
+          "similarity": 0.619,
+          "trust": 0.45
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4403586302",
+          "cited_id": "openalex:W4411120082",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4403586302::k02|openalex:W4411120082::k02",
+      "a": "openalex:W4403586302::k02",
+      "b": "openalex:W4411120082::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4411120082::k02",
+          "dst": "openalex:W4403586302::k02",
+          "relation": "supports",
+          "confidence": 0.4,
+          "evidence": "A's human-aligned reviewing agents address B's identified unreliable self-evaluation failure; loosely complementary.",
+          "similarity": 0.641,
+          "trust": 0.4
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4403586302",
+          "cited_id": "openalex:W4411120082",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4403707291::k01|openalex:W4415036172::k02",
+      "a": "openalex:W4403707291::k01",
+      "b": "openalex:W4415036172::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4415036172::k02",
+          "dst": "openalex:W4403707291::k01",
+          "relation": "supports",
+          "confidence": 0.55,
+          "evidence": "ReproduceBench is a reproducibility benchmark; the fast parallel evaluation harness plausibly accelerates evaluating such benchmarks. May be the same project's components.",
+          "similarity": 0.522,
+          "trust": 0.67
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4415036172",
+          "cited_id": "openalex:W4403707291",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4404350150::k01|openalex:W4404782918::k00",
+      "a": "openalex:W4404350150::k01",
+      "b": "openalex:W4404782918::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4404350150::k01",
+          "dst": "openalex:W4404782918::k00",
+          "relation": "supports",
+          "confidence": 0.55,
+          "evidence": "Both provide peer-review datasets supporting benchmarking of AI-assisted review; complementary resources.",
+          "similarity": 0.668,
+          "trust": 0.79
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4404350150",
+          "cited_id": "openalex:W4404782918",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4405035007::k03|openalex:W4405561462::k02",
+      "a": "openalex:W4405035007::k03",
+      "b": "openalex:W4405561462::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4405035007::k03",
+          "dst": "openalex:W4405561462::k02",
+          "relation": "supports",
+          "confidence": 0.55,
+          "evidence": "Both document LLM reviewing flaws leading to inflated/favorable ratings; A's biases and B's leniency both show LLMs over-rate papers.",
+          "similarity": 0.708,
+          "trust": 0.79
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4405561462",
+          "cited_id": "openalex:W4405035007",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4405561462::k00|openalex:W4414587939::k01",
+      "a": "openalex:W4405561462::k00",
+      "b": "openalex:W4414587939::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4414587939::k01",
+          "dst": "openalex:W4405561462::k00",
+          "relation": "supports",
+          "confidence": 0.45,
+          "evidence": "MLR-Judge is an evaluation framework for AI-generated research quality; Llama-OpenReviewer is an AI reviewer model. Both about automated review but distinct contributions; weak relation.",
+          "similarity": 0.623,
+          "trust": 0.57
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4414587939",
+          "cited_id": "openalex:W4405561462",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4407760093::k00|openalex:W4414827381::k00",
+      "a": "openalex:W4407760093::k00",
+      "b": "openalex:W4414827381::k00",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4414827381::k00",
+          "dst": "openalex:W4407760093::k00",
+          "relation": "builds_on",
+          "confidence": 0.6,
+          "evidence": "AI Scientist-v2 uses progressive agentic tree-search; AIDE pioneers tree search over candidate code solutions. The systems share and extend the tree-search code-optimization approach.",
+          "similarity": 0.58,
+          "trust": 0.72
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4414827381",
+          "cited_id": "openalex:W4407760093",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4414827381::k00|openalex:W4416026872::k01",
+      "a": "openalex:W4414827381::k00",
+      "b": "openalex:W4416026872::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4416026872::k01",
+          "dst": "openalex:W4414827381::k00",
+          "relation": "refines",
+          "confidence": 0.55,
+          "evidence": "B reframes fully autonomous science (as in A) into a tractable mentor-guided baseline-extension task, narrowing the problem setting.",
+          "similarity": 0.712,
+          "trust": 0.79
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4416026872",
+          "cited_id": "openalex:W4414827381",
+          "localized": false,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4414827381::k00|openalex:W7119558012::k03",
+      "a": "openalex:W4414827381::k00",
+      "b": "openalex:W7119558012::k03",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W7119558012::k03",
+          "dst": "openalex:W4414827381::k00",
+          "relation": "builds_on",
+          "confidence": 0.5,
+          "evidence": "B is a public release of artifacts from autonomous ML research attempts, plausibly using/analyzing AI-Scientist-type systems, related to A's system.",
+          "similarity": 0.739,
+          "trust": 0.5
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W7119558012",
+          "cited_id": "openalex:W4414827381",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4416043407::k03|openalex:W4417287919::k01",
+      "a": "openalex:W4416043407::k03",
+      "b": "openalex:W4417287919::k01",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4416043407::k03",
+          "dst": "openalex:W4417287919::k01",
+          "relation": "supports",
+          "confidence": 0.5,
+          "evidence": "Both validate AI-driven drug repurposing experimentally; one in AML, one in AMD \u2014 they jointly support the viability of in silico repurposing hypothesis generation.",
+          "similarity": 0.272,
+          "trust": 0.62
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4417287919",
+          "cited_id": "openalex:W4416043407",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4416043407::k03|openalex:W4417287919::k02",
+      "a": "openalex:W4416043407::k03",
+      "b": "openalex:W4417287919::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4416043407::k03",
+          "dst": "openalex:W4417287919::k02",
+          "relation": "supports",
+          "confidence": 0.45,
+          "evidence": "Both report experimentally validated AI-generated/AI-analyzed therapeutic targets, jointly supporting AI-driven discovery; different diseases.",
+          "similarity": 0.31,
+          "trust": 0.57
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4417287919",
+          "cited_id": "openalex:W4416043407",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    },
+    {
+      "candidate_id": "openalex:W4416043407::k04|openalex:W4417287919::k02",
+      "a": "openalex:W4416043407::k04",
+      "b": "openalex:W4417287919::k02",
+      "channels": [
+        "semantic",
+        "citation"
+      ],
+      "legacy_edges": [
+        {
+          "src": "openalex:W4416043407::k04",
+          "dst": "openalex:W4417287919::k02",
+          "relation": "supports",
+          "confidence": 0.55,
+          "evidence": "Both demonstrate experimentally validated AI/multi-agent-proposed novel therapeutic targets, supporting the same broad claim across different diseases.",
+          "similarity": 0.367,
+          "trust": 0.79
+        }
+      ],
+      "citations": [
+        {
+          "citing_id": "openalex:W4417287919",
+          "cited_id": "openalex:W4416043407",
+          "localized": true,
+          "alignment_rank": null,
+          "alignment_score": null
+        }
+      ]
+    }
+  ]
+}
