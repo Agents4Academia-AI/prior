@@ -1,6 +1,8 @@
 {
   "_meta": {
     "generated_utc": "2026-08-14T16:29:39.383462+00:00",
+    "artifact_id": "canonical_semantic_candidates_enriched_evidence_v12",
+    "status": "canonical",
     "candidate_policy": "same 989 contribution pairs retained by legacy graph",
     "evidence_policy": "quotes + retrieved full text + all currently localized parent-paper citation passages",
     "incoming_v12_corrected_pairs": 34,

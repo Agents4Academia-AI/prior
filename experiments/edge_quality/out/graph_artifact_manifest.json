@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "canonical": {
+    "artifact_id": "canonical_semantic_candidates_enriched_evidence_v12",
+    "path": "experiments/edge_quality/out/canonical_semantic_candidates_enriched_evidence_v12.json",
+    "status": "canonical",
+    "contribution_pairs": 989,
+    "candidate_policy": "legacy semantic Cartographer contribution-pair universe",
+    "evidence_policy": "grounded contribution quotes + retrieved full text + localized citation passages where available",
+    "citation_policy": "evidence and direction only; citations do not add contribution pairs"
+  },
+  "artifacts": [
+    {
+      "artifact_id": "top2_citation_expansion_2188",
+      "candidate_path": "experiments/edge_quality/out/cartographer_rebuild_candidates.json",
+      "prediction_path": "experiments/edge_quality/out/cartographer_rebuild_normalized.jsonl",
+      "generated_graph_path": "experiments/edge_quality/out/fulltext_citation_enriched_v12_graph.json",
+      "status": "deprecated_experiment",
+      "contribution_pairs": 2188,
+      "composition": {
+        "legacy_semantic_pairs": 989,
+        "additional_citation_only_pairs": 1199
+      },
+      "reason": "Additional pairs were selected by a rejected top-2 contribution projection for each paper citation."
+    }
+  ]
+}

@@ -44,7 +44,7 @@ def main() -> None:
     parser.add_argument("--new-intents", type=Path,
                         default=OUT / "citations_intent_incoming_v12_new.json")
     parser.add_argument("--graph", type=Path,
-                        default=OUT / "legacy_fulltext_citation_enriched_v12_graph.json")
+                        default=OUT / "canonical_semantic_candidates_enriched_evidence_v12.json")
     parser.add_argument("--summary", type=Path,
                         default=OUT / "full_intent_graph_audit.json")
     parser.add_argument("--queue", type=Path,

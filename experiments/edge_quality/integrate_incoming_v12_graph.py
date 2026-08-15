@@ -58,9 +58,11 @@ def main() -> None:
         "citation_directions": row.get("citation_directions", []),
         "relabel_source": row.get("relabel_source"),
     } for row in merged]
-    graph_path = OUT / "legacy_fulltext_citation_enriched_v12_graph.json"
+    graph_path = OUT / "canonical_semantic_candidates_enriched_evidence_v12.json"
     graph_path.write_text(json.dumps({
         "_meta": {"generated_utc": datetime.now(timezone.utc).isoformat(),
+                  "artifact_id": "canonical_semantic_candidates_enriched_evidence_v12",
+                  "status": "canonical",
                   "candidate_policy": "same 989 contribution pairs retained by legacy graph",
                   "evidence_policy": "quotes + retrieved full text + all currently localized parent-paper citation passages",
                   "incoming_v12_corrected_pairs": 34,

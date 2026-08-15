@@ -5,3 +5,6 @@ out/gold_export/
 out/legacy_fulltext_citation_enriched_graph.json
 out/legacy_fulltext_citation_enriched_predictions.jsonl
 out/legacy_fulltext_citation_enriched_v12_predictions.jsonl
+# Deprecated 2,188-pair top-2 citation expansion. Kept out of canonical exports.
+out/fulltext_citation_enriched_v12_graph.json
+out/full_intent_graph_audit_queue.jsonl
