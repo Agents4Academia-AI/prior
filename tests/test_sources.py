@@ -7,6 +7,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from prior.sources import openalex
 from prior.sources import arxiv as arxiv_src
+from prior.sources import semanticscholar as s2_src
 
 
 def test_openalex_abstract_inverted_index_reconstructs_order():
@@ -57,3 +58,50 @@ def test_arxiv_entry_parsing():
     assert p.abstract == "We show something."
     assert p.year == 2024
     assert p.authors == ["Alan Turing"]
+
+
+def test_arxiv_abs_fallback_parses_metadata(monkeypatch):
+    class Response:
+        text = ('<meta name="citation_title" content="The AI Scientist">'
+                '<meta name="citation_author" content="Chris Lu">'
+                '<meta name="citation_date" content="2024/08/12">'
+                '<meta name="citation_abstract" content="An autonomous system.">')
+        def raise_for_status(self): pass
+    monkeypatch.setattr(arxiv_src.requests, "get", lambda *a, **k: Response())
+    paper = arxiv_src.fetch_abs("2408.06292")
+    assert paper.title == "The AI Scientist"
+    assert paper.authors == ["Chris Lu"]
+    assert paper.date == "2024-08-12"
+
+
+def test_semantic_scholar_proactively_paces_each_rate_tier(monkeypatch):
+    clock = {"now": 100.0}
+    sleeps = []
+    monkeypatch.setattr(s2_src.time, "monotonic", lambda: clock["now"])
+    monkeypatch.setattr(
+        s2_src.time, "sleep",
+        lambda seconds: (sleeps.append(seconds), clock.__setitem__("now", clock["now"] + seconds)),
+    )
+    s2_src._LAST_REQUEST.update({"slow": 100.0, "standard": 100.0})
+    s2_src._pace(s2_src.SEARCH)
+    s2_src._LAST_REQUEST["standard"] = clock["now"]
+    s2_src._pace(f"{s2_src.GRAPH}/ARXIV:1/references")
+    assert sleeps == [1.05, 0.11]
+
+
+def test_semantic_scholar_honours_retry_after(monkeypatch):
+    class Response:
+        def __init__(self, status, retry=""):
+            self.status_code = status
+            self.headers = {"Retry-After": retry} if retry else {}
+        def raise_for_status(self):
+            if self.status_code >= 400:
+                raise s2_src.requests.HTTPError()
+    responses = iter([Response(429, "7"), Response(200)])
+    sleeps = []
+    monkeypatch.setattr(s2_src, "_pace", lambda *a, **k: None)
+    monkeypatch.setattr(s2_src.requests, "get", lambda *a, **k: next(responses))
+    monkeypatch.setattr(s2_src.random, "uniform", lambda *a: 0.0)
+    monkeypatch.setattr(s2_src.time, "sleep", sleeps.append)
+    assert s2_src._get(s2_src.SEARCH, {}, tries=2).status_code == 200
+    assert sleeps == [7.0]
