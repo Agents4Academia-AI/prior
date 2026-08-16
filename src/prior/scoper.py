@@ -17,6 +17,7 @@ that do research tasks".
 from __future__ import annotations
 
 import json
+import hashlib
 import re
 from pathlib import Path
 
@@ -553,6 +554,129 @@ def scope(topic_def: str, candidates: list[Paper], *, model: str | None = None,
     for p in gated:                                # gated never reach the LLM
         dropped.append((p, "pre-filtered: low topic similarity"))
     return kept, dropped
+
+
+_EXHAUSTIVE_SCOPE_SYSTEM = """You screen records for an exhaustive scientific
+literature search. Use the complete available title and abstract and apply the
+provided scope criteria. Return one role for every record:
+
+- eligible: satisfies the inclusion criteria as primary evidence;
+- retrieval_only: not eligible for synthesis, but useful for discovering
+  terminology, named systems, communities, authors, venues, or citations (reviews,
+  surveys, perspectives, protocols, and adjacent bridge papers often belong here);
+- uncertain: available evidence is insufficient or genuinely ambiguous;
+- excluded: clearly outside scope and not useful as a discovery bridge.
+
+Do not infer exclusion from a missing abstract. Cite the applicable scope criterion
+and a short supporting evidence phrase. An exclusion requires positive evidence;
+otherwise use uncertain. Return a decision for every index."""
+
+_EXHAUSTIVE_SCOPE_SCHEMA = {
+    "type": "object",
+    "properties": {"decisions": {"type": "array", "items": {
+        "type": "object",
+        "properties": {
+            "index": {"type": "integer"},
+            "role": {"type": "string", "enum": [
+                "eligible", "retrieval_only", "uncertain", "excluded",
+            ]},
+            "criterion": {"type": "string"},
+            "evidence": {"type": "string"},
+            "reason": {"type": "string"},
+        },
+        "required": ["index", "role", "criterion", "evidence", "reason"],
+    }}},
+    "required": ["decisions"],
+}
+
+
+def scope_exhaustive(topic_def: str, candidates: list[Paper], *,
+                     model: str | None = None, batch: int = 6,
+                     cache_path: str | Path | None = None,
+                     progress=print) -> dict[str, list[tuple[Paper, dict]]]:
+    """Evidence-grounded four-way screening for exhaustive discovery.
+
+    Unlike :func:`scope`, this never turns missing/ambiguous evidence into an
+    exclusion and preserves navigation records separately from synthesis-eligible
+    evidence. Cache keys include scope, protocol, paper identity, and evidence.
+    """
+    protocol = "scope-exhaustive/1.0"
+
+    def fingerprint(paper: Paper) -> str:
+        payload = "\n".join((protocol, topic_def, paper.key(), paper.title,
+                             paper.abstract or ""))
+        return "sha256:" + hashlib.sha256(payload.encode()).hexdigest()
+
+    cp = Path(cache_path) if cache_path else None
+    cache = {}
+    if cp and cp.exists():
+        for line in cp.read_text().splitlines():
+            try:
+                row = json.loads(line)
+                cache[row["fingerprint"]] = row
+            except (json.JSONDecodeError, KeyError):
+                continue
+    roles = {role: [] for role in (
+        "eligible", "retrieval_only", "uncertain", "excluded",
+    )}
+    pending = []
+    for paper in candidates:
+        cached = cache.get(fingerprint(paper))
+        if cached:
+            roles[cached["role"]].append((paper, cached))
+        else:
+            pending.append(paper)
+    handle = cp.open("a") if cp else None
+    try:
+        for start in range(0, len(pending), batch):
+            chunk = pending[start:start + batch]
+            listing = "\n\n".join(
+                f"[{index}] TITLE: {paper.title}\n"
+                f"METADATA: year={paper.year or 'unknown'}; source={paper.source}; "
+                f"review_flag={paper.is_review}\n"
+                f"ABSTRACT: {paper.abstract or '[missing]'}"
+                for index, paper in enumerate(chunk)
+            )
+            try:
+                response = llm.structured(
+                    model=model or config.READER_MODEL,
+                    system=_EXHAUSTIVE_SCOPE_SYSTEM,
+                    user=f"TOPIC:\n{topic_def}\n\nCANDIDATES:\n{listing}",
+                    schema=_EXHAUSTIVE_SCOPE_SCHEMA, tool_name="emit_scope_roles",
+                    max_tokens=4000,
+                )
+                decisions = {
+                    row["index"]: row for row in response.get("decisions", [])
+                    if isinstance(row.get("index"), int)
+                }
+            except Exception as error:  # noqa: BLE001
+                progress(f"  exhaustive scope batch error: {error}")
+                decisions = {}
+            for index, paper in enumerate(chunk):
+                decision = decisions.get(index) or {
+                    "role": "uncertain", "criterion": "insufficient decision evidence",
+                    "evidence": "", "reason": "missing or failed screening decision",
+                }
+                role = decision.get("role")
+                if role not in roles:
+                    role = "uncertain"
+                    decision["role"] = role
+                record = {
+                    "fingerprint": fingerprint(paper), "protocol": protocol,
+                    "work_key": paper.key(), **decision,
+                }
+                roles[role].append((paper, record))
+                if handle:
+                    handle.write(json.dumps(record, ensure_ascii=False) + "\n")
+                    handle.flush()
+            progress(f"  exhaustive scope {min(start + batch, len(pending))}/"
+                     f"{len(pending)} — " + ", ".join(
+                         f"{role}={len(items)}" for role, items in roles.items()
+                     ))
+    finally:
+        if handle:
+            handle.close()
+    return roles
 
 
 def build_scoped_corpus(topic_def: str, *, per_query: int = 25,
