@@ -74,7 +74,7 @@ def test_stage_recall_and_miss_diagnosis(tmp_path, monkeypatch):
     assert diagnoses == {
         "g1": "recovered",
         "g2": "prefilter_rejection",
-        "g3": "not_retrieved_or_not_indexed",
+        "g3": "not_retrieved_query_depth_or_index_gap",
     }
     assert report["stopping"][0]["true_discovery_recall"] == 0.6667
 
@@ -166,3 +166,130 @@ def test_branch_growth_uses_first_observed_attribution(tmp_path):
     growth = [row for row in rows if row["event"] == "branch_snapshot"]
     assert [(row["globally_new"], row["newly_included"]) for row in growth] == [(2, 1), (0, 0)]
     assert growth[1]["rediscovered"] == 1
+
+
+def test_ledger_accepts_explicit_bounded_terminal_states():
+    run_id = "scoper:terminal"
+    base = {
+        "schema_version": ledger.SCHEMA_VERSION, "run_id": run_id,
+        "recorded_at": "2026-08-15T12:00:00Z",
+    }
+    rows = [
+        base | {"event_id": f"{run_id}:e000001", "event": "manifest", "order": 1,
+                "case": "toy", "scope": "widgets", "scope_sha256": "sha256:x",
+                "code_version": "abc", "parameters": {}},
+        base | {"event_id": f"{run_id}:e000002", "event": "branch_terminal",
+                "order": 2, "branch_id": "q1:openalex", "stage": "multi_query",
+                "status": "bounded", "reason": "fixed_depth"},
+        base | {"event_id": f"{run_id}:e000003", "event": "run_terminal", "order": 3,
+                "status": "bounded", "reason": "baseline_policy", "open_tasks": []},
+    ]
+    ledger.validate_ledger(rows)
+
+
+def test_citation_observer_records_exact_seed_direction_and_path(tmp_path):
+    run = _load("run")
+    seed = run.Paper(id="openalex:S", source="openalex", title="Seed work",
+                     abstract="", url="")
+    paper = run.Paper(id="openalex:P", source="openalex", title="Recovered work",
+                      abstract="", url="")
+    recorder = run.Recorder(tmp_path / "citation.jsonl")
+    recorder.emit("manifest", case="toy", scope="widgets", scope_sha256="sha256:x",
+                  code_version="abc", parameters={})
+    recorder.citation_observer("snowball_1")({
+        "source": "openalex", "hop": 1, "direction": "backward",
+        "seed": seed, "paper": paper, "endpoint": "works/filter:ids.openalex",
+    })
+    recorder.close()
+    rows = ledger.load_and_validate(tmp_path / "citation.jsonl")
+    path = next(row for row in rows if row["event"] == "citation_path")
+    assert path["seed_work_key"] == seed.key()
+    assert path["work_key"] == paper.key()
+    assert path["direction"] == "backward"
+
+
+def test_core_baseline_preserves_policy_inputs_and_blind_gold(tmp_path, monkeypatch):
+    monkeypatch.syspath_prepend(str(ROOT / "scripts"))
+    adapter = _load("core_baseline")
+    core = tmp_path / "core.jsonl"
+    core.write_text(json.dumps({
+        "id": "arxiv:1", "title": "A core work", "year": 2026,
+        "doi": "10.1/example",
+    }) + "\n")
+    out = tmp_path / "replay"
+    manifest = adapter.prepare(out, core, propose_extra=False)
+    assert manifest["policy"]["per_query"] == 20
+    assert manifest["policy"]["cutoff"] is None
+    assert (out / "empty-gold-for-blind-run.jsonl").read_text() == ""
+    assert "fully automated scientific discovery" in (
+        out / "fixed-seed-queries.txt"
+    ).read_text()
+    assert json.loads((out / "gold-current-core.jsonl").read_text())["year"] == 2026
+
+
+def test_query_runner_opens_source_circuit_after_exhausted_failure(tmp_path, monkeypatch):
+    run = _load("run")
+    calls = []
+
+    def fake_gather(_queries, **kwargs):
+        calls.append(kwargs)
+        if len(calls) == 1:
+            kwargs["observe"]({
+                "kind": "source_failure", "source": "semanticscholar",
+                "query": "q1", "error_type": "HTTPError", "message": "429",
+                "retry_or_fallback": "continue_with_remaining_sources",
+            })
+        return []
+
+    monkeypatch.setattr(run.scoper, "gather_candidates", fake_gather)
+    recorder = run.Recorder(tmp_path / "circuit.jsonl")
+    recorder.emit("manifest", case="toy", scope="widgets", scope_sha256="sha256:x",
+                  code_version="abc", parameters={})
+    run._gather_query_branches(
+        ["q1", "q2"], stage="multi_query", kind="probe", motivation="initial",
+        per_query=20, cutoff=None, recorder=recorder, known_before=set(),
+    )
+    recorder.close()
+    assert calls[0]["use_s2"] is True
+    assert calls[1]["use_s2"] is False
+    rows = ledger.load_and_validate(tmp_path / "circuit.jsonl")
+    pending = [row for row in rows if row.get("error_type") == "circuit_open"]
+    assert len(pending) == 1
+    assert pending[0]["retry_or_fallback"] == "pending_retry"
+
+
+def test_recover_interleaved_reconstructs_candidate_and_proven_keep(tmp_path):
+    recovery = _load("recover_interleaved")
+    run_id = "scoper:good"
+    base = {
+        "schema_version": ledger.SCHEMA_VERSION, "run_id": run_id,
+        "recorded_at": "2026-08-16T09:00:00Z",
+    }
+    paper_a = {"id": "a", "title": "A work"}
+    paper_b = {"id": "b", "title": "B work"}
+    rows = [
+        base | {"event_id": f"{run_id}:e000001", "event": "manifest", "order": 1,
+                "case": "toy", "scope": "widgets", "scope_sha256": "sha256:x",
+                "code_version": "abc", "parameters": {}},
+        base | {"event_id": f"{run_id}:e000002", "event": "candidate", "order": 2,
+                "stage": "multi_query", "channel": "search", "work_key": "a",
+                "paper": paper_a},
+        # Orders 3 and 4 emulate one lost candidate plus one lost broad keep.
+        base | {"event_id": f"{run_id}:e000005", "event": "decision", "order": 5,
+                "stage": "multi_query", "work_key": "b", "decision": "dropped",
+                "reason": "outside", "paper": paper_b},
+        base | {"event_id": f"{run_id}:e000006", "event": "decision", "order": 6,
+                "stage": "strict_rescreen", "work_key": "a", "decision": "kept",
+                "reason": "core", "paper": paper_a},
+        base | {"event_id": f"{run_id}:e000007", "event": "run_terminal", "order": 7,
+                "status": "bounded", "reason": "done", "open_tasks": []},
+    ]
+    raw = tmp_path / "raw.jsonl"
+    raw.write_text("".join(json.dumps(row) + "\n" for row in rows))
+    out, report = tmp_path / "recovered.jsonl", tmp_path / "report.json"
+    result = recovery.recover(raw, out, report)
+    recovered = ledger.load_and_validate(out)
+    assert result["reconstructed_candidate_events"] == 1
+    assert result["reconstructed_decision_events"] == 1
+    assert next(row for row in recovered if row["order"] == 3)["work_key"] == "b"
+    assert next(row for row in recovered if row["order"] == 4)["decision"] == "kept"

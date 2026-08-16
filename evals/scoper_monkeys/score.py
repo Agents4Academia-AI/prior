@@ -34,6 +34,13 @@ def analyse(events: list[dict], gold, *, title_threshold: float = 0.82) -> dict:
     manifest = next(event for event in events if event.get("event") == "manifest")
     candidates = _unique_candidates(events)
     decisions = _decisions(events)
+    citation_paths = [event for event in events if event.get("event") == "citation_path"]
+    source_failures = [event for event in events if event.get("event") == "source_failure"]
+    terminals = [event for event in events if event.get("event") == "branch_terminal"]
+    run_terminal = next(
+        (event for event in reversed(events) if event.get("event") == "run_terminal"),
+        None,
+    )
     stages = []
     for event in candidates:
         if event["stage"] not in stages:
@@ -49,6 +56,13 @@ def analyse(events: list[dict], gold, *, title_threshold: float = 0.82) -> dict:
             if candidate_score > score:
                 event, score = candidate, candidate_score
         decision = decisions.get(event["work_key"]) if event else None
+        path, path_score = None, 0.0
+        for candidate_path in citation_paths:
+            candidate_score = match_gold(
+                item, candidate_path["paper"], title_threshold=title_threshold
+            )
+            if candidate_score > path_score:
+                path, path_score = candidate_path, candidate_score
         gold_rows.append({
             "gold_id": item.gold_id,
             "title": item.title,
@@ -61,6 +75,11 @@ def analyse(events: list[dict], gold, *, title_threshold: float = 0.82) -> dict:
             "decision_reason": decision.get("reason", "") if decision else "",
             "candidate_order": event.get("order") if event else None,
             "decision_order": decision.get("order") if decision else None,
+            "citation_source": path.get("source", "") if path else "",
+            "citation_direction": path.get("direction", "") if path else "",
+            "citation_seed_title": path.get("seed", {}).get("title", "") if path else "",
+            "citation_seed_work_key": path.get("seed_work_key", "") if path else "",
+            "citation_branch_id": path.get("branch_id", "") if path else "",
         })
 
     cumulative = []
@@ -132,7 +151,10 @@ def analyse(events: list[dict], gold, *, title_threshold: float = 0.82) -> dict:
 
     for row in gold_rows:
         if not row["found"]:
-            row["automatic_diagnosis"] = "not_retrieved_or_not_indexed"
+            row["automatic_diagnosis"] = (
+                "not_retrieved_with_source_failures" if source_failures
+                else "not_retrieved_query_depth_or_index_gap"
+            )
         elif row["decision"] == "dropped":
             row["automatic_diagnosis"] = (
                 "prefilter_rejection"
@@ -153,6 +175,19 @@ def analyse(events: list[dict], gold, *, title_threshold: float = 0.82) -> dict:
         "budgets": budgets,
         "stopping": snapshots,
         "branches": branches,
+        "source_failures": [
+            {key: event.get(key) for key in (
+                "branch_id", "stage", "source", "query", "error_type", "message",
+                "retry_or_fallback",
+            )}
+            for event in source_failures
+        ],
+        "branch_terminal_counts": {
+            status: sum(event.get("status") == status for event in terminals)
+            for status in ("exhausted", "bounded", "failed", "waived", "pending")
+        },
+        "run_terminal": ({key: run_terminal.get(key) for key in
+                          ("status", "reason", "open_tasks")} if run_terminal else None),
         "gold": gold_rows,
     }
 
@@ -216,6 +251,37 @@ def _markdown(report: dict) -> str:
             f"{row['true_discovery_recall']:.1%} | "
             f"{row['true_accepted_recall']:.1%} |"
         )
+    terminal = report.get("run_terminal")
+    if terminal:
+        lines += [
+            "", "## Methodological run status", "",
+            f"Status: **{terminal['status']}** — {terminal['reason']}.", "",
+            "Branch terminal states: " + ", ".join(
+                f"{key}={value}" for key, value in
+                report.get("branch_terminal_counts", {}).items() if value
+            ) + ".",
+        ]
+    failures = report.get("source_failures", [])
+    if failures:
+        by_source = {}
+        for failure in failures:
+            by_source[failure["source"]] = by_source.get(failure["source"], 0) + 1
+        lines += [
+            "", "## Source failures", "",
+            " · ".join(f"{source}: **{count}**" for source, count in sorted(by_source.items())),
+        ]
+    recovered_paths = [row for row in report["gold"] if row.get("citation_branch_id")]
+    if recovered_paths:
+        lines += [
+            "", "## Hidden targets recovered through citation paths", "",
+            "| target | source | direction | seed |",
+            "|---|---|---|---|",
+        ]
+        for row in recovered_paths:
+            lines.append(
+                f"| {row['title']} | {row['citation_source']} | "
+                f"{row['citation_direction']} | {row['citation_seed_title']} |"
+            )
     return "\n".join(lines) + "\n"
 
 
@@ -227,11 +293,43 @@ def main(args) -> None:
     out.mkdir(parents=True, exist_ok=True)
     (out / "report.json").write_text(json.dumps(report, indent=2) + "\n")
     (out / "report.md").write_text(_markdown(report))
+    with (out / "queries.csv").open("w", newline="") as handle:
+        fields = ["order", "stage", "branch_id", "kind", "query", "motivation"]
+        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer.writeheader()
+        for event in events:
+            if event.get("event") != "query":
+                continue
+            for query in event.get("queries", []):
+                writer.writerow({
+                    "order": event.get("order"), "stage": event.get("stage", ""),
+                    "branch_id": event.get("branch_id", ""),
+                    "kind": event.get("kind", ""), "query": query,
+                    "motivation": event.get("motivation", ""),
+                })
+    with (out / "retrieval_tasks.csv").open("w", newline="") as handle:
+        fields = [
+            "order", "event", "stage", "branch_id", "parent_branch_id", "source",
+            "query", "parameters", "status", "reason", "error_type", "message",
+        ]
+        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer.writeheader()
+        for event in events:
+            if event.get("event") not in {
+                "retrieval_request", "source_failure", "branch_terminal"
+            }:
+                continue
+            writer.writerow({
+                key: (json.dumps(event.get(key), sort_keys=True)
+                      if key == "parameters" else event.get(key, ""))
+                for key in fields
+            })
     with (out / "misses.csv").open("w", newline="") as handle:
         fields = [
             "gold_id", "title", "year", "automatic_diagnosis", "first_stage",
             "decision", "decision_reason", "match_score", "manual_category",
-            "manual_notes",
+            "citation_source", "citation_direction", "citation_seed_title",
+            "citation_seed_work_key", "citation_branch_id", "manual_notes",
         ]
         writer = csv.DictWriter(handle, fieldnames=fields, extrasaction="ignore")
         writer.writeheader()

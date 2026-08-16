@@ -43,6 +43,9 @@ class Recorder:
         self.order = 0
         self.run_id = new_run_id()
         self.first_seen: dict[str, str] = {}
+        self.failures: dict[tuple[str, str], list[str]] = {}
+        self.disabled_sources: set[str] = set()
+        self.citation_seeds: set[tuple[str, str]] = set()
 
     def emit(self, event: str, **fields) -> None:
         self.order += 1
@@ -83,12 +86,56 @@ class Recorder:
 
     def retrieval_observer(self, branch_id: str, stage: str):
         def observe(event: dict) -> None:
+            event = dict(event)
             kind = event.pop("kind")
+            if kind == "source_failure":
+                self.failures.setdefault((branch_id, event["source"]), []).append(
+                    event.get("error_type", "unknown")
+                )
+                self.disabled_sources.add(event["source"])
             paper = event.get("paper")
             if paper is not None:
                 event["work_key"] = paper.key()
                 event["paper"] = paper.to_dict()
             self.emit(kind, branch_id=branch_id, stage=stage, **event)
+        return observe
+
+    def close_query_branch(self, branch_id: str, stage: str, query: str,
+                           sources: tuple[str, ...] = (
+                               "openalex", "arxiv", "semanticscholar")) -> None:
+        """Close each fixed-depth baseline source branch without calling it saturated."""
+        for source in sources:
+            errors = self.failures.get((branch_id, source), [])
+            self.emit(
+                "branch_terminal", branch_id=f"{branch_id}:{source}", stage=stage,
+                parent_branch_id=branch_id, source=source, query=query,
+                status="failed" if errors else "bounded",
+                reason=("source_failure:" + ",".join(errors) if errors
+                        else "original_policy_fixed_retrieval_depth"),
+            )
+
+    def citation_observer(self, stage: str):
+        """Record the exact seed, provider and direction for each citation edge."""
+        def observe(event: dict) -> None:
+            event = dict(event)
+            seed = event.pop("seed")
+            paper = event.pop("paper")
+            source = event["source"]
+            direction = event["direction"]
+            branch_id = f"{stage}:{source}:{direction}:{seed.key()}"
+            seed_marker = (branch_id, seed.id)
+            if seed_marker not in self.citation_seeds:
+                self.citation_seeds.add(seed_marker)
+                self.emit(
+                    "seed", branch_id=branch_id, stage=stage, source=source,
+                    direction=direction, seed_role="original_policy_selected",
+                    work_key=seed.key(), paper=seed.to_dict(),
+                )
+            self.emit(
+                "citation_path", branch_id=branch_id, stage=stage,
+                seed_work_key=seed.key(), work_key=paper.key(), seed=seed.to_dict(),
+                paper=paper.to_dict(), **event,
+            )
         return observe
 
 
@@ -125,10 +172,27 @@ def _gather_query_branches(queries: list[str], *, stage: str, kind: str,
         branch_id = f"{stage}:q{index:03d}"
         recorder.emit("query", stage=stage, branch_id=branch_id, kind=kind,
                       queries=[query], motivation=motivation)
+        for source in sorted(recorder.disabled_sources):
+            recorder.emit(
+                "retrieval_request", branch_id=branch_id, stage=stage,
+                source=source, query=query,
+                parameters={"state": "pending_retry", "attempted": False},
+            )
+            recorder.emit(
+                "source_failure", branch_id=branch_id, stage=stage,
+                source=source, query=query, error_type="circuit_open",
+                message="source paused after an earlier exhausted retry sequence",
+                retry_or_fallback="pending_retry",
+            )
+            recorder.failures.setdefault((branch_id, source), []).append("circuit_open")
         papers = _before_cutoff(scoper.gather_candidates(
             [query], per_query=per_query, progress=progress,
             observe=recorder.retrieval_observer(branch_id, stage),
+            use_openalex="openalex" not in recorder.disabled_sources,
+            use_arxiv="arxiv" not in recorder.disabled_sources,
+            use_s2="semanticscholar" not in recorder.disabled_sources,
         ), cutoff)
+        recorder.close_query_branch(branch_id, stage, query)
         branches.append((branch_id, query, papers))
         pooled.extend(papers)
     pool = _dedup(pooled)
@@ -189,6 +253,10 @@ def collect(args) -> None:
                 "recover_rounds": args.recover_rounds, "hops": args.hops,
                 "use_prefilter": not args.no_prefilter, "epsilon": args.epsilon,
                 "model": args.model, "sources": ["openalex", "arxiv", "semanticscholar"],
+                "retrieval_policy": "original_scoper_v1_fixed_depth",
+                "screening_policy": "original_scoper_v1_binary_truncated_abstract",
+                "stopping_policy": "original_scoper_v1_global_yield",
+                "strict_topic_file": args.strict_topic_file,
             },
         )
         # Monkey baseline: one literal OpenAlex query.
@@ -272,12 +340,48 @@ def collect(args) -> None:
         for hop in range(1, args.hops + 1):
             stage = f"snowball_{hop}"
             seeds = list(corpus)[:200] if hop == 1 else scoper.high_yield_seeds(corpus)
+            selected = {paper.id for paper in seeds}
+            for paper in corpus:
+                recorder.emit(
+                    "seed", branch_id=f"{stage}:selection", stage=stage,
+                    seed_role=("selected" if paper.id in selected else
+                               "not_selected_by_original_policy"),
+                    work_key=paper.key(), paper=paper.to_dict(),
+                )
             new_oa, reached_oa = scoper.snowball(
-                seeds, corpus=corpus, progress=progress
+                seeds, corpus=corpus, progress=progress,
+                observe=recorder.citation_observer(stage), hop=hop,
             )
-            new_s2, reached_s2 = scoper.snowball_s2(
-                seeds, corpus=corpus, progress=progress
-            )
+            if "semanticscholar" in recorder.disabled_sources:
+                new_s2, reached_s2 = [], set()
+                recorder.emit(
+                    "branch_terminal", branch_id=f"{stage}:semanticscholar",
+                    stage=stage, source="semanticscholar", status="pending",
+                    reason="source_circuit_open_pending_retry",
+                )
+            else:
+                try:
+                    new_s2, reached_s2 = scoper.snowball_s2(
+                        seeds, corpus=corpus, progress=progress,
+                        observe=recorder.citation_observer(stage), hop=hop,
+                    )
+                except Exception as error:  # noqa: BLE001
+                    new_s2, reached_s2 = [], set()
+                    recorder.disabled_sources.add("semanticscholar")
+                    recorder.failures.setdefault(
+                        (f"{stage}:semanticscholar", "semanticscholar"), []
+                    ).append(type(error).__name__)
+                    recorder.emit(
+                        "source_failure", branch_id=f"{stage}:semanticscholar",
+                        stage=stage, source="semanticscholar", query="citation expansion",
+                        error_type=type(error).__name__, message=str(error)[:500],
+                        retry_or_fallback="pending_retry",
+                    )
+                    recorder.emit(
+                        "branch_terminal", branch_id=f"{stage}:semanticscholar",
+                        stage=stage, source="semanticscholar", status="failed",
+                        reason="citation_source_failure_pending_retry",
+                    )
             snow_keys |= reached_oa | reached_s2
             pool = _before_cutoff(_dedup(new_oa + new_s2), args.cutoff_year)
             recorder.candidates(stage, pool, "citation")
@@ -304,8 +408,38 @@ def collect(args) -> None:
                 ),
                 completeness=estimate,
             )
+            for branch_id, _seed_id in sorted(recorder.citation_seeds):
+                if branch_id.startswith(stage + ":"):
+                    recorder.emit(
+                        "branch_terminal", branch_id=branch_id, stage=stage,
+                        status="bounded", reason="original_policy_fixed_citation_depth",
+                    )
             if stopped:
                 break
+        if args.strict_topic_file:
+            strict_topic = Path(args.strict_topic_file).read_text()
+            stage = "strict_rescreen"
+            recorder.candidates(stage, corpus, "strict_scope")
+            strict_kept, strict_dropped = _scope_stage(
+                strict_topic, stage, corpus, recorder, model=args.model,
+                use_prefilter=False, progress=progress,
+            )
+            corpus = [paper for paper, _ in strict_kept]
+            recorder.emit(
+                "snapshot", stage=stage, candidates=len(strict_kept) + len(strict_dropped),
+                new_kept=len(strict_kept), corpus=len(corpus), stop_triggered=False,
+                stop_reason="historical_strict_core_rescreen",
+            )
+        failed = [
+            {"branch_id": branch, "source": source, "errors": errors}
+            for (branch, source), errors in recorder.failures.items()
+        ]
+        recorder.emit(
+            "run_terminal", status="incomplete" if failed else "bounded",
+            reason=("unresolved_source_failures" if failed
+                    else "original_policy_fixed_depth_and_yield_stopping"),
+            open_tasks=failed,
+        )
     finally:
         recorder.close()
 
@@ -325,6 +459,7 @@ def parser() -> argparse.ArgumentParser:
     ap.add_argument("--epsilon", type=float, default=0.03)
     ap.add_argument("--no-prefilter", action="store_true")
     ap.add_argument("--model")
+    ap.add_argument("--strict-topic-file")
     return ap
 
 

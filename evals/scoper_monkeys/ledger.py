@@ -16,6 +16,7 @@ EVENT_TYPES = {
     "retrieval_request", "retrieval_result", "source_failure", "deduplication",
     "branch_snapshot",
     "seed", "citation_path",
+    "branch_terminal", "run_terminal",
 }
 QUERY_KINDS = {"probe", "reformulation"}
 
@@ -107,6 +108,18 @@ def validate_event(row: dict) -> None:
                       "work_key", "endpoint", "seed", "paper"):
             if field not in row:
                 raise ValueError(f"citation_path missing field: {field}")
+    elif row["event"] == "branch_terminal":
+        for field in ("branch_id", "stage", "status", "reason"):
+            if field not in row:
+                raise ValueError(f"branch_terminal missing field: {field}")
+        if row["status"] not in {"exhausted", "bounded", "failed", "waived", "pending"}:
+            raise ValueError(f"invalid branch terminal status: {row['status']!r}")
+    elif row["event"] == "run_terminal":
+        for field in ("status", "reason", "open_tasks"):
+            if field not in row:
+                raise ValueError(f"run_terminal missing field: {field}")
+        if row["status"] not in {"complete", "bounded", "incomplete", "failed"}:
+            raise ValueError(f"invalid run terminal status: {row['status']!r}")
     elif row["event"] == "snapshot" and "stage" not in row:
         raise ValueError("snapshot missing field: stage")
 
