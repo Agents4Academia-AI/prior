@@ -74,7 +74,7 @@ def expand_backward(queue_file: Path, out_dir: Path, *, batch_size: int = 100,
                 handle.write(json.dumps({"event": "batch_terminal", "batch": index,
                                          "status": "pending_retry",
                                          "error_type": type(error).__name__,
-                                         "message": str(error)[:500]}) + "\n")
+                                         "message": openalex.redact_error(str(error))[:500]}) + "\n")
                 handle.flush()
                 progress(f"backward batch {index + 1}/{len(batches)} pending retry: {error}")
                 break
@@ -158,7 +158,7 @@ def expand_forward_pass(queue_file: Path, out_dir: Path, *, per_page: int = 200,
             terminal = {"event": "task_terminal", "task_id": task["task_id"],
                         "status": "pending_retry", "cursor": cursor,
                         "next_cursor": cursor, "error_type": type(error).__name__,
-                        "message": str(error)[:500]}
+                        "message": openalex.redact_error(str(error))[:500]}
         if delay:
             time.sleep(delay)
         return task, results, terminal

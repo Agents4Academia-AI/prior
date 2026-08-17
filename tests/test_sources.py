@@ -20,6 +20,13 @@ def test_openalex_id_normalisation():
     assert openalex._norm_id(None) == ""
 
 
+def test_openalex_api_key_comes_only_from_environment(monkeypatch):
+    monkeypatch.setenv("PRIOR_OPENALEX_API_KEY", "private-test-key")
+    assert openalex._params()["api_key"] == "private-test-key"
+    assert "private-test-key" not in openalex.redact_error(
+        "https://api.openalex.org/works?api_key=private-test-key")
+
+
 def test_openalex_to_paper_extracts_citations():
     work = {
         "id": "https://openalex.org/W2",

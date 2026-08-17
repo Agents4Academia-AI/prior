@@ -7,6 +7,7 @@ powers Navigator's backward / origin-tracing mode.
 
 from __future__ import annotations
 
+import os
 import time
 
 import requests
@@ -26,9 +27,30 @@ def _headers() -> dict:
 
 def _params() -> dict:
     p: dict = {}
+    api_key = os.environ.get("PRIOR_OPENALEX_API_KEY") or os.environ.get("OPENALEX_API_KEY")
+    if api_key:
+        p["api_key"] = api_key
     if config.CONTACT_EMAIL:
         p["mailto"] = config.CONTACT_EMAIL
     return p
+
+
+def redact_error(value: str) -> str:
+    """Remove credentials from request URLs before writing errors to ledgers."""
+    for secret in (os.environ.get("PRIOR_OPENALEX_API_KEY"),
+                   os.environ.get("OPENALEX_API_KEY")):
+        if secret:
+            value = value.replace(secret, "[REDACTED]")
+    return value
+
+
+def rate_limit_status() -> dict:
+    """Return authenticated allowance metadata without returning the API key."""
+    r = requests.get("https://api.openalex.org/rate-limit", params=_params(),
+                     headers=_headers(), timeout=config.HTTP_TIMEOUT)
+    r.raise_for_status()
+    body = r.json()
+    return body.get("rate_limit") or {}
 
 
 def _get(url: str, params: dict, *, tries: int = 5):
