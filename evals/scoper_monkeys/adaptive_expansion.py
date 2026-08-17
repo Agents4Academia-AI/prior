@@ -1,0 +1,263 @@
+"""Resumable post-retrieval expansion for an exhaustive Scoper run.
+
+The stages deliberately separate bibliographic evidence and citation topology
+from semantic geometry.  ``prepare-embedding`` writes a model-neutral bundle;
+embedding/model selection and query-map induction happen on the GPU machine.
+Gold targets are never read here.  Recovery is scored by the existing offline
+scorer after each immutable stage snapshot.
+"""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import time
+from pathlib import Path
+
+import sys
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "src"))
+
+from prior import scoper  # noqa: E402
+from prior.models import Paper  # noqa: E402
+from prior.sources import arxiv, openalex, semanticscholar  # noqa: E402
+
+
+USEFUL_ROLES = ("eligible", "retrieval_only", "uncertain")
+
+
+def _read_role(path: Path) -> list[tuple[Paper, dict]]:
+    if not path.exists():
+        return []
+    rows = [json.loads(line) for line in path.read_text().splitlines() if line]
+    return [(Paper.from_dict(row["paper"]), row["decision"]) for row in rows]
+
+
+def _write_jsonl(path: Path, rows) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w") as handle:
+        for row in rows:
+            handle.write(json.dumps(row, ensure_ascii=False) + "\n")
+
+
+def _doi(paper: Paper) -> str:
+    return (paper.doi or "").replace("https://doi.org/", "").replace("doi:", "")
+
+
+def _arxiv_id(paper: Paper) -> str:
+    for item in paper.all_manifestations():
+        pid = str(item.get("id") or "")
+        if pid.startswith("arxiv:"):
+            return pid.split(":", 1)[1].split("v", 1)[0]
+    return ""
+
+
+def _merge_evidence(original: Paper, variants: list[Paper]) -> Paper:
+    """Retain canonical identity/topology, adopting richer verified evidence."""
+    valid = [v for v in variants if scoper._same_work(original, v)]
+    if not valid:
+        return original
+    richest = max([original] + valid, key=lambda p: len(p.abstract or ""))
+    if len(richest.abstract or "") > len(original.abstract or ""):
+        original.abstract = richest.abstract
+    for variant in valid:
+        if not original.pdf_url and variant.pdf_url:
+            original.pdf_url = variant.pdf_url
+        if not original.doi and variant.doi:
+            original.doi = variant.doi
+        for item in variant.all_manifestations():
+            if item.get("id") != original.id and item not in original.manifestations:
+                original.manifestations.append(item)
+    return original
+
+
+def repair(run_dir: Path, out_dir: Path, *, use_s2: bool = False,
+           probe_s2: bool = False, progress=print) -> None:
+    """Repair uncertain records through exact identifiers and manifestations.
+
+    The optional S2 channel is circuit-broken: one credentialed probe must pass
+    before any further S2 requests are attempted.
+    """
+    uncertain = _read_role(run_dir / "uncertain.jsonl")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    ledger = out_dir / "repair-ledger.jsonl"
+    completed = set()
+    if ledger.exists():
+        for line in ledger.read_text().splitlines():
+            try:
+                row = json.loads(line)
+                if row.get("event") == "repair_terminal":
+                    completed.add(row["work_key"])
+            except (ValueError, KeyError):
+                pass
+
+    s2_ok = False
+    # One arXiv export call repairs all already-known arXiv manifestations.  Do
+    # not issue one request per record (both slower and less polite).
+    arxiv_ids = list(dict.fromkeys(_arxiv_id(p) for p, _ in uncertain if _arxiv_id(p)))
+    arxiv_variants = arxiv.fetch_ids(arxiv_ids) if arxiv_ids else {}
+    if use_s2 and probe_s2:
+        probe = next((p for p, _ in uncertain if _doi(p) or _arxiv_id(p)), None)
+        if probe:
+            sid = "ARXIV:" + _arxiv_id(probe) if _arxiv_id(probe) else "DOI:" + _doi(probe)
+            try:
+                s2_ok = semanticscholar.fetch(sid) is not None
+            except Exception:  # adapter has already exhausted/paced retries
+                s2_ok = False
+    with ledger.open("a") as handle:
+        if use_s2:
+            handle.write(json.dumps({"event": "source_probe", "source": "semanticscholar",
+                                     "status": "available" if s2_ok else "circuit_open"}) + "\n")
+            handle.flush()
+        for index, (paper, old_decision) in enumerate(uncertain, 1):
+            key = paper.key()
+            if key in completed:
+                continue
+            before = len(paper.abstract or "")
+            variants: list[Paper] = []
+            aid = _arxiv_id(paper)
+            if aid:
+                candidate = arxiv_variants.get(aid) or arxiv_variants.get("arxiv:" + aid)
+                if candidate:
+                    variants.append(candidate)
+            if _doi(paper):
+                candidate = openalex.fetch_doi(_doi(paper))
+                if candidate:
+                    variants.append(candidate)
+                if s2_ok:
+                    candidate = semanticscholar.fetch("DOI:" + _doi(paper))
+                    if candidate:
+                        variants.append(candidate)
+            elif aid and s2_ok:
+                candidate = semanticscholar.fetch("ARXIV:" + aid)
+                if candidate:
+                    variants.append(candidate)
+            paper = _merge_evidence(paper, variants)
+            row = {"event": "repair_terminal", "work_key": key,
+                   "old_decision": old_decision, "paper": paper.to_dict(),
+                   "abstract_chars_before": before,
+                   "abstract_chars_after": len(paper.abstract or ""),
+                   "evidence_changed": len(paper.abstract or "") > before,
+                   "sources_attempted": ["arxiv", "openalex"] + (["semanticscholar"] if s2_ok else [])}
+            handle.write(json.dumps(row, ensure_ascii=False) + "\n")
+            handle.flush()
+            if index % 25 == 0:
+                progress(f"repair {index}/{len(uncertain)}")
+
+    terminals = {}
+    for line in ledger.read_text().splitlines():
+        row = json.loads(line)
+        if row.get("event") == "repair_terminal":
+            terminals[row["work_key"]] = row
+    repaired = [Paper.from_dict(row["paper"]) for row in terminals.values()]
+    changed = sum(row["evidence_changed"] for row in terminals.values())
+    _write_jsonl(out_dir / "repaired-uncertain.jsonl",
+                 ({"paper": p.to_dict()} for p in repaired))
+    (out_dir / "repair-status.json").write_text(json.dumps({
+        "records": len(repaired), "evidence_changed": changed,
+        "still_missing_abstract": sum(not p.abstract for p in repaired),
+        "semantic_scholar": "available" if s2_ok else "circuit_open",
+        "next": "reassess repaired-uncertain with scope_exhaustive",
+    }, indent=2) + "\n")
+
+
+def prepare_embedding(run_dir: Path, out_dir: Path) -> None:
+    """Write the semantic corpus and leakage-safe GPU model-selection protocol."""
+    records = []
+    for role in USEFUL_ROLES:
+        for paper, decision in _read_role(run_dir / f"{role}.jsonl"):
+            text = f"{paper.title}\n\n{paper.abstract}".strip()
+            records.append({
+                "work_key": paper.key(), "role": role, "title": paper.title,
+                "abstract": paper.abstract, "text": text,
+                "year": paper.year, "source": paper.source,
+                "decision_criterion": decision.get("criterion", ""),
+                "decision_reason": decision.get("reason", ""),
+                "provenance": {"stage": "depth_200", "gold_visible": False},
+            })
+    _write_jsonl(out_dir / "semantic-corpus.jsonl", records)
+    protocol = {
+        "purpose": "choose geometry for evolving query-map induction, not generic retrieval",
+        "gold_visible_during_model_selection": False,
+        "candidate_models": "specified on GPU machine; record exact model/revision/pooling/normalization",
+        "required_comparisons": [
+            "domain scientific-document embedding model",
+            "strong general retrieval embedding model",
+            "lexical BM25 baseline",
+        ],
+        "intrinsic_checks": [
+            "neighbour coherence by blinded human audit",
+            "stability across seeds and clustering resolutions",
+            "separation without collapsing eligible/retrieval_only/uncertain roles",
+            "minority-community preservation",
+        ],
+        "downstream_checks": [
+            "novel eligible yield per induced query branch",
+            "hidden-target recovery scored only after branch freeze",
+            "boundary disagreement rate under strict synthesis scope",
+            "stopping-curve sensitivity to model choice",
+        ],
+        "selection_rule": "freeze model and query branches before joining hidden recovery targets",
+        "corpus_sha256": hashlib.sha256((out_dir / "semantic-corpus.jsonl").read_bytes()).hexdigest(),
+    }
+    (out_dir / "embedding-experiment.json").write_text(json.dumps(protocol, indent=2) + "\n")
+
+
+def citation_queue(run_dir: Path, out_dir: Path) -> None:
+    """Place every useful canonical work in both citation directions."""
+    tasks = []
+    seen = set()
+    for role in USEFUL_ROLES:
+        for paper, decision in _read_role(run_dir / f"{role}.jsonl"):
+            key = paper.key()
+            if key in seen:
+                continue
+            seen.add(key)
+            for direction in ("backward", "forward"):
+                tasks.append({
+                    "task_id": hashlib.sha256(f"{key}|{direction}".encode()).hexdigest()[:20],
+                    "work_key": key, "paper": paper.to_dict(), "role": role,
+                    "direction": direction, "status": "pending",
+                    "priority_signals": {
+                        "uncertain": role == "uncertain",
+                        "citation_count": paper.cited_by_count,
+                        "year": paper.year,
+                        "has_openalex_topology": paper.id.startswith("openalex:"),
+                    },
+                    "decision_criterion": decision.get("criterion", ""),
+                })
+    tasks.sort(key=lambda x: (
+        not x["priority_signals"]["uncertain"],
+        not x["priority_signals"]["has_openalex_topology"],
+        -x["priority_signals"]["citation_count"],
+    ))
+    _write_jsonl(out_dir / "citation-queue.jsonl", tasks)
+    (out_dir / "citation-queue-status.json").write_text(json.dumps({
+        "works": len(seen), "tasks": len(tasks), "directions": ["backward", "forward"],
+        "policy": "all useful records queued; priority controls order, never eligibility",
+        "terminal_states": ["exhausted", "pending_retry", "source_unavailable"],
+    }, indent=2) + "\n")
+
+
+def parser() -> argparse.ArgumentParser:
+    ap = argparse.ArgumentParser()
+    sub = ap.add_subparsers(dest="command", required=True)
+    for name in ("repair", "prepare-embedding", "citation-queue"):
+        p = sub.add_parser(name)
+        p.add_argument("--run-dir", required=True, type=Path)
+        p.add_argument("--out-dir", required=True, type=Path)
+        if name == "repair":
+            p.add_argument("--use-s2", action="store_true")
+            p.add_argument("--probe-s2", action="store_true")
+    return ap
+
+
+if __name__ == "__main__":
+    args = parser().parse_args()
+    if args.command == "repair":
+        repair(args.run_dir, args.out_dir, use_s2=args.use_s2, probe_s2=args.probe_s2)
+    elif args.command == "prepare-embedding":
+        prepare_embedding(args.run_dir, args.out_dir)
+    else:
+        citation_queue(args.run_dir, args.out_dir)

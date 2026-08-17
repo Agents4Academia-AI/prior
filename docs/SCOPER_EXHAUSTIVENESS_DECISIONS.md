@@ -313,6 +313,21 @@ domains. Prefer the defensible claim that no known gap remains under a declared
 protocol, with limitations exposed, over an unknowable percentage-complete
 claim.
 
+### 14. Select semantic geometry on the downstream discovery task
+
+Do not let whichever embedding model happens to run locally determine the
+evolving query map. Bibliographic evidence repair and citation-topology
+expansion remain model-independent. Export useful records with their roles,
+screening evidence, and provenance, then compare embedding models on a GPU
+machine.
+
+The comparison must include a scientific-document model, a strong general
+retrieval model, and a lexical baseline. Select using blinded neighbour audits,
+stability, preservation of minority communities, novel eligible yield from
+induced query branches, and stopping-curve sensitivity. Freeze the selected
+model and its proposed branches before joining hidden recovery targets. Cluster
+appearance alone is not a selection criterion.
+
 ## Implementation dependency order
 
 1. **State and provenance substrate:** canonical works/manifestations, durable
@@ -330,6 +345,9 @@ claim.
 5. **Stopping and evaluation:** evidence-backed terminal-state checks,
    multidimensional completeness reporting, hidden-target ablations, and
    cross-domain calibration (decisions 10 and 13).
+6. **Semantic-map model selection:** portable corpus export, GPU embedding
+   comparison, branch freeze, then leakage-safe downstream recovery evaluation
+   (decision 14).
 
 Build vertical slices through this order so every new retrieval behaviour is
 traceable and evaluable when introduced. Do not first broaden retrieval and add
