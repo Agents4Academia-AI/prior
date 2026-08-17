@@ -600,10 +600,16 @@ def scope_exhaustive(topic_def: str, candidates: list[Paper], *,
     exclusion and preserves navigation records separately from synthesis-eligible
     evidence. Cache keys include scope, protocol, paper identity, and evidence.
     """
-    protocol = "scope-exhaustive/1.0"
+    protocol = "scope-exhaustive/1.1"
+    selected_model = model or config.READER_MODEL
+    selected_backend = llm.backend()
+    prompt_hash = "sha256:" + hashlib.sha256(
+        (_EXHAUSTIVE_SCOPE_SYSTEM + "\n" + json.dumps(
+            _EXHAUSTIVE_SCOPE_SCHEMA, sort_keys=True)).encode()).hexdigest()
 
     def fingerprint(paper: Paper) -> str:
-        payload = "\n".join((protocol, topic_def, paper.key(), paper.title,
+        payload = "\n".join((protocol, selected_backend, selected_model,
+                             prompt_hash, topic_def, paper.key(), paper.title,
                              paper.abstract or ""))
         return "sha256:" + hashlib.sha256(payload.encode()).hexdigest()
 
@@ -639,7 +645,7 @@ def scope_exhaustive(topic_def: str, candidates: list[Paper], *,
             )
             try:
                 response = llm.structured(
-                    model=model or config.READER_MODEL,
+                    model=selected_model,
                     system=_EXHAUSTIVE_SCOPE_SYSTEM,
                     user=f"TOPIC:\n{topic_def}\n\nCANDIDATES:\n{listing}",
                     schema=_EXHAUSTIVE_SCOPE_SCHEMA, tool_name="emit_scope_roles",
@@ -663,7 +669,11 @@ def scope_exhaustive(topic_def: str, candidates: list[Paper], *,
                     decision["role"] = role
                 record = {
                     "fingerprint": fingerprint(paper), "protocol": protocol,
-                    "work_key": paper.key(), **decision,
+                    "work_key": paper.key(), "model": selected_model,
+                    "backend": selected_backend, "prompt_hash": prompt_hash,
+                    "evidence_sha256": "sha256:" + hashlib.sha256(
+                        (paper.title + "\n" + (paper.abstract or "")).encode()).hexdigest(),
+                    **decision,
                 }
                 roles[role].append((paper, record))
                 if handle:

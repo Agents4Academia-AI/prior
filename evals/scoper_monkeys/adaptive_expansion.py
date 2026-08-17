@@ -201,7 +201,7 @@ def _screening_excerpt(text: str, *, limit: int = 12000) -> tuple[str, str]:
 
 
 def repair_fulltext(run_dir: Path, out_dir: Path, *, workers: int = 6,
-                    progress=print) -> None:
+                    inventory_only: bool = False, progress=print) -> None:
     """Retrieve legal OA text for abstract-missing uncertain works and inventory it."""
     source = out_dir / "repaired-uncertain.jsonl"
     if source.exists():
@@ -210,11 +210,14 @@ def repair_fulltext(run_dir: Path, out_dir: Path, *, workers: int = 6,
     else:
         papers = [paper for paper, _ in _read_role(run_dir / "uncertain.jsonl")]
     missing = [paper for paper in papers if not paper.abstract]
-    channels = fulltext.fetch_many(missing, workers=workers, progress=progress)
+    channels = {} if inventory_only else fulltext.fetch_many(
+        missing, workers=workers, progress=progress)
     rows = []
     repaired = 0
     for paper in papers:
-        text, channel = fulltext.fetch_with_source(paper)
+        text = fulltext.cached_text(paper)
+        quality = fulltext.cached_quality(paper) or {}
+        channel = quality.get("selected_source", "cache" if text else "none")
         evidence, evidence_type = ("", "unavailable")
         if not paper.abstract and text:
             evidence, evidence_type = _screening_excerpt(text)
@@ -229,12 +232,92 @@ def repair_fulltext(run_dir: Path, out_dir: Path, *, workers: int = 6,
         "attempted": len(missing), "screening_evidence_recovered": repaired,
         "still_without_evidence": sum(not r["paper"].get("abstract") and
                                       not r["screening_evidence"] for r in rows),
-        "channels": channels,
+        "channels": channels, "inventory_only": inventory_only,
     }, indent=2) + "\n")
     _receipt(out_dir, "repair_fulltext", [source if source.exists() else run_dir / "uncertain.jsonl"],
              [evidence_file, status_file], deterministic=False,
-             parameters={"workers": workers, "legal_open_access_only": True,
+             parameters={"workers": workers, "inventory_only": inventory_only,
+                         "legal_open_access_only": True,
                          "excerpt_algorithm": "abstract-section-else-leading-12000-v1"})
+
+
+def reassess_uncertain(topic_file: Path, run_dir: Path, out_dir: Path, *,
+                       model: str | None = None, progress=print) -> None:
+    """Re-screen only uncertain works whose evidence fingerprint improved."""
+    evidence_file = out_dir / "fulltext-repair.jsonl"
+    rows = [json.loads(line) for line in evidence_file.read_text().splitlines() if line]
+    improved, unresolved = [], []
+    for row in rows:
+        paper = Paper.from_dict(row["paper"])
+        evidence = row.get("screening_evidence") or ""
+        if not paper.abstract and evidence:
+            paper.abstract = "[FULL-TEXT SCREENING EVIDENCE; NOT ABSTRACT]\n" + evidence
+            improved.append(paper)
+        else:
+            unresolved.append(paper)
+    roles = scoper.scope_exhaustive(
+        topic_file.read_text(), improved, model=model,
+        cache_path=out_dir / "uncertain-reassessment-cache.jsonl", progress=progress)
+    # Records without new evidence remain uncertain without another LLM call.
+    old = {p.key(): d for p, d in _read_role(run_dir / "uncertain.jsonl")}
+    for paper in unresolved:
+        decision = old.get(paper.key()) or {
+            "role": "uncertain", "criterion": "evidence still unavailable",
+            "evidence": "", "reason": "no new evidence after repair",
+        }
+        roles["uncertain"].append((paper, decision))
+    outputs = []
+    for role, items in roles.items():
+        path = out_dir / f"reassessed-{role}.jsonl"
+        _write_jsonl(path, ({"paper": p.to_dict(), "decision": d} for p, d in items))
+        outputs.append(path)
+    status_file = out_dir / "uncertain-reassessment-status.json"
+    status_file.write_text(json.dumps({
+        "new_evidence": len(improved), "unchanged_without_llm_call": len(unresolved),
+        "roles": {role: len(items) for role, items in roles.items()},
+    }, indent=2) + "\n")
+    outputs.append(status_file)
+    _receipt(out_dir, "reassess_uncertain", [topic_file, evidence_file], outputs,
+             deterministic=False,
+             parameters={"model": model or __import__("prior.config", fromlist=["READER_MODEL"]).READER_MODEL,
+                         "backend": __import__("prior.llm", fromlist=["backend"]).backend(),
+                         "improved_evidence_only": True})
+
+
+def consolidate_screen(run_dir: Path, out_dir: Path) -> Path:
+    """Replace the old uncertain partition with its reassessed four-way roles."""
+    snapshot = out_dir / "screened-v2"
+    snapshot.mkdir(parents=True, exist_ok=True)
+    outputs = []
+    for role in ("eligible", "retrieval_only", "uncertain", "excluded"):
+        rows = []
+        if role != "uncertain":
+            rows.extend({"paper": p.to_dict(), "decision": d}
+                        for p, d in _read_role(run_dir / f"{role}.jsonl"))
+        reassessed = out_dir / f"reassessed-{role}.jsonl"
+        if reassessed.exists():
+            rows.extend(json.loads(line) for line in reassessed.read_text().splitlines() if line)
+        # Conservative work-level de-duplication; later record wins so the richer
+        # reassessment supersedes any accidental overlap.
+        by_key = {}
+        for row in rows:
+            by_key[Paper.from_dict(row["paper"]).key()] = row
+        path = snapshot / f"{role}.jsonl"
+        _write_jsonl(path, by_key.values())
+        outputs.append(path)
+    status_file = snapshot / "status.json"
+    status_file.write_text(json.dumps({
+        "stage": "screen_consolidated", "gold_visible": False,
+        "roles": {role: sum(1 for line in (snapshot / f"{role}.jsonl").read_text().splitlines()
+                           if line) for role in ("eligible", "retrieval_only", "uncertain", "excluded")},
+    }, indent=2) + "\n")
+    outputs.append(status_file)
+    _receipt(out_dir, "consolidate_screen",
+             [run_dir / f"{role}.jsonl" for role in ("eligible", "retrieval_only", "uncertain", "excluded")] +
+             [out_dir / f"reassessed-{role}.jsonl" for role in
+              ("eligible", "retrieval_only", "uncertain", "excluded")],
+             outputs, deterministic=True)
+    return snapshot
 
 
 def prepare_embedding(run_dir: Path, out_dir: Path) -> None:
@@ -324,7 +407,8 @@ def citation_queue(run_dir: Path, out_dir: Path) -> None:
 def parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest="command", required=True)
-    for name in ("repair", "repair-fulltext", "prepare-embedding", "citation-queue"):
+    for name in ("repair", "repair-fulltext", "reassess-uncertain", "consolidate-screen",
+                 "prepare-embedding", "citation-queue"):
         p = sub.add_parser(name)
         p.add_argument("--run-dir", required=True, type=Path)
         p.add_argument("--out-dir", required=True, type=Path)
@@ -333,6 +417,10 @@ def parser() -> argparse.ArgumentParser:
             p.add_argument("--probe-s2", action="store_true")
         if name == "repair-fulltext":
             p.add_argument("--workers", type=int, default=6)
+            p.add_argument("--inventory-only", action="store_true")
+        if name == "reassess-uncertain":
+            p.add_argument("--topic", required=True, type=Path)
+            p.add_argument("--model")
     return ap
 
 
@@ -341,7 +429,12 @@ if __name__ == "__main__":
     if args.command == "repair":
         repair(args.run_dir, args.out_dir, use_s2=args.use_s2, probe_s2=args.probe_s2)
     elif args.command == "repair-fulltext":
-        repair_fulltext(args.run_dir, args.out_dir, workers=args.workers)
+        repair_fulltext(args.run_dir, args.out_dir, workers=args.workers,
+                        inventory_only=args.inventory_only)
+    elif args.command == "reassess-uncertain":
+        reassess_uncertain(args.topic, args.run_dir, args.out_dir, model=args.model)
+    elif args.command == "consolidate-screen":
+        consolidate_screen(args.run_dir, args.out_dir)
     elif args.command == "prepare-embedding":
         prepare_embedding(args.run_dir, args.out_dir)
     else:

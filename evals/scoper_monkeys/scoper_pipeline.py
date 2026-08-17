@@ -10,8 +10,9 @@ import argparse
 import json
 from pathlib import Path
 
-from adaptive_expansion import (_receipt, citation_queue, prepare_embedding, repair,
-                                repair_fulltext)
+from adaptive_expansion import (_receipt, citation_queue, consolidate_screen,
+                                prepare_embedding, repair, repair_fulltext,
+                                reassess_uncertain)
 
 
 PIPELINE = [
@@ -19,12 +20,13 @@ PIPELINE = [
     {"name": "broad_screen", "kind": "agentic", "depends_on": ["deep_retrieval"], "implemented": True},
     {"name": "repair_metadata", "kind": "source", "depends_on": ["broad_screen"], "implemented": True},
     {"name": "repair_fulltext", "kind": "source", "depends_on": ["repair_metadata"], "implemented": True},
-    {"name": "reassess_uncertain", "kind": "agentic", "depends_on": ["repair_fulltext"], "implemented": False},
-    {"name": "prepare_embedding", "kind": "deterministic", "depends_on": ["broad_screen"], "implemented": True},
+    {"name": "reassess_uncertain", "kind": "agentic", "depends_on": ["repair_fulltext"], "implemented": True},
+    {"name": "consolidate_screen", "kind": "deterministic", "depends_on": ["reassess_uncertain"], "implemented": True},
+    {"name": "prepare_embedding", "kind": "deterministic", "depends_on": ["consolidate_screen"], "implemented": True},
     {"name": "select_embedding", "kind": "gpu_experiment", "depends_on": ["prepare_embedding"], "implemented": False},
     {"name": "induce_query_map", "kind": "agentic", "depends_on": ["select_embedding", "reassess_uncertain"], "implemented": False},
     {"name": "adaptive_search", "kind": "source", "depends_on": ["induce_query_map"], "implemented": False},
-    {"name": "citation_queue", "kind": "deterministic", "depends_on": ["broad_screen"], "implemented": True},
+    {"name": "citation_queue", "kind": "deterministic", "depends_on": ["consolidate_screen"], "implemented": True},
     {"name": "citation_expand", "kind": "source", "depends_on": ["citation_queue"], "implemented": False},
     {"name": "strict_synthesis_screen", "kind": "agentic", "depends_on": ["adaptive_search", "citation_expand"], "implemented": False},
     {"name": "boundary_audit", "kind": "mixed", "depends_on": ["strict_synthesis_screen"], "implemented": False},
@@ -81,15 +83,23 @@ def status(out_dir: Path) -> dict:
     return result
 
 
-def run_stage(name: str, run_dir: Path, out_dir: Path, *, workers: int = 6) -> None:
+def run_stage(name: str, run_dir: Path, out_dir: Path, *, workers: int = 6,
+              inventory_only: bool = False, topic: Path | None = None) -> None:
     if name == "repair_metadata":
         repair(run_dir, out_dir)
     elif name == "repair_fulltext":
-        repair_fulltext(run_dir, out_dir, workers=workers)
+        repair_fulltext(run_dir, out_dir, workers=workers,
+                        inventory_only=inventory_only)
     elif name == "prepare_embedding":
-        prepare_embedding(run_dir, out_dir)
+        prepare_embedding(out_dir / "screened-v2", out_dir)
+    elif name == "consolidate_screen":
+        consolidate_screen(run_dir, out_dir)
+    elif name == "reassess_uncertain":
+        if not topic:
+            raise SystemExit("--topic is required for reassess_uncertain")
+        reassess_uncertain(topic, run_dir, out_dir)
     elif name == "citation_queue":
-        citation_queue(run_dir, out_dir)
+        citation_queue(out_dir / "screened-v2", out_dir)
     else:
         raise SystemExit(f"stage {name!r} is not executable by this controller yet")
 
@@ -101,13 +111,16 @@ def main() -> None:
     ap.add_argument("--out-dir", required=True, type=Path)
     ap.add_argument("--stage")
     ap.add_argument("--workers", type=int, default=6)
+    ap.add_argument("--inventory-only", action="store_true")
+    ap.add_argument("--topic", type=Path)
     args = ap.parse_args()
     if args.command == "init":
         initialize(args.run_dir, args.out_dir)
     elif args.command == "run":
         if not args.stage:
             raise SystemExit("--stage is required for run")
-        run_stage(args.stage, args.run_dir, args.out_dir, workers=args.workers)
+        run_stage(args.stage, args.run_dir, args.out_dir, workers=args.workers,
+                  inventory_only=args.inventory_only, topic=args.topic)
     print(json.dumps(status(args.out_dir), indent=2))
 
 
