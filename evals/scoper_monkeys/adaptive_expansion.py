@@ -12,6 +12,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import time
 from pathlib import Path
 
@@ -19,7 +20,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "src"))
 
-from prior import scoper  # noqa: E402
+from prior import fulltext, scoper  # noqa: E402
 from prior.models import Paper  # noqa: E402
 from prior.sources import arxiv, openalex, semanticscholar  # noqa: E402
 
@@ -39,6 +40,22 @@ def _write_jsonl(path: Path, rows) -> None:
     with path.open("w") as handle:
         for row in rows:
             handle.write(json.dumps(row, ensure_ascii=False) + "\n")
+
+
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _receipt(out_dir: Path, stage: str, inputs: list[Path], outputs: list[Path],
+             *, deterministic: bool, parameters: dict | None = None) -> None:
+    """Write an auditable stage receipt after outputs have been closed."""
+    receipt = {
+        "stage": stage, "status": "complete", "deterministic": deterministic,
+        "parameters": parameters or {},
+        "inputs": [{"path": str(p), "sha256": _sha256(p)} for p in inputs if p.exists()],
+        "outputs": [{"path": str(p), "sha256": _sha256(p)} for p in outputs if p.exists()],
+    }
+    (out_dir / f"stage-{stage}.json").write_text(json.dumps(receipt, indent=2) + "\n")
 
 
 def _doi(paper: Paper) -> str:
@@ -160,6 +177,64 @@ def repair(run_dir: Path, out_dir: Path, *, use_s2: bool = False,
         "semantic_scholar": "available" if s2_ok else "circuit_open",
         "next": "reassess repaired-uncertain with scope_exhaustive",
     }, indent=2) + "\n")
+    _receipt(out_dir, "repair_metadata", [run_dir / "uncertain.jsonl"],
+             [ledger, out_dir / "repaired-uncertain.jsonl", out_dir / "repair-status.json"],
+             deterministic=False,
+             parameters={"sources": ["arxiv", "openalex"] + (["semanticscholar"] if s2_ok else []),
+                         "s2_circuit": "closed" if s2_ok else "open"})
+
+
+def _screening_excerpt(text: str, *, limit: int = 12000) -> tuple[str, str]:
+    """Deterministically select scope evidence from retrieved full text.
+
+    Prefer an explicit abstract section. Otherwise retain a labelled leading
+    excerpt; this is evidence repair, not a claim that the excerpt is an abstract.
+    """
+    normalized = text.replace("\r", "\n")
+    match = re.search(
+        r"(?is)(?:^|\n)\s*abstract\s*\n+(.*?)(?=\n\s*(?:1\.?\s+)?(?:introduction|keywords?)\b)",
+        normalized,
+    )
+    if match and len(match.group(1).strip()) >= 80:
+        return match.group(1).strip()[:limit], "fulltext_abstract_section"
+    return normalized.strip()[:limit], "fulltext_leading_excerpt"
+
+
+def repair_fulltext(run_dir: Path, out_dir: Path, *, workers: int = 6,
+                    progress=print) -> None:
+    """Retrieve legal OA text for abstract-missing uncertain works and inventory it."""
+    source = out_dir / "repaired-uncertain.jsonl"
+    if source.exists():
+        papers = [Paper.from_dict(json.loads(line)["paper"])
+                  for line in source.read_text().splitlines() if line]
+    else:
+        papers = [paper for paper, _ in _read_role(run_dir / "uncertain.jsonl")]
+    missing = [paper for paper in papers if not paper.abstract]
+    channels = fulltext.fetch_many(missing, workers=workers, progress=progress)
+    rows = []
+    repaired = 0
+    for paper in papers:
+        text, channel = fulltext.fetch_with_source(paper)
+        evidence, evidence_type = ("", "unavailable")
+        if not paper.abstract and text:
+            evidence, evidence_type = _screening_excerpt(text)
+            repaired += 1
+        rows.append({"paper": paper.to_dict(), "screening_evidence": evidence,
+                     "evidence_type": evidence_type, "channel": channel,
+                     "text_sha256": hashlib.sha256(text.encode()).hexdigest() if text else ""})
+    evidence_file = out_dir / "fulltext-repair.jsonl"
+    _write_jsonl(evidence_file, rows)
+    status_file = out_dir / "fulltext-repair-status.json"
+    status_file.write_text(json.dumps({
+        "attempted": len(missing), "screening_evidence_recovered": repaired,
+        "still_without_evidence": sum(not r["paper"].get("abstract") and
+                                      not r["screening_evidence"] for r in rows),
+        "channels": channels,
+    }, indent=2) + "\n")
+    _receipt(out_dir, "repair_fulltext", [source if source.exists() else run_dir / "uncertain.jsonl"],
+             [evidence_file, status_file], deterministic=False,
+             parameters={"workers": workers, "legal_open_access_only": True,
+                         "excerpt_algorithm": "abstract-section-else-leading-12000-v1"})
 
 
 def prepare_embedding(run_dir: Path, out_dir: Path) -> None:
@@ -202,6 +277,9 @@ def prepare_embedding(run_dir: Path, out_dir: Path) -> None:
         "corpus_sha256": hashlib.sha256((out_dir / "semantic-corpus.jsonl").read_bytes()).hexdigest(),
     }
     (out_dir / "embedding-experiment.json").write_text(json.dumps(protocol, indent=2) + "\n")
+    _receipt(out_dir, "prepare_embedding", [run_dir / f"{r}.jsonl" for r in USEFUL_ROLES],
+             [out_dir / "semantic-corpus.jsonl", out_dir / "embedding-experiment.json"],
+             deterministic=True)
 
 
 def citation_queue(run_dir: Path, out_dir: Path) -> None:
@@ -238,18 +316,23 @@ def citation_queue(run_dir: Path, out_dir: Path) -> None:
         "policy": "all useful records queued; priority controls order, never eligibility",
         "terminal_states": ["exhausted", "pending_retry", "source_unavailable"],
     }, indent=2) + "\n")
+    _receipt(out_dir, "citation_queue", [run_dir / f"{r}.jsonl" for r in USEFUL_ROLES],
+             [out_dir / "citation-queue.jsonl", out_dir / "citation-queue-status.json"],
+             deterministic=True)
 
 
 def parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest="command", required=True)
-    for name in ("repair", "prepare-embedding", "citation-queue"):
+    for name in ("repair", "repair-fulltext", "prepare-embedding", "citation-queue"):
         p = sub.add_parser(name)
         p.add_argument("--run-dir", required=True, type=Path)
         p.add_argument("--out-dir", required=True, type=Path)
         if name == "repair":
             p.add_argument("--use-s2", action="store_true")
             p.add_argument("--probe-s2", action="store_true")
+        if name == "repair-fulltext":
+            p.add_argument("--workers", type=int, default=6)
     return ap
 
 
@@ -257,6 +340,8 @@ if __name__ == "__main__":
     args = parser().parse_args()
     if args.command == "repair":
         repair(args.run_dir, args.out_dir, use_s2=args.use_s2, probe_s2=args.probe_s2)
+    elif args.command == "repair-fulltext":
+        repair_fulltext(args.run_dir, args.out_dir, workers=args.workers)
     elif args.command == "prepare-embedding":
         prepare_embedding(args.run_dir, args.out_dir)
     else:
