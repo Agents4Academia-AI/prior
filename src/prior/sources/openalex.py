@@ -180,6 +180,26 @@ def cited_by(openalex_id: str, *, max_results: int = 50) -> list[Paper]:
     return [_to_paper(w) for w in r.json().get("results", [])][:max_results]
 
 
+def cited_by_page(openalex_id: str, *, cursor: str = "*", per_page: int = 200
+                  ) -> tuple[list[Paper], str | None]:
+    """One cursor-paginated forward-citation page for resumable traversal.
+
+    Unlike :func:`cited_by`, this does not turn source failures into empty
+    results; callers need the exception to preserve ``pending_retry`` state.
+    """
+    wid = openalex_id.split(":")[-1]
+    params = _params() | {
+        "filter": f"cites:{wid}", "per_page": min(per_page, 200),
+        "cursor": cursor, "sort": "publication_date:desc", "select": _SELECT,
+    }
+    r = _get(API, params)
+    r.raise_for_status()
+    body = r.json()
+    papers = [_to_paper(work) for work in body.get("results", [])]
+    next_cursor = (body.get("meta") or {}).get("next_cursor")
+    return papers, next_cursor
+
+
 def fetch_doi(doi: str) -> Paper | None:
     """Fetch a single work by DOI (exact) — the resolution path for journal
     papers in a reference export that carry no arXiv id."""

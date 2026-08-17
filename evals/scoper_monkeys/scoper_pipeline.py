@@ -13,6 +13,7 @@ from pathlib import Path
 from adaptive_expansion import (_receipt, citation_queue, consolidate_screen,
                                 prepare_embedding, repair, repair_fulltext,
                                 reassess_uncertain)
+from citation_expansion import expand_backward, expand_forward_pass
 
 
 PIPELINE = [
@@ -27,8 +28,9 @@ PIPELINE = [
     {"name": "induce_query_map", "kind": "agentic", "depends_on": ["select_embedding", "reassess_uncertain"], "implemented": False},
     {"name": "adaptive_search", "kind": "source", "depends_on": ["induce_query_map"], "implemented": False},
     {"name": "citation_queue", "kind": "deterministic", "depends_on": ["consolidate_screen"], "implemented": True},
-    {"name": "citation_expand", "kind": "source", "depends_on": ["citation_queue"], "implemented": False},
-    {"name": "strict_synthesis_screen", "kind": "agentic", "depends_on": ["adaptive_search", "citation_expand"], "implemented": False},
+    {"name": "citation_expand_backward", "kind": "source", "depends_on": ["citation_queue"], "implemented": True},
+    {"name": "citation_expand_forward", "kind": "source", "depends_on": ["citation_queue"], "implemented": True},
+    {"name": "strict_synthesis_screen", "kind": "agentic", "depends_on": ["adaptive_search", "citation_expand_backward", "citation_expand_forward"], "implemented": False},
     {"name": "boundary_audit", "kind": "mixed", "depends_on": ["strict_synthesis_screen"], "implemented": False},
     {"name": "recovery_and_stopping", "kind": "offline_evaluation", "depends_on": ["boundary_audit"], "implemented": False},
 ]
@@ -84,7 +86,8 @@ def status(out_dir: Path) -> dict:
 
 
 def run_stage(name: str, run_dir: Path, out_dir: Path, *, workers: int = 6,
-              inventory_only: bool = False, topic: Path | None = None) -> None:
+              inventory_only: bool = False, topic: Path | None = None,
+              max_tasks: int | None = None) -> None:
     if name == "repair_metadata":
         repair(run_dir, out_dir)
     elif name == "repair_fulltext":
@@ -100,6 +103,11 @@ def run_stage(name: str, run_dir: Path, out_dir: Path, *, workers: int = 6,
         reassess_uncertain(topic, run_dir, out_dir)
     elif name == "citation_queue":
         citation_queue(out_dir / "screened-v2", out_dir)
+    elif name == "citation_expand_backward":
+        expand_backward(out_dir / "citation-queue.jsonl", out_dir)
+    elif name == "citation_expand_forward":
+        expand_forward_pass(out_dir / "citation-queue.jsonl", out_dir,
+                            max_tasks=max_tasks, workers=workers)
     else:
         raise SystemExit(f"stage {name!r} is not executable by this controller yet")
 
@@ -113,6 +121,7 @@ def main() -> None:
     ap.add_argument("--workers", type=int, default=6)
     ap.add_argument("--inventory-only", action="store_true")
     ap.add_argument("--topic", type=Path)
+    ap.add_argument("--max-tasks", type=int)
     args = ap.parse_args()
     if args.command == "init":
         initialize(args.run_dir, args.out_dir)
@@ -120,7 +129,8 @@ def main() -> None:
         if not args.stage:
             raise SystemExit("--stage is required for run")
         run_stage(args.stage, args.run_dir, args.out_dir, workers=args.workers,
-                  inventory_only=args.inventory_only, topic=args.topic)
+                  inventory_only=args.inventory_only, topic=args.topic,
+                  max_tasks=args.max_tasks)
     print(json.dumps(status(args.out_dir), indent=2))
 
 
