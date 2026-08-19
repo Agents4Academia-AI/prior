@@ -1,0 +1,18 @@
+AI / LLM agents and agentic systems whose core contribution performs a scientific
+research task, or rigorously evaluates the reliability or safety of such systems.
+
+IN SCOPE: autonomous AI scientists and end-to-end research agents; agent methods
+for experimentation; research-idea or hypothesis generation; automated scientific
+reviewing, citation or claim verification, experimental reproduction; structured
+scientific claim or contribution extraction used to assess or organise research
+findings; and direct evaluations of agentic research systems.
+
+OUT OF SCOPE: education and student assessment; generic LLM capability or agent
+orchestration not tied to a research task; systematic-review search/screening
+automation (a separate corpus); domain-science papers that merely use an LLM;
+general software or databases; and reviews, surveys, perspectives, ethics or
+agenda pieces without a concrete primary system or empirical evaluation.
+
+BOUNDARY RULE: for autonomous laboratory or domain-science work, include only
+when the agent method or evaluation is itself a core contribution. Do not include
+a paper solely because an automated system was used to produce a scientific result.
