@@ -19,6 +19,7 @@ from __future__ import annotations
 import json
 import hashlib
 import re
+import time
 from pathlib import Path
 
 from . import config, dates, llm, repair
@@ -475,6 +476,7 @@ def _ask_scope(topic_def: str, items: list[Paper], model: str | None) -> dict[in
 def scope(topic_def: str, candidates: list[Paper], *, model: str | None = None,
           batch: int = 12, cache_path: str | Path | None = None,
           use_prefilter: bool = False,
+          request_delay: float = 0.0,
           progress=print) -> tuple[list[tuple[Paper, str]], list[tuple[Paper, str]]]:
     """Return (kept, dropped), each a list of (paper, reason).
 
@@ -548,6 +550,8 @@ def scope(topic_def: str, candidates: list[Paper], *, model: str | None = None,
                     fh.flush()
             progress(f"  scored {min(i + batch, len(pending))}/{len(pending)} "
                      f"— kept {len(kept)}")
+            if request_delay > 0 and i + batch < len(pending):
+                time.sleep(request_delay)
     finally:
         if fh:
             fh.close()

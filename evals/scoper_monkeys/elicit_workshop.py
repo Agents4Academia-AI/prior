@@ -141,7 +141,7 @@ def score(run_file: Path, gold_file: Path, out: Path) -> dict:
             "matched_title": row["paper"]["title"] if row else "",
         })
     recall_at = {}
-    for cutoff in (10, 20, 50, 100, 300):
+    for cutoff in (10, 20, 50, 100, 300, 500):
         found = sum(any(match_gold(target, row["paper"]) and row["rank"] <= cutoff
                         for row in results) for target in gold)
         recall_at[str(cutoff)] = {"found": found, "recall": found / max(1, len(gold))}

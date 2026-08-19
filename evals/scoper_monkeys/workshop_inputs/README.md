@@ -10,6 +10,8 @@ Frozen 2026-08-19 for the AI for Meta-Science workshop RQ1 evaluation.
 - `scoper-original-input-v1.txt`: byte-for-byte copy of the broad natural-language
   scope recorded in the historical Scoper replay manifest. Matched-input product
   baselines send the complete file as one request, not one query per line.
+- `historical-strict-core-scope-v1.txt`: byte-for-byte copy of the strict criteria
+  that produced the 255-paper historical Scoper comparison corpus.
 
 The recovery target is
 `artifacts/scoper-core-policy-replay-2026-08-15/gold-current-core.jsonl`
