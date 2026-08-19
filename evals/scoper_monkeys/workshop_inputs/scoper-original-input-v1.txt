@@ -1,0 +1,23 @@
+AI / LLM AGENTS and agentic SYSTEMS for the SCIENTIFIC PROCESS — tools
+that help researchers do research, or that autonomously perform research tasks,
+AND the evaluation of such systems. Meta-research: the tools, evaluation, and
+workflows by which science is done. Pillars: Trust & Evaluation, Efficiency,
+Translation, Acceleration.
+
+IN SCOPE (paper proposes / builds / rigorously evaluates such a system for a
+research task):
+- literature management / review / synthesis; research-idea or hypothesis
+  generation; novelty / contribution assessment
+- autonomous experimentation / "AI scientist" (autonomous chemistry/biology/ML)
+- scientific writing / paper drafting; automated or AI-assisted PEER REVIEW
+- CITATION verification; CLAIM verification; result/empirical REPRODUCTION
+- structured scientific claim / contribution / knowledge-graph extraction
+- personal knowledge management / research assistants for researchers
+- grant / funding discovery; research coordination / matchmaking
+- benchmarks / evaluations of LLM/agent RELIABILITY on agentic research tasks
+
+OUT OF SCOPE: ChatGPT/LLMs in education / classroom / student-assessment /
+academic-integrity; general LLM capability / finetuning / benchmark papers not
+tied to a research task; domain-science papers that merely USE an LLM/tool;
+scientific software / libraries / databases (NumPy, PRISMA, STRING); broad
+opinion / ethics / agenda pieces with no concrete system.

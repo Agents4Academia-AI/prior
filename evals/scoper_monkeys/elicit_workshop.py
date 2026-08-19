@@ -65,8 +65,10 @@ def normalize(paper: dict) -> dict:
 
 
 def run(queries_file: Path, out: Path, *, env_file: Path | None,
-        max_results: int, arm: str) -> None:
-    queries = [line.strip() for line in queries_file.read_text().splitlines() if line.strip()]
+        max_results: int, arm: str, whole_file_query: bool = False) -> None:
+    raw_query_text = queries_file.read_text().strip()
+    queries = ([raw_query_text] if whole_file_query else
+               [line.strip() for line in raw_query_text.splitlines() if line.strip()])
     if arm == "plain":
         queries = queries[:1]
     key = load_key(env_file)
@@ -79,6 +81,7 @@ def run(queries_file: Path, out: Path, *, env_file: Path | None,
             "queries_file": str(queries_file),
             "queries_sha256": hashlib.sha256(queries_file.read_bytes()).hexdigest(),
             "queries": queries, "max_results_per_query": max_results,
+            "whole_file_query": whole_file_query,
             "auth": "bearer credential present; value never recorded",
         }) + "\n")
         for query_index, query in enumerate(queries, 1):
@@ -296,6 +299,8 @@ def parser() -> argparse.ArgumentParser:
     run_ap.add_argument("--env-file", type=Path)
     run_ap.add_argument("--arm", choices=("plain", "multiquery"), required=True)
     run_ap.add_argument("--max-results", type=int, default=100)
+    run_ap.add_argument("--whole-file-query", action="store_true",
+                        help="Send the complete file as one natural-language query")
     score_ap = sub.add_parser("score")
     score_ap.add_argument("--run", required=True, type=Path)
     score_ap.add_argument("--gold", required=True, type=Path)
@@ -316,7 +321,8 @@ if __name__ == "__main__":
     args = parser().parse_args()
     if args.command == "run":
         run(args.queries, args.out, env_file=args.env_file,
-            max_results=args.max_results, arm=args.arm)
+            max_results=args.max_results, arm=args.arm,
+            whole_file_query=args.whole_file_query)
     elif args.command == "score":
         print(json.dumps(score(args.run, args.gold, args.out), indent=2))
     elif args.command == "resolve-external":

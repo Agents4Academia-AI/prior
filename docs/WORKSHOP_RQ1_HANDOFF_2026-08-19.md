@@ -27,6 +27,23 @@ Artifacts live under:
 For multi-query Elicit, reference-set recall is 7/152 at rank 10 per query,
 15/152 at 20, 36/152 at 50, and 51/152 at 100.
 
+### Corrected matched-input baseline
+
+The original Scoper user input was the full natural-language protocol recorded
+in `broad-scope.txt`, not the short Elicit pilot query. Its byte-identical frozen
+copy is `evals/scoper_monkeys/workshop_inputs/scoper-original-input-v1.txt`.
+
+Elicit was rerun with that complete protocol as one request:
+
+| arm | unique candidates | Prior-v0.2 reference recovered | recall |
+|---|---:|---:|---:|
+| Elicit, exact Scoper input | 300 | 40/152 | 26.32% |
+
+The short-query Elicit and Undermind runs are pilots and must not be used as the
+headline matched-input comparison. A matched Undermind deep search was launched
+at 2026-08-19 15:12 under `/Scoper original input matched run`; its results were
+still in progress when this note was updated.
+
 Inputs are frozen in `evals/scoper_monkeys/workshop_inputs/`. The ten-query file
 reuses the July experiment's queries rather than tuning against known misses.
 
