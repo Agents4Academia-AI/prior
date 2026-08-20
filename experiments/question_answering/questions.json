@@ -1,0 +1,61 @@
+{
+  "note": "8 questions: 6 structure-seeking (q*) where the atlas should have a real edge, 2 controls (c*) it should lose. Predictions registered in PLAN.md before the run. 'graph_structure' records the live v12 structure that answers each question (verified, not aspirational) and is NEVER shown to any arm.",
+  "questions": [
+    {
+      "question_id": "q01",
+      "family": "builds-on",
+      "question": "I'm writing a related-work section on The AI Scientist (Lu et al.). Which later papers actually extend its method, as opposed to just citing it in passing?",
+      "expected_winner": "graph",
+      "graph_structure": "7 builds_on edges into it; 59 citation links whose intents separate uses_extends from background (53 of them are background)."
+    },
+    {
+      "question_id": "q02",
+      "family": "disagreement",
+      "question": "Is the field actually agreed that LLMs can come up with genuinely novel research ideas, or do the studies disagree?",
+      "expected_winner": "graph",
+      "graph_structure": "contradicts cluster: 'Can LLMs Generate Novel Research Ideas?' (Si et al.) <-> MLRC-Bench <-> 'Can large language models generate novel scientific ideas'."
+    },
+    {
+      "question_id": "q03",
+      "family": "disagreement",
+      "question": "My PI thinks fully autonomous AI scientists already produce publishable research. Is that contested in the literature?",
+      "expected_winner": "graph",
+      "graph_structure": "'Can AI Conduct Autonomous Scientific Research?' is a contradiction hub: 7 contradicts + 9 supports edges, against Kosmos, AI-Researcher, OpenLens AI, and 'The More You Automate, the Less You See'."
+    },
+    {
+      "question_id": "q04",
+      "family": "uses-findings",
+      "question": "What research is actually being built on the findings from 'Hypothesis Generation with Large Language Models' (the HypoGeniC paper)? I want to know what people did with it, not just who cited it.",
+      "expected_winner": "graph",
+      "graph_structure": "Only 2 papers genuinely take it up - 'Literature Meets Data' (uses_extends + 3 builds_on) and 'HypoBench' (uses_extends + 4 builds_on). 'Improving Scientific Hypothesis Generation with Knowledge Grounding' compares_contrasts. TEN other papers cite it as pure background. The web sees 12 undifferentiated citations."
+    },
+    {
+      "question_id": "q05",
+      "family": "evidence-base",
+      "question": "I want to use an LLM to give feedback on my students' paper drafts. How well does that actually work in practice, and has anyone found that it doesn't?",
+      "expected_winner": "graph",
+      "graph_structure": "supports + contradicts around 'Can Large Language Models Provide Useful Feedback on Research Papers?' (positive headline) - 4 contradicts edges to 'LLMs Assist NLP Researchers: Critique Paper Writing' and 'Are We There Yet? Revealing the Risks of Utilizing LLMs in Scholarly Peer Review', plus support/priority labels on the citation layer."
+    },
+    {
+      "question_id": "q06",
+      "family": "lineage",
+      "question": "I'm considering using AIDE as the coding backbone for a research agent. Where did it come from, and who has already built on top of it?",
+      "expected_winner": "graph",
+      "graph_structure": "8 builds_on edges into AIDE (incl. The AI Scientist-v2 via uses_extends, 2 sites); multi-hop traversal in both directions."
+    },
+    {
+      "question_id": "c01",
+      "family": "control-out-of-scope",
+      "question": "What recent work builds on AlphaFold for de-novo protein binder design?",
+      "expected_winner": "web",
+      "graph_structure": "NOTHING. Structural biology is entirely outside the 152-paper corpus (verified: no paper matching 'AlphaFold' or 'protein'). Tests coverage honesty - does the graph arm say so, or invent?"
+    },
+    {
+      "question_id": "c02",
+      "family": "control-full-text",
+      "question": "What score does the best agent get on PaperBench, on which subset, and how does it compare to the human PhD baseline?",
+      "expected_winner": "web",
+      "graph_structure": "PaperBench IS in the corpus (4 contributions + abstract) but the bundle holds no results tables. Tests depth honesty - the graph arm should identify the paper and decline on the numbers."
+    }
+  ]
+}

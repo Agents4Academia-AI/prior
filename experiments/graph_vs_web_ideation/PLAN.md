@@ -17,18 +17,146 @@ web** (a researcher with a browser)? Fresh build — understands but does not re
 Both arms get the **same lightweight topic seed** each round (keeps them on the
 corpus's subject and lets us pair them), a **tool environment to explore**, the
 **same task** ("propose one novel, concrete research direction: the gap, the study,
-the expected result"), and the **same output schema**. Only the environment differs:
+the expected result"), the **same blinding contract**, and the **same output
+schema**. Only the environment differs:
 
 | | **GRAPH arm** | **WEB arm** |
 |---|---|---|
-| environment | the full v12 atlas via `graph_tools.py` | the open web via `WebSearch` / `WebFetch` |
-| tools | `overview, search_contributions, get_contribution, get_paper, get_edges, get_neighbors, citations_between` | Agent SDK built-ins |
-| budget | ≤ ~12 tool calls, `max_turns` capped | ≤ ~12 searches, `max_turns` capped |
+| environment | the full v12 atlas via `graph_tools.py` (local JSON, no network) | the open web via `WebSearch` / `WebFetch` |
+| tools | `overview, search_contributions, get_contribution, get_paper, get_edges, get_neighbors, get_citations, citations_between` | Agent SDK built-ins |
+| model | `claude-sonnet-5` | `claude-sonnet-5` |
+| caps | `max_turns=16`, `max_budget_usd=0.75` — **not binding**, both arms self-terminate | same |
 
 The graph arm *discovers* the typed relations, edge `reason` justifications and
-citation intents by exploring — nothing is pre-chewed. That's the fair parallel to
-the web arm sifting search results, and it tests Prior as a product, not my
-retrieval heuristic.
+citation intents by exploring — nothing is pre-chewed and no edge is pre-selected
+for it. That's the fair parallel to the web arm sifting search results, and it
+tests Prior as a product, not my retrieval heuristic.
+
+### 1a. What the graph arm can actually reach
+The atlas is **two coupled layers over the same 152 papers**. Everything below is
+in-scope for the agent; nothing is withheld.
+
+**Layer 1 — contributions + semantic relations** (canonical enriched v12)
+
+| | count | notes |
+|---|---|---|
+| papers | 152 | title, year, authors, venue, url, doi, abstract |
+| contributions | 581 | atomic claim / method / finding + `kind` + grounding quote |
+| edges (all) | 989 | each with `relation`, `direction`, `reason`, `type_confidence` |
+| — `related` | 639 | untyped; **hidden by default** in `get_edges` (`include_related=True` to see) |
+| — `supports` | 203 | |
+| — `builds_on` | 109 | |
+| — `contradicts` | 27 | |
+| — `refines` | 10 | |
+| contributions with ≥1 edge | 495 / 581 | |
+| contributions with ≥1 **typed** edge | 299 / 581 | this is the traversable core |
+
+**Layer 2 — citations** (my 809 sites + Klara's 294; disjoint at pair level)
+
+| | count | notes |
+|---|---|---|
+| citation pairs | 643 | spanning 124 / 152 papers |
+| citation sites | 1101 | each with intent, confidence, justification, claim passage |
+| intent `background` | 595 pairs | |
+| intent `compares_contrasts` | 96 pairs | |
+| intent `uses_extends` | 55 pairs | |
+| support / priority | on the 809 subset | `supports`/`partial`/`inconclusive`/`does_not`; `obligatory`/`helpful` |
+
+**How the layers join:** the semantic edges were *derived from* these citations, so
+a typed edge between two contributions can carry the citation link between their
+papers — true for **140 / 349** typed edges. `get_edges` inlines that link
+automatically, which is the bridge from "these two claims are related" to "and here
+is why one paper actually cited the other."
+
+### 1b. The tool surface (what each call returns)
+| tool | argument | returns |
+|---|---|---|
+| `overview` | — | layer description, all counts, relation-type counts, citation-intent counts, 10 most-connected contributions, **2 example edges of each typed relation** (deliberately balanced — §7c) |
+| `search_contributions` | `query` | top-8 keyword matches: contribution id, paper, kind, full statement, **typed-relation breakdown**, **paper citation count** |
+| `get_contribution` | `contribution_id` | statement, kind, grounding quote, paper, relation breakdown, citation count, + a hint to traverse |
+| `get_paper` | `paper_id` | title, year, authors, venue, url, doi, abstract, all its contributions |
+| `get_edges` | `contribution_id` | **the heart of it** — every typed edge: neighbour statement, relation, direction, the LLM `reason`, `type_confidence`, and the inlined citation link between the papers. Sorted contradicts → refines → builds_on → supports |
+| `get_neighbors` | `contribution_id` | cheap adjacency list (id, relation, title, 120-char statement) |
+| `get_citations` | `paper_id` | walks the **citation layer**: what this paper cites and what cites it, each with intents, support, priority, #sites |
+| `citations_between` | `paper_id_a/b` | full site-level detail: every citation site's justification + claim passage |
+
+No full paper text exists in the bundle — the grounded contributions and quotes
+*are* the body-level content. The web arm can fetch whole papers; that asymmetry is
+real, and is reported rather than engineered away.
+
+### 1c. The prompts (verbatim, from `arms.py`)
+**Shared task** — identical for both arms, `{topic}` is the seed:
+```
+You are a research strategist. Explore the topic below using the tools available to
+you, then propose ONE genuinely novel, concrete research direction within it. Explore
+efficiently. When ready, call `submit_idea` EXACTLY ONCE with: a short title; the
+specific gap; a concrete proposed study; the expected result; and one line of
+motivation (why it matters / what prior work grounds it).
+
+STAY ON TOPIC: the proposal MUST sit squarely within the stated TOPIC. If your
+exploration pulls you toward a neighbouring subject, use what you learned but bring it
+back to answer THIS topic - do not submit an idea that really belongs to an adjacent
+area.
+
+[blinding contract]
+Write the idea as a SELF-CONTAINED research proposal a peer could read with no idea how
+you produced it. Cite specific prior work by paper title or author (e.g.
+'CycleResearcher (Weng et al.)'), never by an internal ID. Do NOT mention your tools,
+your search or exploration process, 'the graph', 'the corpus', a database, 'web search',
+node/edge IDs, or how you arrived at the idea. Judge and state novelty against the
+BROADER scientific literature, not against any single source you consulted. Do not
+invent citations or findings.
+
+TOPIC: {topic}
+```
+
+**GRAPH system prompt** — the only arm-specific instruction:
+```
+You have a structured research atlas to explore, and it rewards traversal over reading
+entries in isolation. Two coupled layers:
+- CONTRIBUTIONS - atomic claims / methods / findings from ~150 papers.
+- RELATIONS - how they connect: typed semantic edges (builds_on, refines, supports,
+contradicts - all four matter equally), each with a stated REASON, plus the CITATIONS
+between papers, each tagged with an intent (background / uses-and-extends /
+compares-and-contrasts) and a justification for why one paper cited another. The
+semantic edges were derived from those citations.
+Explore broadly and let the structure you actually find shape the idea - do NOT fixate
+on one kind of relation or one striking edge, and do not force every idea into the same
+mould. Anchor your exploration on the given TOPIC: `search_contributions` for the topic
+to find where you are, read a few contributions, then follow their `get_edges` /
+`get_neighbors` (relations + reasons) and `get_citations` / `citations_between` (why
+papers cite each other) to understand how THAT area is structured - what builds on what,
+what is well-supported, what is refined or disputed, what is still open. Use `overview`
+only for orientation. Build the idea from that topic-local structure. When you write the
+proposal, present it as ordinary research grounded in the underlying papers (cite them
+by name) - reveal nothing about this atlas.
+```
+
+**WEB system prompt:**
+```
+You are a researcher with a web browser: use WebSearch/WebFetch and your own knowledge
+to find and ground a non-obvious idea. When you write the proposal, cite the papers by
+name and reveal nothing about your search process.
+```
+
+### 1d. What the graph arm actually used (measured over 24 seeds)
+| tool | calls | runs using it |
+|---|---|---|
+| `search_contributions` | 124 | 24/24 |
+| `get_edges` | **90** | **24/24** |
+| `get_paper` | 49 | 19/24 |
+| `get_contribution` | 22 | 9/24 |
+| `overview` | 15 | 15/24 |
+| `get_citations` | 13 | 8/24 |
+| `get_neighbors` | 6 | 6/24 |
+| `citations_between` | 5 | 4/24 |
+
+Graph arm: mean **13.5** exploration calls, **$0.447**, **92s** per idea.
+Web arm: mean **4.6** calls (105 `WebSearch`, 5 `WebFetch`), **$0.406**, **104s**.
+The graph arm explores ~3x more but at **comparable cost and slightly less
+wall-clock** — so the efficiency claim is *comparable spend, better-grounded ideas*,
+not "cheaper". Known gap: we log tool *names* only, not arguments, so we cannot yet
+say which contributions/edges each run touched (see §8).
 
 ## 2. Inputs (what feeds the graph, and from where)
 All already on this branch (see GRAPH_STATE doc). `graph_tools.py` reads exactly:
@@ -86,8 +214,13 @@ The generation and judging scripts (`gen.py`, `judge.py`) will be built so that:
 4. ✅ `gen.py` — resumable/killable driver (§5); `--dry-run` verified. *(live run = subscription)*
    *(v1: `get_citations` added, structure surfaced in tool results, `GRAPH_SYS` steers to traverse — §7b.)*
 5. ✅ `convergence.py` — lexical TF-IDF cosine per seed pair, report-only (§7b). *(no LLM; a floor — judge is authority)*
-6. ⬜ `judge.py` — blind, order-swapped, **1-10 per idea** (novelty + feasibility) + same-idea flag → `out/judgements.jsonl`. *(subscription)*
-7. ⬜ `aggregate.py` → `RESULTS.md` (winrate from 1-10 scores + efficiency + convergence). *(no LLM)*
+6. ✅ `judge.py` — blind, order-swapped, **1-10 per idea** (novelty + feasibility) +
+   same-idea flag → `out/judgements.jsonl`; resumable on `(seed_id, order)`, rows lead
+   with the un-blinded scores, judge cost/tokens kept. `--dry-run` verified.
+   *(live run = subscription, my terminal)*
+7. ⬜ `aggregate.py` → `RESULTS.md` — **paired** per-seed deltas + sign test on the 1-10
+   scores, winrate from the forced comparison (margin-weighted), efficiency
+   (gen + judge cost / wall-clock), convergence. *(no LLM)*
 
 **Next action is yours (first subscription spend):** in your own terminal, run a
 1-seed live pilot — `cd experiments/graph_vs_web_ideation && python gen.py --limit 1`
@@ -171,8 +304,32 @@ Fixes (prompt + tool, zero-cost; graph seeds re-run as v3):
   the stated topic; if exploration drifts, bring it back to THIS topic.
 - Web arm unchanged → web rows kept; only the 4 graph seeds regenerate (pilot_v2 archived).
 
+## 7d. Judge pilot v1 (2026-08-20, 3 seeds x 2 orders) -> decisions
+Six judgements, ~$0.15 each. Two findings:
+- **Scores compress to 6-8** (all 24 scores in 5-8). Not a judge failure - every idea
+  is a competent, well-grounded proposal, so 1-4 ("incoherent"/"already standard") and
+  9-10 ("strikingly original AND important") correctly never fire. But integer scores
+  with a typical 1-point delta tie too often. Fixes: (a) **analyse PAIRED** - the
+  quantity is the within-seed graph-web difference by the same judge, not the absolute
+  level (aggregate.py); (b) **forced comparison added to the same call** (free, output
+  tokens only): `more_novel` / `sounder` (A/B/neither) + `novelty_margin` /
+  `feasibility_margin` (decisive/clear/slight/none), which separates pairs whose 1-10
+  scores tie. Rubric anchors deliberately NOT loosened - that shifts the mean without
+  adding discrimination and breaks comparability.
+- **Position bias is negligible** - swapping A/B moved a score by at most 1 point and
+  flipped zero winners. So judging drops from 2x to **1x per seed, `--orders alt`**:
+  alternating which arm is shown as A, assigned by seed index in the full pair list
+  (stable under --limit/--seeds), giving exactly 12 gw / 12 wg. Halves judging cost.
+  The 6 two-order rows are archived as `out/judge_v1_bothorders.jsonl` (the evidence);
+  s01-s03 re-run under the new schema so all 24 seeds carry the comparative fields.
+- Signal is already visible: s03 feasibility graph 8 vs web 5 in BOTH orders.
+
 ## 8. Open questions
 - ✅ `opus-5` available on my subscription (judge). Generator `sonnet-5`.
 - ✅ Web arm: web **+ general knowledge** (realistic strong baseline).
 - ✅ Seeds: **broad topic labels** (26, in `seeds.json`), same seed to both arms.
 - Exploration budget (≤12 tool calls) — tune on the pilot.
+- **Log tool ARGUMENTS, not just names** (§1d): without them we cannot report
+  graph coverage (how many of the 581 contributions / 349 typed edges the runs
+  actually touched, or whether they cluster on the same hubs). Cheap to add to
+  `arms.py`, but changes nothing already generated — do it before any v2 run.
