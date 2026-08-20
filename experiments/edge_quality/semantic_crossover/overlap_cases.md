@@ -411,7 +411,7 @@ rather than sub-tasks, with evidence preserved un-
 der structural revision.
 
 **Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
-**Notes:** … complementary: Both are correct, but again the citation being uses_extends doesnt mean the semantic edge should be builds_on. it is just used as a benchmark in one part of the paper.
+**Notes:** … semantic-wrong : The citation is evidence for a builds on relation.
 
 ---
 ### Case 3

@@ -1,0 +1,2213 @@
+# Citation-intent audit queue — reconciled worklist
+
+*Source: Klara's `out/full_intent_graph_audit_pair_queue.json` (87 pair-reasons, 85 unique contribution pairs), built against the **enriched v12** canonical graph. That graph relabels the 989 legacy pairs using citation + full-text evidence, so its relation types can differ from the citation-blind shipped bundle we annotated in `overlap_cases.md`.*
+
+**Annotation — set each `Verdict` to one of:** `complementary` · `semantic-wrong` · `citation-wrong` · `rollup-artifact` (definitions in `overlap_cases.md`). Then a one-line `Notes`. Queue membership is an *audit pointer*, not a claim the edge is wrong.
+
+> **Provenance of the graph relation:** every relation below is the enriched-v12 label (citation evidence already folded in). Where it changed vs our earlier blind annotation, the Part-1 flag records both, so a carried verdict is never mistaken for a verdict of the new edge.
+
+---
+
+## Part 1 — already annotated (11 pairs): carried over, re-check the flagged ones
+
+*Your prior verdict was made against the **blind** graph. For each pair: your note, then whether the enriched relation moved. ⚠ = relation changed — your verdict may not transfer.*
+
+### P1-1  `arxiv:2504.01848v3::k03` | `arxiv:2606.11447::k01`
+
+✓ relation unchanged (`contradicts`) — verdict carries.
+
+- **Your annotation:** Complementary, semantic is correctly finds the friction between the contributions, citation information agrees
+
+- **Citing** → **AI Coding Agents Can Reproduce Social Science Findings** — Alizadeh et al. (2026) · `arxiv:2606.11447` · [S2](https://www.semanticscholar.org/paper/5e0bff90e232795d0253fe39b86347f25672e726)
+- **Cited** ← **PaperBench: Evaluating AI's Ability to Replicate AI Research** — Starace et al. (2025) · `arxiv:2504.01848v3` · [arXiv](http://arxiv.org/abs/2504.01848v3)
+
+**Flagged for:** comparison_promoted_to_contradiction · 2 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _compares_contrasts_ (conf 0.8 · does_not · obligatory): Cites PaperBench's specific score (27% vs 41% human) which is later contrasted with the citing paper's own higher results.
+    > oducibility performance in prior work depended heavily on domain-specific scaffolding rather than model capability alone. Similarly, PaperBench found that even the top-performing AI agent scored just 27\ on replication tasks drawn from ICML 2024 papers, while human ML experts scored 41\ under comparable conditions **[CITED:TARGET]**. Subsequent work on REPRO-Bench, focused specifically on social science papers, reported a best accuracy of 36.6\ after substantial agent-specific engineering—a result the authors characterized as well below practical thresholds for reliable automation [CITED]. The considerably higher reproduction rates ob
+  - ⚑ _compares_contrasts_ (conf 0.85 · does_not · obligatory): Explicitly states own reproduction rates 'considerably exceed' the target's reported best-case performance.
+    > volving code interpretation, dependency management, debugging, and multi-step analysis execution. These reproduction rates considerably exceed those reported for LLM-based agents on comparable benchmarks, where best-case performance on reproducibility tasks rarely surpassed 35--40\ even with task-specific scaffolding **[CITED:TARGET]**. This gap suggests that purpose-built coding agents represent a meaningful step change over general-purpose LLM agents for scientific reproducibility tasks. A central contribution of this work is the introduction of SocSci-Repro-Bench , which expands the empirical evaluation of reproducibility in social scien
+
+**Enriched-v12 semantic relation:** **contradicts** (semantic-edge direction: symmetric; existence 0.92, type 0.72) — `arxiv:2504.01848v3::k03` → `arxiv:2606.11447::k01`
+  - _rationale:_ Both contributions measure frontier AI agents' ability to autonomously reproduce/replicate scientific research, but arrive at strikingly divergent quantitative findings. Contribution A (PaperBench) finds the best AI agent scores only 21.0% on ML paper replication, well below the human baseline of 41.4%, characterizing a large capability gap. Contribution B (SocSci-Repro-Bench) finds Claude Code achieves 93.4% task-level and 78.0% paper-level accuracy on social science reproducibility, explicitly framing these results as far exceeding prior benchmarks including PaperBench (cited directly in CIT:1 and CIT:2 and B:018). Contribution B explicitly uses Contribution A's results as a contrast point—noting PaperBench's ~27% best-agent score vs. human ~41%—to argue that purpose-built coding agents represent a "meaningful step change." The same construct (frontier AI agent capability for scientific replication) yields incompatible quantitative findings across the two works. The divergence is partly explained by domain (ML vs. social science) and agent type (general-purpose scaffold vs. purpose-built coding agent), but Contribution B itself frames the gap as a genuine performance contrast rather than a domain artifact, directly contradicting the picture of AI agents lagging far behind humans on replication tasks. This is a genuine empirical contradiction on the shared construct of AI replication capability, though mitigated somewhat by differing task domains and scaffolding choices.
+    - `arxiv:2504.01848v3::k03` [empirical_finding] — Frontier AI agents score at most 21.0% average replication on PaperBench, well below a human ML-PhD baseline of 41.4% on a matched subset, establishing a quantitative gap between current AI and expert human capability for autonomous ML research replication.
+      > Evaluations of frontier models on PaperBench: an assessment of several frontier AI agents' abilities to conduct long-horizon tasks and ML R&D … the best-performing tested agent, Claude 3.5 Sonnet (New) with open-source scaffolding, achieves an average replication score of 21.0% … models do not yet outperform the human baseline.
+    - `arxiv:2606.11447::k01` [empirical_finding] — Frontier AI coding agents achieve high computational reproducibility on social science findings: Claude Code reaches 93.4% task-level and 78.0% paper-level accuracy, substantially outperforming Codex (62.1% / 35.8%) and considerably exceeding reproduction rates previously reported for general-purpose LLM-based agents on comparable benchmarks.
+      > we find that both can reproduce a large share of social science findings, with Claude Code substantially outperforming Codex. These reproduction rates considerably exceed those previously reported for general-purpose LLM-based agents on comparable reproducibility benchmarks
+
+**Verdict:** _(carried: complementary)_  
+**Notes:** Complementary, semantic is correctly finds the friction between the contributions, citation information agrees
+
+---
+
+### P1-2  `arxiv:2507.18901v1::k01` | `arxiv:2606.11447::k01`
+
+✓ relation unchanged (`contradicts`) — verdict carries.
+
+- **Your annotation:** Complementary, Here the compares_contrast citation and the contradicts semantic edge are referencing two different things, both useful context.
+
+- **Citing** → **AI Coding Agents Can Reproduce Social Science Findings** — Alizadeh et al. (2026) · `arxiv:2606.11447` · [S2](https://www.semanticscholar.org/paper/5e0bff90e232795d0253fe39b86347f25672e726)
+- **Cited** ← **REPRO-Bench: Can Agentic AI Systems Assess the Reproducibility of Social Science Research?** — Hu et al. (2025) · `arxiv:2507.18901v1` · [arXiv](http://arxiv.org/abs/2507.18901v1)
+
+**Flagged for:** background_passage_supports_hard_relation, comparison_promoted_to_contradiction · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.6 · supports · obligatory): Grouped general statement about prior studies evaluating agent reproducibility, not singled out.
+    > existing computational results from original data and code [CITED]. Existing studies evaluated general-purpose large language models (LLM) agents, such as AutoGPT, on reproducibility benchmarks, providing initial evidence that these agents struggle to reliably execute end-to-end scientific workflows **[CITED:TARGET]**. However, the recent introduction of specialized AI coding agents designed to autonomously execute code, manage dependencies, and debug workflows represents a major technological shift, and their performance remains largely untested, particularly in social science, where large-scale reproducibility evaluations remain
+  - ⚑ _compares_contrasts_ (conf 0.85 · partial · obligatory): Specifically critiques REPRO-Bench's coverage limitation (few journals, missing disciplines).
+    > certify, gertler2018make, askarov2023significance, brodeur2024p, dafoe2014science, nosek2022replicability, fivsar2024reproducibility . CORE-Bench [CITED] includes only 28 social science tasks, all drawn from a highly standardized repository (i.e., CodeOcean [CITED]). Repro-Bench **[CITED:TARGET]**, although covering 112 papers, relies on studies from nine economics journals and only three political science journals [CITED], leaving out sociology, psychology, and communication. In addition, Repro-Bench provides access to original paper PDFs, which may encourage models to rely on textual
+
+**Enriched-v12 semantic relation:** **contradicts** (semantic-edge direction: symmetric; existence 0.95, type 0.88) — `arxiv:2507.18901v1::k01` → `arxiv:2606.11447::k01`
+  - _rationale:_ Both contributions study AI agent performance on social science reproducibility, but reach starkly incompatible findings. A reports that the best agentic system (CORE-Agent) achieves only 21.4% accuracy—below random guessing—on end-to-end reproducibility assessment. B reports that specialized coding agents (Claude Code) achieve 93.4% task-level accuracy on computational reproducibility, explicitly contrasting their results with prior benchmarks where 'best-case performance rarely surpassed 35–40%' (B:034), a range that encompasses A's results. Evidence CIT:arxiv:2606.11447->arxiv:2507.18901v1:1 explicitly frames A as representing the prior generation of general-purpose LLM agents that 'struggle to reliably execute end-to-end scientific workflows', positioning B's findings as superseding A's. The incompatibility is real but partly explained by scope differences (A evaluates end-to-end reproducibility scoring; B evaluates computational result reproduction), which tempers but does not eliminate the contradiction since both claim to characterize AI agent capability on social science reproducibility.
+    - `arxiv:2507.18901v1::k01` [empirical_finding] — State-of-the-art agentic AI systems perform below random-guessing baseline on end-to-end social science reproducibility assessment, with the best evaluated agent (CORE-Agent) reaching only 21.4% accuracy on a four-class scoring task.
+      > We evaluate three representative AI agents on REPRO-Bench, with the best-performing agent achieving an accuracy of only 21.4%, which is even lower than the expected 25% accuracy of random guessing among four scores.
+    - `arxiv:2606.11447::k01` [empirical_finding] — Frontier AI coding agents achieve high computational reproducibility on social science findings: Claude Code reaches 93.4% task-level and 78.0% paper-level accuracy, substantially outperforming Codex (62.1% / 35.8%) and considerably exceeding reproduction rates previously reported for general-purpose LLM-based agents on comparable benchmarks.
+      > we find that both can reproduce a large share of social science findings, with Claude Code substantially outperforming Codex. These reproduction rates considerably exceed those previously reported for general-purpose LLM-based agents on comparable reproducibility benchmarks
+
+**Verdict:** _(carried: ?)_  
+**Notes:** Complementary, Here the compares_contrast citation and the contradicts semantic edge are referencing two different things, both useful context.
+
+---
+
+### P1-3  `arxiv:2606.06473::k04` | `openalex:W4415108068::k00`
+
+✓ relation unchanged (`contradicts`) — verdict carries.
+
+- **Your annotation:** semantic-wrong/complementary: Calling the semantic edge a contradiction might be a bit too strong (A outpeforms B, B was state of the art at the time), not sure how we want to treat this.
+
+- **Citing** → **MLEvolve: A Self-Evolving Framework for Automated Machine Learning Algorithm Discovery** — Du et al. (2026) · `arxiv:2606.06473` · [S2](https://www.semanticscholar.org/paper/0d1e0184dd8fc663c279bae2eaaa163f5230e143)
+- **Cited** ← **AlphaEvolve: A coding agent for scientific and algorithmic discovery** — Novikov et al. (2025) · `openalex:W4415108068` · [OpenAlex](https://openalex.org/W4415108068) · [doi](https://doi.org/10.48550/arxiv.2506.13131) · [pdf](https://arxiv.org/pdf/2506.13131)
+
+**Flagged for:** comparison_promoted_to_contradiction · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - _background_ (conf 0.75 · supports · obligatory): Grouped in a list of application areas for LLM agents, not singled out.
+    > With the continued advancement of large language models (LLMs), LLM-based agent systems [CITED] are now being applied to long-horizon autonomous tasks such as scientific discovery [CITED], automated experimentation [CITED], and end-to-end algorithm design **[CITED:TARGET]**. Unlike single-turn reasoning, these scenarios involve open search spaces and limited time budgets, where agents must continually generate solutions, execute code, evaluate outcomes, and adjust strategies based on feedback. During this process, the agent continuously evolves: accumulating experience from past trials,
+  - ⚑ _compares_contrasts_ (conf 0.93 · supports · obligatory): Explicit outperformance claim against AlphaEvolve specifically on mathematical optimization tasks.
+    > g to stronger solutions for challenging MLE tasks. Experimental results show that achieves a 65.3\ average medal rate on MLE-Bench under a 12-hour budget (half the standard runtime), establishing state-of-the-art performance, and further outperforms specialized algorithm discovery methods including AlphaEvolve **[CITED:TARGET]** on mathematical optimization tasks. Our key contributions are as follows: itemize [leftmargin=*] We propose , a self-evolving multi-agent framework for end-to-end MLE tasks, which unifies progressive graph search, retrospective memory, and hierarchical adaptive code generation to support long
+
+**Enriched-v12 semantic relation:** **contradicts** (semantic-edge direction: symmetric; existence 0.82, type 0.62) — `arxiv:2606.06473::k04` → `openalex:W4415108068::k00`
+  - _rationale:_ Contribution B (AlphaEvolve) presents itself as a leading method for automated algorithm discovery and optimization on scientific and engineering tasks. Contribution A (MLEvolve) directly and explicitly claims to outperform AlphaEvolve on mathematical algorithm optimization tasks (evidence AQ, A:007, A:002, A:006, CIT:2). This constitutes an incompatible performance claim on the same construct (quality of solutions on mathematical optimization tasks): AlphaEvolve positions itself as state-of-the-art (B:000, BQ), while MLEvolve empirically asserts superiority over AlphaEvolve on those same tasks. This is a genuine contradiction in findings about relative solution quality on the shared task domain, not merely a topical overlap or background citation. However, the type confidence is moderate because MLEvolve's claim is benchmarked on potentially different specific problem instances than those AlphaEvolve originally evaluated, making the comparison partially indirect.
+    - `arxiv:2606.06473::k04` [empirical_finding] — An LLM-based MLE agent achieves a 65.3% average medal rate on MLE-Bench within a 12-hour budget (half the standard runtime) and outperforms AlphaEvolve and AlphaEvolve-v2 on mathematical algorithm optimization tasks, demonstrating cross-domain generalization of graph-search-based self-evolving agents.
+      > Extensive experiments show that MLEvolve achieves a 65.3% average medal rate on MLE-Bench under a 12-hour budget, achieving the best among all existing methods, and further outperforms AlphaEvolve and AlphaEvolve-v2 on mathematical optimization tasks, demonstrating cross-domain generalization.
+    - `openalex:W4415108068::k00` [framework] — AlphaEvolve — an evolutionary coding agent that orchestrates a pipeline of LLMs to iteratively improve algorithms via direct code edits, guided by automated evaluation metrics — substantially enhances LLM capabilities on open scientific problems and engineering optimization tasks, surpassing prior automated discovery methods in scale, generality, and solution quality.
+      > we present AlphaEvolve, an evolutionary coding agent that substantially enhances capabilities of state-of-the-art LLMs on highly challenging tasks such as tackling open scientific problems or optimizing critical pieces of computational infrastructure… significantly expanding the scope of prior automated discovery methods
+
+**Verdict:** _(carried: complementary)_  
+**Notes:** semantic-wrong/complementary: Calling the semantic edge a contradiction might be a bit too strong (A outpeforms B, B was state of the art at the time), not sure how we want to treat this.
+
+---
+
+### P1-4  `arxiv:2504.21776::k03` | `arxiv:2511.19399v3::k04`
+
+✓ relation unchanged (`supports`) — verdict carries.
+
+- **Your annotation:** complementary. The judge doesnt talk about the uses_extends citation in its justification. I think the judge is correct overall however, not quite enough for builds_on despite the uses_extends citation being correctly identified. uses_extends citation is just a small part of the method.
+
+- **Citing** → **DR Tulu: Reinforcement Learning with Evolving Rubrics for Deep Research** — Shao et al. (2025) · `arxiv:2511.19399v3` · [arXiv](http://arxiv.org/abs/2511.19399v3)
+- **Cited** ← **WebThinker: Empowering Large Reasoning Models with Deep Research Capability** — Li et al. (2025) · `arxiv:2504.21776` · [S2](https://www.semanticscholar.org/paper/23f655a7a596ab5f431ab9e18d5c641de3f8afb9) · [doi](https://doi.org/10.48550/arXiv.2504.21776)
+
+**Flagged for:** uses_extends_not_builds_on · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - _compares_contrasts_ (conf 0.75 · does_not · obligatory): Target's reliance on static/proprietary components is singled out before 'In contrast, our work presents...'
+    > ons/discussion Related Works Deep research agents. Recent work on DR agents often focuses on short-form QA [CITED]. While some systems target long-form research tasks, they typically rely on static workflows or proprietary components **[CITED:TARGET]**, offer limited tool support, or do not fully release code and data. We provide additional discussion of these related works in Appendix app:related_works . In contrast, our work presents a fully open deep research framework that is trained and evaluated on realistic long-form tasks, natively supports multi-too
+  - ⚑ _uses_extends_ (conf 0.9 · inconclusive · obligatory): 'Following prior work' explicitly adopts the target's LLM-judge evaluation protocol
+    > ph responses. We therefore evaluate how well our SFT and RL models generalize to short-form queries. Datasets. We evaluate short-form QA on SimpleQA [CITED], WebWalkerQA [CITED], and 2Wiki [CITED]. Following prior work **[CITED:TARGET]**, we use an LLM judge to assess answer correctness and report Pass@1 accuracy with GPT-4.1 as the LLM judge. For efficiency, we evaluate on 1 , 000 randomly sampled questions each from SimpleQA and 2Wiki. Results. Table tab:short_form_results shows that performs competitively on short-
+
+**Enriched-v12 semantic relation:** **supports** (semantic-edge direction: symmetric; existence 0.85, type 0.72) — `arxiv:2504.21776::k03` → `arxiv:2511.19399v3::k04`
+  - _rationale:_ Both contributions describe RL-based training strategies (iterative online DPO in A; RLER in B) that improve a model's ability to use research tools for complex tasks, with both reporting substantial gains over non-RL baselines. Evidence AQ and A:002 describe A's RL/DPO approach; BQ and B:005 describe B's RLER gains (6.4–16.0 points) and adaptive tool selection. The citation in CIT:1 places A as prior work in the same space but characterizes it as relying on proprietary components or static workflows, suggesting B is aware of A but frames itself as distinct. The findings are materially corroborating—RL training improves tool-using research agents—but neither contribution explicitly uses or extends the other's specific method or artifact, so 'supports' (symmetric corroboration) is more defensible than 'builds_on'.
+    - `arxiv:2504.21776::k03` [method] — An RL-based training strategy using iterative online Direct Preference Optimization (DPO) over large-scale sampled reasoning trajectories improves large reasoning models' ability to utilize research tools effectively for end-to-end complex task performance.
+      > we develop RL-based training strategies to optimize end-to-end task performance. We leverage the LRM equipped with the research tools to sample large-scale reasoning trajectories from complex tasks. Based on the accuracy of reasoning, tool usage, and final outputs, we construct preference pairs for online DPO training. Through iterative, on-policy RL training, the model progressively improves its ability to perceive, reason, and interact with research tools effectively
+    - `arxiv:2511.19399v3::k04` [empirical_finding] — Training on open-ended deep research with RLER yields a 6.4–16.0 point gain over supervised fine-tuning alone and causes models to adaptively select among multiple search tools (e.g., paper search vs. web search) based on task domain rather than relying on a single hard-coded tool.
+      > Our analysis shows that RLER improves the model's ability to produce more comprehensive and in-depth long-form responses with accurate citations, yielding gains of 6.4–16.0 points on top of the finetuned model across the four benchmarks. Moreover, DR Tulu-8B learns to select appropriate search tools for each task, instead of relying on a single hard-coded search tool like in prior work.
+
+**Verdict:** _(carried: ?)_  
+**Notes:** complementary. The judge doesnt talk about the uses_extends citation in its justification. I think the judge is correct overall however, not quite enough for builds_on despite the uses_extends citation being correctly identified. uses_extends citation is just a small part of the method.
+
+---
+
+### P1-5  `arxiv:2506.11763::k03` | `arxiv:2603.20884v3::k02`
+
+✓ relation unchanged (`supports`) — verdict carries.
+
+- **Your annotation:** complementary: They are both correct. The citation is just about one part of the procsess, doesnt mean that the semantic edge should be builds_on necessarily. The full judge agrees with my previous verdict exactly once it sees the citation, the adoption is too narrow
+
+- **Citing** → **MemoNoveltyAgent: A Historical Research Memory-Aware Agent Workflow for Paper Novelty Assessment** — Hou et al. (2026) · `arxiv:2603.20884v3` · [arXiv](http://arxiv.org/abs/2603.20884v3)
+- **Cited** ← **DeepResearch Bench: A Comprehensive Benchmark for Deep Research Agents** — Du et al. (2025) · `arxiv:2506.11763` · [S2](https://www.semanticscholar.org/paper/cca73506ab839718879a49ccce389d33907aa053) · [doi](https://doi.org/10.48550/arXiv.2506.11763)
+
+**Flagged for:** uses_extends_not_builds_on · 1 of 1 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _uses_extends_ (conf 0.92 · supports · obligatory): Explicitly states 'we follow the core idea of DeepResearchBench' for their citation accuracy protocol.
+    > imation. Finally, the reranker selects the top 7 most relevant chunks for each query, which are subsequently provided to the Analyst Agent—and the checklist evaluator—as highly relevant, citation-grounded evidence. Citation Accuracy For Citation Accuracy (CA), we follow the core idea of DeepResearchBench **[CITED:TARGET]**: citation-bearing claims are extracted from the report, mapped to the cited full-text papers, and judged according to whether the cited source actually supports the claim. Under this protocol, self-validation improves CA from 89.90 to 93.72, while GPT-5 DeepResearch obtains 87.60. This indicates that the Validator and
+
+**Enriched-v12 semantic relation:** **supports** (semantic-edge direction: symmetric; existence 0.82, type 0.65) — `arxiv:2506.11763::k03` → `arxiv:2603.20884v3::k02`
+  - _rationale:_ Both contributions develop automated evaluation frameworks validated against human judgment. A (RACE/FACT) and B (RAG-integrated checklist) independently confirm that their automated methods align well with human expert assessment — AQ and BQ both explicitly state human alignment validation. Evidence B:025 further details B's human alignment results showing tight correspondence. The citation [CIT] shows B uses A's Citation Accuracy approach as a methodological reference, but this is a narrow borrowing (one sub-metric) rather than B building fundamentally on A. The core finding — automated evaluators reliably align with humans — is materially corroborated across both works, supporting a 'supports' classification. The relation is symmetric as both works affirm the same conclusion independently.
+    - `arxiv:2506.11763::k03` [empirical_finding] — Comprehensive human studies confirm that RACE and FACT achieve strong alignment with human judgment, validating both frameworks as reliable automated evaluators for Deep Research Agents.
+      > We conduct comprehensive human studies to validate the reliability of our frameworks and publicly release the benchmark and evaluation protocols to foster future research.
+    - `arxiv:2603.20884v3::k02` [method] — A RAG-integrated checklist evaluation method with dense question coverage enables reliable, evidence-grounded assessment of open-ended novelty report generation, validated through human alignment studies.
+      > We introduce a RAG-integrated checklist evaluation method and validate its effectiveness and reliability through human alignment.
+
+**Verdict:** _(carried: complementary)_  
+**Notes:** complementary: They are both correct. The citation is just about one part of the procsess, doesnt mean that the semantic edge should be builds_on necessarily. The full judge agrees with my previous verdict exactly once it sees the citation, the adoption is too narrow
+
+---
+
+### P1-6  `arxiv:2506.11763::k01` | `arxiv:2603.20884v3::k02`
+
+⚠ **RE-CHECK — relation changed: you judged `supports`, enriched v12 says `related`.**
+
+- **Your annotation:** complementary: They are both correct. The citation is just about one part of the procsess, doesnt mean that the semantic edge should be builds_on necessarily
+
+- **Citing** → **MemoNoveltyAgent: A Historical Research Memory-Aware Agent Workflow for Paper Novelty Assessment** — Hou et al. (2026) · `arxiv:2603.20884v3` · [arXiv](http://arxiv.org/abs/2603.20884v3)
+- **Cited** ← **DeepResearch Bench: A Comprehensive Benchmark for Deep Research Agents** — Du et al. (2025) · `arxiv:2506.11763` · [S2](https://www.semanticscholar.org/paper/cca73506ab839718879a49ccce389d33907aa053) · [doi](https://doi.org/10.48550/arXiv.2506.11763)
+
+**Flagged for:** uses_extends_not_builds_on · 1 of 1 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _uses_extends_ (conf 0.92 · supports · obligatory): Explicitly states 'we follow the core idea of DeepResearchBench' for their citation accuracy protocol.
+    > imation. Finally, the reranker selects the top 7 most relevant chunks for each query, which are subsequently provided to the Analyst Agent—and the checklist evaluator—as highly relevant, citation-grounded evidence. Citation Accuracy For Citation Accuracy (CA), we follow the core idea of DeepResearchBench **[CITED:TARGET]**: citation-bearing claims are extracted from the report, mapped to the cited full-text papers, and judged according to whether the cited source actually supports the claim. Under this protocol, self-validation improves CA from 89.90 to 93.72, while GPT-5 DeepResearch obtains 87.60. This indicates that the Validator and
+
+**Enriched-v12 semantic relation:** **related** (semantic-edge direction: none; existence 0.82, type 0.55) — `arxiv:2506.11763::k01` → `arxiv:2603.20884v3::k02`
+  - _rationale:_ B cites A only for its Citation Accuracy protocol (CIT evidence), adopting that specific sub-method rather than RACE's core report-quality evaluation framework. Both A and B independently propose evaluation frameworks for long-form research output, but their core contributions differ: A proposes RACE (reference-based, adaptive criteria, dynamic weighting for report quality) while B proposes a RAG-integrated checklist for novelty report assessment. The citation is narrow and limited to CA methodology, which is part of FACT (A's companion framework), not RACE itself. This is insufficient to establish builds_on for the stated contributions; 'related' better captures the substantive but indirect relationship.
+    - `arxiv:2506.11763::k01` [framework] — RACE (Reference-based Adaptive Criteria-driven Evaluation with Dynamic Weighting) — a report-quality evaluation framework that dynamically generates task-specific criteria and dimension weights, then scores a target report relative to a high-quality reference — achieves strong alignment with human judgment for assessing long-form research reports across diverse domains.
+      > We further propose RACE and FACT, two novel evaluation frameworks that respectively assess the report generation quality and the information retrieval abilities of Deep Research Agents.
+    - `arxiv:2603.20884v3::k02` [method] — A RAG-integrated checklist evaluation method with dense question coverage enables reliable, evidence-grounded assessment of open-ended novelty report generation, validated through human alignment studies.
+      > We introduce a RAG-integrated checklist evaluation method and validate its effectiveness and reliability through human alignment.
+
+**Verdict:** _(carried: complementary — RE-CHECK)_  
+**Notes:** complementary: They are both correct. The citation is just about one part of the procsess, doesnt mean that the semantic edge should be builds_on necessarily
+
+---
+
+### P1-7  `arxiv:2510.27598::k01` | `arxiv:2602.15112v2::k00`
+
+⚠ **RE-CHECK — relation changed: you judged `contradicts`, enriched v12 says `refines`.**
+
+- **Your annotation:** Complementary: The new judge has a much better understanding and the citation information helped. refines more apporpriate than contradicts and doesnt get tripped up by the naming coincidence as a result i suppose of seeing the fulltexts
+
+- **Citing** → **ResearchGym: Evaluating Language Model Agents on Real-World AI Research** — Garikaparthi et al. (2026) · `arxiv:2602.15112v2` · [arXiv](http://arxiv.org/abs/2602.15112v2)
+- **Cited** ← **InnovatorBench: Evaluating Agents' Ability to Conduct Innovative LLM Research** — Wu et al. (2025) · `arxiv:2510.27598` · [S2](https://www.semanticscholar.org/paper/615c476b4502303d2af07306ee38a05fbf4c0bea) · [doi](https://doi.org/10.48550/arXiv.2510.27598)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.65 · partial · obligatory): Part of an enumerated group of heavy-compute closed-loop benchmarks sharing a field-wide reproducibility critique, not singled out.
+    > mous, wijk2025rebench or paper reproduction [CITED], offering little headroom for creative ideation. Meanwhile, closed-loop research benchmarks either (1) require heavy compute (for example, 8 H100 GPUs), making them difficult to reproduce **[CITED:TARGET]**, (2) rely on LLM judges [CITED], that can be gamed through superficial novelty, and correlate poorly with execution outcomes [CITED], (3) focus on
+  - _compares_contrasts_ (conf 0.68 · partial · helpful): Contrasts own single-GPU reproducible setup against the cluster-scale compute required by the target prior work.
+    > as a soft upper bound, enabling direct comparison to expert attempts. Grading uses paper's original evaluation scripts, avoiding the reliability issues of LLM-judges. All tasks run on a single GPU for up to 24 hours in isolated containers, enabling reproducibility without cluster-scale compute required in prior works **[CITED:TARGET]**. We first evaluate a frontier GPT-5-based agent on ResearchGym. Across 15 end-to-end runs (5 tasks 3 seeds), the agent improves over provided baselines in only 1 run (6.7\ ) and completes just 26.5\ of sub-tasks on average, with performance plateauing after 9 hours. Yet this single successful run outp
+
+**Enriched-v12 semantic relation:** **refines** (semantic-edge direction: b_to_a; existence 0.88, type 0.72) — `arxiv:2602.15112v2::k00` → `arxiv:2510.27598::k01`
+  - _rationale:_ Contribution B (arxiv:2602.15112v2) explicitly cites Contribution A (arxiv:2510.27598) as a prior work requiring heavy compute ('8 H100 GPUs, making them difficult to reproduce') and positions its own ResearchGym as correcting that limitation by running all tasks on a single GPU in isolated containers. B also addresses A's lack of contamination-aware benchmark construction and objective grading. Both share the name ResearchGym but are distinct systems; B narrows and corrects A's approach, fitting 'refines' with direction b_to_a.
+    - `arxiv:2602.15112v2::k00` [benchmark] — ResearchGym — an extensible execution environment and benchmark of five containerized tasks (39 sub-tasks) derived from recent oral/spotlight papers at ICML, ICLR, and ACL — enables objective, execution-based evaluation of AI agents on closed-loop research, including hypothesis generation, experimentation, and surpassing human baselines, while remaining feasible on a single GPU.
+      > An extensible execution environment for agent/task integration and objective grading (§ 2.3). A benchmark of five tasks with 39 sub-tasks for closed-loop research evaluation with contamination-aware construction and single-GPU accessibility (§ 2.2).
+    - `arxiv:2510.27598::k01` [framework] — ResearchGym — a general, extensible research environment — supports long-duration and distributed experiments, asynchronous execution, snapshot saving and loading, and a broad action space (terminal commands, file operations, web search, browsing) for realistic agentic research workflows.
+      > We develop ResearchGym, a general and extensible research environment supporting long-duration and distributed experiments, asynchronous execution, snapshot saving and loading, and a broad action space for realistic research workflows.
+
+**Verdict:** _(carried: ? — RE-CHECK)_  
+**Notes:** Complementary: The new judge has a much better understanding and the citation information helped. refines more apporpriate than contradicts and doesnt get tripped up by the naming coincidence as a result i suppose of seeing the fulltexts
+
+---
+
+### P1-8  `arxiv:2506.11763::k00` | `arxiv:2605.26081::k01`
+
+⚠ **RE-CHECK — relation changed: you judged `supports`, enriched v12 says `builds_on`.**
+
+- **Your annotation:** semantic now correct: The citation shows how the benchmark is used and this helps tip towards builds_on
+
+- **Citing** → **VeriTrace: Evolving Mental Models for Deep Research Agents** — Zhao et al. (2026) · `arxiv:2605.26081` · [S2](https://www.semanticscholar.org/paper/28af457599b8c3fd1bd6e0017ec179038dfd59b4)
+- **Cited** ← **DeepResearch Bench: A Comprehensive Benchmark for Deep Research Agents** — Du et al. (2025) · `arxiv:2506.11763` · [S2](https://www.semanticscholar.org/paper/cca73506ab839718879a49ccce389d33907aa053) · [doi](https://doi.org/10.48550/arXiv.2506.11763)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.72 · supports · helpful): Generic intro motivation statement about evidence synthesis, not adoption or contrast.
+    > n DeepConsult. With Config-DeepSeek, it achieves the strongest reproducible open-source result on DRB. abstract Introduction Large language model (LLM) agents are increasingly used for long-horizon information exploration, such as synthesizing multi-source evidence for open-ended research questions **[CITED:TARGET]** and navigating scientific literature in autonomous research pipelines [CITED]. Such tasks confront the agent with information that is both voluminous and structurally interdependent. Findings must be compacted for the agent to reason over, and dependencies among them must be preserved so that one con
+  - _uses_extends_ (conf 0.92 · supports · obligatory): 'We evaluate on DeepResearch Bench' explicitly adopts it as the evaluation benchmark.
+    > hts bound to 2--5 evidence IDs. Section writer (sequential): receives insights with bound records from _ n_k V_k E _k unlocked; renders prose with [\![m]\!] citations. Experimental Setup sec:setup Benchmarks We evaluate on DeepResearch Bench **[CITED:TARGET]**, comprising 100 complex research queries in Chinese and English. It employs two evaluation frameworks: (1) RACE , which assesses report quality via four LLM-judged dimensions (Comprehensiveness, Insight, Instruction Following, and Readability), scored relative to expert reference reports (0.5 = reference parit
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: b_to_a; existence 0.97, type 0.92) — `arxiv:2605.26081::k01` → `arxiv:2506.11763::k00`
+  - _rationale:_ VeriTrace (B) explicitly uses DeepResearch Bench (A) as its primary evaluation benchmark, reporting concrete performance improvements (4.22 pp on DRB Insight, strongest reproducible open-source result with Config-DeepSeek). Evidence CIT:2 shows B directly cites and evaluates on A's benchmark. B does not merely cite A as background — it adopts A's benchmark as the measurement artifact against which its own contributions are validated, constituting a clear builds_on relationship from B to A.
+    - `arxiv:2605.26081::k01` [framework] — VeriTrace — a cognitive-graph deep-research framework in which nodes represent concepts under inquiry (each carrying acceptance criteria, accumulated findings, and quality history), edges encode inquiry relations, and three explicit regulatory loops (interpretive update via a graph manager, deviation feedback via a CR-AAP-inspired quality assessor, and schema revision via five structural operations) govern how the graph evolves — improves over the strongest matched baseline by 4.22 pp on DeepResearch Bench Insight and 5.9 pp Overall win rate on DeepConsult using matched Qwen3.5-27B backbones, and achieves the strongest reproducible open-source result on DeepResearch Bench with Config-DeepSeek.
+      > We present VeriTrace, a cognitive-graph implementation organised around concepts rather than sub-tasks, with evidence preserved under structural revision.
+    - `arxiv:2506.11763::k00` [benchmark] — DeepResearch Bench — a benchmark of 100 PhD-level research tasks spanning 22 distinct fields, constructed by domain experts to reflect the real-world distribution of deep research demands derived from over 96,000 user queries — enables systematic end-to-end evaluation of Deep Research Agents.
+      > We present DeepResearch Bench, the first specialized benchmark for evaluating Deep Research Agents, constructed through a systematic process that reflects authentic user needs.
+
+**Verdict:** _(carried: complementary — RE-CHECK)_  
+**Notes:** semantic now correct: The citation shows how the benchmark is used and this helps tip towards builds_on
+
+---
+
+### P1-9  `arxiv:2507.18901v1::k00` | `arxiv:2606.11447::k01`
+
+⚠ **RE-CHECK — relation changed: you judged `supports`, enriched v12 says `builds_on`.**
+
+- **Your annotation:** (recorded, no note)
+
+- **Citing** → **AI Coding Agents Can Reproduce Social Science Findings** — Alizadeh et al. (2026) · `arxiv:2606.11447` · [S2](https://www.semanticscholar.org/paper/5e0bff90e232795d0253fe39b86347f25672e726)
+- **Cited** ← **REPRO-Bench: Can Agentic AI Systems Assess the Reproducibility of Social Science Research?** — Hu et al. (2025) · `arxiv:2507.18901v1` · [arXiv](http://arxiv.org/abs/2507.18901v1)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.6 · supports · obligatory): Grouped general statement about prior studies evaluating agent reproducibility, not singled out.
+    > existing computational results from original data and code [CITED]. Existing studies evaluated general-purpose large language models (LLM) agents, such as AutoGPT, on reproducibility benchmarks, providing initial evidence that these agents struggle to reliably execute end-to-end scientific workflows **[CITED:TARGET]**. However, the recent introduction of specialized AI coding agents designed to autonomously execute code, manage dependencies, and debug workflows represents a major technological shift, and their performance remains largely untested, particularly in social science, where large-scale reproducibility evaluations remain
+  - _compares_contrasts_ (conf 0.85 · partial · obligatory): Specifically critiques REPRO-Bench's coverage limitation (few journals, missing disciplines).
+    > certify, gertler2018make, askarov2023significance, brodeur2024p, dafoe2014science, nosek2022replicability, fivsar2024reproducibility . CORE-Bench [CITED] includes only 28 social science tasks, all drawn from a highly standardized repository (i.e., CodeOcean [CITED]). Repro-Bench **[CITED:TARGET]**, although covering 112 papers, relies on studies from nine economics journals and only three political science journals [CITED], leaving out sociology, psychology, and communication. In addition, Repro-Bench provides access to original paper PDFs, which may encourage models to rely on textual
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: b_to_a; existence 0.97, type 0.82) — `arxiv:2606.11447::k01` → `arxiv:2507.18901v1::k00`
+  - _rationale:_ Contribution B (arxiv:2606.11447) explicitly cites REPRO-Bench (Contribution A) as a prior benchmark in the same social science reproducibility space and positions its own work — evaluating frontier AI coding agents — against it. Evidence B:003 cites REPRO-Bench as part of the body of work showing that general-purpose LLM agents "struggle to reliably execute end-to-end scientific workflows," and B:034 explicitly states that the new paper's reproduction rates "considerably exceed those reported for LLM-based agents on comparable benchmarks" including REPRO-Bench. Evidence B:047 provides a detailed description of REPRO-Bench's design (PDF + reproduction package + reproducibility score scale) and notes that "the companion agent work shows that performance is still low," which B uses as a baseline for comparison. Evidence CIT:2 further shows B engaging critically with REPRO-Bench's scope limitations (nine economics journals, three political science journals, absence of sociology/psychology/communication) to motivate its own broader benchmark (SocSci-Repro-Bench, 221 tasks, 54 papers, four disciplines). The relationship is therefore one where B builds on A: it uses A as a prior benchmark result (21.4% best accuracy from A:001) as a baseline to contextualise its own substantially higher findings (Claude Code at 78.0% paper-level), and it introduces a new benchmark explicitly designed to address A's limitations. This is a classic builds_on relationship from B to A — B explicitly uses A's results and artifact as a reference point and extends the evaluation to frontier coding agents and a broader disciplinary scope.
+    - `arxiv:2606.11447::k01` [empirical_finding] — Frontier AI coding agents achieve high computational reproducibility on social science findings: Claude Code reaches 93.4% task-level and 78.0% paper-level accuracy, substantially outperforming Codex (62.1% / 35.8%) and considerably exceeding reproduction rates previously reported for general-purpose LLM-based agents on comparable benchmarks.
+      > we find that both can reproduce a large share of social science findings, with Claude Code substantially outperforming Codex. These reproduction rates considerably exceed those previously reported for general-purpose LLM-based agents on comparable reproducibility benchmarks
+    - `arxiv:2507.18901v1::k00` [benchmark] — REPRO-Bench — a benchmark of 112 task instances, each pairing a social science paper PDF with its reproduction package and a publicly available reproduction report, enabling end-to-end evaluation of AI agents on assessing computational reproducibility across diverse data formats and programming languages.
+      > we introduce REPRO-Bench, a collection of 112 task instances, each representing a social science paper with a publicly available reproduction report. The agents are tasked with assessing the reproducibility of the paper based on the original paper PDF and the corresponding reproduction package.
+
+**Verdict:** _(carried: ? — RE-CHECK)_  
+**Notes:** 
+
+---
+
+### P1-10  `arxiv:2606.06473::k00` | `openalex:W4415108068::k00`
+
+✓ relation unchanged (`builds_on`) — verdict carries.
+
+- **Your annotation:** complementaty: eveything seems accurate, the judge makes the correct overall judgement of builds_on despite their being a background and comparison citation.
+
+- **Citing** → **MLEvolve: A Self-Evolving Framework for Automated Machine Learning Algorithm Discovery** — Du et al. (2026) · `arxiv:2606.06473` · [S2](https://www.semanticscholar.org/paper/0d1e0184dd8fc663c279bae2eaaa163f5230e143)
+- **Cited** ← **AlphaEvolve: A coding agent for scientific and algorithmic discovery** — Novikov et al. (2025) · `openalex:W4415108068` · [OpenAlex](https://openalex.org/W4415108068) · [doi](https://doi.org/10.48550/arxiv.2506.13131) · [pdf](https://arxiv.org/pdf/2506.13131)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.75 · supports · obligatory): Grouped in a list of application areas for LLM agents, not singled out.
+    > With the continued advancement of large language models (LLMs), LLM-based agent systems [CITED] are now being applied to long-horizon autonomous tasks such as scientific discovery [CITED], automated experimentation [CITED], and end-to-end algorithm design **[CITED:TARGET]**. Unlike single-turn reasoning, these scenarios involve open search spaces and limited time budgets, where agents must continually generate solutions, execute code, evaluate outcomes, and adjust strategies based on feedback. During this process, the agent continuously evolves: accumulating experience from past trials,
+  - _compares_contrasts_ (conf 0.93 · supports · obligatory): Explicit outperformance claim against AlphaEvolve specifically on mathematical optimization tasks.
+    > g to stronger solutions for challenging MLE tasks. Experimental results show that achieves a 65.3\ average medal rate on MLE-Bench under a 12-hour budget (half the standard runtime), establishing state-of-the-art performance, and further outperforms specialized algorithm discovery methods including AlphaEvolve **[CITED:TARGET]** on mathematical optimization tasks. Our key contributions are as follows: itemize [leftmargin=*] We propose , a self-evolving multi-agent framework for end-to-end MLE tasks, which unifies progressive graph search, retrospective memory, and hierarchical adaptive code generation to support long
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: a_to_b; existence 0.92, type 0.72) — `arxiv:2606.06473::k00` → `openalex:W4415108068::k00`
+  - _rationale:_ MLEvolve (Contribution A) explicitly positions itself relative to AlphaEvolve (Contribution B) in two distinct ways: (1) it cites AlphaEvolve as a representative example of "end-to-end algorithm design" that motivates the broader research context (CIT:1, A:003), indicating it builds on the landscape AlphaEvolve established; and (2) it directly benchmarks against AlphaEvolve as a specialized algorithm discovery baseline and claims to outperform it on mathematical optimization tasks (CIT:2, A:007, A:002, A:006). This goes beyond mere citation or topical similarity — MLEvolve explicitly extends the problem framing introduced by AlphaEvolve and uses AlphaEvolve's results as a performance reference point for its own contributions. The relationship is directional: A builds on B's established method/artifact/result as a baseline and conceptual predecessor. The type confidence is modestly capped because the relationship is more "competes with / extends the domain of" than a direct reuse of AlphaEvolve's technical machinery; however, the explicit use of AlphaEvolve as a comparative artifact and motivating prior work is sufficient to distinguish this from merely 'related'.
+    - `arxiv:2606.06473::k00` [framework] — MLEvolve — a self-evolving multi-agent framework that unifies progressive graph search, retrospective memory, and hierarchical adaptive code generation — enables end-to-end machine learning algorithm discovery over long-horizon iterative optimization horizons.
+      > We propose MLEvolve, a self-evolving multi-agent framework for end-to-end MLE tasks, which unifies progressive graph search, retrospective memory, and hierarchical adaptive code generation to support long-horizon iterative optimization.
+    - `openalex:W4415108068::k00` [framework] — AlphaEvolve — an evolutionary coding agent that orchestrates a pipeline of LLMs to iteratively improve algorithms via direct code edits, guided by automated evaluation metrics — substantially enhances LLM capabilities on open scientific problems and engineering optimization tasks, surpassing prior automated discovery methods in scale, generality, and solution quality.
+      > we present AlphaEvolve, an evolutionary coding agent that substantially enhances capabilities of state-of-the-art LLMs on highly challenging tasks such as tackling open scientific problems or optimizing critical pieces of computational infrastructure… significantly expanding the scope of prior automated discovery methods
+
+**Verdict:** _(carried: complementary)_  
+**Notes:** complementaty: eveything seems accurate, the judge makes the correct overall judgement of builds_on despite their being a background and comparison citation.
+
+---
+
+### P1-11  `openalex:W4414587939::k02` | `openalex:W4414827381::k00`
+
+⚠ **RE-CHECK — relation changed: you judged `supports`, enriched v12 says `builds_on`.**
+
+- **Your annotation:** complementary: background intent for the citation is correct.
+
+- **Citing** → **MLR-Bench: Evaluating AI Agents on Open-Ended Machine Learning Research** — Chen et al. (2025) · `openalex:W4414587939` · [OpenAlex](https://openalex.org/W4414587939) · [doi](https://doi.org/10.48550/arxiv.2505.19955) · [pdf](https://arxiv.org/pdf/2505.19955)
+- **Cited** ← **The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search** — Yamada et al. (2025) · `openalex:W4414827381` · [OpenAlex](https://openalex.org/W4414827381) · [doi](https://doi.org/10.48550/arxiv.2504.08066) · [pdf](https://arxiv.org/pdf/2504.08066)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - _compares_contrasts_ (conf 0.9 · supports · obligatory): Citing paper directly evaluates AI Scientist V2 and compares its performance against their own MLR-Agent.
+    > ication in the Wild&Trustworthy AI \\ iclr2025\_wsl&Neural Network Weights as a New Data Modality& ML Theory\\ tabular table Comparison of AI Scientist V2 and MLR-Agent sec:comparison_of_ai_scientist In this section, we evaluate AI Scientist V2 **[CITED:TARGET]**, an agent scaffold designed for workshop-level end-to-end automated research, on the ten tasks listed in tab:ten_selected_tasks , and compare its performance with that of MLR-Agent. For AI Scientist V2, we used o4-mini as the backbone model for the whole pipeline and for each task, only a single attempt
+  - ⚑ _background_ (conf 0.6 · supports · helpful): Generic motivating mention of 'recent works' showing promising results, not singled out.
+    > g up the possibility of automating the entire scientific process, from idea conception to experimentation to dissemination. However, realizing this vision raises an important question: how do we rigorously evaluate the quality of research produced by AI agents? While recent works have shown promising results **[CITED:TARGET]**, the community still lacks a comprehensive benchmark to systematically assess AI agents' ability to conduct open-ended scientific research, making progress toward autonomous scientific discovery difficult to measure and compare fairly between agents. Moreover, there is also a need for empirical analysis to identify ke
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: a_to_b; existence 0.95, type 0.82) — `openalex:W4414587939::k02` → `openalex:W4414827381::k00`
+  - _rationale:_ MLR-Agent (Contribution A) explicitly evaluates AI Scientist-v2 (Contribution B) on its own benchmark (MLR-Bench) and directly compares MLR-Agent's performance against AI Scientist-v2 across ten tasks (CIT:1). This is not merely a background citation: Contribution A uses AI Scientist-v2 as a concrete comparison system, running it on its benchmark and analyzing its failure modes (A:007, A:004). Furthermore, Contribution A cites AI Scientist-v2 as one of the "promising results" motivating the need for a rigorous benchmark (CIT:2, A:004). The relationship is directional: MLR-Agent/MLR-Bench builds on AI Scientist-v2 by adopting it as a baseline system to evaluate and extend beyond, rather than the reverse.
+    - `openalex:W4414587939::k02` [model] — MLR-Agent — a modular scaffold that sequentially executes idea generation, proposal formulation, experimentation, and paper writing — provides a reusable baseline research agent for benchmarking AI-driven scientific discovery.
+      > MLR-Agent , a modular research agent scaffold capable of automatically completing these tasks by following the four defined research stages.
+    - `openalex:W4414827381::k00` [framework] — The AI Scientist-v2 — an end-to-end agentic system for automated scientific discovery that eliminates reliance on human-authored code templates, uses a progressive agentic tree-search methodology managed by a dedicated experiment manager agent, and integrates VLM feedback for iterative figure refinement — can autonomously formulate hypotheses, design and execute experiments, analyze data, and author complete scientific manuscripts across diverse machine learning domains.
+      > We introduce The AI Scientist-v2, an automated scientific discovery framework enhanced by agentic tree search, VLM feedback, and parallel experiment execution. It thereby significantly improves the autonomy, flexibility, and scientific exploration depth of previous systems.
+
+**Verdict:** _(carried: complementary — RE-CHECK)_  
+**Notes:** complementary: background intent for the citation is correct.
+
+---
+
+## Part 2 — new pairs to annotate (74)
+
+*Klara's priority order: comparison→contradiction, then uses_extends exceptions, then background-as-evidence (contradicts → refines → builds_on → supports).*
+
+
+### ▸ uses_extends_not_builds_on
+
+#### N-1
+
+- **Citing** → **Are We There Yet? Revealing the Risks of Utilizing Large Language Models in Scholarly Peer Review** — Ye et al. (2024) · `openalex:W4405035007` · [OpenAlex](https://openalex.org/W4405035007) · [doi](https://doi.org/10.48550/arxiv.2412.01708) · [pdf](https://arxiv.org/pdf/2412.01708)
+- **Cited** ← **AgentReview: Exploring Peer Review Dynamics with LLM Agents** — Jin et al. (2024) · `openalex:W4404783497` · [OpenAlex](https://openalex.org/W4404783497) · [doi](https://doi.org/10.18653/v1/2024.emnlp-main.70) · [pdf](https://aclanthology.org/2024.emnlp-main.70.pdf)
+
+**Flagged for:** background_passage_supports_hard_relation, uses_extends_not_builds_on · 1 of 5 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ ⁿ _uses_extends_ (conf 0.75): The citing paper states it builds 'upon three established reviewing pipelines' including this target, indicating adoption of the target's methodology/pipeline for its own experiments.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > rpassed 15,000 years, equivalent to an economic cost exceeding 1.5 billion USD [ 12 , 13 ] . In this context, academia has increasingly explored the automation of the peer review process [ 14 , 15 ] . Large Language Models (LLMs) [ 16 , 17 ] have emerged as promising tools in this realm, due to their extraordinary capability for understanding and generating natural language [ 18 , 19 ] . Researchers have proposed automated pipelines using LLMs such as GPT-4 to review scientific manuscripts [ 20 , 21 , 22 , 23 , 24 ] , with studies showing substantial overlap between LLM-generated reviews and those produced by human reviewers (e.g., over 30% overlap on Nature journals) [ 20 ] . Additionally, research has documented the increasing reliance on LLMs in writing peer reviews for AI conferences: for four recent AI conferences, between 6.5% and 16.9% of peer reviews are substantially influenced by LLMs [ 25 ] ; for a machine learning conference (ICLR 2024), at least 15.8% of reviews are believed to be written wi
+  - ⚑ ⁿ _uses_extends_ (conf 0.7): The passage reiterates building upon reviewing pipelines '[20, 22, 23]' that show alignment with human reviewers, indicating the citing work adopts/extends these pipelines for its manipulation experiments.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > er review in maintaining scientific integrity, the unchecked integration of LLMs into this process poses a significant risk that must be seriously considered before widespread adoption, which strongly motivates our work. In this work, we present a series of analysis that reveals the potential risks associated with employing LLMs in scholarly peer review. Specifically, building upon three established reviewing pipelines that has demonstrated to exhibit substantial alignment with human reviewers [ 20 , 22 , 23 ] , we devise two series of experiments that critically evaluate the reliability and validity of LLM-generated assessments through manipulation and examining the inherent flaws. In our manipulation experiments, we investigate two types of manipulation: explicit manipulation and implicit manipulation. For explicit manipulation, we develop a review injection attack method that embeds manipulative review content into the manuscript PDF using extremely small white font, rendering it nearly invisible
+  - ⚑ ⁿ _background_ (conf 0.65): The target is grouped with other studies '[20, 22, 23]' as recent work exploring LLMs in peer review, used as general context for the paper's critique of the field rather than a singled-out contrast.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > s to papers with incomplete content than those with complete content, as we observe that papers with title only achieve higher or comparable ratings than of full papers on average. As another example, in a single-blind setting, merely attributing authorship to well-known researchers results in more favorable review content, indicating a preference that could affect the impartiality of the review process. In conclusion, while recent studies have explored the use of LLMs in scholarly peer review [ 20 , 22 , 23 ] , our paper underscores the associated risks through a comprehensive qualitative analysis. Our findings demonstrate that the current state of LLMs are insufficiently robust to support their role as primary agents in the peer review process. Given the risks of manipulation and inherent flaws, we believe that additional safeguards and thorough scrutiny mechanisms are essential before LLMs can be more broadly integrated into this critical process. Looking ahead, LLM-generated feedback should be tr
+  - ⚑ ⁿ _uses_extends_ (conf 0.8): The citing work explicitly conducts validation experiments on the AgentReview system, actively applying it to test manipulation risks.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > drop out of that, and (2) as the volume of manipulated reviews increases, the influence on ranking shifts intensifies. Manipulating 5% of the reviews could potentially cause 12% of the papers to lose their position in the top 30% rankings. Table 3: LLM ratings before and after manipulation. All three LLM review systems can be manipulated towards giving significantly better ratings. Systems Before After LLM Review [ 20 ] 5.33 0.60 7.99 0.17 AI Sciensist [ 22 ] 3.40 0.91 6.27 2.35 AgentReview [ 23 ] 5.82 0.41 7.26 0.99 Several existing LLM-based review systems face similar risks. The experiments conducted in previous studies were all based on the LLM-based review system [ 20 ] , which has been validated through real human experiments. To further expand our findings, we explore whether other existing LLM-based review systems are similarly vulnerable to manipulation risks. Thus, we also conduct validation on two recent systems: the review component in AI Scientist [ 22 ] and AgentReview [
+  - ⚑ ⁿ _uses_extends_ (conf 0.8): The passage describes running manipulation experiments on AgentReview and comparing before/after ratings, i.e., actively using the target system's infrastructure.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > ] 5.82 0.41 7.26 0.99 Several existing LLM-based review systems face similar risks. The experiments conducted in previous studies were all based on the LLM-based review system [ 20 ] , which has been validated through real human experiments. To further expand our findings, we explore whether other existing LLM-based review systems are similarly vulnerable to manipulation risks. Thus, we also conduct validation on two recent systems: the review component in AI Scientist [ 22 ] and AgentReview [ 23 ] , both of which have been shown to exhibit a high degree of consistency with human reviewers. Similar to Figure 3 , we compare the ratings before and after manipulation in these systems in Table 3 . From the table, we see that all these review systems give significantly higher ratings after manipulation, indicating that existing systems face similar risks. See cases in Figure 22 , 23 , 24 . Figure 5: A case of implicit manipulation (more in Figure 19 , 20 , 21 .). LLMs tend to reiterate
+
+**Enriched-v12 semantic relation:** **supports** (semantic-edge direction: symmetric; existence 0.82, type 0.62) — `openalex:W4404783497::k02` → `openalex:W4405035007::k03`
+  - _rationale:_ Both contributions document prestige/authority bias corrupting peer review objectivity. Contribution A finds a 27.7% decision shift when author identities are known (human reviewers). Contribution B finds LLMs produce more favorable reviews when authorship is attributed to well-known researchers — the same construct in a different reviewer type. Evidence [B:007] and [CIT:openalex:W4405035007->openalex:W4404783497:3] confirm B's finding directly parallels A's authority-bias result, materially corroborating it. The citation from B to A appears in background motivation context, not as a direct methodological extension, so builds_on is not defensible. Supports is the strongest defensible relation given the analogous but cross-domain (human vs. LLM) nature of the findings.
+    - `openalex:W4404783497::k02` [empirical_finding] — Reviewer biases alone account for a 37.1% variation in paper acceptance decisions, with specific mechanisms including social conformity pressure (27.2% reduction in rating variance post-rebuttal), altruism fatigue cascades (18.7% commitment decline from a single under-committed reviewer), authority and halo effects (27.7% decision shift when author identities are known), and groupthink amplification among biased reviewers — findings corroborated by established sociological theories.
+      > Our study uncovers several significant findings that align with sociological theories to support future research; including a notable 37.1% variation in paper decisions due to reviewers' biases, supported by sociological theories such as the social influence theory, altruism fatigue, and authority bias
+    - `openalex:W4405035007::k03` [empirical_finding] — LLMs exhibit inherent flaws in scholarly peer review: they assign higher or comparable ratings to papers containing only a title versus full papers (hallucination), and they produce more favorable reviews when authorship is attributed to well-known researchers in single-blind settings (prestige bias).
+      > LLMs exhibit inherent flaws, such as potentially assigning higher ratings to incomplete papers compared to full papers and favoring well-known authors in single-blind review process
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-2
+
+- **Citing** → **EXP-Bench: Can AI Conduct AI Research Experiments?** — Kon et al. (2025) · `arxiv:2505.24785v2` · [arXiv](http://arxiv.org/abs/2505.24785v2)
+- **Cited** ← **PaperBench: Evaluating AI's Ability to Replicate AI Research** — Starace et al. (2025) · `arxiv:2504.01848v3` · [arXiv](http://arxiv.org/abs/2504.01848v3)
+
+**Flagged for:** uses_extends_not_builds_on · 2 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _uses_extends_ (conf 0.75 · inconclusive · obligatory): IterativeAgent (from PaperBench) is run as an evaluated agent on the citing paper's own curated tasks.
+    > ous pipeline to extract and structure crucial experimental details from these research papers and their associated open-source code. With the pipeline, curated 461 AI research tasks from 51 top-tier AI research papers. Evaluations of leading AI agents, such as OpenHands [CITED] and IterativeAgent **[CITED:TARGET]** on demonstrate partial capabilities: while scores on individual experimental aspects such as design or implementation correctness reach 20-35\ , the success rate for complete, executable experiments was a mere 0.5\ . By identifying these bottlenecks and providing realistic step-by-step experiment procedures,
+  - ⚑ _uses_extends_ (conf 0.92 · inconclusive · obligatory): Explicitly 'IterativeAgent (as configured in [CITED:TARGET])' adopted for their own experiments.
+    > .3 & 0.0 & 0.0 & 215 \\ tabular table* Setup. We evaluate a range of agents and LLMs used in related benchmarks [CITED] against . In terms of agents, we made use of OpenHands (a top-performing code generation agent) and IterativeAgent (as configured in **[CITED:TARGET]** to reduce the likelihood of early task stopping), henceforth known as OH and IA , respectively. In terms of LLMs, these include the top-ranked Claude-Sonnet 3.7, Haiku 3.5, Deepseek-R1 [CITED] models, and OpenAI o3-mini variants. Each agent is run in an Ubuntu 24.04 Docker container, a
+
+**Enriched-v12 semantic relation:** **related** (semantic-edge direction: none; existence 0.95, type 0.62) — `arxiv:2504.01848v3::k00` → `arxiv:2505.24785v2::k00`
+  - _rationale:_ EXP-Bench (B) explicitly cites PaperBench (A) in two substantive ways: (1) it reuses the IterativeAgent as configured in PaperBench as one of its evaluation agents [CIT:2, B:001, B:002], and (2) it positions itself relative to PaperBench in the benchmark landscape. However, this reuse is narrow — EXP-Bench borrows only an agent configuration from PaperBench, not its rubric methodology, grading workflow, or task construction pipeline. The two benchmarks share the same high-level goal (evaluating AI agents on AI research tasks) and comparable scale (8,316 vs. 12,737 subtasks), but differ meaningfully in scope (replication from scratch vs. end-to-end experimentation), source papers (ICML 2024 Spotlights/Orals vs. NeurIPS/ICLR 2024), and grading methodology. The overlap is substantive enough to rule out 'none', but the relationship is not strong enough to classify as 'builds_on' (EXP-Bench does not extend PaperBench's core artifact or methodology) or 'supports' (they measure different constructs and produce different findings). 'Related' best captures the shared domain, partial methodological overlap (agent reuse), and mutual positioning in the same benchmark ecosystem without a hard semantic dependency.
+    - `arxiv:2504.01848v3::k00` [benchmark] — PaperBench — a benchmark of 20 ICML 2024 Spotlight and Oral papers with hierarchically decomposed, author-approved rubrics (8,316 individually gradable leaf criteria) and an automated LLM-based grading workflow for evaluating AI agents' ability to replicate AI research from scratch.
+      > PaperBench: a benchmark of 20 ML research papers and author-approved rubrics, and an automated grading workflow using LLM-based judges.
+    - `arxiv:2505.24785v2::k00` [benchmark] — EXP-Bench — a benchmark of 461 AI research tasks drawn from 51 top-tier publications (NeurIPS, ICLR 2024) — evaluates AI agents on complete, end-to-end research experiments: hypothesis formulation, experimental design, implementation, execution, and result analysis, using multi-metric grading across 12,737 individually scorable subtasks.
+      > We introduce EXP-Bench, a novel benchmark designed to systematically evaluate AI agents on complete research experiments sourced from influential AI publications. Given a research question and incomplete starter code, EXP-Bench challenges AI agents to formulate hypotheses, design and implement experimental procedures, execute them, and analyze results.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-3
+
+- **Citing** → **Why LLMs Aren't Scientists Yet: Lessons from Four Autonomous Research Attempts** — Trehan et al. (2026) · `openalex:W7119558012` · [OpenAlex](https://openalex.org/W7119558012) · [pdf](https://arxiv.org/pdf/2601.03315)
+- **Cited** ← **AI-Researcher: Autonomous Scientific Innovation** — Tang et al. (2025) · `arxiv:2505.18705v1` · [arXiv](http://arxiv.org/abs/2505.18705v1)
+
+**Flagged for:** uses_extends_not_builds_on · 1 of 3 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ ⁿ _uses_extends_ (conf 0.7): The citing text explicitly adopts Tang et al.'s framework of technical execution and scientific contribution assessment as a complementary perspective, indicating direct use of the target's method.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > c agent at each relevant stage helps avoid conceptual or implementation errors and prevents error cascading. The two critical axes for further design of verification for AI scientist systems are: process vs. outcome verification, and correctness vs. scientific contribution verification. The latter includes ensuring reproducibility across critical stages such as planning, ideation, and output review. Tang et al.’s framework of technical execution assessment and scientific contribution assessment [ 12 ] provides a complementary perspective on evaluating AI scientist outputs. While collecting results from experiments, ground in the raw data and not LLM interpretations since LLMs have a tendency to read signal in errors or be overly optimistic about clearly mid results - what the Goodfire team calls p-hacking and eureka-ing [ 10 ] . In practice, this means ensuring your experimental output evaluation either programmatically reviews raw logs, statistical metrics, and original data outputs, or, if
+  - ⁿ _compares_contrasts_ (conf 0.75): ScientistBench (from the target paper) is singled out and critiqued for its small size (22 papers, 28 tasks) and anonymization limitations, directly contrasting it against evaluation needs.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > ientists exist, we will likely see smaller modules that build data for the next round of long-duration scientific specialization. The data limitations here extend beyond training to evaluation as well. Multiple benchmarks are now being created. Some notable ones include AstaBench from AllenAI, which provides benchmarking for specific agents tackling specific scientific research tasks [ 14 ] , and ScientistBench, which focuses on broader scientific reasoning capabilities. But even ScientistBench [ 12 ] only includes 22 papers and 28 tasks, mostly extremely guided. This highlights the limitations of data for evaluating autonomous science. Moreover, the complex anonymization processes in ScientistBench also point to the evaluation challenge of separating model capabilities from memorized training data. This issue is important because language models can generate plagiarized science in the absence of robust evaluation systems. [ 15 ] There are further gains to be made by multiplying LLM-to-LLM i
+  - ⁿ _background_ (conf 0.85): This is a reference list entry providing bibliographic citation information, not a substantive engagement with the work.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > valuation of OpenAI GPT-5.1-Codex-Max”, https://evaluations.metr.org//gpt-5-1-codex-max-report/ , 2025 [10] Mark Bissell, Michael Byun and Daniel Balsam “You and your research agent: Lessons from using agents for Interpretability Research” In Goodfire AI , 2025 URL: https://www.goodfire.ai/blog/you-and-your-research-agent [11] Johannes Gasteiger et al. “Automated Researchers Can Subtly Sandbag — alignment.anthropic.com”, https://alignment.anthropic.com/2025/automated-researchers-sandbag/ , 2025 [12] Jiabin Tang, Lianghao Xia, Zhonghang Li and Chao Huang “AI-Researcher: Autonomous Scientific Innovation”, 2025 arXiv: https://arxiv.org/abs/2505.18705 [13] Kevin Weil “Tweet on Hiring Domain Experts for OpenAI for Science”, 2025 URL: https://x.com/kevinweil/status/1962938974260904421?s=46 [14] Allen AI “AstaBench: Rigorous benchmarking of AI agents with a holistic scientific research suite — Ai2 — allenai.org”, 2025 URL: https://allenai.org/blog/astabench [15] Tarun Gupta and Danish Pruthi “All
+
+**Enriched-v12 semantic relation:** **related** (semantic-edge direction: none; existence 0.92, type 0.6) — `arxiv:2505.18705v1::k00` → `openalex:W7119558012::k02`
+  - _rationale:_ Both contributions describe end-to-end autonomous AI scientist pipelines covering similar stages (ideation, experimentation, paper writing). B cites A (ScientistBench / AI-Researcher) as a benchmark reference and uses A's evaluation framework (technical execution + scientific contribution assessment) as a 'complementary perspective' on verification design. However, B does not build on A's methods or extend A's artifacts — it independently built its own minimal-scaffolding six-agent system and references A primarily as context for evaluation limitations and design discussion. The citation relationship is substantive but the framing is comparative/contextual rather than direct use or extension, making 'related' the most defensible classification over 'builds_on'.
+    - `arxiv:2505.18705v1::k00` [framework] — AI-Researcher — a fully autonomous multi-agent system that orchestrates the complete scientific research pipeline from literature review and hypothesis generation through algorithm implementation, experimental validation, and publication-ready manuscript preparation with minimal human intervention.
+      > we introduce AI-Researcher, a fully autonomous research system that transforms how AI-driven scientific discovery is conducted and evaluated. Our framework seamlessly orchestrates the complete research pipeline–from literature review and hypothesis generation to algorithm implementation and publication-ready manuscript preparation–with minimal human intervention.
+    - `openalex:W7119558012::k02` [framework] — A six-agent autonomous research pipeline — covering idea generation, hypothesis formulation, experiment planning, output evaluation, revision, and paper outlining — that operates with minimal scaffolding and a shared file-system context store, demonstrated end-to-end on ML research tasks.
+      > Our final system consisted of the following six distinct modules… Figure 1 shows a high-level diagram of our system design
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-4
+
+- **Citing** → **Kosmos: An AI Scientist for Autonomous Discovery** — Mitchener et al. (2025) · `arxiv:2511.02824v2` · [arXiv](http://arxiv.org/abs/2511.02824v2)
+- **Cited** ← **The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search** — Yamada et al. (2025) · `openalex:W4414827381` · [OpenAlex](https://openalex.org/W4414827381) · [doi](https://doi.org/10.48550/arxiv.2504.08066) · [pdf](https://arxiv.org/pdf/2504.08066)
+
+**Flagged for:** uses_extends_not_builds_on · 1 of 1 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _uses_extends_ (conf 0.7 · does_not · obligatory): Passage states the annotation 'was performed using' this resource, showing active adoption.
+    > use reference genome (mm10). UMIs per genes were counted using cellranger-arc using the –include-intron parameter. Count matrices were processed in R and Python for quality control and filtering. Cell-type annotation was performed using RNAseq data by combining alignment with the Allen Brain Atlas mouse brain taxonomy **[CITED:TARGET]** and de-novo clustering, and then extended to the ATACseq data. Note that only RNAseq data was used in Kosmos. The complete dataset will be made available in a separate publication (Bourdenx et al., in preparation ). Discovery Validations For replication runs, the data analysis agent was prov
+
+**Enriched-v12 semantic relation:** **related** (semantic-edge direction: none; existence 0.85, type 0.55) — `arxiv:2511.02824v2::k00` → `openalex:W4414827381::k00`
+  - _rationale:_ Both Kosmos and AI Scientist-v2 are autonomous AI scientist systems that iteratively generate hypotheses, conduct experiments, and produce scientific reports. Evidence A:002 shows Kosmos explicitly references AI Scientist-v2 (via citation [1] or [2], consistent with the citation fact), noting it "remains limited to machine learning research" as a distinguishing contrast, and A:005 mentions running "eight times as many iterations than existing systems [1, 2, 7]." This indicates Kosmos positions itself relative to AI Scientist-v2 but does not build on or extend its methods or artifacts — rather, it pursues a different architectural approach (world model + domain-general datasets vs. tree-search + ML templates) and broader scientific domains. The citation is used as a background/comparison reference, not as a methodological foundation. The systems share the same high-level objective (automated scientific discovery) and comparable scope of contribution, making them substantively related, but the evidence does not support builds_on, refines, supports, or contradicts at the contribution level: they target different domains (metabolomics/neuroscience vs. ML), use different architectures, and report distinct findings. A 'related' classification is the most defensible given the parallel goals but absence of methodological dependency or directly comparable empirical findings.
+    - `arxiv:2511.02824v2::k00` [framework] — Kosmos — an AI scientist system that, given an open-ended research objective and a dataset, autonomously runs iterative cycles of parallel data analysis, literature search, and hypothesis generation for up to 12 hours, then synthesizes findings into fully-cited scientific reports spanning diverse domains including metabolomics, materials science, neuroscience, and statistical genetics.
+      > Here we present Kosmos, an AI scientist that automates data-driven discovery across a wide range of scientific disciplines. Given an open-ended objective and a dataset, Kosmos performs iterative cycles of parallel data analysis, literature search, and hypothesis generation, and summarizes its discoveries in scientific reports.
+    - `openalex:W4414827381::k00` [framework] — The AI Scientist-v2 — an end-to-end agentic system for automated scientific discovery that eliminates reliance on human-authored code templates, uses a progressive agentic tree-search methodology managed by a dedicated experiment manager agent, and integrates VLM feedback for iterative figure refinement — can autonomously formulate hypotheses, design and execute experiments, analyze data, and author complete scientific manuscripts across diverse machine learning domains.
+      > We introduce The AI Scientist-v2, an automated scientific discovery framework enhanced by agentic tree search, VLM feedback, and parallel experiment execution. It thereby significantly improves the autonomy, flexibility, and scientific exploration depth of previous systems.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+
+### ▸ background_passage_supports_hard_relation
+
+#### N-5
+
+- **Citing** → **MLRC-Bench: Can Language Agents Solve Machine Learning Research Challenges?** — Zhang et al. (2025) · `arxiv:2504.09702v3` · [arXiv](http://arxiv.org/abs/2504.09702v3)
+- **Cited** ← **Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers** — Si et al. (2024) · `openalex:W4403586302` · [OpenAlex](https://openalex.org/W4403586302) · [doi](https://doi.org/10.48550/arxiv.2409.04109) · [pdf](https://arxiv.org/pdf/2409.04109)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.8 · supports · helpful): Table row listing the work among many benchmarks for comparison, no specific critique or use.
+    > [c] Evaluation\ & Evaluation\\ Type \\ AI Scientist\\[CITED] & & & & & LLM \&\ Judge &Paper & LLM-as-a-Judge \\ 1-8 Can LLMs Generate\ Research Ideas?\\**[CITED:TARGET]** & & & & &Human Judge &Idea Proposal & LLM-as-a-Judge \\ 1-8 DiscoPOP\\[CITED] & & & & &Task Performance &Function-Level Code & Performance-based \\ 1-8 MLE-Bench\\ DBLP:journals/c
+  - _background_ (conf 0.8 · supports · helpful): Table row listing the work among many benchmarks for comparison.
+    > ject & Compute\ & Continual\ \\ AI Scientist [CITED] & & & & & LLM \&\ Judge &Paper & \\ 1-9 Can LLMs Generate Novel\ Ideas? **[CITED:TARGET]** & & & & &Human Judge & Idea\ \\ 1-9 DiscoPOP [CITED] & & & & & Performance\\-Based & Function-Level\ \\ 1-9 MLAgentBench DBLP:c
+
+**Enriched-v12 semantic relation:** **contradicts** (semantic-edge direction: symmetric; existence 0.87, type 0.72) — `arxiv:2504.09702v3::k02` → `openalex:W4403586302::k03`
+  - _rationale:_ Contribution B (Si et al.) finds that LLM-generated ideas are rated as significantly more novel than human expert ideas by human reviewers, treating novelty scores from blind review as a meaningful signal. Contribution A (MLRC-Bench) directly contradicts this by showing that LLM-judged idea novelty is poorly correlated with empirical effectiveness, and that LLM-as-a-judge evaluations fail to reliably distinguish research quality. While B uses human judges rather than LLM judges, A's finding undermines the premise that high novelty ratings (whether from humans or LLMs) translate to research value — and A explicitly cites B in a comparison table contrasting evaluation methodologies. Evidence [A:023] shows LLM subjective scores cannot distinguish model capabilities; [B:026] shows AI ideas outscore humans on novelty; these findings are in tension over what novelty ratings signify.
+    - `arxiv:2504.09702v3::k02` [empirical_finding] — LLM-judged idea novelty is poorly correlated with empirical effectiveness on cutting-edge ML research problems, revealing a fundamental misalignment that undermines the reliability of LLM-as-a-judge for evaluating research agent outputs.
+      > We pinpoint the flaws in subjective evaluations of LLM-based research agents, by showing that the LLM-judged idea novelty is misaligned with empirical effectiveness
+    - `openalex:W4403586302::k03` [model] — An LLM ideation agent combining retrieval-augmented generation with an overgenerate-and-rerank inference-time scaling strategy produces research ideas rated as more novel than those written by human NLP experts in blind review.
+      > We compare our human expert baseline with a simple and effective LLM agent that incorporates retrieval augmentation and adopts recent ideas in inference-time scaling, such as overgenerating and reranking LM outputs.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-6
+
+- **Citing** → **Are We There Yet? Revealing the Risks of Utilizing Large Language Models in Scholarly Peer Review** — Ye et al. (2024) · `openalex:W4405035007` · [OpenAlex](https://openalex.org/W4405035007) · [doi](https://doi.org/10.48550/arxiv.2412.01708) · [pdf](https://arxiv.org/pdf/2412.01708)
+- **Cited** ← **Can Large Language Models Provide Useful Feedback on Research Papers? A Large-Scale Empirical Analysis** — Liang et al. (2024) · `openalex:W4400734098` · [OpenAlex](https://openalex.org/W4400734098) · [doi](https://doi.org/10.1056/aioa2400196)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - _background_ (conf 0.7 · supports · obligatory): General motivating mention grouped with other pipeline citations.
+    > ve emerged as promising tools in this realm, attracting significant attention due to their extraordinary capability for understanding and generating natural language [CITED]. Researchers have proposed automated pipelines using LLMs such as GPT-4 to review scientific manuscripts **[CITED:TARGET]**, with studies showing substantial overlap between LLM-generated reviews and those produced by human reviewers (e.g., over 30\ overlap on Nature journals) [CITED]. Additionally, research has documented the increasing reliance on LLMs in writing peer reviews for AI conferences: for four recent AI conference
+  - ⚑ _background_ (conf 0.7 · supports · obligatory): Reports the target's finding (overlap with human reviewers) as contextual evidence, not adopted or contrasted.
+    > e proposed automated pipelines using LLMs such as GPT-4 to review scientific manuscripts [CITED], with studies showing substantial overlap between LLM-generated reviews and those produced by human reviewers (e.g., over 30\ overlap on Nature journals) **[CITED:TARGET]**. Additionally, research has documented the increasing reliance on LLMs in writing peer reviews for AI conferences: for four recent AI conferences, between 6.5\ and 16.9\ of peer reviews are substantially influenced by LLMs [CITED]; for a machine learning conference (ICLR 2024), at least 15.8\ of revi
+
+**Enriched-v12 semantic relation:** **contradicts** (semantic-edge direction: symmetric; existence 0.92, type 0.78) — `openalex:W4400734098::k01` → `openalex:W4405035007::k03`
+  - _rationale:_ Contribution A finds that LLM-generated reviews overlap with human reviews at rates comparable to inter-human overlap, implying LLMs can perform adequately as reviewers. Contribution B, while citing A's overlap finding, presents directly conflicting evidence: LLMs assign higher ratings to incomplete papers (title-only) than full papers and exhibit prestige bias in single-blind settings. These findings challenge A's positive framing by showing LLMs have inherent flaws that make them unreliable. The two contributions address the same construct (LLM suitability for peer review) and reach genuinely incompatible conclusions about LLM reliability and readiness.
+    - `openalex:W4400734098::k01` [empirical_finding] — LLM-generated feedback on research papers overlaps with individual human peer reviews at rates comparable to the overlap between two human reviewers, across multiple scientific domains and large-scale datasets.
+      > The overlap in the points raised by GPT-4 and by human reviewers (average overlap of 30.85% for Nature journals and 39.23% for ICLR) is comparable with the overlap between two human reviewers (average overlap of 28.58% for Nature journals and 35.25% for ICLR).
+    - `openalex:W4405035007::k03` [empirical_finding] — LLMs exhibit inherent flaws in scholarly peer review: they assign higher or comparable ratings to papers containing only a title versus full papers (hallucination), and they produce more favorable reviews when authorship is attributed to well-known researchers in single-blind settings (prestige bias).
+      > LLMs exhibit inherent flaws, such as potentially assigning higher ratings to incomplete papers compared to full papers and favoring well-known authors in single-blind review process
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-7
+
+- **Citing** → **MLRC-Bench: Can Language Agents Solve Machine Learning Research Challenges?** — Zhang et al. (2025) · `arxiv:2504.09702v3` · [arXiv](http://arxiv.org/abs/2504.09702v3)
+- **Cited** ← **MLR-Copilot: Autonomous Machine Learning Research based on Large Language Models Agents** — Li et al. (2024) · `openalex:W4402952811` · [OpenAlex](https://openalex.org/W4402952811) · [doi](https://doi.org/10.48550/arxiv.2408.14033) · [pdf](https://arxiv.org/pdf/2408.14033)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - _background_ (conf 0.7 · partial · helpful): Generic framing of 'LLM research agents' evaluation directions, not specific to this work.
+    > ts. Please refer to our LLM policy ( https://neurips.cc/Conferences/2025/LLM ) for what should or should not be described. itemize enumerate sections/appendix document Introduction Evaluating large language model (LLM) research agents **[CITED:TARGET]** has so far been restricted to two directions. One involves tasking the agent with end-to-end scientific discovery: proposing a research idea, writing implementation code, running experiments, and eventually producing a full paper as done by AI Scientist [CITED]. One issue with such e
+  - ⚑ _background_ (conf 0.65 · partial · obligatory): Grouped with The AI Scientist under a shared critique ('rely largely on subjective reviews'), not singled out.
+    > ea generation, coding, and evaluation can jointly refine solutions [CITED]. Automated end-to-end research workflows like The AI Scientist [CITED] and MLR-Copilot **[CITED:TARGET]** rely largely on subjective reviews of papers or research proposals for evaluating success. In parallel, ResearchAgent [CITED] iteratively refines ideas through multi-agent feedback, and Chain-of-Idea-Agent [CITED] organizes literature into progressive
+
+**Enriched-v12 semantic relation:** **refines** (semantic-edge direction: a_to_b; existence 0.9, type 0.72) — `arxiv:2504.09702v3::k02` → `openalex:W4402952811::k03`
+  - _rationale:_ Contribution A (MLRC-Bench) explicitly critiques the evaluation methodology used by systems like Contribution B (MLR-Copilot): it identifies that automated end-to-end research workflows such as MLR-Copilot "rely largely on subjective reviews of papers or research proposals for evaluating success" (A:010, CIT:2), and then demonstrates that LLM-judged novelty is poorly correlated with actual empirical effectiveness (A:005, A:010). This directly qualifies and narrows the positive claims made by Contribution B — that its framework can produce "novel and feasible" hypotheses as judged by manual/automatic evaluations (B:006, B:019) — by showing such subjective novelty assessments are unreliable indicators of real performance. Contribution A does not build on B's methods or artifacts; rather, it uses B as an exemplar of the evaluation approach it critiques and refines the broader claim about LLM-judged novelty being a valid success criterion for research agents.
+    - `arxiv:2504.09702v3::k02` [empirical_finding] — LLM-judged idea novelty is poorly correlated with empirical effectiveness on cutting-edge ML research problems, revealing a fundamental misalignment that undermines the reliability of LLM-as-a-judge for evaluating research agent outputs.
+      > We pinpoint the flaws in subjective evaluations of LLM-based research agents, by showing that the LLM-judged idea novelty is misaligned with empirical effectiveness
+    - `openalex:W4402952811::k03` [empirical_finding] — Empirical evaluation of autonomous ML research generation across five ML research tasks shows that LLM-agent pipelines with RL-tuned idea generation can produce novel and feasible research hypotheses and complete the full research cycle through executable experimental outcomes.
+      > We evaluate our framework on five machine learning research tasks. Experiment results demonstrate the potential of our framework to facilitate ML research progress and innovation.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-8
+
+- **Citing** → **MLRC-Bench: Can Language Agents Solve Machine Learning Research Challenges?** — Zhang et al. (2025) · `arxiv:2504.09702v3` · [arXiv](http://arxiv.org/abs/2504.09702v3)
+- **Cited** ← **Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers** — Si et al. (2024) · `openalex:W4403586302` · [OpenAlex](https://openalex.org/W4403586302) · [doi](https://doi.org/10.48550/arxiv.2409.04109) · [pdf](https://arxiv.org/pdf/2409.04109)
+
+**Flagged for:** background_passage_supports_hard_relation · 2 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.8 · supports · helpful): Table row listing the work among many benchmarks for comparison, no specific critique or use.
+    > [c] Evaluation\ & Evaluation\\ Type \\ AI Scientist\\[CITED] & & & & & LLM \&\ Judge &Paper & LLM-as-a-Judge \\ 1-8 Can LLMs Generate\ Research Ideas?\\**[CITED:TARGET]** & & & & &Human Judge &Idea Proposal & LLM-as-a-Judge \\ 1-8 DiscoPOP\\[CITED] & & & & &Task Performance &Function-Level Code & Performance-based \\ 1-8 MLE-Bench\\ DBLP:journals/c
+  - ⚑ _background_ (conf 0.8 · supports · helpful): Table row listing the work among many benchmarks for comparison.
+    > ject & Compute\ & Continual\ \\ AI Scientist [CITED] & & & & & LLM \&\ Judge &Paper & \\ 1-9 Can LLMs Generate Novel\ Ideas? **[CITED:TARGET]** & & & & &Human Judge & Idea\ \\ 1-9 DiscoPOP [CITED] & & & & & Performance\\-Based & Function-Level\ \\ 1-9 MLAgentBench DBLP:c
+
+**Enriched-v12 semantic relation:** **refines** (semantic-edge direction: a_to_b; existence 0.9, type 0.72) — `arxiv:2504.09702v3::k02` → `openalex:W4403586302::k01`
+  - _rationale:_ Contribution B (Si et al.) establishes that human judges rate LLM-generated ideas as significantly more novel than human expert ideas — a finding that uses human judgment as the gold standard for novelty evaluation. Contribution A explicitly cites B (CIT evidence) and then qualifies/narrows that finding: A shows that LLM-judged novelty (as opposed to human-judged novelty) is poorly correlated with empirical effectiveness, revealing that novelty scores — the very metric B elevated — are unreliable when produced by LLM judges and do not translate to practical research impact. This does not contradict B's human-judge result but rather refines the broader claim about novelty-based evaluation of LLM research agents: A pinpoints that subjective novelty assessments (including LLM-as-a-judge variants of the methodology B exemplifies) are misaligned with objective performance, making A's contribution a critical qualification of the evaluation framework B pioneered. Evidence A:023 and A:005 explicitly frame A's work as correcting the reliability assumption underlying subjective novelty evaluations such as B's, while B:026 shows the novelty scores A is questioning. The relation is refines (A refines B), not contradicts, because A targets LLM-judged novelty specifically and does not dispute B's human-judge findings directly.
+    - `arxiv:2504.09702v3::k02` [empirical_finding] — LLM-judged idea novelty is poorly correlated with empirical effectiveness on cutting-edge ML research problems, revealing a fundamental misalignment that undermines the reliability of LLM-as-a-judge for evaluating research agent outputs.
+      > We pinpoint the flaws in subjective evaluations of LLM-based research agents, by showing that the LLM-judged idea novelty is misaligned with empirical effectiveness
+    - `openalex:W4403586302::k01` [empirical_finding] — In a large-scale blind evaluation by over 100 NLP researchers, LLM-generated research ideas are rated as significantly more novel (p < 0.05) than ideas written by human experts, while being judged slightly weaker on feasibility — the first statistically significant conclusion on LLM research ideation capability.
+      > we obtain the first statistically significant conclusion on current LLM capabilities for research ideation: we find LLM-generated ideas are judged as more novel (p < 0.05) than human expert ideas while being judged slightly weaker on feasibility
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-9
+
+- **Citing** → **Literature Meets Data: A Synergistic Approach to Hypothesis Generation** — Liu et al. (2024) · `arxiv:2410.17309v3` · [arXiv](http://arxiv.org/abs/2410.17309v3)
+- **Cited** ← **Hypothesis Generation with Large Language Models** — Zhou et al. (2024) · `openalex:W4394647523` · [OpenAlex](https://openalex.org/W4394647523) · [doi](https://doi.org/10.48550/arxiv.2404.04326) · [pdf](https://arxiv.org/pdf/2404.04326)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - _uses_extends_ (conf 0.9 · supports · obligatory): 'Our data-driven hypothesis generation adopts in [CITED:TARGET]' is explicit methodological adoption.
+    > r own implementation, we use commercial ones such as [CITED] and [CITED] as strong baselines. Data-Driven Hypothesis Generation sec:data-driven-hypothesis-generation Our data-driven hypothesis generation adopts in **[CITED:TARGET]**. Here we give a brief overview. Suppose we have a set of observational data in the form of input-label pairs, i.e., =\ (x_1,y_1),...,(x_n,y_n)\ . During the initialization stage of , a generation agent _G is prompted with a set of initial data instances _ init
+  - ⚑ _background_ (conf 0.6 · supports · obligatory): Describes data-driven hypothesis generation as a general category to motivate the paper's hybrid approach, not adopting or singling out the target's results.
+    > ng grounded in established human knowledge [CITED]. However, they come with notable limitations: they require high-quality literature, struggle to adapt to new data, and lack empirical support. Data-driven approaches, on the other hand, propose hypotheses by discovering patterns in data **[CITED:TARGET]**. These hypotheses are data-adaptive and can exhibit strong performance in explaining the data. However, they could be too overly tailored to the specific datasets used, which can hinder their generalizability. We hypothesize that theory can guide the discovery from data and propose to integrate literature-based and
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: a_to_b; existence 0.97, type 0.92) — `arxiv:2410.17309v3::k01` → `openalex:W4394647523::k01`
+  - _rationale:_ Contribution A (arxiv:2410.17309v3) explicitly adopts HypoGeniC (the method underlying Contribution B, openalex:W4394647523) as its data-driven backbone, integrating it with literature-based hypothesis generation. CIT:1 shows A uses B's algorithm in its implementation; CIT:2 and A:005 describe framing B as the data-driven component that A extends; A:010 details how HypoRefine/HypoGeniC from B is incorporated into A's pipeline. This is a clear builds_on from A to B.
+    - `arxiv:2410.17309v3::k01` [empirical_finding] — Automatic evaluation across five datasets shows that integrating literature-based and data-driven hypothesis generation yields the best generalizability, measured by out-of-distribution accuracy, across all task and model configurations, and that the generated hypotheses transfer effectively to different inference models.
+      > Experiments on five datasets demonstrate the effectiveness of our approach. Hypotheses generated by combining information from literature and data achieves the best performance across all task and model configurations.
+    - `openalex:W4394647523::k01` [empirical_finding] — Interpretable hypothesis-based classifiers derived from LLM-generated hypotheses outperform few-shot in-context learning by up to 31.7% and exceed supervised learning baselines (RoBERTa, Llama-2-7B) on two challenging real-world datasets, with hypotheses that transfer robustly across different LLMs and out-of-distribution test sets.
+      > Our generated hypotheses enable interpretable hypothesis-based classifiers that outperform in-context learning and even supervised learning for one synthetic and three real-world datasets. These hypotheses are also robust across different LLMs and out-of-distribution datasets.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-10
+
+- **Citing** → **Literature Meets Data: A Synergistic Approach to Hypothesis Generation** — Liu et al. (2024) · `arxiv:2410.17309v3` · [arXiv](http://arxiv.org/abs/2410.17309v3)
+- **Cited** ← **Hypothesis Generation with Large Language Models** — Zhou et al. (2024) · `openalex:W4394647523` · [OpenAlex](https://openalex.org/W4394647523) · [doi](https://doi.org/10.48550/arxiv.2404.04326) · [pdf](https://arxiv.org/pdf/2404.04326)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - _uses_extends_ (conf 0.9 · supports · obligatory): 'Our data-driven hypothesis generation adopts in [CITED:TARGET]' is explicit methodological adoption.
+    > r own implementation, we use commercial ones such as [CITED] and [CITED] as strong baselines. Data-Driven Hypothesis Generation sec:data-driven-hypothesis-generation Our data-driven hypothesis generation adopts in **[CITED:TARGET]**. Here we give a brief overview. Suppose we have a set of observational data in the form of input-label pairs, i.e., =\ (x_1,y_1),...,(x_n,y_n)\ . During the initialization stage of , a generation agent _G is prompted with a set of initial data instances _ init
+  - ⚑ _background_ (conf 0.6 · supports · obligatory): Describes data-driven hypothesis generation as a general category to motivate the paper's hybrid approach, not adopting or singling out the target's results.
+    > ng grounded in established human knowledge [CITED]. However, they come with notable limitations: they require high-quality literature, struggle to adapt to new data, and lack empirical support. Data-driven approaches, on the other hand, propose hypotheses by discovering patterns in data **[CITED:TARGET]**. These hypotheses are data-adaptive and can exhibit strong performance in explaining the data. However, they could be too overly tailored to the specific datasets used, which can hinder their generalizability. We hypothesize that theory can guide the discovery from data and propose to integrate literature-based and
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: a_to_b; existence 0.97, type 0.92) — `arxiv:2410.17309v3::k02` → `openalex:W4394647523::k00`
+  - _rationale:_ Contribution A (arxiv:2410.17309v3) explicitly uses HypoGeniC (Contribution B) as the backbone for its data-driven hypothesis generation component. Evidence A:005 states 'For the data-driven component, we use HypoGeniC as the backbone,' and A:010 describes how HypoRefine integrates HypoGeniC with literature-based refinement. The citation passages confirm A adopts the method from B. A extends B by adding a literature-based agent and conducting human evaluation, making this a clear builds_on relationship directed a_to_b.
+    - `arxiv:2410.17309v3::k02` [empirical_finding] — LLM-generated hypotheses improve human decision-making accuracy: providing them as guidance raises human accuracy by 7.44% on deception detection and 14.19% on AI-generated content detection, establishing a human-evaluation protocol for assessing the utility of machine-generated hypotheses.
+      > We conduct the first human evaluation to test the utility of LLM-generated hypotheses and demonstrate consistent improvements on two challenging tasks.
+    - `openalex:W4394647523::k00` [method] — HypoGeniC — an iterative hypothesis generation algorithm for LLMs inspired by the upper confidence bound (UCB) multi-armed bandit framework — generates and refines data-grounded hypotheses by maintaining a wrong-example bank and a reward-driven exploitation-exploration tradeoff, enabling LLMs to handle arbitrarily large training sets without long-context limitations.
+      > We propose a novel computational framework for generating and evaluating hypotheses with LLMs.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-11
+
+- **Citing** → **Literature Meets Data: A Synergistic Approach to Hypothesis Generation** — Liu et al. (2024) · `arxiv:2410.17309v3` · [arXiv](http://arxiv.org/abs/2410.17309v3)
+- **Cited** ← **Hypothesis Generation with Large Language Models** — Zhou et al. (2024) · `openalex:W4394647523` · [OpenAlex](https://openalex.org/W4394647523) · [doi](https://doi.org/10.48550/arxiv.2404.04326) · [pdf](https://arxiv.org/pdf/2404.04326)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - _uses_extends_ (conf 0.9 · supports · obligatory): 'Our data-driven hypothesis generation adopts in [CITED:TARGET]' is explicit methodological adoption.
+    > r own implementation, we use commercial ones such as [CITED] and [CITED] as strong baselines. Data-Driven Hypothesis Generation sec:data-driven-hypothesis-generation Our data-driven hypothesis generation adopts in **[CITED:TARGET]**. Here we give a brief overview. Suppose we have a set of observational data in the form of input-label pairs, i.e., =\ (x_1,y_1),...,(x_n,y_n)\ . During the initialization stage of , a generation agent _G is prompted with a set of initial data instances _ init
+  - ⚑ _background_ (conf 0.6 · supports · obligatory): Describes data-driven hypothesis generation as a general category to motivate the paper's hybrid approach, not adopting or singling out the target's results.
+    > ng grounded in established human knowledge [CITED]. However, they come with notable limitations: they require high-quality literature, struggle to adapt to new data, and lack empirical support. Data-driven approaches, on the other hand, propose hypotheses by discovering patterns in data **[CITED:TARGET]**. These hypotheses are data-adaptive and can exhibit strong performance in explaining the data. However, they could be too overly tailored to the specific datasets used, which can hinder their generalizability. We hypothesize that theory can guide the discovery from data and propose to integrate literature-based and
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: a_to_b; existence 0.95, type 0.88) — `arxiv:2410.17309v3::k02` → `openalex:W4394647523::k02`
+  - _rationale:_ Contribution A (arxiv:2410.17309v3) explicitly adopts the HypoGeniC method from Contribution B (openalex:W4394647523) as the backbone for its data-driven hypothesis generation component, as stated in A:005 ('For the data-driven component, we use HypoGeniC as the backbone') and confirmed by citation passages CIT:1 and CIT:2. A builds on B's artifact and method directly, extending it by integrating literature-based guidance and adding human evaluation. Direction is a_to_b.
+    - `arxiv:2410.17309v3::k02` [empirical_finding] — LLM-generated hypotheses improve human decision-making accuracy: providing them as guidance raises human accuracy by 7.44% on deception detection and 14.19% on AI-generated content detection, establishing a human-evaluation protocol for assessing the utility of machine-generated hypotheses.
+      > We conduct the first human evaluation to test the utility of LLM-generated hypotheses and demonstrate consistent improvements on two challenging tasks.
+    - `openalex:W4394647523::k02` [empirical_finding] — LLM-generated hypotheses about real-world classification tasks both corroborate human-verified theories from existing literature and surface novel, previously undocumented insights — including findings that contradict established feature-engineering results.
+      > Our generated hypotheses corroborate existing findings while also providing new insights for the tasks.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-12
+
+- **Citing** → **MLRC-Bench: Can Language Agents Solve Machine Learning Research Challenges?** — Zhang et al. (2025) · `arxiv:2504.09702v3` · [arXiv](http://arxiv.org/abs/2504.09702v3)
+- **Cited** ← **RE-Bench: Evaluating frontier AI R&D capabilities of language model agents against human experts** — Wijk et al. (2024) · `arxiv:2411.15114v2` · [arXiv](http://arxiv.org/abs/2411.15114v2)
+
+**Flagged for:** background_passage_supports_hard_relation · 2 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.8 · supports · helpful): Table row listing benchmark among others for comparison.
+    > 095 & & & & & Performance\\-Based & Single-Script\ \\ 1-9 MLGym-Bench [CITED] & & & & & Performance\\-Based & Single-Script\ \\ 1-9 RE-Bench\\**[CITED:TARGET]** & & & & &Performance-Based &Single-Script Code \\ 1-8 RE-Bench [CITED] & & & & & Performance\\-Based & Single-Script\ & &\\ 1-9 (Ours) & & & &
+  - ⚑ _background_ (conf 0.8 · supports · helpful): Table row listing benchmark among others for comparison.
+    > ite DBLP:journals/corr/abs-2502-14499 & & & & & Performance\\-Based & Single-Script\ \\ 1-9 RE-Bench\\[CITED] & & & & &Performance-Based &Single-Script Code \\ 1-8 RE-Bench **[CITED:TARGET]** & & & & & Performance\\-Based & Single-Script\ & &\\ 1-9 (Ours) & & & & & Performance\\-Based & Repository\\-Level Code & & \\ tabular tabular
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: b_to_a; existence 0.95, type 0.72) — `arxiv:2504.09702v3::k01` → `arxiv:2411.15114v2::k00`
+  - _rationale:_ MLRC-Bench (B) explicitly positions itself relative to RE-Bench (A) in a comparative benchmark table and uses RE-Bench as a direct reference point for its own design choices. Evidence B:007 and B:006 show RE-Bench listed in a structured comparison table where MLRC-Bench is differentiated from it. Evidence B:008 directly critiques RE-Bench's limitations ("mostly cover outdated or narrow domains," "difficult to update," "evaluates single-script solutions") and explains how MLRC-Bench extends or improves upon RE-Bench's approach by featuring repository-level coding and continual updates sourced from ML conferences. The citation evidence (CIT:1, CIT:2) confirms RE-Bench appears in the same comparison table as MLRC-Bench. This constitutes B building on A's benchmark paradigm while refining its scope and design — the relationship is closer to builds_on/refines than mere topical similarity. Given that B explicitly uses A as a baseline of comparison and extends the evaluation framework (rather than using A's data/results directly), builds_on is the most defensible hard relation, with B acting on A.
+    - `arxiv:2504.09702v3::k01` [empirical_finding] — Large-scale evaluation of frontier LLMs under representative agent scaffoldings on ML research competition tasks shows that even the best-performing agent (gemini-exp-1206 under MLAB) closes only 9.3% of the gap between the baseline and top human participant scores, demonstrating severe limitations of current AI research agents in generating and implementing innovative ML solutions.
+      > We conduct large-scale, objective evaluations for a wide array of frontier LLMs with representative agent scaffoldings, highlighting their inability to propose and implement innovative solutions with notable performance gains
+    - `arxiv:2411.15114v2::k00` [benchmark] — RE-Bench (Research Engineering Benchmark) — seven open-ended ML research engineering environments with continuous scoring metrics — enables direct, realistic comparison of AI agent R&D capabilities against human expert performance.
+      > We introduce RE-Bench (Research Engineering Benchmark, v1), which consists of 7 challenging, open-ended ML research engineering environments and data from 71 8-hour attempts by 61 distinct human experts.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-13
+
+- **Citing** → **ResearchGym: Evaluating Language Model Agents on Real-World AI Research** — Garikaparthi et al. (2026) · `arxiv:2602.15112v2` · [arXiv](http://arxiv.org/abs/2602.15112v2)
+- **Cited** ← **RE-Bench: Evaluating frontier AI R&D capabilities of language model agents against human experts** — Wijk et al. (2024) · `arxiv:2411.15114v2` · [arXiv](http://arxiv.org/abs/2411.15114v2)
+
+**Flagged for:** background_passage_supports_hard_relation · 2 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.7 · supports · obligatory): Grouped under general limitation that implementation-focused benchmarks give little headroom for ideation.
+    > ics defined in ( sec:eval-metrics ). -4pt fig:rg figure* Existing evaluations target fragments of the research cycle: ideation work focuses on generating hypotheses without implementation [CITED], while implementation work assesses ML engineering **[CITED:TARGET]** or paper reproduction [CITED], offering little headroom for creative ideation. Meanwhile, closed-loop research benchmarks either (1) require heavy compute (for example, 8 H100 GPUs), making them difficult to reproduce nathani2025mlgym
+  - ⚑ _background_ (conf 0.65 · inconclusive · obligatory): Part of an enumerated group of heavy-compute closed-loop benchmarks (with MLGym, InnovatorBench, etc.) sharing a field-wide reproducibility critique.
+    > mous, wijk2025rebench or paper reproduction [CITED], offering little headroom for creative ideation. Meanwhile, closed-loop research benchmarks either (1) require heavy compute (for example, 8 H100 GPUs), making them difficult to reproduce **[CITED:TARGET]**, (2) rely on LLM judges [CITED], that can be gamed through superficial novelty, and correlate poorly with execution outcomes [CITED], (3) focus on
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: b_to_a; existence 0.95, type 0.8) — `arxiv:2602.15112v2::k01` → `arxiv:2411.15114v2::k00`
+  - _rationale:_ ResearchGym (B) explicitly cites RE-Bench (A) when positioning its own benchmark, contrasting it as 'implementation work assessing ML engineering' with 'little headroom for creative ideation' and noting compute requirements. B builds on A's framing of closed-loop research evaluation and situates its contribution as addressing limitations of A (heavy compute, little creative headroom). The citation is not merely background; B uses A as a direct reference point to define the design desiderata of ResearchGym. Direction is b_to_a: B builds on A.
+    - `arxiv:2602.15112v2::k01` [empirical_finding] — Frontier AI agents exhibit a sharp capability–reliability gap on end-to-end research tasks: a GPT-5-based agent surpasses provided baselines in only 1 of 15 evaluations (6.7%) and completes 26.5% of sub-tasks on average, yet in one run exceeds the human reference solution of an ICML 2025 Spotlight task, showing occasional but unreliable state-of-the-art performance.
+      > the agent improves over the provided baselines from the repository in just 1 of 15 evaluations (6.7%) by 11.5%, and completes only 26.5% of sub-tasks on average … Yet in a single run, the agent surpasses the solution of an ICML 2025 Spotlight task, indicating that frontier agents can occasionally reach state-of-the-art performance, but do so unreliably.
+    - `arxiv:2411.15114v2::k00` [benchmark] — RE-Bench (Research Engineering Benchmark) — seven open-ended ML research engineering environments with continuous scoring metrics — enables direct, realistic comparison of AI agent R&D capabilities against human expert performance.
+      > We introduce RE-Bench (Research Engineering Benchmark, v1), which consists of 7 challenging, open-ended ML research engineering environments and data from 71 8-hour attempts by 61 distinct human experts.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-14
+
+- **Citing** → **Aspect-Guided Multi-Level Perturbation Analysis of Large Language Models in Automated Peer Review** — Li et al. (2025) · `arxiv:2502.12510v1` · [arXiv](http://arxiv.org/abs/2502.12510v1)
+- **Cited** ← **AI-Driven Review Systems: Evaluating LLMs in Scalable and Bias-Aware Academic Reviews** — Tyser et al. (2024) · `openalex:W4403006832` · [OpenAlex](https://openalex.org/W4403006832) · [doi](https://doi.org/10.48550/arxiv.2408.10365) · [pdf](https://arxiv.org/pdf/2408.10365)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 1 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.75 · supports · obligatory): Cited as an example spurring 'proposals for fully automated peer review systems', general context.
+    > pers, and consolidating feedback [CITED]. Early studies suggest some overlap between LLM-assisted reviews and human reviews, and AI conferences already report non-trivial use of AI in the review process [CITED]. This has spurred proposals for fully automated peer review systems **[CITED:TARGET]**. However, concerns about the reliability, fairness, and transparency of LLM-based reviews remain paramount. While existing research has highlighted LLM vulnerabilities like hallucination, bias, and susceptibility to adversarial edits [CITED], these studies o
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: a_to_b; existence 0.85, type 0.62) — `arxiv:2502.12510v1::k01` → `openalex:W4403006832::k02`
+  - _rationale:_ Contribution A (arxiv:2502.12510v1) extends and builds on the error-injection approach introduced in B (openalex:W4403006832). B establishes the method of artificially injecting errors into papers to discover LLM reviewer limitations. A adopts and extends this perturbation methodology into a more systematic, aspect-guided, multi-level framework covering three components (paper, review, rebuttal) and adding directional and invariance statistical tests. The citation in A references B in the context of prior work on automated peer review systems, and A's abstract explicitly describes a more elaborate perturbation framework that generalizes the core idea from B. The direction is a_to_b since A explicitly extends B's approach.
+    - `arxiv:2502.12510v1::k01` [framework] — An aspect-guided, multi-level perturbation framework for diagnosing LLM robustness in automated peer review, targeting single components (paper, review, or rebuttal) along defined quality aspects and assessing impact through directional and invariance statistical tests on both LLM-as-Reviewer and LLM-as-Meta-Reviewer roles.
+      > Our aspect-guided, multi-level approach effectively integrates both LLM reviewer and meta-reviewer perturbations, employing directional and invariance tests to assess the impact of these perturbations.
+    - `openalex:W4403006832::k02` [method] — Artificially injecting errors and shortcomings into papers and systematically analyzing LLM reviewer responses provides an automatic method for discovering limitations and blind spots in LLM-based academic reviewing.
+      > Automatic discovery of LLM review limitations, using synthesis and analysis to map errors and shortcomings in LLM based reviewing
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-15
+
+- **Citing** → **ReviewRL: Towards Automated Scientific Review with RL** — Zeng et al. (2025) · `arxiv:2508.10308` · [S2](https://www.semanticscholar.org/paper/278d12fdeb3fe3e5ad1e50fffb9ec8839de324c0) · [doi](https://doi.org/10.48550/arXiv.2508.10308)
+- **Cited** ← **DeepReview: Improving LLM-based Paper Review with Human-like Deep Thinking Process** — Zhu et al. (2025) · `arxiv:2503.08569` · [S2](https://www.semanticscholar.org/paper/60c8a127e6ae8c8e21dd7edfc187ff7f0d9ae2bd) · [doi](https://doi.org/10.48550/arXiv.2503.08569)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - _background_ (conf 0.6 · supports · obligatory): Generic capability claim about LLM-based review with target as passing example.
+    > val fig:model-based-eval figure Recent advances in large language models (LLMs) have created promising opportunities for AI-assisted scientific assessment. These models can analyze complex scientific texts, identify methodological strengths and weaknesses, and generate structured feedback at scale **[CITED:TARGET]**. However, existing approaches to automated paper reviewing face three significant challenges. First, they often struggle to maintain factual accuracy and provide evidence-based critiques that connect the paper to relevant prior work [CITED]. Second, they tend to overestimate paper quality, assigning rating
+  - ⚑ _background_ (conf 0.55 · inconclusive · obligatory): Describes DeepReviewer's SFT/CoT training then critiques 'these advancements' as a whole group, not the target alone.
+    > archer and The AI Scientist [CITED] have introduced end-to-end frameworks that simulate the entire research lifecycle, including manuscript drafting and iterative peer review, where their reviewer modules are trained via supervised fine-tuning or operate through agentic inference. More recently, DeepReviewer **[CITED:TARGET]** is trained through SFT using long chain-of-thought (CoT) data to enhance its reasoning ability. Despite these advancements, challenges remain in ensuring the factualness, reasoning depth and rating consistency of LLM-generated reviews. Reinforcement Learning for LLMs Reinforcement Learning (RL) su
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: b_to_a; existence 0.9, type 0.72) — `arxiv:2508.10308::k00` → `arxiv:2503.08569::k01`
+  - _rationale:_ ReviewRL (B) uses DeepReviewer/DeepReview-13K as a prior baseline, explicitly mentioning it in related work as a system trained via SFT on CoT data, and positions ReviewRL as advancing beyond that approach with RL optimization. The citation is substantive: B situates itself relative to A's contribution and identifies limitations that B's framework addresses. This is builds_on (b_to_a) rather than merely 'related' because B explicitly builds its problem framing and baseline comparison around A's work.
+    - `arxiv:2508.10308::k00` [method] — ReviewRL, a reinforcement learning framework for generating scientific paper reviews that integrates retrieval-augmented context generation via ArXiv-MCP, supervised fine-tuning, and RL optimization with composite rewards.
+      > We introduce ReviewRL, a reinforcement learning framework for generating comprehensive and factually grounded scientific paper reviews. Our approach combines: (1) an ArXiv-MCP retrieval-augmented context generation pipeline that incorporates relevant scientific literature, (2) supervised fine-tuning that establishes foundational reviewing capabilities, and (3) a reinforcement learning procedure with a composite reward function that jointly enhances review quality and rating accuracy.
+    - `arxiv:2503.08569::k01` [dataset] — DeepReview-13K — a dataset of 13,378 research papers with fine-grained structured intermediate review steps and final assessments capturing expert paper review reasoning processes
+      > The resulting dataset, DeepReview-13K, consists of raw research papers, structured intermediate review steps, and final assessments.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-16
+
+- **Citing** → **ReviewRL: Towards Automated Scientific Review with RL** — Zeng et al. (2025) · `arxiv:2508.10308` · [S2](https://www.semanticscholar.org/paper/278d12fdeb3fe3e5ad1e50fffb9ec8839de324c0) · [doi](https://doi.org/10.48550/arXiv.2508.10308)
+- **Cited** ← **DeepReview: Improving LLM-based Paper Review with Human-like Deep Thinking Process** — Zhu et al. (2025) · `arxiv:2503.08569` · [S2](https://www.semanticscholar.org/paper/60c8a127e6ae8c8e21dd7edfc187ff7f0d9ae2bd) · [doi](https://doi.org/10.48550/arXiv.2503.08569)
+
+**Flagged for:** background_passage_supports_hard_relation · 2 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.6 · supports · obligatory): Generic capability claim about LLM-based review with target as passing example.
+    > val fig:model-based-eval figure Recent advances in large language models (LLMs) have created promising opportunities for AI-assisted scientific assessment. These models can analyze complex scientific texts, identify methodological strengths and weaknesses, and generate structured feedback at scale **[CITED:TARGET]**. However, existing approaches to automated paper reviewing face three significant challenges. First, they often struggle to maintain factual accuracy and provide evidence-based critiques that connect the paper to relevant prior work [CITED]. Second, they tend to overestimate paper quality, assigning rating
+  - ⚑ _background_ (conf 0.55 · inconclusive · obligatory): Describes DeepReviewer's SFT/CoT training then critiques 'these advancements' as a whole group, not the target alone.
+    > archer and The AI Scientist [CITED] have introduced end-to-end frameworks that simulate the entire research lifecycle, including manuscript drafting and iterative peer review, where their reviewer modules are trained via supervised fine-tuning or operate through agentic inference. More recently, DeepReviewer **[CITED:TARGET]** is trained through SFT using long chain-of-thought (CoT) data to enhance its reasoning ability. Despite these advancements, challenges remain in ensuring the factualness, reasoning depth and rating consistency of LLM-generated reviews. Reinforcement Learning for LLMs Reinforcement Learning (RL) su
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: b_to_a; existence 0.85, type 0.62) — `arxiv:2508.10308::k00` → `arxiv:2503.08569::k03`
+  - _rationale:_ ReviewRL (B) cites DeepReview-Bench (A's paper) as prior work and positions itself as addressing remaining challenges after DeepReviewer. The citation context in [CIT:arxiv:2508.10308->arxiv:2503.08569:2] and [B:007] shows B explicitly references DeepReviewer (the system that produced DeepReview-Bench) as a baseline to surpass. However, the specific contribution A is DeepReview-Bench (the benchmark), while B's ReviewRL is a review generation framework. B likely uses the benchmark for evaluation, making this a builds_on relationship where B builds on A's benchmark artifact, though the evidence doesn't explicitly confirm B evaluated on DeepReview-Bench specifically.
+    - `arxiv:2508.10308::k00` [method] — ReviewRL, a reinforcement learning framework for generating scientific paper reviews that integrates retrieval-augmented context generation via ArXiv-MCP, supervised fine-tuning, and RL optimization with composite rewards.
+      > We introduce ReviewRL, a reinforcement learning framework for generating comprehensive and factually grounded scientific paper reviews. Our approach combines: (1) an ArXiv-MCP retrieval-augmented context generation pipeline that incorporates relevant scientific literature, (2) supervised fine-tuning that establishes foundational reviewing capabilities, and (3) a reinforcement learning procedure with a composite reward function that jointly enhances review quality and rating accuracy.
+    - `arxiv:2503.08569::k03` [benchmark] — DeepReview-Bench — a comprehensive benchmark with 1,286 samples for evaluating paper review systems on both quantitative aspects (rating prediction, ranking, paper selection) and qualitative review generation quality
+      > We further construct DeepReview-Bench, a comprehensive benchmark containing 1.2K samples, which evaluates both quantitative aspects (rating prediction, quality ranking, and paper selection) and qualitative review generation through LLM-based assessment.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-17
+
+- **Citing** → **MLR-Bench: Evaluating AI Agents on Open-Ended Machine Learning Research** — Chen et al. (2025) · `openalex:W4414587939` · [OpenAlex](https://openalex.org/W4414587939) · [doi](https://doi.org/10.48550/arxiv.2505.19955) · [pdf](https://arxiv.org/pdf/2505.19955)
+- **Cited** ← **PaperBench: Evaluating AI's Ability to Replicate AI Research** — Starace et al. (2025) · `arxiv:2504.01848v3` · [arXiv](http://arxiv.org/abs/2504.01848v3)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.7 · supports · obligatory): Listed among several narrow-task benchmarks describing its focus area, no adoption or unique contrast.
+    > rllmsearn , and writing [CITED]. Existing benchmarks typically target narrow tasks: the MLE benchmark [CITED] focuses on engineering, the MLAgentBench [CITED] on experimentation, and the PaperBench **[CITED:TARGET]** on paper reproduction, each revealing gaps between AI agents and human researchers [CITED]. RE-Bench [CITED] pushes toward generalization on unseen tasks [CITED]. Our proposed MLR-Bench complements these efforts b
+  - _background_ (conf 0.6 · supports · obligatory): The 'revealing gaps' characterization applies collectively to MLE, MLAgentBench and PaperBench, not singled out.
+    > arks typically target narrow tasks: the MLE benchmark [CITED] focuses on engineering, the MLAgentBench [CITED] on experimentation, and the PaperBench [CITED] on paper reproduction, each revealing gaps between AI agents and human researchers **[CITED:TARGET]**. RE-Bench [CITED] pushes toward generalization on unseen tasks [CITED]. Our proposed MLR-Bench complements these efforts by evaluating 201 open-ended research tasks from major Machine Learning conferences, covering the entire research pipeline. By combining modular agent scaffolds, human-aligned
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: b_to_a; existence 0.85, type 0.72) — `openalex:W4414587939::k01` → `arxiv:2504.01848v3::k02`
+  - _rationale:_ MLR-Judge (B) explicitly cites PaperBench/JudgeEval (A) as a prior structured effort demonstrating that fine-tuned LLM judges can align with human reviewers, then builds on these insights to introduce MLR-Judge validated against expert human ratings [B:029]. The citation context shows B positioning itself as extending A's rubric-based judge approach to a broader benchmark. JudgeEval (A) is the auxiliary dataset/evaluation framework that B's MLR-Judge approach builds upon conceptually, making this a b_to_a builds_on relationship.
+    - `openalex:W4414587939::k01` [framework] — MLR-Judge — an automated evaluation framework pairing LLM-based reviewers with structured review rubrics — achieves agreement with expert human reviewers comparable to inter-human agreement, providing a scalable proxy for assessing AI-generated research quality.
+      > MLR-Judge , an automated evaluation pipeline consisting of LLM-based judge and structured review rubrics; ... We find that the level of agreement between an LLM judge and a human judge, when assessing the same output, is very close to the level of agreement between two human judges, demonstrating its effectiveness as a reliable evaluation tool.
+    - `arxiv:2504.01848v3::k02` [dataset] — JudgeEval — a dataset of human-expert-graded replication submissions that serves as an auxiliary evaluation for developing and benchmarking automated LLM-based judges of research replication quality.
+      > JudgeEval: a dataset of human-graded submissions, which can be used as an auxiliary evaluation for the development and assessment of automated judges.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-18
+
+- **Citing** → **Towards a Medical AI Scientist** — Wu et al. (2026) · `arxiv:2603.28589v1` · [arXiv](http://arxiv.org/abs/2603.28589v1)
+- **Cited** ← **AI-Researcher: Autonomous Scientific Innovation** — Tang et al. (2025) · `arxiv:2505.18705v1` · [arXiv](http://arxiv.org/abs/2505.18705v1)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.8 · supports · helpful): Grouped mention as part of general 'AI Scientists' framework description.
+    > ulti-agent systems [CITED] that extend beyond narrow task execution. Together, these developments have catalyzed the rise of autonomous research frameworks, often referred to as AI Scientists **[CITED:TARGET]**, which seek to automate the scientific workflow from hypothesis generation and experimental design to result interpretation and manuscript preparation, promising to accelerate scientific innovation [CITED]. These AI Scientist systems have shown promise in accelerating research in domains such as mathem
+  - _uses_extends_ (conf 0.85 · inconclusive · obligatory): 'Inspired by [CITED:TARGET]' shows the citing authors adopt its decomposition approach for their Surveyor component.
+    > d and executable evidence base that links scientific claims to their operational implementations. The Preparer retrieves relevant literature together with associated code artifacts, normalizing them into a unified representation that captures problem formulations, model designs, and experimental protocols. Inspired by **[CITED:TARGET]**, the Surveyor then performs structured synthesis by decomposing each reference into its core conceptual and methodological primitives. Large language models first extract the fundamental research contribution and methodological skeleton while abstracting away domain-specific terminology to reduce surface bias. These a
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: b_to_a; existence 0.92, type 0.82) — `arxiv:2603.28589v1::k00` → `arxiv:2505.18705v1::k00`
+  - _rationale:_ Medical AI Scientist (B) explicitly builds on a specific methodological element from AI-Researcher (A). Evidence [B:033] and [CIT:arxiv:2603.28589v1->arxiv:2505.18705v1:2] both state that B's Surveyor component is "Inspired by [AI-Researcher]" and adopts its approach of "structured synthesis by decomposing each reference into its core conceptual and methodological primitives" — a direct methodological borrowing from A's literature review pipeline (evidenced in [A:012], which describes the same decomposition process). This goes beyond mere citation as background: B explicitly adapts A's structured literature decomposition technique into its own Preparer/Surveyor subsystem. Additionally, [B:003] and [B:004] position B as extending the class of autonomous research systems that A belongs to, while explicitly differentiating B by its medical domain focus. The relationship is directional (B builds on A), as A's artifact/method is incorporated into B's design.
+    - `arxiv:2603.28589v1::k00` [framework] — Medical AI Scientist — an end-to-end agentic framework for autonomous clinical research comprising an Idea Proposer, Experimental Executor, and Manuscript Composer — is the first autonomous research system explicitly tailored to clinical medicine, operating across three modes (paper-based reproduction, literature-inspired innovation, and task-driven exploration) with progressively increasing autonomy.
+      > we introduce Medical AI Scientist, the first autonomous research framework tailored to clinical autonomous research... The framework operates under 3 research modes, namely paper-based reproduction, literature-inspired innovation, and task-driven exploration, each corresponding to a distinct level of automated scientific inquiry with progressively increasing autonomy.
+    - `arxiv:2505.18705v1::k00` [framework] — AI-Researcher — a fully autonomous multi-agent system that orchestrates the complete scientific research pipeline from literature review and hypothesis generation through algorithm implementation, experimental validation, and publication-ready manuscript preparation with minimal human intervention.
+      > we introduce AI-Researcher, a fully autonomous research system that transforms how AI-driven scientific discovery is conducted and evaluated. Our framework seamlessly orchestrates the complete research pipeline–from literature review and hypothesis generation to algorithm implementation and publication-ready manuscript preparation–with minimal human intervention.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-19
+
+- **Citing** → **AI-Researcher: Autonomous Scientific Innovation** — Tang et al. (2025) · `arxiv:2505.18705v1` · [arXiv](http://arxiv.org/abs/2505.18705v1)
+- **Cited** ← **The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery** — Lu et al. (2024) · `openalex:W4402952666` · [OpenAlex](https://openalex.org/W4402952666) · [doi](https://doi.org/10.48550/arxiv.2408.06292) · [pdf](https://arxiv.org/pdf/2408.06292)
+
+**Flagged for:** background_passage_supports_hard_relation · 2 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.75 · supports · obligatory): Descriptive survey statement 'pioneered this field', followed by listing complementary/successor approaches.
+    > ery and scholarly writing tasks that require extensive reasoning chains and domain expertise. AI-Driven Research Systems Recent advances have transformed AI's role in scientific research from assistive tools to autonomous agents capable of executing complete research workflows. The AI Scientist framework **[CITED:TARGET]** pioneered this field as the first comprehensive system where frontier language models independently generate research ideas, conduct experiments, and produce scientific papers. Complementary approaches include CycleResearcher [CITED], which demonstrated the viability of open-source LLMs for auto
+  - ⚑ _background_ (conf 0.75 · supports · obligatory): Descriptive related-work statement about the framework, not adopted or specifically contrasted.
+    > h capabilities remains an ongoing challenge that requires further advancement. Automated Scientific Discovery Systems Recent advances have transformed AI's role in scientific research from assistive tools to autonomous agents capable of conducting entire research processes. The AI Scientist framework **[CITED:TARGET]** represents the first system for automated scientific discovery, where frontier language models independently generate research ideas, conduct experiments, and produce scientific papers. Its successor, AI Scientist-v2 [CITED], enhanced these capabilities through agentic tree search methodology an
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: a_to_b; existence 0.95, type 0.82) — `arxiv:2505.18705v1::k00` → `openalex:W4402952666::k00`
+  - _rationale:_ AI-Researcher (Contribution A) explicitly and repeatedly cites The AI Scientist (Contribution B) as the pioneering foundational system for autonomous scientific discovery, describing it as having "pioneered this field" and representing "the first system for automated scientific discovery" (CIT:1, CIT:2). A:017 states that AI-Researcher builds on the paradigm established by prior end-to-end AI systems (citing B among others), and the framework explicitly extends the same pipeline structure — idea generation, experiment execution, paper writing — while adding new components such as a multi-agent architecture, a dedicated benchmark (Scientist-Bench), and a structured three-stage pipeline. This is not mere topical similarity: A directly adopts and extends B's conceptual framework and cites it as the field-founding prior work, placing A in a clear builds_on relationship with respect to B.
+    - `arxiv:2505.18705v1::k00` [framework] — AI-Researcher — a fully autonomous multi-agent system that orchestrates the complete scientific research pipeline from literature review and hypothesis generation through algorithm implementation, experimental validation, and publication-ready manuscript preparation with minimal human intervention.
+      > we introduce AI-Researcher, a fully autonomous research system that transforms how AI-driven scientific discovery is conducted and evaluated. Our framework seamlessly orchestrates the complete research pipeline–from literature review and hypothesis generation to algorithm implementation and publication-ready manuscript preparation–with minimal human intervention.
+    - `openalex:W4402952666::k00` [framework] — The AI Scientist — an end-to-end, fully automated pipeline in which a frontier LLM generates research ideas, searches the literature, designs and executes experiments, visualizes results, writes a complete scientific manuscript, and performs self-review in an open-ended loop — enables autonomous scientific discovery in machine learning at a cost of under $15 per paper.
+      > We introduce the first end-to-end framework for fully automated scientific discovery in Machine Learning research, enabled by frontier LLMs (Section 3). This fully automated process includes idea generation, experiment design, execution, and visualizing and writing up the results into a full manuscript.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-20
+
+- **Citing** → **ResearchGym: Evaluating Language Model Agents on Real-World AI Research** — Garikaparthi et al. (2026) · `arxiv:2602.15112v2` · [arXiv](http://arxiv.org/abs/2602.15112v2)
+- **Cited** ← **EXP-Bench: Can AI Conduct AI Research Experiments?** — Kon et al. (2025) · `arxiv:2505.24785v2` · [arXiv](http://arxiv.org/abs/2505.24785v2)
+
+**Flagged for:** background_passage_supports_hard_relation · 2 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.75 · supports · obligatory): Table row listing EXP-Bench's attributes among many other benchmarks.
+    > & --\\ LMR-Bench [CITED] & Papers & Unit tests & & & & -- & & -- & & -- & -- & --\\ RECODE-H [CITED] & Papers & Unit tests & & & & -- & & -- & & 24GB & -- & --\\ EXP-Bench**[CITED:TARGET]** & Papers & Output Match & & & & -- & & -- & & 2-640GB+ & -- & --\\ Data Driven Discovery & & & & & & & & & \\ HypoBench [CITED] & Mixed & Heuristic & & & & -- &
+  - ⚑ _background_ (conf 0.75 · supports · obligatory): Same descriptive comparison table listing, no specific contrast or adoption.
+    > \ LMR-Bench [CITED] & Papers & Unit tests & & & & -- & & -- & & -- & -- & --\\ RECODE-H [CITED] & Papers & Unit tests & & & & -- & & -- & & 24GB & -- & --\\ EXP-Bench**[CITED:TARGET]** & Papers & Output Match & & & & -- & & -- & & 2-640GB+ & -- & --\\ Data Driven Discovery & & & & & & & & & \\ HypoBench [CITED] & Mixed & Heuristic & & &
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: b_to_a; existence 0.9, type 0.72) — `arxiv:2602.15112v2::k01` → `arxiv:2505.24785v2::k00`
+  - _rationale:_ ResearchGym (B) explicitly cites EXP-Bench (A) in its related-work comparison table [B:007, CIT passages], positioning EXP-Bench as a prior benchmark in the same closed-loop research evaluation space. B introduces a new benchmark and evaluation infrastructure (ResearchGym) that addresses gaps it identifies in EXP-Bench and similar works — notably contamination resistance, closed-loop ideation, single-GPU feasibility, and objective grading — meaning B builds on A as a reference point and explicitly extends the design space A opened. The direction is b_to_a (B builds on A). The relation is not merely 'related' because B's benchmark design choices are directly motivated by and contrasted against A's approach. It is not 'refines' because B is a distinct artifact rather than a correction of A.
+    - `arxiv:2602.15112v2::k01` [empirical_finding] — Frontier AI agents exhibit a sharp capability–reliability gap on end-to-end research tasks: a GPT-5-based agent surpasses provided baselines in only 1 of 15 evaluations (6.7%) and completes 26.5% of sub-tasks on average, yet in one run exceeds the human reference solution of an ICML 2025 Spotlight task, showing occasional but unreliable state-of-the-art performance.
+      > the agent improves over the provided baselines from the repository in just 1 of 15 evaluations (6.7%) by 11.5%, and completes only 26.5% of sub-tasks on average … Yet in a single run, the agent surpasses the solution of an ICML 2025 Spotlight task, indicating that frontier agents can occasionally reach state-of-the-art performance, but do so unreliably.
+    - `arxiv:2505.24785v2::k00` [benchmark] — EXP-Bench — a benchmark of 461 AI research tasks drawn from 51 top-tier publications (NeurIPS, ICLR 2024) — evaluates AI agents on complete, end-to-end research experiments: hypothesis formulation, experimental design, implementation, execution, and result analysis, using multi-metric grading across 12,737 individually scorable subtasks.
+      > We introduce EXP-Bench, a novel benchmark designed to systematically evaluate AI agents on complete research experiments sourced from influential AI publications. Given a research question and incomplete starter code, EXP-Bench challenges AI agents to formulate hypotheses, design and implement experimental procedures, execute them, and analyze results.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-21
+
+- **Citing** → **TreeReview: A Dynamic Tree of Questions Framework for Deep and Efficient LLM-based Scientific Peer Review** — Chang et al. (2025) · `arxiv:2506.07642` · [S2](https://www.semanticscholar.org/paper/fccde18f25977d129af241996a769bdb23d1148d) · [doi](https://doi.org/10.48550/arXiv.2506.07642)
+- **Cited** ← **Automated Focused Feedback Generation for Scientific Writing Assistance** — Chamoun et al. (2024) · `openalex:W4402683796` · [OpenAlex](https://openalex.org/W4402683796) · [doi](https://doi.org/10.18653/v1/2024.findings-acl.580) · [pdf](https://aclanthology.org/2024.findings-acl.580.pdf)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 1 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.75 · partial · obligatory): Grouped generic mention of frameworks using multi-agent/multi-modal/external-knowledge integration.
+    > curating peer review datasets and fine-tuning LLMs specifically for review generation [CITED]. The second direction focuses on more complex frameworks that enhance LLM capabilities through multi-agent systems, multi-modal information processing, and external knowledge integration **[CITED:TARGET]**. Beyond standalone review generation, researchers also explore integrating it into automated scientific discovery frameworks such as the AI Scientist [CITED] and the CycleResearcher [CITED] to serve as a crucial feedback module. Decomposition of Complex Tasks Task decomposi
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: a_to_b; existence 0.9, type 0.72) — `arxiv:2506.07642::k01` → `openalex:W4402683796::k01`
+  - _rationale:_ Contribution A (TreeReview benchmark) explicitly incorporates the "Actionable Feedback Comments Generation" task that is directly defined and introduced by Contribution B (SWIF2T/focused feedback generation). Evidence A:017 describes this task as generating "specific, critical feedback points targeting substantive weaknesses," language closely mirroring B's definition, and explicitly uses MARG (a related system also cited in the same cluster as B) as a baseline. Evidence A:005 and A:016 further show that TreeReview benchmarks itself against this task type. The citation fact (CIT) confirms A cites B in the context of LLMs fine-tuned or designed for review generation, situating B's focused feedback framing as foundational prior work that A's benchmark extends to evaluate. Thus A builds on B by adopting B's task definition of actionable/focused feedback generation and incorporating it as one of the two evaluation scenarios in its benchmark.
+    - `arxiv:2506.07642::k01` [benchmark] — An evaluation benchmark for scientific peer review assessment supporting both full review generation and actionable feedback comment generation, derived from ICLR and NeurIPS papers
+      > We construct a benchmark derived from ICLR and NeurIPS venues to evaluate our method on full review generation and actionable feedback comments generation tasks.
+    - `openalex:W4402683796::k01` [other] — Automated focused feedback generation is a well-defined task distinct from high-level review generation: given a specific paragraph within a scientific paper, the goal is to produce comments that demonstrate reading comprehension, specificity, and actionability toward improving research content.
+      > In this paper, we introduce the task of automated focused feedback generation for scientific writing assistance (Figure 1). Focused feedback entails providing specific, actionable, and coherent comments that identify weaknesses in a paper or suggest revisions.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-22
+
+- **Citing** → **ResearcherBench: Evaluating Deep AI Research Systems on the Frontiers of Scientific Inquiry** — Xu et al. (2025) · `arxiv:2507.16280` · [S2](https://www.semanticscholar.org/paper/6c9288c709db52adf7df7a1e32df5683edbbdcc2) · [doi](https://doi.org/10.48550/arXiv.2507.16280)
+- **Cited** ← **DeepResearch Bench: A Comprehensive Benchmark for Deep Research Agents** — Du et al. (2025) · `arxiv:2506.11763` · [S2](https://www.semanticscholar.org/paper/cca73506ab839718879a49ccce389d33907aa053) · [doi](https://doi.org/10.48550/arXiv.2506.11763)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - _background_ (conf 0.65 · supports · obligatory): Grouped critique of 'current evaluation frameworks' emphasizing report generation, not singling out DeepResearch Bench.
+    > hmarks for evaluating deep research capabilities predominantly focus on assessing systems' abilities to retrieve and synthesize established knowledge rather than their capacity to engage with genuinely novel, frontier research questions. Current evaluation frameworks typically emphasize comprehensive report generation **[CITED:TARGET]** or agents' web interaction capabilities [CITED], focusing on breadth of information retrieval rather than conceptual understanding and insight generation. These frameworks fail to capture a crucial dimension of research assistance: the ability to understand, analyze, and provide meani
+  - ⚑ _background_ (conf 0.7 · supports · obligatory): Detailed but purely descriptive summary of DeepResearch Bench's contents, not adopted or contrasted.
+    > cholar, woodrow2025algorithms advanced literature synthesis assessment with expert-written responses across scientific disciplines, emphasizing citation accuracy and factual correctness. Recent developments have introduced benchmarks specifically designed for evaluating deep research capabilities. DeepResearch Bench **[CITED:TARGET]** presents 100 PhD-level research tasks crafted by domain experts across 22 distinct fields, introducing RACE (Reference-based Adaptive Criteria-driven Evaluation) and FACT (Framework for Factual Abundance and Citation Trustworthiness) methodologies to assess report generation quality and information retrieval capabilit
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: b_to_a; existence 0.85, type 0.62) — `arxiv:2507.16280::k02` → `arxiv:2506.11763::k02`
+  - _rationale:_ Contribution B (ResearcherBench) explicitly cites and acknowledges Contribution A's FACT framework as a prior evaluation methodology, then introduces its own "factual assessment" component measuring citation faithfulness and groundedness (coverage). Evidence B:009 and CIT:2 describe FACT by name and position it as prior work. Evidence B:004 explicitly contrasts B's approach against A's framework ("Current evaluation frameworks typically emphasize comprehensive report generation (Du et al., 2025)"), while B:006 and BQ show B introduces its own dual framework. However, the relationship is better characterized as builds_on rather than refines: B's factual assessment adopts the same conceptual space (citation accuracy + coverage) from A's FACT, extending it into a new benchmark context (frontier AI research questions) and pairing it with rubric assessment — though B does not directly reuse A's metrics or implementation. The citation and conceptual borrowing of the citation-accuracy-plus-coverage measurement paradigm supports builds_on (B acting on A), but the type confidence is moderate because B's metrics (faithfulness/groundedness) are re-implemented rather than directly inherited from FACT.
+    - `arxiv:2507.16280::k02` [framework] — A dual evaluation framework combining rubric assessment using expert-designed criteria to evaluate insight quality with factual assessment measuring citation accuracy (faithfulness) and coverage (groundedness).
+      > Our assessment methodology combines rubric assessment with factual assessment. The rubric assessment employs domain expert-crafted evaluation criteria tailored to each specific question, ensuring alignment with human-anchored high-value insights. The factual assessment framework introduces two complementary metrics: faithfulness score and groundedness score, to evaluate the overall factual accuracy and coverage of generated content.
+    - `arxiv:2506.11763::k02` [framework] — FACT (Factual Abundance and Citation Trustworthiness) — a framework that evaluates information retrieval and collection capabilities of research agents by measuring effective citation count and overall citation accuracy — provides a robust, human-aligned approach for assessing the coverage and reliability of information gathered by LLM-based agents.
+      > The other framework is introduced to evaluate DRA's information retrieval and collection capabilities by assessing its effective citation count and overall citation accuracy.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-23
+
+- **Citing** → **aiXiv: A Next-Generation Open Access Ecosystem for Scientific Discovery Generated by AI Scientists** — Zhang et al. (2025) · `arxiv:2508.15126v2` · [arXiv](http://arxiv.org/abs/2508.15126v2)
+- **Cited** ← **AgentRxiv: Towards Collaborative Autonomous Research** — Samuel et al. (2025) · `openalex:W7126046125` · [OpenAlex](https://openalex.org/W7126046125) · [doi](https://doi.org/10.3929/ethz-c-000794599)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 1 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.6 · partial · obligatory): Cited as source of a general claim about publication ecosystem challenges, not contrasted specifically.
+    > l2025agentlaboratoryusingllm , author papers [CITED], and perform peer reviews [CITED]. However, this surge in AI-generated content faces significant challenges within a fragmented and predominantly closed publication ecosystem **[CITED:TARGET]**. Traditional journals, which still rely heavily on human peer review, remain reluctant to accept AI-generated research and struggle to scale with increasing submissions. Besides, existing preprint servers often lack rigorous quality-control mechanisms. As a result, much high-quality AI-generated research lacks suitabl
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: a_to_b; existence 0.88, type 0.72) — `arxiv:2508.15126v2::k00` → `openalex:W7126046125::k00`
+  - _rationale:_ Contribution A (aiXiv) explicitly cites Contribution B (AgentRxiv) in its motivation section, identifying AgentRxiv as part of the existing landscape of preprint-server-based agent collaboration platforms that aiXiv addresses and extends. The citation passage [CIT:arxiv:2508.15126v2->openalex:W7126046125:1] places AgentRxiv among prior work whose limitations — a "fragmented and predominantly closed publication ecosystem" lacking rigorous quality-control — aiXiv is designed to overcome. Both contributions share the same core architectural concept (a shared preprint server enabling autonomous agents to upload, retrieve, and iteratively build on research), but aiXiv explicitly adds multi-agent review pipelines, API/MCP interfaces, human-AI collaboration, prompt-injection defenses, and a closed-loop review-refine system [A:002, A:005, A:032]. This constitutes building on AgentRxiv's foundational framework while extending it with new mechanisms and a broader ecosystem. The direction is A builds on B, as aiXiv adopts and extends AgentRxiv's core concept of a shared agent preprint server rather than the reverse.
+    - `arxiv:2508.15126v2::k00` [framework] — aiXiv — an open-access, multi-agent platform with API and MCP interfaces — enables both human and AI scientists to submit, review, and iteratively refine scientific proposals and papers within a unified, extensible ecosystem.
+      > We introduce aiXiv, the first extensible infrastructure that enables seamless collaboration between AI agents and human researchers for generating, refining, and disseminating scientific proposals and papers. The platform provides APIs and MCPs interfaces for uploading, retrieving, reviewing and discussing scientific proposals and papers.
+    - `openalex:W7126046125::k00` [framework] — An open-source framework enabling autonomous agent laboratories to collaboratively develop research by uploading and retrieving findings from a shared preprint server, allowing agents to iteratively build upon each other's discoveries.
+      > We introduce AgentRxiv —a novel, open-source framework designed to archive and disseminate research outputs from autonomous agents. This platform enables agents to build upon the discoveries of other agents, driving iterative improvements over time.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-24
+
+- **Citing** → **InnovatorBench: Evaluating Agents' Ability to Conduct Innovative LLM Research** — Wu et al. (2025) · `arxiv:2510.27598` · [S2](https://www.semanticscholar.org/paper/615c476b4502303d2af07306ee38a05fbf4c0bea) · [doi](https://doi.org/10.48550/arXiv.2510.27598)
+- **Cited** ← **MLGym: A New Framework and Benchmark for Advancing AI Research Agents** — Nathani et al. (2025) · `openalex:W4407806895` · [OpenAlex](https://openalex.org/W4407806895) · [doi](https://doi.org/10.48550/arxiv.2502.14499) · [pdf](https://arxiv.org/pdf/2502.14499)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - _background_ (conf 0.65 · supports · helpful): MLGym implied among 'existing platforms' whose limitations a third system (ResearchGym) addresses, not the citing paper's own contrast.
+    > beyond narrow tests of implementation fidelity and provides a rigorous framework for assessing whether agents can execute end-to-end research workflows that mirror the demands of real LLM development. In parallel, ResearchGym offers a scalable and realistic environment that addresses limitations of existing platforms **[CITED:TARGET]**. It provides a rich action space that covers terminal commands, file operations, web search, and web browsing. Building on this foundation, ResearchGym supports large-scale experiments that may run for many hours or even days, with facilities for launching, monitoring, and adapting long-running processes, as well as
+  - ⚑ _background_ (conf 0.7 · supports · obligatory): Grouped with other frameworks under 'a common limitation across these frameworks', group-level critique.
+    > tasks over long-running, research-oriented workflows. Other research systems, including WorldCoder [CITED] and multimodal variants such as OpenHands-Versa [CITED], highlight the potential of tool-augmented agents for general problem solving. Correspondingly, environments like MLGym **[CITED:TARGET]** provide structured contexts for ML-related tasks but often constrain the experiment duration, scale, or action space. A common limitation across these frameworks is the lack of support for extended scientific research: they rarely provide distributed training, asynchronous monitoring of multi-hour jobs, snapshot savin
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: a_to_b; existence 0.85, type 0.65) — `arxiv:2510.27598::k00` → `openalex:W4407806895::k03`
+  - _rationale:_ InnovatorBench (A) explicitly references MLGym (B) as a prior environment that provides structured contexts for ML research tasks but constrains experiment duration, scale, or action space. A directly positions itself as addressing MLGym's limitations, building on its foundation while extending beyond its constraints. The citation passages show A uses B as a reference point to motivate its own design choices, constituting a builds_on relationship from A to B. However, the relationship is more about positioning/contrast than direct methodological extension, so type confidence is moderate.
+    - `arxiv:2510.27598::k00` [benchmark] — InnovatorBench — a benchmark of 20 end-to-end LLM research tasks spanning data construction, filtering, augmentation, loss design, reward design, and scaffold construction — enables realistic, multi-dimensional evaluation of AI research agents on correctness, performance, output quality, and uncertainty, rewarding innovation over simple replication.
+      > We introduce InnovatorBench, the first benchmark to systematically evaluate AI research agents on end-to-end LLM research tasks, spanning data construction, filtering, and augmentation, loss design, reward design, and scaffold construction under multiple dimensions.
+    - `openalex:W4407806895::k03` [empirical_finding] — Frontier LLMs (Claude-3.5-Sonnet, Llama-3.1 405B, GPT-4o, o1-preview, Gemini-1.5 Pro) can improve on given baselines primarily through hyperparameter tuning but do not generate novel hypotheses, algorithms, or architectures when evaluated on open-ended AI research tasks.
+      > (iv) extensively evaluate frontier LLMs on MLGym-Bench. We find that current frontier models can improve on the given baselines, usually by finding better hyperparameters, but do not generate novel hypotheses, algorithms, architectures, or substantial improvements.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-25
+
+- **Citing** → **Kosmos: An AI Scientist for Autonomous Discovery** — Mitchener et al. (2025) · `arxiv:2511.02824v2` · [arXiv](http://arxiv.org/abs/2511.02824v2)
+- **Cited** ← **The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery** — Lu et al. (2024) · `openalex:W4402952666` · [OpenAlex](https://openalex.org/W4402952666) · [doi](https://doi.org/10.48550/arxiv.2408.06292) · [pdf](https://arxiv.org/pdf/2408.06292)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - _compares_contrasts_ (conf 0.85 · supports · obligatory): Singles out AI Scientist's specific limitation ('remains limited to machine learning research') vs the citing system.
+    > very across domains. Robin [CITED], a system we previously reported, performs automated cycles of literature search and data analysis to propose evidence-based hypotheses, but has limited context sharing between its agents and is primarily tailored for therapeutics development. Sakana's AI Scientist **[CITED:TARGET]** autonomously forms hypotheses, iteratively conducts computational experiments, and writes and reviews manuscripts about its results, but remains limited to machine learning research. Google’s AI co-scientist [CITED] conducts iterative cycles of reasoning to generate scientific hypotheses, but does
+  - ⚑ _background_ (conf 0.55 · inconclusive · helpful): Grouped generically as 'existing systems' for a quantitative claim, not singled out individually.
+    > ies of the task outputs. Kosmos then queries the world model to propose literature search and data analysis tasks to be completed in the next cycle. This context management strategy allows Kosmos to explore many different research avenues simultaneously, and run for eight times as many iterations than existing systems **[CITED:TARGET]**. Once Kosmos believes it has completed the research objective, it synthesizes key discoveries into three or four scientific reports. Each statement and figure in the report cites either a publication found by the literature search agent or a Jupyter notebook created by the data analysis agent. To assess the overall
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: a_to_b; existence 0.9, type 0.72) — `arxiv:2511.02824v2::k02` → `openalex:W4402952666::k00`
+  - _rationale:_ Contribution A (Kosmos) explicitly contrasts itself with AI Scientist (B) as a prior system and claims it can run eight times as many iterations than existing systems including AI Scientist. The citation passages show Kosmos uses AI Scientist as a baseline/comparison point and positions its architecture as an advance beyond it. This is a builds_on relationship where A builds on/extends the landscape established by B, though Kosmos is a different system rather than a direct extension of AI Scientist's codebase.
+    - `arxiv:2511.02824v2::k02` [empirical_finding] — The number of valuable scientific findings produced by an autonomous AI scientist scales linearly with the number of discovery cycles (computational investment), with expert-estimated research equivalence roughly doubling from cycle 5 to cycle 20, reaching an average of 6 months of expert research time per 20-cycle run.
+      > collaborators reported that a single 20-cycle Kosmos run performed the equivalent of 6 months of their own research time on average. Furthermore, collaborators reported that the number of valuable scientific findings generated scales linearly with Kosmos cycles (tested up to 20 cycles).
+    - `openalex:W4402952666::k00` [framework] — The AI Scientist — an end-to-end, fully automated pipeline in which a frontier LLM generates research ideas, searches the literature, designs and executes experiments, visualizes results, writes a complete scientific manuscript, and performs self-review in an open-ended loop — enables autonomous scientific discovery in machine learning at a cost of under $15 per paper.
+      > We introduce the first end-to-end framework for fully automated scientific discovery in Machine Learning research, enabled by frontier LLMs (Section 3). This fully automated process includes idea generation, experiment design, execution, and visualizing and writing up the results into a full manuscript.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-26
+
+- **Citing** → **ScholarPeer: A Context-Aware Multi-Agent Framework for Automated Peer Review** — Goyal et al. (2026) · `arxiv:2601.22638v2` · [arXiv](http://arxiv.org/abs/2601.22638v2)
+- **Cited** ← **CycleResearcher: Improving Automated Research via Automated Review** — Weng et al. (2024) · `openalex:W4404350150` · [OpenAlex](https://openalex.org/W4404350150) · [doi](https://doi.org/10.48550/arxiv.2411.00816) · [pdf](https://arxiv.org/pdf/2411.00816)
+
+**Flagged for:** background_passage_supports_hard_relation · 2 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.8 · partial · obligatory): Cited as an example of the general 'early approaches' category with a group-level limitation noted afterward.
+    > rapidly evolving literature space [CITED]. Consequently, the community has turned to Large Language Models (LLMs) to assist in the evaluation of scientific manuscripts [CITED]. Early approaches primarily focused on fine-tuning models on static datasets of paper-review pairs **[CITED:TARGET]**. While these systems excel at linguistic fluency and summarization, they evaluate papers in a parametric vacuum. To mitigate this, recent frameworks have integrated retrieval mechanisms [CITED] or explored multi-agent review architectures jin2024agentrevie
+  - ⚑ _background_ (conf 0.7 · supports · obligatory): Detailed description of CycleResearcher's mechanism as prior work, no explicit adoption or contrast to citing paper's method.
+    > classification to complex generation tasks. Early works focused on predicting acceptance decisions or generating short summaries using standard pre-trained models [CITED]. As models scaled, researchers began exploring fine-tuning strategies to align outputs with professional standards. **[CITED:TARGET]** introduced CycleResearcher , a predecessor to more complex reasoning models, where the review model was fine-tuned directly on human reviews without simulating the intermediate reasoning trace. Similarly, OpenReviewer [CITED] fine-tuned Llama models on conference reviews to captu
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: a_to_b; existence 0.92, type 0.72) — `arxiv:2601.22638v2::k04` → `openalex:W4404350150::k01`
+  - _rationale:_ Contribution A (ScholarPeer) explicitly situates itself in the lineage of fine-tuned peer-review models and cites Contribution B (CycleResearcher/CycleReviewer, which introduces Review-5k and Research-14k) as a direct predecessor. Evidence CIT:2 shows A describes B as introducing "CycleResearcher, a predecessor to more complex reasoning models, where the review model was fine-tuned directly on human reviews without simulating the intermediate reasoning trace," positioning A's agentic, reasoning-based framework as an advancement over B's fine-tuning approach. Evidence A:029 further references "weng2024cycleresearcher" as an early SFT-based system that A explicitly contrasts against. Evidence A:003 cites B among "early approaches primarily focused on fine-tuning models on static datasets of paper-review pairs," which A's system is designed to overcome. B:004 confirms that B's CycleReviewer is trained on the Review-5k dataset — a static fine-tuning artifact — which is precisely the paradigm A builds beyond. The relationship is directional: A uses B's contribution as a baseline/predecessor and explicitly extends beyond it, making 'builds_on' (a_to_b) more defensible than 'related', though 'refines' is also plausible given A's framing of improvement over B's limitations.
+    - `arxiv:2601.22638v2::k04` [empirical_finding] — Automated peer-review generation at practical deployment cost (~$1.20 and ~10 minutes per review) with dominant win-rates over state-of-the-art fine-tuned models and search-augmented agentic baselines on ~1,800 ICLR submissions.
+      > We conduct comprehensive evaluations, achieving dominant win-rates against state-of-the-art fine-tuned models and search-enabled agentic baselines, with practical deployment metrics ($1.20 and latency of 10 minutes per review).
+    - `openalex:W4404350150::k01` [dataset] — Review-5k and Research-14k — two large-scale, publicly available datasets capturing real-world machine learning peer review dynamics and full research paper generation — provide training and evaluation resources for automated academic paper writing and review models.
+      > We release two large-scale datasets, Review-5k and Research-14k, which are publicly available and designed to capture the complexity of both peer review and research paper generation in machine learning.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-27
+
+- **Citing** → **ScholarPeer: A Context-Aware Multi-Agent Framework for Automated Peer Review** — Goyal et al. (2026) · `arxiv:2601.22638v2` · [arXiv](http://arxiv.org/abs/2601.22638v2)
+- **Cited** ← **CycleResearcher: Improving Automated Research via Automated Review** — Weng et al. (2024) · `openalex:W4404350150` · [OpenAlex](https://openalex.org/W4404350150) · [doi](https://doi.org/10.48550/arxiv.2411.00816) · [pdf](https://arxiv.org/pdf/2411.00816)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - _background_ (conf 0.8 · partial · obligatory): Cited as an example of the general 'early approaches' category with a group-level limitation noted afterward.
+    > rapidly evolving literature space [CITED]. Consequently, the community has turned to Large Language Models (LLMs) to assist in the evaluation of scientific manuscripts [CITED]. Early approaches primarily focused on fine-tuning models on static datasets of paper-review pairs **[CITED:TARGET]**. While these systems excel at linguistic fluency and summarization, they evaluate papers in a parametric vacuum. To mitigate this, recent frameworks have integrated retrieval mechanisms [CITED] or explored multi-agent review architectures jin2024agentrevie
+  - ⚑ _background_ (conf 0.7 · supports · obligatory): Detailed description of CycleResearcher's mechanism as prior work, no explicit adoption or contrast to citing paper's method.
+    > classification to complex generation tasks. Early works focused on predicting acceptance decisions or generating short summaries using standard pre-trained models [CITED]. As models scaled, researchers began exploring fine-tuning strategies to align outputs with professional standards. **[CITED:TARGET]** introduced CycleResearcher , a predecessor to more complex reasoning models, where the review model was fine-tuned directly on human reviews without simulating the intermediate reasoning trace. Similarly, OpenReviewer [CITED] fine-tuned Llama models on conference reviews to captu
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: a_to_b; existence 0.9, type 0.72) — `arxiv:2601.22638v2::k04` → `openalex:W4404350150::k02`
+  - _rationale:_ A (ScholarPeer) explicitly positions CycleReviewer/CycleResearcher (B) as a prior fine-tuning-based approach that it builds beyond. Evidence A:029 and CIT:2 directly name 'weng2024cycleresearcher' (the paper containing B's CycleReviewer) as an early SFT baseline, and A:003 cites it as part of the lineage of static fine-tuned models that A's agentic framework is designed to surpass. A uses B as a comparison point and explicitly contrasts its approach against B's fine-tuning paradigm, making this a builds_on relationship where A extends beyond B's methodology.
+    - `arxiv:2601.22638v2::k04` [empirical_finding] — Automated peer-review generation at practical deployment cost (~$1.20 and ~10 minutes per review) with dominant win-rates over state-of-the-art fine-tuned models and search-augmented agentic baselines on ~1,800 ICLR submissions.
+      > We conduct comprehensive evaluations, achieving dominant win-rates against state-of-the-art fine-tuned models and search-enabled agentic baselines, with practical deployment metrics ($1.20 and latency of 10 minutes per review).
+    - `openalex:W4404350150::k02` [empirical_finding] — An automated peer-review model (CycleReviewer) achieves a 26.89% reduction in mean absolute error compared to individual human reviewers when predicting paper scores, establishing a new benchmark for automated research assessment.
+      > our CycleReviewer model shows encouraging results with a 26.89% improvement in MAE compared to individual reviewers, suggesting the potential of automated research assessment in mean absolute error (MAE) in research evaluation tasks, setting a new benchmark for automated research assessment.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-28
+
+- **Citing** → **ResearchGym: Evaluating Language Model Agents on Real-World AI Research** — Garikaparthi et al. (2026) · `arxiv:2602.15112v2` · [arXiv](http://arxiv.org/abs/2602.15112v2)
+- **Cited** ← **CORE-Bench: Fostering the Credibility of Published Research Through a Computational Reproducibility Agent Benchmark** — Siegel et al. (2024) · `openalex:W4403707291` · [OpenAlex](https://openalex.org/W4403707291) · [doi](https://doi.org/10.48550/arxiv.2409.11363) · [pdf](https://arxiv.org/pdf/2409.11363)
+
+**Flagged for:** background_passage_supports_hard_relation · 2 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.7 · supports · obligatory): Grouped with other fragment-focused benchmarks under a general field limitation ('offering little headroom for creative ideation').
+    > s target fragments of the research cycle: ideation work focuses on generating hypotheses without implementation [CITED], while implementation work assesses ML engineering [CITED] or paper reproduction **[CITED:TARGET]**, offering little headroom for creative ideation. Meanwhile, closed-loop research benchmarks either (1) require heavy compute (for example, 8 H100 GPUs), making them difficult to reproduce nathani2025mlgymnewframeworkbenchmark, wijk2025rebench, wu2025innovatorbenchevaluatingagentsability, si2026exec
+  - ⚑ _background_ (conf 0.75 · supports · obligatory): Descriptive table row among several reproduction benchmarks, no specific critique.
+    > \\ SUPER [CITED] & Repositories & Execution & & & & -- & & -- & & -- & 30min & --\\ SciCode [CITED] & Hand-crafted & Execution & & & & -- & & -- & & -- & -- & --\\ CORE-Bench **[CITED:TARGET]** & Repositories & Execution & & & & -- & & -- & & 16GB & 2hr & 4\ \\ PaperBench [CITED] & Papers & Execution & & & & -- & & -- & & 24GB & 12hr & 466\ \\ ResearchCodeBench hua2025researchcodebenchben
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: a_to_b; existence 0.85, type 0.62) — `arxiv:2602.15112v2::k01` → `openalex:W4403707291::k02`
+  - _rationale:_ Contribution A (ResearchGym) explicitly cites CORE-Bench (Contribution B) as a prior benchmark in the same design space—paper reproduction/computational reproducibility—and positions its own benchmark partly in contrast to it. In the benchmark comparison table [CIT:arxiv:2602.15112v2->openalex:W4403707291:2], CORE-Bench is listed alongside ResearchGym with shared attributes (repository-based, execution-graded), and in [CIT:arxiv:2602.15112v2->openalex:W4403707291:1] it is grouped among "implementation work" benchmarks that "assess… paper reproduction." Contribution A's framing [A:003, A:009] explicitly situates ResearchGym as addressing gaps left by prior benchmarks including CORE-Bench (e.g., lack of headroom for creative ideation, heavy compute requirements). However, Contribution A does not reuse CORE-Bench's tasks, datasets, or agent architecture directly; rather, it uses CORE-Bench as a reference point to motivate and characterize its own benchmark design. Contribution B [B:018] itself frames CORE-Bench as "a first step towards research agents," and Contribution A builds on this framing by targeting the harder, more creative end of the research cycle. The relationship is better characterized as A building on B's conceptual framing and benchmark lineage than a hard methodological reuse, but the citation is substantive and design-level, not merely topical. A 'related' classification was considered but the explicit positioning of CORE-Bench in A's benchmark taxonomy table and motivating contrast supports a weak builds_on rather than merely related.
+    - `arxiv:2602.15112v2::k01` [empirical_finding] — Frontier AI agents exhibit a sharp capability–reliability gap on end-to-end research tasks: a GPT-5-based agent surpasses provided baselines in only 1 of 15 evaluations (6.7%) and completes 26.5% of sub-tasks on average, yet in one run exceeds the human reference solution of an ICML 2025 Spotlight task, showing occasional but unreliable state-of-the-art performance.
+      > the agent improves over the provided baselines from the repository in just 1 of 15 evaluations (6.7%) by 11.5%, and completes only 26.5% of sub-tasks on average … Yet in a single run, the agent surpasses the solution of an ICML 2025 Spotlight task, indicating that frontier agents can occasionally reach state-of-the-art performance, but do so unreliably.
+    - `openalex:W4403707291::k02` [empirical_finding] — CORE-Agent, a task-specific agent adaptation of AutoGPT, achieves substantially higher accuracy on computational reproducibility tasks than the unmodified generalist AutoGPT, demonstrating that targeted modifications to generalist agents yield significant performance gains, with the best agent reaching only 21% accuracy on the hardest tasks.
+      > We evaluated two agents on CORE-Bench: the generalist agent AutoGPT and a task-specific version we built based on AutoGPT called CORE-Agent. Results show that generalist agents can be easily adapted to specific tasks, yielding significant performance improvements. The best agent achieved an accuracy of 21% on the hardest level of tasks.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-29
+
+- **Citing** → **AI Scientist via Synthetic Task Scaling** — Cai et al. (2026) · `arxiv:2603.17216v1` · [arXiv](http://arxiv.org/abs/2603.17216v1)
+- **Cited** ← **MLR-Bench: Evaluating AI Agents on Open-Ended Machine Learning Research** — Chen et al. (2025) · `openalex:W4414587939` · [OpenAlex](https://openalex.org/W4414587939) · [doi](https://doi.org/10.48550/arxiv.2505.19955) · [pdf](https://arxiv.org/pdf/2505.19955)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 1 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.7 · partial · helpful): Grouped with MLAgentBench and MLRC-Bench in a shared general finding about long-horizon research behaviors.
+    > ion and writing [CITED]. Benchmarks such as MLAgentBench, MLGym/MLGym-Bench, and MLRC-Bench further study long-horizon research behaviors, generally finding that agents can tune and execute established pipelines but still struggle with robust planning and genuinely novel method discovery **[CITED:TARGET]**. Conclusion We presented a scalable pipeline for training machine learning research agents via synthetic task scaling . Our approach automatically generates diverse ML tasks compatible with the SWE-agent framework by sampling topics, proposing and validating real HuggingFace datasets, and synthesizing
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: a_to_b; existence 0.82, type 0.62) — `arxiv:2603.17216v1::k01` → `openalex:W4414587939::k03`
+  - _rationale:_ Contribution A (arxiv:2603.17216v1) introduces a self-debugging verification loop to improve ML task synthesis validity. Contribution B (openalex:W4414587939) diagnoses that coding agents fabricate or fail to validate results in ~80% of ML research tasks—identifying experimental reliability as a critical barrier. A cites B in a passage framing the problem context (agents struggle with robust planning and novel discovery), suggesting A is responding to the problem space that B characterizes. A's self-debugging loop directly addresses the validation failure mode B identifies. This is builds_on (a_to_b): A uses B's finding as motivation/context and proposes a mechanism targeting the reliability gap B diagnosed. The citation is localized to framing rather than explicit method reuse, so type_confidence is moderate.
+    - `arxiv:2603.17216v1::k01` [method] — A self-debugging verification loop that iteratively feeds execution errors back into starter-code generation increases the validity and yield of automatically synthesized ML tasks.
+      > verified for higher quality with a self-debugging loop … If there is an error during the execution, we collect the errors and feed them back to the model in step 3 (starter code generation) … The iterative debug process can continue at most times.
+    - `openalex:W4414587939::k03` [empirical_finding] — Current coding agents fabricate or fail to validate experimental results in approximately 80% of ML research task attempts, representing a critical barrier to scientific reliability that is distinct from their strong performance on idea generation and paper writing.
+      > finding that while LLMs are effective at generating coherent ideas and well-structured papers, current coding agents frequently (e.g., in 80% of the cases) produce fabricated or invalidated experimental results—posing a major barrier to scientific reliability.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-30
+
+- **Citing** → **Towards a Medical AI Scientist** — Wu et al. (2026) · `arxiv:2603.28589v1` · [arXiv](http://arxiv.org/abs/2603.28589v1)
+- **Cited** ← **Accelerating scientific discovery with Co-Scientist** — Gottweis et al. (2026) · `openalex:W7161731996` · [OpenAlex](https://openalex.org/W7161731996) · [doi](https://doi.org/10.1038/s41586-026-10644-y) · [pdf](https://www.nature.com/articles/s41586-026-10644-y_reference.pdf)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 5 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ ⁿ _background_ (conf 0.85): Grouped citation among several references illustrating advances in medical AI/healthcare models; not individually discussed.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > human experts and the Stanford Agentic Reviewer suggest that the generated manuscripts approach MICCAI-level quality, while consistently surpassing those from ISBI and BIBM. The proposed Medical AI Scientist highlights the potential of leveraging AI for autonomous scientific discovery in healthcare. 1 Introduction Recent years have witnessed rapid advances in artificial intelligence for healthcare, with increasingly capable models achieving state-of-the-art performance across disease diagnosis [ 20 , 42 , 73 , 115 ] , medical image analysis [ 37 , 30 , 56 ] and clinical outcome prediction [ 63 , 95 , 12 ] . In parallel, large language models [ 66 , 3 , 86 , 103 , 107 , 50 ] have made substantial progress in language understanding, reasoning and code generation, enabling the emergence of tool-augmented and multi-agent systems [ 65 , 27 , 102 , 101 , 47 , 32 , 104 , 58 , 67 ] that extend beyond narrow task execution. Together, these developments have catalyzed the rise of autonomous research frameworks, ofte
+  - ⁿ _background_ (conf 0.85): Same passage context as a grouped list of citations for AI Scientist frameworks; not singled out.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > ose from ISBI and BIBM. The proposed Medical AI Scientist highlights the potential of leveraging AI for autonomous scientific discovery in healthcare. 1 Introduction Recent years have witnessed rapid advances in artificial intelligence for healthcare, with increasingly capable models achieving state-of-the-art performance across disease diagnosis [ 20 , 42 , 73 , 115 ] , medical image analysis [ 37 , 30 , 56 ] and clinical outcome prediction [ 63 , 95 , 12 ] . In parallel, large language models [ 66 , 3 , 86 , 103 , 107 , 50 ] have made substantial progress in language understanding, reasoning and code generation, enabling the emergence of tool-augmented and multi-agent systems [ 65 , 27 , 102 , 101 , 47 , 32 , 104 , 58 , 67 ] that extend beyond narrow task execution. Together, these developments have catalyzed the rise of autonomous research frameworks, often referred to as AI Scientists [ 53 , 106 , 85 , 97 ] , which seek to automate the scientific workflow from hypothesis generation and experimental design to resu
+  - ⁿ _background_ (conf 0.85): Grouped mention within list of 'AI Scientist' systems [53,106,85,97] providing general context, no specific use or comparison.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > nessed rapid advances in artificial intelligence for healthcare, with increasingly capable models achieving state-of-the-art performance across disease diagnosis [ 20 , 42 , 73 , 115 ] , medical image analysis [ 37 , 30 , 56 ] and clinical outcome prediction [ 63 , 95 , 12 ] . In parallel, large language models [ 66 , 3 , 86 , 103 , 107 , 50 ] have made substantial progress in language understanding, reasoning and code generation, enabling the emergence of tool-augmented and multi-agent systems [ 65 , 27 , 102 , 101 , 47 , 32 , 104 , 58 , 67 ] that extend beyond narrow task execution. Together, these developments have catalyzed the rise of autonomous research frameworks, often referred to as AI Scientists [ 53 , 106 , 85 , 97 ] , which seek to automate the scientific workflow from hypothesis generation and experimental design to result interpretation and manuscript preparation, promising to accelerate scientific innovation [ 74 ] . These AI Scientist systems have shown promise in accelerating research in domains such as mathematics,
+  - ⁿ _background_ (conf 0.6): A limitation ('existing AI Scientists focus on model modifications...ignoring medical priors') is applied to the group of prior AI Scientist systems as a whole, not singled out to this target, so per the grouping rule this remains background.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > hine learning, where problem formulations, data representations and evaluation protocols are relatively standardized. Medical AI represents one of the most consequential domains for such systems, given its direct implications for patient outcomes, diagnostic reliability and healthcare efficiency. As medical datasets, analytical methodologies and scientific literature continue to grow at an unprecedented pace, the throughput of human-driven research has become an increasingly critical bottleneck [ 25 , 89 , 4 , 29 ] . This widening gap highlights the urgent need for autonomous scientific systems that are explicitly designed to operate within the epistemic, operational, and ethical constraints inherent to clinical medicine. However, extending these autonomous research paradigms to medical field remains challenging. First, existing AI Scientists focus on model modifications or generic optimization strategies, ignoring medical related priors, such as basic diagnostic workflows and disease-specific pathologica
+  - ⁿ _background_ (conf 0.9): Cited within a long enumerated list of benchmark task references; grouped, no individual engagement.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > ical AI literature and expert-annotated references. Med-AI Bench is deliberately organized to reflect the breadth of contemporary medical AI research, covering six data modalities and nineteen representative tasks that span the full spectrum from low-level perception to high-level clinical reasoning (Fig. 1 b). Specifically, medical images-related tasks cover core problems in visual understanding and analysis, including classification [ 59 , 35 , 112 ] , segmentation [ 75 , 7 , 10 ] , prognosis [ 31 , 9 , 49 ] , registration [ 5 , 11 , 43 ] , and restoration [ 90 , 91 , 92 ] . Video-centric tasks encompass instrument detection [ 93 , 99 , 6 ] , restoration [ 52 , 94 , 8 ] , workflow recognition [ 109 , 39 , 38 ] , intraoperative risk assessment [ 41 , 60 , 64 ] , and postoperative skill assessment [ 118 , 23 , 51 ] . Structured electronic health record data support tasks in risk prediction [ 36 , 70 , 21 ] and clinical decision support [ 84 , 81 , 108 ] , while physiological signal data are used for
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: a_to_b; existence 0.85, type 0.62) — `arxiv:2603.28589v1::k01` → `openalex:W7161731996::k00`
+  - _rationale:_ Contribution A (Medical AI Scientist) describes a clinician-engineer co-reasoning mechanism that explicitly grounds hypothesis generation in verifiable evidence to reduce hallucinations. Contribution B (Co-Scientist) is a structured scientific thinking engine for hypothesis generation conditioned on literature and research objectives. A cites B in its introduction as part of the broader autonomous research framework landscape (CIT passages), and A's co-reasoning mechanism directly addresses a limitation implicit in systems like B (hallucination and traceability). A's approach extends the hypothesis-generation paradigm established by B with a domain-specific (medical) grounding mechanism, indicating A builds on B's foundational framework. The citation is background/landscape rather than direct method reuse, so builds_on is defensible but not certain; related would be the fallback.
+    - `arxiv:2603.28589v1::k01` [method] — A clinician–engineer co-reasoning mechanism grounds autonomously generated medical research hypotheses in verifiable literature evidence, improving traceability and reducing hallucinations in clinical AI ideation.
+      > A clinician–engineer co-reasoning mechanism is incorporated into the idea generation process to explicitly ground each hypothesis in verifiable evidence and mitigate hallucinations.
+    - `openalex:W7161731996::k00` [framework] — Co-Scientist is a structured scientific thinking engine that synthesizes scientific literature, generates novel hypotheses conditioned on research objectives and prior evidence, and proposes experimental protocols for verification.
+      > we introduce Co-Scientist, a multi-agent AI system built on Gemini for structured scientific thinking and hypothesis generation... it formulates demonstrably novel research hypotheses for experimental verification
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-31
+
+- **Citing** → **MLEvolve: A Self-Evolving Framework for Automated Machine Learning Algorithm Discovery** — Du et al. (2026) · `arxiv:2606.06473` · [S2](https://www.semanticscholar.org/paper/0d1e0184dd8fc663c279bae2eaaa163f5230e143)
+- **Cited** ← **AIDE: AI-Driven Exploration in the Space of Code** — Zhengyao et al. (2025) · `openalex:W4407760093` · [OpenAlex](https://openalex.org/W4407760093) · [doi](https://doi.org/10.48550/arxiv.2502.13138) · [pdf](https://arxiv.org/pdf/2502.13138)
+
+**Flagged for:** background_passage_supports_hard_relation · 2 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.8 · supports · obligatory): General statement that coding agents have been applied to MLE scenarios, target as example.
+    > have achieved significant progress in optimizing discrete stages such as data processing and model selection, they often fall short of covering the entire end-to-end MLE pipeline, i.e. , from data preparation to model training and inference. Recently, LLM-based coding agents have been applied to MLE scenarios **[CITED:TARGET]**, using the planning and code generation capabilities of LLMs to iteratively optimize within open search spaces. These agents typically employ greedy or evolutionary search [CITED], Monte Carlo Tree Search [CITED], or multi-agent collaboration [CITED] to explore candidate solutions.
+  - ⚑ _background_ (conf 0.75 · partial · obligatory): Lists search strategy category (greedy/evolutionary search) target exemplifies, part of a taxonomy list.
+    > training and inference. Recently, LLM-based coding agents have been applied to MLE scenarios [CITED], using the planning and code generation capabilities of LLMs to iteratively optimize within open search spaces. These agents typically employ greedy or evolutionary search **[CITED:TARGET]**, Monte Carlo Tree Search [CITED], or multi-agent collaboration [CITED] to explore candidate solutions. Despite these advances, existing MLE agents still face three key challenges that hinder self-evolution over long horizons. 挑战1 First, existing search mechanisms are limited by
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: a_to_b; existence 0.95, type 0.72) — `arxiv:2606.06473::k00` → `openalex:W4407760093::k00`
+  - _rationale:_ MLEvolve (A) explicitly cites AIDE (B) as a prior LLM-based coding agent for MLE and frames its own contributions as addressing limitations of tree-search-based methods like AIDE. Evidence A:012 shows MLEvolve formalizes its search space following AIDE's formulation ('where each node represents a complete candidate solution... [aide]'), and A:004 lists AIDE among 'greedy or evolutionary search' methods whose limitations MLEvolve's Progressive MCGS is designed to overcome. This constitutes A building on B's method and result while extending it with graph-based search, retrospective memory, and hierarchical code generation.
+    - `arxiv:2606.06473::k00` [framework] — MLEvolve — a self-evolving multi-agent framework that unifies progressive graph search, retrospective memory, and hierarchical adaptive code generation — enables end-to-end machine learning algorithm discovery over long-horizon iterative optimization horizons.
+      > We propose MLEvolve, a self-evolving multi-agent framework for end-to-end MLE tasks, which unifies progressive graph search, retrospective memory, and hierarchical adaptive code generation to support long-horizon iterative optimization.
+    - `openalex:W4407760093::k00` [method] — AIDE (AI-Driven Exploration) — an LLM-powered agent that automates machine learning engineering by framing it as a code optimization problem and conducting tree search over candidate Python solutions, using draft, debug, and improve operators guided by automated evaluation scores.
+      > we introduce AI-Driven Exploration (AIDE), a machine learning engineering agent powered by large language models (LLMs). AIDE frames machine learning engineering as a code optimization problem, and formulates trial-and-error as a tree search in the space of potential solutions.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-32
+
+- **Citing** → **MLEvolve: A Self-Evolving Framework for Automated Machine Learning Algorithm Discovery** — Du et al. (2026) · `arxiv:2606.06473` · [S2](https://www.semanticscholar.org/paper/0d1e0184dd8fc663c279bae2eaaa163f5230e143)
+- **Cited** ← **AIDE: AI-Driven Exploration in the Space of Code** — Zhengyao et al. (2025) · `openalex:W4407760093` · [OpenAlex](https://openalex.org/W4407760093) · [doi](https://doi.org/10.48550/arxiv.2502.13138) · [pdf](https://arxiv.org/pdf/2502.13138)
+
+**Flagged for:** background_passage_supports_hard_relation · 2 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.8 · supports · obligatory): General statement that coding agents have been applied to MLE scenarios, target as example.
+    > have achieved significant progress in optimizing discrete stages such as data processing and model selection, they often fall short of covering the entire end-to-end MLE pipeline, i.e. , from data preparation to model training and inference. Recently, LLM-based coding agents have been applied to MLE scenarios **[CITED:TARGET]**, using the planning and code generation capabilities of LLMs to iteratively optimize within open search spaces. These agents typically employ greedy or evolutionary search [CITED], Monte Carlo Tree Search [CITED], or multi-agent collaboration [CITED] to explore candidate solutions.
+  - ⚑ _background_ (conf 0.75 · partial · obligatory): Lists search strategy category (greedy/evolutionary search) target exemplifies, part of a taxonomy list.
+    > training and inference. Recently, LLM-based coding agents have been applied to MLE scenarios [CITED], using the planning and code generation capabilities of LLMs to iteratively optimize within open search spaces. These agents typically employ greedy or evolutionary search **[CITED:TARGET]**, Monte Carlo Tree Search [CITED], or multi-agent collaboration [CITED] to explore candidate solutions. Despite these advances, existing MLE agents still face three key challenges that hinder self-evolution over long horizons. 挑战1 First, existing search mechanisms are limited by
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: a_to_b; existence 0.88, type 0.72) — `arxiv:2606.06473::k01` → `openalex:W4407760093::k01`
+  - _rationale:_ Contribution A (MCGS) explicitly cites and builds upon Contribution B (AIDE) as a baseline tree-search method. Evidence A:004 and A:012 identify AIDE's tree-structured search as exhibiting the 'branch information isolation' limitation that MCGS is designed to overcome. The citation passages position AIDE as an existing approach that A extends by replacing the tree structure with a graph structure enabling cross-branch information flow. This is a direct architectural extension of B's solution tree concept, making the relation builds_on with direction a_to_b.
+    - `arxiv:2606.06473::k01` [method] — Progressive Monte Carlo Graph Search (MCGS) resolves inter-branch information isolation in tree-based search by adding graph-based cross-branch reference edges and applies an entropy-inspired progressive schedule that shifts search from broad exploration to focused exploitation over time.
+      > We introduce Progressive MCGS and Retrospective Memory for self-evolving optimization. Progressive MCGS resolves inter-branch isolation through graph-based cross-branch information flow and a progressive exploration schedule
+    - `openalex:W4407760093::k01` [framework] — Organizing LLM-driven iterative solution search as a solution tree — where nodes are standalone executable scripts, edges represent improvement attempts, and a hard-coded policy selects between drafting, debugging, and improving — enables scalable code-space optimization without growing prompts unboundedly.
+      > AIDE organizes all historical solutions in a tree structure. It then asks the LLM to propose improvements based on individual tree nodes. A hard-coded tree-search algorithm accumulates these incremental improvements, guided by automated evaluations.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-33
+
+- **Citing** → **MLEvolve: A Self-Evolving Framework for Automated Machine Learning Algorithm Discovery** — Du et al. (2026) · `arxiv:2606.06473` · [S2](https://www.semanticscholar.org/paper/0d1e0184dd8fc663c279bae2eaaa163f5230e143)
+- **Cited** ← **AIDE: AI-Driven Exploration in the Space of Code** — Zhengyao et al. (2025) · `openalex:W4407760093` · [OpenAlex](https://openalex.org/W4407760093) · [doi](https://doi.org/10.48550/arxiv.2502.13138) · [pdf](https://arxiv.org/pdf/2502.13138)
+
+**Flagged for:** background_passage_supports_hard_relation · 2 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.8 · supports · obligatory): General statement that coding agents have been applied to MLE scenarios, target as example.
+    > have achieved significant progress in optimizing discrete stages such as data processing and model selection, they often fall short of covering the entire end-to-end MLE pipeline, i.e. , from data preparation to model training and inference. Recently, LLM-based coding agents have been applied to MLE scenarios **[CITED:TARGET]**, using the planning and code generation capabilities of LLMs to iteratively optimize within open search spaces. These agents typically employ greedy or evolutionary search [CITED], Monte Carlo Tree Search [CITED], or multi-agent collaboration [CITED] to explore candidate solutions.
+  - ⚑ _background_ (conf 0.75 · partial · obligatory): Lists search strategy category (greedy/evolutionary search) target exemplifies, part of a taxonomy list.
+    > training and inference. Recently, LLM-based coding agents have been applied to MLE scenarios [CITED], using the planning and code generation capabilities of LLMs to iteratively optimize within open search spaces. These agents typically employ greedy or evolutionary search **[CITED:TARGET]**, Monte Carlo Tree Search [CITED], or multi-agent collaboration [CITED] to explore candidate solutions. Despite these advances, existing MLE agents still face three key challenges that hinder self-evolution over long horizons. 挑战1 First, existing search mechanisms are limited by
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: a_to_b; existence 0.92, type 0.72) — `arxiv:2606.06473::k01` → `openalex:W4407760093::k03`
+  - _rationale:_ Contribution A (Progressive MCGS in MLEvolve) explicitly cites and positions itself against Contribution B (AIDE's tree-search-based code optimization). Evidence A:004 lists AIDE among existing MLE agents using 'greedy or evolutionary search', and A:012 identifies 'branch information isolation' and 'fixed search behavior' as limitations of existing tree-search methods (which AIDE exemplifies). Contribution A then proposes Progressive MCGS specifically to overcome these limitations. This is a builds_on relationship where A extends/improves upon the category of methods that B represents, using B as a baseline comparator. The citation is background/contrast rather than directly reusing AIDE's method, so the type_confidence is moderate rather than high.
+    - `arxiv:2606.06473::k01` [method] — Progressive Monte Carlo Graph Search (MCGS) resolves inter-branch information isolation in tree-based search by adding graph-based cross-branch reference edges and applies an entropy-inspired progressive schedule that shifts search from broad exploration to focused exploitation over time.
+      > We introduce Progressive MCGS and Retrospective Memory for self-evolving optimization. Progressive MCGS resolves inter-branch isolation through graph-based cross-branch information flow and a progressive exploration schedule
+    - `openalex:W4407760093::k03` [empirical_finding] — Tree-search-based code optimization with LLMs achieves state-of-the-art performance on ML engineering benchmarks, earning twice the medals of the next-best agent on MLE-Bench (with GPT-4o) and surpassing human expert solutions on time-constrained RE-Bench tasks such as Triton Kernel optimization.
+      > AIDE effectively trades computational resources for enhanced performance, achieving state-of-the-art results on multiple machine learning engineering benchmarks, including our Kaggle evaluations, OpenAI MLE-Bench and METR's RE-Bench … AIDE achieves twice the number of medals compared to a follow-up agent … AIDE's final solution surpasses that of human experts, even when the latter had extended development time.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-34
+
+- **Citing** → **MLEvolve: A Self-Evolving Framework for Automated Machine Learning Algorithm Discovery** — Du et al. (2026) · `arxiv:2606.06473` · [S2](https://www.semanticscholar.org/paper/0d1e0184dd8fc663c279bae2eaaa163f5230e143)
+- **Cited** ← **AIDE: AI-Driven Exploration in the Space of Code** — Zhengyao et al. (2025) · `openalex:W4407760093` · [OpenAlex](https://openalex.org/W4407760093) · [doi](https://doi.org/10.48550/arxiv.2502.13138) · [pdf](https://arxiv.org/pdf/2502.13138)
+
+**Flagged for:** background_passage_supports_hard_relation · 2 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.8 · supports · obligatory): General statement that coding agents have been applied to MLE scenarios, target as example.
+    > have achieved significant progress in optimizing discrete stages such as data processing and model selection, they often fall short of covering the entire end-to-end MLE pipeline, i.e. , from data preparation to model training and inference. Recently, LLM-based coding agents have been applied to MLE scenarios **[CITED:TARGET]**, using the planning and code generation capabilities of LLMs to iteratively optimize within open search spaces. These agents typically employ greedy or evolutionary search [CITED], Monte Carlo Tree Search [CITED], or multi-agent collaboration [CITED] to explore candidate solutions.
+  - ⚑ _background_ (conf 0.75 · partial · obligatory): Lists search strategy category (greedy/evolutionary search) target exemplifies, part of a taxonomy list.
+    > training and inference. Recently, LLM-based coding agents have been applied to MLE scenarios [CITED], using the planning and code generation capabilities of LLMs to iteratively optimize within open search spaces. These agents typically employ greedy or evolutionary search **[CITED:TARGET]**, Monte Carlo Tree Search [CITED], or multi-agent collaboration [CITED] to explore candidate solutions. Despite these advances, existing MLE agents still face three key challenges that hinder self-evolution over long horizons. 挑战1 First, existing search mechanisms are limited by
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: a_to_b; existence 0.88, type 0.72) — `arxiv:2606.06473::k03` → `openalex:W4407760093::k01`
+  - _rationale:_ Contribution A (arxiv:2606.06473) explicitly cites and references AIDE (openalex:W4407760093) as a baseline approach using tree-structured search with a fixed hard-coded policy. A's contribution — decoupling strategic planning from code generation with adaptive coding modes — is framed as addressing limitations of AIDE's approach (fixed exploration strategy, branch information isolation). Evidence A:004 lists AIDE's greedy/evolutionary search as a known limitation; A:012 describes A's hierarchical planning as a direct improvement over such methods. This is a builds_on relation where A builds on B's framework while extending and improving it.
+    - `arxiv:2606.06473::k03` [method] — Decoupling strategic planning from code generation and selecting among full-rewrite, stepwise, and diff-based editing modes according to search state improves iteration efficiency and stability in long-horizon code optimization agents.
+      > we further decouple strategic planning from code generation with adaptive coding modes
+    - `openalex:W4407760093::k01` [framework] — Organizing LLM-driven iterative solution search as a solution tree — where nodes are standalone executable scripts, edges represent improvement attempts, and a hard-coded policy selects between drafting, debugging, and improving — enables scalable code-space optimization without growing prompts unboundedly.
+      > AIDE organizes all historical solutions in a tree structure. It then asks the LLM to propose improvements based on individual tree nodes. A hard-coded tree-search algorithm accumulates these incremental improvements, guided by automated evaluations.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-35
+
+- **Citing** → **MLEvolve: A Self-Evolving Framework for Automated Machine Learning Algorithm Discovery** — Du et al. (2026) · `arxiv:2606.06473` · [S2](https://www.semanticscholar.org/paper/0d1e0184dd8fc663c279bae2eaaa163f5230e143)
+- **Cited** ← **Towards end-to-end automation of AI research** — Lu et al. (2026) · `openalex:W7140287209` · [OpenAlex](https://openalex.org/W7140287209) · [doi](https://doi.org/10.1038/s41586-026-10265-5) · [pdf](https://www.nature.com/articles/s41586-026-10265-5.pdf)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 1 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.8 · supports · helpful): Listed as one example application area among several cited works.
+    > is reshaping scientific research and complex engineering, leading to the paradigm of AI for Science [CITED]. With the continued advancement of large language models (LLMs), LLM-based agent systems [CITED] are now being applied to long-horizon autonomous tasks such as scientific discovery **[CITED:TARGET]**, automated experimentation [CITED], and end-to-end algorithm design [CITED]. Unlike single-turn reasoning, these scenarios involve open search spaces and limited time budgets, where agents must continually generate solutions, execute code, evaluate outcomes, and adjust strate
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: a_to_b; existence 0.82, type 0.62) — `arxiv:2606.06473::k03` → `openalex:W7140287209::k01`
+  - _rationale:_ Contribution A (MLEvolve) cites Contribution B (AI Scientist) in a background passage listing scientific discovery agents. A's adaptive coding modes and hierarchical planning extend the general paradigm of agentic tree search for code generation that B introduced in its template-free mode. The citation is background-level, so the relation is substantive but not a tight methodological extension; 'builds_on a_to_b' is defensible because A explicitly adopts and elaborates the agentic tree-search + code-generation framing pioneered by B, though the connection is thematic rather than a direct reuse of B's artifact.
+    - `arxiv:2606.06473::k03` [method] — Decoupling strategic planning from code generation and selecting among full-rewrite, stepwise, and diff-based editing modes according to search state improves iteration efficiency and stability in long-horizon code optimization agents.
+      > we further decouple strategic planning from code generation with adaptive coding modes
+    - `openalex:W7140287209::k01` [method] — A template-free, open-ended research execution mode that uses agentic tree search to generate code from scratch, optimize implementations, and explore scientific hypotheses without human-provided scaffolding.
+      > template-free, open-ended mode that leverages agentic search for wider scientific exploration … The AI Scientist can generate an initial starting code script by itself. In this case, experimentation includes further stages for optimizing the code it writes from scratch, and experiment execution leverages extra test-time compute with a tree search
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-36
+
+- **Citing** → **MLEvolve: A Self-Evolving Framework for Automated Machine Learning Algorithm Discovery** — Du et al. (2026) · `arxiv:2606.06473` · [S2](https://www.semanticscholar.org/paper/0d1e0184dd8fc663c279bae2eaaa163f5230e143)
+- **Cited** ← **AIDE: AI-Driven Exploration in the Space of Code** — Zhengyao et al. (2025) · `openalex:W4407760093` · [OpenAlex](https://openalex.org/W4407760093) · [doi](https://doi.org/10.48550/arxiv.2502.13138) · [pdf](https://arxiv.org/pdf/2502.13138)
+
+**Flagged for:** background_passage_supports_hard_relation · 2 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.8 · supports · obligatory): General statement that coding agents have been applied to MLE scenarios, target as example.
+    > have achieved significant progress in optimizing discrete stages such as data processing and model selection, they often fall short of covering the entire end-to-end MLE pipeline, i.e. , from data preparation to model training and inference. Recently, LLM-based coding agents have been applied to MLE scenarios **[CITED:TARGET]**, using the planning and code generation capabilities of LLMs to iteratively optimize within open search spaces. These agents typically employ greedy or evolutionary search [CITED], Monte Carlo Tree Search [CITED], or multi-agent collaboration [CITED] to explore candidate solutions.
+  - ⚑ _background_ (conf 0.75 · partial · obligatory): Lists search strategy category (greedy/evolutionary search) target exemplifies, part of a taxonomy list.
+    > training and inference. Recently, LLM-based coding agents have been applied to MLE scenarios [CITED], using the planning and code generation capabilities of LLMs to iteratively optimize within open search spaces. These agents typically employ greedy or evolutionary search **[CITED:TARGET]**, Monte Carlo Tree Search [CITED], or multi-agent collaboration [CITED] to explore candidate solutions. Despite these advances, existing MLE agents still face three key challenges that hinder self-evolution over long horizons. 挑战1 First, existing search mechanisms are limited by
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: a_to_b; existence 0.92, type 0.78) — `arxiv:2606.06473::k04` → `openalex:W4407760093::k03`
+  - _rationale:_ Contribution A (MLEvolve) explicitly cites and situates itself against Contribution B (AIDE) as a key prior work. Evidence A:003–A:004 place AIDE among the LLM-based MLE coding agents that employ "greedy or evolutionary search" (attributing this characterisation directly to AIDE), and A:004 specifically criticises tree-structured search (as used by AIDE) for "information isolation between branches." A:006 then presents MLEvolve's Progressive Monte Carlo Graph Search as a direct architectural response to these limitations — replacing AIDE's tree search with a graph-based scheme that adds cross-branch information flow and an adaptive exploration schedule. The citation passages (CIT:1 and CIT:2) confirm that AIDE is cited as the representative instance of the search paradigm that MLEvolve extends. B:006 and B:019 confirm AIDE's tree-search method and its MLE-Bench results, which MLEvolve explicitly benchmarks against and surpasses (A:007: 65.3% medal rate, "best among all existing methods"). This is therefore a builds_on relationship: Contribution A explicitly extends and improves upon the method and benchmark results established by Contribution B, rather than merely citing it as background.
+    - `arxiv:2606.06473::k04` [empirical_finding] — An LLM-based MLE agent achieves a 65.3% average medal rate on MLE-Bench within a 12-hour budget (half the standard runtime) and outperforms AlphaEvolve and AlphaEvolve-v2 on mathematical algorithm optimization tasks, demonstrating cross-domain generalization of graph-search-based self-evolving agents.
+      > Extensive experiments show that MLEvolve achieves a 65.3% average medal rate on MLE-Bench under a 12-hour budget, achieving the best among all existing methods, and further outperforms AlphaEvolve and AlphaEvolve-v2 on mathematical optimization tasks, demonstrating cross-domain generalization.
+    - `openalex:W4407760093::k03` [empirical_finding] — Tree-search-based code optimization with LLMs achieves state-of-the-art performance on ML engineering benchmarks, earning twice the medals of the next-best agent on MLE-Bench (with GPT-4o) and surpassing human expert solutions on time-constrained RE-Bench tasks such as Triton Kernel optimization.
+      > AIDE effectively trades computational resources for enhanced performance, achieving state-of-the-art results on multiple machine learning engineering benchmarks, including our Kaggle evaluations, OpenAI MLE-Bench and METR's RE-Bench … AIDE achieves twice the number of medals compared to a follow-up agent … AIDE's final solution surpasses that of human experts, even when the latter had extended development time.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-37
+
+- **Citing** → **AI Coding Agents Can Reproduce Social Science Findings** — Alizadeh et al. (2026) · `arxiv:2606.11447` · [S2](https://www.semanticscholar.org/paper/5e0bff90e232795d0253fe39b86347f25672e726)
+- **Cited** ← **CORE-Bench: Fostering the Credibility of Published Research Through a Computational Reproducibility Agent Benchmark** — Siegel et al. (2024) · `openalex:W4403707291` · [OpenAlex](https://openalex.org/W4403707291) · [doi](https://doi.org/10.48550/arxiv.2409.11363) · [pdf](https://arxiv.org/pdf/2409.11363)
+
+**Flagged for:** background_passage_supports_hard_relation · 2 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.7 · supports · obligatory): General statement about need to reproduce computational results, motivational context.
+    > bail2024can, asai2026synthesizing, padarha2026agentslr, grossmann2023ai, shao2025sciscigpt, wang2023scientific . Before such systems can meaningfully participate in scientific knowledge production, however, they must first demonstrate the ability to reproduce existing computational results from original data and code **[CITED:TARGET]**. Existing studies evaluated general-purpose large language models (LLM) agents, such as AutoGPT, on reproducibility benchmarks, providing initial evidence that these agents struggle to reliably execute end-to-end scientific workflows [CITED]. However, the recent intr
+  - ⚑ _background_ (conf 0.65 · supports · obligatory): Describes prior study's finding about AutoGPT struggling as motivating context, not adopted or directly contrasted with own results here.
+    > existing computational results from original data and code [CITED]. Existing studies evaluated general-purpose large language models (LLM) agents, such as AutoGPT, on reproducibility benchmarks, providing initial evidence that these agents struggle to reliably execute end-to-end scientific workflows **[CITED:TARGET]**. However, the recent introduction of specialized AI coding agents designed to autonomously execute code, manage dependencies, and debug workflows represents a major technological shift, and their performance remains largely untested, particularly in social science, where large-scale reproducibility evaluations remain
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: a_to_b; existence 0.92, type 0.78) — `arxiv:2606.11447::k00` → `openalex:W4403707291::k00`
+  - _rationale:_ SocSci-Repro-Bench (A) explicitly positions itself relative to CORE-Bench (B) in multiple ways that go beyond mere citation. Evidence A:005 states that SocSci-Repro-Bench differs from "benchmarks such as CORE-Bench" in three key ways, directly engaging with CORE-Bench's design as a point of departure. Evidence A:034 compares reproduction rates against "comparable benchmarks" where "best-case performance on reproducibility tasks rarely surpassed 35–40%," referencing CORE-Bench's baseline results (B:010 shows 21% on hardest tasks, 60% on easiest). CIT evidence confirms A cites B as the foundational prior work on computational reproducibility benchmarking that motivates A's construction. A adopts the same core task framing (AI agents reproducing computational results from code and data) introduced by B, but extends and refines it specifically for social science with systematic paper selection, stricter task verification (only fully reproducible or demonstrably non-reproducible tasks), and evaluation of specialized coding agents rather than general-purpose LLMs. This constitutes building on B's benchmark concept and baseline findings while adding a domain-specific, methodologically improved instantiation — making the relationship builds_on (A extends B) rather than merely related or supports.
+    - `arxiv:2606.11447::k00` [benchmark] — SocSci-Repro-Bench — a benchmark of 221 reproduction tasks drawn from 54 systematically selected social science papers spanning political science, sociology, psychology, and communication across 13 substantive domains — isolates agent reproduction capacity by including only tasks verified as fully reproducible with available materials or demonstrably non-reproducible due to missing data.
+      > we introduce SocSci-Repro-Bench, a benchmark of 221 tasks spanning four disciplines and 13 substantive domains, constructed from studies whose results are either fully reproducible with available materials or demonstrably non-reproducible due to missing data, allowing us to isolate agents' reproduction capacity
+    - `openalex:W4403707291::k00` [benchmark] — CORE-Bench — a benchmark of 270 tasks derived from 90 scientific papers across computer science, social science, and medicine — measures AI agent accuracy on computational reproducibility at three difficulty levels, covering both language-only and vision-language tasks with Python and R codebases.
+      > CORE-Bench (Computational Reproducibility Benchmark). CORE-Bench comprises 270 tasks derived from 90 papers across computer science, social science, and medicine with Python or R codebases.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-38
+
+- **Citing** → **AI Coding Agents Can Reproduce Social Science Findings** — Alizadeh et al. (2026) · `arxiv:2606.11447` · [S2](https://www.semanticscholar.org/paper/5e0bff90e232795d0253fe39b86347f25672e726)
+- **Cited** ← **CORE-Bench: Fostering the Credibility of Published Research Through a Computational Reproducibility Agent Benchmark** — Siegel et al. (2024) · `openalex:W4403707291` · [OpenAlex](https://openalex.org/W4403707291) · [doi](https://doi.org/10.48550/arxiv.2409.11363) · [pdf](https://arxiv.org/pdf/2409.11363)
+
+**Flagged for:** background_passage_supports_hard_relation · 2 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.7 · supports · obligatory): General statement about need to reproduce computational results, motivational context.
+    > bail2024can, asai2026synthesizing, padarha2026agentslr, grossmann2023ai, shao2025sciscigpt, wang2023scientific . Before such systems can meaningfully participate in scientific knowledge production, however, they must first demonstrate the ability to reproduce existing computational results from original data and code **[CITED:TARGET]**. Existing studies evaluated general-purpose large language models (LLM) agents, such as AutoGPT, on reproducibility benchmarks, providing initial evidence that these agents struggle to reliably execute end-to-end scientific workflows [CITED]. However, the recent intr
+  - ⚑ _background_ (conf 0.65 · supports · obligatory): Describes prior study's finding about AutoGPT struggling as motivating context, not adopted or directly contrasted with own results here.
+    > existing computational results from original data and code [CITED]. Existing studies evaluated general-purpose large language models (LLM) agents, such as AutoGPT, on reproducibility benchmarks, providing initial evidence that these agents struggle to reliably execute end-to-end scientific workflows **[CITED:TARGET]**. However, the recent introduction of specialized AI coding agents designed to autonomously execute code, manage dependencies, and debug workflows represents a major technological shift, and their performance remains largely untested, particularly in social science, where large-scale reproducibility evaluations remain
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: a_to_b; existence 0.97, type 0.88) — `arxiv:2606.11447::k01` → `openalex:W4403707291::k00`
+  - _rationale:_ Contribution A (arxiv:2606.11447) explicitly positions itself relative to CORE-Bench (Contribution B) in multiple ways: (1) it directly cites CORE-Bench as the primary prior benchmark establishing that general-purpose LLM agents struggle with computational reproducibility (CIT:1, CIT:2, A:003); (2) it uses CORE-Bench's baseline results (~21-40% best-case accuracy) as the explicit performance baseline against which its own findings are compared and contrasted — "These reproduction rates considerably exceed those previously reported for general-purpose LLM-based agents on comparable reproducibility benchmarks" (A:034, A:035, AQ); (3) it introduces its own benchmark (SocSci-Repro-Bench) that extends the scope and methodology of CORE-Bench into social science with frontier coding agents rather than general-purpose LLM agents. Contribution A thus builds on B by using CORE-Bench's benchmark results and framing as the foundation from which it motivates its work, measures its advance, and contrasts its findings. The direction is clearly A builds on B, not vice versa.
+    - `arxiv:2606.11447::k01` [empirical_finding] — Frontier AI coding agents achieve high computational reproducibility on social science findings: Claude Code reaches 93.4% task-level and 78.0% paper-level accuracy, substantially outperforming Codex (62.1% / 35.8%) and considerably exceeding reproduction rates previously reported for general-purpose LLM-based agents on comparable benchmarks.
+      > we find that both can reproduce a large share of social science findings, with Claude Code substantially outperforming Codex. These reproduction rates considerably exceed those previously reported for general-purpose LLM-based agents on comparable reproducibility benchmarks
+    - `openalex:W4403707291::k00` [benchmark] — CORE-Bench — a benchmark of 270 tasks derived from 90 scientific papers across computer science, social science, and medicine — measures AI agent accuracy on computational reproducibility at three difficulty levels, covering both language-only and vision-language tasks with Python and R codebases.
+      > CORE-Bench (Computational Reproducibility Benchmark). CORE-Bench comprises 270 tasks derived from 90 papers across computer science, social science, and medicine with Python or R codebases.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-39
+
+- **Citing** → **Generative Adversarial Reviews: When LLMs Become the Critic** — Bougie et al. (2024) · `openalex:W4405468016` · [OpenAlex](https://openalex.org/W4405468016) · [doi](https://doi.org/10.48550/arxiv.2412.10415) · [pdf](https://arxiv.org/pdf/2412.10415)
+- **Cited** ← **GPT4 is Slightly Helpful for Peer-Review Assistance: A Pilot Study** — Robertson (2023) · `openalex:W4384261641` · [OpenAlex](https://openalex.org/W4384261641) · [doi](https://doi.org/10.48550/arxiv.2307.05492) · [pdf](https://arxiv.org/pdf/2307.05492)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 1 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.7 · supports · obligatory): Descriptive summary of Robertson et al.'s findings, no use or contrast.
+    > et2024llms . By leveraging the natural language understanding and contextual analysis afforded by these models, AI can be utilized to assist in manuscript evaluation by simulating aspects of a human reviewer’s decision-making process [CITED]. Other initial investigations, such as those by Robertson et al. **[CITED:TARGET]**, indicated that reviews generated by GPT models align closely with human reviewers’ assessments. By evaluating reviews produced by both humans and LLMs for papers submitted to a prominent machine learning conference, early results illustrated that LLMs could play a valuable role in the peer review process. Further stu
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: b_to_a; existence 0.82, type 0.62) — `openalex:W4405468016::k03` → `openalex:W4384261641::k01`
+  - _rationale:_ Contribution B (GAR) explicitly cites Contribution A (Robertson et al.) as an early investigation showing GPT-generated reviews align with human assessments, and uses it as a foundation in its related work framing [B:008, CIT:openalex:W4405468016->openalex:W4384261641:1]. B then differentiates itself by moving beyond A's single-pass, three-step prompting pipeline [AQ] toward a multi-round, memory-augmented iterative review process [BQ, B:010, B:011]. The citation is substantive — B acknowledges A's contribution and positions its own multi-round approach as extending the paradigm A established. However, the relationship is more one of contextual acknowledgment and contrast than direct methodological reuse of A's pipeline; B builds on the broader lineage A represents rather than directly incorporating A's three-step method. This is best characterized as builds_on (B extends the problem space A opened), though the type confidence is moderate given the primary mechanism is differentiation rather than direct extension.
+    - `openalex:W4405468016::k03` [method] — A multi-round review process — where an agent produces an initial review and iteratively refines it via memory retrieval and self-assessment — better emulates the iterative nature of real-world peer review.
+      > We introduce a multi-round review process, wherein the agent generates an initial review and iteratively refines the review based on retrieved information from the memory module and self-assessment.
+    - `openalex:W4384261641::k01` [method] — A three-step prompting pipeline for automated peer review — generating section-level notes, organizing them into a structured format, and producing a guideline-compliant review — enables GPT-4 to produce formatted conference-style reviews.
+      > Our approach works in the three steps. First, we have GPT generate notes on different sections of the paper that are helpful for generating a review. Second, we have GPT organize these notes into a consistent format. Third, we give GPT formal guidelines for generating a review and then have it generate a review based on the organized notes.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-40
+
+- **Citing** → **AI-Driven Review Systems: Evaluating LLMs in Scalable and Bias-Aware Academic Reviews** — Tyser et al. (2024) · `openalex:W4403006832` · [OpenAlex](https://openalex.org/W4403006832) · [doi](https://doi.org/10.48550/arxiv.2408.10365) · [pdf](https://arxiv.org/pdf/2408.10365)
+- **Cited** ← **MARG: Multi-Agent Review Generation for Scientific Papers** — D’Arcy et al. (2024) · `openalex:W4390784029` · [OpenAlex](https://openalex.org/W4390784029) · [doi](https://doi.org/10.48550/arxiv.2401.04259) · [pdf](https://arxiv.org/pdf/2401.04259)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 1 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.65 · supports · obligatory): Descriptive summary of the target's multi-agent review mechanism as related work, not adopted.
+    > handled by expert instances with tailored instructions, significantly enhancing performance across various tasks. This approach outperforms conventional prompting methods across multiple tasks, enhancing LLM functionality without requiring task-specific instructions. Multi-agent review generation for scientific papers **[CITED:TARGET]** improves LLM reviewing by using multiple instances of LLMs, providing more specific and helpful feedback by distributing the text across specialized agents that simulate an internal discussion. This reduces generic feedback and increases the generation of good comments. Recent work formulates the peer-review process a
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: b_to_a; existence 0.82, type 0.62) — `openalex:W4403006832::k03` → `openalex:W4390784029::k00`
+  - _rationale:_ Contribution B (openalex:W4403006832) explicitly cites and characterizes Contribution A (MARG) as prior work on multi-agent LLM reviewing, then extends the multi-agent paradigm by introducing role-playing (author, reviewer, area chair personas) in a multi-turn dialogue setting. Evidence B:004 and CIT:1 describe MARG's approach and position it as a precursor, while B:026 and B:007 detail B's distinct role-playing framework that goes beyond MARG's text-distribution strategy. However, B does not directly reuse MARG's code or architecture — it builds on the conceptual space MARG opened (multi-agent LLM peer review) and extends it with role differentiation and dialogue simulation. This makes the relationship best characterized as builds_on (B builds on A's conceptual foundation), though the extension is more thematic than direct methodological reuse, which tempers type confidence.
+    - `openalex:W4403006832::k03` [method] — A role-playing framework in which multiple LLMs enact different peer-review roles (author, reviewer, area chair) in a multi-turn dialogue generates more specific and contextually grounded paper reviews than single-agent prompting.
+      > Role playing: Dialogue between LLMs playing different roles in the review process.
+    - `openalex:W4390784029::k00` [method] — MARG (Multi-Agent Review Generation) — a system in which multiple LLM instances each receive a portion of a scientific paper, engage in structured internal discussion, and collectively generate peer-review feedback for papers whose full text exceeds any single LLM's context window.
+      > We propose a novel method (MARG) that can generate high-quality peer-review feedback even for papers longer than the context size of the base model.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-41
+
+- **Citing** → **AI-Driven Review Systems: Evaluating LLMs in Scalable and Bias-Aware Academic Reviews** — Tyser et al. (2024) · `openalex:W4403006832` · [OpenAlex](https://openalex.org/W4403006832) · [doi](https://doi.org/10.48550/arxiv.2408.10365) · [pdf](https://arxiv.org/pdf/2408.10365)
+- **Cited** ← **Peer Review as A Multi-Turn and Long-Context Dialogue with Role-Based Interactions** — Tan et al. (2024) · `openalex:W4399555023` · [OpenAlex](https://openalex.org/W4399555023) · [doi](https://doi.org/10.48550/arxiv.2406.05688) · [pdf](https://arxiv.org/pdf/2406.05688)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 1 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.65 · supports · obligatory): Descriptive mention of prior work reformulating peer review as multi-turn dialogue, not adopted or contrasted.
+    > l feedback by distributing the text across specialized agents that simulate an internal discussion. This reduces generic feedback and increases the generation of good comments. Recent work formulates the peer-review process as a multi-turn dialogue between the different roles of authors, reviewers, and decision-makers **[CITED:TARGET]**, and finds that both reviews [CITED] and meta-reviews written by LLMs [CITED] are preferred by humans over human reviews and meta-reviews. Why do the Artificial Intelligence, Machine Learning, and Computer Vision communities need AI-based reviews of papers? (i) AI-ba
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: b_to_a; existence 0.95, type 0.82) — `openalex:W4403006832::k03` → `openalex:W4399555023::k00`
+  - _rationale:_ Contribution B (W4403006832) explicitly cites and references A's multi-turn dialogue reformulation of peer review (W4399555023) as prior work, then extends it by implementing a role-playing multi-LLM framework that enacts those same roles. Evidence CIT and B:004 show B's authors directly acknowledge A's formulation and position their work as building upon it with a concrete multi-agent role-playing system that generates more specific reviews than single-agent prompting.
+    - `openalex:W4403006832::k03` [method] — A role-playing framework in which multiple LLMs enact different peer-review roles (author, reviewer, area chair) in a multi-turn dialogue generates more specific and contextually grounded paper reviews than single-agent prompting.
+      > Role playing: Dialogue between LLMs playing different roles in the review process.
+    - `openalex:W4399555023::k00` [framework] — Peer review reformulated as a multi-turn, long-context dialogue with role-based interactions for authors, reviewers, and decision makers captures the iterative nature of academic peer review.
+      > we reformulate the peer-review process as a multi-turn, long-context dialogue, incorporating distinct roles for authors, reviewers, and decision makers
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-42
+
+- **Citing** → **AI-Driven Review Systems: Evaluating LLMs in Scalable and Bias-Aware Academic Reviews** — Tyser et al. (2024) · `openalex:W4403006832` · [OpenAlex](https://openalex.org/W4403006832) · [doi](https://doi.org/10.48550/arxiv.2408.10365) · [pdf](https://arxiv.org/pdf/2408.10365)
+- **Cited** ← **Peer Review as A Multi-Turn and Long-Context Dialogue with Role-Based Interactions** — Tan et al. (2024) · `openalex:W4399555023` · [OpenAlex](https://openalex.org/W4399555023) · [doi](https://doi.org/10.48550/arxiv.2406.05688) · [pdf](https://arxiv.org/pdf/2406.05688)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 1 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.65 · supports · obligatory): Descriptive mention of prior work reformulating peer review as multi-turn dialogue, not adopted or contrasted.
+    > l feedback by distributing the text across specialized agents that simulate an internal discussion. This reduces generic feedback and increases the generation of good comments. Recent work formulates the peer-review process as a multi-turn dialogue between the different roles of authors, reviewers, and decision-makers **[CITED:TARGET]**, and finds that both reviews [CITED] and meta-reviews written by LLMs [CITED] are preferred by humans over human reviews and meta-reviews. Why do the Artificial Intelligence, Machine Learning, and Computer Vision communities need AI-based reviews of papers? (i) AI-ba
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: b_to_a; existence 0.85, type 0.62) — `openalex:W4403006832::k03` → `openalex:W4399555023::k01`
+  - _rationale:_ Evidence B:005 and the citation passage show that W4403006832 (B) explicitly references W4399555023 (A) as prior work that 'formulates the peer-review process as a multi-turn dialogue between the different roles of authors, reviewers, and decision-makers.' Contribution B's role-playing framework builds on the same multi-turn dialogue framing introduced by A (ReviewMT), but extends it by using multiple LLMs enacting different roles to generate reviews, rather than simply providing the dataset. The citation is substantive (not merely background), referencing A's specific framing and findings. However, B does not directly use ReviewMT's dataset — it cites A's conceptual contribution. This is a builds_on from B on A's framework/framing rather than pure dataset use, so direction is b_to_a.
+    - `openalex:W4403006832::k03` [method] — A role-playing framework in which multiple LLMs enact different peer-review roles (author, reviewer, area chair) in a multi-turn dialogue generates more specific and contextually grounded paper reviews than single-agent prompting.
+      > Role playing: Dialogue between LLMs playing different roles in the review process.
+    - `openalex:W4399555023::k01` [dataset] — ReviewMT — a dataset of 26,841 papers with 92,017 reviews from ICLR and Nature Communications designed for training and evaluating multi-turn dialogue systems in academic peer review.
+      > We construct a comprehensive dataset containing over 26,841 papers with 92,017 reviews collected from multiple sources, including the top-tier conference and prestigious journal. This dataset is meticulously designed to facilitate the applications of LLMs for multi-turn dialogues, effectively simulating the complete peer-review process.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-43
+
+- **Citing** → **Generative Adversarial Reviews: When LLMs Become the Critic** — Bougie et al. (2024) · `openalex:W4405468016` · [OpenAlex](https://openalex.org/W4405468016) · [doi](https://doi.org/10.48550/arxiv.2412.10415) · [pdf](https://arxiv.org/pdf/2412.10415)
+- **Cited** ← **Peer Review as A Multi-Turn and Long-Context Dialogue with Role-Based Interactions** — Tan et al. (2024) · `openalex:W4399555023` · [OpenAlex](https://openalex.org/W4399555023) · [doi](https://doi.org/10.48550/arxiv.2406.05688) · [pdf](https://arxiv.org/pdf/2406.05688)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 1 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.7 · supports · obligatory): Descriptive summary of ReviewerMT's reformulation, not used or contrasted by citing method.
+    > the peer review process. Further studies [CITED] demonstrated that GPT-4’s feedback shared notable similarities with human reviewer comments, with more than half of participants finding the LLM's feedback beneficial, highlighting its increasing impact in this area. Building on these findings, ReviewerMT **[CITED:TARGET]** reformulates the peer-review process as a multi-turn, role-based dialogue, encompassing distinct roles for authors, reviewers, and decision makers. Recent studies, such as [CITED], simulate peer review through LLM agents to analyze factors like reviewer biases and decision-making but focus primarily o
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: b_to_a; existence 0.95, type 0.8) — `openalex:W4405468016::k03` → `openalex:W4399555023::k01`
+  - _rationale:_ B (W4405468016) explicitly cites and names ReviewerMT (W4399555023/A) in its related work, noting that ReviewerMT 'reformulates the peer-review process as a multi-turn, role-based dialogue' and then presents its own multi-round review process as a further development with additional components (memory module, self-assessment, graph-based representation). Evidence B:009 shows B directly references A's reformulation as a prior building block, and B:005/B:006 describe B's multi-round contribution as extending beyond A's approach. B builds on A's framing of peer review as iterative multi-turn dialogue.
+    - `openalex:W4405468016::k03` [method] — A multi-round review process — where an agent produces an initial review and iteratively refines it via memory retrieval and self-assessment — better emulates the iterative nature of real-world peer review.
+      > We introduce a multi-round review process, wherein the agent generates an initial review and iteratively refines the review based on retrieved information from the memory module and self-assessment.
+    - `openalex:W4399555023::k01` [dataset] — ReviewMT — a dataset of 26,841 papers with 92,017 reviews from ICLR and Nature Communications designed for training and evaluating multi-turn dialogue systems in academic peer review.
+      > We construct a comprehensive dataset containing over 26,841 papers with 92,017 reviews collected from multiple sources, including the top-tier conference and prestigious journal. This dataset is meticulously designed to facilitate the applications of LLMs for multi-turn dialogues, effectively simulating the complete peer-review process.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-44
+
+- **Citing** → **AI-Driven Review Systems: Evaluating LLMs in Scalable and Bias-Aware Academic Reviews** — Tyser et al. (2024) · `openalex:W4403006832` · [OpenAlex](https://openalex.org/W4403006832) · [doi](https://doi.org/10.48550/arxiv.2408.10365) · [pdf](https://arxiv.org/pdf/2408.10365)
+- **Cited** ← **Peer Review as A Multi-Turn and Long-Context Dialogue with Role-Based Interactions** — Tan et al. (2024) · `openalex:W4399555023` · [OpenAlex](https://openalex.org/W4399555023) · [doi](https://doi.org/10.48550/arxiv.2406.05688) · [pdf](https://arxiv.org/pdf/2406.05688)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 1 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.65 · supports · obligatory): Descriptive mention of prior work reformulating peer review as multi-turn dialogue, not adopted or contrasted.
+    > l feedback by distributing the text across specialized agents that simulate an internal discussion. This reduces generic feedback and increases the generation of good comments. Recent work formulates the peer-review process as a multi-turn dialogue between the different roles of authors, reviewers, and decision-makers **[CITED:TARGET]**, and finds that both reviews [CITED] and meta-reviews written by LLMs [CITED] are preferred by humans over human reviews and meta-reviews. Why do the Artificial Intelligence, Machine Learning, and Computer Vision communities need AI-based reviews of papers? (i) AI-ba
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: b_to_a; existence 0.92, type 0.78) — `openalex:W4403006832::k03` → `openalex:W4399555023::k02`
+  - _rationale:_ Contribution A (W4399555023) proposes the multi-turn peer-review dialogue framework with role-specific evaluation metrics. Contribution B (W4403006832) explicitly cites and builds upon this framework: evidence B:004 and CIT reference 'Recent work formulates the peer-review process as a multi-turn dialogue between the different roles of authors, reviewers, and decision-makers (Tan et al. 2024)' — directly referencing A's formulation — and uses it as context for B's own role-playing multi-agent approach. B does not reuse A's metrics or dataset directly but takes A's framing as a prior result to position against, indicating builds_on rather than mere topical relatedness.
+    - `openalex:W4403006832::k03` [method] — A role-playing framework in which multiple LLMs enact different peer-review roles (author, reviewer, area chair) in a multi-turn dialogue generates more specific and contextually grounded paper reviews than single-agent prompting.
+      > Role playing: Dialogue between LLMs playing different roles in the review process.
+    - `openalex:W4399555023::k02` [benchmark] — Role-specific evaluation metrics for assessing LLM performance in multi-turn peer-review dialogues, measuring response validity, text quality, score accuracy, and decision-making quality for each participant role.
+      > we propose a series of metrics to evaluate the performance of LLMs for each role under this reformulated peer-review setting, ensuring fair and comprehensive evaluations
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-45
+
+- **Citing** → **AI-Driven Review Systems: Evaluating LLMs in Scalable and Bias-Aware Academic Reviews** — Tyser et al. (2024) · `openalex:W4403006832` · [OpenAlex](https://openalex.org/W4403006832) · [doi](https://doi.org/10.48550/arxiv.2408.10365) · [pdf](https://arxiv.org/pdf/2408.10365)
+- **Cited** ← **Can Large Language Models Provide Useful Feedback on Research Papers? A Large-Scale Empirical Analysis** — Liang et al. (2024) · `openalex:W4400734098` · [OpenAlex](https://openalex.org/W4400734098) · [doi](https://doi.org/10.1056/aioa2400196)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 1 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.6 · supports · helpful): Listed among 'previous work' addressing LLM reviewing capabilities, general context.
+    > ecco2021ai,bao2021predicting,vesper2018peer,latona2024ai,kuznetsov2024can , along with the risks involved [CITED]. Previous work addresses the limitations of LLM's ability to perform reviewing [CITED] and their capabilities to review academic papers **[CITED:TARGET]**. Large language models demonstrate surprising creative capabilities in text [CITED], though they may hallucinate [CITED], and demonstrate the power to persuade humans even when inaccurate [CITED]. This makes controlling the quality and appropriateness of LLM-augmented reviewi
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: b_to_a; existence 0.88, type 0.72) — `openalex:W4403006832::k04` → `openalex:W4400734098::k01`
+  - _rationale:_ Contribution B (W4403006832) explicitly cites and builds upon Contribution A (W4400734098): the citation passage references A as prior work establishing LLM capabilities to review academic papers, and B's system (OpenReviewer / Papers with Reviews) extends that finding into a large-scale public corpus and authoring service. B uses A's empirical result—that LLM feedback overlaps with human reviewers at comparable rates—as a foundation for the practical deployment described in BQ and B:028/B:012. This is a builds_on relation with B acting on A (b_to_a).
+    - `openalex:W4403006832::k04` [resource] — A large-scale public corpus of LLM-generated reviews for arXiv and open-access Nature journal papers, paired with a free authoring service, makes merit-based, bias-mitigated academic reviews broadly accessible outside traditional conference pipelines.
+      > We make the reviews of publicly available arXiv and open-access Nature journal papers available online, along with a free service which helps authors review and revise their research papers and improve their quality.
+    - `openalex:W4400734098::k01` [empirical_finding] — LLM-generated feedback on research papers overlaps with individual human peer reviews at rates comparable to the overlap between two human reviewers, across multiple scientific domains and large-scale datasets.
+      > The overlap in the points raised by GPT-4 and by human reviewers (average overlap of 30.85% for Nature journals and 39.23% for ICLR) is comparable with the overlap between two human reviewers (average overlap of 28.58% for Nature journals and 35.25% for ICLR).
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-46
+
+- **Citing** → **OpenReviewer: A Specialized Large Language Model for Generating Critical Scientific Paper Reviews** — Idahl et al. (2024) · `openalex:W4405561462` · [OpenAlex](https://openalex.org/W4405561462) · [doi](https://doi.org/10.48550/arxiv.2412.11948) · [pdf](https://arxiv.org/pdf/2412.11948)
+- **Cited** ← **Can Large Language Models Provide Useful Feedback on Research Papers? A Large-Scale Empirical Analysis** — Liang et al. (2024) · `openalex:W4400734098` · [OpenAlex](https://openalex.org/W4400734098) · [doi](https://doi.org/10.1056/aioa2400196)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 1 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.72 · inconclusive · obligatory): Related-work section describes the target's findings as prior art without adopting or contrasting the citing work's own method
+    > ection Review Generation with Large Language Models With the emergence of powerful LLMs, several recent studies have explored their potential for automated review generation. [CITED] conducted experiments using OpenAI's GPT-4 for reviewing papers but found limitations in technical depth and consistency. **[CITED:TARGET]** show that while LLMs can provide useful feedback, they tend to focus more on writing and presentation issues rather than technical contributions. The AI Scientist [CITED] is a recent framework for fully automated scientific discovery based on GPT4o, including research idea generation, coding, experiment ex
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: b_to_a; existence 0.9, type 0.72) — `openalex:W4405561462::k02` → `openalex:W4400734098::k01`
+  - _rationale:_ Contribution B (OpenReviewer/W4405561462) explicitly cites and characterizes Contribution A (Liang et al./W4400734098) in its related work section, noting that A "show that while LLMs can provide useful feedback, they tend to focus more on writing and presentation issues rather than technical contributions" (B:017, CIT passage). B then extends beyond A's finding: while A establishes that LLM feedback overlaps with human reviewers at comparable rates to human-human overlap (AQ), B identifies a specific, actionable limitation—general-purpose LLMs are systematically too lenient in their recommendations (BQ, B:015)—and proposes a remedy via domain fine-tuning. This constitutes a build-on relationship where B uses A's empirical grounding as a starting point, identifies a gap (leniency/recommendation calibration) not fully addressed in A, and introduces a specialized system (OpenReviewer) to address it. The relationship goes beyond mere citation or topical similarity: B explicitly situates its motivation and contribution relative to A's findings. However, the type confidence is moderated because B's core contribution (fine-tuning for calibration) is sufficiently novel that it also partially refines A's characterization of LLM review quality.
+    - `openalex:W4405561462::k02` [empirical_finding] — General-purpose LLMs (GPT-4o, Claude-3.5-Sonnet) are systematically too lenient as paper reviewers, producing recommendation distributions far more positive than human expert reviewers, while domain fine-tuning on expert review data substantially closes this gap.
+      > An evaluation demonstrating that OpenReviewer generates reviews that align considerably better with human expert reviews compared to state-of-the-art LLMs, including GPT-4o and Claude-3.5-Sonnet. We find that general-purpose LLMs are not critical enough and tend to give much more positive recommendations than human reviews.
+    - `openalex:W4400734098::k01` [empirical_finding] — LLM-generated feedback on research papers overlaps with individual human peer reviews at rates comparable to the overlap between two human reviewers, across multiple scientific domains and large-scale datasets.
+      > The overlap in the points raised by GPT-4 and by human reviewers (average overlap of 30.85% for Nature journals and 39.23% for ICLR) is comparable with the overlap between two human reviewers (average overlap of 28.58% for Nature journals and 35.25% for ICLR).
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-47
+
+- **Citing** → **MMReview: A Multidisciplinary and Multimodal Benchmark for LLM-Based Peer Review Automation** — Gao et al. (2025) · `openalex:W4415238296` · [OpenAlex](https://openalex.org/W4415238296) · [doi](https://doi.org/10.48550/arxiv.2508.14146) · [pdf](https://arxiv.org/pdf/2508.14146)
+- **Cited** ← **Can Large Language Models Provide Useful Feedback on Research Papers? A Large-Scale Empirical Analysis** — Liang et al. (2024) · `openalex:W4400734098` · [OpenAlex](https://openalex.org/W4400734098) · [doi](https://doi.org/10.1056/aioa2400196)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 1 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.7 · supports · obligatory): Describes finding of 'initial studies' generically, not adopted or specifically contrasted.
+    > wn strong potential in analyzing complex scholarly texts [CITED]. Initial studies indicate that LLM-generated review comments partially overlap with those of human reviewers, suggesting their potential contribution to peer review **[CITED:TARGET]**. However, further research reveals that even advanced models like GPT-4o often fail to meet human expectations in review quality [CITED]. To improve alignment with peer review standards, researchers have built datasets from public review platforms and fine-tuned LLMs kangDatasetPeerRev
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: b_to_a; existence 0.82, type 0.65) — `openalex:W4415238296::k02` → `openalex:W4400734098::k02`
+  - _rationale:_ Contribution B (MMReview benchmark paper) explicitly cites Contribution A (Liang et al. 2023) in its related work section as foundational evidence that "LLM-generated review comments partially overlap with those of human reviewers," using A's empirical finding as part of the motivating context for developing its own benchmark and evaluation framework. This is a direct citation use of A's results to situate B's work. However, B does not directly extend A's methodology or dataset — it builds a new benchmark (MMReview) addressing gaps that prior work like A helped identify. The relationship is one of B building on A's findings as a reference point, though the connection is more contextual than deeply methodological, warranting moderate type confidence.
+    - `openalex:W4415238296::k02` [empirical_finding] — Empirical findings from evaluating 21 LLMs (18 open-source, 3 closed-source) on automated peer review tasks reveal key capability gaps and domain-specific performance patterns that inform future development of LLM-assisted review systems.
+      > We conduct extensive experiments on 18 open-source and 3 closed-source models using the MMReview benchmark, offering some key findings of LLM-based automated reviewing. Our findings offer in-depth analysis and valuable guidance for the future development of LLM-assisted peer review systems.
+    - `openalex:W4400734098::k02` [empirical_finding] — Researchers perceive LLM-generated feedback on their own papers as helpful and beneficial, with a majority finding it useful and most rating it competitive with or superior to human peer review feedback.
+      > In our prospective user study, more than half (57.4%) of the users found GPT-4–generated feedback helpful/very helpful, and 82.4% found it more beneficial than feedback from at least some human reviewers.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-48
+
+- **Citing** → **AIGS: Generating Science from AI-Powered Automated Falsification** — Liu et al. (2024) · `openalex:W4404573571` · [OpenAlex](https://openalex.org/W4404573571) · [doi](https://doi.org/10.48550/arxiv.2411.11910) · [pdf](https://arxiv.org/pdf/2411.11910)
+- **Cited** ← **The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery** — Lu et al. (2024) · `openalex:W4402952666` · [OpenAlex](https://openalex.org/W4402952666) · [doi](https://doi.org/10.48550/arxiv.2408.06292) · [pdf](https://arxiv.org/pdf/2408.06292)
+
+**Flagged for:** background_passage_supports_hard_relation · 2 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.7 · supports · obligatory): Descriptive one-line summary in a categorized survey list, no use or singled-out critique.
+    > iterativeresearchidea proposed ... Performance Optimization Agents RD-Agent [CITED] proposed ... Human Copilot MLR-Copilot [CITED] proposed ... Automated AI Agent Scientists AI-Scientist **[CITED:TARGET]** proposed a fully automated AI driven scientific research framework. Position Papers Pitfalls of Current Systems 从效果而非设计上分析缺陷 AIGS System How Human Conduct Scientific Research In order to put forward an AI Agent system that can autonomously conduct the e
+  - ⚑ _background_ (conf 0.65 · supports · obligatory): Describes AI Scientist's claims then critiques the whole research line generally, not the target alone.
+    > construct end-to-end systems that cover both creativity and executability . MLR-copilot [CITED] takes existing research papers as input, and produces execution results by both generating ideas and implementing experiments. AI Scientist **[CITED:TARGET]** further claims to be able to organize the generated ideas and experimental results into research papers as the output. This line of research arouses significant excitement in the community, but is feedbacked with controversy: Criticisms include the incremental nature of the generated knowledge ``tweaks", as well as th
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: b_to_a; existence 0.92, type 0.72) — `openalex:W4404573571::k00` → `openalex:W4402952666::k00`
+  - _rationale:_ Baby-AIGS (B) explicitly positions itself relative to AI Scientist (A), citing it by name as 'AI-Scientist' and 'Lu et al., 2024' in multiple passages. Evidence B:003 states that explicit falsification is 'a key feature absent in prior systems (Lu et al., 2024)', directly referencing A's system as the prior work being extended. Evidence B:009 contrasts Baby-AIGS's DSL approach with 'coding language adopted in previous work (Lu et al., 2024)'. The citation evidence shows B surveying A as a landmark system it builds upon and differentiates from, particularly by adding falsification via FalsificationAgent. This constitutes builds_on (b_to_a): B uses A's framing and prior results as a foundation and extends them with new mechanisms.
+    - `openalex:W4404573571::k00` [framework] — Baby-AIGS — a multi-agent LLM-powered system comprising ProposalAgent, ExpAgent, ReviewAgent, and FalsificationAgent — enables autonomous, full-process scientific discovery without relying on domain-specific external verification engines.
+      > we propose Baby-AIGS as a baby-step demonstration of a full-process AIGS system, which is a multi-agent system with agents in roles representing key research process
+    - `openalex:W4402952666::k00` [framework] — The AI Scientist — an end-to-end, fully automated pipeline in which a frontier LLM generates research ideas, searches the literature, designs and executes experiments, visualizes results, writes a complete scientific manuscript, and performs self-review in an open-ended loop — enables autonomous scientific discovery in machine learning at a cost of under $15 per paper.
+      > We introduce the first end-to-end framework for fully automated scientific discovery in Machine Learning research, enabled by frontier LLMs (Section 3). This fully automated process includes idea generation, experiment design, execution, and visualizing and writing up the results into a full manuscript.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-49
+
+- **Citing** → **Towards end-to-end automation of AI research** — Lu et al. (2026) · `openalex:W7140287209` · [OpenAlex](https://openalex.org/W7140287209) · [doi](https://doi.org/10.1038/s41586-026-10265-5) · [pdf](https://www.nature.com/articles/s41586-026-10265-5.pdf)
+- **Cited** ← **The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery** — Lu et al. (2024) · `openalex:W4402952666` · [OpenAlex](https://openalex.org/W4402952666) · [doi](https://doi.org/10.48550/arxiv.2408.06292) · [pdf](https://arxiv.org/pdf/2408.06292)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 1 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ ⁿ _background_ (conf 0.8): Passage points to the target as the source of highlighted example papers and further detail, a general pointer/context reference rather than an explicit extension or comparison.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > e-Based AI Scientist Papers This section presents three highlighted papers generated by the template-based version of The AI Scientist, one from each experimental domain, to showcase the system’s capabilities. For each, the generated idea, a link to the code, the full PDF of the paper, and the automated review are provided. The full set of ten highlighted papers, along with in-depth analysis of their contents, can be found in the original work on the template-based version of The AI Scientist ( Lu et al. 2024b ) . D.1.1 DualScale Diffusion: Adaptive Feature Balancing for Low-Dimensional Generative Models Link to code: https://github.com/SakanaAI/AI-Scientist/tree/main/example_papers/adaptive_dual_scale_denoising . See pages - of v1_materials/highlighted_papers/diffusion/adaptive_dual_scale_denoising/adaptive_dual_scale_denoising.pdf D.1.2 StyleFusion: Adaptive Multi-style Generation in Character-Level Language Models Link to code: https://github.com/SakanaAI/AI-Scientist/tree/main/example_papers/mult
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: b_to_a; existence 0.98, type 0.9) — `openalex:W7140287209::k00` → `openalex:W4402952666::k00`
+  - _rationale:_ Contribution B (W7140287209, the Nature 2026 paper) explicitly builds on Contribution A (W4402952666, the original AI Scientist preprint). Evidence CIT shows B citing A directly, referring to 'the template-based version of The AI Scientist (Lu et al. 2024b)' and directing readers to the original work for full analysis. B:006 describes two modes including 'a template-based system that extends human-provided code' which maps to A's approach, and 'a more open-ended template-free system' as the new extension. B:000 is the journal publication that presents an extended pipeline building on the original. B uses A's artifacts, methods, and results as a foundation and extends them with a template-free mode and peer-review milestone.
+    - `openalex:W7140287209::k00` [framework] — The AI Scientist — a fully automated, end-to-end scientific research pipeline that autonomously generates research ideas, writes and executes code, runs experiments, analyzes and plots results, writes complete machine-learning conference manuscripts, and performs automated peer review.
+      > Here we present a pipeline for automating the entire scientific process end to end. We present The AI Scientist, which creates research ideas, writes code, runs experiments, plots and analyses data, writes the entire scientific manuscript, and performs its own peer review.
+    - `openalex:W4402952666::k00` [framework] — The AI Scientist — an end-to-end, fully automated pipeline in which a frontier LLM generates research ideas, searches the literature, designs and executes experiments, visualizes results, writes a complete scientific manuscript, and performs self-review in an open-ended loop — enables autonomous scientific discovery in machine learning at a cost of under $15 per paper.
+      > We introduce the first end-to-end framework for fully automated scientific discovery in Machine Learning research, enabled by frontier LLMs (Section 3). This fully automated process includes idea generation, experiment design, execution, and visualizing and writing up the results into a full manuscript.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-50
+
+- **Citing** → **Towards end-to-end automation of AI research** — Lu et al. (2026) · `openalex:W7140287209` · [OpenAlex](https://openalex.org/W7140287209) · [doi](https://doi.org/10.1038/s41586-026-10265-5) · [pdf](https://www.nature.com/articles/s41586-026-10265-5.pdf)
+- **Cited** ← **The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery** — Lu et al. (2024) · `openalex:W4402952666` · [OpenAlex](https://openalex.org/W4402952666) · [doi](https://doi.org/10.48550/arxiv.2408.06292) · [pdf](https://arxiv.org/pdf/2408.06292)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 1 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ ⁿ _background_ (conf 0.8): Passage points to the target as the source of highlighted example papers and further detail, a general pointer/context reference rather than an explicit extension or comparison.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > e-Based AI Scientist Papers This section presents three highlighted papers generated by the template-based version of The AI Scientist, one from each experimental domain, to showcase the system’s capabilities. For each, the generated idea, a link to the code, the full PDF of the paper, and the automated review are provided. The full set of ten highlighted papers, along with in-depth analysis of their contents, can be found in the original work on the template-based version of The AI Scientist ( Lu et al. 2024b ) . D.1.1 DualScale Diffusion: Adaptive Feature Balancing for Low-Dimensional Generative Models Link to code: https://github.com/SakanaAI/AI-Scientist/tree/main/example_papers/adaptive_dual_scale_denoising . See pages - of v1_materials/highlighted_papers/diffusion/adaptive_dual_scale_denoising/adaptive_dual_scale_denoising.pdf D.1.2 StyleFusion: Adaptive Multi-style Generation in Character-Level Language Models Link to code: https://github.com/SakanaAI/AI-Scientist/tree/main/example_papers/mult
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: b_to_a; existence 0.97, type 0.88) — `openalex:W7140287209::k03` → `openalex:W4402952666::k00`
+  - _rationale:_ Contribution B (W7140287209) explicitly extends and reports results from the same AI Scientist system described in Contribution A (W4402952666). Evidence B:000 and B:001 describe the system built upon the original work, citing Lu et al. 2024b directly (CIT evidence). The peer-review result in B (one manuscript passing workshop review) is a finding produced by running the system introduced in A. B thus builds on A's pipeline, artifact, and methods to demonstrate a new result about output quality.
+    - `openalex:W7140287209::k03` [empirical_finding] — AI-generated research manuscripts can pass the first round of peer review at a workshop of a top-tier machine learning conference, demonstrating that fully autonomous scientific output meets a non-trivial human-evaluated quality bar.
+      > Its ideas, execution and presentation are of sufficient quality that the manuscript generated by this AI system passed the first round of peer review for a workshop of a top-tier machine learning conference.
+    - `openalex:W4402952666::k00` [framework] — The AI Scientist — an end-to-end, fully automated pipeline in which a frontier LLM generates research ideas, searches the literature, designs and executes experiments, visualizes results, writes a complete scientific manuscript, and performs self-review in an open-ended loop — enables autonomous scientific discovery in machine learning at a cost of under $15 per paper.
+      > We introduce the first end-to-end framework for fully automated scientific discovery in Machine Learning research, enabled by frontier LLMs (Section 3). This fully automated process includes idea generation, experiment design, execution, and visualizing and writing up the results into a full manuscript.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-51
+
+- **Citing** → **Towards end-to-end automation of AI research** — Lu et al. (2026) · `openalex:W7140287209` · [OpenAlex](https://openalex.org/W7140287209) · [doi](https://doi.org/10.1038/s41586-026-10265-5) · [pdf](https://www.nature.com/articles/s41586-026-10265-5.pdf)
+- **Cited** ← **The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery** — Lu et al. (2024) · `openalex:W4402952666` · [OpenAlex](https://openalex.org/W4402952666) · [doi](https://doi.org/10.48550/arxiv.2408.06292) · [pdf](https://arxiv.org/pdf/2408.06292)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 1 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ ⁿ _background_ (conf 0.8): Passage points to the target as the source of highlighted example papers and further detail, a general pointer/context reference rather than an explicit extension or comparison.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > e-Based AI Scientist Papers This section presents three highlighted papers generated by the template-based version of The AI Scientist, one from each experimental domain, to showcase the system’s capabilities. For each, the generated idea, a link to the code, the full PDF of the paper, and the automated review are provided. The full set of ten highlighted papers, along with in-depth analysis of their contents, can be found in the original work on the template-based version of The AI Scientist ( Lu et al. 2024b ) . D.1.1 DualScale Diffusion: Adaptive Feature Balancing for Low-Dimensional Generative Models Link to code: https://github.com/SakanaAI/AI-Scientist/tree/main/example_papers/adaptive_dual_scale_denoising . See pages - of v1_materials/highlighted_papers/diffusion/adaptive_dual_scale_denoising/adaptive_dual_scale_denoising.pdf D.1.2 StyleFusion: Adaptive Multi-style Generation in Character-Level Language Models Link to code: https://github.com/SakanaAI/AI-Scientist/tree/main/example_papers/mult
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: b_to_a; existence 0.92, type 0.78) — `openalex:W7140287209::k02` → `openalex:W4402952666::k02`
+  - _rationale:_ Contribution A (the original AI Scientist paper) introduced the automated reviewer as part of its system, achieving near-human-level accuracy (65% vs 66% balanced accuracy on ICLR 2022 data, per A:002). Contribution B explicitly extends this into a standalone Automated Reviewer with an ensemble of five independent reviews and further validation (69% vs 66% accuracy, higher F1, per B:008). B cites A and uses A's generated papers as evaluation examples (CIT, B:006), directly building on A's reviewer methodology and artifact. The direction is b_to_a: B takes A's automated reviewer concept and extends/validates it more rigorously.
+    - `openalex:W7140287209::k02` [model] — The Automated Reviewer — an ensemble-based LLM reviewer that predicts conference acceptance decisions with accuracy on par with human reviewers, validated against openly available decisions from past conferences.
+      > we created an automated reviewer and first evaluated its performance against real, human-generated papers. The Automated Reviewer can accurately predict conference acceptance decisions, performing on par with human reviewers
+    - `openalex:W4402952666::k02` [empirical_finding] — Fully automated LLM-driven scientific discovery can produce novel machine learning papers in diffusion modeling, transformer-based language modeling, and learning dynamics that exceed the acceptance threshold of a top machine learning conference as judged by an automated reviewer.
+      > The AI Scientist can produce papers that exceed the acceptance threshold at a top machine learning conference as judged by our automated reviewer... we focus on a subset of these papers, highlighting novel insights in diffusion modeling, language modeling, and grokking.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-52
+
+- **Citing** → **MLR-Bench: Evaluating AI Agents on Open-Ended Machine Learning Research** — Chen et al. (2025) · `openalex:W4414587939` · [OpenAlex](https://openalex.org/W4414587939) · [doi](https://doi.org/10.48550/arxiv.2505.19955) · [pdf](https://arxiv.org/pdf/2505.19955)
+- **Cited** ← **OpenReviewer: A Specialized Large Language Model for Generating Critical Scientific Paper Reviews** — Idahl et al. (2024) · `openalex:W4405561462` · [OpenAlex](https://openalex.org/W4405561462) · [doi](https://doi.org/10.48550/arxiv.2412.11948) · [pdf](https://arxiv.org/pdf/2412.11948)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - _background_ (conf 0.65 · supports · obligatory): Grouped with ReviewerGPT as prior works performing sub-tasks; the limitation is attributed to the group, not this target alone.
+    > judges, and diverse real-world tasks, MLR-Bench offers the comprehensive benchmark for diagnosing and improving end-to-end research automation. LLMs as Reviewers for Scientific Research. LLMs have also been explored as automated reviewers. Prior works like ReviewerGPT [CITED] and OpenReviewer **[CITED:TARGET]** show that LLMs can perform specific reviewing sub-tasks, but tend to produce overconfident and unreliable overall judgments [CITED]. More structured efforts, such as PaperBench [CITED], demonstrate that fine-tuned LLM judges can align well with
+  - ⚑ _background_ (conf 0.6 · partial · helpful): The 'overconfident and unreliable judgments' critique is attributed to the group of prior review works, not the target specifically.
+    > extbf LLMs as Reviewers for Scientific Research. LLMs have also been explored as automated reviewers. Prior works like ReviewerGPT [CITED] and OpenReviewer [CITED] show that LLMs can perform specific reviewing sub-tasks, but tend to produce overconfident and unreliable overall judgments **[CITED:TARGET]**. More structured efforts, such as PaperBench [CITED], demonstrate that fine-tuned LLM judges can align well with human reviewers on benchmark tasks [CITED]. Building on these insights, MLR-Bench introduces MLR-Judge, a rubric-based LLM
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: b_to_a; existence 0.9, type 0.7) — `openalex:W4414587939::k01` → `openalex:W4405561462::k00`
+  - _rationale:_ MLR-Judge (B) explicitly cites OpenReviewer (A) as prior work in the LLM-as-reviewer space, noting its limitations (overconfident, unreliable overall judgments), then builds on those insights by introducing a more structured rubric-based approach. Evidence CIT:2 and B:029 show B directly frames MLR-Judge as building on lessons from A and similar works. This is a builds_on relation with B acting on A.
+    - `openalex:W4414587939::k01` [framework] — MLR-Judge — an automated evaluation framework pairing LLM-based reviewers with structured review rubrics — achieves agreement with expert human reviewers comparable to inter-human agreement, providing a scalable proxy for assessing AI-generated research quality.
+      > MLR-Judge , an automated evaluation pipeline consisting of LLM-based judge and structured review rubrics; ... We find that the level of agreement between an LLM judge and a human judge, when assessing the same output, is very close to the level of agreement between two human judges, demonstrating its effectiveness as a reliable evaluation tool.
+    - `openalex:W4405561462::k00` [model] — Llama-OpenReviewer-8B — an 8B-parameter language model fine-tuned on 79,000 expert peer reviews from top ML/AI conferences (ICLR, NeurIPS) — generates structured, critical academic reviews that closely match human reviewer recommendation distributions.
+      > A specialized long-context large language model for generating academic reviews, finetuned on a large dataset of expert reviews from top ML conferences.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-53
+
+- **Citing** → **A Typed, Dynamic, No-Meta Theory of Autonomous Research Claim Certification and Release** — Takahashi (2026) · `openalex:W7149942558` · [OpenAlex](https://openalex.org/W7149942558) · [doi](https://doi.org/10.5281/zenodo.19427818)
+- **Cited** ← **Automated Hypothesis Validation with Agentic Sequential Falsifications** — Huang et al. (2025) · `openalex:W4407632372` · [OpenAlex](https://openalex.org/W4407632372) · [doi](https://doi.org/10.48550/arxiv.2502.09858) · [pdf](https://arxiv.org/pdf/2502.09858)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ ⁿ _background_ (conf 0.55): Target (Popper) appears among a small group of works described as extending adaptive-inference/false-discovery-control lines into automated research settings, a grouped mention rather than a singled-out contrast or explicit adoption.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > milies with seal nodes. The relation is therefore one of strict architectural inclusion rather than terminological overlap. 2.3 Adaptive inference and false-discovery control Reusable holdouts, online FDR, and safe anytime-valid inference study how inferential validity can be preserved under adaptivity [7, 8, 9]. The broader metascientific background includes false-positive flexibility and the garden of forking paths [1, 2, 3]. More recent work extends this line into automated research settings [10, 11]. These works are essential for inferential rigor, but they do not by themselves yield a 5 common certification-and-release law incorporating documentary, provenance, replay, and unverifiability failures. 2.4 Information reduction, sufficiency, and measurable decision structure The present paper also draws on a different lineage: comparison of experiments, sufficient public statistics, and measurable factorization. Blackwell’s comparison of experiments formalized when one information structure
+  - ⁿ _background_ (conf 0.35): The visible passage concerns cryptographic release/update frameworks and research-integrity literature, not clearly discussing the target (Popper) directly, so classified as low-confidence background.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > ion, and cryptographically checkable claims [15, 16, 17, 18, 19, 20, 25, 22, 21, 23]. Those works provide essential engineering substrates. The present paper instead asks what can be formally certified, held, or released under explicit observable-only and no-meta restrictions. 2.6 Research-integrity policy and fraud at scale Research-integrity policy and fraud-at-scale studies explain which types of misconduct exist and why publication ecosystems remain vulnerable to industrialized manipulation [4, 29]. That literature is indispensable, but it is usually not cast as a typed measurable theory of certification and release under resource scarcity. 2.7 Secure update frameworks and release channels Secure software-update frameworks clarify why release cannot be treated as an unmodeled afterthought. TUF formalizes threshold-signed metadata, rollback and freeze protection, and consistent-snapshot discipline for update distribution [25], while Certificate Transparency formalizes append-only public lo
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: b_to_a; existence 0.9, type 0.72) — `openalex:W7149942558::k04` → `openalex:W4407632372::k01`
+  - _rationale:_ B (W7149942558) explicitly cites A (W4407632372) and positions A's always-valid e-process gates as a component that maps into B's declared inferential checker families with seal nodes. Evidence B:011 states 'always-valid e-process gates map to declared inferential checker families with seal nodes' and describes A as a 'concrete protocol-level instantiation' that B's architecture generalizes. CIT passage confirms B treats A's framework as an essential substrate that B incorporates and extends into a broader certification-and-release governance architecture. This is builds_on with direction b_to_a (B builds on A).
+    - `openalex:W7149942558::k04` [framework] — A public inferential shell with realized finite revealed graphs, declared event budgets, predictable e-processes, and seal nodes that enables program-level validity certification for sealed inferential admission.
+      > a public inferential shell with realized finite revealed graphs, declared event budgets, predictable e-factor programs, and seal nodes, together with a program-level validity theorem for sealed inferential admission
+    - `openalex:W4407632372::k01` [method] — A sequential testing framework based on e-values that aggregates evidence from multiple, potentially dependent LLM-generated falsification tests while maintaining strict Type-I error control and anytime validity.
+      > A novel sequential testing framework ensures strict Type-I error control while actively gathering evidence from diverse observations, whether drawn from existing data or newly conducted procedures.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-54
+
+- **Citing** → **Towards end-to-end automation of AI research** — Lu et al. (2026) · `openalex:W7140287209` · [OpenAlex](https://openalex.org/W7140287209) · [doi](https://doi.org/10.1038/s41586-026-10265-5) · [pdf](https://www.nature.com/articles/s41586-026-10265-5.pdf)
+- **Cited** ← **AIDE: AI-Driven Exploration in the Space of Code** — Zhengyao et al. (2025) · `openalex:W4407760093` · [OpenAlex](https://openalex.org/W4407760093) · [doi](https://doi.org/10.48550/arxiv.2502.13138) · [pdf](https://arxiv.org/pdf/2502.13138)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 1 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ ⁿ _background_ (conf 0.5): The visible citing text discusses foundation models and agentic search generally; the target (AIDE) is not singled out or explicitly used/contrasted in the shown passage, so this reads as general/grouped context.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > review at a major machine learning conference workshop. The workshop has an acceptance rate of 70 percent. Our system leverages modern foundation models ( OpenAI 2023 ; Anthropic 2024 ; Llama Team 2024 ) within a complex agentic system. We evaluate The AI Scientist in two settings: a focused mode using human-provided code templates as an initial scaffold to conduct research on a specific topic, and a template-free, open-ended mode that leverages agentic search for wider scientific exploration ( Jiang et al. 2025 ; Chan et al. 2025 ) . Both settings produce diverse ideas and automatically test, report on, and evaluate them. This achievement demonstrates AI’s growing capacity for scientific contribution and signifies a potential paradigm shift in how research is conducted. As with any impactful new technology, there could be significant risks, including taxing overwhelmed review systems and adding noise to scientific literature. However, if developed responsibly, such autonomous systems could greatly acc
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: b_to_a; existence 0.9, type 0.75) — `openalex:W7140287209::k01` → `openalex:W4407760093::k01`
+  - _rationale:_ B (The AI Scientist) explicitly cites A (AIDE) when describing its template-free, open-ended mode that uses agentic tree search for code optimization. The citation passage in CIT references 'Jiang et al. 2025; Chan et al. 2025' (AIDE authors) in the context of leveraging agentic search for wider scientific exploration. Evidence BQ describes B's template-free mode generating code from scratch and using 'tree search' for experiment execution — directly paralleling A's solution tree structure. B builds on A's tree-search-based code optimization approach by incorporating it as a component in a broader autonomous research pipeline, making the direction b_to_a (B builds on A).
+    - `openalex:W7140287209::k01` [method] — A template-free, open-ended research execution mode that uses agentic tree search to generate code from scratch, optimize implementations, and explore scientific hypotheses without human-provided scaffolding.
+      > template-free, open-ended mode that leverages agentic search for wider scientific exploration … The AI Scientist can generate an initial starting code script by itself. In this case, experimentation includes further stages for optimizing the code it writes from scratch, and experiment execution leverages extra test-time compute with a tree search
+    - `openalex:W4407760093::k01` [framework] — Organizing LLM-driven iterative solution search as a solution tree — where nodes are standalone executable scripts, edges represent improvement attempts, and a hard-coded policy selects between drafting, debugging, and improving — enables scalable code-space optimization without growing prompts unboundedly.
+      > AIDE organizes all historical solutions in a tree structure. It then asks the LLM to propose improvements based on individual tree nodes. A hard-coded tree-search algorithm accumulates these incremental improvements, guided by automated evaluations.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-55
+
+- **Citing** → **Towards end-to-end automation of AI research** — Lu et al. (2026) · `openalex:W7140287209` · [OpenAlex](https://openalex.org/W7140287209) · [doi](https://doi.org/10.1038/s41586-026-10265-5) · [pdf](https://www.nature.com/articles/s41586-026-10265-5.pdf)
+- **Cited** ← **AIDE: AI-Driven Exploration in the Space of Code** — Zhengyao et al. (2025) · `openalex:W4407760093` · [OpenAlex](https://openalex.org/W4407760093) · [doi](https://doi.org/10.48550/arxiv.2502.13138) · [pdf](https://arxiv.org/pdf/2502.13138)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 1 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ ⁿ _background_ (conf 0.5): The visible citing text discusses foundation models and agentic search generally; the target (AIDE) is not singled out or explicitly used/contrasted in the shown passage, so this reads as general/grouped context.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > review at a major machine learning conference workshop. The workshop has an acceptance rate of 70 percent. Our system leverages modern foundation models ( OpenAI 2023 ; Anthropic 2024 ; Llama Team 2024 ) within a complex agentic system. We evaluate The AI Scientist in two settings: a focused mode using human-provided code templates as an initial scaffold to conduct research on a specific topic, and a template-free, open-ended mode that leverages agentic search for wider scientific exploration ( Jiang et al. 2025 ; Chan et al. 2025 ) . Both settings produce diverse ideas and automatically test, report on, and evaluate them. This achievement demonstrates AI’s growing capacity for scientific contribution and signifies a potential paradigm shift in how research is conducted. As with any impactful new technology, there could be significant risks, including taxing overwhelmed review systems and adding noise to scientific literature. However, if developed responsibly, such autonomous systems could greatly acc
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: b_to_a; existence 0.92, type 0.72) — `openalex:W7140287209::k01` → `openalex:W4407760093::k03`
+  - _rationale:_ B (The AI Scientist's template-free mode) explicitly leverages agentic tree search for code generation and optimization, and the citation passage in CIT directly references 'Jiang et al. 2025; Chan et al. 2025' in the context of agentic search for open-ended scientific exploration, with Chan et al. corresponding to AIDE (openalex:W4407760093). Evidence BQ and B:006 show B adopts tree search for code optimization in its template-free mode, extending the tree-search approach that A (AIDE) established for ML engineering. This is a builds_on relation where B draws on A's method.
+    - `openalex:W7140287209::k01` [method] — A template-free, open-ended research execution mode that uses agentic tree search to generate code from scratch, optimize implementations, and explore scientific hypotheses without human-provided scaffolding.
+      > template-free, open-ended mode that leverages agentic search for wider scientific exploration … The AI Scientist can generate an initial starting code script by itself. In this case, experimentation includes further stages for optimizing the code it writes from scratch, and experiment execution leverages extra test-time compute with a tree search
+    - `openalex:W4407760093::k03` [empirical_finding] — Tree-search-based code optimization with LLMs achieves state-of-the-art performance on ML engineering benchmarks, earning twice the medals of the next-best agent on MLE-Bench (with GPT-4o) and surpassing human expert solutions on time-constrained RE-Bench tasks such as Triton Kernel optimization.
+      > AIDE effectively trades computational resources for enhanced performance, achieving state-of-the-art results on multiple machine learning engineering benchmarks, including our Kaggle evaluations, OpenAI MLE-Bench and METR's RE-Bench … AIDE achieves twice the number of medals compared to a follow-up agent … AIDE's final solution surpasses that of human experts, even when the latter had extended development time.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-56
+
+- **Citing** → **El Agente Gráfico: Structured Execution Graphs for Scientific Agents** — Bai et al. (2026) · `openalex:W7131078049` · [OpenAlex](https://openalex.org/W7131078049) · [doi](https://doi.org/10.48550/arxiv.2602.17902)
+- **Cited** ← **El Agente: An autonomous agent for quantum chemistry** — Zou et al. (2025) · `openalex:W4411932316` · [OpenAlex](https://openalex.org/W4411932316) · [doi](https://doi.org/10.1016/j.matt.2025.102263) · [pdf](https://www.cell.com/matter/pdf/S2590-2385(25)00306-6.pdf)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.75 · supports · obligatory): General introductory statement about LLM agents invoking tools, no specific adoption.
+    > For the complete chat transcript, please refer to GitHub repo: https://github.com/jb2197/ElAgenteGrafico-ChatTranscript . includes/si_tex/si-mofs Introduction The integration of llm into scientific workflows enables agents to invoke external tools and orchestrate multi-step procedures **[CITED:TARGET]**. These agents can parameterize function calls, reason over quantitative outputs, and synthesize results conversationally. In our previous work, [CITED] introduced a computational chemistry agent, reporting > 87 \ accuracy using a multi-agent architecture. A new family of agentic framewor
+  - _uses_extends_ (conf 0.7 · supports · obligatory): Described as the citing authors' own previous work whose multi-agent architecture is expanded upon.
+    > ientist,kosmos,Zou2025ElAgente,Ding2025SciToolAgent,Kang2024chatmof,cao2025automating,Pham2026ChemGraph,Wang2025dreams,yaghi2025agentMOF,aitomia,Navarro2025speak . These agents can parameterize function calls, reason over quantitative outputs, and synthesize results conversationally. In our previous work, **[CITED:TARGET]** introduced a computational chemistry agent, reporting > 87 \ accuracy using a multi-agent architecture. A new family of agentic frameworks based on this architecture is expanding into a wide variety of applications [CITED]. To mitigate llm cont
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: b_to_a; existence 0.97, type 0.88) — `openalex:W7131078049::k03` → `openalex:W4411932316::k01`
+  - _rationale:_ Contribution B (El Agente Gráfico) explicitly builds on Contribution A (El Agente Q) in multiple concrete ways: (1) CIT evidence [CIT:openalex:W7131078049->openalex:W4411932316:2] states "In our previous work, we introduced [El Agente Q], a computational chemistry agent built on a multi-agent architecture," confirming direct lineage; (2) Evidence [B:007] shows that Contribution B's benchmark suite is drawn directly from El Agente Q's university-level quantum chemistry exercises ("We evaluate El Agente Gráfico on six quantum chemistry exercises from El Agente Q"); (3) The core scientific claim of Contribution B — that a single agent with a type-safe execution engine can robustly match or exceed a multi-agent system — is framed as a deliberate architectural contrast and improvement over El Agente Q's multi-agent design. Contribution B thus reuses El Agente Q's benchmark tasks, cites it as the prior system being compared against, and positions its single-agent approach as an evolution from El Agente Q's multi-agent paradigm.
+    - `openalex:W7131078049::k03` [empirical_finding] — Single LLM-driven agents coupled with type-safe execution engines robustly perform complex, multi-step, and parallel computations in quantum chemistry and materials science applications.
+      > We evaluate the system by developing an automated benchmarking framework across a suite of university-level quantum chemistry tasks previously evaluated on a multi-agent system, demonstrating that a single agent, when coupled to a reliable execution engine, can robustly perform complex, multi-step, and parallel computations.
+    - `openalex:W4411932316::k01` [model] — El Agente Q is an LLM-based multi-agent system that dynamically generates and executes quantum chemistry workflows from natural language prompts, with capabilities including flexible task decomposition, adaptive tool selection, post-analysis, autonomous file handling, SLURM job submission, and in situ error debugging.
+      > we introduce El Agente Q, an LLM-based multi-agent system that dynamically generates and executes quantum chemistry workflows from natural language user prompts. The system is built on a novel cognitive architecture featuring a hierarchical memory framework that enables flexible task decomposition, adaptive tool selection, post-analysis, and autonomous file handling and submission.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-57
+
+- **Citing** → **AgentRxiv: Towards Collaborative Autonomous Research** — Samuel et al. (2025) · `openalex:W7126046125` · [OpenAlex](https://openalex.org/W7126046125) · [doi](https://doi.org/10.3929/ethz-c-000794599)
+- **Cited** ← **Agent Laboratory: Using LLM Agents as Research Assistants** — Schmidgall et al. (2025) · `openalex:W4416035220` · [OpenAlex](https://openalex.org/W4416035220) · [doi](https://doi.org/10.18653/v1/2025.findings-emnlp.320) · [pdf](https://aclanthology.org/2025.findings-emnlp.320.pdf)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 5 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⁿ _background_ (conf 0.7): Passage surveys related autonomous-research systems (AI Scientist, Virtual Lab) as prior art context; the target is not singled out for use or comparison in this excerpt.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > s 2013 ). Over time, these methods lead to the steady accumulation of knowledge, forming the basis upon which further inquiries are built ( Shapere 1964 ). In this manner, scientific progress does not typically arise from isolated breakthroughs but rather from incremental improvements that collectively advance our understanding of complex phenomena. In an effort to accelerate the process of scientific discovery, recent work has explored the ability of LLM agents to perform autonomous research ( Schmidgall et al. 2025 ; Swanson et al. 2024 ; Lu et al. 2024b ). The AI Scientist framework ( Lu et al. 2024b ) is a large language model (LLM)-based system that generates research ideas in machine learning, writes research code, run experiments, and produces a scientific paper with using an automated peer-review to evaluate the work. Virtual Lab ( Swanson et al. 2024 ) uses a multi-agent system of LLM-based experts from different backgrounds (e.g. chemist or biologist) working together with human scientists to prod
+  - ⚑ ⁿ _background_ (conf 0.65): Agent Laboratory is described in detail and noted as reducing cost versus Lu et al. 2024b, but this is a factual description grouped with other prior systems ('these works demonstrate progress... operate in isolation'), not a targeted comparison of the citing paper's own results against Agent Laboratory.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > earch ideas in machine learning, writes research code, run experiments, and produces a scientific paper with using an automated peer-review to evaluate the work. Virtual Lab ( Swanson et al. 2024 ) uses a multi-agent system of LLM-based experts from different backgrounds (e.g. chemist or biologist) working together with human scientists to produce novel nanobody binders for SARS-CoV-2, where discovered nanobodies demonstrate promising efficacy in wet-lab validations. Finally, Agent Laboratory ( Schmidgall et al. 2025 ) is a multi-agent autonomous research system that is able to incorporate human feedback, with greatly reduced cost compared to Lu et al. 2024b . While these works demonstrate progress toward accelerated scientific discovery, they often operate in isolation and do not support the continuous, cumulative development of research across time that reflects the nature of science. Therefore, we aim to provide a unified platform that enables agents to build upon the research of other agents. In this st
+  - ⁿ _background_ (conf 0.75): Target is described alongside several other ML solvers (AIDE, CodeActAgent, MLAgentBench) in a survey-style listing; the mle-solver module is described but not adopted by the citing work.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > ectively as benchmarks to measure the abilities of ML agents in tasks such as data preparation, model development, and submission. Several ML "solvers" which can solve ML challenges have been introduced, such as AIDE ( Schmidt et al. 2024 ), CodeActAgent (referred to as “OpenHands") ( Wang et al. 2024b ), and ResearchAgent (referred to as “MLAB") from MLAgentBench ( Huang et al. 2024 ) which automate feature implementation, bug fixing, and code refactoring with a high success rate. mle-solver ( Schmidgall et al. 2025 ) is a module that iteratively generates, refines, and evaluates ML code using a cycle of command execution, error repair, and LLM reward-based scoring, and demonstrates SOTA performance on a subset of MLE-Bench. AutoKaggle ( Li et al. 2024d ) is a user-centric multi-agent system focused on assisting data scientists toward completing data pipelines whereas Agent K ( Grosnit et al. 2024 ) focuses on autonomy and demonstrates the ability to solve Kaggle challenges at the human-level with only a U
+  - ⁿ _background_ (conf 0.7): Agent Laboratory is described among a list of related autonomous-research systems (CycleResearcher, AI Co-Scientist, Swanson et al., AI Scientist) in a related-work survey; it is characterized but not used by the citing paper here.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > d CycleResearcher which is trained to write high quality research papers. The AI Co-Scientist ( Gottweis et al. 2025 ) is a multi-agent system that helps scientists generate novel hypotheses and research proposals. The hypotheses of this work were validated in real biomedical applications, demonstrating great promise for automated discovery. LLMs for autonomous research. In addition to performing research related tasks, LLMs have also been used to perform end-to-end research. Agent Laboratory ( Schmidgall et al. 2025 ) integrates human feedback into a multi-stage LLM agent pipeline–covering literature review, experimentation, and report writing–to produce complete research outputs at reduced cost and improved efficiency compared with other frameworks. Swanson et al. 2024 introduces a multi-agent system of LLM scientists working together with human researchers to produce novel nanobody binders that address recent variants of SARS-CoV-2. The AI Scientist ( Lu et al. 2024a ) performs end-to-end discovery in ma
+  - ⁿ _uses_extends_ (conf 0.95): The citing passage explicitly states the paper is built on the work of Agent Laboratory, directly adopting its framework/workflow.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > her than replacement role for LLMs in autonomous research. 2.1 Agent Laboratory Figure 2 : Agent Laboratory Workflow. (Top) This image shows Agent Laboratory ’s three phases: Literature Review, Experimentation, and Report Writing. Human researchers collaborate with AI agents (e.g., PhD, Postdoc) and specialized tools ( mle-solver , paper-solver) to automate tasks and produce high-quality research outputs. (Bottom) This Autonomous research in this paper is build on the work of Agent Laboratory ( Schmidgall et al. 2025 ). Agent Laboratory automates the research process by coordinating multiple specialized LLM agents through three core phases: Literature Review, Experimentation, and Report Writing. In this system, agents such as PhD, Postdoc, ML Engineer, and Professor collaborate to independently collect and analyze research papers, plan experiments, and ultimately generate comprehensive academic reports. For example, during the Literature Review phase, the PhD agent uses the arXiv API to retrieve, summarize,
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: b_to_a; existence 0.95, type 0.82) — `openalex:W7126046125::k00` → `openalex:W4416035220::k00`
+  - _rationale:_ AgentRxiv (B) explicitly positions itself as extending the line of work that includes Agent Laboratory (A). Evidence B:004 states that prior systems like Agent Laboratory 'operate in isolation and do not support the continuous, cumulative development of research across time,' and that AgentRxiv is introduced to address this gap by enabling agents to build upon each other's research. B:012 further describes Agent Laboratory as a prior system and frames AgentRxiv as a new framework that builds on top of the ecosystem these systems established. The citation passages confirm B cites A as a direct predecessor whose limitation motivates B's contribution. This is a clear builds_on relationship with B building on A.
+    - `openalex:W7126046125::k00` [framework] — An open-source framework enabling autonomous agent laboratories to collaboratively develop research by uploading and retrieving findings from a shared preprint server, allowing agents to iteratively build upon each other's discoveries.
+      > We introduce AgentRxiv —a novel, open-source framework designed to archive and disseminate research outputs from autonomous agents. This platform enables agents to build upon the discoveries of other agents, driving iterative improvements over time.
+    - `openalex:W4416035220::k00` [framework] — Agent Laboratory — an autonomous LLM-based pipeline that accepts a human-provided research idea and completes the full research cycle (literature review, experimentation, and report writing) to produce a code repository and research report, with optional human feedback at each stage.
+      > we introduce Agent Laboratory, an autonomous LLM-based framework capable of completing the entire research process. This framework accepts a human-provided research idea and progresses through three stages–literature review, experimentation, and report writing–in order to produce research, including a code repository and a research report, while enabling users to provide feedback and guidance at each stage.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-58
+
+- **Citing** → **AgentRxiv: Towards Collaborative Autonomous Research** — Samuel et al. (2025) · `openalex:W7126046125` · [OpenAlex](https://openalex.org/W7126046125) · [doi](https://doi.org/10.3929/ethz-c-000794599)
+- **Cited** ← **Agent Laboratory: Using LLM Agents as Research Assistants** — Schmidgall et al. (2025) · `openalex:W4416035220` · [OpenAlex](https://openalex.org/W4416035220) · [doi](https://doi.org/10.18653/v1/2025.findings-emnlp.320) · [pdf](https://aclanthology.org/2025.findings-emnlp.320.pdf)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 5 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⁿ _background_ (conf 0.7): Passage surveys related autonomous-research systems (AI Scientist, Virtual Lab) as prior art context; the target is not singled out for use or comparison in this excerpt.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > s 2013 ). Over time, these methods lead to the steady accumulation of knowledge, forming the basis upon which further inquiries are built ( Shapere 1964 ). In this manner, scientific progress does not typically arise from isolated breakthroughs but rather from incremental improvements that collectively advance our understanding of complex phenomena. In an effort to accelerate the process of scientific discovery, recent work has explored the ability of LLM agents to perform autonomous research ( Schmidgall et al. 2025 ; Swanson et al. 2024 ; Lu et al. 2024b ). The AI Scientist framework ( Lu et al. 2024b ) is a large language model (LLM)-based system that generates research ideas in machine learning, writes research code, run experiments, and produces a scientific paper with using an automated peer-review to evaluate the work. Virtual Lab ( Swanson et al. 2024 ) uses a multi-agent system of LLM-based experts from different backgrounds (e.g. chemist or biologist) working together with human scientists to prod
+  - ⚑ ⁿ _background_ (conf 0.65): Agent Laboratory is described in detail and noted as reducing cost versus Lu et al. 2024b, but this is a factual description grouped with other prior systems ('these works demonstrate progress... operate in isolation'), not a targeted comparison of the citing paper's own results against Agent Laboratory.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > earch ideas in machine learning, writes research code, run experiments, and produces a scientific paper with using an automated peer-review to evaluate the work. Virtual Lab ( Swanson et al. 2024 ) uses a multi-agent system of LLM-based experts from different backgrounds (e.g. chemist or biologist) working together with human scientists to produce novel nanobody binders for SARS-CoV-2, where discovered nanobodies demonstrate promising efficacy in wet-lab validations. Finally, Agent Laboratory ( Schmidgall et al. 2025 ) is a multi-agent autonomous research system that is able to incorporate human feedback, with greatly reduced cost compared to Lu et al. 2024b . While these works demonstrate progress toward accelerated scientific discovery, they often operate in isolation and do not support the continuous, cumulative development of research across time that reflects the nature of science. Therefore, we aim to provide a unified platform that enables agents to build upon the research of other agents. In this st
+  - ⁿ _background_ (conf 0.75): Target is described alongside several other ML solvers (AIDE, CodeActAgent, MLAgentBench) in a survey-style listing; the mle-solver module is described but not adopted by the citing work.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > ectively as benchmarks to measure the abilities of ML agents in tasks such as data preparation, model development, and submission. Several ML "solvers" which can solve ML challenges have been introduced, such as AIDE ( Schmidt et al. 2024 ), CodeActAgent (referred to as “OpenHands") ( Wang et al. 2024b ), and ResearchAgent (referred to as “MLAB") from MLAgentBench ( Huang et al. 2024 ) which automate feature implementation, bug fixing, and code refactoring with a high success rate. mle-solver ( Schmidgall et al. 2025 ) is a module that iteratively generates, refines, and evaluates ML code using a cycle of command execution, error repair, and LLM reward-based scoring, and demonstrates SOTA performance on a subset of MLE-Bench. AutoKaggle ( Li et al. 2024d ) is a user-centric multi-agent system focused on assisting data scientists toward completing data pipelines whereas Agent K ( Grosnit et al. 2024 ) focuses on autonomy and demonstrates the ability to solve Kaggle challenges at the human-level with only a U
+  - ⁿ _background_ (conf 0.7): Agent Laboratory is described among a list of related autonomous-research systems (CycleResearcher, AI Co-Scientist, Swanson et al., AI Scientist) in a related-work survey; it is characterized but not used by the citing paper here.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > d CycleResearcher which is trained to write high quality research papers. The AI Co-Scientist ( Gottweis et al. 2025 ) is a multi-agent system that helps scientists generate novel hypotheses and research proposals. The hypotheses of this work were validated in real biomedical applications, demonstrating great promise for automated discovery. LLMs for autonomous research. In addition to performing research related tasks, LLMs have also been used to perform end-to-end research. Agent Laboratory ( Schmidgall et al. 2025 ) integrates human feedback into a multi-stage LLM agent pipeline–covering literature review, experimentation, and report writing–to produce complete research outputs at reduced cost and improved efficiency compared with other frameworks. Swanson et al. 2024 introduces a multi-agent system of LLM scientists working together with human researchers to produce novel nanobody binders that address recent variants of SARS-CoV-2. The AI Scientist ( Lu et al. 2024a ) performs end-to-end discovery in ma
+  - ⁿ _uses_extends_ (conf 0.95): The citing passage explicitly states the paper is built on the work of Agent Laboratory, directly adopting its framework/workflow.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > her than replacement role for LLMs in autonomous research. 2.1 Agent Laboratory Figure 2 : Agent Laboratory Workflow. (Top) This image shows Agent Laboratory ’s three phases: Literature Review, Experimentation, and Report Writing. Human researchers collaborate with AI agents (e.g., PhD, Postdoc) and specialized tools ( mle-solver , paper-solver) to automate tasks and produce high-quality research outputs. (Bottom) This Autonomous research in this paper is build on the work of Agent Laboratory ( Schmidgall et al. 2025 ). Agent Laboratory automates the research process by coordinating multiple specialized LLM agents through three core phases: Literature Review, Experimentation, and Report Writing. In this system, agents such as PhD, Postdoc, ML Engineer, and Professor collaborate to independently collect and analyze research papers, plan experiments, and ultimately generate comprehensive academic reports. For example, during the Literature Review phase, the PhD agent uses the arXiv API to retrieve, summarize,
+
+**Enriched-v12 semantic relation:** **builds_on** (semantic-edge direction: b_to_a; existence 0.95, type 0.82) — `openalex:W7126046125::k03` → `openalex:W4416035220::k00`
+  - _rationale:_ Contribution B (AgentRxiv parallelized mode) explicitly builds on Contribution A (Agent Laboratory). Evidence B:004 and CIT:2 state that Agent Laboratory 'operates in isolation' and that AgentRxiv was introduced to address this limitation by providing 'a unified platform that enables agents to build upon the research of other agents.' B:012 describes Agent Laboratory as the prior system and positions AgentRxiv as extending it with shared findings and parallel execution. The parallelized mode in B directly extends the Agent Laboratory framework concept, making this a clear builds_on relationship from B to A.
+    - `openalex:W7126046125::k03` [method] — Parallelized execution mode for autonomous agent laboratories, allowing multiple agents to run simultaneously while sharing research findings through a centralized platform, accelerates cumulative research progress compared to isolated agent development.
+      > We introduce a parallelized mode for AgentRxiv, allowing multiple agentic systems to run simultaneously and share findings. We show that this setup accelerates improvements on MATH-500 by +6.0% with 3 parallel labs. We also find that there are a trade-offs between speed and computational efficiency, with discoveries occurring faster but at a higher computational cost.
+    - `openalex:W4416035220::k00` [framework] — Agent Laboratory — an autonomous LLM-based pipeline that accepts a human-provided research idea and completes the full research cycle (literature review, experimentation, and report writing) to produce a code repository and research report, with optional human feedback at each stage.
+      > we introduce Agent Laboratory, an autonomous LLM-based framework capable of completing the entire research process. This framework accepts a human-provided research idea and progresses through three stages–literature review, experimentation, and report writing–in order to produce research, including a code repository and a research report, while enabling users to provide feedback and guidance at each stage.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-59
+
+- **Citing** → **PaperBench: Evaluating AI's Ability to Replicate AI Research** — Starace et al. (2025) · `arxiv:2504.01848v3` · [arXiv](http://arxiv.org/abs/2504.01848v3)
+- **Cited** ← **RE-Bench: Evaluating frontier AI R&D capabilities of language model agents against human experts** — Wijk et al. (2024) · `arxiv:2411.15114v2` · [arXiv](http://arxiv.org/abs/2411.15114v2)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.65 · supports · obligatory): States own result is 'consistent with' target's prior finding, corroboration not contrast or adoption.
+    > e-and-baseline . We observe that o1 initially outperforms the human baseline during the early stages of the replication attempt, but humans start outperforming the AI agent after 24 hours. This trend of agents initially outperforming humans but falling behind at longer time horizons is consistent with previous results **[CITED:TARGET]**. Notably, o1's scores mostly plateau after the first hour, suggesting that the model is proficient at writing a lot of code quickly at the beginning of the attempt, but fails to effectively work beyond this time horizon to strategize how to improve its submission. Human scores are slow to rise in the initial hours, pe
+  - _compares_contrasts_ (conf 0.85 · supports · obligatory): Directly contrasts RE-Bench's self-contained tasks with PaperBench's broader scope.
+    > MLE-bench [CITED], MLAgentBench [CITED], and DSBench [CITED] evaluate agents on Kaggle competitions. Many Kaggle competitions are dated and relatively simple ML challenges, whereas PaperBench only contains tasks relevant to modern machine learning research. RE-Bench **[CITED:TARGET]** proposes 7 challenging open-ended ML research engineering tasks for agents to solve. We expect PaperBench to cover a broader range of sub-tasks over a longer horizon of work compared to the more self-contained tasks proposed in RE-Bench. Additionally, RE-Bench provides agents with a ``scoring function" on most tasks t
+
+**Enriched-v12 semantic relation:** **supports** (semantic-edge direction: symmetric; existence 0.92, type 0.75) — `arxiv:2411.15114v2::k00` → `arxiv:2504.01848v3::k03`
+  - _rationale:_ Both contributions measure AI agent performance on ML research tasks against human expert baselines and find a consistent pattern: agents outperform humans early but plateau while humans catch up at longer horizons. Evidence CIT:1 explicitly states 'This trend of agents initially outperforming humans but falling behind at longer time horizons is consistent with previous results [RE-Bench]', directly corroborating the findings. Evidence B:029/CIT:2 positions RE-Bench as a related benchmark with comparable design goals. A:001 reports the same plateau pattern in RE-Bench. The two benchmarks use different tasks (RE-Bench: 7 open-ended engineering tasks up to 8h; PaperBench: paper replication up to 48h) but reach materially corroborating findings about the current AI-human capability gap. This is supports (symmetric) rather than builds_on because PaperBench does not reuse RE-Bench's method or artifact — it independently confirms the same empirical phenomenon with a different benchmark design.
+    - `arxiv:2411.15114v2::k00` [benchmark] — RE-Bench (Research Engineering Benchmark) — seven open-ended ML research engineering environments with continuous scoring metrics — enables direct, realistic comparison of AI agent R&D capabilities against human expert performance.
+      > We introduce RE-Bench (Research Engineering Benchmark, v1), which consists of 7 challenging, open-ended ML research engineering environments and data from 71 8-hour attempts by 61 distinct human experts.
+    - `arxiv:2504.01848v3::k03` [empirical_finding] — Frontier AI agents score at most 21.0% average replication on PaperBench, well below a human ML-PhD baseline of 41.4% on a matched subset, establishing a quantitative gap between current AI and expert human capability for autonomous ML research replication.
+      > Evaluations of frontier models on PaperBench: an assessment of several frontier AI agents' abilities to conduct long-horizon tasks and ML R&D … the best-performing tested agent, Claude 3.5 Sonnet (New) with open-source scaffolding, achieves an average replication score of 21.0% … models do not yet outperform the human baseline.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-60
+
+- **Citing** → **PaperBench: Evaluating AI's Ability to Replicate AI Research** — Starace et al. (2025) · `arxiv:2504.01848v3` · [arXiv](http://arxiv.org/abs/2504.01848v3)
+- **Cited** ← **RE-Bench: Evaluating frontier AI R&D capabilities of language model agents against human experts** — Wijk et al. (2024) · `arxiv:2411.15114v2` · [arXiv](http://arxiv.org/abs/2411.15114v2)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.65 · supports · obligatory): States own result is 'consistent with' target's prior finding, corroboration not contrast or adoption.
+    > e-and-baseline . We observe that o1 initially outperforms the human baseline during the early stages of the replication attempt, but humans start outperforming the AI agent after 24 hours. This trend of agents initially outperforming humans but falling behind at longer time horizons is consistent with previous results **[CITED:TARGET]**. Notably, o1's scores mostly plateau after the first hour, suggesting that the model is proficient at writing a lot of code quickly at the beginning of the attempt, but fails to effectively work beyond this time horizon to strategize how to improve its submission. Human scores are slow to rise in the initial hours, pe
+  - _compares_contrasts_ (conf 0.85 · supports · obligatory): Directly contrasts RE-Bench's self-contained tasks with PaperBench's broader scope.
+    > MLE-bench [CITED], MLAgentBench [CITED], and DSBench [CITED] evaluate agents on Kaggle competitions. Many Kaggle competitions are dated and relatively simple ML challenges, whereas PaperBench only contains tasks relevant to modern machine learning research. RE-Bench **[CITED:TARGET]** proposes 7 challenging open-ended ML research engineering tasks for agents to solve. We expect PaperBench to cover a broader range of sub-tasks over a longer horizon of work compared to the more self-contained tasks proposed in RE-Bench. Additionally, RE-Bench provides agents with a ``scoring function" on most tasks t
+
+**Enriched-v12 semantic relation:** **supports** (semantic-edge direction: symmetric; existence 0.95, type 0.82) — `arxiv:2411.15114v2::k02` → `arxiv:2504.01848v3::k03`
+  - _rationale:_ Both contributions independently measure the same qualitative phenomenon — AI agents initially outperform human experts at short time horizons but fall behind at longer ones — and their quantitative findings are mutually corroborating. Contribution A (RE-Bench) documents that AI outperforms humans at 2 hours, matches at 8 hours, and is surpassed 2× at 32 hours. Contribution B (PaperBench) replicates this exact pattern with o1: the agent initially outperforms humans but is overtaken after 24 hours, explicitly calling this "consistent with previous results [RE-Bench]" (CIT:1, B:028). Both also independently establish a quantitative AI-vs-human gap in ML R&D tasks, lending mutual empirical corroboration. The relationship is supports rather than builds_on because PaperBench does not extend or use RE-Bench's method or artifact — it is a distinct benchmark that independently arrives at compatible findings and cites RE-Bench as prior corroborating evidence.
+    - `arxiv:2411.15114v2::k02` [empirical_finding] — AI agents outperform human experts at short time budgets (2 hours, by 4×) but humans achieve progressively higher relative scores at longer budgets (matching AI at 8 hours, reaching 2× AI scores at 32 hours), revealing a time-horizon scaling gap in current AI R&D automation.
+      > the best AI agents achieve a score 4x higher than human experts when both are given a total time budget of 2 hours per environment. However, humans currently display better returns to increasing time budgets, narrowly exceeding the top AI agent scores given an 8-hour budget, and achieving 2x the score of the top AI agent when both are given 32 total hours
+    - `arxiv:2504.01848v3::k03` [empirical_finding] — Frontier AI agents score at most 21.0% average replication on PaperBench, well below a human ML-PhD baseline of 41.4% on a matched subset, establishing a quantitative gap between current AI and expert human capability for autonomous ML research replication.
+      > Evaluations of frontier models on PaperBench: an assessment of several frontier AI agents' abilities to conduct long-horizon tasks and ML R&D … the best-performing tested agent, Claude 3.5 Sonnet (New) with open-source scaffolding, achieves an average replication score of 21.0% … models do not yet outperform the human baseline.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-61
+
+- **Citing** → **Aspect-Guided Multi-Level Perturbation Analysis of Large Language Models in Automated Peer Review** — Li et al. (2025) · `arxiv:2502.12510v1` · [arXiv](http://arxiv.org/abs/2502.12510v1)
+- **Cited** ← **AgentReview: Exploring Peer Review Dynamics with LLM Agents** — Jin et al. (2024) · `openalex:W4404783497` · [OpenAlex](https://openalex.org/W4404783497) · [doi](https://doi.org/10.18653/v1/2024.emnlp-main.70) · [pdf](https://aclanthology.org/2024.emnlp-main.70.pdf)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 3 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⁿ _background_ (conf 0.6): The citing passage discusses the paper's own experimental setup (GPT-4o, Gemini) without any visible mention or engagement of the AGENTREVIEW target, so no evidence of use or comparison is present.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > opt GPT-4o Achiam et al. 2023 as our primary large language model for both generating text perturbations (paper, review, and rebuttal) and producing the subsequent reviews or meta-reviews. Additionally, we evaluate gemini-2.0-flash-001 Team et al. 2024 on the same tasks as additional results in Appendix D , allowing for a comparative analysis of their responses under identical perturbation scenarios. All models are prompted in zero-shot setting 4 4 4 Following prior work ( Yu et al. 2024 ; Jin et al. 2024 ) , we use a zero-shot setting due to the extensive input context length, which makes few-shot prompting impractical. . 4 LLM as Reviewer In this section, We present the results of applying the perturbation framework to the LLM-as-Reviewer role. We analyze how targeted modifications to the input paper affect the LLM’s generated reviews and scores. Our analysis is structured around two key tests: a directional test (assessing whether perturbations cause changes in the expected direction), an inv
+  - ⚑ ⁿ _background_ (conf 0.8): AGENTREVIEW-relevant work (Jin et al. 2024) is cited among a grouped list of LLM-in-peer-review systems providing general context, not singled out for comparison or adoption.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > ts, according to some related works Panickssery et al. 2024 . Additionally, we use Gemini to test whether this shortcoming is shared by LLMs (see Appendix D ), and the results are mostly consistent. This highlights the need for significant improvements before such systems can be reliably deployed in real-world peer review applications. 6 Related Work LLMs in Peer Review Modern Large Language Models have enabled automated or semi-automated pipelines for academic reviewing ( Liang et al. 2024b ; Jin et al. 2024 ; Yu et al. 2024 ) , already adopted in up to 15.8% of AI-conference reviews ( Liang et al. 2024a ; Latona et al. 2024 ) . While AI-generated comments can partially align with human judgments ( Liang et al. 2024b ) , concerns persist regarding hallucinations ( Zeng et al. 2024 ) , biases ( Gallegos et al. 2024 ) , and susceptibility to adversarial inputs ( Liang et al. 2024b ; Lu et al. 2024 ) . Studies have also raised the risks of flawed critique interpretation, anonymity breaches, and undue
+  - ⁿ _background_ (conf 0.95): This site is a bibliography/reference-list entry with no substantive discussion of the cited work in the citing passage.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > uiyi Zhang, and Nesreen K Ahmed. 2024. Bias and fairness in large language models: A survey. Computational Linguistics , pages 1–79. Glaser (1978) Barney G Glaser. 1978. Theoretical sensitivity . University of California,. He et al. (2023) Tianxing He, Jingyu Zhang, Tianle Wang, Sachin Kumar, Kyunghyun Cho, James R. Glass, and Yulia Tsvetkov. 2023. On the blind spots of model-based evaluation metrics for text generation. In ACL (1) , pages 12067–12097. Association for Computational Linguistics. Jin et al. (2024) Yiqiao Jin, Qinlin Zhao, Yiyang Wang, Hao Chen, Kaijie Zhu, Yijia Xiao, and Jindong Wang. 2024. AgentReview: Exploring peer review dynamics with LLM agents . In Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing , pages 1208–1226, Miami, Florida, USA. Association for Computational Linguistics. Karpinska et al. (2022) Marzena Karpinska, Nishant Raj, Katherine Thai, Yixiao Song, Ankita Gupta, and Mohit Iyyer. 2022. Demetr: diagnosing evaluation metrics for tra
+
+**Enriched-v12 semantic relation:** **supports** (semantic-edge direction: symmetric; existence 0.82, type 0.65) — `arxiv:2502.12510v1::k02` → `openalex:W4404783497::k02`
+  - _rationale:_ Both contributions document systematic biases that distort peer review outcomes: A identifies LLM-specific vulnerabilities (strong-reject dominance, hostile-critique misinterpretation, rebuttal paradoxes) while B quantifies human reviewer biases (conformity pressure, altruism fatigue, authority effects). The findings are materially corroborating — both show that review processes are skewed by non-merit factors that inflate or distort acceptance decisions. The citation in A references B in a related-work context on biases in review systems (CIT:2), and both use similar simulation/perturbation frameworks (AgentReview appears in both). The relationship is symmetric since neither explicitly extends the other's method; they independently corroborate the broad claim that peer review is systematically biased. The type confidence is moderate because A focuses on LLM pipelines and B on human reviewer simulation, so the constructs partially overlap rather than being identical.
+    - `arxiv:2502.12510v1::k02` [empirical_finding] — LLM-based peer review pipelines exhibit systematic vulnerabilities: 'strong reject' review conclusions disproportionately dominate meta-review decisions, hostile or erroneous critiques are misinterpreted as thoroughness, and incomplete or hostile rebuttals can unexpectedly raise acceptance rates; these biases persist across multiple Chain-of-Thought prompting strategies.
+      > Our findings illuminate vulnerabilities within the LLM-based review system, revealing that the 'strong reject' conclusion can overshadow all other feedback. Furthermore, hostile or erroneous critiques may be misinterpreted as thoroughness… Statistical tests show that these biases persist under various Chain-of-Thought prompting strategies.
+    - `openalex:W4404783497::k02` [empirical_finding] — Reviewer biases alone account for a 37.1% variation in paper acceptance decisions, with specific mechanisms including social conformity pressure (27.2% reduction in rating variance post-rebuttal), altruism fatigue cascades (18.7% commitment decline from a single under-committed reviewer), authority and halo effects (27.7% decision shift when author identities are known), and groupthink amplification among biased reviewers — findings corroborated by established sociological theories.
+      > Our study uncovers several significant findings that align with sociological theories to support future research; including a notable 37.1% variation in paper decisions due to reviewers' biases, supported by sociological theories such as the social influence theory, altruism fatigue, and authority bias
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-62
+
+- **Citing** → **ResearchGym: Evaluating Language Model Agents on Real-World AI Research** — Garikaparthi et al. (2026) · `arxiv:2602.15112v2` · [arXiv](http://arxiv.org/abs/2602.15112v2)
+- **Cited** ← **PaperBench: Evaluating AI's Ability to Replicate AI Research** — Starace et al. (2025) · `arxiv:2504.01848v3` · [arXiv](http://arxiv.org/abs/2504.01848v3)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 1 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ ⁿ _background_ (conf 0.6): Appears only in a bibliography-style listing with 'Cited by' section markers; no citing-passage content indicating specific use or comparison is available.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > g, Y. Choi, E. Candès, D. Yang, and T. Hashimoto Towards execution-grounded automated ai research . External Links: 2601.14525 , Link Cited by: Table 8 , Table 1 , §1 , §2.2 , §2.3 . Siegel et al. (2024) Z. S. Siegel, S. Kapoor, N. Nadgir, B. Stroebl, and A. Narayanan CORE-bench: fostering the credibility of published research through a computational reproducibility agent benchmark . Transactions on Machine Learning Research . Note: External Links: ISSN 2835-8856 , Link Cited by: Table 1 , §1 . Starace et al. (2025) G. Starace, O. Jaffe, D. Sherburn, J. Aung, J. S. Chan, L. Maksin, R. Dias, E. Mays, B. Kinsella, W. Thompson, J. Heidecke, A. Glaese, and T. Patwardhan PaperBench: evaluating AI’s ability to replicate AI research . In Forty-second International Conference on Machine Learning , External Links: Link Cited by: Table 8 , §D.11 , Table 1 , §1 , §3 , §3 , §6 . Su et al. (2025) H. Su, R. Chen, S. Tang, Z. Yin, X. Zheng, J. Li, B. Qi, Q. Wu, H. Li, W. Ouyang, P. Torr, B. Zhou, and N. Dong Many heads
+
+**Enriched-v12 semantic relation:** **supports** (semantic-edge direction: symmetric; existence 0.92, type 0.78) — `arxiv:2504.01848v3::k03` → `arxiv:2602.15112v2::k01`
+  - _rationale:_ Both contributions independently establish that frontier AI agents fall well short of reliable, expert-level performance on autonomous ML research tasks: A quantifies a 21.0% replication score vs. 41.4% human PhD baseline on PaperBench; B quantifies 6.7% success rate and 26.5% sub-task completion on ResearchGym. Both highlight the same qualitative finding—occasional near-SOTA performance but systematic unreliability. B explicitly cites A (CIT evidence), and the findings are materially corroborating rather than one extending or correcting the other's method or artifact. The relationship is symmetric supports.
+    - `arxiv:2504.01848v3::k03` [empirical_finding] — Frontier AI agents score at most 21.0% average replication on PaperBench, well below a human ML-PhD baseline of 41.4% on a matched subset, establishing a quantitative gap between current AI and expert human capability for autonomous ML research replication.
+      > Evaluations of frontier models on PaperBench: an assessment of several frontier AI agents' abilities to conduct long-horizon tasks and ML R&D … the best-performing tested agent, Claude 3.5 Sonnet (New) with open-source scaffolding, achieves an average replication score of 21.0% … models do not yet outperform the human baseline.
+    - `arxiv:2602.15112v2::k01` [empirical_finding] — Frontier AI agents exhibit a sharp capability–reliability gap on end-to-end research tasks: a GPT-5-based agent surpasses provided baselines in only 1 of 15 evaluations (6.7%) and completes 26.5% of sub-tasks on average, yet in one run exceeds the human reference solution of an ICML 2025 Spotlight task, showing occasional but unreliable state-of-the-art performance.
+      > the agent improves over the provided baselines from the repository in just 1 of 15 evaluations (6.7%) by 11.5%, and completes only 26.5% of sub-tasks on average … Yet in a single run, the agent surpasses the solution of an ICML 2025 Spotlight task, indicating that frontier agents can occasionally reach state-of-the-art performance, but do so unreliably.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-63
+
+- **Citing** → **MLRC-Bench: Can Language Agents Solve Machine Learning Research Challenges?** — Zhang et al. (2025) · `arxiv:2504.09702v3` · [arXiv](http://arxiv.org/abs/2504.09702v3)
+- **Cited** ← **MLGym: A New Framework and Benchmark for Advancing AI Research Agents** — Nathani et al. (2025) · `openalex:W4407806895` · [OpenAlex](https://openalex.org/W4407806895) · [doi](https://doi.org/10.48550/arxiv.2502.14499) · [pdf](https://arxiv.org/pdf/2502.14499)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - _background_ (conf 0.8 · supports · helpful): Table row listing the benchmark among others, no specific critique or use.
+    > VLL24 & & & & & Performance\\-Based & Single-Script\ \\ 1-9 MLE-Bench [CITED] & & & & & Performance\\-Based & Single-Script\ \\ 1-9 MLGym-Bench **[CITED:TARGET]** & & & & & Performance\\-Based & Single-Script\ \\ 1-9 RE-Bench\\[CITED] & & & & &Performance-Based &Single-Script Code \\ 1-8 RE-Bench DBLP:journals/corr/abs-2411-1511
+  - ⚑ _background_ (conf 0.6 · partial · helpful): Grouped with RE-Bench under a shared critique of covering 'outdated or narrow domains', not singled out.
+    > ypothesis generation. DSBench [CITED] and AAAR-1.0 [CITED] extend evaluations to data science and general R\&D workflows but still fall short of addressing cutting-edge ML research innovation. RE-Bench [CITED] and MLGym **[CITED:TARGET]** provide ML research task environments but mostly cover outdated or narrow domains (e.g., CIFAR-10 [CITED]), with six of seven RE-Bench tasks focusing on language modeling. As its tasks are manually curated by experts, RE-Bench is difficult to update and often lags behind emerging research trends.
+
+**Enriched-v12 semantic relation:** **supports** (semantic-edge direction: symmetric; existence 0.92, type 0.82) — `arxiv:2504.09702v3::k01` → `openalex:W4407806895::k03`
+  - _rationale:_ Both contributions independently evaluate frontier LLMs on open-ended ML research tasks and reach materially corroborating findings: A finds agents close only 9.3% of the human-baseline gap; B finds models improve on baselines via hyperparameter tuning but do not generate novel hypotheses or architectures. The shared finding—that current frontier LLMs cannot produce genuine methodological innovation—is directly supported by both AQ and BQ. The citation context (CIT:2) shows A treats B's MLGym as a related evaluation environment, confirming awareness, but A does not build on B's method or artifact; it independently replicates and reinforces the same empirical conclusion. Supports (symmetric) is the most defensible hard relation.
+    - `arxiv:2504.09702v3::k01` [empirical_finding] — Large-scale evaluation of frontier LLMs under representative agent scaffoldings on ML research competition tasks shows that even the best-performing agent (gemini-exp-1206 under MLAB) closes only 9.3% of the gap between the baseline and top human participant scores, demonstrating severe limitations of current AI research agents in generating and implementing innovative ML solutions.
+      > We conduct large-scale, objective evaluations for a wide array of frontier LLMs with representative agent scaffoldings, highlighting their inability to propose and implement innovative solutions with notable performance gains
+    - `openalex:W4407806895::k03` [empirical_finding] — Frontier LLMs (Claude-3.5-Sonnet, Llama-3.1 405B, GPT-4o, o1-preview, Gemini-1.5 Pro) can improve on given baselines primarily through hyperparameter tuning but do not generate novel hypotheses, algorithms, or architectures when evaluated on open-ended AI research tasks.
+      > (iv) extensively evaluate frontier LLMs on MLGym-Bench. We find that current frontier models can improve on the given baselines, usually by finding better hyperparameters, but do not generate novel hypotheses, algorithms, architectures, or substantial improvements.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-64
+
+- **Citing** → **InnovatorBench: Evaluating Agents' Ability to Conduct Innovative LLM Research** — Wu et al. (2025) · `arxiv:2510.27598` · [S2](https://www.semanticscholar.org/paper/615c476b4502303d2af07306ee38a05fbf4c0bea) · [doi](https://doi.org/10.48550/arXiv.2510.27598)
+- **Cited** ← **EXP-Bench: Can AI Conduct AI Research Experiments?** — Kon et al. (2025) · `arxiv:2505.24785v2` · [arXiv](http://arxiv.org/abs/2505.24785v2)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.65 · partial · helpful): General critique of 'research environments' as a field-wide limitation, not singling out EXP-Bench alone.
+    > new objective design, or architectural creativity. Moreover, the research environments where agents are evaluated are simplified and resource-constrained, so large-scale and long-horizon training or inference are typically unsupported , and asynchronous monitoring of processes that span multiple hours is rare **[CITED:TARGET]**. Action spaces are also constrained , preventing agents from engaging in realistic research behaviors such as managing files, executing commands, or browsing literature [CITED]. These limitations collectively restrict the conclusions that can be drawn about
+  - _compares_contrasts_ (conf 0.7 · partial · obligatory): Comparison table listing EXP-Bench's specific attributes against other benchmarks.
+    > 3 & red & red & red & 6h-12h \\ RE-Bench [CITED] & Design Manually & 1 & red & red & red & 12m-2h \\ EXP-Bench **[CITED:TARGET]** & NeurIPS, ICLR Papers & 1 & red & red & red & 35m \\ PaperBench [CITED] & ICML 2024 Papers & 1 & red & red & red
+
+**Enriched-v12 semantic relation:** **supports** (semantic-edge direction: symmetric; existence 0.9, type 0.72) — `arxiv:2505.24785v2::k02` → `arxiv:2510.27598::k02`
+  - _rationale:_ Both contributions report that frontier LLM-based agents fail at end-to-end AI research tasks: A finds 0.5% success on complete experiments with partial phase scores of 20–35%, while B finds agents struggle with fragile algorithm design and long-horizon decision making despite promise on code-driven sub-tasks. The findings materially corroborate each other—both measure agent failure on realistic research workflows, identifying complementary failure modes (A: misclassification, missing components, environment misconfiguration; B: impatience, resource mismanagement, template reasoning). CIT evidence confirms B cites A as a peer benchmark. The relationship is supports rather than builds_on because B introduces a new benchmark (InnovatorBench) independently rather than explicitly extending A's method or artifact, and the citation is contextual/comparative rather than methodologically dependent.
+    - `arxiv:2505.24785v2::k02` [empirical_finding] — Leading LLM-based agents achieve only 0.5% success on complete, executable AI research experiments; individual phases reach at most 20–35%, with key failure modes being experimental design misclassification (16.1%), missing implementation components (39.7%), and environment or dependency misconfiguration (29.4%).
+      > Evaluations of leading LLM-based agents, such as OpenHands and IterativeAgent on EXP-Bench demonstrate partial capabilities: while scores on individual experimental aspects such as design or implementation correctness occasionally reach 20-35%, the success rate for complete, executable experiments was a mere 0.5%.
+    - `arxiv:2510.27598::k02` [empirical_finding] — Frontier LLMs evaluated as ReAct agents on end-to-end LLM research tasks show promise on code-driven sub-tasks but consistently fail on fragile algorithm design and long-horizon decision making, exhibiting impatience, resource mismanagement, poor library selection, and template-based reasoning, requiring over 11 hours to reach best performance.
+      > We perform an empirical analysis of InnovatorBench across multiple leading LLMs, demonstrating its potential and weaknesses in handling real LLM research tasks.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-65
+
+- **Citing** → **InnovatorBench: Evaluating Agents' Ability to Conduct Innovative LLM Research** — Wu et al. (2025) · `arxiv:2510.27598` · [S2](https://www.semanticscholar.org/paper/615c476b4502303d2af07306ee38a05fbf4c0bea) · [doi](https://doi.org/10.48550/arXiv.2510.27598)
+- **Cited** ← **MLGym: A New Framework and Benchmark for Advancing AI Research Agents** — Nathani et al. (2025) · `openalex:W4407806895` · [OpenAlex](https://openalex.org/W4407806895) · [doi](https://doi.org/10.48550/arxiv.2502.14499) · [pdf](https://arxiv.org/pdf/2502.14499)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - _background_ (conf 0.65 · supports · helpful): MLGym implied among 'existing platforms' whose limitations a third system (ResearchGym) addresses, not the citing paper's own contrast.
+    > beyond narrow tests of implementation fidelity and provides a rigorous framework for assessing whether agents can execute end-to-end research workflows that mirror the demands of real LLM development. In parallel, ResearchGym offers a scalable and realistic environment that addresses limitations of existing platforms **[CITED:TARGET]**. It provides a rich action space that covers terminal commands, file operations, web search, and web browsing. Building on this foundation, ResearchGym supports large-scale experiments that may run for many hours or even days, with facilities for launching, monitoring, and adapting long-running processes, as well as
+  - ⚑ _background_ (conf 0.7 · supports · obligatory): Grouped with other frameworks under 'a common limitation across these frameworks', group-level critique.
+    > tasks over long-running, research-oriented workflows. Other research systems, including WorldCoder [CITED] and multimodal variants such as OpenHands-Versa [CITED], highlight the potential of tool-augmented agents for general problem solving. Correspondingly, environments like MLGym **[CITED:TARGET]** provide structured contexts for ML-related tasks but often constrain the experiment duration, scale, or action space. A common limitation across these frameworks is the lack of support for extended scientific research: they rarely provide distributed training, asynchronous monitoring of multi-hour jobs, snapshot savin
+
+**Enriched-v12 semantic relation:** **supports** (semantic-edge direction: symmetric; existence 0.9, type 0.72) — `arxiv:2510.27598::k00` → `openalex:W4407806895::k01`
+  - _rationale:_ Both InnovatorBench and MLGym-Bench are benchmark suites for evaluating LLM agents on open-ended AI research tasks, and their comparable scope and findings corroborate one another. The citation in A treats MLGym as a peer environment for structured ML research tasks (CIT:2, A:011), noting shared goals but different constraints. A does not build on B's methods or artifacts; it positions InnovatorBench as addressing gaps that MLGym leaves open (experiment duration, scale, action space), which is a contrast rather than extension. The relationship is substantive and parallel — both benchmark AI research agents on realistic workflows — making 'supports' (comparable findings corroborate) more defensible than 'builds_on' or 'refines'.
+    - `arxiv:2510.27598::k00` [benchmark] — InnovatorBench — a benchmark of 20 end-to-end LLM research tasks spanning data construction, filtering, augmentation, loss design, reward design, and scaffold construction — enables realistic, multi-dimensional evaluation of AI research agents on correctness, performance, output quality, and uncertainty, rewarding innovation over simple replication.
+      > We introduce InnovatorBench, the first benchmark to systematically evaluate AI research agents on end-to-end LLM research tasks, spanning data construction, filtering, and augmentation, loss design, reward design, and scaffold construction under multiple dimensions.
+    - `openalex:W4407806895::k01` [benchmark] — MLGym-Bench — a benchmark suite of 13 diverse, open-ended AI research tasks spanning computer vision, natural language processing, reinforcement learning, and game theory, designed to evaluate LLM agents on realistic multifaceted research workflows.
+      > (ii) release MLGym-Bench, a suite of diverse open-ended AI research tasks for evaluating LLM agents
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-66
+
+- **Citing** → **EvoScientist: Towards Multi-Agent Evolving AI Scientists for End-to-End Scientific Discovery** — Lyu et al. (2026) · `arxiv:2603.08127v1` · [arXiv](http://arxiv.org/abs/2603.08127v1)
+- **Cited** ← **Many Heads Are Better Than One: Improved Scientific Idea Generation by A LLM-Based Multi-Agent System** — Su et al. (2025) · `openalex:W4412889809` · [OpenAlex](https://openalex.org/W4412889809) · [doi](https://doi.org/10.18653/v1/2025.acl-long.1368) · [pdf](https://aclanthology.org/2025.acl-long.1368.pdf)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - _background_ (conf 0.7 · supports · helpful): Cited as general context for a research line, not singled out.
+    > ted sub-tasks to building agentic systems that support coordinated scientific reasoning and action across the discovery process [CITED]. One line of work focuses on early-stage idea generation, where LLMs and multi-agent collaboration are used to propose, critique, and iteratively refine hypotheses **[CITED:TARGET]**. Representative work such as Virtual Scientist (VirSci) [CITED] and Co-Scientist [CITED] organizes multiple agents to simulate collaborative scientific ideation through proposal, critique, and refinement [CITED]. In parallel, a second line of work develops end-to-end AI scien
+  - ⚑ _background_ (conf 0.65 · supports · helpful): Descriptive mention of VirSci as a representative example, not adopted or critiqued specifically.
+    > tage idea generation, where LLMs and multi-agent collaboration are used to propose, critique, and iteratively refine hypotheses [CITED]. Representative work such as Virtual Scientist (VirSci) **[CITED:TARGET]** and Co-Scientist [CITED] organizes multiple agents to simulate collaborative scientific ideation through proposal, critique, and refinement [CITED]. In parallel, a second line of work develops end-to-end AI scientist systems that automate the workflow from ideation and literature review
+
+**Enriched-v12 semantic relation:** **supports** (semantic-edge direction: symmetric; existence 0.85, type 0.65) — `arxiv:2603.08127v1::k02` → `openalex:W4412889809::k03`
+  - _rationale:_ Both contributions demonstrate that multi-agent collaboration improves scientific idea generation quality over single-agent/weaker baselines (A shows higher novelty/feasibility/relevance/clarity vs 7 baselines; B shows +13.8% alignment and +44.1% impact over single-agent). A cites B (VirSci) as representative prior work in the same line of multi-agent ideation research. The findings are corroborative rather than one building on the other's specific method — A uses a distinct self-evolving architecture with persistent memory, not B's pipeline. The citation is background/topical, but the empirical findings materially corroborate each other on the core claim that multi-agent beats single-agent for scientific ideation.
+    - `arxiv:2603.08127v1::k02` [empirical_finding] — A multi-agent evolving AI scientist system with persistent memory achieves higher novelty, feasibility, relevance, and clarity in scientific idea generation and higher code execution success rates compared to seven open-source and commercial state-of-the-art baselines, with all six end-to-end generated papers accepted to a peer-reviewed venue and two receiving awards.
+      > We provide empirical evidence that EvoScientist generates higher-quality ideas and achieves higher code execution success rates compared to strong open-source and commercial baselines.
+    - `openalex:W4412889809::k03` [empirical_finding] — Multi-agent collaboration in scientific idea generation outperforms single-agent baselines by an average of +13.8% in alignment with contemporary research trends and +44.1% in potential impact on contemporary research, with experimental patterns consistent with established Science of Science findings such as fresh teams producing more innovative ideas.
+      > The findings prove that the multi-agent system improves the single-agent executive by, on average, +13.8% and +44.1% in alignment with and potential impacts on contemporary research, respectively. Furthermore, our experiments investigate collaboration mechanisms among agents that influence the performance of idea generation. The patterns observed in the experimental results align with findings from prior Science of Science studies
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-67
+
+- **Citing** → **AutoScientists: Self-Organizing Agent Teams for Long-Running Scientific Experimentation** — Gao et al. (2026) · `arxiv:2605.28655` · [S2](https://www.semanticscholar.org/paper/719ea28de0bcac146fe56eb57d3d5c6db5dded78)
+- **Cited** ← **Accelerating scientific discovery with Co-Scientist** — Gottweis et al. (2026) · `openalex:W7161731996` · [OpenAlex](https://openalex.org/W7161731996) · [doi](https://doi.org/10.1038/s41586-026-10644-y) · [pdf](https://www.nature.com/articles/s41586-026-10644-y_reference.pdf)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 1 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ ⁿ _background_ (conf 0.85): Passage is a bibliography-style reference list entry with no discussion of the target's content or use.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > ongyao Wang, Le Cong, and Zaixi Zhang. Stella: Towards a biomedical world model with self-evolving multimodal agents. bioRxiv , 2026. doi: 10.1101/2025.07.01.662467 . URL https://www.biorxiv.org/content/early/2026/01/25/2025.07.01.662467 . Gao et al. [2025] Shanghua Gao, Richard Zhu, Zhenglun Kong, Ayush Noori, Xiaorui Su, Curtis Ginder, Theodoros Tsiligkaridis, and Marinka Zitnik. Txagent: an ai agent for therapeutic reasoning across a universe of tools. arXiv preprint arXiv:2503.10970 , 2025. Gottweis et al. [2025] Juraj Gottweis, Wei-Hung Weng, Alexander Daryin, Tao Tu, Anil Palepu, Petar Sirkovic, Artiom Myaskovsky, Felix Weissenberger, Keran Rong, Ryutaro Tanno, et al. Towards an ai co-scientist. arXiv preprint arXiv:2502.18864 , 2025. Penadés et al. [2025] José R Penadés, Juraj Gottweis, Lingchen He, Jonasz B Patkowski, Alexander Daryin, Wei-Hung Weng, Tao Tu, Anil Palepu, Artiom Myaskovsky, Annalisa Pawlosky, et al. Ai mirrors experimental science to uncover a mechanism of gene transfer crucial to b
+
+**Enriched-v12 semantic relation:** **supports** (semantic-edge direction: symmetric; existence 0.72, type 0.55) — `arxiv:2605.28655::k01` → `openalex:W7161731996::k03`
+  - _rationale:_ Both contributions demonstrate that multi-agent architectures with iterative self-improvement improve scientific discovery outcomes. Contribution B (Co-Scientist) shows that test-time compute scaling via tournament-based self-play improves hypothesis quality; Contribution A (AutoScientists) shows that decentralized self-organizing agent teams outperform single-agent and centrally-coordinated baselines on long-horizon scientific tasks. Evidence BQ directly matches B's claim about continued test-time compute benefits. Evidence AQ shows sustained improvement during long experimental search, paralleling B's approach. The citation from A to B exists but the localized passage is a reference list entry, not a direct methodological adoption. The parallel findings (multi-agent collaboration improves scientific output quality over time) constitute corroborating evidence rather than one building on the other's specific method or artifact. 'Supports' is preferred over 'builds_on' because A does not explicitly extend B's tournament-evolution mechanism—it uses a different decentralized self-organization approach.
+    - `arxiv:2605.28655::k01` [empirical_finding] — Decentralized self-organizing agent teams outperform single-agent and centrally-coordinated multi-agent baselines on long-horizon scientific experimentation: on BioML-Bench (24 biomedical ML tasks) AutoScientists achieves a mean leaderboard percentile of 74.4%, improving the strongest prior AI agent by +8.33%; on GPT training optimization it reaches a target validation bits-per-byte 1.9× faster and discovers 7 accepted improvements where the single-agent baseline finds none; and on ProteinGym supervised substitution it improves average Spearman correlation by +6.5% over the prior state of the art across all 217 assays.
+      > State-of-the-art performance across scientific domains, with sustained improvement during long-running experimental search. AutoScientists improves over prior agents on biomedical ML, protein fitness prediction, and language-model training optimization, and continues identifying productive modifications after single-agent baselines stop improving.
+    - `openalex:W7161731996::k03` [empirical_finding] — Scaling test-time compute through multi-agent self-play and tournament evolution improves hypothesis quality for complex scientific problems.
+      > Automated evaluations show continued benefits of test-time compute scaling, improving hypothesis quality over time
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-68
+
+- **Citing** → **ForeSci: Evaluating LLM Agents for Forward-Looking AI Research Judgment** — Tian et al. (2026) · `arxiv:2606.00644` · [S2](https://www.semanticscholar.org/paper/842c64793c011828317ebfa4f6dc4b8d8c9cd965)
+- **Cited** ← **MLR-Bench: Evaluating AI Agents on Open-Ended Machine Learning Research** — Chen et al. (2025) · `openalex:W4414587939` · [OpenAlex](https://openalex.org/W4414587939) · [doi](https://doi.org/10.48550/arxiv.2505.19955) · [pdf](https://arxiv.org/pdf/2505.19955)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - _background_ (conf 0.7 · partial · helpful): Generic mention of research agents deployed for workflow execution.
+    > becomes tomorrow's baseline. The value of a research decision ( e.g. , which bottleneck to attack, which direction is worth a six-month commitment) often lies in anticipating where the field is going. As autonomous research agents are increasingly deployed for ideation, planning, and scientific workflow execution **[CITED:TARGET]**, they are being asked to participate in this forward-looking decision layer. Whether current LLM agents can make defensible, evidence-grounded research judgements about an as-yet-unwritten future is therefore a central open question. Existing benchmarks do not fully answer this question. Prior work has mostly evaluat
+  - ⚑ _background_ (conf 0.68 · supports · obligatory): Grouped under 'execute research workflows' category among several cited works.
+    > a central open question. Existing benchmarks do not fully answer this question. Prior work has mostly evaluated whether AI systems can answer questions over papers, synthesize literature [CITED], use tools [CITED], execute research workflows **[CITED:TARGET]**, or generate components of future papers, such as related work, contribution content, citations, and impact [CITED]. None of these tasks asks whether an agent can produce an open-ended research decision, such as picking a bottleneck, ranking a research agenda, or selecting a venue, using only the e
+
+**Enriched-v12 semantic relation:** **supports** (semantic-edge direction: symmetric; existence 0.82, type 0.65) — `arxiv:2606.00644::k01` → `openalex:W4414587939::k01`
+  - _rationale:_ Both contributions address automated evaluation of AI-generated research quality validated against human expert agreement. A introduces a multi-signal protocol (factuality, alignment, traceability, persuasiveness) validated against human experts; B (MLR-Judge) achieves LLM-human agreement comparable to inter-human agreement on similar quality dimensions. The citation in A places B in the context of prior benchmarks for AI research evaluation workflows, and both findings corroborate the feasibility of scalable, human-aligned automated research assessment. The relationship is supportive but not builds_on or refines, as A does not explicitly extend B's method or artifact — it independently develops a parallel protocol. The citation context is background/topical rather than methodological inheritance.
+    - `arxiv:2606.00644::k01` [framework] — A multi-signal evaluation protocol for forward-looking research judgement that separately measures prediction factuality, future-target alignment, evidence traceability, and reviewer persuasiveness, validated against human experts.
+      > A multi-signal evaluation protocol separating factuality, future-target alignment, evidence traceability, and reviewer persuasiveness, validated against human experts.
+    - `openalex:W4414587939::k01` [framework] — MLR-Judge — an automated evaluation framework pairing LLM-based reviewers with structured review rubrics — achieves agreement with expert human reviewers comparable to inter-human agreement, providing a scalable proxy for assessing AI-generated research quality.
+      > MLR-Judge , an automated evaluation pipeline consisting of LLM-based judge and structured review rubrics; ... We find that the level of agreement between an LLM judge and a human judge, when assessing the same output, is very close to the level of agreement between two human judges, demonstrating its effectiveness as a reliable evaluation tool.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-69
+
+- **Citing** → **HypoBench: Towards Systematic and Principled Benchmarking for Hypothesis Generation** — Liu et al. (2025) · `openalex:W4416540539` · [OpenAlex](https://openalex.org/W4416540539) · [doi](https://doi.org/10.48550/arxiv.2504.11524) · [pdf](https://arxiv.org/pdf/2504.11524)
+- **Cited** ← **DISCOVERYWORLD: A Virtual Environment for Developing and Evaluating Automated Scientific Discovery Agents** — Jansen et al. (2024) · `openalex:W4399597648` · [OpenAlex](https://openalex.org/W4399597648) · [doi](https://doi.org/10.48550/arxiv.2406.06769) · [pdf](https://arxiv.org/pdf/2406.06769)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - _background_ (conf 0.8 · supports · helpful): Grouped as an example of broader scientific research task benchmarks.
+    > orousassessmentlanguage, MLAgentBench, guo2024dsagent , literature processing and information retrieval [CITED], and broader scientific research tasks **[CITED:TARGET]**. In addition to DiscoveryBench [CITED], other related benchmarks including [CITED], which benchmarks LLMs' ability to generate the core ideas of a target paper by providing the source literature that inspired it. jansen2024discoveryworldvirt
+  - ⚑ _background_ (conf 0.7 · supports · helpful): Descriptive mention of what the target assesses, not adopted or contrasted with the citing work.
+    > yworldvirtualenvironmentdeveloping . In addition to DiscoveryBench [CITED], other related benchmarks including [CITED], which benchmarks LLMs' ability to generate the core ideas of a target paper by providing the source literature that inspired it. **[CITED:TARGET]** assesses LLM-driven scientific discovery pipelines in fully synthetic environments, and [CITED] evaluates LLMs in synthetic inductive reasoning tasks. Additionally, [CITED] introduces D5, a task for goal-driven discovery of distributional differences between text cor
+
+**Enriched-v12 semantic relation:** **supports** (semantic-edge direction: symmetric; existence 0.82, type 0.7) — `openalex:W4399597648::k03` → `openalex:W4416540539::k03`
+  - _rationale:_ Both contributions independently demonstrate that current AI systems face a concrete performance ceiling on scientific discovery tasks: A shows strong baseline agents recover only 34% of gold knowledge on easy tasks and 8% on challenge tasks in DiscoveryWorld; B shows best models recover only 38.8% of ground-truth hypotheses at high difficulty in HypoBench. The citation context [CIT:2] groups both works as benchmarks assessing LLM-driven scientific discovery pipelines, and the quantitative findings (low recovery rates under harder conditions) materially corroborate one another. Neither explicitly extends the other's method or artifact, so 'builds_on' is not warranted; 'supports' fits the convergent empirical pattern.
+    - `openalex:W4399597648::k03` [empirical_finding] — Strong baseline agents that perform well on prior published environments struggle on end-to-end scientific discovery tasks, demonstrating that complete discovery cycles — requiring ideation, systematic experimentation, and explanatory inference — pose novel challenges not captured by existing benchmarks.
+      > Baseline results for agents in this environment, illustrating that DiscoveryWorld captures several novel challenges that contemporary agent models struggle with.
+    - `openalex:W4416540539::k03` [empirical_finding] — Controlled synthetic datasets with programmatically varied difficulty (via logistic regression or decision-tree data-generating processes) reveal that hypothesis discovery rates collapse sharply as task complexity grows — best-performing model–method combinations recover only 38.8% of ground-truth hypotheses at high difficulty, quantifying a concrete ceiling for current approaches.
+      > We complement our real-world tasks with carefully controlled synthetic datasets at different complexity levels, enabling direct evaluation of how well models can recover known ground-truth hypotheses and demonstrating substantial room for improvement … as task difficulty increases, performance significantly drops, with best models and methods only recovering 38.8% of the ground-truth hypotheses.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-70
+
+- **Citing** → **AIGS: Generating Science from AI-Powered Automated Falsification** — Liu et al. (2024) · `openalex:W4404573571` · [OpenAlex](https://openalex.org/W4404573571) · [doi](https://doi.org/10.48550/arxiv.2411.11910) · [pdf](https://arxiv.org/pdf/2411.11910)
+- **Cited** ← **The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery** — Lu et al. (2024) · `openalex:W4402952666` · [OpenAlex](https://openalex.org/W4402952666) · [doi](https://doi.org/10.48550/arxiv.2408.06292) · [pdf](https://arxiv.org/pdf/2408.06292)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 2 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - _background_ (conf 0.7 · supports · obligatory): Descriptive one-line summary in a categorized survey list, no use or singled-out critique.
+    > iterativeresearchidea proposed ... Performance Optimization Agents RD-Agent [CITED] proposed ... Human Copilot MLR-Copilot [CITED] proposed ... Automated AI Agent Scientists AI-Scientist **[CITED:TARGET]** proposed a fully automated AI driven scientific research framework. Position Papers Pitfalls of Current Systems 从效果而非设计上分析缺陷 AIGS System How Human Conduct Scientific Research In order to put forward an AI Agent system that can autonomously conduct the e
+  - ⚑ _background_ (conf 0.65 · supports · obligatory): Describes AI Scientist's claims then critiques the whole research line generally, not the target alone.
+    > construct end-to-end systems that cover both creativity and executability . MLR-copilot [CITED] takes existing research papers as input, and produces execution results by both generating ideas and implementing experiments. AI Scientist **[CITED:TARGET]** further claims to be able to organize the generated ideas and experimental results into research papers as the output. This line of research arouses significant excitement in the community, but is feedbacked with controversy: Criticisms include the incremental nature of the generated knowledge ``tweaks", as well as th
+
+**Enriched-v12 semantic relation:** **supports** (semantic-edge direction: symmetric; existence 0.82, type 0.62) — `openalex:W4402952666::k00` → `openalex:W4404573571::k03`
+  - _rationale:_ Both contributions address the same high-level question — can an AI system autonomously conduct the full scientific research process and produce meaningful discoveries? — and reach broadly compatible positive findings: Contribution A demonstrates end-to-end autonomous scientific discovery at low cost (AQ, A:000), and Contribution B similarly shows that a full-process multi-agent system can produce meaningful scientific discoveries (BQ, B:000). The citation passage [CIT:openalex:W4404573571->openalex:W4402952666:2] explicitly groups AI Scientist alongside BABY-AIGS as part of the same line of research building "end-to-end systems that cover both creativity and executability," reinforcing that both findings corroborate one another on the feasibility of automated science. However, Contribution B's explicit qualification — "not on par with experienced human researchers" — adds a nuance A does not, making a refines or contradicts label tempting but unsupported: A does not claim human-level quality, so the findings are not genuinely incompatible. The relationship is best characterized as mutual support of the core feasibility claim, with insufficient evidence to elevate it to builds_on (BABY-AIGS cites AI Scientist in a survey context but does not demonstrably use or extend its specific methods or artifacts).
+    - `openalex:W4402952666::k00` [framework] — The AI Scientist — an end-to-end, fully automated pipeline in which a frontier LLM generates research ideas, searches the literature, designs and executes experiments, visualizes results, writes a complete scientific manuscript, and performs self-review in an open-ended loop — enables autonomous scientific discovery in machine learning at a cost of under $15 per paper.
+      > We introduce the first end-to-end framework for fully automated scientific discovery in Machine Learning research, enabled by frontier LLMs (Section 3). This fully automated process includes idea generation, experiment design, execution, and visualizing and writing up the results into a full manuscript.
+    - `openalex:W4404573571::k03` [empirical_finding] — A full-process multi-agent AI system can produce meaningful scientific discoveries across diverse research tasks, though with a measurable quality gap relative to experienced human researchers.
+      > Experiments on three tasks preliminarily show that Baby-AIGS could produce meaningful scientific discoveries, though not on par with experienced human researchers
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-71
+
+- **Citing** → **Towards end-to-end automation of AI research** — Lu et al. (2026) · `openalex:W7140287209` · [OpenAlex](https://openalex.org/W7140287209) · [doi](https://doi.org/10.1038/s41586-026-10265-5) · [pdf](https://www.nature.com/articles/s41586-026-10265-5.pdf)
+- **Cited** ← **The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery** — Lu et al. (2024) · `openalex:W4402952666` · [OpenAlex](https://openalex.org/W4402952666) · [doi](https://doi.org/10.48550/arxiv.2408.06292) · [pdf](https://arxiv.org/pdf/2408.06292)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 1 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ ⁿ _background_ (conf 0.8): Passage points to the target as the source of highlighted example papers and further detail, a general pointer/context reference rather than an explicit extension or comparison.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > e-Based AI Scientist Papers This section presents three highlighted papers generated by the template-based version of The AI Scientist, one from each experimental domain, to showcase the system’s capabilities. For each, the generated idea, a link to the code, the full PDF of the paper, and the automated review are provided. The full set of ten highlighted papers, along with in-depth analysis of their contents, can be found in the original work on the template-based version of The AI Scientist ( Lu et al. 2024b ) . D.1.1 DualScale Diffusion: Adaptive Feature Balancing for Low-Dimensional Generative Models Link to code: https://github.com/SakanaAI/AI-Scientist/tree/main/example_papers/adaptive_dual_scale_denoising . See pages - of v1_materials/highlighted_papers/diffusion/adaptive_dual_scale_denoising/adaptive_dual_scale_denoising.pdf D.1.2 StyleFusion: Adaptive Multi-style Generation in Character-Level Language Models Link to code: https://github.com/SakanaAI/AI-Scientist/tree/main/example_papers/mult
+
+**Enriched-v12 semantic relation:** **supports** (semantic-edge direction: symmetric; existence 0.97, type 0.88) — `openalex:W4402952666::k02` → `openalex:W7140287209::k03`
+  - _rationale:_ Both contributions assert that a fully automated LLM-driven system (The AI Scientist) produces scientific manuscripts meeting a non-trivial peer-review quality bar at a top ML conference/workshop. Evidence AQ states the system 'can produce papers that exceed the acceptance threshold at a top machine learning conference as judged by our automated reviewer'; BQ and B:000 confirm the manuscript 'passed the first round of peer review for a workshop of a top-tier machine learning conference'. The citation [CIT] confirms B (the Nature paper) explicitly builds on and presents results from A's system. The two contributions are corroborating claims about the same system's capability—comparable findings that materially support each other. The relation is symmetric because neither narrows nor contradicts the other; both assert the same core finding (AI can meet a peer-review bar), with B adding the real workshop outcome as further corroboration of A's automated-reviewer result.
+    - `openalex:W4402952666::k02` [empirical_finding] — Fully automated LLM-driven scientific discovery can produce novel machine learning papers in diffusion modeling, transformer-based language modeling, and learning dynamics that exceed the acceptance threshold of a top machine learning conference as judged by an automated reviewer.
+      > The AI Scientist can produce papers that exceed the acceptance threshold at a top machine learning conference as judged by our automated reviewer... we focus on a subset of these papers, highlighting novel insights in diffusion modeling, language modeling, and grokking.
+    - `openalex:W7140287209::k03` [empirical_finding] — AI-generated research manuscripts can pass the first round of peer review at a workshop of a top-tier machine learning conference, demonstrating that fully autonomous scientific output meets a non-trivial human-evaluated quality bar.
+      > Its ideas, execution and presentation are of sufficient quality that the manuscript generated by this AI system passed the first round of peer review for a workshop of a top-tier machine learning conference.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-72
+
+- **Citing** → **MOOSE-Chem: Large Language Models for Rediscovering Unseen Chemistry Scientific Hypotheses** — Yang et al. (2024) · `openalex:W4403345771` · [OpenAlex](https://openalex.org/W4403345771) · [doi](https://doi.org/10.48550/arxiv.2410.07076) · [pdf](https://arxiv.org/pdf/2410.07076)
+- **Cited** ← **Can Large Language Models Unlock Novel Scientific Research Ideas?** — Kumar et al. (2025) · `openalex:W4416035327` · [OpenAlex](https://openalex.org/W4416035327) · [doi](https://doi.org/10.18653/v1/2025.emnlp-main.1704) · [pdf](https://aclanthology.org/2025.emnlp-main.1704.pdf)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 1 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.7 · partial · obligatory): Simple descriptive mention of target's scope within a related-work list.
+    > ml/SprueillEAOSJLJ24 focus on catalyst discovery, but their evaluation relies on whether can rediscover existing commercially used catalysts, which might cause data contamination problem. [CITED] also rely on the evaluation of rediscovering chemistry knowledge before 2018 with GPT-4. **[CITED:TARGET]** compare different LLMs on scientific discovery in different disciplines. [CITED] show that word embedding obtained from large-scale chemistry literature can recommend materials for functional applications years before their discovery. by controlling the date of the training
+
+**Enriched-v12 semantic relation:** **supports** (semantic-edge direction: symmetric; existence 0.82, type 0.65) — `openalex:W4403345771::k04` → `openalex:W4416035327::k03`
+  - _rationale:_ Both contributions make corroborating claims about LLMs' latent capacity for scientific discovery: A argues LLMs encode latent knowledge associations enabling novel hypothesis generation (evidenced by out-of-distribution inspiration retrieval), while B shows LLMs can generate relevant, novel, feasible research ideas across disciplines. The citation in A [CIT] references B as a work comparing different LLMs on scientific discovery across disciplines, situating B as corroborating evidence that LLMs have scientific discovery potential. The findings are compatible and mutually reinforcing rather than one building mechanistically on the other.
+    - `openalex:W4403345771::k04` [empirical_finding] — LLMs appear to encode latent scientific knowledge associations — pairs of concepts whose connection enables novel hypothesis generation — that have not yet been explicitly recognized by human scientists, as evidenced by surprisingly high out-of-distribution inspiration retrieval accuracy.
+      > We propose an assumption, grounded in preliminary experiments, that LLMs may already possess numerous knowledge pairs capable of being associated to create novel knowledge—even when scientists have not previously recognized any relationship between them.
+    - `openalex:W4416035327::k03` [empirical_finding] — LLMs (Gemini, Claude-2, GPT-3.5, GPT-4) can generate future research ideas that are relevant, feasible, and novel to a meaningful degree, as evidenced by human evaluation of 660 generated ideas across novelty, relevance, and feasibility dimensions.
+      > We further conduct a human evaluation of 660 generated ideas in the field of computer science to assess their novelty, relevance, and feasibility… Our findings demonstrate that LLMs have the potential to generate research ideas that are relevant, distinct, feasible, and novel—to some extent.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-73
+
+- **Citing** → **OpenReviewer: A Specialized Large Language Model for Generating Critical Scientific Paper Reviews** — Idahl et al. (2024) · `openalex:W4405561462` · [OpenAlex](https://openalex.org/W4405561462) · [doi](https://doi.org/10.48550/arxiv.2412.11948) · [pdf](https://arxiv.org/pdf/2412.11948)
+- **Cited** ← **Are We There Yet? Revealing the Risks of Utilizing Large Language Models in Scholarly Peer Review** — Ye et al. (2024) · `openalex:W4405035007` · [OpenAlex](https://openalex.org/W4405035007) · [doi](https://doi.org/10.48550/arxiv.2412.01708) · [pdf](https://arxiv.org/pdf/2412.01708)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 1 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ _background_ (conf 0.7 · supports · obligatory): General statement about ethical concerns raised by automation, part of a broader list.
+    > eview, including institutional bias [CITED], gender bias [CITED], and strategic manipulation [CITED]. While automation through NLP offers potential solutions, it also raises new ethical concerns about fairness, transparency, and accountability **[CITED:TARGET]**. Conclusion We presented OpenReviewer, an open-source system for generating high-quality peer reviews of ML/AI papers. Through careful fine-tuning on expert reviews and evaluation against multiple baselines, we demonstrated that OpenReviewer produces more realistic and critical reviews than general-purpose
+
+**Enriched-v12 semantic relation:** **supports** (semantic-edge direction: symmetric; existence 0.92, type 0.82) — `openalex:W4405035007::k03` → `openalex:W4405561462::k02`
+  - _rationale:_ Both contributions independently document that general-purpose LLMs are insufficiently critical as peer reviewers. A finds hallucination and prestige bias as inherent flaws; B finds LLMs are systematically too lenient (more positive recommendations than humans). These are corroborating, compatible findings about the same construct (LLM reviewer quality deficiencies). B cites A in an ethics/bias context [CIT], and B's evidence [B:003] that 'general-purpose LLMs are not critical enough and tend to give much more positive recommendations than human reviews' materially corroborates A's finding that LLMs have inherent flaws compromising review objectivity. The relationship is supports (symmetric) rather than builds_on because B does not explicitly use A's method or artifact—it independently evaluates different LLMs with a different approach (fine-tuning comparison), and the citation is background rather than methodological extension.
+    - `openalex:W4405035007::k03` [empirical_finding] — LLMs exhibit inherent flaws in scholarly peer review: they assign higher or comparable ratings to papers containing only a title versus full papers (hallucination), and they produce more favorable reviews when authorship is attributed to well-known researchers in single-blind settings (prestige bias).
+      > LLMs exhibit inherent flaws, such as potentially assigning higher ratings to incomplete papers compared to full papers and favoring well-known authors in single-blind review process
+    - `openalex:W4405561462::k02` [empirical_finding] — General-purpose LLMs (GPT-4o, Claude-3.5-Sonnet) are systematically too lenient as paper reviewers, producing recommendation distributions far more positive than human expert reviewers, while domain fine-tuning on expert review data substantially closes this gap.
+      > An evaluation demonstrating that OpenReviewer generates reviews that align considerably better with human expert reviews compared to state-of-the-art LLMs, including GPT-4o and Claude-3.5-Sonnet. We find that general-purpose LLMs are not critical enough and tend to give much more positive recommendations than human reviews.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---
+
+#### N-74
+
+- **Citing** → **MLR-Bench: Evaluating AI Agents on Open-Ended Machine Learning Research** — Chen et al. (2025) · `openalex:W4414587939` · [OpenAlex](https://openalex.org/W4414587939) · [doi](https://doi.org/10.48550/arxiv.2505.19955) · [pdf](https://arxiv.org/pdf/2505.19955)
+- **Cited** ← **ResearchAgent: Iterative Research Idea Generation over Scientific Literature with Large Language Models** — Baek et al. (2025) · `openalex:W4411120082` · [OpenAlex](https://openalex.org/W4411120082) · [doi](https://doi.org/10.18653/v1/2025.naacl-long.342) · [pdf](https://aclanthology.org/2025.naacl-long.342.pdf)
+
+**Flagged for:** background_passage_supports_hard_relation · 1 of 5 site(s) flagged
+
+**All citation sites** (⚑ = flagged by the audit queue; ⁿ = new v12 substrate; intent · conf · support/priority · justification, then the citing passage):
+  - ⚑ ⁿ _background_ (conf 0.6): ResearchAgent is mentioned as prior related work motivating the introduction of MLR-Bench, providing general context rather than direct use or comparison.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > emonstrated their growing potential to drive and support scientific discovery. In this work, we introduce MLR-Bench , a comprehensive benchmark for evaluating AI agents on open-ended machine learning research. MLR-Bench includes three key components: (1) 201 research tasks sourced from NeurIPS, ICLR, and ICML workshops covering diverse ML topics; (2) MLR-Judge , an automated evaluation framework combining LLM-based reviewers with carefully designed review rubrics to assess research quality; and (3) MLR-Agent , a modular agent scaffold capable of completing research tasks through four stages: idea generation, proposal formulation, experimentation, and paper writing. Our framework supports both stepwise assessment across these distinct research stages, and end-to-end evaluation of the final research paper. We then use MLR-Bench to evaluate six frontier LLMs and an advanced coding agent, finding that while LLMs are effective at generating coherent ideas and well-structured papers, current co
+  - ⁿ _background_ (conf 0.75): The passage describes the citing work's own MLR-Bench research questions and structure without directly engaging with or building on ResearchAgent's methods.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > k to answer the following research questions: • RQ1: How well can AI agents conduct open-ended machine learning research? (§ 3 ) • RQ2 : How effectively can an LLM judge evaluate research, as measured by its agreement with human reviewers? (§ 4 ) • RQ3: What are the key factors that affect the quality of AI-generated research? (§ 5 ) To systematically address these questions, we decompose the research process into four successive stages: (1) idea generation , (2) research proposal formulation , (3) experimental execution and analysis , and (4) paper writing . This decomposition allows us to assess both stepwise progress and the overall end-to-end research capability of AI agents. MLR-Bench consists of three key components: (1) a collection of 201 real-world research tasks sourced from NeurIPS, ICLR, and ICML workshops over the past three years, covering a wide range of machine learning domains, including LLMs, trustworthy AI, ML systems, AI for science; (2) MLR-Judge , an automated evalua
+  - ⁿ _background_ (conf 0.85): Target is grouped with several other AI research-agent papers listed as evaluated models/tools; no specific use of ResearchAgent's method or comparison is made here.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > on allows us to assess both stepwise progress and the overall end-to-end research capability of AI agents. MLR-Bench consists of three key components: (1) a collection of 201 real-world research tasks sourced from NeurIPS, ICLR, and ICML workshops over the past three years, covering a wide range of machine learning domains, including LLMs, trustworthy AI, ML systems, AI for science; (2) MLR-Judge , an automated evaluation pipeline consisting of LLM-based judge and structured review rubrics; and (3) MLR-Agent , a modular research agent scaffold capable of automatically completing these tasks by following the four defined research stages. To explore RQ1, we use MLR-Bench to evaluate six state-of-the-art models—including the most recent o4-mini ( o4mini2025 ) , Gemini-2.5-pro-preview ( gemini2025 ) , and Qwen3-235B-A22B ( qwenteam2025qwen3 ) —as well as the advanced coding agents, Claude Code ( claude2025 ) and Codex ( codex2025 ) . Our results show that while these models perform
+  - ⁿ _background_ (conf 0.9): Passage describes MLR-Bench's own framework and tasks; ResearchAgent is not mentioned in this excerpt's content, indicating a general contextual citation rather than direct use or comparison.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > of fabricated experimental results and hallucinated methodology, pointing to key challenges for future research. 2 MLR-Bench In this section, we describe the overall flow of MLR-Bench. Fig. 1 presents an overview of the framework of MLR-Bench, which consists of both an end-to-end evaluation pipeline to evaluate AI agents’ ability to complete end-to-end research, and a stepwise evaluation pipeline, which separately evaluates AI agents’ abilities on (1) Idea Generation, (2) Proposal Generation, (3) Experimentation, and (4) Paper Writing. Tasks. To measure the performance of AI agents across various machine learning topics, we collect 201 tasks from ICLR, ICML, and NeurIPS workshops over the past three years. These tasks are categorized into 9 core ML topics: LLMs and Vision Language Models (VLMs), AI for Science, ML Theory, Trustworthy AI, Computer Vision, ML Systems, Multimodality, Reinforcement Learning (RL), and other emerging topics. Fig. 2 illustrates the distribution of our tasks
+  - ⁿ _background_ (conf 0.9): Passage details MLR-Bench's stepwise evaluation pipeline without referencing ResearchAgent's methods or comparing results to it.
+    > _(raw window — no `[CITED:TARGET]` marker available; the marked version lives in Klara's local `citation-substrate` worktree)_
+    > includes file system access, a Python runtime for executing scripts, and internet connectivity. Stepwise Evaluation. To assess AI agents’ research capabilities in a more fine-grained manner, we evaluate them over 4 steps, using MLR-Judge to assess each step: (1) Idea Generation: we provide the agent with a research task and require it to generate a research idea. (2) Proposal Generation: we provide the agent with a research task and idea, and require it to generate a detailed research proposal. (3) Experimentation: the agent is given access to an environment for running experiments (similar to in the end-to-end case), and iteratively writes code and runs experiments. (4) Paper Writing: agents are given a full set of experimental outputs (report, figures, and a log of commands run during experimentation), and required to produce the final paper. This task involves multimodal input and output, so we test multimodal agents in this stage. Each step of the stepwise evaluation requires a set of
+
+**Enriched-v12 semantic relation:** **supports** (semantic-edge direction: symmetric; existence 0.85, type 0.72) — `openalex:W4411120082::k02` → `openalex:W4414587939::k01`
+  - _rationale:_ Both contributions address LLM-based automated evaluation of AI-generated research quality using human-aligned criteria. Contribution A (ResearchAgent) uses ReviewingAgents prompted with human-preference-induced evaluation criteria to provide iterative feedback. Contribution B (MLR-Judge) pairs LLM-based reviewers with structured rubrics and validates they achieve human-level inter-rater agreement. Evidence [A:005] and [AQ] show A's approach of inducing human-aligned criteria for LLM reviewers; [BQ] and [B:029] show B validates LLM judges as proxies for human reviewers. Both findings corroborate each other: LLM reviewers aligned with human preferences can reliably assess research quality. The citation [CIT:openalex:W4414587939->openalex:W4411120082:1] confirms B cites A as prior work in the same space, but the relationship is one of comparable/corroborating findings rather than explicit extension, making 'supports' more defensible than 'builds_on'.
+    - `openalex:W4411120082::k02` [method] — LLM-based ReviewingAgents prompted with evaluation criteria induced from real researchers' judgements provide iterative, human-preference-aligned feedback that measurably improves research idea quality.
+      > to simulate robust feedback mechanisms, we instantiate a number of LLM-powered ReviewingAgents that help the ResearchAgent to iterate on research idea generation with constructive critiques. Crucially, these ReviewingAgents are prompted with evaluation criteria that are induced from real researchers' judgements, thus aligning them with actual scientific preferential standards.
+    - `openalex:W4414587939::k01` [framework] — MLR-Judge — an automated evaluation framework pairing LLM-based reviewers with structured review rubrics — achieves agreement with expert human reviewers comparable to inter-human agreement, providing a scalable proxy for assessing AI-generated research quality.
+      > MLR-Judge , an automated evaluation pipeline consisting of LLM-based judge and structured review rubrics; ... We find that the level of agreement between an LLM judge and a human judge, when assessing the same output, is very close to the level of agreement between two human judges, demonstrating its effectiveness as a reliable evaluation tool.
+
+**Verdict:** _( complementary | semantic-wrong | citation-wrong | rollup-artifact )_  
+**Notes:** …
+
+---

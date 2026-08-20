@@ -1,0 +1,46 @@
+{
+  "arxiv:2504.01848v3::k03|arxiv:2606.11447::k01": {
+    "verdict": "_(carried: complementary)_",
+    "notes": "Complementary, semantic is correctly finds the friction between the contributions, citation information agrees"
+  },
+  "arxiv:2507.18901v1::k01|arxiv:2606.11447::k01": {
+    "verdict": "_(carried: ?)_",
+    "notes": "Complementary, Here the compares_contrast citation and the contradicts semantic edge are referencing two different things, both useful context."
+  },
+  "arxiv:2606.06473::k04|openalex:W4415108068::k00": {
+    "verdict": "_(carried: complementary)_",
+    "notes": "semantic-wrong/complementary: Calling the semantic edge a contradiction might be a bit too strong (A outpeforms B, B was state of the art at the time), not sure how we want to treat this."
+  },
+  "arxiv:2504.21776::k03|arxiv:2511.19399v3::k04": {
+    "verdict": "_(carried: ?)_",
+    "notes": "complementary. The judge doesnt talk about the uses_extends citation in its justification. I think the judge is correct overall however, not quite enough for builds_on despite the uses_extends citation being correctly identified. uses_extends citation is just a small part of the method."
+  },
+  "arxiv:2506.11763::k03|arxiv:2603.20884v3::k02": {
+    "verdict": "_(carried: complementary)_",
+    "notes": "complementary: They are both correct. The citation is just about one part of the procsess, doesnt mean that the semantic edge should be builds_on necessarily. The full judge agrees with my previous verdict exactly once it sees the citation, the adoption is too narrow"
+  },
+  "arxiv:2506.11763::k01|arxiv:2603.20884v3::k02": {
+    "verdict": "_(carried: complementary — RE-CHECK)_",
+    "notes": "complementary: They are both correct. The citation is just about one part of the procsess, doesnt mean that the semantic edge should be builds_on necessarily"
+  },
+  "arxiv:2510.27598::k01|arxiv:2602.15112v2::k00": {
+    "verdict": "_(carried: ? — RE-CHECK)_",
+    "notes": "Complementary: The new judge has a much better understanding and the citation information helped. refines more apporpriate than contradicts and doesnt get tripped up by the naming coincidence as a result i suppose of seeing the fulltexts"
+  },
+  "arxiv:2506.11763::k00|arxiv:2605.26081::k01": {
+    "verdict": "_(carried: complementary — RE-CHECK)_",
+    "notes": "semantic now correct: The citation shows how the benchmark is used and this helps tip towards builds_on"
+  },
+  "arxiv:2507.18901v1::k00|arxiv:2606.11447::k01": {
+    "verdict": "_(carried: ? — RE-CHECK)_",
+    "notes": ""
+  },
+  "arxiv:2606.06473::k00|openalex:W4415108068::k00": {
+    "verdict": "_(carried: complementary)_",
+    "notes": "complementaty: eveything seems accurate, the judge makes the correct overall judgement of builds_on despite their being a background and comparison citation."
+  },
+  "openalex:W4414587939::k02|openalex:W4414827381::k00": {
+    "verdict": "_(carried: complementary — RE-CHECK)_",
+    "notes": "complementary: background intent for the citation is correct."
+  }
+}

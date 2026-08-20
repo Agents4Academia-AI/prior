@@ -1,0 +1,668 @@
+%% ===================================================================
+%%  Prior — citation intent poster.  A0 PORTRAIT, 3 columns.
+%%  Generated from POSTER_CONTENT.md.  Compile:  pdflatex poster.tex
+%%  (Callum: you never need to edit this file — edit POSTER_CONTENT.md
+%%   and say "rebuild the poster".)
+%% ===================================================================
+\documentclass[final]{beamer}
+\usepackage[size=a0,orientation=portrait,scale=1.30]{beamerposter}
+\usetheme{default}
+\usefonttheme{professionalfonts}
+\setbeamertemplate{navigation symbols}{}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[most]{tcolorbox}
+\usetikzlibrary{positioning,arrows.meta,shapes.geometric,calc,fit,backgrounds}
+
+%% ---------- palette (matches Prior's own viewers) ------------------
+\definecolor{pBg}    {HTML}{FAF6EC}   % poster background, cream
+\definecolor{pPanel} {HTML}{FFFFFF}   % block background
+\definecolor{pInk}   {HTML}{2E3440}   % body text
+\definecolor{pDim}   {HTML}{6B7686}   % secondary text
+\definecolor{pRule}  {HTML}{DCD8CC}   % hairlines
+\definecolor{pTeal}  {HTML}{0A9396}   % accent
+\definecolor{pDeep}  {HTML}{005F73}   % headings
+\definecolor{pRust}  {HTML}{BB3E03}   % contrast / alert
+\definecolor{pSand}  {HTML}{EE9B00}   % highlight
+\definecolor{pSlate} {HTML}{8896A6}   % background class
+
+\setbeamercolor{background canvas}{bg=pBg}
+\setbeamercolor{normal text}{fg=pInk}
+\usebeamercolor[fg]{normal text}
+
+%% ---------- shorthands ---------------------------------------------
+\newcommand{\ttx}[1]{\texttt{#1}}
+\newcommand{\clsbg}{\textcolor{pSlate}{\textbf{\texttt{background}}}}
+\newcommand{\clsuse}{\textcolor{pTeal}{\textbf{\texttt{uses\_extends}}}}
+\newcommand{\clscmp}{\textcolor{pRust}{\textbf{\texttt{compares\_contrasts}}}}
+\newcommand{\num}[1]{\textcolor{pDeep}{\textbf{#1}}}
+
+%% ---------- the block environment ----------------------------------
+\newtcolorbox{pblock}[1]{
+  enhanced, breakable=false,
+  colback=pPanel, colframe=pRule, boxrule=1.2pt, arc=8pt,
+  left=20pt, right=20pt, top=22pt, bottom=14pt,
+  boxsep=0pt, before skip=0pt, after skip=18pt,
+  title={\raggedright\bfseries\fontsize{33}{39}\selectfont #1},
+  coltitle=white, colbacktitle=pDeep,
+  fonttitle=\bfseries, toptitle=12pt, bottomtitle=12pt,
+  attach boxed title to top left={xshift=-1.2pt, yshift=-1.2pt},
+  boxed title style={colframe=pDeep, arc=8pt, boxrule=0pt,
+                     left=22pt, right=22pt}
+}
+
+%% a lighter, untitled note box
+\newtcolorbox{pnote}{
+  enhanced, colback=pBg, colframe=pRule, boxrule=1pt, arc=6pt,
+  left=16pt, right=16pt, top=11pt, bottom=11pt,
+  before skip=8pt, after skip=8pt
+}
+
+%% ---------- figure-or-placeholder ----------------------------------
+%% \figbox{path}{height}{hint shown while the file is missing}
+\newcommand{\figbox}[3]{%
+  \IfFileExists{#1}{%
+    \begin{center}\includegraphics[width=\linewidth]{#1}\end{center}%
+  }{%
+    \begin{center}
+    \begin{tikzpicture}
+      \node[draw=pRule, line width=1.5pt, dashed, fill=pBg, rounded corners=6pt,
+            minimum width=0.95\linewidth, minimum height=#2, align=center,
+            text=pDim, font=\fontsize{22}{28}\selectfont]
+        {\textbf{[ screenshot pending ]}\\[6pt]\texttt{\detokenize{#1}}\\[6pt]\itshape #3};
+    \end{tikzpicture}
+    \end{center}%
+  }%
+}
+\newcommand{\figcap}[1]{\vspace{-2pt}{\fontsize{18}{22}\selectfont\color{pDim}\itshape #1}\vspace{4pt}}
+
+%% ---------- body text size ------------------------------------------
+\newcommand{\body}{\fontsize{21}{27}\selectfont}
+\newcommand{\smallbody}{\fontsize{19}{24}\selectfont}
+
+\newlength{\colw}
+\setlength{\colw}{0.305\paperwidth}
+
+\begin{document}
+\body
+\begin{frame}[t]{}
+\vspace{-1.5cm}
+
+%% ===================================================================
+%%  HEADER
+%% ===================================================================
+\begin{center}
+\begin{tcolorbox}[enhanced, colback=pDeep, colframe=pDeep, arc=10pt,
+                  left=40pt,right=40pt,top=26pt,bottom=26pt, width=\textwidth]
+\centering
+{\fontsize{86}{96}\selectfont\bfseries\color{white} Why did this paper cite that one?}\\[14pt]
+{\fontsize{46}{54}\selectfont\color{pSand} Typed citation edges for a research-literature knowledge graph}\\[22pt]
+{\fontsize{30}{36}\selectfont\color{white}\bfseries Callum Young}\quad
+{\fontsize{30}{36}\selectfont\color{pRule} $\cdot$\ \ \textit{affiliation to be filled in}}\\[16pt]
+\textcolor{pSand}{\rule{0.5\textwidth}{2pt}}\\[14pt]
+{\fontsize{30}{38}\selectfont\color{white}
+ 809 citation sites \ \ $\cdot$ \ \ 3-class intent taxonomy \ \ $\cdot$ \ \
+ \textbf{95\% on a blind gold set} (macro-F1 0.892)}
+\end{tcolorbox}
+\end{center}
+
+\vspace{22pt}
+
+%% ===================================================================
+%%  THREE COLUMNS
+%% ===================================================================
+\noindent
+%% -------------------------------------------------------------------
+%%  COLUMN 1
+%% -------------------------------------------------------------------
+\begin{minipage}[t]{\colw}\vspace{0pt}
+
+\begin{pblock}{1 \ \ What Prior is, and why citations}
+\textbf{Prior} reads a corpus of research papers and builds a map of them. It pulls out
+each paper's \emph{contributions} --- the specific things that paper claims to have done
+--- and draws typed, directed relations between the contributions of different papers, so
+you can ask \emph{``what is actually known about X?''} and get an answer grounded in the
+literature rather than a plausible-sounding summary.
+
+\medskip
+The map has a weak link. Those relations are drawn from \textbf{semantic similarity plus
+an LLM's reading of two contribution statements}. The model never sees whether one paper
+actually cited the other, or what it said when it did. The result is a map that agrees
+with itself: \num{70\% of edges are \ttx{supports}}, and \ttx{contradicts} --- the label
+you would most want a literature map for --- has been measured at about
+\textcolor{pRust}{\textbf{36\% precision}}.
+
+\medskip
+Meanwhile the citation record sits unused. And a citation is a different kind of object:
+$p_1$ citing $p_2$ is a \textbf{fact}; an LLM saying their ideas ``build on'' each other is
+an \textbf{assertion}.
+
+\medskip
+But raw citations are blunt. In the graph, $p_1$ \emph{extending} $p_2$'s method, $p_1$
+\emph{mentioning} $p_3$ in passing, and $p_1$ \emph{name-dropping} $p_4$ out of obligation
+are all the same edge with the same weight. \textbf{The reason for a citation is the
+missing variable.}
+
+\begin{pnote}
+\smallbody\centering
+\textbf{So: type the citation edges $(p_1, p_2, t)$,\\ then use those facts to discipline
+the assertions.}
+\end{pnote}
+
+\medskip
+\figbox{figures/atlas.png}{9cm}{The Prior atlas --- zoomed out, topic clusters visible}
+\figcap{Fig 1. Prior's semantic map of the 152-paper corpus. Relations here are drawn
+without ever looking at a citation.}
+\end{pblock}
+
+\begin{pblock}{2 \ \ The taxonomy, and why ours}
+We started from \textbf{RefWarden}, a citation-verification tool, which asks whether a
+cited paper \ttx{exists}, whether it \ttx{supports} the claim it is attached to, and
+whether it is \ttx{obligatory} or merely \ttx{helpful}. Good questions --- but they all ask
+\emph{is this citation sound?} Prior needs to know \emph{why the citation is there at all.}
+
+\medskip
+So we added a primary \textbf{intent} axis, keeping support and priority as secondary
+stamps:
+
+\smallskip
+\begin{itemize}\itemsep5pt
+  \item[] \clsbg{} --- cited as context, prior art, or a passing mention.
+  \item[] \clsuse{} --- the citing paper actually adopts or builds on the target.
+  \item[] \clscmp{} --- the citing paper sets its own work \emph{specifically} against
+    the target.
+\end{itemize}
+
+\begin{pnote}
+\smallbody
+\textbf{The selection rule:} a class only earns its place if the downstream system would
+\emph{act differently} on it.
+\end{pnote}
+
+That single test does all the work. ACL-ARC's \ttx{uses} and \ttx{extends} collapse into
+one class, because Prior treats them identically. Semantic Scholar's \ttx{result} is
+dropped --- ambiguous, and it triggers no distinct action. \ttx{exists} is excluded because
+every cited paper is already in the corpus, so it is trivially yes (parked for the
+hallucinated-citation demo on AI-generated papers).
+
+\medskip
+\textbf{And why we could not just use an off-the-shelf label set:}
+\textcolor{pRust}{\textbf{Semantic Scholar has no contrast class at all.}} Contrast is the
+single most valuable signal for Prior, because \ttx{contradicts} is exactly the relation
+the semantic graph gets wrong. The standard taxonomy cannot express the one thing we most
+need.
+
+\medskip
+Intent is also not redundant with verification: \num{65\%} of \clscmp{} sites still
+\ttx{support} their local claim --- so the support axis genuinely cannot see intent.
+
+\bigskip
+%% ---- FIG 2: taxonomy comparison -------------------------------------
+\begin{center}
+\begin{tikzpicture}[font=\fontsize{19}{23}\selectfont]
+  \def\cw{5.9}
+  \def\rh{2.1}
+  \node[minimum width=\cw cm, minimum height=1.5cm, align=center, fill=pBg,
+        text=pDim, draw=pRule, line width=1pt] at (0,0) {scite};
+  \node[minimum width=\cw cm, minimum height=1.5cm, align=center, fill=pBg,
+        text=pDim, draw=pRule, line width=1pt] at ({\cw},0) {ACL-ARC};
+  \node[minimum width=\cw cm, minimum height=1.5cm, align=center, fill=pBg,
+        text=pDim, draw=pRule, line width=1pt] at ({2*\cw},0) {Sem.\ Scholar};
+  \node[minimum width=\cw cm, minimum height=1.5cm, align=center, fill=pDeep,
+        text=white, draw=pDeep, line width=1pt] at ({3*\cw},0) {\textbf{Ours}};
+
+  \foreach \i/\a/\b/\c in {
+    1/{mentioning}/{background}/{background},
+    2/{supporting}/{uses, extends}/{method},
+    3/{contrasting}/{compare/\\contrast}/{\textcolor{pRust}{\textit{--- none ---}}},
+    4/{---}/{motivation,\\future work}/{result} }
+  {
+    \node[minimum width=\cw cm, minimum height=\rh cm, align=center, fill=pPanel,
+          draw=pRule, line width=1pt] at (0,{-\i*\rh}) {\a};
+    \node[minimum width=\cw cm, minimum height=\rh cm, align=center, fill=pPanel,
+          draw=pRule, line width=1pt] at ({\cw},{-\i*\rh}) {\b};
+    \node[minimum width=\cw cm, minimum height=\rh cm, align=center, fill=pPanel,
+          draw=pRule, line width=1pt] at ({2*\cw},{-\i*\rh}) {\c};
+  }
+  \node[minimum width=\cw cm, minimum height=\rh cm, align=center, fill=pBg,
+        draw=pDeep, line width=1.6pt, text=pSlate] at ({3*\cw},{-\rh}) {\textbf{background}};
+  \node[minimum width=\cw cm, minimum height=\rh cm, align=center, fill=pBg,
+        draw=pDeep, line width=1.6pt, text=pTeal] at ({3*\cw},{-2*\rh}) {\textbf{uses\_}\\\textbf{extends}};
+  \node[minimum width=\cw cm, minimum height=\rh cm, align=center, fill=pBg,
+        draw=pDeep, line width=1.6pt, text=pRust] at ({3*\cw},{-3*\rh}) {\textbf{compares\_}\\\textbf{contrasts}};
+  \node[minimum width=\cw cm, minimum height=\rh cm, align=center, fill=pBg,
+        draw=pDeep, line width=1.6pt, text=pDim] at ({3*\cw},{-4*\rh}) {\textit{dropped}};
+
+  \node[text=pRust, align=center, font=\fontsize{18}{22}\selectfont]
+    at ({1.5*\cw},{-5*\rh-0.1})
+    {the gap that forced our own judge $\nearrow$};
+\end{tikzpicture}
+\end{center}
+\figcap{Fig 2. Four taxonomies. Classes merge when the downstream action is the same, and
+drop when there is no distinct action. Semantic Scholar's missing contrast class is why an
+off-the-shelf label set was not an option.}
+\end{pblock}
+
+\begin{pblock}{3 \ \ The pipeline}
+The corpus is \num{152 papers} on AI-for-science, already carrying \num{581 contributions}
+and \num{989 semantic edges} from Prior's existing pipeline.
+
+\medskip
+For each paper we extract the bibliography from its arXiv \LaTeX{} source, resolve every
+reference back to a paper in the corpus, and pull the \textbf{passage around the citation},
+marking the reference being typed as \ttx{[CITED:TARGET]} and its neighbours as
+\ttx{[CITED]}. Intra-corpus citations only.
+
+\medskip
+That gives \num{525 citation edges across 809 claim-sites}, later extended to
+\num{1,103 sites over 643 paper-pairs}. A \textbf{site} is one (edge, passage) pair; an
+\textbf{edge} is one citing$\rightarrow$cited paper pair, rolled up from its sites.
+
+\medskip
+Everything ran on a Claude Code subscription rather than a metered API --- which is why
+every runner is checkpointed, resumable, and stops cleanly when the usage window closes.
+
+\bigskip
+%% ---- FIG 3: pipeline strip ------------------------------------------
+\begin{center}
+\begin{tikzpicture}[font=\fontsize{18}{22}\selectfont,
+   stage/.style={draw=pRule, line width=1.2pt, fill=pBg, rounded corners=5pt,
+                 minimum width=3.9cm, minimum height=2.6cm, align=center, inner sep=3pt},
+   fin/.style={draw=pDeep, line width=1.8pt, fill=pDeep, text=white, rounded corners=5pt,
+               minimum width=4.4cm, minimum height=2.6cm, align=center, inner sep=3pt},
+   ar/.style={-{Stealth[length=6mm,width=4mm]}, line width=1.5pt, draw=pTeal}]
+  \node[stage] (a) at (0,0) {152\\papers};
+  \node[stage, right=0.8cm of a] (b) {arXiv\\\texttt{.bbl}};
+  \node[stage, right=0.8cm of b] (c) {resolve to\\corpus paper};
+  \node[stage, right=0.8cm of c] (d) {citing\\passage};
+  \node[fin,   right=0.8cm of d] (e) {typed edge\\$(p_1,p_2,t)$};
+  \draw[ar] (a)--(b); \draw[ar] (b)--(c); \draw[ar] (c)--(d); \draw[ar] (d)--(e);
+  \node[below=3mm of c, text=pDim, font=\fontsize{17}{20}\selectfont] {525 edges};
+  \node[below=3mm of d, text=pDim, font=\fontsize{17}{20}\selectfont] {809 sites};
+  \node[below=3mm of e, text=pDim, font=\fontsize{17}{20}\selectfont] {+ support, priority};
+\end{tikzpicture}
+\end{center}
+\figcap{Fig 3. From LaTeX source to a typed edge. The judge sees the citing passage and the
+cited paper's abstract --- nothing else.}
+\end{pblock}
+
+\end{minipage}
+\hfill
+%% -------------------------------------------------------------------
+%%  COLUMN 2
+%% -------------------------------------------------------------------
+\begin{minipage}[t]{\colw}\vspace{0pt}
+
+\begin{pblock}{4 \ \ Building the judge, and the prompt}
+We reused RefWarden's judge \textbf{transport} --- the batching, the evidence assembly, the
+JSON contract --- and swapped out the \textbf{rubric}. Support and priority came for free;
+the intent axis was \emph{a prompt change, not new software}. The judge sees the cited
+paper's abstract as evidence, plus the citing passage with the target marked.
+
+\begin{pnote}
+\smallbody
+\textbf{The interesting part is that the constraint inverted.}\\[6pt]
+RefWarden's hard problem is telling the model \textbf{what \emph{not} to do} --- don't
+judge the neighbouring citations, don't use prior knowledge, abstain when the abstract
+doesn't say.\\[6pt]
+Intent has \textbf{no abstain option}: the model must commit to a class on every site.
+Caution stops being safe --- it just becomes a systematic bias toward the majority class.
+\end{pnote}
+
+\medskip
+Which is exactly what happened.
+
+\medskip
+%% ---- FIG 4: prompt version strip ------------------------------------
+\begin{center}
+\begin{tikzpicture}[font=\fontsize{19}{23}\selectfont,
+  ver/.style={draw=pRule, line width=1.4pt, fill=pBg, rounded corners=6pt,
+              text width=6.0cm, align=center, inner sep=8pt, minimum height=3.0cm},
+  vfin/.style={draw=pDeep, line width=2pt, fill=pBg, rounded corners=6pt,
+              text width=6.0cm, align=center, inner sep=8pt, minimum height=3.0cm},
+  ar/.style={-{Stealth[length=6mm,width=4mm]}, line width=1.5pt, draw=pTeal}]
+
+  \node[ver] (v2) at (0,0)
+    {\textbf{v2}\\[3pt]{\fontsize{17}{21}\selectfont ``the target is a\\\emph{dependency}''}};
+  \node[ver] (v3) at (7.8,0)
+    {\textbf{v3}\\[3pt]{\fontsize{17}{21}\selectfont broaden \texttt{uses\_extends}\\+ baseline tie-breaker}};
+  \node[vfin] (v4) at (15.6,0)
+    {\textcolor{pDeep}{\textbf{v4 (final)}}\\[3pt]{\fontsize{17}{21}\selectfont grouping rule moved\\\emph{into} \texttt{background}}};
+
+  \draw[ar] (v2)--(v3);
+  \draw[ar] (v3)--(v4);
+
+  \node[below=0.9cm of v2, text width=6.4cm, align=center, text=pRust,
+        font=\fontsize{17}{21}\selectfont]
+        {\textbf{fails:} too cautious,\\ underfires \texttt{uses\_extends}};
+  \node[below=0.9cm of v3, text width=6.4cm, align=center, text=pRust,
+        font=\fontsize{17}{21}\selectfont]
+        {\textbf{fails:} overfires \texttt{compares\_}\\\texttt{contrasts} on \emph{group} critiques};
+  \node[below=0.9cm of v4, text width=6.4cm, align=center, text=pTeal,
+        font=\fontsize{17}{21}\selectfont]
+        {\textbf{95\%} on the blind\\ gold set};
+\end{tikzpicture}
+\end{center}
+\figcap{Fig 4. Three rubric versions, each fixing the previous one's failure mode.}
+
+\medskip
+\begin{itemize}\itemsep5pt
+\item \textbf{v2 was too cautious and underfired} \clsuse{}. The rubric was asymmetric: it
+  demanded the target be ``a dependency of the citing work'' for adoption, while accepting
+  much weaker cues for \ttx{background}.
+\item \textbf{v3 broadened it} --- the target ``provides an ingredient, method,
+  formulation, metric, dataset or architectural block that the citing paper actively
+  uses'' --- and added a baseline tie-breaker: \emph{rerunning} a system to beat it is
+  \clscmp{}, \emph{adopting} its protocol or code is \clsuse{}.
+\item \textbf{v3 then overfired} \clscmp{} \textbf{on group critiques.} \emph{``Another
+  limitation is that current systems are limited to small-scale code experiments
+  \ttx{[CITED:TARGET]}''} is a critique of a field, not of a paper.
+\item \textbf{v4 fixed it by moving the rule, not adding one.} The ``do not over-use
+  \ttx{compares\_contrasts}'' warning came \emph{out} of the negative clause and went
+  \emph{into} the positive definition of \ttx{background}: if the target is grouped with
+  other papers to describe a general limitation, it \textbf{is} background.
+\end{itemize}
+
+\begin{pnote}
+\smallbody\centering
+\textbf{Telling the model what a class \emph{is} beats telling it\\ what a neighbouring
+class \emph{isn't}.}
+\end{pnote}
+
+\medskip
+This was iterative hand-review rather than a controlled ablation --- but v4 is the version
+that was then measured, blind, at 95\%.
+\end{pblock}
+
+\begin{pblock}{5 \ \ Evaluation}
+Three validation stages, in increasing order of cost and of trust.
+
+\medskip
+\textbf{A. Semantic Scholar as a silver standard --- a negative result.} Free, no LLM. Only
+237 of our 525 edges appear in S2's reference graph and \textcolor{pRust}{\textbf{only 10
+carry an intent label at all}}: SciCite has not been run on 2025--26 papers. On the 9
+comparable edges S2 agreed 6/9, and \emph{on all three disagreements S2 was the coarser
+one}. This is why the next two stages were necessary.
+
+\medskip
+\textbf{B. A blind second judge.} A \emph{stronger} model (Opus~5) relabelled a stratified
+100-site sample, given a \textbf{clean-room rubric} --- it never saw our tie-breakers, so
+the two annotators' errors decorrelate --- and blind to our label.
+
+\smallskip
+%% ---- FIG 5: kappa stat strip ----------------------------------------
+\begin{center}
+\begin{tikzpicture}[font=\fontsize{20}{24}\selectfont,
+  tile/.style={draw=pRule, line width=1.2pt, fill=pBg, rounded corners=6pt,
+               minimum width=6.4cm, minimum height=3.6cm, align=center}]
+  \node[tile] (k) at (0,0)
+    {\fontsize{42}{48}\selectfont\color{pDeep}\textbf{0.79}\\[2pt]
+     \fontsize{18}{22}\selectfont\color{pDim}Cohen's $\kappa$};
+  \node[tile, right=0.6cm of k] (a)
+    {\fontsize{42}{48}\selectfont\color{pDeep}\textbf{81\%}\\[2pt]
+     \fontsize{18}{22}\selectfont\color{pDim}agreement,\\
+     \color{pDim}reweighted};
+  \node[tile, right=0.6cm of a] (d)
+    {\fontsize{42}{48}\selectfont\color{pTeal}\textbf{14/14}\\[2pt]
+     \fontsize{18}{22}\selectfont\color{pDim}disagreements on\\
+     \color{pDim}known taxonomy\\
+     \color{pDim}boundaries};
+\end{tikzpicture}
+\end{center}
+\figcap{Fig 5. Second-judge cross-check --- 100 stratified sites, blind.}
+
+\smallskip
+The result that matters is not the number: \textbf{all 14 disagreements land on known
+taxonomy boundaries, and none are random errors.} A judge that only argues on the
+genuinely ambiguous cases is a credible judge.
+
+\medskip
+\textbf{C. A hand-labelled gold set --- the real number.} 122 sites labelled blind through
+a purpose-built web app; the judge's verdicts and quality gates sat in the backing sheet
+but were never sent to the browser. The queue is \textbf{blocked by sample type}:
+
+\smallskip
+\begin{itemize}\itemsep5pt
+\item[--] an 80-site \ttx{random\_eval} block \emph{in random order}, so any labelled
+  prefix is still a uniform sample and the headline accuracy is unbiased;
+\item[--] a \ttx{disagreement} block of stage-B hard cases, \textbf{excluded from
+  accuracy}, used only to referee the taxonomy forks;
+\item[--] a stratified top-up to $\sim$27 per class for macro-F1.
+\end{itemize}
+
+\medskip
+%% ---- FIG 6: accuracy panel -------------------------------------------
+\begin{center}
+\begin{tikzpicture}[font=\fontsize{20}{24}\selectfont]
+  \node[align=center] at (0,0)
+    {{\fontsize{72}{80}\selectfont\color{pDeep}\textbf{95.0\%}}\\[4pt]
+     {\fontsize{21}{25}\selectfont\color{pDim}76 / 80 random-block sites}};
+  \begin{scope}[shift={(-6.0,-3.8)}]
+    \draw[pRule, line width=1.4pt] (0,0)--(12.0,0);
+    \foreach \x/\l in {0/80, 3/85, 6/90, 9/95, 12/100}
+      \draw[pRule, line width=1.4pt] (\x,-0.16)--(\x,0.16)
+        node[below=5pt, text=pDim, font=\fontsize{17}{20}\selectfont] {\l\%};
+    \draw[pTeal, line width=7pt] ({(87.8-80)/20*12},0.6)--({(98.0-80)/20*12},0.6);
+    \fill[pDeep] ({(95.0-80)/20*12},0.6) circle (0.30);
+    \node[text=pDim, font=\fontsize{17}{20}\selectfont] at (6.0,1.6) {95\% CI [87.8, 98.0]};
+  \end{scope}
+  \node[align=center, font=\fontsize{21}{26}\selectfont] at (0,-7.2)
+    {\textbf{94.6\%} reweighted to the population class mix\\
+     \textbf{macro-F1 = 0.892}};
+\end{tikzpicture}
+\end{center}
+
+\smallskip
+%% ---- FIG 6b: confusion matrix ----------------------------------------
+\begin{center}
+\begin{tikzpicture}[font=\fontsize{19}{23}\selectfont]
+  \def\cw{4.6}\def\rh{2.1}
+  \node[text=pDim, font=\fontsize{18}{22}\selectfont] at ({2*\cw},{1.75}) {\textbf{gold}};
+  \node[text=pSlate, font=\fontsize{19}{23}\selectfont] at ({1*\cw},{0.85}) {\textbf{bg}};
+  \node[text=pTeal,  font=\fontsize{19}{23}\selectfont] at ({2*\cw},{0.85}) {\textbf{use}};
+  \node[text=pRust,  font=\fontsize{19}{23}\selectfont] at ({3*\cw},{0.85}) {\textbf{cmp}};
+  \node[text=pSlate, anchor=east, font=\fontsize{19}{23}\selectfont] at ({0.44*\cw},{0}) {\textbf{bg}};
+  \node[text=pTeal,  anchor=east, font=\fontsize{19}{23}\selectfont] at ({0.44*\cw},{-\rh}) {\textbf{use}};
+  \node[text=pRust,  anchor=east, font=\fontsize{19}{23}\selectfont] at ({0.44*\cw},{-2*\rh}) {\textbf{cmp}};
+  \node[text=pDim, rotate=90, font=\fontsize{18}{22}\selectfont] at ({-0.12*\cw},{-\rh}) {\textbf{judge}};
+  \foreach \i/\j/\v/\s in {
+     0/1/{78.3}/100, 0/2/{1.3}/8,  0/3/{2.6}/14,
+     1/1/{0.3}/4,    1/2/{6.2}/32, 1/3/{0.3}/4,
+     2/1/{1.0}/7,    2/2/{0.0}/2,  2/3/{10.0}/45 }
+  {
+    \node[minimum width=\cw cm, minimum height=\rh cm, align=center,
+          fill=pTeal!\s, draw=pRule, line width=1pt]
+      at ({\j*\cw},{-\i*\rh}) {\v\%};
+  }
+  \node[text=pDim, font=\fontsize{17}{20}\selectfont] at ({2*\cw},{-2.6*\rh})
+    {population-scaled};
+\end{tikzpicture}
+\end{center}
+\figcap{Fig 6. Headline accuracy with its interval, and the reweighted confusion matrix.
+Sites on the same edge are not independent, so the true interval is a little wider than
+binomial.}
+
+\medskip
+\textbf{And the referee result.} On the 12 hard cases where our judge and Opus disagreed,
+gold sided with \textbf{ours 6, Opus 5, neither 1}. \emph{The stronger model was not the
+more accurate one} --- and the split was clean: ours won every
+\ttx{background}$\rightarrow$X call, Opus won every X$\rightarrow$\ttx{background} call.
+\end{pblock}
+
+\end{minipage}
+\hfill
+%% -------------------------------------------------------------------
+%%  COLUMN 3
+%% -------------------------------------------------------------------
+\begin{minipage}[t]{\colw}\vspace{0pt}
+
+\begin{pblock}{6 \ \ Folding citations into the semantic graph}
+Prior now holds \textbf{two graphs} over the same 152 papers, answering different
+questions. The citation graph is paper$\rightarrow$paper and it is a \textbf{fact}. The
+semantic graph is contribution$\rightarrow$contribution and it is an \textbf{assertion}.
+Rolling the 989 semantic edges up to paper-pairs and intersecting gives:
+
+\smallskip
+%% ---- FIG 7: overlap venn ---------------------------------------------
+\begin{center}
+\begin{tikzpicture}[font=\fontsize{21}{25}\selectfont]
+  \begin{scope}[opacity=0.5, transparency group]
+    \fill[pTeal]  (-1.9,0) circle (4.2);
+    \fill[pSand]  ( 1.9,0) circle (3.7);
+  \end{scope}
+  \draw[pTeal, line width=2pt] (-1.9,0) circle (4.2);
+  \draw[pSand!80!black, line width=2pt] ( 1.9,0) circle (3.7);
+  \node[white, font=\fontsize{32}{36}\selectfont] at (-3.9,0.5) {\textbf{535}};
+  \node[white, font=\fontsize{18}{22}\selectfont, align=center] at (-3.9,-0.8) {semantic\\only};
+  \node[white, font=\fontsize{32}{36}\selectfont] at ( 3.8,0.5) {\textbf{406}};
+  \node[white, font=\fontsize{18}{22}\selectfont, align=center] at ( 3.8,-0.8) {citation\\only};
+  \node[text=pInk, font=\fontsize{32}{36}\selectfont] at (0,0.6) {\textbf{118}};
+  \node[text=pInk, font=\fontsize{18}{22}\selectfont] at (0,-0.9) {both};
+  \node[text=pTeal, font=\fontsize{22}{26}\selectfont] at (-3.9,4.9) {\textbf{semantic}};
+  \node[text=pSand!70!black, font=\fontsize{22}{26}\selectfont] at (3.8,4.3) {\textbf{citation}};
+\end{tikzpicture}
+\end{center}
+\figcap{Fig 7. Paper-pair overlap. The two graphs are complementary, not redundant.}
+
+\smallskip
+Citations alone miss parallel work that never cites; semantics alone invents relations.
+
+\begin{pnote}
+\smallbody
+\textbf{The result that justifies the taxonomy:} of the 26 shared pairs typed \clscmp{},
+\textcolor{pRust}{\textbf{only 4}} carry any semantic \ttx{contradicts} edge. The critique
+signal is almost entirely invisible to the semantic pass --- so the contrast class is not a
+refinement, it is \emph{new information}.
+\end{pnote}
+
+\medskip
+%% ---- FIG 8: intent x relation crosstab -------------------------------
+\begin{center}
+\begin{tikzpicture}[font=\fontsize{19}{23}\selectfont]
+  \def\cw{3.7}\def\rh{1.75}
+  \node[text=pDim, align=center, font=\fontsize{17}{20}\selectfont] at ({1*\cw},{1.3}) {supports};
+  \node[text=pDim, align=center, font=\fontsize{17}{20}\selectfont] at ({2*\cw},{1.3}) {builds\_on};
+  \node[text=pDim, align=center, font=\fontsize{17}{20}\selectfont] at ({3*\cw},{1.3}) {refines};
+  \node[text=pDim, align=center, font=\fontsize{17}{20}\selectfont] at ({4*\cw},{1.3}) {contradicts};
+  \node[text=pSlate, anchor=east, font=\fontsize{18}{21}\selectfont] at ({0.45*\cw},{0}) {\textbf{background}};
+  \node[text=pTeal,  anchor=east, font=\fontsize{18}{21}\selectfont] at ({0.45*\cw},{-\rh}) {\textbf{uses\_extends}};
+  \node[text=pRust,  anchor=east, font=\fontsize{18}{21}\selectfont] at ({0.45*\cw},{-2*\rh}) {\textbf{compares\_contrasts}};
+  \foreach \i/\j/\v/\s in {
+    0/1/{57}/62, 0/2/{23}/26, 0/3/{2}/4,  0/4/{8}/10,
+    1/1/{10}/16, 1/2/{9}/14,  1/3/{1}/3,  1/4/{0}/1,
+    2/1/{19}/24, 2/2/{10}/14, 2/3/{0}/1,  2/4/{4}/8 }
+  {
+    \node[minimum width=\cw cm, minimum height=\rh cm, align=center,
+          fill=pTeal!\s, draw=pRule, line width=1pt] at ({\j*\cw},{-\i*\rh}) {\v};
+  }
+  \draw[pRust, line width=3pt, rounded corners=3pt]
+    ({4*\cw-\cw/2},{-2*\rh-\rh/2}) rectangle ({4*\cw+\cw/2},{-2*\rh+\rh/2});
+  \node[text=pDim, font=\fontsize{17}{20}\selectfont, align=center]
+    at ({2.5*\cw},{-2.9*\rh}) {shared pairs carrying $\geq$1 semantic edge of that relation};
+\end{tikzpicture}
+\end{center}
+\figcap{Fig 8. Citation intent $\times$ semantic relation, on the 118 shared pairs.}
+
+\medskip
+\textbf{Direction is nearly free.} Citation direction agrees with the semantic arrow on
+\num{66} pairs and disagrees on \num{52} --- the LLM's \ttx{builds\_on}/\ttx{refines} arrow
+is close to a coin flip. On the audited \clsuse{} pairs, citation direction was correct
+\num{33/33}.
+
+\medskip
+\textbf{We then read the divergent pairs by hand}, marking each as \emph{complementary},
+\emph{semantic-wrong}, \emph{citation-wrong} or \emph{rollup-artifact}. The dominant
+verdict was \textbf{complementary} --- the two signals describe different \emph{facets} of
+a pair rather than disagreeing. The clearest case is MLEvolve\,$\rightarrow$\,AlphaEvolve,
+genuinely \textbf{both} \ttx{builds\_on} \textbf{and} \ttx{contradicts}: it extends the
+paradigm \emph{and} claims to beat it. A majority-vote rollup would have hidden that
+tension entirely.
+
+\begin{pnote}
+\smallbody\centering
+\textbf{Use citation signal as complementary evidence and as a\\ direction fix --- not as a
+relabel.}\\[6pt]
+Re-typed with citation evidence visible, \clsuse{} pairs became\\ \ttx{builds\_on}
+\textbf{89\%} of the time --- without ever overwriting\\ the semantic layer.
+\end{pnote}
+
+\medskip
+\figbox{figures/view_intent.png}{6cm}{Two-layer viewer --- both layers on, filtered to the overlap}
+\figcap{Fig 9. Both graphs on one layout: solid arrows are citations coloured by intent,
+dashed lines are the semantic relations.}
+\end{pblock}
+
+%% ---- SECTION 7 : comment out this whole block to drop the ideation work
+\begin{pblock}{7 \ \ Graph vs.\ web ideation \textnormal{\textit{(in progress)}}}
+\textbf{The question:} does an LLM exploring the Prior atlas propose better research
+directions than the same LLM exploring the open web? Same seed topic, same task, same
+output schema, same generator; only the environment differs. Judged blind and pairwise by a
+stronger model, order-swapped.
+
+\medskip
+\textbf{Status: 10 ideas per arm generated; judging not yet built.} Three pilot findings are
+already worth reporting:
+
+\smallskip
+\begin{enumerate}\itemsep5pt
+\item \textbf{Blinding failed first.} 9 of 10 ideas leaked their arm --- the graph arm cited
+  internal node IDs, the web arm said ``web search''. Fixed with an explicit blinding
+  contract and an automated leakage gate before judging.
+\item \textbf{The arms converged.} 3 of 4 seeds produced the \emph{same core idea} on both
+  sides --- unsurprising in hindsight, since the corpus \textbf{is} the public literature
+  the web arm retrieves.
+\item \textbf{The cause: the graph arm wasn't using the graph.} Across four runs it called
+  \ttx{get\_edges} once and the citation tools zero times --- using the atlas as a private
+  search index over the same papers. The fix was not to \emph{force} traversal but to make
+  structure \textbf{advertise itself}, surfacing typed-relation breakdowns and citation
+  counts in every tool result. Traversal rose to 3--4 edge calls per run, and 3 of 4 seeds
+  then diverged from the web arm.
+\end{enumerate}
+
+\smallskip
+%% ---- FIG 10: arm comparison ------------------------------------------
+\begin{center}
+\begin{tikzpicture}[font=\fontsize{19}{23}\selectfont]
+  \def\cw{4.6}\def\rh{1.9}
+  \node[text=pDim, font=\fontsize{17}{20}\selectfont] at ({1*\cw},{1.25}) {explore calls};
+  \node[text=pDim, font=\fontsize{17}{20}\selectfont] at ({2*\cw},{1.25}) {seconds};
+  \node[text=pDim, font=\fontsize{17}{20}\selectfont] at ({3*\cw},{1.25}) {cost / idea};
+  \node[text=pTeal, anchor=east, font=\fontsize{20}{24}\selectfont] at ({0.44*\cw},{0}) {\textbf{GRAPH}};
+  \node[text=pSand!70!black, anchor=east, font=\fontsize{20}{24}\selectfont] at ({0.44*\cw},{-\rh}) {\textbf{WEB}};
+  \foreach \i/\j/\v in {0/1/{13.6}, 0/2/{95}, 0/3/{\$0.46},
+                        1/1/{3.9},  1/2/{111}, 1/3/{\$0.41}}
+    \node[minimum width=\cw cm, minimum height=\rh cm, align=center,
+          fill=pBg, draw=pRule, line width=1pt] at ({\j*\cw},{-\i*\rh}) {\v};
+\end{tikzpicture}
+\end{center}
+\figcap{Fig 10. Comparable cost per idea --- the claim under test is \emph{better ideas at similar cost}.}
+\end{pblock}
+%% ---- end section 7 ---------------------------------------------------
+
+\begin{pblock}{8 \ \ Takeaways}
+\begin{itemize}\itemsep5pt
+\item \textbf{A taxonomy chosen by downstream action, not by convention.} Three intent
+  classes, each kept only because Prior would act differently on it --- validated blind at
+  \num{95\% accuracy}, \num{macro-F1 0.892}.
+\item \textbf{The rubric was the lever, not the model.} The constraint inverted from ``do
+  not classify'' to ``must classify'', and the fix for over-firing was to define a class
+  \emph{positively} rather than forbid its neighbour.
+\item \textbf{The two graphs are complementary} --- 118 shared pairs of 1,059 --- and the
+  contrast signal is nearly invisible to the semantic layer (4 of 26 pairs). Citation
+  evidence belongs as \emph{evidence and direction}, not as a relabel.
+\item \textbf{Next:} feed intent into the cartographer's labelling prompt and measure
+  whether \ttx{contradicts} precision moves off 36\%.
+\end{itemize}
+
+\end{pblock}
+
+\end{minipage}
+
+\end{frame}
+\end{document}
