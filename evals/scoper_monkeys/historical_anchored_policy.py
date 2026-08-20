@@ -58,6 +58,14 @@ def yield_below(summary: dict, prefix: str, epsilon: float) -> bool:
     return candidates == 0 or eligible / candidates < epsilon
 
 
+def complete_screen(status_path: Path) -> bool:
+    if not status_path.exists():
+        return False
+    status = json.loads(status_path.read_text())
+    return int(status.get("records") or 0) == (
+        int(status.get("eligible") or 0) + int(status.get("excluded") or 0))
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--scope", type=Path, required=True,
@@ -149,8 +157,10 @@ def main() -> None:
                   "--out-dir", str(strict_dir), "--cache", str(args.out_dir / "strict-cache.jsonl")]
     if args.model:
         strict_cmd += ["--model", args.model]
-    if not (strict_dir / "status.json").exists():
+    if not complete_screen(strict_dir / "status.json"):
         invoke(strict_cmd, env=env, ledger=ledger)
+    if not complete_screen(strict_dir / "status.json"):
+        raise RuntimeError("strict screen remains incomplete after resume")
     snapshot = args.out_dir / "snapshot"; snapshot.mkdir(exist_ok=True)
     write_jsonl(snapshot / "eligible.jsonl", rows(strict_dir / "eligible.jsonl"))
     for role in ("retrieval_only", "uncertain"):

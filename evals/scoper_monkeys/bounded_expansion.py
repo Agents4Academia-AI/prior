@@ -62,6 +62,18 @@ def ensure_file(path: Path) -> None:
         path.touch()
 
 
+def require_complete_screen(status_path: Path) -> dict:
+    """Reject a superficially successful but only partially screened stage."""
+    status = json.loads(status_path.read_text())
+    records = int(status.get("records") or 0)
+    decided = int(status.get("eligible") or 0) + int(status.get("excluded") or 0)
+    if decided != records:
+        raise RuntimeError(
+            f"incomplete screen at {status_path}: {decided}/{records} decisions; "
+            "resume after restoring the model backend")
+    return status
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--screen-dir", type=Path,
@@ -137,6 +149,7 @@ def main() -> None:
         if args.model:
             initial_screen_cmd += ["--model", args.model]
         run(initial_screen_cmd, env=env, ledger=ledger)
+        require_complete_screen(initial_screen / "status.json")
         working_screen = args.out_dir / "initial-snapshot"
         working_screen.mkdir(exist_ok=True)
         initial_eligible = rows(initial_screen / "eligible.jsonl")
@@ -168,6 +181,7 @@ def main() -> None:
             if args.model:
                 anchor_cmd += ["--model", args.model]
             run(anchor_cmd, env=env, ledger=ledger)
+            require_complete_screen(anchor_screen / "status.json")
             anchor_eligible = rows(anchor_screen / "eligible.jsonl")
 
         # A work can be independently found by search and supplied as an anchor.
@@ -248,6 +262,7 @@ def main() -> None:
     if args.model:
         screen_cmd += ["--model", args.model]
     run(screen_cmd, env=env, ledger=ledger)
+    require_complete_screen(query_screen / "status.json")
 
     citation_seed_dir = args.out_dir / "citation-seeds"
     citation_seed_dir.mkdir(exist_ok=True)
@@ -298,6 +313,7 @@ def main() -> None:
         if args.model:
             citation_cmd += ["--model", args.model]
         run(citation_cmd, env=env, ledger=ledger)
+        require_complete_screen(citation_screen / "status.json")
 
     final_dir = args.out_dir / "snapshot"
     final_dir.mkdir(exist_ok=True)
@@ -340,9 +356,9 @@ def main() -> None:
         "autonomous_initial_eligible": count(args.out_dir / "initial-screen" / "eligible.jsonl"),
         "supplied_anchor_records": sum(count(path) for path in args.anchor_papers),
         "screened_anchor_eligible": count(args.out_dir / "anchor-screen" / "eligible.jsonl"),
-        "query_candidates_screened": json.loads((query_screen / "status.json").read_text())["records"],
+        "query_candidates_screened": require_complete_screen(query_screen / "status.json")["records"],
         "query_eligible": count(query_screen / "eligible.jsonl"),
-        "citation_candidates_screened": json.loads((citation_screen / "status.json").read_text())["records"],
+        "citation_candidates_screened": require_complete_screen(citation_screen / "status.json")["records"],
         "citation_eligible": count(citation_screen / "eligible.jsonl"),
         "snapshot_eligible": len(final), "hidden_targets_loaded": False,
         "finished_at": datetime.now(timezone.utc).isoformat(),

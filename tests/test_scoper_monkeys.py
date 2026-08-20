@@ -77,6 +77,19 @@ def test_bounded_expansion_materialises_empty_stage_checkpoint(tmp_path):
     assert checkpoint.read_text() == ""
 
 
+def test_bounded_expansion_rejects_partial_screen_status(tmp_path):
+    bounded = _load("bounded_expansion")
+    status = tmp_path / "status.json"
+    status.write_text(json.dumps({"records": 10, "eligible": 2, "excluded": 3}))
+    try:
+        bounded.require_complete_screen(status)
+        assert False, "partial screens must not become pipeline snapshots"
+    except RuntimeError as error:
+        assert "5/10 decisions" in str(error)
+    status.write_text(json.dumps({"records": 10, "eligible": 2, "excluded": 8}))
+    assert bounded.require_complete_screen(status)["records"] == 10
+
+
 def test_stage_recall_and_miss_diagnosis(tmp_path, monkeypatch):
     # score.py imports common by its script-local name.
     monkeypatch.syspath_prepend(str(ROOT / "evals" / "scoper_monkeys"))
