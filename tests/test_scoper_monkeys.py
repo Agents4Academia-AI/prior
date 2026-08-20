@@ -41,6 +41,25 @@ def test_gold_bib_parser_and_identity(tmp_path):
     ) == 1.0
 
 
+def test_gold_jsonl_accepts_nested_frozen_target_rows(tmp_path):
+    gold_file = tmp_path / "hidden-targets.jsonl"
+    gold_file.write_text(json.dumps({
+        "target_id": "external:0001",
+        "paper": {
+            "id": "openalex:W1",
+            "title": "A Nested Frozen Target",
+            "doi": "https://doi.org/10.1234/NESTED",
+            "year": 2026,
+        },
+    }) + "\n")
+
+    gold = common.load_gold(gold_file)
+
+    assert gold == [common.GoldItem(
+        "external:0001", "A Nested Frozen Target", "10.1234/nested", "", 2026
+    )]
+
+
 def test_stage_recall_and_miss_diagnosis(tmp_path, monkeypatch):
     # score.py imports common by its script-local name.
     monkeypatch.syspath_prepend(str(ROOT / "evals" / "scoper_monkeys"))

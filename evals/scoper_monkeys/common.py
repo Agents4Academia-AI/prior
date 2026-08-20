@@ -67,15 +67,16 @@ def _bib_field(entry: str, name: str) -> str:
 def _gold_from_rows(rows: Iterable[dict]) -> list[GoldItem]:
     out: list[GoldItem] = []
     for index, row in enumerate(rows):
-        title = " ".join(re.sub(r"[{}]", "", str(row.get("title", ""))).split())
+        metadata = row.get("paper") if isinstance(row.get("paper"), dict) else row
+        title = " ".join(re.sub(r"[{}]", "", str(metadata.get("title", ""))).split())
         if not title:
             continue
-        year_text = str(row.get("year", "") or "")
+        year_text = str(metadata.get("year", "") or "")
         out.append(GoldItem(
-            gold_id=str(row.get("gold_id") or row.get("id") or f"gold:{index:05d}"),
+            gold_id=str(row.get("gold_id") or row.get("target_id") or metadata.get("id") or f"gold:{index:05d}"),
             title=title,
-            doi=normalise_doi(str(row.get("doi", "") or "")),
-            arxiv=normalise_arxiv(str(row.get("arxiv", "") or "")),
+            doi=normalise_doi(str(metadata.get("doi", "") or "")),
+            arxiv=normalise_arxiv(str(metadata.get("arxiv", "") or "")),
             year=int(year_text) if year_text.isdigit() else None,
         ))
     return out
