@@ -3,6 +3,8 @@ omitted indices, then keeps anything still undecided (recall-safe). Offline: the
 LLM call is stubbed.
 """
 
+import pytest
+
 from prior import scoper
 from prior.models import Paper
 
@@ -49,3 +51,33 @@ def test_still_undecided_is_kept_recall_safe(monkeypatch):
     kd = {p.id: r for p, r in kept}
     assert "b" in kd and kd["b"] == "undecided — kept for review"   # kept, not dropped
     assert all(p.id != "b" for p, _ in dropped)
+
+
+def test_contradictory_accept_is_reasked(monkeypatch):
+    calls = 0
+
+    def fake_structured(**_kw):
+        nonlocal calls
+        calls += 1
+        if calls == 1:
+            return {"decisions": [{"index": 0, "in_scope": True,
+                                    "reason": "This is a review article and out of scope."}]}
+        return {"decisions": [{"index": 0, "in_scope": False,
+                                "reason": "A review article, excluded by the primary-source rule."}]}
+
+    monkeypatch.setattr(scoper.llm, "structured", fake_structured)
+    kept, dropped = scoper.scope(TOPIC, [CANDS[0]], progress=lambda _m: None)
+    assert calls == 2
+    assert not kept and _ids(dropped) == {"a"}
+
+
+def test_persistent_contradiction_fails_without_caching(monkeypatch, tmp_path):
+    def fake_structured(**_kw):
+        return {"decisions": [{"index": 0, "in_scope": True,
+                                "reason": "This paper is out of scope."}]}
+
+    monkeypatch.setattr(scoper.llm, "structured", fake_structured)
+    cache = tmp_path / "scope.jsonl"
+    with pytest.raises(RuntimeError, match="internally contradictory"):
+        scoper.scope(TOPIC, [CANDS[0]], cache_path=cache, progress=lambda _m: None)
+    assert not cache.read_text()

@@ -473,6 +473,22 @@ def _ask_scope(topic_def: str, items: list[Paper], model: str | None) -> dict[in
             if isinstance(d.get("index"), int)}
 
 
+_ACCEPT_CONTRADICTION = re.compile(
+    r"(?:\bout of scope\b|\b(?:is|reads as) (?:a )?(?:survey|review article)\b|"
+    r"\b(?:position|perspective|opinion) paper\b|\bdoes not (?:fit|meet)\b)", re.I)
+_EXCLUDE_CONTRADICTION = re.compile(
+    r"(?:\bdirectly in scope\b|\bdirectly (?:fits|matches)\b|"
+    r"\bsatisfies the (?:inclusion|in-scope) criteria\b)", re.I)
+
+
+def _scope_decision_conflict(decision: dict) -> bool:
+    """Detect an explicit contradiction between a label and its rationale."""
+    reason = str(decision.get("reason") or "")
+    if bool(decision.get("in_scope")):
+        return bool(_ACCEPT_CONTRADICTION.search(reason))
+    return bool(_EXCLUDE_CONTRADICTION.search(reason))
+
+
 def scope(topic_def: str, candidates: list[Paper], *, model: str | None = None,
           batch: int = 12, cache_path: str | Path | None = None,
           use_prefilter: bool = False,
@@ -497,7 +513,10 @@ def scope(topic_def: str, candidates: list[Paper], *, model: str | None = None,
                 continue
             try:                                   # tolerate a torn final line
                 d = json.loads(line)
-                cache[d["id"]] = d
+                # Old caches may contain the exact failure this guard prevents.
+                # Treat contradictory entries as absent so they are re-judged.
+                if not _scope_decision_conflict(d):
+                    cache[d["id"]] = d
             except (ValueError, KeyError):
                 continue
 
@@ -537,6 +556,20 @@ def scope(topic_def: str, candidates: list[Paper], *, model: str | None = None,
                 still = [j for j in range(len(chunk)) if j not in dec]
                 if still:
                     progress(f"  {len(still)} undecided after re-ask — kept for review")
+            # Structured output guarantees a boolean, but not that the boolean
+            # agrees with its rationale. Re-judge contradictions individually and
+            # refuse to cache a decision that remains internally inconsistent.
+            conflicts = [j for j, decision in dec.items()
+                         if j < len(chunk) and _scope_decision_conflict(decision)]
+            for j in conflicts:
+                progress(f"  contradictory scope decision for {chunk[j].id} — re-asking")
+                revised = _ask_scope(topic_def, [chunk[j]], model).get(0)
+                if revised is None or _scope_decision_conflict(revised):
+                    raise RuntimeError(
+                        "scope decision remained internally contradictory after re-ask: "
+                        f"{chunk[j].id} | {json.dumps(revised or dec[j], ensure_ascii=False)}"
+                    )
+                dec[j] = revised
             for j, p in enumerate(chunk):
                 d = dec.get(j)
                 if d is None:                      # undecided → keep (recall-safe)
