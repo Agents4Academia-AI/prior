@@ -32,6 +32,13 @@ pool. Sixty-five anchor entries occur in the strict 255 and 58 entries occur in
 the released 152. After work-level deduplication, those 58 entries represent 55
 distinct released works; the remaining 97 released works are non-anchor targets.
 
+The fixed scaffold is exactly recoverable as 23 queries from historical
+`scripts/build_scoped.py`. The query generator used the Scoper prompt requesting
+6--10 diverse OpenAlex/arXiv queries and the configured Reader model,
+`claude-sonnet-4-6`. The generated strings were not persisted, so a new run is a
+procedural replication with the same prompt, topic, scaffold, and model rather
+than a claim of identical query text.
+
 The frozen reconstruction bundle contains exact bibliography copies, hashes,
 entry-level provenance, and resolved paper records. Title-resolved records are
 marked as approximations because the historical run queried live OpenAlex.

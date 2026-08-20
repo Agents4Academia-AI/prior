@@ -75,12 +75,18 @@ def main() -> None:
     ap.add_argument("--out-dir", type=Path, required=True)
     ap.add_argument("--components", type=int, default=8)
     ap.add_argument("--initial-query-count", type=int, default=10)
+    ap.add_argument("--fixed-queries", type=Path,
+                    help="Optional fixed query scaffold used before generated queries")
     ap.add_argument("--initial-depth", type=int, default=50)
     ap.add_argument("--max-depth", type=int, default=200)
     ap.add_argument("--citation-seeds", type=int, default=200)
     ap.add_argument("--citation-page", type=int, default=200)
     ap.add_argument("--citation-workers", type=int, default=2)
     ap.add_argument("--model")
+    ap.add_argument("--screen-cache", type=Path,
+                    help="Shared screening cache across staged policy rounds")
+    ap.add_argument("--skip-adaptive", action="store_true")
+    ap.add_argument("--skip-citation", action="store_true")
     ap.add_argument("--resume", action="store_true")
     args = ap.parse_args()
     strict_scope = args.strict_scope or args.scope
@@ -89,6 +95,8 @@ def main() -> None:
         raise SystemExit("output directory is not empty; pass --resume to reuse checkpoints")
     args.out_dir.mkdir(parents=True, exist_ok=True)
     ledger = args.out_dir / "run-ledger.jsonl"
+    screen_cache = args.screen_cache or (args.out_dir / "screen-cache.jsonl")
+    screen_cache.parent.mkdir(parents=True, exist_ok=True)
     env = dict(os.environ); env["PYTHONPATH"] = str(ROOT / "src")
     py = sys.executable
 
@@ -109,6 +117,8 @@ def main() -> None:
                       str(args.initial_query_count)]
         if args.model:
             query_plan += ["--model", args.model]
+        if args.fixed_queries:
+            query_plan += ["--fixed-queries", str(args.fixed_queries)]
         run(query_plan, env=env, ledger=ledger)
         run([py, str(HERE / "depth_ablation.py"), "collect", "--queries",
              str(initial / "initial-queries.txt"), "--out",
@@ -123,7 +133,7 @@ def main() -> None:
             py, str(HERE / "product_disagreement.py"), "screen-historical",
             "--input", str(initial / "adaptive-pre_cutoff-papers.jsonl"),
             "--topic", str(strict_scope), "--out-dir", str(initial_screen),
-            "--cache", str(args.out_dir / "screen-cache.jsonl")]
+            "--cache", str(screen_cache)]
         if args.model:
             initial_screen_cmd += ["--model", args.model]
         run(initial_screen_cmd, env=env, ledger=ledger)
@@ -154,7 +164,7 @@ def main() -> None:
                 py, str(HERE / "product_disagreement.py"), "screen-historical",
                 "--input", str(anchor_input), "--topic", str(strict_scope),
                 "--out-dir", str(anchor_screen), "--cache",
-                str(args.out_dir / "screen-cache.jsonl")]
+                str(screen_cache)]
             if args.model:
                 anchor_cmd += ["--model", args.model]
             run(anchor_cmd, env=env, ledger=ledger)
@@ -185,6 +195,10 @@ def main() -> None:
         "screen_sha256": {path.stem: sha(path) for path in required},
         "anchor_inputs": [{"path": str(path), "sha256": sha(path),
                            "records": count(path)} for path in args.anchor_papers],
+        "fixed_queries": ({"path": str(args.fixed_queries),
+                           "sha256": sha(args.fixed_queries)}
+                          if args.fixed_queries else None),
+        "screen_cache": str(screen_cache),
         "parameters": {"components": args.components, "queries_per_component": 2,
                        "initial_query_count": args.initial_query_count,
                        "initial_depth_per_query_source": args.initial_depth,
@@ -192,7 +206,9 @@ def main() -> None:
                        "citation_seeds": args.citation_seeds,
                        "citation_page": args.citation_page,
                        "adaptive_rounds": 1, "citation_hops": 1,
-                       "sources": ["openalex", "arxiv"], "model": args.model},
+                       "sources": ["openalex", "arxiv"], "model": args.model,
+                       "skip_adaptive": args.skip_adaptive,
+                       "skip_citation": args.skip_citation},
         "started_at": datetime.now(timezone.utc).isoformat(),
     }
     (args.out_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
@@ -200,7 +216,7 @@ def main() -> None:
     query_dir = args.out_dir / "query-round"
     query_dir.mkdir(exist_ok=True)
     eligible_n = count(working_screen / "eligible.jsonl")
-    can_induce = eligible_n >= 5
+    can_induce = eligible_n >= 5 and not args.skip_adaptive
     if can_induce:
         actual_components = min(args.components, max(1, eligible_n // 3))
         run([py, str(HERE / "cpu_query_map.py"), "--screen-dir", str(working_screen),
@@ -214,7 +230,8 @@ def main() -> None:
         (query_dir / "cpu-adaptive-queries.txt").touch()
         write_jsonl(query_dir / "retrieval.jsonl", [{
             "event": "manifest", "queries": [], "reason":
-            "fewer_than_five_initial_eligible_works_for_community_induction"}])
+            ("adaptive_stage_disabled" if args.skip_adaptive else
+             "fewer_than_five_initial_eligible_works_for_community_induction")}])
     candidate_cmd = [py, str(HERE / "adaptive_candidates.py"), "--retrieval",
                      str(query_dir / "retrieval.jsonl"), "--out-dir", str(query_dir),
                      "--cutoff", "none"]
@@ -227,7 +244,7 @@ def main() -> None:
     screen_cmd = [py, str(HERE / "product_disagreement.py"), "screen-historical",
                   "--input", str(query_dir / "adaptive-pre_cutoff-papers.jsonl"),
                   "--topic", str(strict_scope), "--out-dir", str(query_screen),
-                  "--cache", str(args.out_dir / "screen-cache.jsonl")]
+                  "--cache", str(screen_cache)]
     if args.model:
         screen_cmd += ["--model", args.model]
     run(screen_cmd, env=env, ledger=ledger)
@@ -249,31 +266,38 @@ def main() -> None:
     write_jsonl(citation_seed_dir / "eligible.jsonl", eligible)
     for role in ("retrieval_only", "uncertain"):
         (citation_seed_dir / f"{role}.jsonl").touch()
-    citation_dir = args.out_dir / "citation-round"
-    citation_dir.mkdir(exist_ok=True)
-    run([py, str(HERE / "adaptive_expansion.py"), "citation-queue", "--run-dir",
-         str(citation_seed_dir), "--out-dir", str(citation_dir)], env=env, ledger=ledger)
-    run([py, str(HERE / "citation_expansion.py"), "backward", "--queue",
-         str(citation_dir / "citation-queue.jsonl"), "--out-dir", str(citation_dir)],
-        env=env, ledger=ledger)
-    run([py, str(HERE / "citation_expansion.py"), "forward-pass", "--queue",
-         str(citation_dir / "citation-queue.jsonl"), "--out-dir", str(citation_dir),
-         "--per-page", str(args.citation_page), "--max-tasks", str(args.citation_seeds),
-         "--workers", str(args.citation_workers)], env=env, ledger=ledger)
-    run([py, str(HERE / "consolidate_citations.py"), "--screen-dir",
-         str(citation_seed_dir), "--out-dir", str(citation_dir)], env=env, ledger=ledger)
-
     citation_screen = args.out_dir / "citation-screen"
-    citation_papers = citation_dir / "citation-new-candidate-papers.jsonl"
-    write_jsonl(citation_papers,
-                (row["paper"] for row in rows(citation_dir / "citation-new-candidates.jsonl")))
-    citation_cmd = [py, str(HERE / "product_disagreement.py"), "screen-historical",
-                    "--input", str(citation_papers),
-                    "--topic", str(strict_scope), "--out-dir", str(citation_screen),
-                    "--cache", str(args.out_dir / "screen-cache.jsonl")]
-    if args.model:
-        citation_cmd += ["--model", args.model]
-    run(citation_cmd, env=env, ledger=ledger)
+    if args.skip_citation:
+        citation_screen.mkdir(exist_ok=True)
+        for name in ("eligible.jsonl", "excluded.jsonl"):
+            (citation_screen / name).touch()
+        (citation_screen / "status.json").write_text(json.dumps({
+            "records": 0, "eligible": 0, "excluded": 0,
+            "reason": "citation_stage_disabled"}, indent=2) + "\n")
+    else:
+        citation_dir = args.out_dir / "citation-round"
+        citation_dir.mkdir(exist_ok=True)
+        run([py, str(HERE / "adaptive_expansion.py"), "citation-queue", "--run-dir",
+             str(citation_seed_dir), "--out-dir", str(citation_dir)], env=env, ledger=ledger)
+        run([py, str(HERE / "citation_expansion.py"), "backward", "--queue",
+             str(citation_dir / "citation-queue.jsonl"), "--out-dir", str(citation_dir)],
+            env=env, ledger=ledger)
+        run([py, str(HERE / "citation_expansion.py"), "forward-pass", "--queue",
+             str(citation_dir / "citation-queue.jsonl"), "--out-dir", str(citation_dir),
+             "--per-page", str(args.citation_page), "--max-tasks", str(args.citation_seeds),
+             "--workers", str(args.citation_workers)], env=env, ledger=ledger)
+        run([py, str(HERE / "consolidate_citations.py"), "--screen-dir",
+             str(citation_seed_dir), "--out-dir", str(citation_dir)], env=env, ledger=ledger)
+        citation_papers = citation_dir / "citation-new-candidate-papers.jsonl"
+        write_jsonl(citation_papers,
+                    (row["paper"] for row in rows(citation_dir / "citation-new-candidates.jsonl")))
+        citation_cmd = [py, str(HERE / "product_disagreement.py"), "screen-historical",
+                        "--input", str(citation_papers),
+                        "--topic", str(strict_scope), "--out-dir", str(citation_screen),
+                        "--cache", str(screen_cache)]
+        if args.model:
+            citation_cmd += ["--model", args.model]
+        run(citation_cmd, env=env, ledger=ledger)
 
     final_dir = args.out_dir / "snapshot"
     final_dir.mkdir(exist_ok=True)
@@ -288,6 +312,8 @@ def main() -> None:
         if key not in seen:
             seen.add(key); final.append(row)
     write_jsonl(final_dir / "eligible.jsonl", final)
+    for role in ("retrieval_only", "uncertain"):
+        (final_dir / f"{role}.jsonl").touch()
     routes = {}
     route_sources = [
         ("initial_search", args.out_dir / "initial-screen" / "eligible.jsonl"),
