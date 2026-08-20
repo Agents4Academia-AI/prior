@@ -1,4 +1,4 @@
-"""Run one autonomous, bounded Scoper expansion from an existing snapshot.
+"""Run one autonomous, bounded Scoper construction or snapshot expansion.
 
 This is the committed workshop policy, not an exhaustiveness claim.  It retains
 the supplied snapshot, induces lexical communities, opens one query round,
@@ -13,6 +13,7 @@ import argparse
 import hashlib
 import json
 import os
+import shutil
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -63,12 +64,18 @@ def ensure_file(path: Path) -> None:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--screen-dir", type=Path, required=True,
-                    help="Existing eligible/retrieval_only/uncertain JSONL snapshot")
+    ap.add_argument("--screen-dir", type=Path,
+                    help="Existing snapshot; omit for a zero-shot construction run")
+    ap.add_argument("--anchor-papers", type=Path, action="append", default=[],
+                    help="Frozen JSONL papers supplied by researchers; repeatable")
     ap.add_argument("--scope", type=Path, required=True,
-                    help="Strict natural-language inclusion/exclusion criteria")
+                    help="Natural-language discovery scope")
+    ap.add_argument("--strict-scope", type=Path,
+                    help="Optional stricter screening scope; defaults to --scope")
     ap.add_argument("--out-dir", type=Path, required=True)
     ap.add_argument("--components", type=int, default=8)
+    ap.add_argument("--initial-query-count", type=int, default=10)
+    ap.add_argument("--initial-depth", type=int, default=50)
     ap.add_argument("--max-depth", type=int, default=200)
     ap.add_argument("--citation-seeds", type=int, default=200)
     ap.add_argument("--citation-page", type=int, default=200)
@@ -76,12 +83,8 @@ def main() -> None:
     ap.add_argument("--model")
     ap.add_argument("--resume", action="store_true")
     args = ap.parse_args()
+    strict_scope = args.strict_scope or args.scope
 
-    required = [args.screen_dir / f"{role}.jsonl"
-                for role in ("eligible", "retrieval_only", "uncertain")]
-    missing = [str(path) for path in required if not path.exists()]
-    if missing:
-        raise SystemExit("missing snapshot inputs: " + ", ".join(missing))
     if args.out_dir.exists() and any(args.out_dir.iterdir()) and not args.resume:
         raise SystemExit("output directory is not empty; pass --resume to reuse checkpoints")
     args.out_dir.mkdir(parents=True, exist_ok=True)
@@ -89,12 +92,102 @@ def main() -> None:
     env = dict(os.environ); env["PYTHONPATH"] = str(ROOT / "src")
     py = sys.executable
 
+    if args.screen_dir:
+        required = [args.screen_dir / f"{role}.jsonl"
+                    for role in ("eligible", "retrieval_only", "uncertain")]
+        missing = [str(path) for path in required if not path.exists()]
+        if missing:
+            raise SystemExit("missing snapshot inputs: " + ", ".join(missing))
+        working_screen = args.screen_dir
+        mode = "living_update"
+    else:
+        mode = "anchored_construction" if args.anchor_papers else "zero_shot_construction"
+        initial = args.out_dir / "initial"
+        initial.mkdir(exist_ok=True)
+        query_plan = [py, str(HERE / "initial_query_plan.py"), "--scope", str(args.scope),
+                      "--out-dir", str(initial), "--max-queries",
+                      str(args.initial_query_count)]
+        if args.model:
+            query_plan += ["--model", args.model]
+        run(query_plan, env=env, ledger=ledger)
+        run([py, str(HERE / "depth_ablation.py"), "collect", "--queries",
+             str(initial / "initial-queries.txt"), "--out",
+             str(initial / "retrieval.jsonl"), "--max-depth", str(args.initial_depth)],
+            env=env, ledger=ledger)
+        run([py, str(HERE / "adaptive_candidates.py"), "--retrieval",
+             str(initial / "retrieval.jsonl"), "--out-dir", str(initial),
+             "--cutoff", "none"], env=env, ledger=ledger)
+        ensure_file(initial / "adaptive-pre_cutoff-papers.jsonl")
+        initial_screen = args.out_dir / "initial-screen"
+        initial_screen_cmd = [
+            py, str(HERE / "product_disagreement.py"), "screen-historical",
+            "--input", str(initial / "adaptive-pre_cutoff-papers.jsonl"),
+            "--topic", str(strict_scope), "--out-dir", str(initial_screen),
+            "--cache", str(args.out_dir / "screen-cache.jsonl")]
+        if args.model:
+            initial_screen_cmd += ["--model", args.model]
+        run(initial_screen_cmd, env=env, ledger=ledger)
+        working_screen = args.out_dir / "initial-snapshot"
+        working_screen.mkdir(exist_ok=True)
+        initial_eligible = rows(initial_screen / "eligible.jsonl")
+        anchor_eligible = []
+        if args.anchor_papers:
+            anchor_input = args.out_dir / "anchor-papers.jsonl"
+            supplied = []
+            supplied_ledger = []
+            for path in args.anchor_papers:
+                for row in rows(path):
+                    paper = row.get("paper", row)
+                    supplied.append(paper)
+                    supplied_ledger.append({
+                        "paper_id": paper.get("id"), "title": paper.get("title"),
+                        "work_id": paper.get("work_id"), "input_path": str(path),
+                        "input_sha256": sha(path),
+                        "anchor_provenance": row.get("anchor_provenance", {}),
+                    })
+            # Preserve the supplied set before model screening. This is the
+            # researcher input, not hidden evaluation data.
+            write_jsonl(anchor_input, supplied)
+            write_jsonl(args.out_dir / "anchor-input-ledger.jsonl", supplied_ledger)
+            anchor_screen = args.out_dir / "anchor-screen"
+            anchor_cmd = [
+                py, str(HERE / "product_disagreement.py"), "screen-historical",
+                "--input", str(anchor_input), "--topic", str(strict_scope),
+                "--out-dir", str(anchor_screen), "--cache",
+                str(args.out_dir / "screen-cache.jsonl")]
+            if args.model:
+                anchor_cmd += ["--model", args.model]
+            run(anchor_cmd, env=env, ledger=ledger)
+            anchor_eligible = rows(anchor_screen / "eligible.jsonl")
+
+        # A work can be independently found by search and supplied as an anchor.
+        # Keep one paper row here; discovery-ledger.jsonl below preserves every
+        # route rather than forcing a mutually exclusive attribution.
+        combined = []
+        seen_initial = set()
+        for row in initial_eligible + anchor_eligible:
+            paper = row.get("paper", row)
+            key = paper.get("work_id") or paper.get("id") or paper.get("title", "").lower()
+            if key not in seen_initial:
+                seen_initial.add(key); combined.append(row)
+        write_jsonl(working_screen / "eligible.jsonl", combined)
+        for role in ("retrieval_only", "uncertain"):
+            (working_screen / f"{role}.jsonl").touch()
+        required = [working_screen / f"{role}.jsonl"
+                    for role in ("eligible", "retrieval_only", "uncertain")]
+
     manifest = {
-        "policy": "bounded-adaptive-v1", "hidden_targets_loaded": False,
+        "policy": "bounded-adaptive-v1", "mode": mode,
+        "hidden_targets_loaded": False,
         "scope": str(args.scope), "scope_sha256": sha(args.scope),
-        "screen_dir": str(args.screen_dir),
+        "strict_scope": str(strict_scope), "strict_scope_sha256": sha(strict_scope),
+        "screen_dir": str(args.screen_dir) if args.screen_dir else None,
         "screen_sha256": {path.stem: sha(path) for path in required},
+        "anchor_inputs": [{"path": str(path), "sha256": sha(path),
+                           "records": count(path)} for path in args.anchor_papers],
         "parameters": {"components": args.components, "queries_per_component": 2,
+                       "initial_query_count": args.initial_query_count,
+                       "initial_depth_per_query_source": args.initial_depth,
                        "max_depth_per_query_source": args.max_depth,
                        "citation_seeds": args.citation_seeds,
                        "citation_page": args.citation_page,
@@ -106,13 +199,22 @@ def main() -> None:
 
     query_dir = args.out_dir / "query-round"
     query_dir.mkdir(exist_ok=True)
-    run([py, str(HERE / "cpu_query_map.py"), "--screen-dir", str(args.screen_dir),
-         "--out-dir", str(query_dir), "--components", str(args.components)],
-        env=env, ledger=ledger)
-    run([py, str(HERE / "depth_ablation.py"), "collect", "--queries",
-         str(query_dir / "cpu-adaptive-queries.txt"), "--out",
-         str(query_dir / "retrieval.jsonl"), "--max-depth", str(args.max_depth)],
-        env=env, ledger=ledger)
+    eligible_n = count(working_screen / "eligible.jsonl")
+    can_induce = eligible_n >= 5
+    if can_induce:
+        actual_components = min(args.components, max(1, eligible_n // 3))
+        run([py, str(HERE / "cpu_query_map.py"), "--screen-dir", str(working_screen),
+             "--out-dir", str(query_dir), "--components", str(actual_components)],
+            env=env, ledger=ledger)
+        run([py, str(HERE / "depth_ablation.py"), "collect", "--queries",
+             str(query_dir / "cpu-adaptive-queries.txt"), "--out",
+             str(query_dir / "retrieval.jsonl"), "--max-depth", str(args.max_depth)],
+            env=env, ledger=ledger)
+    else:
+        (query_dir / "cpu-adaptive-queries.txt").touch()
+        write_jsonl(query_dir / "retrieval.jsonl", [{
+            "event": "manifest", "queries": [], "reason":
+            "fewer_than_five_initial_eligible_works_for_community_induction"}])
     candidate_cmd = [py, str(HERE / "adaptive_candidates.py"), "--retrieval",
                      str(query_dir / "retrieval.jsonl"), "--out-dir", str(query_dir),
                      "--cutoff", "none"]
@@ -124,7 +226,7 @@ def main() -> None:
     query_screen = args.out_dir / "query-screen"
     screen_cmd = [py, str(HERE / "product_disagreement.py"), "screen-historical",
                   "--input", str(query_dir / "adaptive-pre_cutoff-papers.jsonl"),
-                  "--topic", str(args.scope), "--out-dir", str(query_screen),
+                  "--topic", str(strict_scope), "--out-dir", str(query_screen),
                   "--cache", str(args.out_dir / "screen-cache.jsonl")]
     if args.model:
         screen_cmd += ["--model", args.model]
@@ -132,7 +234,18 @@ def main() -> None:
 
     citation_seed_dir = args.out_dir / "citation-seeds"
     citation_seed_dir.mkdir(exist_ok=True)
-    eligible = rows(query_screen / "eligible.jsonl")[:args.citation_seeds]
+    # Seed citations from every eligible work available at this point. The
+    # historical pipeline snowballed the accumulated corpus, including accepted
+    # anchors; limiting this to one stage recreates its former bridge-seed bug.
+    eligible = []
+    seen_seed = set()
+    for path in (working_screen / "eligible.jsonl", query_screen / "eligible.jsonl"):
+        for row in rows(path):
+            paper = row.get("paper", row)
+            key = paper.get("work_id") or paper.get("id") or paper.get("title", "").lower()
+            if key not in seen_seed:
+                seen_seed.add(key); eligible.append(row)
+    eligible = eligible[:args.citation_seeds]
     write_jsonl(citation_seed_dir / "eligible.jsonl", eligible)
     for role in ("retrieval_only", "uncertain"):
         (citation_seed_dir / f"{role}.jsonl").touch()
@@ -156,7 +269,7 @@ def main() -> None:
                 (row["paper"] for row in rows(citation_dir / "citation-new-candidates.jsonl")))
     citation_cmd = [py, str(HERE / "product_disagreement.py"), "screen-historical",
                     "--input", str(citation_papers),
-                    "--topic", str(args.scope), "--out-dir", str(citation_screen),
+                    "--topic", str(strict_scope), "--out-dir", str(citation_screen),
                     "--cache", str(args.out_dir / "screen-cache.jsonl")]
     if args.model:
         citation_cmd += ["--model", args.model]
@@ -165,7 +278,7 @@ def main() -> None:
     final_dir = args.out_dir / "snapshot"
     final_dir.mkdir(exist_ok=True)
     combined = []
-    for path in (args.screen_dir / "eligible.jsonl", query_screen / "eligible.jsonl",
+    for path in (working_screen / "eligible.jsonl", query_screen / "eligible.jsonl",
                  citation_screen / "eligible.jsonl"):
         combined.extend(rows(path))
     seen = set(); final = []
@@ -175,9 +288,32 @@ def main() -> None:
         if key not in seen:
             seen.add(key); final.append(row)
     write_jsonl(final_dir / "eligible.jsonl", final)
+    routes = {}
+    route_sources = [
+        ("initial_search", args.out_dir / "initial-screen" / "eligible.jsonl"),
+        ("supplied_anchor", args.out_dir / "anchor-screen" / "eligible.jsonl"),
+        ("adaptive_query", query_screen / "eligible.jsonl"),
+        ("citation", citation_screen / "eligible.jsonl"),
+    ]
+    for channel, path in route_sources:
+        if not path.exists():
+            continue
+        for row in rows(path):
+            paper = row.get("paper", row)
+            key = paper.get("work_id") or paper.get("id") or paper.get("title", "").lower()
+            record = routes.setdefault(key, {"work_key": key,
+                "paper_id": paper.get("id"), "title": paper.get("title"),
+                "discovery_channels": []})
+            if channel not in record["discovery_channels"]:
+                record["discovery_channels"].append(channel)
+    write_jsonl(args.out_dir / "discovery-ledger.jsonl", routes.values())
     summary = {
-        "status": "complete", "policy": "bounded-adaptive-v1",
-        "retained_existing": count(args.screen_dir / "eligible.jsonl"),
+        "status": "complete", "policy": "bounded-adaptive-v1", "mode": mode,
+        "retained_existing": count(working_screen / "eligible.jsonl") if args.screen_dir else 0,
+        "initial_eligible": count(working_screen / "eligible.jsonl") if not args.screen_dir else None,
+        "autonomous_initial_eligible": count(args.out_dir / "initial-screen" / "eligible.jsonl"),
+        "supplied_anchor_records": sum(count(path) for path in args.anchor_papers),
+        "screened_anchor_eligible": count(args.out_dir / "anchor-screen" / "eligible.jsonl"),
         "query_candidates_screened": json.loads((query_screen / "status.json").read_text())["records"],
         "query_eligible": count(query_screen / "eligible.jsonl"),
         "citation_candidates_screened": json.loads((citation_screen / "status.json").read_text())["records"],

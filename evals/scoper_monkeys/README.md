@@ -61,6 +61,37 @@ python evals/scoper_monkeys/bounded_expansion.py \
   --out-dir local/atlas-v2-expansion
 ```
 
+Omit `--screen-dir` for a zero-shot construction. When discovery and synthesis
+boundaries differ, pass both the broad natural-language input and strict screen:
+
+```bash
+python evals/scoper_monkeys/bounded_expansion.py \
+  --scope local/original-natural-language-input.txt \
+  --strict-scope local/strict-scope.txt \
+  --out-dir local/atlas-v1-zero-shot
+```
+
+For the realistic anchored policy, pass one or more frozen researcher-provided
+paper manifests. Anchors are not silently included: they are screened against
+the same strict scope, folded into the initial evidence map, used when inducing
+adaptive queries, and allowed to seed citation expansion.
+
+```bash
+python evals/scoper_monkeys/bounded_expansion.py \
+  --scope local/original-natural-language-input.txt \
+  --strict-scope local/strict-scope.txt \
+  --anchor-papers local/resolved-anchor-papers.jsonl \
+  --out-dir local/atlas-v1-anchored
+```
+
+`anchor-input-ledger.jsonl` preserves supplied-paper provenance;
+`discovery-ledger.jsonl` records every route by which a final work was observed
+(`supplied_anchor`, `initial_search`, `adaptive_query`, or `citation`). These
+routes are intentionally non-exclusive: a supplied paper may also be recovered
+autonomously. This makes the following ablations comparable without changing
+the screening policy: anchors only, one-shot search, anchors plus one-shot,
+adaptive recovery, citation expansion, and the full policy.
+
 Workshop defaults are eight communities, two queries per community, depth 200
 per query/source, one adaptive round, and one OpenAlex citation hop. The output
 directory must be empty unless `--resume` is explicit. `manifest.json` freezes
