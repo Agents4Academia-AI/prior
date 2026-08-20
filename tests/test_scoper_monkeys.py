@@ -2,6 +2,7 @@ import importlib.util
 import json
 import sys
 import zipfile
+from datetime import date
 from pathlib import Path
 
 
@@ -58,6 +59,22 @@ def test_gold_jsonl_accepts_nested_frozen_target_rows(tmp_path):
     assert gold == [common.GoldItem(
         "external:0001", "A Nested Frozen Target", "10.1234/nested", "", 2026
     )]
+
+
+def test_living_adaptive_candidates_disable_retrospective_cutoff(monkeypatch):
+    monkeypatch.syspath_prepend(str(ROOT / "evals" / "scoper_monkeys"))
+    adaptive_candidates = _load("adaptive_candidates")
+    paper = {"title": "A future living-corpus work", "date": "2099-01-01"}
+    assert adaptive_candidates.cutoff_bucket(paper, None) == "pre_cutoff"
+    assert adaptive_candidates.cutoff_bucket(paper, date(2026, 6, 24)) == "post_cutoff"
+
+
+def test_bounded_expansion_materialises_empty_stage_checkpoint(tmp_path):
+    bounded = _load("bounded_expansion")
+    checkpoint = tmp_path / "empty.jsonl"
+    bounded.ensure_file(checkpoint)
+    assert checkpoint.exists()
+    assert checkpoint.read_text() == ""
 
 
 def test_stage_recall_and_miss_diagnosis(tmp_path, monkeypatch):

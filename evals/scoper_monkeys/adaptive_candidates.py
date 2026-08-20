@@ -19,7 +19,9 @@ def events(path: Path):
             yield json.loads(line)
 
 
-def cutoff_bucket(paper: dict) -> str:
+def cutoff_bucket(paper: dict, cutoff: date | None = CUTOFF) -> str:
+    if cutoff is None:
+        return "pre_cutoff"
     raw = paper.get("date") or ""
     if len(raw) == 10:
         return "post_cutoff" if date.fromisoformat(raw) > CUTOFF else "pre_cutoff"
@@ -42,7 +44,10 @@ def main() -> None:
     ap.add_argument("--retrieval", type=Path, required=True)
     ap.add_argument("--existing", type=Path, action="append", default=[])
     ap.add_argument("--out-dir", type=Path, required=True)
+    ap.add_argument("--cutoff", default=CUTOFF.isoformat(),
+                    help="YYYY-MM-DD, or 'none' for a living-corpus run")
     args = ap.parse_args(); args.out_dir.mkdir(parents=True, exist_ok=True)
+    cutoff = None if args.cutoff.lower() == "none" else date.fromisoformat(args.cutoff)
     existing = set()
     for path in args.existing: existing |= load_aliases(path)
 
@@ -68,7 +73,7 @@ def main() -> None:
                              "query_count": len(queries), "source_count": len(sources),
                              "reciprocal_rank_sum": sum(1 / h["rank"] for h in hits)}
         group["seen_in_pre_adaptive_search"] = bool(set(group["aliases"]) & existing)
-        group["cutoff_bucket"] = cutoff_bucket(group["paper"])
+        group["cutoff_bucket"] = cutoff_bucket(group["paper"], cutoff)
         bucket = "rediscovered" if group["seen_in_pre_adaptive_search"] else group["cutoff_bucket"]
         outputs[bucket].append(group)
         for h in hits:
@@ -85,7 +90,8 @@ def main() -> None:
         (args.out_dir / f"adaptive-{bucket}-papers.jsonl").write_text("".join(
             json.dumps(item["paper"], ensure_ascii=False) + "\n" for item in items))
     terminals = [r for r in events(args.retrieval) if r.get("event") == "terminal"]
-    status = {"retrieval": str(args.retrieval), "cutoff": CUTOFF.isoformat(),
+    status = {"retrieval": str(args.retrieval),
+              "cutoff": cutoff.isoformat() if cutoff else None,
               "result_occurrences": sum(1 for r in events(args.retrieval) if r.get("event") == "result"),
               "canonical_works": len(groups), "partitions": {k: len(v) for k, v in outputs.items()},
               "source_failures": sum(r.get("status") == "failed" for r in terminals),

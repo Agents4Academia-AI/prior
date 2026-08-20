@@ -44,6 +44,30 @@ python evals/scoper_monkeys/score.py \
 Use `--queries-file` to freeze generated queries across ablations. Use
 `--no-prefilter`, `--recover-rounds 0`, or `--hops 0` for ablations.
 
+## Committed bounded expansion policy
+
+`bounded_expansion.py` runs the workshop policy end to end from an existing,
+versioned Scoper snapshot. It retains existing eligible works, induces lexical
+communities, opens exactly one adaptive query round, screens novel candidates
+against the supplied strict scope, performs one bounded citation hop from newly
+eligible works, and writes the next snapshot. It never loads evaluation targets.
+
+```bash
+export PRIOR_LLM_BACKEND=api  # or another configured backend
+
+python evals/scoper_monkeys/bounded_expansion.py \
+  --screen-dir local/atlas-v1/screened \
+  --scope local/strict-scope.txt \
+  --out-dir local/atlas-v2-expansion
+```
+
+Workshop defaults are eight communities, two queries per community, depth 200
+per query/source, one adaptive round, and one OpenAlex citation hop. The output
+directory must be empty unless `--resume` is explicit. `manifest.json` freezes
+inputs and parameters; `run-ledger.jsonl` records every stage command and
+terminal status; `summary.json` and `snapshot/eligible.jsonl` are the handoff.
+This is an auditable bounded policy, not a claim of exhaustive coverage.
+
 Outputs:
 
 - the raw `--out` JSONL is a `prior.scoper-ledger/1.0` ledger with a frozen scope,
