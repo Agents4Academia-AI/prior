@@ -1,0 +1,33 @@
+{
+  "domain": "AI / LLM systems for automating and assisting scientific research",
+  "provenance": "Broad topic labels authored from seeds_draft.json (TF-IDF + KMeans k=24 over the 152-corpus papers; see select_seeds.py). Near-duplicate clusters merged; labels phrased neutrally so neither the graph arm nor the web arm is tipped toward an answer. Both arms receive the same `topic` each round.",
+  "n_seeds": 26,
+  "seeds": [
+    {"seed_id": "s01", "topic": "Automating scientific peer review with LLMs"},
+    {"seed_id": "s02", "topic": "Fully autonomous end-to-end AI scientists for machine-learning research"},
+    {"seed_id": "s03", "topic": "LLM-driven generation of scientific hypotheses"},
+    {"seed_id": "s04", "topic": "AI systems for generating novel research ideas"},
+    {"seed_id": "s05", "topic": "Deep-research and web-browsing agents for literature synthesis"},
+    {"seed_id": "s06", "topic": "Autonomous experiment design and execution by AI agents"},
+    {"seed_id": "s07", "topic": "AI for scientific discovery in materials and therapeutic design"},
+    {"seed_id": "s08", "topic": "Assessing scientific rigor and interpretation in AI-produced research"},
+    {"seed_id": "s09", "topic": "Agentic computational workflows for research pipelines"},
+    {"seed_id": "s10", "topic": "Robotic self-driving laboratories and physical lab automation"},
+    {"seed_id": "s11", "topic": "Assessing reproducibility and replication of findings with AI agents"},
+    {"seed_id": "s12", "topic": "Literature question-answering and evidence-summarization systems"},
+    {"seed_id": "s13", "topic": "Biomedical research agents and knowledge-graph reasoning"},
+    {"seed_id": "s14", "topic": "Multimodal understanding of scientific papers (figures, tables, layout)"},
+    {"seed_id": "s15", "topic": "Measuring the quality and usefulness of AI-generated research ideas"},
+    {"seed_id": "s16", "topic": "Automated scientific claim verification and evidence auditing"},
+    {"seed_id": "s17", "topic": "Bioinformatics tool-use and tool integration by AI agents"},
+    {"seed_id": "s18", "topic": "Benchmarks and environments for evaluating research agents"},
+    {"seed_id": "s19", "topic": "Reinforcement learning and evolutionary search for scientific discovery"},
+    {"seed_id": "s20", "topic": "Causal and social-science hypothesis generation with LLMs"},
+    {"seed_id": "s21", "topic": "Novelty assessment of research contributions"},
+    {"seed_id": "s22", "topic": "Human-AI collaboration in the scientific workflow (co-scientist / co-pilot)"},
+    {"seed_id": "s23", "topic": "Test-time compute and scaling for scientific reasoning"},
+    {"seed_id": "s24", "topic": "Benchmarking AI agents on replicating published research"},
+    {"seed_id": "s25", "topic": "Safety, oversight, and failure modes of autonomous research agents"},
+    {"seed_id": "s26", "topic": "Self-improving research agents that create or refine their own tools"}
+  ]
+}

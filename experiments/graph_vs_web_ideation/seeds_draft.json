@@ -1,0 +1,478 @@
+{
+  "k": 24,
+  "n_papers": 152,
+  "clusters": [
+    {
+      "cluster": 8,
+      "size": 14,
+      "keyterms": [
+        "review",
+        "reviews",
+        "peer",
+        "peer review",
+        "reviewers",
+        "feedback",
+        "reviewer",
+        "academic"
+      ],
+      "representative_titles": [
+        "Are We There Yet? Revealing the Risks of Utilizing Large Language Models in Scholarly Peer Review",
+        "GPT4 is Slightly Helpful for Peer-Review Assistance: A Pilot Study",
+        "Generative Adversarial Reviews: When LLMs Become the Critic",
+        "AgentReview: Exploring Peer Review Dynamics with LLM Agents"
+      ]
+    },
+    {
+      "cluster": 20,
+      "size": 12,
+      "keyterms": [
+        "scientist",
+        "machine learning",
+        "machine",
+        "learning",
+        "discovery",
+        "automated",
+        "code",
+        "fully"
+      ],
+      "representative_titles": [
+        "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery",
+        "Towards end-to-end automation of AI research",
+        "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search",
+        "Jr. AI Scientist and Its Risk Report: Autonomous Scientific Exploration from a Baseline Paper"
+      ]
+    },
+    {
+      "cluster": 9,
+      "size": 11,
+      "keyterms": [
+        "hypothesis",
+        "hypotheses",
+        "hypothesis generation",
+        "prompting",
+        "in-context",
+        "adversarial",
+        "knowledge",
+        "developmental"
+      ],
+      "representative_titles": [
+        "Literature Meets Data: A Synergistic Approach to Hypothesis Generation",
+        "Hypothesis Generation with Large Language Models",
+        "HypoBench: Towards Systematic and Principled Benchmarking for Hypothesis Generation",
+        "SCIHYPO - A Deep Learning Framework for Data-Driven Scientific Hypothesis Generation from Extensive Literature Analysis"
+      ]
+    },
+    {
+      "cluster": 10,
+      "size": 10,
+      "keyterms": [
+        "idea",
+        "ideas",
+        "idea generation",
+        "ideation",
+        "researchers",
+        "novelty",
+        "llm-based",
+        "iterative"
+      ],
+      "representative_titles": [
+        "Can large language models generate novel scientific ideas? A comprehensive study on data-driven astronomy",
+        "Chain of Ideas: Revolutionizing Research Via Novel Idea Development with LLM Agents",
+        "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers",
+        "Many Heads Are Better Than One: Improved Scientific Idea Generation by A LLM-Based Multi-Agent System"
+      ]
+    },
+    {
+      "cluster": 23,
+      "size": 10,
+      "keyterms": [
+        "deep",
+        "reasoning",
+        "deepresearch",
+        "web",
+        "information",
+        "tool-use",
+        "training",
+        "trajectories"
+      ],
+      "representative_titles": [
+        "DR Tulu: Reinforcement Learning with Evolving Rubrics for Deep Research",
+        "Marco DeepResearch: Unlocking Efficient Deep Research Agents via Verification-Centric Design",
+        "WebThinker: Empowering Large Reasoning Models with Deep Research Capability",
+        "DeepResearch Bench: A Comprehensive Benchmark for Deep Research Agents"
+      ]
+    },
+    {
+      "cluster": 1,
+      "size": 9,
+      "keyterms": [
+        "autonomous",
+        "implementation",
+        "medical",
+        "execution",
+        "experiment",
+        "idea",
+        "experimental",
+        "success"
+      ],
+      "representative_titles": [
+        "MLR-Copilot: Autonomous Machine Learning Research based on Large Language Models Agents",
+        "Why LLMs Aren't Scientists Yet: Lessons from Four Autonomous Research Attempts",
+        "AI-Researcher: Autonomous Scientific Innovation",
+        "EXP-Bench: Can AI Conduct AI Research Experiments?"
+      ]
+    },
+    {
+      "cluster": 5,
+      "size": 8,
+      "keyterms": [
+        "discovery",
+        "materials",
+        "hypothesis",
+        "therapeutic",
+        "hypothesis generation",
+        "multi-agent",
+        "analysis",
+        "hypotheses"
+      ],
+      "representative_titles": [
+        "Robin: A multi-agent system for automating scientific discovery",
+        "Kosmos: An AI Scientist for Autonomous Discovery",
+        "Hypothesis Generation for Materials Discovery and Design Using Goal-Driven and Constraint-Guided LLM Agents",
+        "SciAgents: Automating Scientific Discovery Through Bioinspired Multi‐Agent Intelligent Graph Reasoning"
+      ]
+    },
+    {
+      "cluster": 0,
+      "size": 7,
+      "keyterms": [
+        "biology",
+        "performance",
+        "interpretation",
+        "questions",
+        "rigor",
+        "projects",
+        "adversarial",
+        "benchmark"
+      ],
+      "representative_titles": [
+        "LAB-Bench: Measuring Capabilities of Language Models for Biology Research",
+        "Evaluating Large Language Models in Scientific Discovery",
+        "FlowBench: separating planning, fault recovery and interpretation in agentic bioinformatics",
+        "Are Large Language Models Reliable AI Scientists? Assessing Reverse-Engineering of Black-Box Systems"
+      ]
+    },
+    {
+      "cluster": 2,
+      "size": 7,
+      "keyterms": [
+        "computational",
+        "workflows",
+        "agentic",
+        "execution",
+        "agente",
+        "chemistry",
+        "problems",
+        "quantum chemistry"
+      ],
+      "representative_titles": [
+        "QUASAR: A Universal Autonomous System for Atomistic Simulation and a Benchmark of Its Capabilities",
+        "El Agente: An autonomous agent for quantum chemistry",
+        "El Agente Gráfico: Structured Execution Graphs for Scientific Agents",
+        "Agentic systems are adept at solving well-scoped, verifiable problems in computational biology"
+      ]
+    },
+    {
+      "cluster": 13,
+      "size": 7,
+      "keyterms": [
+        "laboratory",
+        "safety",
+        "robotic",
+        "automation",
+        "biological",
+        "experimental",
+        "laboratory automation",
+        "hypotheses"
+      ],
+      "representative_titles": [
+        "Evaluating large language model agents for automation of atomic force microscopy",
+        "Agentic AI Integrated with Scientific Knowledge: Laboratory Validation in Systems Biology",
+        "BioMARS: A Multi-Agent Robotic System for Autonomous Biological Experiments",
+        "Agent Laboratory: Using LLM Agents as Research Assistants"
+      ]
+    },
+    {
+      "cluster": 6,
+      "size": 6,
+      "keyterms": [
+        "reproduction",
+        "reproducibility",
+        "social",
+        "original",
+        "computational reproducibility",
+        "accuracy",
+        "code",
+        "studies"
+      ],
+      "representative_titles": [
+        "REPRO-Bench: Can Agentic AI Systems Assess the Reproducibility of Social Science Research?",
+        "AI Coding Agents Can Reproduce Social Science Findings",
+        "CORE-Bench: Fostering the Credibility of Published Research Through a Computational Reproducibility Agent Benchmark",
+        "Automated reproducibility assessments in the social and behavioral sciences using large language models"
+      ]
+    },
+    {
+      "cluster": 14,
+      "size": 6,
+      "keyterms": [
+        "paperqa",
+        "literature",
+        "experts",
+        "summaries",
+        "expert",
+        "humans",
+        "cost",
+        "comparison"
+      ],
+      "representative_titles": [
+        "Language agents achieve superhuman synthesis of scientific knowledge",
+        "PaperQA: Retrieval-Augmented Generative Agent for Scientific Research",
+        "RE-Bench: Evaluating frontier AI R&D capabilities of language model agents against human experts",
+        "AstaBench: Rigorous Benchmarking of AI Agents with a Scientific Research Suite"
+      ]
+    },
+    {
+      "cluster": 21,
+      "size": 6,
+      "keyterms": [
+        "biomedical",
+        "biomni",
+        "imaging",
+        "knowledge graph",
+        "software",
+        "bioml-bench",
+        "graph",
+        "interpretation"
+      ],
+      "representative_titles": [
+        "BioML-bench: Evaluation of AI Agents for End-to-End Biomedical ML",
+        "Biomni: A General-Purpose Biomedical AI Agent",
+        "BioKGBench: A Knowledge Graph Checking Benchmark of AI Agent for Biomedical Science",
+        "BiomniBench: Process-level Evaluation of LLM Agents for Real-world Biomedical Research"
+      ]
+    },
+    {
+      "cluster": 4,
+      "size": 5,
+      "keyterms": [
+        "review",
+        "peer review",
+        "peer",
+        "multimodal",
+        "limitations",
+        "health",
+        "informatics",
+        "comprehensive"
+      ],
+      "representative_titles": [
+        "MMReview: A Multidisciplinary and Multimodal Benchmark for LLM-Based Peer Review Automation",
+        "Multimodal Peer Review Simulation with Actionable To-Do Recommendations for Community-Aware Manuscript Revisions",
+        "TreeReview: A Dynamic Tree of Questions Framework for Deep and Efficient LLM-based Scientific Peer Review",
+        "Can LLMs Identify Critical Limitations within Scientific Research? A Systematic Evaluation on AI Research Papers"
+      ]
+    },
+    {
+      "cluster": 7,
+      "size": 5,
+      "keyterms": [
+        "ideas",
+        "ai-generated",
+        "ai-generated ideas",
+        "sciences",
+        "references",
+        "future",
+        "grok",
+        "citations"
+      ],
+      "representative_titles": [
+        "Interesting Scientific Idea Generation using Knowledge Graphs and LLMs: Evaluations with 100 Research Group Leaders",
+        "AI Research Agents Narrow Scientific Exploration",
+        "Can Large Language Models Unlock Novel Scientific Research Ideas?",
+        "aiXiv: A Next-Generation Open Access Ecosystem for Scientific Discovery Generated by AI Scientists"
+      ]
+    },
+    {
+      "cluster": 12,
+      "size": 5,
+      "keyterms": [
+        "claim",
+        "evidence",
+        "claims",
+        "public",
+        "audit",
+        "typed",
+        "benchmark",
+        "schema"
+      ],
+      "representative_titles": [
+        "FactReview: Evidence-Grounded Peer Review with Execution-Based Claim Verification",
+        "StatefulDiscovery: Evidence-Calibrated Claim Formation in Open-Ended Scientific Discovery",
+        "A Typed, Dynamic, No-Meta Theory of Autonomous Research Claim Certification and Release",
+        "ForeSci: Evaluating LLM Agents for Forward-Looking AI Research Judgment"
+      ]
+    },
+    {
+      "cluster": 11,
+      "size": 4,
+      "keyterms": [
+        "biomedical",
+        "tool",
+        "bioinformatics",
+        "tools",
+        "stella",
+        "self-evolving",
+        "analyses",
+        "bioinformatics tools"
+      ],
+      "representative_titles": [
+        "Empowering AI data scientists using a multi-agent LLM framework with self-evolving capabilities for autonomous, tool-aware biomedical data analyses",
+        "STELLA: Self-Evolving LLM Agent for Biomedical Research",
+        "Democratizing AI scientists using ToolUniverse",
+        "CARIBOU: Computational AI Research Interface for Bioinformatics, Omics, and Unifying Agents"
+      ]
+    },
+    {
+      "cluster": 18,
+      "size": 4,
+      "keyterms": [
+        "researchgym",
+        "design",
+        "performance",
+        "react",
+        "genes",
+        "editing",
+        "hours",
+        "search"
+      ],
+      "representative_titles": [
+        "InnovatorBench: Evaluating Agents' Ability to Conduct Innovative LLM Research",
+        "ResearchGym: Evaluating Language Model Agents on Real-World AI Research",
+        "AIRA_2: Overcoming Bottlenecks in AI Research Agents",
+        "CRISPR-GPT for agentic automation of gene-editing experiments"
+      ]
+    },
+    {
+      "cluster": 19,
+      "size": 4,
+      "keyterms": [
+        "learning",
+        "alphaevolve",
+        "reinforcement",
+        "reinforcement learning",
+        "synthetic",
+        "mlgym",
+        "algorithms",
+        "qwen"
+      ],
+      "representative_titles": [
+        "MLGym: A New Framework and Benchmark for Advancing AI Research Agents",
+        "AI Scientist via Synthetic Task Scaling",
+        "ReviewRL: Towards Automated Scientific Review with RL",
+        "AlphaEvolve: A coding agent for scientific and algorithmic discovery"
+      ]
+    },
+    {
+      "cluster": 16,
+      "size": 3,
+      "keyterms": [
+        "causal",
+        "psychology",
+        "hypotheses",
+        "social",
+        "hypothesis generation",
+        "hypothesis",
+        "experts",
+        "data-driven"
+      ],
+      "representative_titles": [
+        "Automating psychological hypothesis generation with AI: when large language models meet causal graph",
+        "Large language models for causal hypothesis generation in science",
+        "Machine-assisted social psychology hypothesis generation."
+      ]
+    },
+    {
+      "cluster": 17,
+      "size": 3,
+      "keyterms": [
+        "novelty",
+        "novelty assessment",
+        "novelty evaluation",
+        "assessment",
+        "facet-based",
+        "idea novelty",
+        "idea",
+        "memory"
+      ],
+      "representative_titles": [
+        "NovBench: Evaluating Large Language Models on Academic Paper Novelty Assessment",
+        "Literature-Grounded Novelty Assessment of Scientific Ideas",
+        "MemoNoveltyAgent: A Historical Research Memory-Aware Agent Workflow for Paper Novelty Assessment"
+      ]
+    },
+    {
+      "cluster": 3,
+      "size": 2,
+      "keyterms": [
+        "peer-review",
+        "comments",
+        "internal",
+        "automated peer-review",
+        "submissions",
+        "generic",
+        "feedback",
+        "multi-agent"
+      ],
+      "representative_titles": [
+        "ScholarPeer: A Context-Aware Multi-Agent Framework for Automated Peer Review",
+        "MARG: Multi-Agent Review Generation for Scientific Papers"
+      ]
+    },
+    {
+      "cluster": 15,
+      "size": 2,
+      "keyterms": [
+        "co-scientist",
+        "compute",
+        "evolution",
+        "test-time compute",
+        "test-time",
+        "scaling",
+        "hypotheses",
+        "drug repurposing"
+      ],
+      "representative_titles": [
+        "Towards an AI co-scientist",
+        "Accelerating scientific discovery with Co-Scientist"
+      ]
+    },
+    {
+      "cluster": 22,
+      "size": 2,
+      "keyterms": [
+        "replication",
+        "paperbench",
+        "astrophysics",
+        "replicate",
+        "rubrics",
+        "frontier",
+        "faithfulness",
+        "score"
+      ],
+      "representative_titles": [
+        "PaperBench: Evaluating AI's Ability to Replicate AI Research",
+        "ReplicationBench: Can AI Agents Replicate Astrophysics Research Papers?"
+      ]
+    }
+  ]
+}
