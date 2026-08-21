@@ -3,6 +3,8 @@
 import sys
 from pathlib import Path
 
+import pytest
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from prior.sources import openalex
@@ -112,3 +114,58 @@ def test_semantic_scholar_honours_retry_after(monkeypatch):
     monkeypatch.setattr(s2_src.time, "sleep", sleeps.append)
     assert s2_src._get(s2_src.SEARCH, {}, tries=2).status_code == 200
     assert sleeps == [7.0]
+
+
+def test_semantic_scholar_missing_paper_id_is_not_shared_placeholder():
+    paper = s2_src._to_paper({"paperId": None, "title": "Reference stub",
+                              "year": 2025, "authors": [], "externalIds": {}})
+    assert paper.id.startswith("unresolved:s2:")
+    assert paper.id != "s2:None"
+
+
+def test_semantic_scholar_neighbors_forward_observer(monkeypatch):
+    seen = []
+
+    class Response:
+        def json(self):
+            return {"data": []}
+
+    def fake_get(url, params, observe=None):
+        seen.append(observe)
+        return Response()
+
+    monkeypatch.setattr(s2_src, "_get", fake_get)
+    observer = lambda event: None
+    assert s2_src.references("ARXIV:1", observe=observer) == []
+    assert seen == [observer]
+
+
+def test_semantic_scholar_strict_neighbor_errors_propagate(monkeypatch):
+    monkeypatch.setattr(s2_src, "_get",
+                        lambda *a, **k: (_ for _ in ()).throw(
+                            s2_src.requests.HTTPError("missing")))
+    with pytest.raises(s2_src.requests.HTTPError, match="missing"):
+        s2_src.references("DOI:missing", strict_errors=True)
+
+
+def test_semantic_scholar_recommendations_use_central_adapter(monkeypatch):
+    called = {}
+
+    class Response:
+        def json(self):
+            return {"recommendedPapers": [{
+                "paperId": "abc", "title": "A recommended paper",
+                "abstract": "Evidence", "authors": [], "externalIds": {},
+            }]}
+
+    def fake_get(url, params, observe=None):
+        called.update(url=url, params=params, observe=observe)
+        return Response()
+
+    monkeypatch.setattr(s2_src, "_get", fake_get)
+    observer = lambda event: None
+    papers = s2_src.recommendations("ARXIV:1", max_results=7, observe=observer)
+    assert [paper.title for paper in papers] == ["A recommended paper"]
+    assert "/recommendations/" in called["url"]
+    assert called["params"]["limit"] == 7
+    assert called["observe"] is observer

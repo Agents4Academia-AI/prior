@@ -20,6 +20,7 @@ import json
 import hashlib
 import re
 import time
+import unicodedata
 from pathlib import Path
 
 from . import config, dates, llm, repair
@@ -464,7 +465,7 @@ _S_SCHEMA = {
 def _ask_scope(topic_def: str, items: list[Paper], model: str | None) -> dict[int, dict]:
     """One LLM scope call over `items`; returns {local_index: decision}."""
     listing = "\n".join(
-        f"[{j}] {p.title}\n    {p.abstract[:320]}" for j, p in enumerate(items))
+        f"[{j}] {p.title}\n    {p.abstract}" for j, p in enumerate(items))
     out = llm.structured(
         model=model or config.READER_MODEL, system=_S_SYSTEM,
         user=f"TOPIC:\n{topic_def}\n\nCANDIDATES:\n{listing}",
@@ -475,6 +476,7 @@ def _ask_scope(topic_def: str, items: list[Paper], model: str | None) -> dict[in
 
 _ACCEPT_CONTRADICTION = re.compile(
     r"(?:\bout of scope\b|\b(?:is|reads as) (?:a )?(?:survey|review article)\b|"
+    r"\b(?:this paper )?(?:surveys|reviews) (?:the |existing )?(?:field|literature|methods|work)\b|"
     r"\b(?:position|perspective|opinion) paper\b|\bdoes not (?:fit|meet)\b)", re.I)
 _EXCLUDE_CONTRADICTION = re.compile(
     r"(?:\bdirectly in scope\b|\bdirectly (?:fits|matches)\b|"
@@ -604,9 +606,30 @@ provided scope criteria. Return one role for every record:
 - uncertain: available evidence is insufficient or genuinely ambiguous;
 - excluded: clearly outside scope and not useful as a discovery bridge.
 
-Do not infer exclusion from a missing abstract. Cite the applicable scope criterion
-and a short supporting evidence phrase. An exclusion requires positive evidence;
-otherwise use uncertain. Return a decision for every index."""
+Also classify publication_role as one of: primary_system_or_method,
+primary_empirical_evaluation, benchmark_or_dataset, secondary_review_or_survey,
+perspective_or_position, protocol_only, or unclear. Set
+has_original_contribution=true only when the title/abstract supports a substantive
+original system, method, benchmark, dataset, or empirical evaluation. A hybrid
+review is eligible only when that separable original contribution satisfies the
+scope. Papers *about peer review* can still be primary research.
+
+The complete title and abstract are supplied as numbered evidence spans in their
+original order. Read all spans. For every eligible, retrieval_only, or excluded
+decision, choose one non-negative evidence_span_index that directly supports the
+decision. Use -1 only for uncertain. The pipeline will copy the selected span
+verbatim; do not reproduce the quote yourself. Do not infer exclusion from missing
+evidence. An exclusion requires positive evidence; otherwise use uncertain. Return
+exactly one decision for every record index."""
+
+_EXHAUSTIVE_ROLES = ("eligible", "retrieval_only", "uncertain", "excluded")
+_PUBLICATION_ROLES = (
+    "primary_system_or_method", "primary_empirical_evaluation",
+    "benchmark_or_dataset", "secondary_review_or_survey",
+    "perspective_or_position", "protocol_only", "unclear",
+)
+_PRIMARY_PUBLICATION_ROLES = set(_PUBLICATION_ROLES[:3])
+_EXHAUSTIVE_SCOPE_PROTOCOL = "scope-exhaustive/1.4"
 
 _EXHAUSTIVE_SCOPE_SCHEMA = {
     "type": "object",
@@ -618,13 +641,126 @@ _EXHAUSTIVE_SCOPE_SCHEMA = {
                 "eligible", "retrieval_only", "uncertain", "excluded",
             ]},
             "criterion": {"type": "string"},
-            "evidence": {"type": "string"},
+            "evidence_span_index": {"type": "integer", "minimum": -1},
             "reason": {"type": "string"},
+            "publication_role": {"type": "string", "enum": list(_PUBLICATION_ROLES)},
+            "has_original_contribution": {"type": "boolean"},
         },
-        "required": ["index", "role", "criterion", "evidence", "reason"],
+        "required": ["index", "role", "criterion", "evidence_span_index", "reason",
+                     "publication_role", "has_original_contribution"],
     }}},
     "required": ["decisions"],
 }
+
+
+def _exhaustive_prompt_hash() -> str:
+    return "sha256:" + hashlib.sha256(
+        (_EXHAUSTIVE_SCOPE_SYSTEM + "\n" + json.dumps(
+            _EXHAUSTIVE_SCOPE_SCHEMA, sort_keys=True)).encode()).hexdigest()
+
+
+def exhaustive_scope_fingerprint(topic_def: str, paper: Paper, *,
+                                 model: str | None = None,
+                                 backend: str | None = None) -> str:
+    """Stable cache identity for a complete title/abstract screening decision."""
+    selected_model = model or config.READER_MODEL
+    selected_backend = backend or llm.backend()
+    payload = "\n".join((_EXHAUSTIVE_SCOPE_PROTOCOL, selected_backend,
+                          selected_model, _exhaustive_prompt_hash(), topic_def,
+                          paper.key(), paper.title, paper.abstract or ""))
+    return "sha256:" + hashlib.sha256(payload.encode()).hexdigest()
+
+
+def _exhaustive_decision_issues(paper: Paper, decision: dict) -> list[str]:
+    """Mechanical contradictions that require individual re-adjudication."""
+    issues = []
+    role = decision.get("role")
+    publication_role = decision.get("publication_role")
+    original = decision.get("has_original_contribution")
+    combined = " ".join(str(decision.get(field) or "")
+                        for field in ("criterion", "reason"))
+    evidence = str(decision.get("evidence") or "").strip()
+    haystack = paper.title + "\n" + (paper.abstract or "")
+    normalize = lambda value: " ".join(
+        unicodedata.normalize("NFKC", str(value or "")).split()).casefold()
+    if role not in _EXHAUSTIVE_ROLES:
+        issues.append("invalid_role")
+    if publication_role not in _PUBLICATION_ROLES:
+        issues.append("invalid_publication_role")
+    if not isinstance(original, bool):
+        issues.append("missing_original_contribution_flag")
+    if role != "uncertain" and (not evidence or normalize(evidence) not in normalize(haystack)):
+        issues.append("evidence_not_verbatim")
+    if role == "eligible" and (
+            publication_role not in _PRIMARY_PUBLICATION_ROLES or original is not True):
+        issues.append("eligible_without_primary_original_contribution")
+    if role == "eligible" and _ACCEPT_CONTRADICTION.search(combined):
+        issues.append("eligible_rationale_says_exclude")
+    if role == "excluded" and _EXCLUDE_CONTRADICTION.search(combined):
+        issues.append("excluded_rationale_says_include")
+    if role == "retrieval_only" and publication_role in _PRIMARY_PUBLICATION_ROLES \
+            and original is True and _EXCLUDE_CONTRADICTION.search(combined):
+        issues.append("retrieval_only_rationale_says_include")
+    if role == "excluded" and not paper.abstract and not evidence:
+        issues.append("excluded_from_missing_evidence")
+    return issues
+
+
+def _evidence_spans(paper: Paper) -> list[str]:
+    """Deterministic, ordered spans covering the complete title and abstract."""
+    spans = [paper.title.strip()]
+    abstract = (paper.abstract or "").strip()
+    if abstract:
+        spans.extend(part.strip() for part in re.split(
+            r"(?<=[.!?])\s+(?=[A-Z0-9])|\n+", abstract) if part.strip())
+    return spans
+
+
+def _ask_scope_exhaustive(topic_def: str, items: list[Paper], *, model: str,
+                          validation_feedback: str = "") \
+        -> tuple[dict[int, dict], set[int]]:
+    spans_by_index = [_evidence_spans(paper) for paper in items]
+    records = []
+    for index, (paper, spans) in enumerate(zip(items, spans_by_index)):
+        listing = "\n".join(f"  <{span_index}> {span}"
+                            for span_index, span in enumerate(spans))
+        records.append(
+            f"[{index}] METADATA: year={paper.year or 'unknown'}; "
+            f"source={paper.source}; type={paper.type or 'unknown'}; "
+            f"review_flag={paper.is_review}\nEVIDENCE SPANS:\n{listing}"
+        )
+    listing = "\n\n".join(records)
+    correction = (
+        "\n\nCORRECTION REQUIRED:\nThe previous decision failed mechanical "
+        f"validation: {validation_feedback}. Return a corrected decision. For any "
+        "non-uncertain role, select one valid non-negative evidence_span_index "
+        "from the supplied record; use -1 only for uncertain."
+        if validation_feedback else ""
+    )
+    response = llm.structured(
+        model=model, system=_EXHAUSTIVE_SCOPE_SYSTEM,
+        user=f"TOPIC:\n{topic_def}\n\nCANDIDATES:\n{listing}{correction}",
+        schema=_EXHAUSTIVE_SCOPE_SCHEMA, tool_name="emit_scope_roles",
+        max_tokens=5000,
+    )
+    decisions: dict[int, dict] = {}
+    duplicates = set()
+    for row in response.get("decisions", []):
+        if not isinstance(row, dict):
+            continue
+        index = row.get("index")
+        if not isinstance(index, int) or not 0 <= index < len(items):
+            continue
+        span_index = row.get("evidence_span_index")
+        spans = spans_by_index[index]
+        if isinstance(span_index, int) and 0 <= span_index < len(spans):
+            row["evidence"] = spans[span_index]
+        elif "evidence" not in row:
+            row["evidence"] = ""
+        if index in decisions:
+            duplicates.add(index)
+        decisions[index] = row
+    return decisions, duplicates
 
 
 def scope_exhaustive(topic_def: str, candidates: list[Paper], *,
@@ -637,18 +773,14 @@ def scope_exhaustive(topic_def: str, candidates: list[Paper], *,
     exclusion and preserves navigation records separately from synthesis-eligible
     evidence. Cache keys include scope, protocol, paper identity, and evidence.
     """
-    protocol = "scope-exhaustive/1.1"
+    protocol = _EXHAUSTIVE_SCOPE_PROTOCOL
     selected_model = model or config.READER_MODEL
     selected_backend = llm.backend()
-    prompt_hash = "sha256:" + hashlib.sha256(
-        (_EXHAUSTIVE_SCOPE_SYSTEM + "\n" + json.dumps(
-            _EXHAUSTIVE_SCOPE_SCHEMA, sort_keys=True)).encode()).hexdigest()
+    prompt_hash = _exhaustive_prompt_hash()
 
     def fingerprint(paper: Paper) -> str:
-        payload = "\n".join((protocol, selected_backend, selected_model,
-                             prompt_hash, topic_def, paper.key(), paper.title,
-                             paper.abstract or ""))
-        return "sha256:" + hashlib.sha256(payload.encode()).hexdigest()
+        return exhaustive_scope_fingerprint(
+            topic_def, paper, model=selected_model, backend=selected_backend)
 
     cp = Path(cache_path) if cache_path else None
     cache = {}
@@ -656,12 +788,11 @@ def scope_exhaustive(topic_def: str, candidates: list[Paper], *,
         for line in cp.read_text().splitlines():
             try:
                 row = json.loads(line)
-                cache[row["fingerprint"]] = row
+                if row.get("cacheable", True) and row.get("role") in _EXHAUSTIVE_ROLES:
+                    cache[row["fingerprint"]] = row
             except (json.JSONDecodeError, KeyError):
                 continue
-    roles = {role: [] for role in (
-        "eligible", "retrieval_only", "uncertain", "excluded",
-    )}
+    roles = {role: [] for role in _EXHAUSTIVE_ROLES}
     pending = []
     for paper in candidates:
         cached = cache.get(fingerprint(paper))
@@ -673,41 +804,55 @@ def scope_exhaustive(topic_def: str, candidates: list[Paper], *,
     try:
         for start in range(0, len(pending), batch):
             chunk = pending[start:start + batch]
-            listing = "\n\n".join(
-                f"[{index}] TITLE: {paper.title}\n"
-                f"METADATA: year={paper.year or 'unknown'}; source={paper.source}; "
-                f"review_flag={paper.is_review}\n"
-                f"ABSTRACT: {paper.abstract or '[missing]'}"
-                for index, paper in enumerate(chunk)
-            )
             try:
-                response = llm.structured(
-                    model=selected_model,
-                    system=_EXHAUSTIVE_SCOPE_SYSTEM,
-                    user=f"TOPIC:\n{topic_def}\n\nCANDIDATES:\n{listing}",
-                    schema=_EXHAUSTIVE_SCOPE_SCHEMA, tool_name="emit_scope_roles",
-                    max_tokens=4000,
-                )
-                decisions = {
-                    row["index"]: row for row in response.get("decisions", [])
-                    if isinstance(row.get("index"), int)
-                }
+                decisions, duplicates = _ask_scope_exhaustive(
+                    topic_def, chunk, model=selected_model)
             except Exception as error:  # noqa: BLE001
-                progress(f"  exhaustive scope batch error: {error}")
-                decisions = {}
+                # Transport/structured-output failures are operational failures,
+                # not scientific uncertainty. Leave the batch uncached so a
+                # resumable run retries it.
+                progress(f"  exhaustive scope batch error (uncached): {error}")
+                continue
             for index, paper in enumerate(chunk):
-                decision = decisions.get(index) or {
-                    "role": "uncertain", "criterion": "insufficient decision evidence",
-                    "evidence": "", "reason": "missing or failed screening decision",
-                }
+                decision = decisions.get(index)
+                issues = (["duplicate_or_missing_index"] if
+                          decision is None or index in duplicates else
+                          _exhaustive_decision_issues(paper, decision))
+                if issues:
+                    progress(f"  invalid exhaustive decision for {paper.id} "
+                             f"({', '.join(issues)}) — re-asking")
+                    try:
+                        revised, duplicate = _ask_scope_exhaustive(
+                            topic_def, [paper], model=selected_model,
+                            validation_feedback=", ".join(issues))
+                        candidate = revised.get(0)
+                        revised_issues = (["duplicate_or_missing_index"] if
+                                          candidate is None or duplicate else
+                                          _exhaustive_decision_issues(paper, candidate))
+                    except Exception as error:  # noqa: BLE001
+                        candidate, revised_issues = None, [
+                            f"reask_error:{type(error).__name__}"]
+                    if candidate is not None and not revised_issues:
+                        decision, issues = candidate, []
+                    else:
+                        decision = {
+                            "role": "uncertain", "criterion": "adjudication required",
+                            "evidence": "", "reason": "screening decision failed validation",
+                            "publication_role": "unclear",
+                            "has_original_contribution": False,
+                            "adjudication_required": True,
+                            "validation_issues": issues + revised_issues,
+                        }
                 role = decision.get("role")
                 if role not in roles:
                     role = "uncertain"
                     decision["role"] = role
+                cacheable = not decision.get("adjudication_required", False)
                 record = {
                     "fingerprint": fingerprint(paper), "protocol": protocol,
                     "work_key": paper.key(), "model": selected_model,
                     "backend": selected_backend, "prompt_hash": prompt_hash,
+                    "cacheable": cacheable,
                     "evidence_sha256": "sha256:" + hashlib.sha256(
                         (paper.title + "\n" + (paper.abstract or "")).encode()).hexdigest(),
                     **decision,

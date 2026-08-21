@@ -11,6 +11,7 @@ arXiv source; otherwise `s2:<paperId>`.
 
 from __future__ import annotations
 
+import hashlib
 import os
 import random
 import threading
@@ -73,7 +74,18 @@ def _headers() -> dict:
 def _to_paper(it: dict) -> Paper:
     ext = it.get("externalIds") or {}
     arxiv_id = ext.get("ArXiv")
-    pid = f"arxiv:{arxiv_id}" if arxiv_id else f"s2:{it.get('paperId')}"
+    paper_id = it.get("paperId")
+    if arxiv_id:
+        pid = f"arxiv:{arxiv_id}"
+    elif paper_id:
+        pid = f"s2:{paper_id}"
+    else:
+        # Citation endpoints sometimes return identifier-less bibliography
+        # stubs.  A shared ``s2:None`` id is dangerous because downstream work
+        # resolution may treat source ids as strong aliases and merge every
+        # stub into one false work.
+        evidence = f"{it.get('title') or ''}\n{it.get('year') or ''}"
+        pid = "unresolved:s2:" + hashlib.sha1(evidence.encode()).hexdigest()[:16]
     doi = ext.get("DOI")
     authors = [a.get("name", "") for a in (it.get("authors") or [])]
     types = it.get("publicationTypes") or []
@@ -138,7 +150,8 @@ def _get(url: str, params: dict, *, tries: int = 6, observe=None):
     return last
 
 
-def _neighbors(s2_id: str, kind: str, *, max_results: int) -> list[Paper]:
+def _neighbors(s2_id: str, kind: str, *, max_results: int,
+               observe=None, strict_errors: bool = False) -> list[Paper]:
     """Paginate a citation edge list. kind='citations' (forward, papers citing
     s2_id) or 'references' (backward, papers s2_id cites). These endpoints sit in
     S2's 10 req/s tier, so with a key the snowball is cheap."""
@@ -149,8 +162,11 @@ def _neighbors(s2_id: str, kind: str, *, max_results: int) -> list[Paper]:
         params = {"fields": FIELDS, "limit": min(100, max_results - len(out)),
                   "offset": offset}
         try:
-            body = _get(f"{GRAPH}/{s2_id}/{kind}", params).json()
+            body = _get(f"{GRAPH}/{s2_id}/{kind}", params,
+                        observe=observe).json()
         except requests.RequestException:
+            if strict_errors:
+                raise
             break
         data = body.get("data") or []
         if not data:
@@ -166,15 +182,34 @@ def _neighbors(s2_id: str, kind: str, *, max_results: int) -> list[Paper]:
     return out
 
 
-def citations(s2_id: str, *, max_results: int = 60) -> list[Paper]:
+def citations(s2_id: str, *, max_results: int = 60, observe=None,
+              strict_errors: bool = False) -> list[Paper]:
     """Forward citations (papers that cite s2_id) — the recent-frontier signal
     OpenAlex lacks for fresh preprints."""
-    return _neighbors(s2_id, "citations", max_results=max_results)
+    return _neighbors(s2_id, "citations", max_results=max_results,
+                      observe=observe, strict_errors=strict_errors)
 
 
-def references(s2_id: str, *, max_results: int = 60) -> list[Paper]:
+def references(s2_id: str, *, max_results: int = 60, observe=None,
+               strict_errors: bool = False) -> list[Paper]:
     """Backward references (papers s2_id cites)."""
-    return _neighbors(s2_id, "references", max_results=max_results)
+    return _neighbors(s2_id, "references", max_results=max_results,
+                      observe=observe, strict_errors=strict_errors)
+
+
+def recommendations(s2_id: str, *, max_results: int = 10, observe=None,
+                    strict_errors: bool = False) -> list[Paper]:
+    """Semantic neighbours for one seed, routed through the shared limiter."""
+    url = f"https://api.semanticscholar.org/recommendations/v1/papers/forpaper/{s2_id}"
+    params = {"fields": FIELDS, "limit": min(max_results, 500)}
+    try:
+        body = _get(url, params, observe=observe).json()
+    except requests.RequestException:
+        if strict_errors:
+            raise
+        return []
+    return [_to_paper(item) for item in body.get("recommendedPapers", [])
+            if item.get("title")][:max_results]
 
 
 def reference_external_ids(s2_id: str, *, max_results: int = 1000) -> list[dict]:

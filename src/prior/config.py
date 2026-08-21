@@ -7,8 +7,10 @@ from pathlib import Path
 def _load_dotenv() -> None:
     """Load a local, gitignored .env so secrets (e.g. PRIOR_S2_API_KEY) apply to
     every run without re-exporting. Real environment variables take precedence."""
-    env_path = Path(__file__).resolve().parents[2] / ".env"
-    if not env_path.exists():
+    configured = os.environ.get("PRIOR_ENV_FILE", "").strip()
+    env_path = (Path(configured) if configured
+                else Path(__file__).resolve().parents[2] / ".env")
+    if not env_path.is_file():
         return
     for line in env_path.read_text().splitlines():
         line = line.strip()

@@ -81,3 +81,114 @@ def test_persistent_contradiction_fails_without_caching(monkeypatch, tmp_path):
     with pytest.raises(RuntimeError, match="internally contradictory"):
         scoper.scope(TOPIC, [CANDS[0]], cache_path=cache, progress=lambda _m: None)
     assert not cache.read_text()
+
+
+def test_scope_uses_full_available_abstract(monkeypatch):
+    marker = "THIS SURVEY SELF-IDENTIFICATION MUST BE VISIBLE"
+    candidate = Paper(id="long", source="t", title="ambiguous",
+                      abstract="x" * 500 + marker, url="")
+    seen = []
+
+    def fake_structured(**kw):
+        seen.append(kw["user"])
+        return {"decisions": [{"index": 0, "in_scope": False,
+                                "reason": "This is a survey article."}]}
+
+    monkeypatch.setattr(scoper.llm, "structured", fake_structured)
+    kept, dropped = scoper.scope(TOPIC, [candidate], progress=lambda _m: None)
+    assert marker in seen[0]
+    assert not kept and _ids(dropped) == {"long"}
+
+
+def test_exhaustive_scope_reasks_nonprimary_eligible(monkeypatch):
+    calls = 0
+
+    def fake_structured(**_kw):
+        nonlocal calls
+        calls += 1
+        if calls == 1:
+            return {"decisions": [{
+                "index": 0, "role": "eligible", "criterion": "primary only",
+                "evidence": "alpha", "reason": "a review article",
+                "publication_role": "secondary_review_or_survey",
+                "has_original_contribution": False,
+            }]}
+        return {"decisions": [{
+            "index": 0, "role": "retrieval_only", "criterion": "secondary source",
+            "evidence": "alpha", "reason": "useful review article",
+            "publication_role": "secondary_review_or_survey",
+            "has_original_contribution": False,
+        }]}
+
+    monkeypatch.setattr(scoper.llm, "structured", fake_structured)
+    roles = scoper.scope_exhaustive(TOPIC, [CANDS[0]], progress=lambda _m: None)
+    assert calls == 2
+    assert [p.id for p, _ in roles["retrieval_only"]] == ["a"]
+    assert not roles["eligible"]
+
+
+def test_exhaustive_scope_does_not_cache_transport_failure(monkeypatch, tmp_path):
+    def fail(**_kw):
+        raise RuntimeError("temporary API failure")
+
+    monkeypatch.setattr(scoper.llm, "structured", fail)
+    cache = tmp_path / "scope.jsonl"
+    roles = scoper.scope_exhaustive(
+        TOPIC, [CANDS[0]], cache_path=cache, progress=lambda _m: None)
+    assert sum(map(len, roles.values())) == 0
+    assert cache.read_text() == ""
+
+
+def test_exhaustive_evidence_validation_normalises_only_whitespace():
+    paper = Paper(id="quote", source="t", title="Quoted result",
+                  abstract="The system evaluates scientific hypotheses\nwith expert rubrics.",
+                  url="")
+    decision = {
+        "role": "eligible", "criterion": "primary evaluation",
+        "evidence": "system evaluates scientific hypotheses with expert rubrics",
+        "reason": "direct evaluation",
+        "publication_role": "primary_empirical_evaluation",
+        "has_original_contribution": True,
+    }
+    assert scoper._exhaustive_decision_issues(paper, decision) == []
+    decision["evidence"] = "system assesses scientific hypotheses with expert rubrics"
+    assert "evidence_not_verbatim" in scoper._exhaustive_decision_issues(paper, decision)
+
+
+def test_exhaustive_reask_receives_validation_feedback(monkeypatch):
+    users = []
+
+    def fake_structured(**kw):
+        users.append(kw["user"])
+        evidence = "" if len(users) == 1 else "alpha"
+        return {"decisions": [{
+            "index": 0, "role": "eligible", "criterion": "primary system",
+            "evidence": evidence, "reason": "directly in scope",
+            "publication_role": "primary_system_or_method",
+            "has_original_contribution": True,
+        }]}
+
+    monkeypatch.setattr(scoper.llm, "structured", fake_structured)
+    roles = scoper.scope_exhaustive(TOPIC, [CANDS[0]], progress=lambda _m: None)
+    assert [paper.id for paper, _ in roles["eligible"]] == ["a"]
+    assert "CORRECTION REQUIRED" in users[1]
+    assert "evidence_not_verbatim" in users[1]
+
+
+def test_exhaustive_span_choice_is_copied_by_pipeline(monkeypatch):
+    paper = Paper(id="span", source="t", title="A title",
+                  abstract="First supporting sentence. Second sentence.", url="")
+
+    def fake_structured(**_kw):
+        return {"decisions": [{
+            "index": 0, "role": "eligible", "criterion": "primary system",
+            "evidence_span_index": 1, "reason": "directly in scope",
+            "publication_role": "primary_system_or_method",
+            "has_original_contribution": True,
+        }]}
+
+    monkeypatch.setattr(scoper.llm, "structured", fake_structured)
+    roles = scoper.scope_exhaustive(TOPIC, [paper], progress=lambda _m: None)
+    decision = roles["eligible"][0][1]
+    assert decision["evidence"] == "First supporting sentence."
+    assert decision["evidence_span_index"] == 1
