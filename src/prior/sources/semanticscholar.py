@@ -43,9 +43,13 @@ def _rate_tier(url: str) -> str:
 
 def _pace(url: str, *, observe=None) -> None:
     tier = _rate_tier(url)
+    # Anonymous/shared-pool experiments can opt into a much gentler global pace
+    # without changing the normal authenticated defaults.
+    configured = float(os.environ.get("PRIOR_S2_MIN_INTERVAL_SECONDS", "0") or 0)
+    minimum = max(_MIN_INTERVAL[tier], configured)
     with _RATE_LOCK:
         now = time.monotonic()
-        wait = max(0.0, _MIN_INTERVAL[tier] - (now - _LAST_REQUEST[tier]))
+        wait = max(0.0, minimum - (now - _LAST_REQUEST[tier]))
         if wait:
             if observe:
                 observe({"kind": "rate_limit_wait", "source": "semanticscholar",
