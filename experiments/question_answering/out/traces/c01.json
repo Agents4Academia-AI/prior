@@ -1,0 +1,365 @@
+{
+ "nodes": [
+  {
+   "id": "arxiv:2507.02004v1::k00",
+   "paper_id": "arxiv:2507.02004v1",
+   "label": "STELLA — a self-evolving multi-agent system for biomedical research whose capabilities grow autonomously through a dynam",
+   "problem": "",
+   "method": "framework",
+   "result": "STELLA — a self-evolving multi-agent system for biomedical research whose capabilities grow autonomously through a dynamically updated Template Library of successful reasoning workflows and an expanding Tool Ocean of bioinformatics tools discovered and integrated by a dedicated Tool Creation Agent.",
+   "paper": "STELLA: Self-Evolving LLM Agent for Biomedical Research",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "arxiv:2507.02004v1::k03",
+   "paper_id": "arxiv:2507.02004v1",
+   "label": "State-of-the-art accuracy on biomedical question-answering benchmarks: ~26 % on Humanity's Last Exam: Biomedicine, ~54 %",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "State-of-the-art accuracy on biomedical question-answering benchmarks: ~26 % on Humanity's Last Exam: Biomedicine, ~54 % on LAB-Bench DBQA, and ~63 % on LAB-Bench LitQA, outperforming leading LLMs and specialized agents by up to 8 percentage points.",
+   "paper": "STELLA: Self-Evolving LLM Agent for Biomedical Research",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "arxiv:2605.28655::k00",
+   "paper_id": "arxiv:2605.28655",
+   "label": "AutoScientists — a decentralized multi-agent system for long-running computational scientific experimentation in which a",
+   "problem": "",
+   "method": "framework",
+   "result": "AutoScientists — a decentralized multi-agent system for long-running computational scientific experimentation in which agents interpret a shared experimental state, self-organize dynamically into teams around promising hypotheses, filter proposals through peer critique before committing experimental compute, and propagate successes and failures across teams to reduce redundant exploration — without any central orchestrator or pre-specified search decomposition.",
+   "paper": "AutoScientists: Self-Organizing Agent Teams for Long-Running Scientific Experimentation",
+   "year": 2026,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1,
+    3,
+    4
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2606.01316::k00",
+   "paper_id": "arxiv:2606.01316",
+   "label": "Science Earth — a planet-scale scientific runtime in which any capability (simulation cluster, wet-lab robot, proof engi",
+   "problem": "",
+   "method": "framework",
+   "result": "Science Earth — a planet-scale scientific runtime in which any capability (simulation cluster, wet-lab robot, proof engine, single-cell pipeline) can connect to any other and collaboration structure emerges from the scientific question itself rather than from a central designer's foresight — shifts the organizing challenge in AI-native discovery from workflow design to open-ended connectivity.",
+   "paper": "Science Earth: Towards A Planet-Scale Operating System for AI-Native Scientific Discovery",
+   "year": 2026,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    4
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "arxiv:2606.08532::k00",
+   "paper_id": "arxiv:2606.08532",
+   "label": "DN-Hypo-Pipeline — an LLM-driven workflow that identifies underlying laws, theories, and principles from a paper's expla",
+   "problem": "",
+   "method": "framework",
+   "result": "DN-Hypo-Pipeline — an LLM-driven workflow that identifies underlying laws, theories, and principles from a paper's explanandum and reconstructs novel, yet-to-be-verified scientific hypotheses from existing literature using scientific explanations as prior knowledge.",
+   "paper": "DN-Hypo-Pipeline: An AI-Driven Workflow for Hypothesis Generation via Large Language Models and Scientific Explanations",
+   "year": 2026,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    4
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4402345509::k00",
+   "paper_id": "openalex:W4402345509",
+   "label": "LAB-Bench — a dataset of over 2,400 multiple-choice questions spanning literature recall and reasoning, figure and table",
+   "problem": "",
+   "method": "benchmark",
+   "result": "LAB-Bench — a dataset of over 2,400 multiple-choice questions spanning literature recall and reasoning, figure and table interpretation, biological database access, protocol troubleshooting, and DNA/protein sequence comprehension and manipulation — provides a benchmark for evaluating AI systems on practical biology research tasks rather than textbook-style science knowledge.",
+   "paper": "LAB-Bench: Measuring Capabilities of Language Models for Biology Research",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1,
+    3,
+    4
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4402683796::k00",
+   "paper_id": "openalex:W4402683796",
+   "label": "SWIF2T (Scientific WrIting Focused Feedback Tool) — a four-component system (planner, investigator, reviewer, controller",
+   "problem": "",
+   "method": "model",
+   "result": "SWIF2T (Scientific WrIting Focused Feedback Tool) — a four-component system (planner, investigator, reviewer, controller) using multiple LLMs — generates specific, actionable, and coherent focused feedback that identifies weaknesses in scientific paper paragraphs and proposes revisions, outperforming GPT-4 and CoVe baselines in specificity, reading comprehension, and overall helpfulness.",
+   "paper": "Automated Focused Feedback Generation for Scientific Writing Assistance",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    4
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4403586302::k00",
+   "paper_id": "openalex:W4403586302",
+   "label": "A controlled experimental framework for comparing human and LLM research idea generation — enforcing style standardizati",
+   "problem": "",
+   "method": "framework",
+   "result": "A controlled experimental framework for comparing human and LLM research idea generation — enforcing style standardization, matched topic distributions, and blind expert review — enables statistically rigorous head-to-head evaluation of ideation capabilities for the first time.",
+   "paper": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4403795293::k00",
+   "paper_id": "openalex:W4403795293",
+   "label": "PaperQA2, a retrieval-augmented generation agent with agentic tool use (paper search, evidence gathering with LLM rerank",
+   "problem": "",
+   "method": "model",
+   "result": "PaperQA2, a retrieval-augmented generation agent with agentic tool use (paper search, evidence gathering with LLM reranking and contextual summarization, citation traversal, and answer generation), matches or exceeds PhD-level subject matter expert performance on scientific literature retrieval and summarization tasks without restricting humans in time, tools, or internet access.",
+   "paper": "Language agents achieve superhuman synthesis of scientific knowledge",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4403795293::k01",
+   "paper_id": "openalex:W4403795293",
+   "label": "LitQA2, a benchmark of 248 multiple-choice questions requiring full-literature retrieval to answer, where answers appear",
+   "problem": "",
+   "method": "benchmark",
+   "result": "LitQA2, a benchmark of 248 multiple-choice questions requiring full-literature retrieval to answer, where answers appear only in paper bodies (not abstracts) and ideally only once in all scientific literature, provides a rigorous evaluation of scientific question-answering that includes a direct human performance comparison.",
+   "paper": "Language agents achieve superhuman synthesis of scientific knowledge",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4407632372::k00",
+   "paper_id": "openalex:W4407632372",
+   "label": "Popper — an agentic framework for automated, statistically rigorous validation of free-form natural-language hypotheses ",
+   "problem": "",
+   "method": "framework",
+   "result": "Popper — an agentic framework for automated, statistically rigorous validation of free-form natural-language hypotheses using LLM agents that design and execute sequential falsification experiments.",
+   "paper": "Automated Hypothesis Validation with Agentic Sequential Falsifications",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4412759774::k00",
+   "paper_id": "openalex:W4412759774",
+   "label": "CRISPR-GPT — a multi-agent LLM system combining chain-of-thought reasoning, retrieval-augmented generation, instruction ",
+   "problem": "",
+   "method": "framework",
+   "result": "CRISPR-GPT — a multi-agent LLM system combining chain-of-thought reasoning, retrieval-augmented generation, instruction fine-tuning, and integrated bioinformatics tools — automates end-to-end CRISPR-based gene-editing experiment design and data analysis across four editing modalities (knockout, base editing, prime editing, CRISPRa/i) with tunable automation levels (Meta, Auto, and Q&A modes).",
+   "paper": "CRISPR-GPT for agentic automation of gene-editing experiments",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1,
+    3,
+    4
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4414028042::k00",
+   "paper_id": "openalex:W4414028042",
+   "label": "BioML-bench enables evaluation of AI agents on end-to-end biomedical ML tasks across four domains (protein engineering, ",
+   "problem": "",
+   "method": "benchmark",
+   "result": "BioML-bench enables evaluation of AI agents on end-to-end biomedical ML tasks across four domains (protein engineering, single-cell omics, biomedical imaging, drug discovery), where agents must implement complete ML pipelines from task description to validated predictions.",
+   "paper": "BioML-bench: Evaluation of AI Agents for End-to-End Biomedical ML",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1,
+    3
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4414827381::k00",
+   "paper_id": "openalex:W4414827381",
+   "label": "The AI Scientist-v2 — an end-to-end agentic system for automated scientific discovery that eliminates reliance on human-",
+   "problem": "",
+   "method": "framework",
+   "result": "The AI Scientist-v2 — an end-to-end agentic system for automated scientific discovery that eliminates reliance on human-authored code templates, uses a progressive agentic tree-search methodology managed by a dedicated experiment manager agent, and integrates VLM feedback for iterative figure refinement — can autonomously formulate hypotheses, design and execute experiments, analyze data, and author complete scientific manuscripts across diverse machine learning domains.",
+   "paper": "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4416034681::k00",
+   "paper_id": "openalex:W4416034681",
+   "label": "Chain-of-Ideas (CoI) agent — an LLM-based research ideation system that organizes relevant literature into a chronologic",
+   "problem": "",
+   "method": "framework",
+   "result": "Chain-of-Ideas (CoI) agent — an LLM-based research ideation system that organizes relevant literature into a chronological chain structure mirroring the progressive development of a research domain, enabling LLMs to generate novel and logically coherent research ideas with experimental designs for approximately $0.50 per idea.",
+   "paper": "Chain of Ideas: Revolutionizing Research Via Novel Idea Development with LLM Agents",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    4
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W7164550912::k00",
+   "paper_id": "openalex:W7164550912",
+   "label": "GALILEO — Generalizable Agentic Laboratory Intelligence for Learning, Experimentation, and Optimization — is a physicall",
+   "problem": "",
+   "method": "framework",
+   "result": "GALILEO — Generalizable Agentic Laboratory Intelligence for Learning, Experimentation, and Optimization — is a physically embodied AI scientist that couples an Observation-Thought-Action-Summary (OTAS) reasoning loop with robotic peptide synthesis and multimodal phenotyping to close the prediction-to-intervention gap in therapeutic peptide discovery for dynamic membrane systems.",
+   "paper": "GALILEO: Embodied AI scientist for autonomous therapeutic discovery in dynamic membrane systems",
+   "year": 2026,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1,
+    3,
+    4
+   ],
+   "trace_in_answer": true
+  }
+ ],
+ "edges": [
+  {
+   "id": "arxiv:2507.02004v1::k03|builds_on|openalex:W4402345509::k00",
+   "source": "arxiv:2507.02004v1::k03",
+   "target": "openalex:W4402345509::k00",
+   "relation": "builds_on",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4403795293::k01|builds_on|openalex:W4402345509::k00",
+   "source": "openalex:W4403795293::k01",
+   "target": "openalex:W4402345509::k00",
+   "relation": "builds_on",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1
+   ],
+   "trace_kind": "semantic"
+  }
+ ],
+ "trace": {
+  "question_id": "c01",
+  "question": "What recent work builds on AlphaFold for de-novo protein binder design?",
+  "family": "control-out-of-scope",
+  "arm": "graph",
+  "n_calls": 5,
+  "steps": [
+   {
+    "step": 1,
+    "tool": "topic_structure",
+    "args": {
+     "query": "de novo protein binder design AlphaFold"
+    },
+    "surfaced": [
+     "openalex:W4402345509",
+     "openalex:W4412759774",
+     "arxiv:2605.28655",
+     "openalex:W7164550912",
+     "openalex:W4414028042"
+    ],
+    "note": ""
+   },
+   {
+    "step": 2,
+    "tool": "find_paper",
+    "args": {
+     "query": "AlphaFold"
+    },
+    "surfaced": [],
+    "note": "NO MATCH — below the coverage threshold (refused)"
+   },
+   {
+    "step": 3,
+    "tool": "search_contributions",
+    "args": {
+     "query": "protein binder design"
+    },
+    "surfaced": [
+     "openalex:W4402345509",
+     "openalex:W4412759774",
+     "arxiv:2605.28655",
+     "openalex:W7164550912",
+     "openalex:W4414028042",
+     "openalex:W4414827381",
+     "openalex:W4403586302",
+     "openalex:W4407632372"
+    ],
+    "note": ""
+   },
+   {
+    "step": 4,
+    "tool": "search_contributions",
+    "args": {
+     "query": "RFdiffusion protein structure generation"
+    },
+    "surfaced": [
+     "openalex:W4402683796",
+     "arxiv:2606.08532",
+     "openalex:W4402345509",
+     "openalex:W4416034681",
+     "openalex:W4412759774",
+     "arxiv:2606.01316",
+     "arxiv:2605.28655",
+     "openalex:W7164550912"
+    ],
+    "note": ""
+   },
+   {
+    "step": 5,
+    "tool": "find_paper",
+    "args": {
+     "query": "protein structure prediction deep learning"
+    },
+    "surfaced": [],
+    "note": "NO MATCH — below the coverage threshold (refused)"
+   }
+  ],
+  "papers_named": [
+   "AutoScientists: Self-Organizing Agent Teams for Long-Running Scientific Experimentation",
+   "GALILEO: Embodied AI scientist for autonomous therapeutic discovery in dynamic membrane systems"
+  ]
+ }
+}

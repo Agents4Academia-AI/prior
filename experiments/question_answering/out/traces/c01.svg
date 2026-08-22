@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1900" height="1533" viewBox="0 0 1900 1533" font-family="Arial, Helvetica, sans-serif">
+<rect x="0" y="0" width="1900" height="1533" fill="#ffffff"/>
+<defs>
+<marker id="a_builds_on" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#6ea8fe"/></marker>
+<marker id="af_builds_on" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#6ea8fe" opacity="0.55"/></marker>
+<marker id="a_mentions" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#868e96"/></marker>
+<marker id="af_mentions" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#868e96" opacity="0.55"/></marker>
+<marker id="a_refines" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#63e6be"/></marker>
+<marker id="af_refines" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#63e6be" opacity="0.55"/></marker>
+</defs>
+<text x="24" y="56" font-size="37.4" font-weight="700" fill="#212529">C01 · control-out-of-scope</text>
+<text x="24" y="84" font-size="24.8" fill="#495057">What recent work builds on AlphaFold for de-novo protein binder design?</text>
+<g transform="translate(1004.4,637.7) scale(0.8461)">
+<ellipse cx="0" cy="0" rx="468.4" ry="290.4" fill="none" stroke="#dee2e6" stroke-width="1.2" stroke-dasharray="2 8"/>
+<line x1="-558.8" y1="476.8" x2="-246.5" y2="246.9" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="-558.8" y1="476.8" x2="-460.4" y2="53.4" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="-558.8" y1="476.8" x2="0.0" y2="290.4" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="-558.8" y1="476.8" x2="-394.0" y2="-157.0" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="-558.8" y1="476.8" x2="-460.4" y2="-53.4" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="0.0" y1="-589.4" x2="-246.5" y2="246.9" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="0.0" y1="-589.4" x2="-460.4" y2="53.4" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="0.0" y1="-589.4" x2="0.0" y2="290.4" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="0.0" y1="-589.4" x2="-394.0" y2="-157.0" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="0.0" y1="-589.4" x2="-460.4" y2="-53.4" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="0.0" y1="-589.4" x2="246.5" y2="-246.9" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="0.0" y1="-589.4" x2="-246.5" y2="-246.9" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="0.0" y1="-589.4" x2="0.0" y2="-290.4" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="558.8" y1="476.8" x2="460.4" y2="53.4" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="558.8" y1="476.8" x2="460.4" y2="-53.4" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="558.8" y1="476.8" x2="-246.5" y2="246.9" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="558.8" y1="476.8" x2="394.0" y2="157.0" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="558.8" y1="476.8" x2="-460.4" y2="53.4" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="558.8" y1="476.8" x2="394.0" y2="-157.0" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="558.8" y1="476.8" x2="0.0" y2="290.4" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="558.8" y1="476.8" x2="-394.0" y2="-157.0" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<path d="M 237.6 251.6 Q 0.0 375.1 -234.1 253.4" fill="none" stroke="#6ea8fe" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_builds_on)"/>
+<path d="M -389.4 165.9 Q -358.3 226.0 -260.3 244.4" fill="none" stroke="#6ea8fe" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_builds_on)"/>
+<circle cx="0.0" cy="-290.4" r="7.0" fill="#adb5bd"/>
+<text x="20.0" y="-306.0" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">Automated</text>
+<text x="20.0" y="-284.2" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">Hypothesis</text>
+<text x="20.0" y="-262.5" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">Validation with</text>
+<circle cx="246.5" cy="-246.9" r="7.0" fill="#adb5bd"/>
+<text x="266.5" y="-240.8" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">The AI Scientist-v2</text>
+<circle cx="394.0" cy="-157.0" r="7.0" fill="#adb5bd"/>
+<text x="414.0" y="-150.9" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">Science Earth</text>
+<circle cx="460.4" cy="-53.4" r="7.0" fill="#adb5bd"/>
+<text x="480.4" y="-47.2" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">DN-Hypo-Pipeline</text>
+<circle cx="460.4" cy="53.4" r="7.0" fill="#adb5bd"/>
+<text x="480.4" y="37.8" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">Automated Focused</text>
+<text x="480.4" y="59.6" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">Feedback Generation</text>
+<text x="480.4" y="81.3" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">for Scientifi…</text>
+<circle cx="394.0" cy="157.0" r="7.0" fill="#adb5bd"/>
+<text x="414.0" y="163.2" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">Chain of Ideas</text>
+<circle cx="246.5" cy="246.9" r="7.0" fill="#adb5bd"/>
+<text x="266.5" y="231.3" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">STELLA:</text>
+<text x="266.5" y="253.1" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">Self-Evolving LLM</text>
+<text x="266.5" y="274.9" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">Agent for</text>
+<circle cx="0.0" cy="290.4" r="11.0" fill="none" stroke="#f59f00" stroke-width="2.4"/>
+<circle cx="0.0" cy="290.4" r="7.0" fill="#adb5bd"/>
+<text x="20.0" y="296.6" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">AutoScientists</text>
+<circle cx="-246.5" cy="246.9" r="7.0" fill="#adb5bd"/>
+<text x="-266.5" y="253.1" font-size="18.2" text-anchor="end" fill="#7c848c" font-weight="400">LAB-Bench</text>
+<circle cx="-394.0" cy="157.0" r="7.0" fill="#adb5bd"/>
+<text x="-414.0" y="141.4" font-size="18.2" text-anchor="end" fill="#7c848c" font-weight="400">Language agents</text>
+<text x="-414.0" y="163.2" font-size="18.2" text-anchor="end" fill="#7c848c" font-weight="400">achieve superhuman</text>
+<text x="-414.0" y="185.0" font-size="18.2" text-anchor="end" fill="#7c848c" font-weight="400">synthesis of sci…</text>
+<circle cx="-460.4" cy="53.4" r="7.0" fill="#adb5bd"/>
+<text x="-480.4" y="37.8" font-size="18.2" text-anchor="end" fill="#7c848c" font-weight="400">CRISPR-GPT for</text>
+<text x="-480.4" y="59.6" font-size="18.2" text-anchor="end" fill="#7c848c" font-weight="400">agentic automation</text>
+<text x="-480.4" y="81.3" font-size="18.2" text-anchor="end" fill="#7c848c" font-weight="400">of gene-editing e…</text>
+<circle cx="-460.4" cy="-53.4" r="7.0" fill="#adb5bd"/>
+<text x="-480.4" y="-47.2" font-size="18.2" text-anchor="end" fill="#7c848c" font-weight="400">BioML-bench</text>
+<circle cx="-394.0" cy="-157.0" r="11.0" fill="none" stroke="#f59f00" stroke-width="2.4"/>
+<circle cx="-394.0" cy="-157.0" r="7.0" fill="#adb5bd"/>
+<text x="-414.0" y="-172.6" font-size="18.2" text-anchor="end" fill="#7c848c" font-weight="400">GALILEO: Embodied</text>
+<text x="-414.0" y="-150.9" font-size="18.2" text-anchor="end" fill="#7c848c" font-weight="400">AI scientist for</text>
+<text x="-414.0" y="-129.1" font-size="18.2" text-anchor="end" fill="#7c848c" font-weight="400">autonomous thera…</text>
+<circle cx="-246.5" cy="-246.9" r="7.0" fill="#adb5bd"/>
+<text x="-266.5" y="-262.6" font-size="18.2" text-anchor="end" fill="#7c848c" font-weight="400">Can LLMs Generate</text>
+<text x="-266.5" y="-240.8" font-size="18.2" text-anchor="end" fill="#7c848c" font-weight="400">Novel Research</text>
+<text x="-266.5" y="-219.0" font-size="18.2" text-anchor="end" fill="#7c848c" font-weight="400">Ideas? A Large-Sca…</text>
+<rect x="-750.6" y="458.1" width="383.7" height="37.4" rx="18.7" fill="#f1f3f5" stroke="#ced4da" stroke-width="1.6"/>
+<text x="-558.8" y="483.6" font-size="18.7" text-anchor="middle" fill="#495057">“de novo protein binder design Alp…”</text>
+<rect x="784.2" y="-200.8" width="239.7" height="37.4" rx="18.7" fill="#fff5f5" stroke="#ff6b6b" stroke-width="1.6" stroke-dasharray='5 4'/>
+<text x="904.1" y="-175.4" font-size="18.7" text-anchor="middle" fill="#c92a2a">“AlphaFold — no match”</text>
+<rect x="-125.0" y="-608.1" width="250.0" height="37.4" rx="18.7" fill="#f1f3f5" stroke="#ced4da" stroke-width="1.6"/>
+<text x="0.0" y="-582.6" font-size="18.7" text-anchor="middle" fill="#495057">“protein binder design”</text>
+<rect x="366.9" y="458.1" width="383.7" height="37.4" rx="18.7" fill="#f1f3f5" stroke="#ced4da" stroke-width="1.6"/>
+<text x="558.8" y="483.6" font-size="18.7" text-anchor="middle" fill="#495057">“RFdiffusion protein structure gen…”</text>
+<rect x="-1152.5" y="-200.8" width="496.8" height="37.4" rx="18.7" fill="#fff5f5" stroke="#ff6b6b" stroke-width="1.6" stroke-dasharray='5 4'/>
+<text x="-904.1" y="-175.4" font-size="18.7" text-anchor="middle" fill="#c92a2a">“protein structure prediction deep… — no match”</text>
+</g>
+<text x="24" y="1093" font-size="16.5" font-weight="700" fill="#495057" letter-spacing="0.8">WHAT IT DID, IN ORDER</text>
+<circle cx="37.4" cy="1118.3" r="13.2" fill="#adb5bd"/>
+<text x="37.4" y="1126.9" font-size="16.7" text-anchor="middle" fill="#ffffff" font-weight="700">1</text>
+<text x="57.2" y="1127.7" font-size="20.4" fill="#868e96">topic map “de novo protein binder design AlphaFo…”</text>
+<circle cx="610.5" cy="1118.3" r="13.2" fill="#adb5bd"/>
+<text x="610.5" y="1126.9" font-size="16.7" text-anchor="middle" fill="#ffffff" font-weight="700">2</text>
+<text x="630.3" y="1127.7" font-size="20.4" fill="#868e96">look up by name “AlphaFold” — no match</text>
+<circle cx="1056.6" cy="1118.3" r="13.2" fill="#adb5bd"/>
+<text x="1056.6" y="1126.9" font-size="16.7" text-anchor="middle" fill="#ffffff" font-weight="700">3</text>
+<text x="1076.4" y="1127.7" font-size="20.4" fill="#868e96">keyword search “protein binder design”</text>
+<circle cx="37.4" cy="1154.0" r="13.2" fill="#adb5bd"/>
+<text x="37.4" y="1162.5" font-size="16.7" text-anchor="middle" fill="#ffffff" font-weight="700">4</text>
+<text x="57.2" y="1163.3" font-size="20.4" fill="#868e96">keyword search “RFdiffusion protein structure generat…”</text>
+<circle cx="663.4" cy="1154.0" r="13.2" fill="#adb5bd"/>
+<text x="663.4" y="1162.5" font-size="16.7" text-anchor="middle" fill="#ffffff" font-weight="700">5</text>
+<text x="683.2" y="1163.3" font-size="20.4" fill="#868e96">look up by name “protein structure prediction deep lea…” — no match</text>
+<text x="24" y="1215" font-size="16.5" font-weight="700" fill="#495057" letter-spacing="0.8">HOW THE AGENT ENGAGED</text>
+<circle cx="38.5" cy="1240.2" r="14.4" fill="#fff" stroke="#212529" stroke-width="3.4"/><circle cx="38.5" cy="1240.2" r="7.9" fill="#212529"/>
+<text x="61.6" y="1248.3" font-size="20.4" fill="#495057">chose it — named as a call argument (n = step)</text>
+<circle cx="38.5" cy="1274.8" r="9.6" fill="#fff" stroke="#495057" stroke-width="2.8"/>
+<text x="61.6" y="1282.9" font-size="20.4" fill="#495057">read its evidence — justification pulled</text>
+<circle cx="38.5" cy="1309.4" r="5.6" fill="#adb5bd"/>
+<text x="61.6" y="1317.5" font-size="20.4" fill="#495057">listed only — delivered, not read</text>
+<circle cx="38.5" cy="1344.0" r="10.5" fill="none" stroke="#f59f00" stroke-width="3.4"/>
+<text x="61.6" y="1352.1" font-size="20.4" fill="#495057">named in the final answer</text>
+<rect x="24.2" y="1369.2" width="37.4" height="18.7" rx="9.4" fill="#f1f3f5" stroke="#ced4da" stroke-width="1.7"/>
+<text x="79.2" y="1386.7" font-size="20.4" fill="#495057">a search the agent typed (dotted lines → what it found)</text>
+<rect x="24.2" y="1403.8" width="37.4" height="18.7" rx="9.4" fill="#fff5f5" stroke="#ff6b6b" stroke-width="1.7" stroke-dasharray='5 4'/>
+<text x="79.2" y="1421.3" font-size="20.4" fill="#495057">“no match” — nothing in the corpus fit it</text>
+<text x="1024" y="1215" font-size="16.5" font-weight="700" fill="#495057" letter-spacing="0.8">RELATION</text>
+<path d="M 1024.1 1240.2 L 1061.5 1240.2" stroke="#ff6b6b" stroke-width="4.2" fill="none"/>
+<text x="1083.5" y="1248.3" font-size="20.4" fill="#495057">contradicts (symmetric)</text>
+<path d="M 1024.1 1274.8 L 1061.5 1274.8" stroke="#63e6be" stroke-width="4.2" fill="none" marker-end="url(#a_refines)"/>
+<text x="1083.5" y="1282.9" font-size="20.4" fill="#495057">refines</text>
+<path d="M 1024.1 1309.4 L 1061.5 1309.4" stroke="#6ea8fe" stroke-width="4.2" fill="none" marker-end="url(#a_builds_on)"/>
+<text x="1083.5" y="1317.5" font-size="20.4" fill="#495057">builds on</text>
+<path d="M 1024.1 1344.0 L 1061.5 1344.0" stroke="#b197fc" stroke-width="4.2" fill="none"/>
+<text x="1083.5" y="1352.1" font-size="20.4" fill="#495057">supports (symmetric)</text>
+<path d="M 1024.1 1378.5 L 1061.5 1378.5" stroke="#868e96" stroke-width="4.2" fill="none" marker-end="url(#a_mentions)"/>
+<text x="1083.5" y="1386.7" font-size="20.4" fill="#495057">cites (citation layer)</text>
+<text x="1024.1" y="1421.3" font-size="18.3" fill="#adb5bd">contradicts and supports are recorded symmetric — no direction is claimed</text>
+<text x="1024.1" y="1453.4" font-size="18.3" fill="#adb5bd">solid = read · dashed = listed only</text>
+<text x="24" y="1521" font-size="18.7" fill="#adb5bd">5 graph calls · 0 papers chosen · 0 read in depth · 14 listed · 2 typed edges · 2 papers in the answer</text>
+</svg>

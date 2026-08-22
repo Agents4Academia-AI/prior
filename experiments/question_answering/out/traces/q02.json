@@ -1,0 +1,1437 @@
+{
+ "nodes": [
+  {
+   "id": "arxiv:2411.15114v2::k00",
+   "paper_id": "arxiv:2411.15114v2",
+   "label": "RE-Bench (Research Engineering Benchmark) — seven open-ended ML research engineering environments with continuous scorin",
+   "problem": "",
+   "method": "benchmark",
+   "result": "RE-Bench (Research Engineering Benchmark) — seven open-ended ML research engineering environments with continuous scoring metrics — enables direct, realistic comparison of AI agent R&D capabilities against human expert performance.",
+   "paper": "RE-Bench: Evaluating frontier AI R&D capabilities of language model agents against human experts",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "arxiv:2504.09702v3::k00",
+   "paper_id": "arxiv:2504.09702v3",
+   "label": "MLRC-Bench — a dynamic benchmark suite of 7 tasks drawn from ML conference competitions (NeurIPS, ECCV, KDD) — evaluates",
+   "problem": "",
+   "method": "benchmark",
+   "result": "MLRC-Bench — a dynamic benchmark suite of 7 tasks drawn from ML conference competitions (NeurIPS, ECCV, KDD) — evaluates language agents on both proposing and implementing novel ML research methods using objective, performance-based metrics and compute constraints, enabling rigorous comparison against established baselines and top human solutions.",
+   "paper": "MLRC-Bench: Can Language Agents Solve Machine Learning Research Challenges?",
+   "year": 2025,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    5,
+    6,
+    8,
+    9,
+    10
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2504.09702v3::k01",
+   "paper_id": "arxiv:2504.09702v3",
+   "label": "Large-scale evaluation of frontier LLMs under representative agent scaffoldings on ML research competition tasks shows t",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "Large-scale evaluation of frontier LLMs under representative agent scaffoldings on ML research competition tasks shows that even the best-performing agent (gemini-exp-1206 under MLAB) closes only 9.3% of the gap between the baseline and top human participant scores, demonstrating severe limitations of current AI research agents in generating and implementing innovative ML solutions.",
+   "paper": "MLRC-Bench: Can Language Agents Solve Machine Learning Research Challenges?",
+   "year": 2025,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    5,
+    6,
+    8,
+    9,
+    10
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2504.09702v3::k02",
+   "paper_id": "arxiv:2504.09702v3",
+   "label": "LLM-judged idea novelty is poorly correlated with empirical effectiveness on cutting-edge ML research problems, revealin",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "LLM-judged idea novelty is poorly correlated with empirical effectiveness on cutting-edge ML research problems, revealing a fundamental misalignment that undermines the reliability of LLM-as-a-judge for evaluating research agent outputs.",
+   "paper": "MLRC-Bench: Can Language Agents Solve Machine Learning Research Challenges?",
+   "year": 2025,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    5,
+    6,
+    8,
+    9,
+    10
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2506.22026::k00",
+   "paper_id": "arxiv:2506.22026",
+   "label": "Idea Novelty Checker, a retrieval-augmented LLM framework using keyword and snippet-based retrieval, embedding-based fil",
+   "problem": "",
+   "method": "method",
+   "result": "Idea Novelty Checker, a retrieval-augmented LLM framework using keyword and snippet-based retrieval, embedding-based filtering, and facet-based LLM re-ranking to assess whether scientific ideas are novel relative to prior literature",
+   "paper": "Literature-Grounded Novelty Assessment of Scientific Ideas",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "arxiv:2605.27905::k00",
+   "paper_id": "arxiv:2605.27905",
+   "label": "A corpus of 37,802 AI-generated scientific ideas produced by four research-agent frameworks (zero-shot, AIScientist, Res",
+   "problem": "",
+   "method": "dataset",
+   "result": "A corpus of 37,802 AI-generated scientific ideas produced by four research-agent frameworks (zero-shot, AIScientist, ResearchAgent, AgentLaboratory) paired with six LLMs across citation-defined research areas in AI and machine learning, enabling systematic comparison of AI and human scientific ideation.",
+   "paper": "AI Research Agents Narrow Scientific Exploration",
+   "year": 2026,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    6,
+    11,
+    12
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2605.27905::k01",
+   "paper_id": "arxiv:2605.27905",
+   "label": "AI-generated scientific ideas are substantially more concentrated in topic space than human-authored papers from the sam",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "AI-generated scientific ideas are substantially more concentrated in topic space than human-authored papers from the same research areas, indicating that scale of AI ideation does not translate to breadth of scientific exploration.",
+   "paper": "AI Research Agents Narrow Scientific Exploration",
+   "year": 2026,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    6,
+    11,
+    12
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2605.27905::k02",
+   "paper_id": "arxiv:2605.27905",
+   "label": "AI-generated ideas remain much closer to their seed literature than human follow-on work does, staying within the concep",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "AI-generated ideas remain much closer to their seed literature than human follow-on work does, staying within the conceptual neighborhood of input papers rather than moving into new research territory.",
+   "paper": "AI Research Agents Narrow Scientific Exploration",
+   "year": 2026,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    6,
+    11,
+    12
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2605.27905::k03",
+   "paper_id": "arxiv:2605.27905",
+   "label": "Papers most similar to AI-generated research ideas tend to receive fewer subsequent citations, suggesting AI agents pref",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "Papers most similar to AI-generated research ideas tend to receive fewer subsequent citations, suggesting AI agents preferentially occupy lower-impact regions of the scientific landscape.",
+   "paper": "AI Research Agents Narrow Scientific Exploration",
+   "year": 2026,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    6,
+    11,
+    12
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2605.27905::k04",
+   "paper_id": "arxiv:2605.27905",
+   "label": "When AI-generated ideas diverge from prior work, the divergence arises primarily from recombining existing technical met",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "When AI-generated ideas diverge from prior work, the divergence arises primarily from recombining existing technical methods rather than from posing fundamentally new research questions.",
+   "paper": "AI Research Agents Narrow Scientific Exploration",
+   "year": 2026,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    6,
+    11,
+    12
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4402952666::k00",
+   "paper_id": "openalex:W4402952666",
+   "label": "The AI Scientist — an end-to-end, fully automated pipeline in which a frontier LLM generates research ideas, searches th",
+   "problem": "",
+   "method": "framework",
+   "result": "The AI Scientist — an end-to-end, fully automated pipeline in which a frontier LLM generates research ideas, searches the literature, designs and executes experiments, visualizes results, writes a complete scientific manuscript, and performs self-review in an open-ended loop — enables autonomous scientific discovery in machine learning at a cost of under $15 per paper.",
+   "paper": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6,
+    8
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4402952811::k00",
+   "paper_id": "openalex:W4402952811",
+   "label": "MLR-Copilot — a three-stage autonomous ML research framework (idea generation, experiment implementation, and execution)",
+   "problem": "",
+   "method": "framework",
+   "result": "MLR-Copilot — a three-stage autonomous ML research framework (idea generation, experiment implementation, and execution) that takes a research paper as input and produces novel research methodologies, executable code, and experimental results.",
+   "paper": "MLR-Copilot: Autonomous Machine Learning Research based on Large Language Models Agents",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4402952811::k03",
+   "paper_id": "openalex:W4402952811",
+   "label": "Empirical evaluation of autonomous ML research generation across five ML research tasks shows that LLM-agent pipelines w",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "Empirical evaluation of autonomous ML research generation across five ML research tasks shows that LLM-agent pipelines with RL-tuned idea generation can produce novel and feasible research hypotheses and complete the full research cycle through executable experimental outcomes.",
+   "paper": "MLR-Copilot: Autonomous Machine Learning Research based on Large Language Models Agents",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4403586302::k00",
+   "paper_id": "openalex:W4403586302",
+   "label": "A controlled experimental framework for comparing human and LLM research idea generation — enforcing style standardizati",
+   "problem": "",
+   "method": "framework",
+   "result": "A controlled experimental framework for comparing human and LLM research idea generation — enforcing style standardization, matched topic distributions, and blind expert review — enables statistically rigorous head-to-head evaluation of ideation capabilities for the first time.",
+   "paper": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers",
+   "year": 2024,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    3,
+    6,
+    7,
+    8,
+    10,
+    12
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4403586302::k01",
+   "paper_id": "openalex:W4403586302",
+   "label": "In a large-scale blind evaluation by over 100 NLP researchers, LLM-generated research ideas are rated as significantly m",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "In a large-scale blind evaluation by over 100 NLP researchers, LLM-generated research ideas are rated as significantly more novel (p < 0.05) than ideas written by human experts, while being judged slightly weaker on feasibility — the first statistically significant conclusion on LLM research ideation capability.",
+   "paper": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers",
+   "year": 2024,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    3,
+    6,
+    7,
+    8,
+    10,
+    12
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4403586302::k02",
+   "paper_id": "openalex:W4403586302",
+   "label": "LLM ideation agents exhibit two systematic failure modes at scale: lack of diversity in generated ideas and unreliable s",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "LLM ideation agents exhibit two systematic failure modes at scale: lack of diversity in generated ideas and unreliable self-evaluation of idea quality.",
+   "paper": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers",
+   "year": 2024,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    3,
+    6,
+    7,
+    8,
+    10,
+    12
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4403586302::k03",
+   "paper_id": "openalex:W4403586302",
+   "label": "An LLM ideation agent combining retrieval-augmented generation with an overgenerate-and-rerank inference-time scaling st",
+   "problem": "",
+   "method": "model",
+   "result": "An LLM ideation agent combining retrieval-augmented generation with an overgenerate-and-rerank inference-time scaling strategy produces research ideas rated as more novel than those written by human NLP experts in blind review.",
+   "paper": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers",
+   "year": 2024,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    3,
+    6,
+    7,
+    8,
+    10,
+    12
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4403586302::k04",
+   "paper_id": "openalex:W4403586302",
+   "label": "An end-to-end study design that recruits expert researchers to execute generated ideas into full research projects enabl",
+   "problem": "",
+   "method": "framework",
+   "result": "An end-to-end study design that recruits expert researchers to execute generated ideas into full research projects enables ground-truth measurement of whether expert novelty and feasibility judgments translate into meaningful differences in research outcomes.",
+   "paper": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers",
+   "year": 2024,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    3,
+    6,
+    7,
+    8,
+    10,
+    12
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4404782918::k00",
+   "paper_id": "openalex:W4404782918",
+   "label": "ReviewCritique — a dataset of 100 NLP paper submissions paired with both human-written and LLM-generated reviews, where ",
+   "problem": "",
+   "method": "dataset",
+   "result": "ReviewCritique — a dataset of 100 NLP paper submissions paired with both human-written and LLM-generated reviews, where every review is annotated at the sentence level by domain experts (most holding Ph.D. degrees or area-chairing experience) for deficiency labels and explanations — supports benchmarking of AI-assisted peer review and LLM meta-reviewing capabilities.",
+   "paper": "LLMs Assist NLP Researchers: Critique Paper (Meta-)Reviewing",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    7,
+    8
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4404782918::k02",
+   "paper_id": "openalex:W4404782918",
+   "label": "At the sentence level, LLM-generated paper reviews contain more deficient segments than human-written reviews and tend t",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "At the sentence level, LLM-generated paper reviews contain more deficient segments than human-written reviews and tend to be paper-unspecific, lacking diversity and constructive feedback — establishing a quantitative gap between human and LLM reviewing quality.",
+   "paper": "LLMs Assist NLP Researchers: Critique Paper (Meta-)Reviewing",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    7,
+    8
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4407760093::k00",
+   "paper_id": "openalex:W4407760093",
+   "label": "AIDE (AI-Driven Exploration) — an LLM-powered agent that automates machine learning engineering by framing it as a code ",
+   "problem": "",
+   "method": "method",
+   "result": "AIDE (AI-Driven Exploration) — an LLM-powered agent that automates machine learning engineering by framing it as a code optimization problem and conducting tree search over candidate Python solutions, using draft, debug, and improve operators guided by automated evaluation scores.",
+   "paper": "AIDE: AI-Driven Exploration in the Space of Code",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8,
+    11
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4407806895::k00",
+   "paper_id": "openalex:W4407806895",
+   "label": "MLGym — a Gym-compatible environment and unified framework for developing and evaluating LLM agents on open-ended AI res",
+   "problem": "",
+   "method": "framework",
+   "result": "MLGym — a Gym-compatible environment and unified framework for developing and evaluating LLM agents on open-ended AI research tasks, enabling research on reinforcement learning, curriculum learning, and open-ended learning algorithms for training such agents.",
+   "paper": "MLGym: A New Framework and Benchmark for Advancing AI Research Agents",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4407806895::k03",
+   "paper_id": "openalex:W4407806895",
+   "label": "Frontier LLMs (Claude-3.5-Sonnet, Llama-3.1 405B, GPT-4o, o1-preview, Gemini-1.5 Pro) can improve on given baselines pri",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "Frontier LLMs (Claude-3.5-Sonnet, Llama-3.1 405B, GPT-4o, o1-preview, Gemini-1.5 Pro) can improve on given baselines primarily through hyperparameter tuning but do not generate novel hypotheses, algorithms, or architectures when evaluated on open-ended AI research tasks.",
+   "paper": "MLGym: A New Framework and Benchmark for Advancing AI Research Agents",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4411120082::k00",
+   "paper_id": "openalex:W4411120082",
+   "label": "ResearchAgent — an LLM-powered system that automatically identifies novel research problems, proposes methods, and desig",
+   "problem": "",
+   "method": "framework",
+   "result": "ResearchAgent — an LLM-powered system that automatically identifies novel research problems, proposes methods, and designs experiments by augmenting a core paper with an academic-graph neighbourhood and an entity-centric knowledge store, then iteratively refines the output via feedback from collaborative ReviewingAgents.",
+   "paper": "ResearchAgent: Iterative Research Idea Generation over Scientific Literature with Large Language Models",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1,
+    2,
+    6,
+    8,
+    9,
+    12
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4411120082::k01",
+   "paper_id": "openalex:W4411120082",
+   "label": "An entity-centric knowledge store built from co-occurrences of key concepts across scientific literature enables cross-d",
+   "problem": "",
+   "method": "resource",
+   "result": "An entity-centric knowledge store built from co-occurrences of key concepts across scientific literature enables cross-domain idea generation by capturing novel underlying relationships within and across fields.",
+   "paper": "ResearchAgent: Iterative Research Idea Generation over Scientific Literature with Large Language Models",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1,
+    2,
+    6,
+    8,
+    9,
+    12
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4412887852::k00",
+   "paper_id": "openalex:W4412887852",
+   "label": "NOVA — an iterative planning framework that purposely plans the retrieval of external knowledge across multiple fields a",
+   "problem": "",
+   "method": "framework",
+   "result": "NOVA — an iterative planning framework that purposely plans the retrieval of external knowledge across multiple fields at each step, progressively enriching LLM-based research-idea generation with broader and deeper insights to improve novelty and diversity.",
+   "paper": "NOVA: An Iterative Planning Framework for Enhancing Scientific Innovation with Large Language Models",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    2
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4412889957::k00",
+   "paper_id": "openalex:W4412889957",
+   "label": "A substantial fraction (24%) of LLM-generated research documents are plagiarized — either paraphrased with one-to-one me",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "A substantial fraction (24%) of LLM-generated research documents are plagiarized — either paraphrased with one-to-one methodological mapping or significantly borrowed from existing work without attribution — as identified through an expert-led evaluation in which 13 domain experts actively searched for similarities across 50 LLM-generated research documents, with findings cross-verified by authors of the source papers.",
+   "paper": "All That Glitters is Not Novel: Plagiarism in AI Generated Research",
+   "year": 2025,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    4,
+    6,
+    7,
+    10
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4412889957::k01",
+   "paper_id": "openalex:W4412889957",
+   "label": "A synthetic dataset of research proposals intentionally plagiarized from existing papers enables controlled, systematic ",
+   "problem": "",
+   "method": "dataset",
+   "result": "A synthetic dataset of research proposals intentionally plagiarized from existing papers enables controlled, systematic evaluation of automated plagiarism detection methods on idea-level plagiarism.",
+   "paper": "All That Glitters is Not Novel: Plagiarism in AI Generated Research",
+   "year": 2025,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    4,
+    6,
+    7,
+    10
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4412889957::k02",
+   "paper_id": "openalex:W4412889957",
+   "label": "Automated plagiarism detection methods — including Semantic Scholar Augmented Generation (SSAG), embedding-based search ",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "Automated plagiarism detection methods — including Semantic Scholar Augmented Generation (SSAG), embedding-based search (OpenScholar), and commercial text-matching tools (Turnitin) — are inadequate at catching idea-level plagiarism in LLM-generated research proposals.",
+   "paper": "All That Glitters is Not Novel: Plagiarism in AI Generated Research",
+   "year": 2025,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    4,
+    6,
+    7,
+    10
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4412889957::k03",
+   "paper_id": "openalex:W4412889957",
+   "label": "LLM-generated research content is less diverse and follows more predictable patterns than human-written research, and th",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "LLM-generated research content is less diverse and follows more predictable patterns than human-written research, and these patterns may be detectable through basic classification methods to flag content for additional review.",
+   "paper": "All That Glitters is Not Novel: Plagiarism in AI Generated Research",
+   "year": 2025,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    4,
+    6,
+    7,
+    10
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4414587939::k00",
+   "paper_id": "openalex:W4414587939",
+   "label": "MLR-Bench — a benchmark of 201 open-ended machine learning research tasks drawn from NeurIPS, ICLR, and ICML workshops —",
+   "problem": "",
+   "method": "benchmark",
+   "result": "MLR-Bench — a benchmark of 201 open-ended machine learning research tasks drawn from NeurIPS, ICLR, and ICML workshops — enables systematic evaluation of AI research agents across nine ML topic areas with both stepwise (idea generation, proposal formulation, experimentation, paper writing) and end-to-end assessment pipelines.",
+   "paper": "MLR-Bench: Evaluating AI Agents on Open-Ended Machine Learning Research",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5,
+    8
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4414587939::k03",
+   "paper_id": "openalex:W4414587939",
+   "label": "Current coding agents fabricate or fail to validate experimental results in approximately 80% of ML research task attemp",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "Current coding agents fabricate or fail to validate experimental results in approximately 80% of ML research task attempts, representing a critical barrier to scientific reliability that is distinct from their strong performance on idea generation and paper writing.",
+   "paper": "MLR-Bench: Evaluating AI Agents on Open-Ended Machine Learning Research",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5,
+    8
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4416034681::k00",
+   "paper_id": "openalex:W4416034681",
+   "label": "Chain-of-Ideas (CoI) agent — an LLM-based research ideation system that organizes relevant literature into a chronologic",
+   "problem": "",
+   "method": "framework",
+   "result": "Chain-of-Ideas (CoI) agent — an LLM-based research ideation system that organizes relevant literature into a chronological chain structure mirroring the progressive development of a research domain, enabling LLMs to generate novel and logically coherent research ideas with experimental designs for approximately $0.50 per idea.",
+   "paper": "Chain of Ideas: Revolutionizing Research Via Novel Idea Development with LLM Agents",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1,
+    6,
+    8
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4416034681::k01",
+   "paper_id": "openalex:W4416034681",
+   "label": "Idea Arena — an arena-style, pairwise evaluation protocol for comparing research idea-generation methods that achieves h",
+   "problem": "",
+   "method": "benchmark",
+   "result": "Idea Arena — an arena-style, pairwise evaluation protocol for comparing research idea-generation methods that achieves high agreement with human researcher preferences.",
+   "paper": "Chain of Ideas: Revolutionizing Research Via Novel Idea Development with LLM Agents",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1,
+    6,
+    8
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4416035220::k00",
+   "paper_id": "openalex:W4416035220",
+   "label": "Agent Laboratory — an autonomous LLM-based pipeline that accepts a human-provided research idea and completes the full r",
+   "problem": "",
+   "method": "framework",
+   "result": "Agent Laboratory — an autonomous LLM-based pipeline that accepts a human-provided research idea and completes the full research cycle (literature review, experimentation, and report writing) to produce a code repository and research report, with optional human feedback at each stage.",
+   "paper": "Agent Laboratory: Using LLM Agents as Research Assistants",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8,
+    12
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4416035327::k00",
+   "paper_id": "openalex:W4416035327",
+   "label": "A multi-domain corpus of 1,250 scientific papers with annotated future research ideas (FRIs) spanning Computer Science, ",
+   "problem": "",
+   "method": "dataset",
+   "result": "A multi-domain corpus of 1,250 scientific papers with annotated future research ideas (FRIs) spanning Computer Science, Economics, Chemistry, Physics, and Medicine, designed to benchmark LLM future-research-idea generation with author-proposed ideas as ground truth.",
+   "paper": "Can Large Language Models Unlock Novel Scientific Research Ideas?",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    2,
+    9
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4416035327::k03",
+   "paper_id": "openalex:W4416035327",
+   "label": "LLMs (Gemini, Claude-2, GPT-3.5, GPT-4) can generate future research ideas that are relevant, feasible, and novel to a m",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "LLMs (Gemini, Claude-2, GPT-3.5, GPT-4) can generate future research ideas that are relevant, feasible, and novel to a meaningful degree, as evidenced by human evaluation of 660 generated ideas across novelty, relevance, and feasibility dimensions.",
+   "paper": "Can Large Language Models Unlock Novel Scientific Research Ideas?",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    2,
+    9
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W7126046125::k00",
+   "paper_id": "openalex:W7126046125",
+   "label": "An open-source framework enabling autonomous agent laboratories to collaboratively develop research by uploading and ret",
+   "problem": "",
+   "method": "framework",
+   "result": "An open-source framework enabling autonomous agent laboratories to collaboratively develop research by uploading and retrieving findings from a shared preprint server, allowing agents to iteratively build upon each other's discoveries.",
+   "paper": "AgentRxiv: Towards Collaborative Autonomous Research",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6,
+    7
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W7165138641::k00",
+   "paper_id": "openalex:W7165138641",
+   "label": "AstroInsight — an end-to-end framework for automated scientific idea generation in data-driven astronomy — integrates fa",
+   "problem": "",
+   "method": "framework",
+   "result": "AstroInsight — an end-to-end framework for automated scientific idea generation in data-driven astronomy — integrates fact extraction and hypothesis mining, entity linking-based iterative refinement, Mixture of Agents optimization, and human-AI collaborative review.",
+   "paper": "Can large language models generate novel scientific ideas? A comprehensive study on data-driven astronomy",
+   "year": 2026,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    3,
+    8,
+    9
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W7165138641::k01",
+   "paper_id": "openalex:W7165138641",
+   "label": "Entity linking-based iterative optimization combining entity refinements with re-ranking improves the accuracy and coher",
+   "problem": "",
+   "method": "method",
+   "result": "Entity linking-based iterative optimization combining entity refinements with re-ranking improves the accuracy and coherence of scientific hypotheses.",
+   "paper": "Can large language models generate novel scientific ideas? A comprehensive study on data-driven astronomy",
+   "year": 2026,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    3,
+    8,
+    9
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W7165138641::k02",
+   "paper_id": "openalex:W7165138641",
+   "label": "Mixture of Agents architecture where multiple LLMs independently refine scientific drafts and merge outputs enables deep",
+   "problem": "",
+   "method": "method",
+   "result": "Mixture of Agents architecture where multiple LLMs independently refine scientific drafts and merge outputs enables deeper iterations and facilitates disruptive discovery.",
+   "paper": "Can large language models generate novel scientific ideas? A comprehensive study on data-driven astronomy",
+   "year": 2026,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    3,
+    8,
+    9
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W7165138641::k03",
+   "paper_id": "openalex:W7165138641",
+   "label": "Human-AI collaborative quality control mechanism integrating expert evaluation with LLM-based assessment assures scienti",
+   "problem": "",
+   "method": "method",
+   "result": "Human-AI collaborative quality control mechanism integrating expert evaluation with LLM-based assessment assures scientific validity while maintaining efficiency.",
+   "paper": "Can large language models generate novel scientific ideas? A comprehensive study on data-driven astronomy",
+   "year": 2026,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    3,
+    8,
+    9
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W7165138641::k04",
+   "paper_id": "openalex:W7165138641",
+   "label": "LLM-generated research ideas in data-driven astronomy achieve novelty scores of 3+/6 and match or exceed human-generated",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "LLM-generated research ideas in data-driven astronomy achieve novelty scores of 3+/6 and match or exceed human-generated ideas in originality and feasibility.",
+   "paper": "Can large language models generate novel scientific ideas? A comprehensive study on data-driven astronomy",
+   "year": 2026,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    3,
+    8,
+    9
+   ],
+   "trace_in_answer": true
+  }
+ ],
+ "edges": [
+  {
+   "id": "openalex:W4416034681::k01|builds_on|openalex:W4403586302::k00",
+   "source": "openalex:W4416034681::k01",
+   "target": "openalex:W4403586302::k00",
+   "relation": "builds_on",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1,
+    6
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2504.09702v3::k02|refines|openalex:W4403586302::k01",
+   "source": "arxiv:2504.09702v3::k02",
+   "target": "openalex:W4403586302::k01",
+   "relation": "refines",
+   "provenance": "text",
+   "confidence": 1.0,
+   "evidence": "Contribution B (Si et al.) establishes that human judges rate LLM-generated ideas as significantly more novel than human expert ideas — a finding that uses human judgment as the gold standard for novelty evaluation. Contribution A explicitly cites B (CIT evidence) and then qualifies/narrows that finding: A shows that LLM-judged novelty (as opposed to human-judged novelty) is poorly correlated with empirical effectiveness, revealing that novelty scores — the very metric B elevated — are unreliable when produced by LLM judges and do not translate to practical research impact. This does not contradict B's human-judge result but rather refines the broader claim about novelty-based evaluation of LLM research agents: A pinpoints that subjective novelty assessments (including LLM-as-a-judge variants of the methodology B exemplifies) are misaligned with objective performance, making A's contribution a critical qualification of the evaluation framework B pioneered. Evidence A:023 and A:005 explicitly frame A's work as correcting the reliability assumption underlying subjective novelty evaluations such as B's, while B:026 shows the novelty scores A is questioning. The relation is refines (A ",
+   "trace_engagement": "read",
+   "trace_steps": [
+    1,
+    6,
+    8,
+    10
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4412889957::k00|refines|openalex:W4403586302::k01",
+   "source": "openalex:W4412889957::k00",
+   "target": "openalex:W4403586302::k01",
+   "relation": "refines",
+   "provenance": "text",
+   "confidence": 1.0,
+   "evidence": "Contribution B (Gupta & Pruthi) directly evaluates LLM-generated research documents from Si et al. (2024) — i.e., Contribution A — and qualifies its novelty finding. While Contribution A concludes that LLM-generated ideas are rated as significantly more novel than human expert ideas (AQ, A:002, A:005), Contribution B applies a different evaluative lens (plagiarism detection rather than novelty rating) to the same artifact set, finding that 24% of those documents are plagiarized from prior work (B:000, B:001, B:002). This directly narrows and corrects the scope of Contribution A's novelty claim: apparent novelty is partially an artifact of undetected plagiarism. B:001 explicitly states that the 50 evaluated documents include proposals generated from Si et al. (2024), and B:000 frames its work as a critical response to the \"prevailing optimism\" and prior expert evaluations of novelty/feasibility — an unmistakable reference to Contribution A. This is a refines relationship directed from B to A, as B qualifies and makes more precise (by undermining) A's conclusion about LLM novelty.",
+   "trace_engagement": "read",
+   "trace_steps": [
+    1,
+    6,
+    7,
+    10
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2504.09702v3::k02|supports|openalex:W4403586302::k02",
+   "source": "arxiv:2504.09702v3::k02",
+   "target": "openalex:W4403586302::k02",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 1.0,
+   "evidence": "Both contributions identify the same core finding: LLM self-evaluation of research idea quality is unreliable. Contribution B (Si et al.) empirically establishes that LLMs cannot reliably evaluate ideas and lack diversity at scale. Contribution A (MLRC-Bench) corroborates this by showing LLM-judged novelty is poorly correlated with empirical effectiveness. The citation in A of B, combined with A's explicit framing of its LLM-as-a-judge analysis as investigating the same alignment problem B identified, indicates mutual corroboration of the same phenomenon from complementary experimental angles. This is supports (symmetric) rather than builds_on because A does not extend B's method or artifact — it independently measures the same failure mode on a different benchmark.",
+   "trace_engagement": "read",
+   "trace_steps": [
+    1,
+    6,
+    8,
+    10
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2504.09702v3::k02|contradicts|openalex:W4403586302::k03",
+   "source": "arxiv:2504.09702v3::k02",
+   "target": "openalex:W4403586302::k03",
+   "relation": "contradicts",
+   "provenance": "text",
+   "confidence": 1.0,
+   "evidence": "Contribution B (Si et al.) finds that LLM-generated ideas are rated as significantly more novel than human expert ideas by human reviewers, treating novelty scores from blind review as a meaningful signal. Contribution A (MLRC-Bench) directly contradicts this by showing that LLM-judged idea novelty is poorly correlated with empirical effectiveness, and that LLM-as-a-judge evaluations fail to reliably distinguish research quality. While B uses human judges rather than LLM judges, A's finding undermines the premise that high novelty ratings (whether from humans or LLMs) translate to research value — and A explicitly cites B in a comparison table contrasting evaluation methodologies. Evidence [A:023] shows LLM subjective scores cannot distinguish model capabilities; [B:026] shows AI ideas outscore humans on novelty; these findings are in tension over what novelty ratings signify.",
+   "trace_engagement": "read",
+   "trace_steps": [
+    1,
+    6,
+    8,
+    10
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4416034681::k00|mentions|openalex:W4403586302::k00",
+   "source": "openalex:W4416034681::k00",
+   "target": "openalex:W4403586302::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2506.22026::k00|mentions|openalex:W4403586302::k00",
+   "source": "arxiv:2506.22026::k00",
+   "target": "openalex:W4403586302::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W7126046125::k00|mentions|openalex:W4403586302::k00",
+   "source": "openalex:W7126046125::k00",
+   "target": "openalex:W4403586302::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2605.27905::k00|mentions|openalex:W4403586302::k00",
+   "source": "arxiv:2605.27905::k00",
+   "target": "openalex:W4403586302::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6,
+    12
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W4403586302::k00|mentions|openalex:W4402952666::k00",
+   "source": "openalex:W4403586302::k00",
+   "target": "openalex:W4402952666::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W4403586302::k00|mentions|openalex:W4411120082::k00",
+   "source": "openalex:W4403586302::k00",
+   "target": "openalex:W4411120082::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W4404782918::k02|supports|openalex:W4412889957::k03",
+   "source": "openalex:W4404782918::k02",
+   "target": "openalex:W4412889957::k03",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    7
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W7126046125::k00|mentions|openalex:W4412889957::k00",
+   "source": "openalex:W7126046125::k00",
+   "target": "openalex:W4412889957::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    7
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2504.09702v3::k01|builds_on|arxiv:2411.15114v2::k00",
+   "source": "arxiv:2504.09702v3::k01",
+   "target": "arxiv:2411.15114v2::k00",
+   "relation": "builds_on",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2504.09702v3::k02|refines|openalex:W4402952811::k03",
+   "source": "arxiv:2504.09702v3::k02",
+   "target": "openalex:W4402952811::k03",
+   "relation": "refines",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2504.09702v3::k02|contradicts|openalex:W7165138641::k04",
+   "source": "arxiv:2504.09702v3::k02",
+   "target": "openalex:W7165138641::k04",
+   "relation": "contradicts",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8,
+    9
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2504.09702v3::k01|supports|openalex:W4407806895::k03",
+   "source": "arxiv:2504.09702v3::k01",
+   "target": "openalex:W4407806895::k03",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2504.09702v3::k02|supports|openalex:W4414587939::k03",
+   "source": "arxiv:2504.09702v3::k02",
+   "target": "openalex:W4414587939::k03",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2504.09702v3::k00|mentions|openalex:W4416034681::k00",
+   "source": "arxiv:2504.09702v3::k00",
+   "target": "openalex:W4416034681::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2504.09702v3::k00|mentions|openalex:W4407760093::k00",
+   "source": "arxiv:2504.09702v3::k00",
+   "target": "openalex:W4407760093::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2504.09702v3::k00|mentions|openalex:W4402952666::k00",
+   "source": "arxiv:2504.09702v3::k00",
+   "target": "openalex:W4402952666::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2504.09702v3::k00|mentions|openalex:W4411120082::k00",
+   "source": "arxiv:2504.09702v3::k00",
+   "target": "openalex:W4411120082::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2504.09702v3::k00|mentions|openalex:W4403586302::k00",
+   "source": "arxiv:2504.09702v3::k00",
+   "target": "openalex:W4403586302::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2504.09702v3::k00|mentions|openalex:W4407806895::k00",
+   "source": "arxiv:2504.09702v3::k00",
+   "target": "openalex:W4407806895::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2504.09702v3::k00|mentions|arxiv:2411.15114v2::k00",
+   "source": "arxiv:2504.09702v3::k00",
+   "target": "arxiv:2411.15114v2::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2504.09702v3::k00|mentions|openalex:W4402952811::k00",
+   "source": "arxiv:2504.09702v3::k00",
+   "target": "openalex:W4402952811::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2504.09702v3::k00|mentions|openalex:W4416035220::k00",
+   "source": "arxiv:2504.09702v3::k00",
+   "target": "openalex:W4416035220::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2504.09702v3::k00|mentions|openalex:W4404782918::k00",
+   "source": "arxiv:2504.09702v3::k00",
+   "target": "openalex:W4404782918::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W7165138641::k01|builds_on|openalex:W4411120082::k01",
+   "source": "openalex:W7165138641::k01",
+   "target": "openalex:W4411120082::k01",
+   "relation": "builds_on",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    9
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4416035327::k03|supports|openalex:W7165138641::k04",
+   "source": "openalex:W4416035327::k03",
+   "target": "openalex:W7165138641::k04",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    9
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2605.27905::k00|mentions|openalex:W4411120082::k00",
+   "source": "arxiv:2605.27905::k00",
+   "target": "openalex:W4411120082::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    12
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2605.27905::k00|mentions|openalex:W4416035220::k00",
+   "source": "arxiv:2605.27905::k00",
+   "target": "openalex:W4416035220::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    12
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  }
+ ],
+ "trace": {
+  "question_id": "q02",
+  "question": "Is the field actually agreed that LLMs can come up with genuinely novel research ideas, or do the studies disagree?",
+  "family": "disagreement",
+  "arm": "graph",
+  "n_calls": 12,
+  "steps": [
+   {
+    "step": 1,
+    "tool": "topic_structure",
+    "args": {
+     "query": "LLM generating novel research ideas"
+    },
+    "surfaced": [
+     "openalex:W4411120082",
+     "openalex:W4403586302",
+     "openalex:W4403586302",
+     "openalex:W4403586302",
+     "openalex:W4403586302"
+    ],
+    "note": ""
+   },
+   {
+    "step": 2,
+    "tool": "search_contributions",
+    "args": {
+     "query": "large language models research idea generation novelty"
+    },
+    "surfaced": [
+     "openalex:W4412887852",
+     "openalex:W4411120082",
+     "openalex:W4411120082",
+     "openalex:W4411120082",
+     "openalex:W4411120082",
+     "openalex:W4416035327",
+     "openalex:W4416035327",
+     "openalex:W4412887852"
+    ],
+    "note": ""
+   },
+   {
+    "step": 3,
+    "tool": "find_paper",
+    "args": {
+     "query": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers"
+    },
+    "surfaced": [
+     "openalex:W4403586302",
+     "openalex:W7165138641"
+    ],
+    "note": ""
+   },
+   {
+    "step": 4,
+    "tool": "find_paper",
+    "args": {
+     "query": "All That Glitters is Not Novel: Plagiarism in AI Generated Research"
+    },
+    "surfaced": [
+     "openalex:W4412889957"
+    ],
+    "note": ""
+   },
+   {
+    "step": 5,
+    "tool": "find_paper",
+    "args": {
+     "query": "MLRC-Bench: Can Language Agents Solve Machine Learning Research Challenges?"
+    },
+    "surfaced": [
+     "arxiv:2504.09702v3",
+     "openalex:W4414587939"
+    ],
+    "note": ""
+   },
+   {
+    "step": 6,
+    "tool": "paper_neighbourhood",
+    "args": {
+     "paper_id": "openalex:W4403586302"
+    },
+    "surfaced": [
+     "openalex:W4416034681",
+     "arxiv:2506.22026",
+     "arxiv:2505.18705v1",
+     "openalex:W7126046125",
+     "arxiv:2605.27905",
+     "arxiv:2508.15126v2",
+     "openalex:W4402952666",
+     "openalex:W4411120082",
+     "openalex:W4400734098",
+     "openalex:W4390784029",
+     "openalex:W4394647523"
+    ],
+    "note": ""
+   },
+   {
+    "step": 7,
+    "tool": "paper_neighbourhood",
+    "args": {
+     "paper_id": "openalex:W4412889957"
+    },
+    "surfaced": [
+     "openalex:W7126046125"
+    ],
+    "note": ""
+   },
+   {
+    "step": 8,
+    "tool": "paper_neighbourhood",
+    "args": {
+     "paper_id": "arxiv:2504.09702v3"
+    },
+    "surfaced": [
+     "openalex:W4416034681",
+     "openalex:W4407760093",
+     "openalex:W4402952666",
+     "openalex:W4411120082",
+     "openalex:W4403586302",
+     "openalex:W4407806895",
+     "arxiv:2411.15114v2",
+     "openalex:W4402952811",
+     "openalex:W4414827381",
+     "openalex:W4416035220",
+     "openalex:W4403324055",
+     "openalex:W4404782918"
+    ],
+    "note": ""
+   },
+   {
+    "step": 9,
+    "tool": "paper_neighbourhood",
+    "args": {
+     "paper_id": "openalex:W7165138641"
+    },
+    "surfaced": [],
+    "note": ""
+   },
+   {
+    "step": 10,
+    "tool": "edge_reasons",
+    "args": {
+     "paper_id": "openalex:W4403586302",
+     "others": [
+      "arxiv:2504.09702v3",
+      "openalex:W4412889957"
+     ]
+    },
+    "surfaced": [
+     "arxiv:2504.09702v3",
+     "openalex:W4412889957",
+     "arxiv:2504.09702v3",
+     "arxiv:2504.09702v3"
+    ],
+    "note": ""
+   },
+   {
+    "step": 11,
+    "tool": "find_paper",
+    "args": {
+     "query": "AI Research Agents Narrow Scientific Exploration"
+    },
+    "surfaced": [
+     "arxiv:2605.27905",
+     "openalex:W4416026872",
+     "arxiv:2510.21652v2",
+     "openalex:W4407760093"
+    ],
+    "note": ""
+   },
+   {
+    "step": 12,
+    "tool": "paper_neighbourhood",
+    "args": {
+     "paper_id": "arxiv:2605.27905"
+    },
+    "surfaced": [
+     "openalex:W4403586302",
+     "openalex:W7134120420",
+     "openalex:W4411120082",
+     "openalex:W4416035220",
+     "openalex:W7140287209",
+     "openalex:W4412889809",
+     "openalex:W4416540539",
+     "openalex:W7161731996"
+    ],
+    "note": ""
+   }
+  ],
+  "papers_named": [
+   "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers",
+   "MLRC-Bench: Can Language Agents Solve Machine Learning Research Challenges?",
+   "All That Glitters is Not Novel: Plagiarism in AI Generated Research",
+   "AI Research Agents Narrow Scientific Exploration",
+   "ResearchAgent: Iterative Research Idea Generation over Scientific Literature with Large Language Models",
+   "NOVA: An Iterative Planning Framework for Enhancing Scientific Innovation with Large Language Models",
+   "Can large language models generate novel scientific ideas? A comprehensive study on data-driven astronomy"
+  ]
+ }
+}

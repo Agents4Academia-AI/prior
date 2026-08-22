@@ -18,6 +18,22 @@ The judge is told explicitly that an honest "I could not establish this" OUTRANK
 a confident vague answer. Without that the judge rewards fluency, and the two
 control questions (which the atlas is SUPPOSED to lose) measure nothing.
 
+v2 (2026-08-21) — `fabricated` is SPLIT from `unrecognised`. The judge is sealed
+and scores from its own knowledge, which is the right call for reproducibility but
+has a hard edge: 32% of the 152-paper corpus is dated 2026 and eight papers
+postdate the judge's training data outright. A paper it has never heard of looks
+exactly like one that does not exist. It bit us on q04, where the judge set
+`fabricated` on "DN Hypo Pipeline" as "not a real system/paper" — it is
+arxiv:2606.08532, in the corpus, published after the cutoff. The bias is
+directional: the graph arm is the one that names obscure corpus papers, so it is
+the one penalised for being right about recent work.
+
+So the judge now scores correctness on the RELATIONSHIPS AND CLAIMS an answer
+makes, flags what it cannot place as `unrecognised` (no penalty), and reserves
+`fabricated` for things it affirmatively believes are false. Existence is settled
+mechanically afterwards by check_fabrication.py against the corpus. The v1
+judgements are kept in out_judge_v1/ and both are reported.
+
   • Checkpointed on question_id → out/qa_judgements.jsonl; re-running skips done.
   • Ctrl+C safe; --dry-run renders the exact prompt with no model call.
 
@@ -58,9 +74,20 @@ JUDGE_SYS = (
     "  5-6  specific papers, but the connection to the question is loosely argued\n"
     "  7-8  specific papers AND precise, checkable relationships between them\n"
     "  9-10 precise, and the structure of the evidence itself is made clear\n\n"
-    "CORRECTNESS (1-10) — are the stated facts and relationships actually true, as far "
-    "as you know the literature? A fabricated or misattributed paper is disqualifying: "
-    "score 1-3 and set the fabricated flag.\n\n"
+    "CORRECTNESS (1-10) — are the stated RELATIONSHIPS AND CLAIMS actually true, as "
+    "far as you know the literature? Judge what an answer says about how papers "
+    "relate, what a method does, who did it and what was found.\n\n"
+    "CRITICAL — a paper you do not recognise is NOT evidence of fabrication. These "
+    "answers draw on very recent work, including papers published after your training "
+    "data ends; roughly a third of the relevant literature here is from the current "
+    "year and some of it postdates anything you could have seen. If you cannot place a "
+    "title, that is a fact about you, not about the paper. Do NOT lower correctness "
+    "for it and do NOT set `fabricated` — set `unrecognised` instead, which carries no "
+    "penalty and is checked mechanically afterwards.\n"
+    "Reserve `fabricated` for something you affirmatively believe is WRONG: a real "
+    "paper credited to the wrong authors, a finding or number that contradicts what "
+    "you know the paper says, a method attributed to a system that does not do it, or "
+    "a title that garbles a paper you DO know. That is disqualifying: score 1-3.\n\n"
     "USEFULNESS (1-10) — could the researcher act on this answer as it stands?\n\n"
     "CRITICAL — how to treat uncertainty: an HONEST answer that says 'I could not "
     "establish this, here is what I can say' OUTRANKS a confident, fluent answer that "
@@ -69,8 +96,10 @@ JUDGE_SYS = (
     "reward length, fluency or confidence for their own sake — several of these answers "
     "may be from systems that cannot see the relevant material, and admitting that is "
     "the correct behaviour, not a weakness.\n\n"
-    "Flag per answer: `fabricated` (names a paper/finding/number you believe does not "
-    "exist or is misattributed), `hedged` (declined to commit to an answer), "
+    "Flag per answer: `fabricated` (states something you affirmatively believe is "
+    "false — wrong authors, wrong finding, garbled title of a paper you know); "
+    "`unrecognised` (names a paper you simply cannot place — no penalty, and note "
+    "which in `unrecognised_titles`); `hedged` (declined to commit to an answer); "
     "`overclaimed` (asserted completeness — 'these are all the papers that…' — that it "
     "cannot support).\n\n"
     "Finally give an overall RANKING (e.g. 'B>A>C'), name the BEST answer, and say how "
@@ -93,13 +122,15 @@ def _fields() -> dict:
         s[f"{x}_correctness"] = Annotated[int, f"Answer {X} correctness, 1-10"]
         s[f"{x}_usefulness"] = Annotated[int, f"Answer {X} usefulness, 1-10"]
         s[f"{x}_reason"] = Annotated[str, f"One sentence on Answer {X}"]
-        s[f"{x}_fabricated"] = Annotated[bool, f"Answer {X} names something that does not exist"]
+        s[f"{x}_fabricated"] = Annotated[bool, f"Answer {X} states something you believe is FALSE (wrong authors/finding/garbled known title) — not merely unfamiliar"]
+        s[f"{x}_unrecognised"] = Annotated[bool, f"Answer {X} names a paper you cannot place. No penalty — recent work is expected"]
+        s[f"{x}_unrecognised_titles"] = Annotated[str, f"Titles in Answer {X} you could not place; ';'-separated, or 'none'"]
         s[f"{x}_hedged"] = Annotated[bool, f"Answer {X} declined to commit"]
         s[f"{x}_overclaimed"] = Annotated[bool, f"Answer {X} asserted unsupportable completeness"]
     s["best_answer"] = Annotated[str, "Which answer is best overall: 'A', 'B' or 'C'"]
     s["ranking"] = Annotated[str, "Full ranking, e.g. 'B>A>C'"]
     s["margin"] = Annotated[str, "Gap from best to second: 'decisive', 'clear', 'slight', 'none'"]
-    s["fabrication_notes"] = Annotated[str, "What was fabricated, if anything; else 'none'"]
+    s["fabrication_notes"] = Annotated[str, "What you believe is FALSE, if anything (not merely unfamiliar); else 'none'"]
     return s
 
 
@@ -134,11 +165,15 @@ def load_units() -> list[tuple[dict, dict]]:
     return out
 
 
-def done_keys() -> set[str]:
+def done_keys() -> set[tuple[str, int]]:
+    """(question_id, run) — so --repeats resumes correctly and a partly-judged
+    question re-runs only the runs it is missing. Judgements written before
+    repeats existed carry no `run` and count as run 0."""
     if not CKPT.exists():
         return set()
-    return {json.loads(l)["question_id"] for l in
-            CKPT.read_text(encoding="utf-8").splitlines() if l.strip()}
+    return {(r["question_id"], int(r.get("run", 0))) for r in
+            (json.loads(l) for l in
+             CKPT.read_text(encoding="utf-8").splitlines() if l.strip())}
 
 
 def append(row: dict) -> None:
@@ -168,10 +203,21 @@ async def judge_one(question: str, rendered: dict[str, str], *, model: str,
         holder["j"] = {k: args.get(k) for k in JUDGEMENT_SCHEMA}
         return {"content": [{"type": "text", "text": "recorded"}]}
 
+    # SEALED, exactly like the arms. The system prompt says "you have no tools and no
+    # browser", but a prompt is not a seal: with bypassPermissions and only
+    # `allowed_tools` set, the judge could have reached WebSearch or Bash and quietly
+    # looked papers up. That would make correctness scores depend on what it happened
+    # to find rather than on the answers, and would not reproduce. See
+    # TOOL_SURFACE_V2.md — same bug the arms had in v1.
+    from qa_arms import _BUILTINS
     opts = ClaudeAgentOptions(
         system_prompt=JUDGE_SYS,
         mcp_servers={"io": create_sdk_mcp_server(name="io", tools=[submit_judgement])},
         allowed_tools=["mcp__io__submit_judgement"],
+        tools=[],                       # THE surface restriction: no built-ins at all
+        disallowed_tools=list(_BUILTINS),
+        setting_sources=[],             # no project CLAUDE.md / settings
+        skills=[],                      # no repo skills
         max_turns=max_turns, model=model,
         permission_mode="bypassPermissions", max_budget_usd=budget_usd,
     )
@@ -190,7 +236,8 @@ async def judge_one(question: str, rendered: dict[str, str], *, model: str,
             "is_error": getattr(result, "is_error", None)}
 
 
-def build_row(q: dict, perm: tuple[str, ...], rows: dict[str, dict], res: dict) -> dict:
+def build_row(q: dict, perm: tuple[str, ...], rows: dict[str, dict], res: dict,
+              run: int = 0) -> dict:
     """Un-blind A/B/C back onto graph/web/null. Scores lead the row."""
     j = res["judgement"]
     slot_of = {arm: SLOTS[i] for i, arm in enumerate(perm)}   # arm -> 'a'/'b'/'c'
@@ -209,7 +256,7 @@ def build_row(q: dict, perm: tuple[str, ...], rows: dict[str, dict], res: dict) 
         ranking = ranking.replace(s.upper(), arm_of[s])
 
     row = {
-        "question_id": q["question_id"], "family": q["family"],
+        "question_id": q["question_id"], "run": run, "family": q["family"],
         "expected_winner": q["expected_winner"],
         "best_answer": best_arm, "margin": str(j.get("margin") or "none").lower(),
         "prediction_hit": best_arm == q["expected_winner"],
@@ -221,6 +268,8 @@ def build_row(q: dict, perm: tuple[str, ...], rows: dict[str, dict], res: dict) 
         row[f"{arm}_usefulness"] = sc(arm, "usefulness")
     for arm in ARMS:
         row[f"{arm}_fabricated"] = fl(arm, "fabricated")
+        row[f"{arm}_unrecognised"] = fl(arm, "unrecognised")
+        row[f"{arm}_unrecognised_titles"] = j.get(f"{slot_of[arm]}_unrecognised_titles")
         row[f"{arm}_hedged"] = fl(arm, "hedged")
         row[f"{arm}_overclaimed"] = fl(arm, "overclaimed")
     row["question"] = q["question"]
@@ -238,6 +287,12 @@ def build_row(q: dict, perm: tuple[str, ...], rows: dict[str, dict], res: dict) 
 
 
 def main() -> None:
+    # answers and judge prose contain arrows, dashes and accents; Windows
+    # consoles default to cp1252 and would die mid-run on one of them
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):
+        pass
     ap = argparse.ArgumentParser()
     ap.add_argument("--questions", help="comma-separated question_ids")
     ap.add_argument("--limit", type=int)
@@ -246,28 +301,72 @@ def main() -> None:
     ap.add_argument("--budget", type=float, default=0.80)
     ap.add_argument("--sleep", type=float, default=2.0)
     ap.add_argument("--dry-run", action="store_true")
+    # A single judge pass is noisier than the effect it measures: judging q01-q03
+    # twice on IDENTICAL answers moved 7 of 27 axis scores by a point and flipped
+    # one of three winners. Repeats give a mean and a spread instead of a number.
+    ap.add_argument("--repeats", type=int, default=1,
+                    help="judge each question N times, each with a DIFFERENT "
+                         "presentation order; report.py then reports mean + spread")
+    ap.add_argument("--drop", help="comma-separated question_ids to remove from the "
+                                   "judgement checkpoint so they are judged again "
+                                   "(after re-generating an answer). Archived to "
+                                   "out/dropped_judgements.jsonl. (free)")
     args = ap.parse_args()
+
+    if args.drop:
+        if not CKPT.exists():
+            print("no judgements to drop.")
+            return
+        want = {q.strip() for q in args.drop.split(",") if q.strip()}
+        rows = [json.loads(l) for l in
+                CKPT.read_text(encoding="utf-8").splitlines() if l.strip()]
+        keep = [r for r in rows if r["question_id"] not in want]
+        gone = [r for r in rows if r["question_id"] in want]
+        with (OUT_DIR / "dropped_judgements.jsonl").open("a", encoding="utf-8") as f:
+            for r in gone:
+                f.write(json.dumps(r, ensure_ascii=False) + "\n")
+                print(f"  dropped judgement {r['question_id']} — will re-judge")
+        CKPT.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n"
+                                for r in keep), encoding="utf-8")
+        print(f"kept {len(keep)}, dropped {len(gone)}.")
+        return
 
     if not ANSWERS.exists():
         sys.exit(f"no answers at {ANSWERS} — run qa_gen.py first.")
     units = load_units()
-    # permutation is fixed by index in the FULL list, before filtering, so --limit
-    # never changes which order a question is judged in
-    perm_of = {q["question_id"]: PERMS[i % len(PERMS)] for i, (q, _) in enumerate(units)}
+    reps = max(1, args.repeats)
+    # Presentation order is fixed by position in the FULL list, before filtering,
+    # so --limit and --questions never change which order a judgement sees.
+    #
+    # Across QUESTIONS the base order cycles through all 6 permutations. Within a
+    # question, each repeat ROTATES that base — so at --repeats 3 every arm
+    # appears in every slot exactly once, and a position effect cannot ride along
+    # with one arm across its repeats. (Cycling the 6 perms per run instead would
+    # balance only in aggregate, leaving an arm slot-heavy on any given question.)
+    def _order(i: int, r: int) -> tuple[str, ...]:
+        base = PERMS[i % len(PERMS)]
+        k = r % len(base)
+        return base[k:] + base[:k]
+
+    perm_of = {(q["question_id"], r): _order(i, r)
+               for i, (q, _) in enumerate(units) for r in range(reps)}
     if args.questions:
         keep = set(args.questions.split(","))
         units = [u for u in units if u[0]["question_id"] in keep]
     if args.limit:
         units = units[: args.limit]
     done = done_keys()
-    todo = [u for u in units if u[0]["question_id"] not in done]
-    print(f"questions={len(units)} done={len(units) - len(todo)} todo={len(todo)}")
+    todo = [(q, rows, r) for (q, rows) in units for r in range(reps)
+            if (q["question_id"], r) not in done]
+    print(f"questions={len(units)} repeats={reps} "
+          f"judgements={len(units) * reps} done={len(units) * reps - len(todo)} "
+          f"todo={len(todo)}")
 
     if args.dry_run:
-        for q, rows in todo[:1]:
-            perm = perm_of[q["question_id"]]
+        for q, rows, r in todo[:1]:
+            perm = perm_of[(q["question_id"], r)]
             rendered = {SLOTS[i]: render(rows[arm]["answer"]) for i, arm in enumerate(perm)}
-            print(f"\n--- {q['question_id']} order={perm} ---")
+            print(f"\n--- {q['question_id']} run={r} order={perm} ---")
             print(PROMPT.format(question=q["question"], **rendered)[:1500], "...")
         print(f"\n(dry-run) would run {len(todo)} judgements on {args.model}. No model called.")
         return
@@ -276,10 +375,11 @@ def main() -> None:
 
     async def go():
         spend = 0.0
-        for i, (q, rows) in enumerate(todo, 1):
-            perm = perm_of[q["question_id"]]
+        for i, (q, rows, run) in enumerate(todo, 1):
+            perm = perm_of[(q["question_id"], run)]
             rendered = {SLOTS[k]: render(rows[arm]["answer"]) for k, arm in enumerate(perm)}
-            print(f"[{i}/{len(todo)}] {q['question_id']} order={'/'.join(perm)}", flush=True)
+            print(f"[{i}/{len(todo)}] {q['question_id']} run={run} "
+                  f"order={'/'.join(perm)}", flush=True)
             try:
                 res = await judge_one(q["question"], rendered, model=args.model,
                                       max_turns=args.max_turns, budget_usd=args.budget)
@@ -291,16 +391,18 @@ def main() -> None:
                       flush=True)
                 continue
             res["model"] = args.model
-            row = build_row(q, perm, rows, res)
+            row = build_row(q, perm, rows, res, run=run)
             append(row)
             spend += res["total_cost_usd"] or 0.0
             hit = "PREDICTED" if row["prediction_hit"] else f"MISS(exp {row['expected_winner']})"
             fab = [a for a in ARMS if row[f"{a}_fabricated"]]
+            unrec = [a for a in ARMS if row[f"{a}_unrecognised"]]
             print(f"    best={row['best_answer']} ({row['margin']}) {hit} | "
                   f"G {row['graph_groundedness']}/{row['graph_correctness']}/{row['graph_usefulness']} "
                   f"W {row['web_groundedness']}/{row['web_correctness']}/{row['web_usefulness']} "
                   f"N {row['null_groundedness']}/{row['null_correctness']}/{row['null_usefulness']}"
                   + (f" | FABRICATED: {fab}" if fab else "")
+                  + (f" | unrecognised: {unrec}" if unrec else "")
                   + f"  ${res['total_cost_usd']} (run ${spend:.2f})", flush=True)
             if i < len(todo):
                 time.sleep(args.sleep)

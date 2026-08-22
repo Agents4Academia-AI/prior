@@ -1,0 +1,463 @@
+{
+ "nodes": [
+  {
+   "id": "arxiv:2410.17309v3::k00",
+   "paper_id": "arxiv:2410.17309v3",
+   "label": "HypoRefine — a method that grounds data-driven hypothesis generation (via HypoGeniC) with literature-based insights thro",
+   "problem": "",
+   "method": "method",
+   "result": "HypoRefine — a method that grounds data-driven hypothesis generation (via HypoGeniC) with literature-based insights through a collaborative agent architecture that refines and maintains a shared hypothesis pool — outperforms literature-only, data-only, and few-shot baselines on out-of-distribution generalization across five social-science classification tasks (15.75%, 3.37%, and 8.97% gains, respectively).",
+   "paper": "Literature Meets Data: A Synergistic Approach to Hypothesis Generation",
+   "year": 2024,
+   "trace_engagement": "read",
+   "trace_steps": [
+    2,
+    3
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2410.17309v3::k01",
+   "paper_id": "arxiv:2410.17309v3",
+   "label": "Automatic evaluation across five datasets shows that integrating literature-based and data-driven hypothesis generation ",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "Automatic evaluation across five datasets shows that integrating literature-based and data-driven hypothesis generation yields the best generalizability, measured by out-of-distribution accuracy, across all task and model configurations, and that the generated hypotheses transfer effectively to different inference models.",
+   "paper": "Literature Meets Data: A Synergistic Approach to Hypothesis Generation",
+   "year": 2024,
+   "trace_engagement": "read",
+   "trace_steps": [
+    2,
+    3
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2606.08532::k00",
+   "paper_id": "arxiv:2606.08532",
+   "label": "DN-Hypo-Pipeline — an LLM-driven workflow that identifies underlying laws, theories, and principles from a paper's expla",
+   "problem": "",
+   "method": "framework",
+   "result": "DN-Hypo-Pipeline — an LLM-driven workflow that identifies underlying laws, theories, and principles from a paper's explanandum and reconstructs novel, yet-to-be-verified scientific hypotheses from existing literature using scientific explanations as prior knowledge.",
+   "paper": "DN-Hypo-Pipeline: An AI-Driven Workflow for Hypothesis Generation via Large Language Models and Scientific Explanations",
+   "year": 2026,
+   "trace_engagement": "read",
+   "trace_steps": [
+    2,
+    3
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2606.08532::k02",
+   "paper_id": "arxiv:2606.08532",
+   "label": "Novel algorithms derived from LLM-generated hypotheses that outperform baseline models from highly cited data science pa",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "Novel algorithms derived from LLM-generated hypotheses that outperform baseline models from highly cited data science papers, providing end-to-end experimental validation of AI-generated scientific hypotheses.",
+   "paper": "DN-Hypo-Pipeline: An AI-Driven Workflow for Hypothesis Generation via Large Language Models and Scientific Explanations",
+   "year": 2026,
+   "trace_engagement": "read",
+   "trace_steps": [
+    2,
+    3
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4394647523::k00",
+   "paper_id": "openalex:W4394647523",
+   "label": "HypoGeniC — an iterative hypothesis generation algorithm for LLMs inspired by the upper confidence bound (UCB) multi-arm",
+   "problem": "",
+   "method": "method",
+   "result": "HypoGeniC — an iterative hypothesis generation algorithm for LLMs inspired by the upper confidence bound (UCB) multi-armed bandit framework — generates and refines data-grounded hypotheses by maintaining a wrong-example bank and a reward-driven exploitation-exploration tradeoff, enabling LLMs to handle arbitrarily large training sets without long-context limitations.",
+   "paper": "Hypothesis Generation with Large Language Models",
+   "year": 2024,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4394647523::k01",
+   "paper_id": "openalex:W4394647523",
+   "label": "Interpretable hypothesis-based classifiers derived from LLM-generated hypotheses outperform few-shot in-context learning",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "Interpretable hypothesis-based classifiers derived from LLM-generated hypotheses outperform few-shot in-context learning by up to 31.7% and exceed supervised learning baselines (RoBERTa, Llama-2-7B) on two challenging real-world datasets, with hypotheses that transfer robustly across different LLMs and out-of-distribution test sets.",
+   "paper": "Hypothesis Generation with Large Language Models",
+   "year": 2024,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4394647523::k02",
+   "paper_id": "openalex:W4394647523",
+   "label": "LLM-generated hypotheses about real-world classification tasks both corroborate human-verified theories from existing li",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "LLM-generated hypotheses about real-world classification tasks both corroborate human-verified theories from existing literature and surface novel, previously undocumented insights — including findings that contradict established feature-engineering results.",
+   "paper": "Hypothesis Generation with Large Language Models",
+   "year": 2024,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4400448985::k00",
+   "paper_id": "openalex:W4400448985",
+   "label": "A hybrid framework (LLMCG) combining LLM-based causal relation extraction from large psychology literature corpora with ",
+   "problem": "",
+   "method": "framework",
+   "result": "A hybrid framework (LLMCG) combining LLM-based causal relation extraction from large psychology literature corpora with link prediction on the resulting causal graph generates novel psychological hypotheses that match expert (doctoral scholar) quality in novelty and outperform LLM-only hypothesis generation.",
+   "paper": "Automating psychological hypothesis generation with AI: when large language models meet causal graph",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4403345771::k00",
+   "paper_id": "openalex:W4403345771",
+   "label": "A formal mathematical decomposition of chemistry hypothesis discovery into three executable subtasks — retrieving inspir",
+   "problem": "",
+   "method": "framework",
+   "result": "A formal mathematical decomposition of chemistry hypothesis discovery into three executable subtasks — retrieving inspirations, composing hypotheses from inspirations, and ranking hypotheses — provides a tractable reformulation of an otherwise intractable scientific discovery problem.",
+   "paper": "MOOSE-Chem: Large Language Models for Rediscovering Unseen Chemistry Scientific Hypotheses",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    2
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4403345771::k04",
+   "paper_id": "openalex:W4403345771",
+   "label": "LLMs appear to encode latent scientific knowledge associations — pairs of concepts whose connection enables novel hypoth",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "LLMs appear to encode latent scientific knowledge associations — pairs of concepts whose connection enables novel hypothesis generation — that have not yet been explicitly recognized by human scientists, as evidenced by surprisingly high out-of-distribution inspiration retrieval accuracy.",
+   "paper": "MOOSE-Chem: Large Language Models for Rediscovering Unseen Chemistry Scientific Hypotheses",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    2
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4404355537::k00",
+   "paper_id": "openalex:W4404355537",
+   "label": "KG-CoI (Knowledge Grounded Chain of Ideas) — a system that integrates structured knowledge from knowledge graphs into LL",
+   "problem": "",
+   "method": "framework",
+   "result": "KG-CoI (Knowledge Grounded Chain of Ideas) — a system that integrates structured knowledge from knowledge graphs into LLM hypothesis generation via KG-guided context retrieval, KG-augmented chain-of-idea generation, and KG-supported hallucination detection — improves the accuracy and factual grounding of scientifically generated hypotheses.",
+   "paper": "Improving Scientific Hypothesis Generation with Knowledge Grounded Large Language Models",
+   "year": 2024,
+   "trace_engagement": "read",
+   "trace_steps": [
+    1,
+    2,
+    4
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4405954117::k00",
+   "paper_id": "openalex:W4405954117",
+   "label": "A spectrum of integration methods for combining experts, LLMs, and data-driven approaches in causal hypothesis generatio",
+   "problem": "",
+   "method": "framework",
+   "result": "A spectrum of integration methods for combining experts, LLMs, and data-driven approaches in causal hypothesis generation, ranging from purely knowledge-driven to purely data-driven, with varying degrees of interaction between sources.",
+   "paper": "Large language models for causal hypothesis generation in science",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4411037930::k00",
+   "paper_id": "openalex:W4411037930",
+   "label": "GPT4-generated hypotheses about novel synergistic pairs of FDA-approved non-cancer drugs targeting the MCF7 breast cance",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "GPT4-generated hypotheses about novel synergistic pairs of FDA-approved non-cancer drugs targeting the MCF7 breast cancer cell line are experimentally validated in the laboratory, with three out of twelve first-round combinations and three out of four second-round combinations achieving synergy scores above positive controls.",
+   "paper": "Scientific hypothesis generation by large language models: laboratory validation in breast cancer treatment",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4411120082::k00",
+   "paper_id": "openalex:W4411120082",
+   "label": "ResearchAgent — an LLM-powered system that automatically identifies novel research problems, proposes methods, and desig",
+   "problem": "",
+   "method": "framework",
+   "result": "ResearchAgent — an LLM-powered system that automatically identifies novel research problems, proposes methods, and designs experiments by augmenting a core paper with an academic-graph neighbourhood and an entity-centric knowledge store, then iteratively refines the output via feedback from collaborative ReviewingAgents.",
+   "paper": "ResearchAgent: Iterative Research Idea Generation over Scientific Literature with Large Language Models",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    2
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4416540539::k00",
+   "paper_id": "openalex:W4416540539",
+   "label": "HypoBench — a benchmark spanning 194 datasets across 7 real-world and 5 synthetic tasks — enables systematic evaluation ",
+   "problem": "",
+   "method": "benchmark",
+   "result": "HypoBench — a benchmark spanning 194 datasets across 7 real-world and 5 synthetic tasks — enables systematic evaluation of hypothesis generation methods along three dimensions: practical utility (explanatory power), generalizability (in-domain vs. out-of-domain splits), and ground-truth hypothesis discovery rate.",
+   "paper": "HypoBench: Towards Systematic and Principled Benchmarking for Hypothesis Generation",
+   "year": 2025,
+   "trace_engagement": "read",
+   "trace_steps": [
+    2,
+    3
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4416540539::k03",
+   "paper_id": "openalex:W4416540539",
+   "label": "Controlled synthetic datasets with programmatically varied difficulty (via logistic regression or decision-tree data-gen",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "Controlled synthetic datasets with programmatically varied difficulty (via logistic regression or decision-tree data-generating processes) reveal that hypothesis discovery rates collapse sharply as task complexity grows — best-performing model–method combinations recover only 38.8% of ground-truth hypotheses at high difficulty, quantifying a concrete ceiling for current approaches.",
+   "paper": "HypoBench: Towards Systematic and Principled Benchmarking for Hypothesis Generation",
+   "year": 2025,
+   "trace_engagement": "read",
+   "trace_steps": [
+    2,
+    3
+   ],
+   "trace_in_answer": true
+  }
+ ],
+ "edges": [
+  {
+   "id": "arxiv:2410.17309v3::k01|builds_on|openalex:W4394647523::k01",
+   "source": "arxiv:2410.17309v3::k01",
+   "target": "openalex:W4394647523::k01",
+   "relation": "builds_on",
+   "provenance": "text",
+   "confidence": 1.0,
+   "evidence": "Contribution A (arxiv:2410.17309v3) explicitly uses HypoGeniC (Contribution B) as the backbone for its data-driven hypothesis generation component. Evidence A:005 states 'For the data-driven component, we use HypoGeniC as the backbone,' and A:010 describes how HypoRefine integrates HypoGeniC with literature-based refinement. The citation passages confirm A adopts the method from B. A extends B by adding a literature-based agent and conducting human evaluation, making this a clear builds_on relationship directed a_to_b.",
+   "trace_engagement": "read",
+   "trace_steps": [
+    2,
+    3
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4416540539::k03|builds_on|openalex:W4394647523::k00",
+   "source": "openalex:W4416540539::k03",
+   "target": "openalex:W4394647523::k00",
+   "relation": "builds_on",
+   "provenance": "text",
+   "confidence": 1.0,
+   "evidence": "Contribution B (HypoBench) explicitly and directly incorporates HypoGeniC (Contribution A) as one of the six hypothesis-generation methods being benchmarked, using its official code release, provided prompts, and reported best hyperparameters (CIT:1). It also adopts datasets from HypoGeniC's original paper for its real-world evaluation suite (CIT:2, B:008). This is a clear case of B building on A: B uses A's artifact (algorithm + datasets) as a component of its own comparative framework, rather than merely citing it for background. The relationship is directional — B acts on A.",
+   "trace_engagement": "read",
+   "trace_steps": [
+    2,
+    3
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2606.08532::k02|supports|openalex:W4394647523::k01",
+   "source": "arxiv:2606.08532::k02",
+   "target": "openalex:W4394647523::k01",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 1.0,
+   "evidence": "Both contributions demonstrate the same core finding: LLM-generated hypotheses can be operationalized into classifiers or algorithms that outperform established baselines (supervised learning, few-shot prompting, or highly-cited paper baselines). Contribution A (DN-Hypo-Pipeline) validates LLM-generated hypotheses by developing novel algorithms that outperform baseline models from highly cited data science papers [AQ, A:001]. Contribution B (HypoGeniC) shows LLM-generated hypotheses enable interpretable classifiers outperforming few-shot ICL by up to 31.7% and supervised learning baselines [BQ, B:002, B:006]. These are materially comparable findings — both confirm that LLM-generated scientific hypotheses have practical downstream utility exceeding strong baselines. However, there is no citation between the papers, and their methodological targets differ (data science modeling vs. text classification tasks), making a 'builds_on' or 'refines' relation unsupported. No contradictory findings are present. The shared finding of LLM-hypothesis-derived methods outperforming baselines makes 'supports' the most defensible relation, though the domains and specific methods differ enough to tem",
+   "trace_engagement": "read",
+   "trace_steps": [
+    2,
+    3
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4394647523::k02|supports|openalex:W4403345771::k04",
+   "source": "openalex:W4394647523::k02",
+   "target": "openalex:W4403345771::k04",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    2
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2410.17309v3::k00|mentions|openalex:W4394647523::k00",
+   "source": "arxiv:2410.17309v3::k00",
+   "target": "openalex:W4394647523::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    2
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W4416540539::k00|mentions|openalex:W4394647523::k00",
+   "source": "openalex:W4416540539::k00",
+   "target": "openalex:W4394647523::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    2
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W4404355537::k00|mentions|openalex:W4394647523::k00",
+   "source": "openalex:W4404355537::k00",
+   "target": "openalex:W4394647523::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 1.0,
+   "evidence": "General motivating statement about LLMs generating hypotheses, no specific adoption or contrast. | Describes target's prompting method then explicitly states 'Our approach differs by...' singling it out.",
+   "trace_engagement": "read",
+   "trace_steps": [
+    2,
+    4
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W4394647523::k00|mentions|openalex:W4411120082::k00",
+   "source": "openalex:W4394647523::k00",
+   "target": "openalex:W4411120082::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    2
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  }
+ ],
+ "trace": {
+  "question_id": "q04",
+  "question": "What research is actually being built on the findings from 'Hypothesis Generation with Large Language Models' (the HypoGeniC paper)? I want to know what people did with it, not just who cited it.",
+  "family": "uses-findings",
+  "arm": "graph",
+  "n_calls": 4,
+  "steps": [
+   {
+    "step": 1,
+    "tool": "find_paper",
+    "args": {
+     "query": "Hypothesis Generation with Large Language Models"
+    },
+    "surfaced": [
+     "openalex:W4394647523",
+     "openalex:W4404355537",
+     "openalex:W4400448985",
+     "openalex:W4405954117",
+     "openalex:W4411037930"
+    ],
+    "note": ""
+   },
+   {
+    "step": 2,
+    "tool": "paper_neighbourhood",
+    "args": {
+     "paper_id": "openalex:W4394647523"
+    },
+    "surfaced": [
+     "arxiv:2410.17309v3",
+     "openalex:W4416540539",
+     "openalex:W4404355537",
+     "openalex:W4411120082"
+    ],
+    "note": ""
+   },
+   {
+    "step": 3,
+    "tool": "edge_reasons",
+    "args": {
+     "paper_id": "openalex:W4394647523",
+     "others": [
+      "arxiv:2410.17309v3",
+      "openalex:W4416540539",
+      "arxiv:2606.08532",
+      "openalex:W4403345771",
+      "openalex:W4404355537"
+     ]
+    },
+    "surfaced": [
+     "arxiv:2410.17309v3",
+     "openalex:W4416540539",
+     "openalex:W4416540539",
+     "openalex:W4416540539",
+     "arxiv:2410.17309v3",
+     "arxiv:2606.08532"
+    ],
+    "note": "asked about, no typed edge: openalex:W4404355537"
+   },
+   {
+    "step": 4,
+    "tool": "citations_between",
+    "args": {
+     "paper_id_a": "openalex:W4394647523",
+     "paper_id_b": "openalex:W4404355537"
+    },
+    "surfaced": [
+     "openalex:W4404355537"
+    ],
+    "note": "2 site(s), intents=['background', 'compares_contrasts']"
+   }
+  ],
+  "papers_named": [
+   "Hypothesis Generation with Large Language Models",
+   "Literature Meets Data: A Synergistic Approach to Hypothesis Generation",
+   "HypoBench: Towards Systematic and Principled Benchmarking for Hypothesis Generation",
+   "DN-Hypo-Pipeline: An AI-Driven Workflow for Hypothesis Generation via Large Language Models and Scientific Explanations",
+   "Improving Scientific Hypothesis Generation with Knowledge Grounded Large Language Models"
+  ]
+ }
+}

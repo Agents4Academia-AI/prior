@@ -1,0 +1,205 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1900" height="1643" viewBox="0 0 1900 1643" font-family="Arial, Helvetica, sans-serif">
+<rect x="0" y="0" width="1900" height="1643" fill="#ffffff"/>
+<defs>
+<marker id="a_builds_on" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#6ea8fe"/></marker>
+<marker id="af_builds_on" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#6ea8fe" opacity="0.55"/></marker>
+<marker id="a_mentions" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#868e96"/></marker>
+<marker id="af_mentions" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#868e96" opacity="0.55"/></marker>
+<marker id="a_refines" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#63e6be"/></marker>
+<marker id="af_refines" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#63e6be" opacity="0.55"/></marker>
+</defs>
+<text x="24" y="56" font-size="37.4" font-weight="700" fill="#212529">Q05 · evidence-base</text>
+<text x="24" y="84" font-size="24.8" fill="#495057">I want to use an LLM to give feedback on my students' paper drafts. How well does that actually work in practice, and has anyone found that it</text>
+<text x="24" y="115" font-size="24.8" fill="#495057">doesn't?</text>
+<g transform="translate(944.5,733.9) scale(0.7072)">
+<ellipse cx="0" cy="0" rx="217.2" ry="134.7" fill="none" stroke="#dee2e6" stroke-width="1.2" stroke-dasharray="2 8"/>
+<ellipse cx="0" cy="0" rx="611.2" ry="378.9" fill="none" stroke="#dee2e6" stroke-width="1.2" stroke-dasharray="2 8"/>
+<ellipse cx="0" cy="0" rx="873.4" ry="541.5" fill="none" stroke="#dee2e6" stroke-width="1.2" stroke-dasharray="2 8"/>
+<line x1="-1119.0" y1="400.6" x2="-858.5" y2="99.6" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="-1119.0" y1="400.6" x2="-858.5" y2="-99.6" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="-1119.0" y1="400.6" x2="217.2" y2="0.0" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="-1119.0" y1="400.6" x2="217.2" y2="0.0" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="1119.0" y1="400.6" x2="217.2" y2="0.0" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="1119.0" y1="400.6" x2="217.2" y2="0.0" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="1119.0" y1="400.6" x2="217.2" y2="0.0" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="1119.0" y1="400.6" x2="-858.5" y2="99.6" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="1119.0" y1="400.6" x2="-858.5" y2="99.6" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="0.0" y1="-801.1" x2="-0.0" y2="134.7" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="0.0" y1="-801.1" x2="459.7" y2="460.5" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="0.0" y1="-801.1" x2="734.7" y2="-292.8" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<line x1="0.0" y1="-801.1" x2="-217.2" y2="-0.0" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
+<path d="M -743.0 287.1 Q -854.6 210.5 -858.2 109.6" fill="none" stroke="#b197fc" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' />
+<path d="M -743.0 -287.1 Q -854.6 -210.5 -858.0 -113.6" fill="none" stroke="#6ea8fe" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_builds_on)"/>
+<path d="M -456.1 -451.1 Q -389.3 -276.0 -14.4 119.4" fill="none" stroke="#b197fc" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' />
+<path d="M 456.1 -451.1 Q 389.3 -276.0 14.4 119.4" fill="none" stroke="#b197fc" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' />
+<path d="M 460.6 450.5 Q 512.1 -90.3 10.5 -532.3" fill="none" stroke="#6ea8fe" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_builds_on)"/>
+<path d="M 469.0 456.9 Q 787.8 334.7 854.5 113.0" fill="none" stroke="#6ea8fe" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_builds_on)"/>
+<path d="M 7.5 -534.9 Q 512.1 -90.3 460.6 450.5" fill="none" stroke="#b197fc" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' />
+<path d="M -726.8 298.9 Q -245.1 671.2 450.1 463.3" fill="none" stroke="#b197fc" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' />
+<path d="M 229.9 16.7 Q 450.3 306.3 459.1 450.5" fill="none" stroke="#b197fc" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' />
+<path d="M 858.2 -109.6 Q 854.6 -210.5 746.3 -284.9" fill="none" stroke="#6ea8fe" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_builds_on)"/>
+<path d="M 19.9 -141.3 Q 536.3 -312.0 720.8 -294.1" fill="none" stroke="#6ea8fe" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_builds_on)"/>
+<path d="M 727.3 -286.1 Q 623.7 -191.9 236.2 -9.0" fill="none" stroke="#b197fc" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' />
+<path d="M 739.4 -283.9 Q 887.0 -0.0 739.4 283.9" fill="none" stroke="#b197fc" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' />
+<path d="M -198.6 9.7 Q -0.0 112.9 195.0 11.5" fill="none" stroke="#6ea8fe" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_builds_on)"/>
+<path d="M 848.8 -97.4 Q 705.9 -65.3 238.0 -2.8" fill="none" stroke="#b197fc" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' />
+<path d="M -198.6 9.7 Q -0.0 112.9 195.0 11.5" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M 0.0 531.5 Q 0.0 379.2 0.0 -109.7" fill="none" stroke="#6ea8fe" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_builds_on)"/>
+<path d="M 728.0 285.4 Q 583.4 125.6 22.8 -124.5" fill="none" stroke="#6ea8fe" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_builds_on)"/>
+<path d="M 849.1 -102.9 Q 644.8 -175.9 24.9 -136.3" fill="none" stroke="#63e6be" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_refines)"/>
+<path d="M 849.1 -102.9 Q 644.8 -175.9 24.9 -136.3" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M 19.9 -141.3 Q 536.3 -312.0 720.8 -294.1" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M -450.2 457.3 Q -319.4 413.5 -15.8 148.5" fill="none" stroke="#b197fc" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' />
+<path d="M 19.9 141.3 Q 536.3 312.0 724.8 293.8" fill="none" stroke="#b197fc" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' />
+<path d="M -15.8 148.5 Q -319.4 413.5 -446.4 456.0" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M 21.0 136.0 Q 644.8 175.9 845.4 104.3" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M 9.7 116.0 Q 70.0 0.0 11.5 -112.5" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M -0.0 155.7 Q 0.0 443.9 0.0 527.5" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M -196.3 -2.4 Q 598.2 -92.9 844.5 -99.2" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M -213.5 -20.7 Q -165.1 -288.0 -16.6 -369.8" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M -196.3 2.4 Q 598.2 92.9 844.5 99.2" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M -214.6 20.8 Q -165.1 411.6 -11.0 532.9" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M -207.7 -18.7 Q -165.1 -102.3 -24.5 -129.9" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M 0.0 -157.7 Q 0.0 -281.2 0.0 -361.9" fill="none" stroke="#ff6b6b" stroke-width="4.2" opacity="0.95" />
+<path d="M -4.5 -112.1 Q -26.9 -0.0 -4.5 112.1" fill="none" stroke="#ff6b6b" stroke-width="4.2" opacity="0.95" />
+<circle cx="0.0" cy="-541.5" r="7.0" fill="#adb5bd"/>
+<text x="20.0" y="-557.1" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">aiXiv: A</text>
+<text x="20.0" y="-535.4" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">Next-Generation</text>
+<text x="20.0" y="-513.6" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">Open Access</text>
+<circle cx="459.7" cy="-460.5" r="7.0" fill="#adb5bd"/>
+<text x="479.7" y="-454.3" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">SciIntBench</text>
+<circle cx="734.7" cy="-292.8" r="11.0" fill="none" stroke="#f59f00" stroke-width="2.4"/>
+<circle cx="734.7" cy="-292.8" r="7.0" fill="#adb5bd"/>
+<text x="754.7" y="-308.4" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">GPT4 is Slightly</text>
+<text x="754.7" y="-286.6" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">Helpful for</text>
+<text x="754.7" y="-264.9" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">Peer-Review</text>
+<circle cx="858.5" cy="-99.6" r="7.0" fill="#adb5bd"/>
+<text x="878.5" y="-115.2" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">MARG: Multi-Agent</text>
+<text x="878.5" y="-93.4" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">Review Generation</text>
+<text x="878.5" y="-71.6" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">for Scientific…</text>
+<circle cx="858.5" cy="99.6" r="7.0" fill="#adb5bd"/>
+<text x="878.5" y="105.7" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">The AI Scientist</text>
+<circle cx="734.7" cy="292.8" r="7.0" fill="#adb5bd"/>
+<text x="754.7" y="299.0" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">OpenReviewer</text>
+<circle cx="459.7" cy="460.5" r="7.0" fill="#adb5bd"/>
+<text x="479.7" y="444.9" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">Towards end-to-end</text>
+<text x="479.7" y="466.6" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">automation of AI</text>
+<text x="479.7" y="488.4" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">research</text>
+<circle cx="0.0" cy="541.5" r="7.0" fill="#adb5bd"/>
+<text x="20.0" y="536.8" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">AI-Driven Review</text>
+<text x="20.0" y="558.6" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">Systems</text>
+<circle cx="-459.7" cy="460.5" r="7.0" fill="#adb5bd"/>
+<text x="-479.7" y="466.6" font-size="18.2" text-anchor="end" fill="#7c848c" font-weight="400">AgentReview</text>
+<circle cx="-734.7" cy="292.8" r="7.0" fill="#adb5bd"/>
+<text x="-754.7" y="299.0" font-size="18.2" text-anchor="end" fill="#7c848c" font-weight="400">The Denario project</text>
+<circle cx="-858.5" cy="99.6" r="7.0" fill="#adb5bd"/>
+<text x="-878.5" y="105.7" font-size="18.2" text-anchor="end" fill="#7c848c" font-weight="400">The AI Scientist-v2</text>
+<circle cx="-858.5" cy="-99.6" r="7.0" fill="#adb5bd"/>
+<text x="-878.5" y="-93.4" font-size="18.2" text-anchor="end" fill="#7c848c" font-weight="400">Agent Laboratory</text>
+<circle cx="-734.7" cy="-292.8" r="7.0" fill="#adb5bd"/>
+<text x="-754.7" y="-308.4" font-size="18.2" text-anchor="end" fill="#7c848c" font-weight="400">AgentRxiv: Towards</text>
+<text x="-754.7" y="-286.6" font-size="18.2" text-anchor="end" fill="#7c848c" font-weight="400">Collaborative</text>
+<text x="-754.7" y="-264.9" font-size="18.2" text-anchor="end" fill="#7c848c" font-weight="400">Autonomous Research</text>
+<circle cx="-459.7" cy="-460.5" r="7.0" fill="#adb5bd"/>
+<text x="-479.7" y="-476.1" font-size="18.2" text-anchor="end" fill="#7c848c" font-weight="400">Aspect-Guided</text>
+<text x="-479.7" y="-454.3" font-size="18.2" text-anchor="end" fill="#7c848c" font-weight="400">Multi-Level</text>
+<text x="-479.7" y="-432.5" font-size="18.2" text-anchor="end" fill="#7c848c" font-weight="400">Perturbation</text>
+<circle cx="0.0" cy="-378.9" r="18.0" fill="none" stroke="#f59f00" stroke-width="3.4"/>
+<circle cx="0.0" cy="-378.9" r="12.0" fill="#ffffff" stroke="#495057" stroke-width="3"/>
+<text x="25.0" y="-384.8" font-size="22.6" text-anchor="start" fill="#495057" font-weight="400">LLMs Assist NLP</text>
+<text x="25.0" y="-357.7" font-size="22.6" text-anchor="start" fill="#495057" font-weight="400">Researchers</text>
+<circle cx="0.0" cy="-134.7" r="24.0" fill="none" stroke="#f59f00" stroke-width="3.4"/>
+<circle cx="0.0" cy="-134.7" r="18.0" fill="#ffffff" stroke="#212529" stroke-width="3.8"/>
+<circle cx="0.0" cy="-134.7" r="10.0" fill="#212529"/>
+<circle cx="-26.0" cy="-152.7" r="12.5" fill="#212529"/>
+<text x="-26.0" y="-147.7" font-size="16" text-anchor="middle" fill="#ffffff" font-weight="700">5</text>
+<text x="31.0" y="-157.8" font-size="27.0" text-anchor="start" fill="#212529" font-weight="700">Can Large Language</text>
+<text x="31.0" y="-125.5" font-size="27.0" text-anchor="start" fill="#212529" font-weight="700">Models Provide Useful</text>
+<text x="31.0" y="-93.2" font-size="27.0" text-anchor="start" fill="#212529" font-weight="700">Feedback o…</text>
+<circle cx="217.2" cy="0.0" r="24.0" fill="none" stroke="#f59f00" stroke-width="3.4"/>
+<circle cx="217.2" cy="0.0" r="18.0" fill="#ffffff" stroke="#212529" stroke-width="3.8"/>
+<circle cx="217.2" cy="0.0" r="10.0" fill="#212529"/>
+<circle cx="191.2" cy="-18.0" r="12.5" fill="#212529"/>
+<text x="191.2" y="-13.0" font-size="16" text-anchor="middle" fill="#ffffff" font-weight="700">4</text>
+<text x="248.2" y="-23.2" font-size="27.0" text-anchor="start" fill="#212529" font-weight="700">Automated Focused</text>
+<text x="248.2" y="9.2" font-size="27.0" text-anchor="start" fill="#212529" font-weight="700">Feedback Generation</text>
+<text x="248.2" y="41.5" font-size="27.0" text-anchor="start" fill="#212529" font-weight="700">for Scientifi…</text>
+<circle cx="-0.0" cy="134.7" r="24.0" fill="none" stroke="#f59f00" stroke-width="3.4"/>
+<circle cx="-0.0" cy="134.7" r="18.0" fill="#ffffff" stroke="#212529" stroke-width="3.8"/>
+<circle cx="-0.0" cy="134.7" r="10.0" fill="#212529"/>
+<circle cx="26.0" cy="116.7" r="12.5" fill="#212529"/>
+<text x="26.0" y="121.7" font-size="16" text-anchor="middle" fill="#ffffff" font-weight="700">6</text>
+<text x="-31.0" y="111.5" font-size="27.0" text-anchor="end" fill="#212529" font-weight="700">Are We There Yet?</text>
+<text x="-31.0" y="143.8" font-size="27.0" text-anchor="end" fill="#212529" font-weight="700">Revealing the Risks</text>
+<text x="-31.0" y="176.2" font-size="27.0" text-anchor="end" fill="#212529" font-weight="700">of Utilizing…</text>
+<circle cx="-217.2" cy="-0.0" r="24.0" fill="none" stroke="#f59f00" stroke-width="3.4"/>
+<circle cx="-217.2" cy="-0.0" r="18.0" fill="#ffffff" stroke="#212529" stroke-width="3.8"/>
+<circle cx="-217.2" cy="-0.0" r="10.0" fill="#212529"/>
+<circle cx="-191.2" cy="-18.0" r="12.5" fill="#212529"/>
+<text x="-191.2" y="-13.0" font-size="16" text-anchor="middle" fill="#ffffff" font-weight="700">7</text>
+<text x="-248.2" y="-23.2" font-size="27.0" text-anchor="end" fill="#212529" font-weight="700">Can LLMs Identify</text>
+<text x="-248.2" y="9.2" font-size="27.0" text-anchor="end" fill="#212529" font-weight="700">Critical Limitations</text>
+<text x="-248.2" y="41.5" font-size="27.0" text-anchor="end" fill="#212529" font-weight="700">within Scien…</text>
+<rect x="-1295.5" y="381.9" width="352.8" height="37.4" rx="18.7" fill="#f1f3f5" stroke="#ced4da" stroke-width="1.6"/>
+<text x="-1119.0" y="407.3" font-size="18.7" text-anchor="middle" fill="#495057">“LLM feedback on student writing”</text>
+<rect x="927.2" y="381.9" width="383.7" height="37.4" rx="18.7" fill="#f1f3f5" stroke="#ced4da" stroke-width="1.6"/>
+<text x="1119.0" y="407.3" font-size="18.7" text-anchor="middle" fill="#495057">“automated feedback on paper drafts”</text>
+<rect x="-191.8" y="-819.8" width="383.7" height="37.4" rx="18.7" fill="#f1f3f5" stroke="#ced4da" stroke-width="1.6"/>
+<text x="0.0" y="-794.4" font-size="18.7" text-anchor="middle" fill="#495057">“LLM generated peer review quality…”</text>
+</g>
+<text x="24" y="1167" font-size="16.5" font-weight="700" fill="#495057" letter-spacing="0.8">WHAT IT DID, IN ORDER</text>
+<circle cx="37.4" cy="1192.0" r="13.2" fill="#adb5bd"/>
+<text x="37.4" y="1200.6" font-size="16.7" text-anchor="middle" fill="#ffffff" font-weight="700">1</text>
+<text x="57.2" y="1201.4" font-size="20.4" fill="#868e96">topic map “LLM feedback on student writing”</text>
+<circle cx="536.4" cy="1192.0" r="13.2" fill="#adb5bd"/>
+<text x="536.4" y="1200.6" font-size="16.7" text-anchor="middle" fill="#ffffff" font-weight="700">2</text>
+<text x="556.2" y="1201.4" font-size="20.4" fill="#868e96">keyword search “automated feedback on paper drafts”</text>
+<circle cx="1120.1" cy="1192.0" r="13.2" fill="#adb5bd"/>
+<text x="1120.1" y="1200.6" font-size="16.7" text-anchor="middle" fill="#ffffff" font-weight="700">3</text>
+<text x="1139.9" y="1201.4" font-size="20.4" fill="#868e96">topic map “LLM generated peer review quality lim…”</text>
+<circle cx="37.4" cy="1227.6" r="13.2" fill="#212529"/>
+<text x="37.4" y="1236.2" font-size="16.7" text-anchor="middle" fill="#ffffff" font-weight="700">4</text>
+<text x="57.2" y="1237.0" font-size="20.4" fill="#212529">neighbourhood: Automated Focused Feedback Ge…</text>
+<circle cx="557.6" cy="1227.6" r="13.2" fill="#212529"/>
+<text x="557.6" y="1236.2" font-size="16.7" text-anchor="middle" fill="#ffffff" font-weight="700">5</text>
+<text x="577.4" y="1237.0" font-size="20.4" fill="#212529">neighbourhood: Can Large Language Models Pro…</text>
+<circle cx="1077.8" cy="1227.6" r="13.2" fill="#212529"/>
+<text x="1077.8" y="1236.2" font-size="16.7" text-anchor="middle" fill="#ffffff" font-weight="700">6</text>
+<text x="1097.6" y="1237.0" font-size="20.4" fill="#212529">neighbourhood: Are We There Yet? Revealing t…</text>
+<circle cx="37.4" cy="1263.2" r="13.2" fill="#212529"/>
+<text x="37.4" y="1271.8" font-size="16.7" text-anchor="middle" fill="#ffffff" font-weight="700">7</text>
+<text x="57.2" y="1272.6" font-size="20.4" fill="#212529">neighbourhood: Can LLMs Identify Critical Li…</text>
+<circle cx="557.6" cy="1263.2" r="13.2" fill="#212529"/>
+<text x="557.6" y="1271.8" font-size="16.7" text-anchor="middle" fill="#ffffff" font-weight="700">8</text>
+<text x="577.4" y="1272.6" font-size="20.4" fill="#212529">read justifications: Can Large Language Models Pro… · contradicts</text>
+<circle cx="1289.4" cy="1263.2" r="13.2" fill="#212529"/>
+<text x="1289.4" y="1271.8" font-size="16.7" text-anchor="middle" fill="#ffffff" font-weight="700">9</text>
+<text x="1309.2" y="1272.6" font-size="20.4" fill="#212529">contribution: Can LLMs Identify Critical Li…</text>
+<text x="24" y="1324" font-size="16.5" font-weight="700" fill="#495057" letter-spacing="0.8">HOW THE AGENT ENGAGED</text>
+<circle cx="38.5" cy="1349.4" r="14.4" fill="#fff" stroke="#212529" stroke-width="3.4"/><circle cx="38.5" cy="1349.4" r="7.9" fill="#212529"/>
+<text x="61.6" y="1357.6" font-size="20.4" fill="#495057">chose it — named as a call argument (n = step)</text>
+<circle cx="38.5" cy="1384.0" r="9.6" fill="#fff" stroke="#495057" stroke-width="2.8"/>
+<text x="61.6" y="1392.2" font-size="20.4" fill="#495057">read its evidence — justification pulled</text>
+<circle cx="38.5" cy="1418.6" r="5.6" fill="#adb5bd"/>
+<text x="61.6" y="1426.8" font-size="20.4" fill="#495057">listed only — delivered, not read</text>
+<circle cx="38.5" cy="1453.2" r="10.5" fill="none" stroke="#f59f00" stroke-width="3.4"/>
+<text x="61.6" y="1461.4" font-size="20.4" fill="#495057">named in the final answer</text>
+<rect x="24.2" y="1478.5" width="37.4" height="18.7" rx="9.4" fill="#f1f3f5" stroke="#ced4da" stroke-width="1.7"/>
+<text x="79.2" y="1496.0" font-size="20.4" fill="#495057">a search the agent typed (dotted lines → what it found)</text>
+<rect x="24.2" y="1513.1" width="37.4" height="18.7" rx="9.4" fill="#fff5f5" stroke="#ff6b6b" stroke-width="1.7" stroke-dasharray='5 4'/>
+<text x="79.2" y="1530.6" font-size="20.4" fill="#495057">“no match” — nothing in the corpus fit it</text>
+<text x="1024" y="1324" font-size="16.5" font-weight="700" fill="#495057" letter-spacing="0.8">RELATION</text>
+<path d="M 1024.1 1349.4 L 1061.5 1349.4" stroke="#ff6b6b" stroke-width="4.2" fill="none"/>
+<text x="1083.5" y="1357.6" font-size="20.4" fill="#495057">contradicts (symmetric)</text>
+<path d="M 1024.1 1384.0 L 1061.5 1384.0" stroke="#63e6be" stroke-width="4.2" fill="none" marker-end="url(#a_refines)"/>
+<text x="1083.5" y="1392.2" font-size="20.4" fill="#495057">refines</text>
+<path d="M 1024.1 1418.6 L 1061.5 1418.6" stroke="#6ea8fe" stroke-width="4.2" fill="none" marker-end="url(#a_builds_on)"/>
+<text x="1083.5" y="1426.8" font-size="20.4" fill="#495057">builds on</text>
+<path d="M 1024.1 1453.2 L 1061.5 1453.2" stroke="#b197fc" stroke-width="4.2" fill="none"/>
+<text x="1083.5" y="1461.4" font-size="20.4" fill="#495057">supports (symmetric)</text>
+<path d="M 1024.1 1487.8 L 1061.5 1487.8" stroke="#868e96" stroke-width="4.2" fill="none" marker-end="url(#a_mentions)"/>
+<text x="1083.5" y="1496.0" font-size="20.4" fill="#495057">cites (citation layer)</text>
+<text x="1024.1" y="1530.6" font-size="18.3" fill="#adb5bd">contradicts and supports are recorded symmetric — no direction is claimed</text>
+<text x="1024.1" y="1562.7" font-size="18.3" fill="#adb5bd">solid = read · dashed = listed only</text>
+<text x="24" y="1631" font-size="18.7" fill="#adb5bd">9 graph calls · 4 papers chosen · 1 read in depth · 14 listed · 22 typed edges · 6 papers in the answer</text>
+</svg>

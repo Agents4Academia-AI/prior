@@ -44,8 +44,18 @@ PATTERNS = {
     "tool_name": re.compile(r"\b(get_edges|get_neighbors|get_contribution|get_paper|"
                             r"get_citations|citations_between|search_contributions|"
                             r"WebSearch|WebFetch|mcp__)", re.I),
-    "process": re.compile(r"\b(web[- ]?search|I searched|my search(?:es)?|the database|"
-                          r"knowledge base|my tools|the tools (?:I|available)|"
+    # NB the same ordinary-English carve-out as `schema_label` above: what betrays
+    # the arm is a reference to ITS OWN sources, not the words themselves. "an
+    # expert knowledge base (mined from Kaggle solutions)" is the web arm
+    # describing AutoMind's architecture — a real feature of a real paper, and
+    # exactly the kind of specific detail these answers are supposed to contain.
+    # So "knowledge base" and "the database" are flagged only when possessed by
+    # the speaker ("my knowledge base", "the knowledge base I was given").
+    "process": re.compile(r"\b(web[- ]?search|I searched|my search(?:es)?|"
+                          r"(?:my|our) (?:knowledge base|database)|"
+                          r"(?:the|this) (?:knowledge base|database) (?:I|we|available|"
+                          r"provided|given|here)|"
+                          r"my tools|the tools (?:I|available)|"
                           r"my training data|I have no access)\b", re.I),
 }
 FIELDS = ("answer", "limits")

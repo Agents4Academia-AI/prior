@@ -1,0 +1,101 @@
+{
+ "nodes": [
+  {
+   "id": "arxiv:2504.01848v3::k00",
+   "paper_id": "arxiv:2504.01848v3",
+   "label": "PaperBench — a benchmark of 20 ICML 2024 Spotlight and Oral papers with hierarchically decomposed, author-approved rubri",
+   "problem": "",
+   "method": "benchmark",
+   "result": "PaperBench — a benchmark of 20 ICML 2024 Spotlight and Oral papers with hierarchically decomposed, author-approved rubrics (8,316 individually gradable leaf criteria) and an automated LLM-based grading workflow for evaluating AI agents' ability to replicate AI research from scratch.",
+   "paper": "PaperBench: Evaluating AI's Ability to Replicate AI Research",
+   "year": 2025,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    2
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2504.01848v3::k01",
+   "paper_id": "arxiv:2504.01848v3",
+   "label": "PaperBench Code-Dev — a lightweight variant of the AI-research replication benchmark that relaxes execution requirements",
+   "problem": "",
+   "method": "benchmark",
+   "result": "PaperBench Code-Dev — a lightweight variant of the AI-research replication benchmark that relaxes execution requirements to lower setup cost and broaden community accessibility.",
+   "paper": "PaperBench: Evaluating AI's Ability to Replicate AI Research",
+   "year": 2025,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    2
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2504.01848v3::k02",
+   "paper_id": "arxiv:2504.01848v3",
+   "label": "JudgeEval — a dataset of human-expert-graded replication submissions that serves as an auxiliary evaluation for developi",
+   "problem": "",
+   "method": "dataset",
+   "result": "JudgeEval — a dataset of human-expert-graded replication submissions that serves as an auxiliary evaluation for developing and benchmarking automated LLM-based judges of research replication quality.",
+   "paper": "PaperBench: Evaluating AI's Ability to Replicate AI Research",
+   "year": 2025,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    2
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2504.01848v3::k03",
+   "paper_id": "arxiv:2504.01848v3",
+   "label": "Frontier AI agents score at most 21.0% average replication on PaperBench, well below a human ML-PhD baseline of 41.4% on",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "Frontier AI agents score at most 21.0% average replication on PaperBench, well below a human ML-PhD baseline of 41.4% on a matched subset, establishing a quantitative gap between current AI and expert human capability for autonomous ML research replication.",
+   "paper": "PaperBench: Evaluating AI's Ability to Replicate AI Research",
+   "year": 2025,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    2
+   ],
+   "trace_in_answer": true
+  }
+ ],
+ "edges": [],
+ "trace": {
+  "question_id": "c02",
+  "question": "What score does the best agent get on PaperBench, on which subset, and how does it compare to the human PhD baseline?",
+  "family": "control-full-text",
+  "arm": "graph",
+  "n_calls": 2,
+  "steps": [
+   {
+    "step": 1,
+    "tool": "find_paper",
+    "args": {
+     "query": "PaperBench"
+    },
+    "surfaced": [
+     "arxiv:2504.01848v3"
+    ],
+    "note": ""
+   },
+   {
+    "step": 2,
+    "tool": "get_paper",
+    "args": {
+     "paper_id": "arxiv:2504.01848v3"
+    },
+    "surfaced": [],
+    "note": ""
+   }
+  ],
+  "papers_named": [
+   "PaperBench: Evaluating AI's Ability to Replicate AI Research"
+  ]
+ }
+}

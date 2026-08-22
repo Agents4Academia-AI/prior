@@ -1,0 +1,2095 @@
+{
+ "nodes": [
+  {
+   "id": "arxiv:2505.18705v1::k00",
+   "paper_id": "arxiv:2505.18705v1",
+   "label": "AI-Researcher — a fully autonomous multi-agent system that orchestrates the complete scientific research pipeline from l",
+   "problem": "",
+   "method": "framework",
+   "result": "AI-Researcher — a fully autonomous multi-agent system that orchestrates the complete scientific research pipeline from literature review and hypothesis generation through algorithm implementation, experimental validation, and publication-ready manuscript preparation with minimal human intervention.",
+   "paper": "AI-Researcher: Autonomous Scientific Innovation",
+   "year": 2025,
+   "trace_engagement": "read",
+   "trace_steps": [
+    1,
+    5,
+    8,
+    9,
+    10
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2505.18705v1::k01",
+   "paper_id": "arxiv:2505.18705v1",
+   "label": "Scientist-Bench — the first comprehensive benchmark for evaluating autonomous AI research agents, comprising state-of-th",
+   "problem": "",
+   "method": "benchmark",
+   "result": "Scientist-Bench — the first comprehensive benchmark for evaluating autonomous AI research agents, comprising state-of-the-art papers across diverse AI domains with both guided (Level-1) and open-ended (Level-2) tasks, paired ground-truth papers, curated references, and datasets for multidimensional assessment of implementation and documentation quality.",
+   "paper": "AI-Researcher: Autonomous Scientific Innovation",
+   "year": 2025,
+   "trace_engagement": "read",
+   "trace_steps": [
+    1,
+    5,
+    8,
+    9,
+    10
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2505.18705v1::k04",
+   "paper_id": "arxiv:2505.18705v1",
+   "label": "Autonomous research systems perform better on open-ended scientific exploration tasks than on guided implementation task",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "Autonomous research systems perform better on open-ended scientific exploration tasks than on guided implementation tasks, suggesting such systems leverage internal knowledge synthesis more effectively than following prescriptive research directives.",
+   "paper": "AI-Researcher: Autonomous Scientific Innovation",
+   "year": 2025,
+   "trace_engagement": "read",
+   "trace_steps": [
+    1,
+    5,
+    8,
+    9,
+    10
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2505.24785v2::k00",
+   "paper_id": "arxiv:2505.24785v2",
+   "label": "EXP-Bench — a benchmark of 461 AI research tasks drawn from 51 top-tier publications (NeurIPS, ICLR 2024) — evaluates AI",
+   "problem": "",
+   "method": "benchmark",
+   "result": "EXP-Bench — a benchmark of 461 AI research tasks drawn from 51 top-tier publications (NeurIPS, ICLR 2024) — evaluates AI agents on complete, end-to-end research experiments: hypothesis formulation, experimental design, implementation, execution, and result analysis, using multi-metric grading across 12,737 individually scorable subtasks.",
+   "paper": "EXP-Bench: Can AI Conduct AI Research Experiments?",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5,
+    7,
+    8,
+    9
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "arxiv:2505.24785v2::k02",
+   "paper_id": "arxiv:2505.24785v2",
+   "label": "Leading LLM-based agents achieve only 0.5% success on complete, executable AI research experiments; individual phases re",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "Leading LLM-based agents achieve only 0.5% success on complete, executable AI research experiments; individual phases reach at most 20–35%, with key failure modes being experimental design misclassification (16.1%), missing implementation components (39.7%), and environment or dependency misconfiguration (29.4%).",
+   "paper": "EXP-Bench: Can AI Conduct AI Research Experiments?",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5,
+    7,
+    8,
+    9
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "arxiv:2509.14778v2::k00",
+   "paper_id": "arxiv:2509.14778v2",
+   "label": "OpenLens AI — a modular, fully automated research agent framework for health informatics — integrates specialized agents",
+   "problem": "",
+   "method": "framework",
+   "result": "OpenLens AI — a modular, fully automated research agent framework for health informatics — integrates specialized agents for literature review, data analysis, code generation, and manuscript preparation into an end-to-end pipeline that requires no human intervention.",
+   "paper": "OpenLens AI: Fully Autonomous Research Agent for Health Infomatics",
+   "year": 2025,
+   "trace_engagement": "read",
+   "trace_steps": [
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2509.14778v2::k01",
+   "paper_id": "arxiv:2509.14778v2",
+   "label": "Vision-language feedback integrated into an automated research pipeline enables iterative evaluation and refinement of m",
+   "problem": "",
+   "method": "method",
+   "result": "Vision-language feedback integrated into an automated research pipeline enables iterative evaluation and refinement of medical visualizations (plots, charts, curves), closing a gap left by general-purpose research agents.",
+   "paper": "OpenLens AI: Fully Autonomous Research Agent for Health Infomatics",
+   "year": 2025,
+   "trace_engagement": "read",
+   "trace_steps": [
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2509.14778v2::k02",
+   "paper_id": "arxiv:2509.14778v2",
+   "label": "A quality control framework embedded in an autonomous health informatics agent enforces methodological soundness, statis",
+   "problem": "",
+   "method": "framework",
+   "result": "A quality control framework embedded in an autonomous health informatics agent enforces methodological soundness, statistical reliability, and reproducibility, reducing the likelihood of misleading or hallucinated findings.",
+   "paper": "OpenLens AI: Fully Autonomous Research Agent for Health Infomatics",
+   "year": 2025,
+   "trace_engagement": "read",
+   "trace_steps": [
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2509.14778v2::k03",
+   "paper_id": "arxiv:2509.14778v2",
+   "label": "End-to-end automation of the health informatics research pipeline — from initial ideation through literature review, dat",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "End-to-end automation of the health informatics research pipeline — from initial ideation through literature review, data analysis, and code execution to publication-ready LaTeX manuscript generation — is achievable with transparent and traceable workflows.",
+   "paper": "OpenLens AI: Fully Autonomous Research Agent for Health Infomatics",
+   "year": 2025,
+   "trace_engagement": "read",
+   "trace_steps": [
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2511.02824v2::k00",
+   "paper_id": "arxiv:2511.02824v2",
+   "label": "Kosmos — an AI scientist system that, given an open-ended research objective and a dataset, autonomously runs iterative ",
+   "problem": "",
+   "method": "framework",
+   "result": "Kosmos — an AI scientist system that, given an open-ended research objective and a dataset, autonomously runs iterative cycles of parallel data analysis, literature search, and hypothesis generation for up to 12 hours, then synthesizes findings into fully-cited scientific reports spanning diverse domains including metabolomics, materials science, neuroscience, and statistical genetics.",
+   "paper": "Kosmos: An AI Scientist for Autonomous Discovery",
+   "year": 2025,
+   "trace_engagement": "read",
+   "trace_steps": [
+    1,
+    5,
+    6,
+    7,
+    9,
+    10,
+    11
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2511.02824v2::k01",
+   "paper_id": "arxiv:2511.02824v2",
+   "label": "A structured world model for coordinating large numbers of parallel scientific agents enables coherent long-horizon auto",
+   "problem": "",
+   "method": "method",
+   "result": "A structured world model for coordinating large numbers of parallel scientific agents enables coherent long-horizon autonomous research — sustaining over 200 agent rollouts that collectively execute an average of 42,000 lines of code and read 1,500 full-length papers per run, an 8× improvement in iteration depth over prior systems.",
+   "paper": "Kosmos: An AI Scientist for Autonomous Discovery",
+   "year": 2025,
+   "trace_engagement": "read",
+   "trace_steps": [
+    1,
+    5,
+    6,
+    7,
+    9,
+    10,
+    11
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2511.02824v2::k02",
+   "paper_id": "arxiv:2511.02824v2",
+   "label": "The number of valuable scientific findings produced by an autonomous AI scientist scales linearly with the number of dis",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "The number of valuable scientific findings produced by an autonomous AI scientist scales linearly with the number of discovery cycles (computational investment), with expert-estimated research equivalence roughly doubling from cycle 5 to cycle 20, reaching an average of 6 months of expert research time per 20-cycle run.",
+   "paper": "Kosmos: An AI Scientist for Autonomous Discovery",
+   "year": 2025,
+   "trace_engagement": "read",
+   "trace_steps": [
+    1,
+    5,
+    6,
+    7,
+    9,
+    10,
+    11
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2511.02824v2::k03",
+   "paper_id": "arxiv:2511.02824v2",
+   "label": "An autonomous AI scientist can independently reproduce unpublished or post-cutoff scientific findings and generate novel",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "An autonomous AI scientist can independently reproduce unpublished or post-cutoff scientific findings and generate novel, expert-validated discoveries across multiple fields, with 79.4% of report statements verified as accurate by independent domain experts and four out of seven highlighted findings constituting novel contributions to the scientific literature.",
+   "paper": "Kosmos: An AI Scientist for Autonomous Discovery",
+   "year": 2025,
+   "trace_engagement": "read",
+   "trace_steps": [
+    1,
+    5,
+    6,
+    7,
+    9,
+    10,
+    11
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2602.15112v2::k00",
+   "paper_id": "arxiv:2602.15112v2",
+   "label": "ResearchGym — an extensible execution environment and benchmark of five containerized tasks (39 sub-tasks) derived from ",
+   "problem": "",
+   "method": "benchmark",
+   "result": "ResearchGym — an extensible execution environment and benchmark of five containerized tasks (39 sub-tasks) derived from recent oral/spotlight papers at ICML, ICLR, and ACL — enables objective, execution-based evaluation of AI agents on closed-loop research, including hypothesis generation, experimentation, and surpassing human baselines, while remaining feasible on a single GPU.",
+   "paper": "ResearchGym: Evaluating Language Model Agents on Real-World AI Research",
+   "year": 2026,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6,
+    8
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "arxiv:2602.15112v2::k02",
+   "paper_id": "arxiv:2602.15112v2",
+   "label": "Recurring long-horizon failure modes in autonomous research agents include impatience, poor time and resource management",
+   "problem": "",
+   "method": "analysis",
+   "result": "Recurring long-horizon failure modes in autonomous research agents include impatience, poor time and resource management, overconfidence in weak hypotheses, difficulty coordinating parallel experiments, and context-length limits, as identified through ablations, 35+ end-to-end runs, and qualitative case studies.",
+   "paper": "ResearchGym: Evaluating Language Model Agents on Real-World AI Research",
+   "year": 2026,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6,
+    8
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4390784029::k00",
+   "paper_id": "openalex:W4390784029",
+   "label": "MARG (Multi-Agent Review Generation) — a system in which multiple LLM instances each receive a portion of a scientific p",
+   "problem": "",
+   "method": "method",
+   "result": "MARG (Multi-Agent Review Generation) — a system in which multiple LLM instances each receive a portion of a scientific paper, engage in structured internal discussion, and collectively generate peer-review feedback for papers whose full text exceeds any single LLM's context window.",
+   "paper": "MARG: Multi-Agent Review Generation for Scientific Papers",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5,
+    7
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4402952666::k00",
+   "paper_id": "openalex:W4402952666",
+   "label": "The AI Scientist — an end-to-end, fully automated pipeline in which a frontier LLM generates research ideas, searches th",
+   "problem": "",
+   "method": "framework",
+   "result": "The AI Scientist — an end-to-end, fully automated pipeline in which a frontier LLM generates research ideas, searches the literature, designs and executes experiments, visualizes results, writes a complete scientific manuscript, and performs self-review in an open-ended loop — enables autonomous scientific discovery in machine learning at a cost of under $15 per paper.",
+   "paper": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery",
+   "year": 2024,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    2,
+    5,
+    6,
+    7
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4402952666::k01",
+   "paper_id": "openalex:W4402952666",
+   "label": "An automated, foundation-model-based paper-reviewing process achieves near-human-level performance (65% vs. 66% balanced",
+   "problem": "",
+   "method": "method",
+   "result": "An automated, foundation-model-based paper-reviewing process achieves near-human-level performance (65% vs. 66% balanced accuracy) when evaluated against ICLR 2022 OpenReview data, enabling scalable quality assessment of LLM-generated research papers.",
+   "paper": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery",
+   "year": 2024,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    2,
+    5,
+    6,
+    7
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4402952666::k02",
+   "paper_id": "openalex:W4402952666",
+   "label": "Fully automated LLM-driven scientific discovery can produce novel machine learning papers in diffusion modeling, transfo",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "Fully automated LLM-driven scientific discovery can produce novel machine learning papers in diffusion modeling, transformer-based language modeling, and learning dynamics that exceed the acceptance threshold of a top machine learning conference as judged by an automated reviewer.",
+   "paper": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery",
+   "year": 2024,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    2,
+    5,
+    6,
+    7
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4402952811::k00",
+   "paper_id": "openalex:W4402952811",
+   "label": "MLR-Copilot — a three-stage autonomous ML research framework (idea generation, experiment implementation, and execution)",
+   "problem": "",
+   "method": "framework",
+   "result": "MLR-Copilot — a three-stage autonomous ML research framework (idea generation, experiment implementation, and execution) that takes a research paper as input and produces novel research methodologies, executable code, and experimental results.",
+   "paper": "MLR-Copilot: Autonomous Machine Learning Research based on Large Language Models Agents",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5,
+    8
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4403586302::k00",
+   "paper_id": "openalex:W4403586302",
+   "label": "A controlled experimental framework for comparing human and LLM research idea generation — enforcing style standardizati",
+   "problem": "",
+   "method": "framework",
+   "result": "A controlled experimental framework for comparing human and LLM research idea generation — enforcing style standardization, matched topic distributions, and blind expert review — enables statistically rigorous head-to-head evaluation of ideation capabilities for the first time.",
+   "paper": "Can LLMs Generate Novel Research Ideas? A Large-Scale Human Study with 100+ NLP Researchers",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5,
+    6,
+    8
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4404573571::k00",
+   "paper_id": "openalex:W4404573571",
+   "label": "Baby-AIGS — a multi-agent LLM-powered system comprising ProposalAgent, ExpAgent, ReviewAgent, and FalsificationAgent — e",
+   "problem": "",
+   "method": "framework",
+   "result": "Baby-AIGS — a multi-agent LLM-powered system comprising ProposalAgent, ExpAgent, ReviewAgent, and FalsificationAgent — enables autonomous, full-process scientific discovery without relying on domain-specific external verification engines.",
+   "paper": "AIGS: Generating Science from AI-Powered Automated Falsification",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1,
+    5,
+    8
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4404573571::k03",
+   "paper_id": "openalex:W4404573571",
+   "label": "A full-process multi-agent AI system can produce meaningful scientific discoveries across diverse research tasks, though",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "A full-process multi-agent AI system can produce meaningful scientific discoveries across diverse research tasks, though with a measurable quality gap relative to experienced human researchers.",
+   "paper": "AIGS: Generating Science from AI-Powered Automated Falsification",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1,
+    5,
+    8
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4407760093::k00",
+   "paper_id": "openalex:W4407760093",
+   "label": "AIDE (AI-Driven Exploration) — an LLM-powered agent that automates machine learning engineering by framing it as a code ",
+   "problem": "",
+   "method": "method",
+   "result": "AIDE (AI-Driven Exploration) — an LLM-powered agent that automates machine learning engineering by framing it as a code optimization problem and conducting tree search over candidate Python solutions, using draft, debug, and improve operators guided by automated evaluation scores.",
+   "paper": "AIDE: AI-Driven Exploration in the Space of Code",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6,
+    8
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4412889957::k00",
+   "paper_id": "openalex:W4412889957",
+   "label": "A substantial fraction (24%) of LLM-generated research documents are plagiarized — either paraphrased with one-to-one me",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "A substantial fraction (24%) of LLM-generated research documents are plagiarized — either paraphrased with one-to-one methodological mapping or significantly borrowed from existing work without attribution — as identified through an expert-led evaluation in which 13 domain experts actively searched for similarities across 50 LLM-generated research documents, with findings cross-verified by authors of the source papers.",
+   "paper": "All That Glitters is Not Novel: Plagiarism in AI Generated Research",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    7,
+    8
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4414827381::k00",
+   "paper_id": "openalex:W4414827381",
+   "label": "The AI Scientist-v2 — an end-to-end agentic system for automated scientific discovery that eliminates reliance on human-",
+   "problem": "",
+   "method": "framework",
+   "result": "The AI Scientist-v2 — an end-to-end agentic system for automated scientific discovery that eliminates reliance on human-authored code templates, uses a progressive agentic tree-search methodology managed by a dedicated experiment manager agent, and integrates VLM feedback for iterative figure refinement — can autonomously formulate hypotheses, design and execute experiments, analyze data, and author complete scientific manuscripts across diverse machine learning domains.",
+   "paper": "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search",
+   "year": 2025,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    2,
+    5,
+    6,
+    7,
+    8
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4414827381::k01",
+   "paper_id": "openalex:W4414827381",
+   "label": "A fully AI-generated manuscript can successfully pass peer review at a recognized machine learning workshop, with one AI",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "A fully AI-generated manuscript can successfully pass peer review at a recognized machine learning workshop, with one AI-generated submission exceeding the average human acceptance threshold at an ICLR workshop.",
+   "paper": "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search",
+   "year": 2025,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    2,
+    5,
+    6,
+    7,
+    8
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4414827381::k02",
+   "paper_id": "openalex:W4414827381",
+   "label": "Comprehensive internal evaluation and analysis of peer-review feedback on AI-generated manuscripts reveals the strengths",
+   "problem": "",
+   "method": "analysis",
+   "result": "Comprehensive internal evaluation and analysis of peer-review feedback on AI-generated manuscripts reveals the strengths, weaknesses, and current status of fully autonomous scientific writing relative to human-authored publications.",
+   "paper": "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search",
+   "year": 2025,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    2,
+    5,
+    6,
+    7,
+    8
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4414827381::k03",
+   "paper_id": "openalex:W4414827381",
+   "label": "An open-source codebase and ICLR 2025 workshop experiment data for The AI Scientist-v2 are released to enable further re",
+   "problem": "",
+   "method": "resource",
+   "result": "An open-source codebase and ICLR 2025 workshop experiment data for The AI Scientist-v2 are released to enable further research into automated scientific discovery.",
+   "paper": "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search",
+   "year": 2025,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    2,
+    5,
+    6,
+    7,
+    8
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4416026872::k00",
+   "paper_id": "openalex:W4416026872",
+   "label": "Jr. AI Scientist — an autonomous AI scientist system that, given a baseline paper, its LaTeX source files, and associate",
+   "problem": "",
+   "method": "method",
+   "result": "Jr. AI Scientist — an autonomous AI scientist system that, given a baseline paper, its LaTeX source files, and associated codebase from a human mentor, identifies the paper's limitations, formulates improvement hypotheses, iteratively runs experiments on complex multi-file codebases using modern coding agents (e.g., Claude Code), and writes a full research paper from the results.",
+   "paper": "Jr. AI Scientist and Its Risk Report: Autonomous Scientific Exploration from a Baseline Paper",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    7,
+    9
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4416026872::k01",
+   "paper_id": "openalex:W4416026872",
+   "label": "A 'Jr. AI Scientist' problem setting that reframes fully autonomous science into a tractable, mentor-guided baseline-ext",
+   "problem": "",
+   "method": "framework",
+   "result": "A 'Jr. AI Scientist' problem setting that reframes fully autonomous science into a tractable, mentor-guided baseline-extension task — giving the AI agent one baseline paper and its codebase as the starting point — providing a clear optimization direction and enabling scientifically valuable, complex-codebase contributions.",
+   "paper": "Jr. AI Scientist and Its Risk Report: Autonomous Scientific Exploration from a Baseline Paper",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    7,
+    9
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4416026872::k03",
+   "paper_id": "openalex:W4416026872",
+   "label": "A comprehensive risk taxonomy for autonomous AI scientist systems, cataloguing concrete failure modes and hazards across",
+   "problem": "",
+   "method": "analysis",
+   "result": "A comprehensive risk taxonomy for autonomous AI scientist systems, cataloguing concrete failure modes and hazards across the idea-generation, experimentation, writing, and review phases, derived from end-to-end system development and deployment experience.",
+   "paper": "Jr. AI Scientist and Its Risk Report: Autonomous Scientific Exploration from a Baseline Paper",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    7,
+    9
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4416034681::k00",
+   "paper_id": "openalex:W4416034681",
+   "label": "Chain-of-Ideas (CoI) agent — an LLM-based research ideation system that organizes relevant literature into a chronologic",
+   "problem": "",
+   "method": "framework",
+   "result": "Chain-of-Ideas (CoI) agent — an LLM-based research ideation system that organizes relevant literature into a chronological chain structure mirroring the progressive development of a research domain, enabling LLMs to generate novel and logically coherent research ideas with experimental designs for approximately $0.50 per idea.",
+   "paper": "Chain of Ideas: Revolutionizing Research Via Novel Idea Development with LLM Agents",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5,
+    8
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4416035220::k00",
+   "paper_id": "openalex:W4416035220",
+   "label": "Agent Laboratory — an autonomous LLM-based pipeline that accepts a human-provided research idea and completes the full r",
+   "problem": "",
+   "method": "framework",
+   "result": "Agent Laboratory — an autonomous LLM-based pipeline that accepts a human-provided research idea and completes the full research cycle (literature review, experimentation, and report writing) to produce a code repository and research report, with optional human feedback at each stage.",
+   "paper": "Agent Laboratory: Using LLM Agents as Research Assistants",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6,
+    7,
+    8
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4416035220::k02",
+   "paper_id": "openalex:W4416035220",
+   "label": "A co-pilot mode for LLM-driven research pipelines, in which human reviewers approve or request revision of agent outputs",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "A co-pilot mode for LLM-driven research pipelines, in which human reviewers approve or request revision of agent outputs at the end of each subtask phase, improves overall research quality over fully autonomous operation.",
+   "paper": "Agent Laboratory: Using LLM Agents as Research Assistants",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6,
+    7,
+    8
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4416043407::k00",
+   "paper_id": "openalex:W4416043407",
+   "label": "An AI co-scientist — a multi-agent system built on Gemini 2.0 that uses a generate, debate, and evolve approach with spe",
+   "problem": "",
+   "method": "framework",
+   "result": "An AI co-scientist — a multi-agent system built on Gemini 2.0 that uses a generate, debate, and evolve approach with specialized agents (Generation, Reflection, Ranking, Evolution, Proximity, Meta-review) to formulate novel research hypotheses and proposals aligned to scientist-provided objectives, with test-time compute scaling for iterative improvement.",
+   "paper": "Towards an AI co-scientist",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6,
+    8
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4417070798::k00",
+   "paper_id": "openalex:W4417070798",
+   "label": "A diagnostic framework identifying four methodological failure modes in AI scientist systems — inappropriate benchmark s",
+   "problem": "",
+   "method": "framework",
+   "result": "A diagnostic framework identifying four methodological failure modes in AI scientist systems — inappropriate benchmark selection, data leakage, metric misuse, and post-hoc selection bias — with controlled experimental designs that isolate each failure mode using fully synthetic tasks to avoid data contamination.",
+   "paper": "The More You Automate, the Less You See: Hidden Pitfalls of AI Scientist Systems",
+   "year": 2025,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    6,
+    7,
+    9,
+    11
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4417070798::k01",
+   "paper_id": "openalex:W4417070798",
+   "label": "Empirical evidence that prominent open-source AI scientist systems exhibit systematic methodological failures including ",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "Empirical evidence that prominent open-source AI scientist systems exhibit systematic methodological failures including benchmark cherry-picking, undocumented dataset manipulation, arbitrary metric selection, and post-hoc selection bias driven by internal reward mechanisms that exploit test-set performance.",
+   "paper": "The More You Automate, the Less You See: Hidden Pitfalls of AI Scientist Systems",
+   "year": 2025,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    6,
+    7,
+    9,
+    11
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4417070798::k02",
+   "paper_id": "openalex:W4417070798",
+   "label": "An LLM-based auditing classifier for detecting methodological pitfalls in AI-generated research achieves substantially h",
+   "problem": "",
+   "method": "method",
+   "result": "An LLM-based auditing classifier for detecting methodological pitfalls in AI-generated research achieves substantially higher accuracy (82% binary classification, F1 0.81) when applied to workflow trace logs and generated code than when applied to the final paper alone (55% accuracy, F1 0.51).",
+   "paper": "The More You Automate, the Less You See: Hidden Pitfalls of AI Scientist Systems",
+   "year": 2025,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    6,
+    7,
+    9,
+    11
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W7118690722::k00",
+   "paper_id": "openalex:W7118690722",
+   "label": "Systematic case-study evaluation of eight open-source AI frameworks on scientific research reproduction tasks reveals no",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "Systematic case-study evaluation of eight open-source AI frameworks on scientific research reproduction tasks reveals none can complete a full research cycle from literature understanding through computational execution to validated results and scientific writing.",
+   "paper": "Can AI Conduct Autonomous Scientific Research? Case Studies on Two Real-World Tasks",
+   "year": 2026,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    4,
+    7,
+    8,
+    9,
+    10
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W7118690722::k01",
+   "paper_id": "openalex:W7118690722",
+   "label": "AI research frameworks demonstrate a critical capability gap: competence in conceptual planning and summarization but co",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "AI research frameworks demonstrate a critical capability gap: competence in conceptual planning and summarization but consistent failure at robust computational implementation, with all frameworks producing sophisticated hallucinations.",
+   "paper": "Can AI Conduct Autonomous Scientific Research? Case Studies on Two Real-World Tasks",
+   "year": 2026,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    4,
+    7,
+    8,
+    9,
+    10
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W7118690722::k02",
+   "paper_id": "openalex:W7118690722",
+   "label": "Definition of a full research cycle spanning literature understanding, hypothesis formulation, computational implementat",
+   "problem": "",
+   "method": "framework",
+   "result": "Definition of a full research cycle spanning literature understanding, hypothesis formulation, computational implementation, experiment execution with controls, result validation, theoretical interpretation, and scientific writing—operationalized as a holistic evaluation framework for assessing autonomous AI research capabilities beyond isolated benchmarks.",
+   "paper": "Can AI Conduct Autonomous Scientific Research? Case Studies on Two Real-World Tasks",
+   "year": 2026,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    4,
+    7,
+    8,
+    9,
+    10
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W7118690722::k03",
+   "paper_id": "openalex:W7118690722",
+   "label": "AI research frameworks require substantial debugging and technical expertise to deploy in practice, contradicting claims",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "AI research frameworks require substantial debugging and technical expertise to deploy in practice, contradicting claims about democratization of science, though they show potential value as supervised assistants for methodological planning and ideation.",
+   "paper": "Can AI Conduct Autonomous Scientific Research? Case Studies on Two Real-World Tasks",
+   "year": 2026,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    4,
+    7,
+    8,
+    9,
+    10
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W7119558012::k00",
+   "paper_id": "openalex:W7119558012",
+   "label": "Six recurring failure modes in LLM-based autonomous research pipelines: bias toward training data defaults, implementati",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "Six recurring failure modes in LLM-based autonomous research pipelines: bias toward training data defaults, implementation drift under execution pressure, memory and context degradation across long-horizon tasks, overexcitement that declares success despite obvious failures, insufficient domain intelligence, and weak scientific taste in experimental design.",
+   "paper": "Why LLMs Aren't Scientists Yet: Lessons from Four Autonomous Research Attempts",
+   "year": 2026,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    3,
+    6,
+    8,
+    9
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W7119558012::k01",
+   "paper_id": "openalex:W7119558012",
+   "label": "Four design principles for building more robust AI-scientist systems, derived from empirical case-study experience runni",
+   "problem": "",
+   "method": "analysis",
+   "result": "Four design principles for building more robust AI-scientist systems, derived from empirical case-study experience running four end-to-end autonomous ML research attempts.",
+   "paper": "Why LLMs Aren't Scientists Yet: Lessons from Four Autonomous Research Attempts",
+   "year": 2026,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    3,
+    6,
+    8,
+    9
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W7119558012::k02",
+   "paper_id": "openalex:W7119558012",
+   "label": "A six-agent autonomous research pipeline — covering idea generation, hypothesis formulation, experiment planning, output",
+   "problem": "",
+   "method": "framework",
+   "result": "A six-agent autonomous research pipeline — covering idea generation, hypothesis formulation, experiment planning, output evaluation, revision, and paper outlining — that operates with minimal scaffolding and a shared file-system context store, demonstrated end-to-end on ML research tasks.",
+   "paper": "Why LLMs Aren't Scientists Yet: Lessons from Four Autonomous Research Attempts",
+   "year": 2026,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    3,
+    6,
+    8,
+    9
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W7119558012::k03",
+   "paper_id": "openalex:W7119558012",
+   "label": "A public release of all prompts, agent artifacts, intermediate outputs, and final papers from four autonomous ML researc",
+   "problem": "",
+   "method": "resource",
+   "result": "A public release of all prompts, agent artifacts, intermediate outputs, and final papers from four autonomous ML research attempts, enabling reproducibility and analysis of AI-scientist system behaviour.",
+   "paper": "Why LLMs Aren't Scientists Yet: Lessons from Four Autonomous Research Attempts",
+   "year": 2026,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    3,
+    6,
+    8,
+    9
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W7126046125::k00",
+   "paper_id": "openalex:W7126046125",
+   "label": "An open-source framework enabling autonomous agent laboratories to collaboratively develop research by uploading and ret",
+   "problem": "",
+   "method": "framework",
+   "result": "An open-source framework enabling autonomous agent laboratories to collaboratively develop research by uploading and retrieving findings from a shared preprint server, allowing agents to iteratively build upon each other's discoveries.",
+   "paper": "AgentRxiv: Towards Collaborative Autonomous Research",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1,
+    6
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W7126046125::k03",
+   "paper_id": "openalex:W7126046125",
+   "label": "Parallelized execution mode for autonomous agent laboratories, allowing multiple agents to run simultaneously while shar",
+   "problem": "",
+   "method": "method",
+   "result": "Parallelized execution mode for autonomous agent laboratories, allowing multiple agents to run simultaneously while sharing research findings through a centralized platform, accelerates cumulative research progress compared to isolated agent development.",
+   "paper": "AgentRxiv: Towards Collaborative Autonomous Research",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1,
+    6
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W7140287209::k00",
+   "paper_id": "openalex:W7140287209",
+   "label": "The AI Scientist — a fully automated, end-to-end scientific research pipeline that autonomously generates research ideas",
+   "problem": "",
+   "method": "framework",
+   "result": "The AI Scientist — a fully automated, end-to-end scientific research pipeline that autonomously generates research ideas, writes and executes code, runs experiments, analyzes and plots results, writes complete machine-learning conference manuscripts, and performs automated peer review.",
+   "paper": "Towards end-to-end automation of AI research",
+   "year": 2026,
+   "trace_engagement": "read",
+   "trace_steps": [
+    1,
+    5,
+    6,
+    9,
+    10
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W7140287209::k01",
+   "paper_id": "openalex:W7140287209",
+   "label": "A template-free, open-ended research execution mode that uses agentic tree search to generate code from scratch, optimiz",
+   "problem": "",
+   "method": "method",
+   "result": "A template-free, open-ended research execution mode that uses agentic tree search to generate code from scratch, optimize implementations, and explore scientific hypotheses without human-provided scaffolding.",
+   "paper": "Towards end-to-end automation of AI research",
+   "year": 2026,
+   "trace_engagement": "read",
+   "trace_steps": [
+    1,
+    5,
+    6,
+    9,
+    10
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W7140287209::k02",
+   "paper_id": "openalex:W7140287209",
+   "label": "The Automated Reviewer — an ensemble-based LLM reviewer that predicts conference acceptance decisions with accuracy on p",
+   "problem": "",
+   "method": "model",
+   "result": "The Automated Reviewer — an ensemble-based LLM reviewer that predicts conference acceptance decisions with accuracy on par with human reviewers, validated against openly available decisions from past conferences.",
+   "paper": "Towards end-to-end automation of AI research",
+   "year": 2026,
+   "trace_engagement": "read",
+   "trace_steps": [
+    1,
+    5,
+    6,
+    9,
+    10
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W7140287209::k03",
+   "paper_id": "openalex:W7140287209",
+   "label": "AI-generated research manuscripts can pass the first round of peer review at a workshop of a top-tier machine learning c",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "AI-generated research manuscripts can pass the first round of peer review at a workshop of a top-tier machine learning conference, demonstrating that fully autonomous scientific output meets a non-trivial human-evaluated quality bar.",
+   "paper": "Towards end-to-end automation of AI research",
+   "year": 2026,
+   "trace_engagement": "read",
+   "trace_steps": [
+    1,
+    5,
+    6,
+    9,
+    10
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W7165004696::k00",
+   "paper_id": "openalex:W7165004696",
+   "label": "Orion — a computer-using AI agent that integrates terminal code execution, graphical interface control, and adaptive mul",
+   "problem": "",
+   "method": "framework",
+   "result": "Orion — a computer-using AI agent that integrates terminal code execution, graphical interface control, and adaptive multi-step reasoning to automate end-to-end biomedical image analysis and interpretation workflows without requiring bespoke software integrations.",
+   "paper": "Orion: Towards Lab Automation with Computer-Using Agents",
+   "year": 2026,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1,
+    6
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W7165004696::k01",
+   "paper_id": "openalex:W7165004696",
+   "label": "A hierarchical agent architecture with a terminal-based controller and dynamically spawned GUI subagents, combined with ",
+   "problem": "",
+   "method": "method",
+   "result": "A hierarchical agent architecture with a terminal-based controller and dynamically spawned GUI subagents, combined with externalized memory, enables sustained autonomous execution of complex research workflows exceeding 300 sequential actions.",
+   "paper": "Orion: Towards Lab Automation with Computer-Using Agents",
+   "year": 2026,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1,
+    6
+   ],
+   "trace_in_answer": false
+  }
+ ],
+ "edges": [
+  {
+   "id": "openalex:W7118690722::k03|supports|openalex:W7119558012::k03",
+   "source": "openalex:W7118690722::k03",
+   "target": "openalex:W7119558012::k03",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1,
+    8,
+    9
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2505.18705v1::k01|supports|openalex:W7118690722::k00",
+   "source": "arxiv:2505.18705v1::k01",
+   "target": "openalex:W7118690722::k00",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1,
+    9
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2511.02824v2::k01|supports|openalex:W7126046125::k03",
+   "source": "arxiv:2511.02824v2::k01",
+   "target": "openalex:W7126046125::k03",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2511.02824v2::k01|supports|openalex:W7165004696::k01",
+   "source": "arxiv:2511.02824v2::k01",
+   "target": "openalex:W7165004696::k01",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2505.18705v1::k00|builds_on|openalex:W4402952666::k00",
+   "source": "arxiv:2505.18705v1::k00",
+   "target": "openalex:W4402952666::k00",
+   "relation": "builds_on",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1,
+    5
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2511.02824v2::k02|builds_on|openalex:W4402952666::k00",
+   "source": "arxiv:2511.02824v2::k02",
+   "target": "openalex:W4402952666::k00",
+   "relation": "builds_on",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1,
+    5
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4404573571::k00|builds_on|openalex:W4402952666::k00",
+   "source": "openalex:W4404573571::k00",
+   "target": "openalex:W4402952666::k00",
+   "relation": "builds_on",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1,
+    5
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4414827381::k00|builds_on|openalex:W4402952666::k00",
+   "source": "openalex:W4414827381::k00",
+   "target": "openalex:W4402952666::k00",
+   "relation": "builds_on",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1,
+    5,
+    6
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W7140287209::k02|builds_on|openalex:W4402952666::k02",
+   "source": "openalex:W7140287209::k02",
+   "target": "openalex:W4402952666::k02",
+   "relation": "builds_on",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1,
+    5
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4402952666::k00|supports|openalex:W4404573571::k03",
+   "source": "openalex:W4402952666::k00",
+   "target": "openalex:W4404573571::k03",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4402952666::k02|supports|openalex:W7140287209::k03",
+   "source": "openalex:W4402952666::k02",
+   "target": "openalex:W7140287209::k03",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4416034681::k00|mentions|openalex:W4402952666::k00",
+   "source": "openalex:W4416034681::k00",
+   "target": "openalex:W4402952666::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W4414827381::k00|mentions|openalex:W4402952666::k00",
+   "source": "openalex:W4414827381::k00",
+   "target": "openalex:W4402952666::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5,
+    6
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W4403586302::k00|mentions|openalex:W4402952666::k00",
+   "source": "openalex:W4403586302::k00",
+   "target": "openalex:W4402952666::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2505.24785v2::k00|mentions|openalex:W4402952666::k00",
+   "source": "arxiv:2505.24785v2::k00",
+   "target": "openalex:W4402952666::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2511.02824v2::k00|mentions|openalex:W4402952666::k00",
+   "source": "arxiv:2511.02824v2::k00",
+   "target": "openalex:W4402952666::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W4402952811::k00|mentions|openalex:W4402952666::k00",
+   "source": "openalex:W4402952811::k00",
+   "target": "openalex:W4402952666::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W4402952666::k00|mentions|openalex:W4390784029::k00",
+   "source": "openalex:W4402952666::k00",
+   "target": "openalex:W4390784029::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W4414827381::k00|builds_on|openalex:W4407760093::k00",
+   "source": "openalex:W4414827381::k00",
+   "target": "openalex:W4407760093::k00",
+   "relation": "builds_on",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4414827381::k00|builds_on|openalex:W7140287209::k01",
+   "source": "openalex:W4414827381::k00",
+   "target": "openalex:W7140287209::k01",
+   "relation": "builds_on",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2509.14778v2::k01|supports|openalex:W4414827381::k00",
+   "source": "arxiv:2509.14778v2::k01",
+   "target": "openalex:W4414827381::k00",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4414827381::k01|supports|openalex:W7140287209::k03",
+   "source": "openalex:W4414827381::k01",
+   "target": "openalex:W7140287209::k03",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4417070798::k00|mentions|openalex:W4414827381::k00",
+   "source": "openalex:W4417070798::k00",
+   "target": "openalex:W4414827381::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6,
+    7
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2511.02824v2::k00|mentions|openalex:W4414827381::k00",
+   "source": "arxiv:2511.02824v2::k00",
+   "target": "openalex:W4414827381::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W7119558012::k00|mentions|openalex:W4414827381::k00",
+   "source": "openalex:W7119558012::k00",
+   "target": "openalex:W4414827381::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6,
+    8
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W7165004696::k00|mentions|openalex:W4414827381::k00",
+   "source": "openalex:W7165004696::k00",
+   "target": "openalex:W4414827381::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2602.15112v2::k00|mentions|openalex:W4414827381::k00",
+   "source": "arxiv:2602.15112v2::k00",
+   "target": "openalex:W4414827381::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W4414827381::k00|mentions|openalex:W4407760093::k00",
+   "source": "openalex:W4414827381::k00",
+   "target": "openalex:W4407760093::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W4414827381::k00|mentions|openalex:W4403586302::k00",
+   "source": "openalex:W4414827381::k00",
+   "target": "openalex:W4403586302::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W4414827381::k00|mentions|openalex:W4416043407::k00",
+   "source": "openalex:W4414827381::k00",
+   "target": "openalex:W4416043407::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W4414827381::k00|mentions|openalex:W4416035220::k00",
+   "source": "openalex:W4414827381::k00",
+   "target": "openalex:W4416035220::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W4414827381::k00|mentions|openalex:W7126046125::k00",
+   "source": "openalex:W4414827381::k00",
+   "target": "openalex:W7126046125::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W4416026872::k03|builds_on|openalex:W4417070798::k00",
+   "source": "openalex:W4416026872::k03",
+   "target": "openalex:W4417070798::k00",
+   "relation": "builds_on",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    7
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2511.02824v2::k03|contradicts|openalex:W4417070798::k01",
+   "source": "arxiv:2511.02824v2::k03",
+   "target": "openalex:W4417070798::k01",
+   "relation": "contradicts",
+   "provenance": "text",
+   "confidence": 1.0,
+   "evidence": "Contribution A presents an autonomous AI scientist (Kosmos) as capable of reliably reproducing unpublished findings and generating expert-validated novel discoveries, with 79.4% accuracy and four novel contributions confirmed by domain experts [AQ, A:004, A:008, A:048]. Contribution B presents systematic empirical evidence that prominent open-source AI scientist systems exhibit serious methodological failures—benchmark cherry-picking, data leakage, metric misuse, and post-hoc selection bias driven by internal reward mechanisms that exploit test-set performance—which undermine the integrity and trustworthiness of their outputs [BQ, B:001, B:003, B:006]. Both contributions address the same construct: whether autonomous AI scientist systems produce reliable and valid scientific findings. Contribution A's positive claim (reliable, expert-validated discovery) is in direct tension with Contribution B's negative finding (systematic methodological failures that inflate and distort results). However, there is some ambiguity: B focuses on ML-domain open-source systems (The AI Scientist, Agent Laboratory), while A focuses on Kosmos in broader scientific domains. This domain difference tempers",
+   "trace_engagement": "read",
+   "trace_steps": [
+    7,
+    11
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2509.14778v2::k02|supports|openalex:W4417070798::k00",
+   "source": "arxiv:2509.14778v2::k02",
+   "target": "openalex:W4417070798::k00",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    7
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4417070798::k01|supports|openalex:W7118690722::k00",
+   "source": "openalex:W4417070798::k01",
+   "target": "openalex:W7118690722::k00",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    7,
+    9
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2505.24785v2::k02|supports|openalex:W4417070798::k02",
+   "source": "arxiv:2505.24785v2::k02",
+   "target": "openalex:W4417070798::k02",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    7
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4416026872::k00|mentions|openalex:W4417070798::k00",
+   "source": "openalex:W4416026872::k00",
+   "target": "openalex:W4417070798::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    7
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W4417070798::k00|mentions|openalex:W4416035220::k00",
+   "source": "openalex:W4417070798::k00",
+   "target": "openalex:W4416035220::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    7
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W4417070798::k00|mentions|openalex:W4402952666::k00",
+   "source": "openalex:W4417070798::k00",
+   "target": "openalex:W4402952666::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    7
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W4417070798::k00|mentions|openalex:W4412889957::k00",
+   "source": "openalex:W4417070798::k00",
+   "target": "openalex:W4412889957::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    7
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W4417070798::k00|mentions|openalex:W4390784029::k00",
+   "source": "openalex:W4417070798::k00",
+   "target": "openalex:W4390784029::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    7
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2505.24785v2::k02|supports|openalex:W7119558012::k00",
+   "source": "arxiv:2505.24785v2::k02",
+   "target": "openalex:W7119558012::k00",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2602.15112v2::k02|supports|openalex:W7119558012::k00",
+   "source": "arxiv:2602.15112v2::k02",
+   "target": "openalex:W7119558012::k00",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4416035220::k02|supports|openalex:W7119558012::k00",
+   "source": "openalex:W4416035220::k02",
+   "target": "openalex:W7119558012::k00",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4402952811::k00|supports|openalex:W7119558012::k01",
+   "source": "openalex:W4402952811::k00",
+   "target": "openalex:W7119558012::k01",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2509.14778v2::k03|supports|openalex:W7119558012::k02",
+   "source": "arxiv:2509.14778v2::k03",
+   "target": "openalex:W7119558012::k02",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4404573571::k03|supports|openalex:W7119558012::k02",
+   "source": "openalex:W4404573571::k03",
+   "target": "openalex:W7119558012::k02",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W7119558012::k00|mentions|arxiv:2505.18705v1::k00",
+   "source": "openalex:W7119558012::k00",
+   "target": "arxiv:2505.18705v1::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W7119558012::k00|mentions|openalex:W4416043407::k00",
+   "source": "openalex:W7119558012::k00",
+   "target": "openalex:W4416043407::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W7119558012::k00|mentions|openalex:W4407760093::k00",
+   "source": "openalex:W7119558012::k00",
+   "target": "openalex:W4407760093::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W7119558012::k00|mentions|openalex:W4416034681::k00",
+   "source": "openalex:W7119558012::k00",
+   "target": "openalex:W4416034681::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W7119558012::k00|mentions|openalex:W4403586302::k00",
+   "source": "openalex:W7119558012::k00",
+   "target": "openalex:W4403586302::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W7119558012::k00|mentions|openalex:W4412889957::k00",
+   "source": "openalex:W7119558012::k00",
+   "target": "openalex:W4412889957::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    8
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2505.18705v1::k04|contradicts|openalex:W7118690722::k02",
+   "source": "arxiv:2505.18705v1::k04",
+   "target": "openalex:W7118690722::k02",
+   "relation": "contradicts",
+   "provenance": "text",
+   "confidence": 1.0,
+   "evidence": "Both contributions directly address the same construct: whether current AI multi-agent systems can autonomously complete a full scientific research cycle (literature review → hypothesis generation → implementation → validated results → manuscript). Contribution A (AI-Researcher) claims to achieve this, demonstrating \"remarkable implementation success rates\" and \"publication-ready manuscript preparation with minimal human intervention\" (AQ, A:002, A:005). Contribution B empirically evaluates eight open-source AI frameworks on equivalent tasks and finds that \"no framework completed a full research cycle from literature understanding through computational execution to validated results and scientific paper writing,\" with all frameworks failing at robust implementation and producing \"sophisticated hallucinations\" (BQ, B:003, B:007). B:004 explicitly targets the gap between \"ambitious claims\" about autonomous AI scientists and empirical reality — directly the type of claim made by A. This represents genuinely incompatible empirical findings and conclusions about the same capability question, though the contradiction is somewhat mitigated by the fact that B evaluated different frameworks",
+   "trace_engagement": "read",
+   "trace_steps": [
+    9,
+    10
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2509.14778v2::k00|contradicts|openalex:W7118690722::k00",
+   "source": "arxiv:2509.14778v2::k00",
+   "target": "openalex:W7118690722::k00",
+   "relation": "contradicts",
+   "provenance": "text",
+   "confidence": 1.0,
+   "evidence": "Contribution A claims OpenLens AI achieves fully automated, end-to-end research with no human intervention across literature review, data analysis, code generation, and manuscript preparation in health informatics (AQ, A:001, A:003, A:006). Contribution B empirically evaluates eight open-source AI frameworks on analogous end-to-end scientific research tasks and finds that none can complete a full research cycle from literature understanding through computational execution to validated results and scientific writing, with all frameworks failing at implementation and producing hallucinations (BQ, B:003, B:007). These represent genuinely incompatible findings on the same core construct: whether current AI agent frameworks can autonomously execute a complete scientific research pipeline. B's systematic negative finding directly contradicts A's affirmative claim of full automation with no human intervention, even if the specific frameworks evaluated differ. The contradiction is on the central empirical proposition—feasibility of end-to-end automated AI research agents—not merely on peripheral details.",
+   "trace_engagement": "read",
+   "trace_steps": [
+    9,
+    10
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2511.02824v2::k02|contradicts|openalex:W7118690722::k02",
+   "source": "arxiv:2511.02824v2::k02",
+   "target": "openalex:W7118690722::k02",
+   "relation": "contradicts",
+   "provenance": "text",
+   "confidence": 1.0,
+   "evidence": "Contribution A presents empirical evidence that an autonomous AI scientist (Kosmos) can independently reproduce unpublished findings and generate novel, expert-validated discoveries across multiple fields, with 79.4% accuracy and four novel contributions confirmed. Contribution B presents a systematic evaluation of eight open-source AI frameworks finding that none can complete a full scientific research cycle — all failed at implementation, produced sophisticated hallucinations, and could not move from planning to validated computational results. Both contributions directly address the same construct: whether current AI systems can autonomously conduct scientific research. Their empirical findings are genuinely incompatible: A demonstrates successful autonomous scientific discovery while B finds current AI frameworks incapable of completing the research cycle. Evidence [B:004] explicitly situates Contribution B as a corrective to \"isolated success stories, often reported by the developers of the systems themselves,\" which maps directly to the kind of claim made by Contribution A. Evidence [B:007] states all frameworks \"fundamentally operated as conceptual planning and text generati",
+   "trace_engagement": "read",
+   "trace_steps": [
+    9,
+    10
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W7118690722::k02|contradicts|openalex:W7140287209::k00",
+   "source": "openalex:W7118690722::k02",
+   "target": "openalex:W7140287209::k00",
+   "relation": "contradicts",
+   "provenance": "text",
+   "confidence": 1.0,
+   "evidence": "Contribution B (The AI Scientist) claims to deliver a fully automated, end-to-end scientific research pipeline—including idea generation, code execution, experiment running, manuscript writing, and peer review—and reports that a generated manuscript passed peer review at a top-tier ML conference workshop (B:000, B:001, B:004, BQ). Contribution A operationalizes a holistic research cycle framework and empirically finds that no current AI framework—including systems with comparable advertised capabilities—completed such a full research cycle; all tested frameworks failed at the critical transition from planning to computational execution, producing sophisticated hallucinations rather than genuine results (A:003, A:007, AQ). Contribution A explicitly targets the gap between marketing claims about \"autonomous AI scientists\" and empirical performance (A:004), directly engaging the class of claims that B exemplifies. While B is not among the eight frameworks A evaluated, A's findings about the inability of AI systems to autonomously conduct science are genuinely incompatible with B's central claim of successful end-to-end automation. The absence of a direct citation is consistent with pa",
+   "trace_engagement": "read",
+   "trace_steps": [
+    9,
+    10
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2505.24785v2::k00|supports|openalex:W7118690722::k02",
+   "source": "arxiv:2505.24785v2::k00",
+   "target": "openalex:W7118690722::k02",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    9
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4416026872::k01|supports|openalex:W7118690722::k03",
+   "source": "openalex:W4416026872::k01",
+   "target": "openalex:W7118690722::k03",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    9
+   ],
+   "trace_kind": "semantic"
+  }
+ ],
+ "trace": {
+  "question_id": "q03",
+  "question": "My PI thinks fully autonomous AI scientists already produce publishable research. Is that contested in the literature?",
+  "family": "disagreement",
+  "arm": "graph",
+  "n_calls": 11,
+  "steps": [
+   {
+    "step": 1,
+    "tool": "topic_structure",
+    "args": {
+     "query": "autonomous AI scientist generating research papers"
+    },
+    "surfaced": [
+     "openalex:W7119558012",
+     "arxiv:2505.18705v1",
+     "arxiv:2511.02824v2",
+     "openalex:W4402952666",
+     "openalex:W4402952666"
+    ],
+    "note": ""
+   },
+   {
+    "step": 2,
+    "tool": "search_contributions",
+    "args": {
+     "query": "AI scientist publishable research automated discovery"
+    },
+    "surfaced": [
+     "openalex:W7163647947",
+     "openalex:W4402952666",
+     "openalex:W4402952666",
+     "openalex:W4414827381",
+     "openalex:W4402952666",
+     "openalex:W4414827381",
+     "openalex:W4414827381",
+     "openalex:W4414827381"
+    ],
+    "note": ""
+   },
+   {
+    "step": 3,
+    "tool": "find_paper",
+    "args": {
+     "query": "Why LLMs Aren't Scientists Yet: Lessons from Four Autonomous Research Attempts"
+    },
+    "surfaced": [
+     "openalex:W7119558012"
+    ],
+    "note": ""
+   },
+   {
+    "step": 4,
+    "tool": "find_paper",
+    "args": {
+     "query": "Can AI Conduct Autonomous Scientific Research? Case Studies on Two Real-World Tasks"
+    },
+    "surfaced": [
+     "openalex:W7118690722"
+    ],
+    "note": ""
+   },
+   {
+    "step": 5,
+    "tool": "paper_neighbourhood",
+    "args": {
+     "paper_id": "openalex:W4402952666"
+    },
+    "surfaced": [
+     "openalex:W4416034681",
+     "openalex:W4405035007",
+     "arxiv:2506.22026",
+     "openalex:W7149942558",
+     "openalex:W4414827381",
+     "openalex:W4403586302",
+     "openalex:W4407806895",
+     "openalex:W4407632372",
+     "openalex:W4403324055",
+     "openalex:W4414837761",
+     "arxiv:2505.24785v2",
+     "openalex:W4405468016",
+     "arxiv:2511.02824v2",
+     "openalex:W4402952811",
+     "openalex:W4416611770",
+     "arxiv:2506.07642",
+     "openalex:W4411120082",
+     "openalex:W4400734098",
+     "openalex:W4390784029"
+    ],
+    "note": ""
+   },
+   {
+    "step": 6,
+    "tool": "paper_neighbourhood",
+    "args": {
+     "paper_id": "openalex:W4414827381"
+    },
+    "surfaced": [
+     "openalex:W4417070798",
+     "arxiv:2511.02824v2",
+     "openalex:W7119558012",
+     "openalex:W7165004696",
+     "openalex:W4414587939",
+     "arxiv:2602.15112v2",
+     "arxiv:2601.22638v2",
+     "openalex:W4407760093",
+     "arxiv:2411.15114v2",
+     "openalex:W4402952666",
+     "openalex:W4404350150",
+     "openalex:W4403586302",
+     "openalex:W4416043407",
+     "openalex:W4416035220",
+     "openalex:W7126046125"
+    ],
+    "note": ""
+   },
+   {
+    "step": 7,
+    "tool": "paper_neighbourhood",
+    "args": {
+     "paper_id": "openalex:W4417070798"
+    },
+    "surfaced": [
+     "openalex:W4416026872",
+     "openalex:W4414827381",
+     "openalex:W4416035220",
+     "openalex:W4417287919",
+     "openalex:W4402952666",
+     "openalex:W4412889957",
+     "openalex:W4390784029"
+    ],
+    "note": ""
+   },
+   {
+    "step": 8,
+    "tool": "paper_neighbourhood",
+    "args": {
+     "paper_id": "openalex:W7119558012"
+    },
+    "surfaced": [
+     "arxiv:2505.18705v1",
+     "openalex:W4416043407",
+     "openalex:W4407760093",
+     "openalex:W4416034681",
+     "openalex:W4414827381",
+     "openalex:W7161731996",
+     "openalex:W4415108068",
+     "openalex:W4403586302",
+     "openalex:W4412889957"
+    ],
+    "note": ""
+   },
+   {
+    "step": 9,
+    "tool": "paper_neighbourhood",
+    "args": {
+     "paper_id": "openalex:W7118690722"
+    },
+    "surfaced": [],
+    "note": ""
+   },
+   {
+    "step": 10,
+    "tool": "edge_reasons",
+    "args": {
+     "paper_id": "openalex:W7118690722",
+     "relation": "contradicts"
+    },
+    "surfaced": [
+     "arxiv:2505.18705v1",
+     "arxiv:2509.14778v2",
+     "arxiv:2511.02824v2",
+     "arxiv:2505.18705v1",
+     "arxiv:2511.02824v2",
+     "openalex:W7140287209"
+    ],
+    "note": ""
+   },
+   {
+    "step": 11,
+    "tool": "edge_reasons",
+    "args": {
+     "paper_id": "openalex:W4417070798",
+     "relation": "contradicts"
+    },
+    "surfaced": [
+     "arxiv:2511.02824v2"
+    ],
+    "note": ""
+   }
+  ],
+  "papers_named": [
+   "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery",
+   "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search",
+   "AI-Researcher: Autonomous Scientific Innovation",
+   "Kosmos: An AI Scientist for Autonomous Discovery",
+   "OpenLens AI: Fully Autonomous Research Agent for Health Infomatics",
+   "Can AI Conduct Autonomous Scientific Research? Case Studies on Two Real-World Tasks",
+   "Why LLMs Aren't Scientists Yet: Lessons from Four Autonomous Research Attempts",
+   "The More You Automate, the Less You See: Hidden Pitfalls of AI Scientist Systems"
+  ]
+ }
+}

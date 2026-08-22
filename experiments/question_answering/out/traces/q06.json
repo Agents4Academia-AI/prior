@@ -1,0 +1,1131 @@
+{
+ "nodes": [
+  {
+   "id": "arxiv:2411.15114v2::k00",
+   "paper_id": "arxiv:2411.15114v2",
+   "label": "RE-Bench (Research Engineering Benchmark) — seven open-ended ML research engineering environments with continuous scorin",
+   "problem": "",
+   "method": "benchmark",
+   "result": "RE-Bench (Research Engineering Benchmark) — seven open-ended ML research engineering environments with continuous scoring metrics — enables direct, realistic comparison of AI agent R&D capabilities against human expert performance.",
+   "paper": "RE-Bench: Evaluating frontier AI R&D capabilities of language model agents against human experts",
+   "year": 2024,
+   "trace_engagement": "read",
+   "trace_steps": [
+    2,
+    3
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2504.09702v3::k00",
+   "paper_id": "arxiv:2504.09702v3",
+   "label": "MLRC-Bench — a dynamic benchmark suite of 7 tasks drawn from ML conference competitions (NeurIPS, ECCV, KDD) — evaluates",
+   "problem": "",
+   "method": "benchmark",
+   "result": "MLRC-Bench — a dynamic benchmark suite of 7 tasks drawn from ML conference competitions (NeurIPS, ECCV, KDD) — evaluates language agents on both proposing and implementing novel ML research methods using objective, performance-based metrics and compute constraints, enabling rigorous comparison against established baselines and top human solutions.",
+   "paper": "MLRC-Bench: Can Language Agents Solve Machine Learning Research Challenges?",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    2
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2505.18705v1::k00",
+   "paper_id": "arxiv:2505.18705v1",
+   "label": "AI-Researcher — a fully autonomous multi-agent system that orchestrates the complete scientific research pipeline from l",
+   "problem": "",
+   "method": "framework",
+   "result": "AI-Researcher — a fully autonomous multi-agent system that orchestrates the complete scientific research pipeline from literature review and hypothesis generation through algorithm implementation, experimental validation, and publication-ready manuscript preparation with minimal human intervention.",
+   "paper": "AI-Researcher: Autonomous Scientific Innovation",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "arxiv:2505.24785v2::k00",
+   "paper_id": "arxiv:2505.24785v2",
+   "label": "EXP-Bench — a benchmark of 461 AI research tasks drawn from 51 top-tier publications (NeurIPS, ICLR 2024) — evaluates AI",
+   "problem": "",
+   "method": "benchmark",
+   "result": "EXP-Bench — a benchmark of 461 AI research tasks drawn from 51 top-tier publications (NeurIPS, ICLR 2024) — evaluates AI agents on complete, end-to-end research experiments: hypothesis formulation, experimental design, implementation, execution, and result analysis, using multi-metric grading across 12,737 individually scorable subtasks.",
+   "paper": "EXP-Bench: Can AI Conduct AI Research Experiments?",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "arxiv:2505.24785v2::k02",
+   "paper_id": "arxiv:2505.24785v2",
+   "label": "Leading LLM-based agents achieve only 0.5% success on complete, executable AI research experiments; individual phases re",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "Leading LLM-based agents achieve only 0.5% success on complete, executable AI research experiments; individual phases reach at most 20–35%, with key failure modes being experimental design misclassification (16.1%), missing implementation components (39.7%), and environment or dependency misconfiguration (29.4%).",
+   "paper": "EXP-Bench: Can AI Conduct AI Research Experiments?",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "arxiv:2509.14778v2::k00",
+   "paper_id": "arxiv:2509.14778v2",
+   "label": "OpenLens AI — a modular, fully automated research agent framework for health informatics — integrates specialized agents",
+   "problem": "",
+   "method": "framework",
+   "result": "OpenLens AI — a modular, fully automated research agent framework for health informatics — integrates specialized agents for literature review, data analysis, code generation, and manuscript preparation into an end-to-end pipeline that requires no human intervention.",
+   "paper": "OpenLens AI: Fully Autonomous Research Agent for Health Infomatics",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "arxiv:2509.14778v2::k03",
+   "paper_id": "arxiv:2509.14778v2",
+   "label": "End-to-end automation of the health informatics research pipeline — from initial ideation through literature review, dat",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "End-to-end automation of the health informatics research pipeline — from initial ideation through literature review, data analysis, and code execution to publication-ready LaTeX manuscript generation — is achievable with transparent and traceable workflows.",
+   "paper": "OpenLens AI: Fully Autonomous Research Agent for Health Infomatics",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "arxiv:2602.15112v2::k00",
+   "paper_id": "arxiv:2602.15112v2",
+   "label": "ResearchGym — an extensible execution environment and benchmark of five containerized tasks (39 sub-tasks) derived from ",
+   "problem": "",
+   "method": "benchmark",
+   "result": "ResearchGym — an extensible execution environment and benchmark of five containerized tasks (39 sub-tasks) derived from recent oral/spotlight papers at ICML, ICLR, and ACL — enables objective, execution-based evaluation of AI agents on closed-loop research, including hypothesis generation, experimentation, and surpassing human baselines, while remaining feasible on a single GPU.",
+   "paper": "ResearchGym: Evaluating Language Model Agents on Real-World AI Research",
+   "year": 2026,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "arxiv:2602.15112v2::k02",
+   "paper_id": "arxiv:2602.15112v2",
+   "label": "Recurring long-horizon failure modes in autonomous research agents include impatience, poor time and resource management",
+   "problem": "",
+   "method": "analysis",
+   "result": "Recurring long-horizon failure modes in autonomous research agents include impatience, poor time and resource management, overconfidence in weak hypotheses, difficulty coordinating parallel experiments, and context-length limits, as identified through ablations, 35+ end-to-end runs, and qualitative case studies.",
+   "paper": "ResearchGym: Evaluating Language Model Agents on Real-World AI Research",
+   "year": 2026,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "arxiv:2603.26499v2::k00",
+   "paper_id": "arxiv:2603.26499v2",
+   "label": "AIRA_2 — an AI research agent combining asynchronous multi-GPU execution, Hidden Consistent Evaluation, and ReAct operat",
+   "problem": "",
+   "method": "model",
+   "result": "AIRA_2 — an AI research agent combining asynchronous multi-GPU execution, Hidden Consistent Evaluation, and ReAct operators — achieves a mean Percentile Rank of 81.5% at 24 hours and 83.1% at 72 hours on MLE-bench-30, outperforming the strongest prior baseline (72.7%), and exceeds human state-of-the-art on 6 of 20 tasks on AIRS-Bench.",
+   "paper": "AIRA_2: Overcoming Bottlenecks in AI Research Agents",
+   "year": 2026,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    2,
+    4
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2603.26499v2::k01",
+   "paper_id": "arxiv:2603.26499v2",
+   "label": "An asynchronous multi-GPU worker pool with containerization decouples LLM decision-making from experiment execution in A",
+   "problem": "",
+   "method": "method",
+   "result": "An asynchronous multi-GPU worker pool with containerization decouples LLM decision-making from experiment execution in AI research agents, increasing candidate-solution throughput linearly with GPU count and making evolutionary search over ML solutions practically tractable within wall-clock budgets.",
+   "paper": "AIRA_2: Overcoming Bottlenecks in AI Research Agents",
+   "year": 2026,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    2,
+    4
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2603.26499v2::k02",
+   "paper_id": "arxiv:2603.26499v2",
+   "label": "Hidden Consistent Evaluation (HCE) — standardizing data splits once across all candidates, hiding evaluation labels from",
+   "problem": "",
+   "method": "method",
+   "result": "Hidden Consistent Evaluation (HCE) — standardizing data splits once across all candidates, hiding evaluation labels from the agent, and decoupling the search signal from the final selection signal — eliminates validation-test divergence and enables continued performance gains over extended (72-hour) search horizons.",
+   "paper": "AIRA_2: Overcoming Bottlenecks in AI Research Agents",
+   "year": 2026,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    2,
+    4
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2603.26499v2::k03",
+   "paper_id": "arxiv:2603.26499v2",
+   "label": "Replacing fixed single-turn LLM operators with ReAct agents that autonomously scope exploratory data analysis, iterative",
+   "problem": "",
+   "method": "method",
+   "result": "Replacing fixed single-turn LLM operators with ReAct agents that autonomously scope exploratory data analysis, iterative debugging, and log inspection removes the operator-capability ceiling in agentic research systems, improving performance and accelerating discovery of strong solutions.",
+   "paper": "AIRA_2: Overcoming Bottlenecks in AI Research Agents",
+   "year": 2026,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    2,
+    4
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2603.26499v2::k04",
+   "paper_id": "arxiv:2603.26499v2",
+   "label": "The performance degradation attributed to 'overfitting' in prior AI research agents over extended search horizons is cau",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "The performance degradation attributed to 'overfitting' in prior AI research agents over extended search horizons is caused by evaluation noise rather than true data memorization, as confirmed by ablation studies isolating the effect of evaluation consistency.",
+   "paper": "AIRA_2: Overcoming Bottlenecks in AI Research Agents",
+   "year": 2026,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    2,
+    4
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2605.28655::k00",
+   "paper_id": "arxiv:2605.28655",
+   "label": "AutoScientists — a decentralized multi-agent system for long-running computational scientific experimentation in which a",
+   "problem": "",
+   "method": "framework",
+   "result": "AutoScientists — a decentralized multi-agent system for long-running computational scientific experimentation in which agents interpret a shared experimental state, self-organize dynamically into teams around promising hypotheses, filter proposals through peer critique before committing experimental compute, and propagate successes and failures across teams to reduce redundant exploration — without any central orchestrator or pre-specified search decomposition.",
+   "paper": "AutoScientists: Self-Organizing Agent Teams for Long-Running Scientific Experimentation",
+   "year": 2026,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    2
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2606.06473::k00",
+   "paper_id": "arxiv:2606.06473",
+   "label": "MLEvolve — a self-evolving multi-agent framework that unifies progressive graph search, retrospective memory, and hierar",
+   "problem": "",
+   "method": "framework",
+   "result": "MLEvolve — a self-evolving multi-agent framework that unifies progressive graph search, retrospective memory, and hierarchical adaptive code generation — enables end-to-end machine learning algorithm discovery over long-horizon iterative optimization horizons.",
+   "paper": "MLEvolve: A Self-Evolving Framework for Automated Machine Learning Algorithm Discovery",
+   "year": 2026,
+   "trace_engagement": "read",
+   "trace_steps": [
+    2,
+    3
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2606.06473::k03",
+   "paper_id": "arxiv:2606.06473",
+   "label": "Decoupling strategic planning from code generation and selecting among full-rewrite, stepwise, and diff-based editing mo",
+   "problem": "",
+   "method": "method",
+   "result": "Decoupling strategic planning from code generation and selecting among full-rewrite, stepwise, and diff-based editing modes according to search state improves iteration efficiency and stability in long-horizon code optimization agents.",
+   "paper": "MLEvolve: A Self-Evolving Framework for Automated Machine Learning Algorithm Discovery",
+   "year": 2026,
+   "trace_engagement": "read",
+   "trace_steps": [
+    2,
+    3
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4402952811::k00",
+   "paper_id": "openalex:W4402952811",
+   "label": "MLR-Copilot — a three-stage autonomous ML research framework (idea generation, experiment implementation, and execution)",
+   "problem": "",
+   "method": "framework",
+   "result": "MLR-Copilot — a three-stage autonomous ML research framework (idea generation, experiment implementation, and execution) that takes a research paper as input and produces novel research methodologies, executable code, and experimental results.",
+   "paper": "MLR-Copilot: Autonomous Machine Learning Research based on Large Language Models Agents",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4404573571::k00",
+   "paper_id": "openalex:W4404573571",
+   "label": "Baby-AIGS — a multi-agent LLM-powered system comprising ProposalAgent, ExpAgent, ReviewAgent, and FalsificationAgent — e",
+   "problem": "",
+   "method": "framework",
+   "result": "Baby-AIGS — a multi-agent LLM-powered system comprising ProposalAgent, ExpAgent, ReviewAgent, and FalsificationAgent — enables autonomous, full-process scientific discovery without relying on domain-specific external verification engines.",
+   "paper": "AIGS: Generating Science from AI-Powered Automated Falsification",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4404573571::k03",
+   "paper_id": "openalex:W4404573571",
+   "label": "A full-process multi-agent AI system can produce meaningful scientific discoveries across diverse research tasks, though",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "A full-process multi-agent AI system can produce meaningful scientific discoveries across diverse research tasks, though with a measurable quality gap relative to experienced human researchers.",
+   "paper": "AIGS: Generating Science from AI-Powered Automated Falsification",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4407760093::k00",
+   "paper_id": "openalex:W4407760093",
+   "label": "AIDE (AI-Driven Exploration) — an LLM-powered agent that automates machine learning engineering by framing it as a code ",
+   "problem": "",
+   "method": "method",
+   "result": "AIDE (AI-Driven Exploration) — an LLM-powered agent that automates machine learning engineering by framing it as a code optimization problem and conducting tree search over candidate Python solutions, using draft, debug, and improve operators guided by automated evaluation scores.",
+   "paper": "AIDE: AI-Driven Exploration in the Space of Code",
+   "year": 2025,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4407760093::k01",
+   "paper_id": "openalex:W4407760093",
+   "label": "Organizing LLM-driven iterative solution search as a solution tree — where nodes are standalone executable scripts, edge",
+   "problem": "",
+   "method": "framework",
+   "result": "Organizing LLM-driven iterative solution search as a solution tree — where nodes are standalone executable scripts, edges represent improvement attempts, and a hard-coded policy selects between drafting, debugging, and improving — enables scalable code-space optimization without growing prompts unboundedly.",
+   "paper": "AIDE: AI-Driven Exploration in the Space of Code",
+   "year": 2025,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4407760093::k02",
+   "paper_id": "openalex:W4407760093",
+   "label": "The Weco Kaggle Benchmark — a curated set of tabular machine learning Kaggle tasks used to evaluate ML engineering agent",
+   "problem": "",
+   "method": "benchmark",
+   "result": "The Weco Kaggle Benchmark — a curated set of tabular machine learning Kaggle tasks used to evaluate ML engineering agents — provides a reproducible evaluation protocol for automated ML engineering systems.",
+   "paper": "AIDE: AI-Driven Exploration in the Space of Code",
+   "year": 2025,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4407760093::k03",
+   "paper_id": "openalex:W4407760093",
+   "label": "Tree-search-based code optimization with LLMs achieves state-of-the-art performance on ML engineering benchmarks, earnin",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "Tree-search-based code optimization with LLMs achieves state-of-the-art performance on ML engineering benchmarks, earning twice the medals of the next-best agent on MLE-Bench (with GPT-4o) and surpassing human expert solutions on time-constrained RE-Bench tasks such as Triton Kernel optimization.",
+   "paper": "AIDE: AI-Driven Exploration in the Space of Code",
+   "year": 2025,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4414827381::k00",
+   "paper_id": "openalex:W4414827381",
+   "label": "The AI Scientist-v2 — an end-to-end agentic system for automated scientific discovery that eliminates reliance on human-",
+   "problem": "",
+   "method": "framework",
+   "result": "The AI Scientist-v2 — an end-to-end agentic system for automated scientific discovery that eliminates reliance on human-authored code templates, uses a progressive agentic tree-search methodology managed by a dedicated experiment manager agent, and integrates VLM feedback for iterative figure refinement — can autonomously formulate hypotheses, design and execute experiments, analyze data, and author complete scientific manuscripts across diverse machine learning domains.",
+   "paper": "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search",
+   "year": 2025,
+   "trace_engagement": "read",
+   "trace_steps": [
+    2,
+    3,
+    4,
+    5
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4415108068::k00",
+   "paper_id": "openalex:W4415108068",
+   "label": "AlphaEvolve — an evolutionary coding agent that orchestrates a pipeline of LLMs to iteratively improve algorithms via di",
+   "problem": "",
+   "method": "framework",
+   "result": "AlphaEvolve — an evolutionary coding agent that orchestrates a pipeline of LLMs to iteratively improve algorithms via direct code edits, guided by automated evaluation metrics — substantially enhances LLM capabilities on open scientific problems and engineering optimization tasks, surpassing prior automated discovery methods in scale, generality, and solution quality.",
+   "paper": "AlphaEvolve: A coding agent for scientific and algorithmic discovery",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    4,
+    5
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4415148250::k00",
+   "paper_id": "openalex:W4415148250",
+   "label": "AILA (Artificially Intelligent Lab Assistant) — a modular, multi-agent LLM-powered framework with specialized AFM Handle",
+   "problem": "",
+   "method": "framework",
+   "result": "AILA (Artificially Intelligent Lab Assistant) — a modular, multi-agent LLM-powered framework with specialized AFM Handler and Data Handler agents — enables end-to-end automation of atomic force microscopy, from experimental design and instrument control to image analysis, via natural-language queries.",
+   "paper": "Evaluating large language model agents for automation of atomic force microscopy",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4415148250::k03",
+   "paper_id": "openalex:W4415148250",
+   "label": "LLM agents deployed in laboratory settings can spontaneously deviate from explicit instructions — a failure mode termed ",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "LLM agents deployed in laboratory settings can spontaneously deviate from explicit instructions — a failure mode termed 'sleepwalking' — posing safety-alignment risks for self-driving laboratory applications.",
+   "paper": "Evaluating large language model agents for automation of atomic force microscopy",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4416035220::k00",
+   "paper_id": "openalex:W4416035220",
+   "label": "Agent Laboratory — an autonomous LLM-based pipeline that accepts a human-provided research idea and completes the full r",
+   "problem": "",
+   "method": "framework",
+   "result": "Agent Laboratory — an autonomous LLM-based pipeline that accepts a human-provided research idea and completes the full research cycle (literature review, experimentation, and report writing) to produce a code repository and research report, with optional human feedback at each stage.",
+   "paper": "Agent Laboratory: Using LLM Agents as Research Assistants",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4416035220::k02",
+   "paper_id": "openalex:W4416035220",
+   "label": "A co-pilot mode for LLM-driven research pipelines, in which human reviewers approve or request revision of agent outputs",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "A co-pilot mode for LLM-driven research pipelines, in which human reviewers approve or request revision of agent outputs at the end of each subtask phase, improves overall research quality over fully autonomous operation.",
+   "paper": "Agent Laboratory: Using LLM Agents as Research Assistants",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4416043407::k00",
+   "paper_id": "openalex:W4416043407",
+   "label": "An AI co-scientist — a multi-agent system built on Gemini 2.0 that uses a generate, debate, and evolve approach with spe",
+   "problem": "",
+   "method": "framework",
+   "result": "An AI co-scientist — a multi-agent system built on Gemini 2.0 that uses a generate, debate, and evolve approach with specialized agents (Generation, Reflection, Ranking, Evolution, Proximity, Meta-review) to formulate novel research hypotheses and proposals aligned to scientist-provided objectives, with test-time compute scaling for iterative improvement.",
+   "paper": "Towards an AI co-scientist",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    4,
+    5
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W7118690722::k00",
+   "paper_id": "openalex:W7118690722",
+   "label": "Systematic case-study evaluation of eight open-source AI frameworks on scientific research reproduction tasks reveals no",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "Systematic case-study evaluation of eight open-source AI frameworks on scientific research reproduction tasks reveals none can complete a full research cycle from literature understanding through computational execution to validated results and scientific writing.",
+   "paper": "Can AI Conduct Autonomous Scientific Research? Case Studies on Two Real-World Tasks",
+   "year": 2026,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W7118690722::k03",
+   "paper_id": "openalex:W7118690722",
+   "label": "AI research frameworks require substantial debugging and technical expertise to deploy in practice, contradicting claims",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "AI research frameworks require substantial debugging and technical expertise to deploy in practice, contradicting claims about democratization of science, though they show potential value as supervised assistants for methodological planning and ideation.",
+   "paper": "Can AI Conduct Autonomous Scientific Research? Case Studies on Two Real-World Tasks",
+   "year": 2026,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W7119558012::k00",
+   "paper_id": "openalex:W7119558012",
+   "label": "Six recurring failure modes in LLM-based autonomous research pipelines: bias toward training data defaults, implementati",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "Six recurring failure modes in LLM-based autonomous research pipelines: bias toward training data defaults, implementation drift under execution pressure, memory and context degradation across long-horizon tasks, overexcitement that declares success despite obvious failures, insufficient domain intelligence, and weak scientific taste in experimental design.",
+   "paper": "Why LLMs Aren't Scientists Yet: Lessons from Four Autonomous Research Attempts",
+   "year": 2026,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    2,
+    5
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W7119558012::k01",
+   "paper_id": "openalex:W7119558012",
+   "label": "Four design principles for building more robust AI-scientist systems, derived from empirical case-study experience runni",
+   "problem": "",
+   "method": "analysis",
+   "result": "Four design principles for building more robust AI-scientist systems, derived from empirical case-study experience running four end-to-end autonomous ML research attempts.",
+   "paper": "Why LLMs Aren't Scientists Yet: Lessons from Four Autonomous Research Attempts",
+   "year": 2026,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    2,
+    5
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W7119558012::k02",
+   "paper_id": "openalex:W7119558012",
+   "label": "A six-agent autonomous research pipeline — covering idea generation, hypothesis formulation, experiment planning, output",
+   "problem": "",
+   "method": "framework",
+   "result": "A six-agent autonomous research pipeline — covering idea generation, hypothesis formulation, experiment planning, output evaluation, revision, and paper outlining — that operates with minimal scaffolding and a shared file-system context store, demonstrated end-to-end on ML research tasks.",
+   "paper": "Why LLMs Aren't Scientists Yet: Lessons from Four Autonomous Research Attempts",
+   "year": 2026,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    2,
+    5
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W7119558012::k03",
+   "paper_id": "openalex:W7119558012",
+   "label": "A public release of all prompts, agent artifacts, intermediate outputs, and final papers from four autonomous ML researc",
+   "problem": "",
+   "method": "resource",
+   "result": "A public release of all prompts, agent artifacts, intermediate outputs, and final papers from four autonomous ML research attempts, enabling reproducibility and analysis of AI-scientist system behaviour.",
+   "paper": "Why LLMs Aren't Scientists Yet: Lessons from Four Autonomous Research Attempts",
+   "year": 2026,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    2,
+    5
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W7140287209::k00",
+   "paper_id": "openalex:W7140287209",
+   "label": "The AI Scientist — a fully automated, end-to-end scientific research pipeline that autonomously generates research ideas",
+   "problem": "",
+   "method": "framework",
+   "result": "The AI Scientist — a fully automated, end-to-end scientific research pipeline that autonomously generates research ideas, writes and executes code, runs experiments, analyzes and plots results, writes complete machine-learning conference manuscripts, and performs automated peer review.",
+   "paper": "Towards end-to-end automation of AI research",
+   "year": 2026,
+   "trace_engagement": "read",
+   "trace_steps": [
+    2,
+    3
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W7140287209::k01",
+   "paper_id": "openalex:W7140287209",
+   "label": "A template-free, open-ended research execution mode that uses agentic tree search to generate code from scratch, optimiz",
+   "problem": "",
+   "method": "method",
+   "result": "A template-free, open-ended research execution mode that uses agentic tree search to generate code from scratch, optimize implementations, and explore scientific hypotheses without human-provided scaffolding.",
+   "paper": "Towards end-to-end automation of AI research",
+   "year": 2026,
+   "trace_engagement": "read",
+   "trace_steps": [
+    2,
+    3
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W7161731996::k00",
+   "paper_id": "openalex:W7161731996",
+   "label": "Co-Scientist is a structured scientific thinking engine that synthesizes scientific literature, generates novel hypothes",
+   "problem": "",
+   "method": "framework",
+   "result": "Co-Scientist is a structured scientific thinking engine that synthesizes scientific literature, generates novel hypotheses conditioned on research objectives and prior evidence, and proposes experimental protocols for verification.",
+   "paper": "Accelerating scientific discovery with Co-Scientist",
+   "year": 2026,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    4,
+    5
+   ],
+   "trace_in_answer": false
+  }
+ ],
+ "edges": [
+  {
+   "id": "arxiv:2606.06473::k03|builds_on|openalex:W4407760093::k01",
+   "source": "arxiv:2606.06473::k03",
+   "target": "openalex:W4407760093::k01",
+   "relation": "builds_on",
+   "provenance": "text",
+   "confidence": 1.0,
+   "evidence": "Contribution A (arxiv:2606.06473) explicitly cites and references AIDE (openalex:W4407760093) as a baseline approach using tree-structured search with a fixed hard-coded policy. A's contribution — decoupling strategic planning from code generation with adaptive coding modes — is framed as addressing limitations of AIDE's approach (fixed exploration strategy, branch information isolation). Evidence A:004 lists AIDE's greedy/evolutionary search as a known limitation; A:012 describes A's hierarchical planning as a direct improvement over such methods. This is a builds_on relation where A builds on B's framework while extending and improving it.",
+   "trace_engagement": "read",
+   "trace_steps": [
+    2,
+    3
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4414827381::k00|builds_on|openalex:W4407760093::k00",
+   "source": "openalex:W4414827381::k00",
+   "target": "openalex:W4407760093::k00",
+   "relation": "builds_on",
+   "provenance": "text",
+   "confidence": 1.0,
+   "evidence": "AI Scientist-v2 (B) explicitly states it was 'inspired by' AIDE's tree-search approach and integrates 'a similar tree search-based exploration strategy' adapted to scientific experimentation. Evidence B:003 and CIT:2 directly describe adopting AIDE's methodology — each node as a solution state with scalar evaluation scores — into their framework, constituting a clear builds_on relationship from B to A.",
+   "trace_engagement": "read",
+   "trace_steps": [
+    2,
+    3
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W7140287209::k01|builds_on|openalex:W4407760093::k01",
+   "source": "openalex:W7140287209::k01",
+   "target": "openalex:W4407760093::k01",
+   "relation": "builds_on",
+   "provenance": "text",
+   "confidence": 1.0,
+   "evidence": "B (The AI Scientist) explicitly cites A (AIDE) when describing its template-free, open-ended mode that uses agentic tree search for code optimization. The citation passage in CIT references 'Jiang et al. 2025; Chan et al. 2025' (AIDE authors) in the context of leveraging agentic search for wider scientific exploration. Evidence BQ describes B's template-free mode generating code from scratch and using 'tree search' for experiment execution — directly paralleling A's solution tree structure. B builds on A's tree-search-based code optimization approach by incorporating it as a component in a broader autonomous research pipeline, making the direction b_to_a (B builds on A).",
+   "trace_engagement": "read",
+   "trace_steps": [
+    2,
+    3
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4407760093::k03|builds_on|arxiv:2411.15114v2::k00",
+   "source": "openalex:W4407760093::k03",
+   "target": "arxiv:2411.15114v2::k00",
+   "relation": "builds_on",
+   "provenance": "text",
+   "confidence": 1.0,
+   "evidence": "Contribution B (AIDE/tree-search agent) explicitly and extensively uses Contribution A's artifact — RE-Bench, its seven environments, its scoring metrics, and its human expert baselines — to benchmark and validate AIDE's performance. Evidence B:001 and BQ name RE-Bench as one of the core benchmarks on which AIDE achieves state-of-the-art results. B:004 and B:023 describe in detail how AIDE was assessed on RE-Bench by METR (the creators of RE-Bench, i.e., Contribution A), comparing AIDE against the human expert data that RE-Bench provides (scores, time-curves, named institutions of expert participants). B:023 even reproduces RE-Bench's Figure 4, citing METR (2024) directly as the source of those results. Contribution A's defining contribution is precisely the benchmark infrastructure and human performance data (A:006, A:010) that Contribution B consumes and reports against. This is a clear builds_on relationship: B uses A's benchmark as an evaluation platform. The absence of a direct citation in the resolved corpus graph is explained by AIDE citing METR (2024) — the report associated with RE-Bench — rather than the arXiv preprint identifier, consistent with the citation facts noting",
+   "trace_engagement": "read",
+   "trace_steps": [
+    2,
+    3
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4414827381::k00|mentions|openalex:W4407760093::k00",
+   "source": "openalex:W4414827381::k00",
+   "target": "openalex:W4407760093::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    2
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2603.26499v2::k00|mentions|openalex:W4407760093::k00",
+   "source": "arxiv:2603.26499v2::k00",
+   "target": "openalex:W4407760093::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    2,
+    4
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W7119558012::k00|mentions|openalex:W4407760093::k00",
+   "source": "openalex:W7119558012::k00",
+   "target": "openalex:W4407760093::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    2,
+    5
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2504.09702v3::k00|mentions|openalex:W4407760093::k00",
+   "source": "arxiv:2504.09702v3::k00",
+   "target": "openalex:W4407760093::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    2
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2605.28655::k00|mentions|openalex:W4407760093::k00",
+   "source": "arxiv:2605.28655::k00",
+   "target": "openalex:W4407760093::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    2
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2603.26499v2::k00|mentions|openalex:W4415108068::k00",
+   "source": "arxiv:2603.26499v2::k00",
+   "target": "openalex:W4415108068::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    4
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2603.26499v2::k00|mentions|openalex:W4414827381::k00",
+   "source": "arxiv:2603.26499v2::k00",
+   "target": "openalex:W4414827381::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    4
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2603.26499v2::k00|mentions|openalex:W4416043407::k00",
+   "source": "arxiv:2603.26499v2::k00",
+   "target": "openalex:W4416043407::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    4
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2603.26499v2::k00|mentions|openalex:W7161731996::k00",
+   "source": "arxiv:2603.26499v2::k00",
+   "target": "openalex:W7161731996::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    4
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2505.24785v2::k02|supports|openalex:W7119558012::k00",
+   "source": "arxiv:2505.24785v2::k02",
+   "target": "openalex:W7119558012::k00",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2602.15112v2::k02|supports|openalex:W7119558012::k00",
+   "source": "arxiv:2602.15112v2::k02",
+   "target": "openalex:W7119558012::k00",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4415148250::k03|supports|openalex:W7119558012::k00",
+   "source": "openalex:W4415148250::k03",
+   "target": "openalex:W7119558012::k00",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4416035220::k02|supports|openalex:W7119558012::k00",
+   "source": "openalex:W4416035220::k02",
+   "target": "openalex:W7119558012::k00",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4402952811::k00|supports|openalex:W7119558012::k01",
+   "source": "openalex:W4402952811::k00",
+   "target": "openalex:W7119558012::k01",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W7118690722::k03|supports|openalex:W7119558012::k01",
+   "source": "openalex:W7118690722::k03",
+   "target": "openalex:W7119558012::k01",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2509.14778v2::k03|supports|openalex:W7119558012::k02",
+   "source": "arxiv:2509.14778v2::k03",
+   "target": "openalex:W7119558012::k02",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4404573571::k03|supports|openalex:W7119558012::k02",
+   "source": "openalex:W4404573571::k03",
+   "target": "openalex:W7119558012::k02",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W7119558012::k00|mentions|arxiv:2505.18705v1::k00",
+   "source": "openalex:W7119558012::k00",
+   "target": "arxiv:2505.18705v1::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W7119558012::k00|mentions|openalex:W4416043407::k00",
+   "source": "openalex:W7119558012::k00",
+   "target": "openalex:W4416043407::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W7119558012::k00|mentions|openalex:W4414827381::k00",
+   "source": "openalex:W7119558012::k00",
+   "target": "openalex:W4414827381::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W7119558012::k00|mentions|openalex:W7161731996::k00",
+   "source": "openalex:W7119558012::k00",
+   "target": "openalex:W7161731996::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W7119558012::k00|mentions|openalex:W4415108068::k00",
+   "source": "openalex:W7119558012::k00",
+   "target": "openalex:W4415108068::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  }
+ ],
+ "trace": {
+  "question_id": "q06",
+  "question": "I'm considering using AIDE as the coding backbone for a research agent. Where did it come from, and who has already built on top of it?",
+  "family": "lineage",
+  "arm": "graph",
+  "n_calls": 5,
+  "steps": [
+   {
+    "step": 1,
+    "tool": "find_paper",
+    "args": {
+     "query": "AIDE"
+    },
+    "surfaced": [
+     "openalex:W4407760093"
+    ],
+    "note": ""
+   },
+   {
+    "step": 2,
+    "tool": "paper_neighbourhood",
+    "args": {
+     "paper_id": "openalex:W4407760093"
+    },
+    "surfaced": [
+     "openalex:W4414827381",
+     "arxiv:2603.26499v2",
+     "openalex:W7119558012",
+     "arxiv:2504.09702v3",
+     "arxiv:2605.28655"
+    ],
+    "note": ""
+   },
+   {
+    "step": 3,
+    "tool": "edge_reasons",
+    "args": {
+     "paper_id": "openalex:W4407760093",
+     "others": [
+      "arxiv:2606.06473::k00",
+      "arxiv:2606.06473::k01",
+      "arxiv:2606.06473::k03",
+      "arxiv:2606.06473::k04",
+      "openalex:W4414827381::k00",
+      "openalex:W7140287209::k01",
+      "arxiv:2411.15114v2::k00"
+     ]
+    },
+    "surfaced": [
+     "arxiv:2606.06473",
+     "openalex:W4414827381",
+     "arxiv:2606.06473",
+     "arxiv:2606.06473",
+     "openalex:W7140287209",
+     "arxiv:2411.15114v2"
+    ],
+    "note": ""
+   },
+   {
+    "step": 4,
+    "tool": "paper_neighbourhood",
+    "args": {
+     "paper_id": "arxiv:2603.26499v2"
+    },
+    "surfaced": [
+     "openalex:W4407760093",
+     "openalex:W4415108068",
+     "openalex:W4414827381",
+     "openalex:W4416043407",
+     "openalex:W7161731996"
+    ],
+    "note": ""
+   },
+   {
+    "step": 5,
+    "tool": "paper_neighbourhood",
+    "args": {
+     "paper_id": "openalex:W7119558012"
+    },
+    "surfaced": [
+     "arxiv:2505.18705v1",
+     "openalex:W4416043407",
+     "openalex:W4407760093",
+     "openalex:W4416034681",
+     "openalex:W4414827381",
+     "openalex:W7161731996",
+     "openalex:W4415108068",
+     "openalex:W4403586302",
+     "openalex:W4412889957"
+    ],
+    "note": ""
+   }
+  ],
+  "papers_named": [
+   "AIDE: AI-Driven Exploration in the Space of Code",
+   "RE-Bench: Evaluating frontier AI R&D capabilities of language model agents against human experts",
+   "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search",
+   "Towards end-to-end automation of AI research",
+   "MLEvolve: A Self-Evolving Framework for Automated Machine Learning Algorithm Discovery",
+   "AIRA_2: Overcoming Bottlenecks in AI Research Agents",
+   "Why LLMs Aren't Scientists Yet: Lessons from Four Autonomous Research Attempts",
+   "MLRC-Bench: Can Language Agents Solve Machine Learning Research Challenges?",
+   "AutoScientists: Self-Organizing Agent Teams for Long-Running Scientific Experimentation"
+  ]
+ }
+}

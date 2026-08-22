@@ -1,0 +1,1452 @@
+{
+ "nodes": [
+  {
+   "id": "arxiv:2502.12510v1::k00",
+   "paper_id": "arxiv:2502.12510v1",
+   "label": "A dataset of 79,302 adversarial, aspect-guided text edits spanning nine perturbation aspects (contribution, soundness, p",
+   "problem": "",
+   "method": "dataset",
+   "result": "A dataset of 79,302 adversarial, aspect-guided text edits spanning nine perturbation aspects (contribution, soundness, presentation, tone, factual correctness, conclusion, and rebuttal-level variants) applied across papers, reviews, and rebuttals in the academic peer review setting.",
+   "paper": "Aspect-Guided Multi-Level Perturbation Analysis of Large Language Models in Automated Peer Review",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3,
+    6
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "arxiv:2502.12510v1::k02",
+   "paper_id": "arxiv:2502.12510v1",
+   "label": "LLM-based peer review pipelines exhibit systematic vulnerabilities: 'strong reject' review conclusions disproportionatel",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "LLM-based peer review pipelines exhibit systematic vulnerabilities: 'strong reject' review conclusions disproportionately dominate meta-review decisions, hostile or erroneous critiques are misinterpreted as thoroughness, and incomplete or hostile rebuttals can unexpectedly raise acceptance rates; these biases persist across multiple Chain-of-Thought prompting strategies.",
+   "paper": "Aspect-Guided Multi-Level Perturbation Analysis of Large Language Models in Automated Peer Review",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3,
+    6
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "arxiv:2507.02694::k00",
+   "paper_id": "arxiv:2507.02694",
+   "label": "Comprehensive taxonomy of limitation types in scientific research papers, with focus on AI",
+   "problem": "",
+   "method": "resource",
+   "result": "Comprehensive taxonomy of limitation types in scientific research papers, with focus on AI",
+   "paper": "Can LLMs Identify Critical Limitations within Scientific Research? A Systematic Evaluation on AI Research Papers",
+   "year": 2025,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    3,
+    4,
+    7,
+    9
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2507.02694::k01",
+   "paper_id": "arxiv:2507.02694",
+   "label": "LimitGen — a comprehensive benchmark for evaluating LLMs' ability to identify and address limitations in research papers",
+   "problem": "",
+   "method": "benchmark",
+   "result": "LimitGen — a comprehensive benchmark for evaluating LLMs' ability to identify and address limitations in research papers",
+   "paper": "Can LLMs Identify Critical Limitations within Scientific Research? A Systematic Evaluation on AI Research Papers",
+   "year": 2025,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    3,
+    4,
+    7,
+    9
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2507.02694::k02",
+   "paper_id": "arxiv:2507.02694",
+   "label": "LimitGen-Syn — synthetic dataset created through controlled perturbations of papers to systematically introduce specific",
+   "problem": "",
+   "method": "dataset",
+   "result": "LimitGen-Syn — synthetic dataset created through controlled perturbations of papers to systematically introduce specific types of research limitations",
+   "paper": "Can LLMs Identify Critical Limitations within Scientific Research? A Systematic Evaluation on AI Research Papers",
+   "year": 2025,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    3,
+    4,
+    7,
+    9
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2507.02694::k03",
+   "paper_id": "arxiv:2507.02694",
+   "label": "LimitGen-Human — dataset of real limitations written by human reviewers in scientific peer review",
+   "problem": "",
+   "method": "dataset",
+   "result": "LimitGen-Human — dataset of real limitations written by human reviewers in scientific peer review",
+   "paper": "Can LLMs Identify Critical Limitations within Scientific Research? A Systematic Evaluation on AI Research Papers",
+   "year": 2025,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    3,
+    4,
+    7,
+    9
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2507.02694::k04",
+   "paper_id": "arxiv:2507.02694",
+   "label": "RAG-augmented approach for limitation identification that grounds analysis in retrieved prior literature",
+   "problem": "",
+   "method": "method",
+   "result": "RAG-augmented approach for limitation identification that grounds analysis in retrieved prior literature",
+   "paper": "Can LLMs Identify Critical Limitations within Scientific Research? A Systematic Evaluation on AI Research Papers",
+   "year": 2025,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    3,
+    4,
+    7,
+    9
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "arxiv:2508.15126v2::k00",
+   "paper_id": "arxiv:2508.15126v2",
+   "label": "aiXiv — an open-access, multi-agent platform with API and MCP interfaces — enables both human and AI scientists to submi",
+   "problem": "",
+   "method": "framework",
+   "result": "aiXiv — an open-access, multi-agent platform with API and MCP interfaces — enables both human and AI scientists to submit, review, and iteratively refine scientific proposals and papers within a unified, extensible ecosystem.",
+   "paper": "aiXiv: A Next-Generation Open Access Ecosystem for Scientific Discovery Generated by AI Scientists",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "arxiv:2508.15126v2::k01",
+   "paper_id": "arxiv:2508.15126v2",
+   "label": "A closed-loop review pipeline featuring automatic retrieval-augmented evaluation, reviewer guidance, multi-voting public",
+   "problem": "",
+   "method": "method",
+   "result": "A closed-loop review pipeline featuring automatic retrieval-augmented evaluation, reviewer guidance, multi-voting publication decisions, and a five-stage prompt injection detection and defense mechanism for AI-reviewed scientific submissions.",
+   "paper": "aiXiv: A Next-Generation Open Access Ecosystem for Scientific Discovery Generated by AI Scientists",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "arxiv:2508.15126v2::k03",
+   "paper_id": "arxiv:2508.15126v2",
+   "label": "Iterative AI-driven review-and-refine cycles yield measurable improvements in the quality of AI-generated research propo",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "Iterative AI-driven review-and-refine cycles yield measurable improvements in the quality of AI-generated research proposals and papers, with gains in proposal ranking, review helpfulness, and final paper quality.",
+   "paper": "aiXiv: A Next-Generation Open Access Ecosystem for Scientific Discovery Generated by AI Scientists",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "arxiv:2510.26887v1::k00",
+   "paper_id": "arxiv:2510.26887v1",
+   "label": "Denario — a modular AI multi-agent system with specialized modules for idea generation, literature review, research plan",
+   "problem": "",
+   "method": "framework",
+   "result": "Denario — a modular AI multi-agent system with specialized modules for idea generation, literature review, research planning, code writing and execution, plotting, and paper drafting and review — enables end-to-end autonomous scientific research across diverse disciplines.",
+   "paper": "The Denario project: Deep knowledge AI agents for scientific discovery",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1,
+    3
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "arxiv:2510.26887v1::k01",
+   "paper_id": "arxiv:2510.26887v1",
+   "label": "A corpus of AI-generated scientific papers produced by Denario across thirteen domains — including astrophysics, biology",
+   "problem": "",
+   "method": "benchmark",
+   "result": "A corpus of AI-generated scientific papers produced by Denario across thirteen domains — including astrophysics, biology, biophysics, chemistry, materials science, mathematical physics, medicine, neuroscience, and planetary science — together with domain-expert evaluations providing numerical scores and review-like feedback, benchmarks the current capabilities and limitations of autonomous AI research systems.",
+   "paper": "The Denario project: Deep knowledge AI agents for scientific discovery",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1,
+    3
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "arxiv:2605.29468::k00",
+   "paper_id": "arxiv:2605.29468",
+   "label": "SciIntBench — an adversarial benchmark of 810 prompts (270 matched triplets) spanning ten responsible conduct of researc",
+   "problem": "",
+   "method": "benchmark",
+   "result": "SciIntBench — an adversarial benchmark of 810 prompts (270 matched triplets) spanning ten responsible conduct of research (RCR) categories and three scientific domains, where each scenario is presented in Overt Adversarial, Covert Adversarial, and Benign variants to jointly evaluate misconduct refusal and helpfulness on legitimate requests.",
+   "paper": "SciIntBench: Measuring LLM Compliance with Research Integrity Norms Under Adversarial Framing",
+   "year": 2026,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3,
+    6
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "arxiv:2605.29468::k01",
+   "paper_id": "arxiv:2605.29468",
+   "label": "LLM refusal of research misconduct is strongly framing-sensitive: models that reliably refuse overtly stated misconduct ",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "LLM refusal of research misconduct is strongly framing-sensitive: models that reliably refuse overtly stated misconduct frequently comply when the identical violation is framed covertly, and are especially vulnerable when misconduct is presented as a pressure-driven shortcut.",
+   "paper": "SciIntBench: Measuring LLM Compliance with Research Integrity Norms Under Adversarial Framing",
+   "year": 2026,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3,
+    6
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4384261641::k00",
+   "paper_id": "openalex:W4384261641",
+   "label": "GPT-4-generated peer reviews achieve comparable mean helpfulness ratings to human reviews (~3/5), but with higher varian",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "GPT-4-generated peer reviews achieve comparable mean helpfulness ratings to human reviews (~3/5), but with higher variance, suggesting AI can contribute to academic peer review while remaining inconsistent in quality.",
+   "paper": "GPT4 is Slightly Helpful for Peer-Review Assistance: A Pilot Study",
+   "year": 2023,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3,
+    4,
+    5
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4390784029::k00",
+   "paper_id": "openalex:W4390784029",
+   "label": "MARG (Multi-Agent Review Generation) — a system in which multiple LLM instances each receive a portion of a scientific p",
+   "problem": "",
+   "method": "method",
+   "result": "MARG (Multi-Agent Review Generation) — a system in which multiple LLM instances each receive a portion of a scientific paper, engage in structured internal discussion, and collectively generate peer-review feedback for papers whose full text exceeds any single LLM's context window.",
+   "paper": "MARG: Multi-Agent Review Generation for Scientific Papers",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3,
+    4,
+    5,
+    7
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4390784029::k01",
+   "paper_id": "openalex:W4390784029",
+   "label": "MARG-S, a specialized variant of MARG that incorporates aspect-specific 'expert' agents for experiments, clarity, and im",
+   "problem": "",
+   "method": "model",
+   "result": "MARG-S, a specialized variant of MARG that incorporates aspect-specific 'expert' agents for experiments, clarity, and impact sub-tasks, substantially improves the specificity and helpfulness of automatically generated scientific feedback compared to single-agent and non-specialized multi-agent baselines.",
+   "paper": "MARG: Multi-Agent Review Generation for Scientific Papers",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3,
+    4,
+    5,
+    7
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4390784029::k03",
+   "paper_id": "openalex:W4390784029",
+   "label": "Specializing LLM agents by comment type reduces the rate of generic peer-review comments from 60% to 29% and increases t",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "Specializing LLM agents by comment type reduces the rate of generic peer-review comments from 60% to 29% and increases the count of user-rated 'good' comments from 1.7 to 3.7 per paper (a 2.2× improvement) over strong GPT-4 baselines.",
+   "paper": "MARG: Multi-Agent Review Generation for Scientific Papers",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3,
+    4,
+    5,
+    7
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4400734098::k00",
+   "paper_id": "openalex:W4400734098",
+   "label": "A GPT-4-based pipeline that generates structured scientific feedback on research papers, providing assessments of signif",
+   "problem": "",
+   "method": "method",
+   "result": "A GPT-4-based pipeline that generates structured scientific feedback on research papers, providing assessments of significance, novelty, potential acceptance/rejection reasoning, and improvement suggestions.",
+   "paper": "Can Large Language Models Provide Useful Feedback on Research Papers? A Large-Scale Empirical Analysis",
+   "year": 2024,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    3,
+    5,
+    6,
+    7,
+    8
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4400734098::k01",
+   "paper_id": "openalex:W4400734098",
+   "label": "LLM-generated feedback on research papers overlaps with individual human peer reviews at rates comparable to the overlap",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "LLM-generated feedback on research papers overlaps with individual human peer reviews at rates comparable to the overlap between two human reviewers, across multiple scientific domains and large-scale datasets.",
+   "paper": "Can Large Language Models Provide Useful Feedback on Research Papers? A Large-Scale Empirical Analysis",
+   "year": 2024,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    3,
+    5,
+    6,
+    7,
+    8
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4400734098::k02",
+   "paper_id": "openalex:W4400734098",
+   "label": "Researchers perceive LLM-generated feedback on their own papers as helpful and beneficial, with a majority finding it us",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "Researchers perceive LLM-generated feedback on their own papers as helpful and beneficial, with a majority finding it useful and most rating it competitive with or superior to human peer review feedback.",
+   "paper": "Can Large Language Models Provide Useful Feedback on Research Papers? A Large-Scale Empirical Analysis",
+   "year": 2024,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    3,
+    5,
+    6,
+    7,
+    8
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4402683796::k00",
+   "paper_id": "openalex:W4402683796",
+   "label": "SWIF2T (Scientific WrIting Focused Feedback Tool) — a four-component system (planner, investigator, reviewer, controller",
+   "problem": "",
+   "method": "model",
+   "result": "SWIF2T (Scientific WrIting Focused Feedback Tool) — a four-component system (planner, investigator, reviewer, controller) using multiple LLMs — generates specific, actionable, and coherent focused feedback that identifies weaknesses in scientific paper paragraphs and proposes revisions, outperforming GPT-4 and CoVe baselines in specificity, reading comprehension, and overall helpfulness.",
+   "paper": "Automated Focused Feedback Generation for Scientific Writing Assistance",
+   "year": 2024,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    2,
+    3,
+    4,
+    7
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4402683796::k01",
+   "paper_id": "openalex:W4402683796",
+   "label": "Automated focused feedback generation is a well-defined task distinct from high-level review generation: given a specifi",
+   "problem": "",
+   "method": "other",
+   "result": "Automated focused feedback generation is a well-defined task distinct from high-level review generation: given a specific paragraph within a scientific paper, the goal is to produce comments that demonstrate reading comprehension, specificity, and actionability toward improving research content.",
+   "paper": "Automated Focused Feedback Generation for Scientific Writing Assistance",
+   "year": 2024,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    2,
+    3,
+    4,
+    7
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4402683796::k02",
+   "paper_id": "openalex:W4402683796",
+   "label": "A plan re-ranking method for multi-step LLM-based feedback pipelines improves the coherence, structure, and specificity ",
+   "problem": "",
+   "method": "method",
+   "result": "A plan re-ranking method for multi-step LLM-based feedback pipelines improves the coherence, structure, and specificity of generated review plans, thereby enhancing downstream scientific feedback quality.",
+   "paper": "Automated Focused Feedback Generation for Scientific Writing Assistance",
+   "year": 2024,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    2,
+    3,
+    4,
+    7
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4402683796::k03",
+   "paper_id": "openalex:W4402683796",
+   "label": "A benchmark dataset of 300 human-written peer-review examples, each linking a weakness-citing review comment to a specif",
+   "problem": "",
+   "method": "dataset",
+   "result": "A benchmark dataset of 300 human-written peer-review examples, each linking a weakness-citing review comment to a specific paragraph of a scientific paper, enables evaluation of focused scientific feedback generation systems.",
+   "paper": "Automated Focused Feedback Generation for Scientific Writing Assistance",
+   "year": 2024,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    2,
+    3,
+    4,
+    7
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4402683796::k04",
+   "paper_id": "openalex:W4402683796",
+   "label": "Automatically generated scientific feedback can in some cases be judged superior to human-written peer reviews, indicati",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "Automatically generated scientific feedback can in some cases be judged superior to human-written peer reviews, indicating practical potential for AI integration in the scientific writing process.",
+   "paper": "Automated Focused Feedback Generation for Scientific Writing Assistance",
+   "year": 2024,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    1,
+    2,
+    3,
+    4,
+    7
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4402952666::k00",
+   "paper_id": "openalex:W4402952666",
+   "label": "The AI Scientist — an end-to-end, fully automated pipeline in which a frontier LLM generates research ideas, searches th",
+   "problem": "",
+   "method": "framework",
+   "result": "The AI Scientist — an end-to-end, fully automated pipeline in which a frontier LLM generates research ideas, searches the literature, designs and executes experiments, visualizes results, writes a complete scientific manuscript, and performs self-review in an open-ended loop — enables autonomous scientific discovery in machine learning at a cost of under $15 per paper.",
+   "paper": "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3,
+    6,
+    7
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4403006832::k00",
+   "paper_id": "openalex:W4403006832",
+   "label": "OpenReviewer, Papers with Reviews, and Reviewer Arena — three integrated AI review systems — enable automatic LLM-based ",
+   "problem": "",
+   "method": "framework",
+   "result": "OpenReviewer, Papers with Reviews, and Reviewer Arena — three integrated AI review systems — enable automatic LLM-based peer review, public access to generated reviews, and pairwise preference-based evaluation of competing reviewer models.",
+   "paper": "AI-Driven Review Systems: Evaluating LLMs in Scalable and Bias-Aware Academic Reviews",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5,
+    6,
+    7
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4403006832::k04",
+   "paper_id": "openalex:W4403006832",
+   "label": "A large-scale public corpus of LLM-generated reviews for arXiv and open-access Nature journal papers, paired with a free",
+   "problem": "",
+   "method": "resource",
+   "result": "A large-scale public corpus of LLM-generated reviews for arXiv and open-access Nature journal papers, paired with a free authoring service, makes merit-based, bias-mitigated academic reviews broadly accessible outside traditional conference pipelines.",
+   "paper": "AI-Driven Review Systems: Evaluating LLMs in Scalable and Bias-Aware Academic Reviews",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5,
+    6,
+    7
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4404782918::k00",
+   "paper_id": "openalex:W4404782918",
+   "label": "ReviewCritique — a dataset of 100 NLP paper submissions paired with both human-written and LLM-generated reviews, where ",
+   "problem": "",
+   "method": "dataset",
+   "result": "ReviewCritique — a dataset of 100 NLP paper submissions paired with both human-written and LLM-generated reviews, where every review is annotated at the sentence level by domain experts (most holding Ph.D. degrees or area-chairing experience) for deficiency labels and explanations — supports benchmarking of AI-assisted peer review and LLM meta-reviewing capabilities.",
+   "paper": "LLMs Assist NLP Researchers: Critique Paper (Meta-)Reviewing",
+   "year": 2024,
+   "trace_engagement": "read",
+   "trace_steps": [
+    5,
+    7,
+    8
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4404782918::k02",
+   "paper_id": "openalex:W4404782918",
+   "label": "At the sentence level, LLM-generated paper reviews contain more deficient segments than human-written reviews and tend t",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "At the sentence level, LLM-generated paper reviews contain more deficient segments than human-written reviews and tend to be paper-unspecific, lacking diversity and constructive feedback — establishing a quantitative gap between human and LLM reviewing quality.",
+   "paper": "LLMs Assist NLP Researchers: Critique Paper (Meta-)Reviewing",
+   "year": 2024,
+   "trace_engagement": "read",
+   "trace_steps": [
+    5,
+    7,
+    8
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4404783497::k00",
+   "paper_id": "openalex:W4404783497",
+   "label": "AgentReview — an LLM agent-based simulation framework that models the full peer review pipeline (reviewer assessment, au",
+   "problem": "",
+   "method": "framework",
+   "result": "AgentReview — an LLM agent-based simulation framework that models the full peer review pipeline (reviewer assessment, author rebuttal, area-chair discussion, meta-review, and final decision) with customizable reviewer, author, and area-chair characteristics — enables controlled disentanglement of latent variables in peer review without requiring access to sensitive real-world data.",
+   "paper": "AgentReview: Exploring Peer Review Dynamics with LLM Agents",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4404783497::k02",
+   "paper_id": "openalex:W4404783497",
+   "label": "Reviewer biases alone account for a 37.1% variation in paper acceptance decisions, with specific mechanisms including so",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "Reviewer biases alone account for a 37.1% variation in paper acceptance decisions, with specific mechanisms including social conformity pressure (27.2% reduction in rating variance post-rebuttal), altruism fatigue cascades (18.7% commitment decline from a single under-committed reviewer), authority and halo effects (27.7% decision shift when author identities are known), and groupthink amplification among biased reviewers — findings corroborated by established sociological theories.",
+   "paper": "AgentReview: Exploring Peer Review Dynamics with LLM Agents",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4405035007::k00",
+   "paper_id": "openalex:W4405035007",
+   "label": "Injecting covert manipulative text into manuscript PDFs using an extremely small white font (invisible to humans but rea",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "Injecting covert manipulative text into manuscript PDFs using an extremely small white font (invisible to humans but readable by PDF parsers) can almost entirely control LLM-generated peer reviews, raising agreement rates with injected content to ~90% while reducing alignment with human reviews from 53% to 16% and inflating average ratings from 5.34 to 7.99.",
+   "paper": "Are We There Yet? Revealing the Risks of Utilizing Large Language Models in Scholarly Peer Review",
+   "year": 2024,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    3,
+    5,
+    6,
+    8
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4405035007::k01",
+   "paper_id": "openalex:W4405035007",
+   "label": "LLM peer reviewers are 4.5× more likely than human reviewers to reiterate limitations that authors proactively disclose ",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "LLM peer reviewers are 4.5× more likely than human reviewers to reiterate limitations that authors proactively disclose in their manuscripts, revealing a systematic susceptibility to implicit manipulation via strategic self-disclosure of minor weaknesses.",
+   "paper": "Are We There Yet? Revealing the Risks of Utilizing Large Language Models in Scholarly Peer Review",
+   "year": 2024,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    3,
+    5,
+    6,
+    8
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4405035007::k02",
+   "paper_id": "openalex:W4405035007",
+   "label": "Manipulating as few as 5% of LLM-generated reviews in a conference setting can cause 12% of papers to lose their positio",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "Manipulating as few as 5% of LLM-generated reviews in a conference setting can cause 12% of papers to lose their position in the top 30% of rankings, quantifying the systemic impact of localized review manipulation on paper acceptance outcomes.",
+   "paper": "Are We There Yet? Revealing the Risks of Utilizing Large Language Models in Scholarly Peer Review",
+   "year": 2024,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    3,
+    5,
+    6,
+    8
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4405035007::k03",
+   "paper_id": "openalex:W4405035007",
+   "label": "LLMs exhibit inherent flaws in scholarly peer review: they assign higher or comparable ratings to papers containing only",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "LLMs exhibit inherent flaws in scholarly peer review: they assign higher or comparable ratings to papers containing only a title versus full papers (hallucination), and they produce more favorable reviews when authorship is attributed to well-known researchers in single-blind settings (prestige bias).",
+   "paper": "Are We There Yet? Revealing the Risks of Utilizing Large Language Models in Scholarly Peer Review",
+   "year": 2024,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    3,
+    5,
+    6,
+    8
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4405035007::k04",
+   "paper_id": "openalex:W4405035007",
+   "label": "A comprehensive vulnerability analysis of LLM-based peer review systems, covering explicit injection attacks, implicit a",
+   "problem": "",
+   "method": "analysis",
+   "result": "A comprehensive vulnerability analysis of LLM-based peer review systems, covering explicit injection attacks, implicit author-disclosure manipulation, hallucination under incomplete inputs, and authorship bias, demonstrates that current LLMs are insufficiently robust to serve as primary agents in scholarly peer review.",
+   "paper": "Are We There Yet? Revealing the Risks of Utilizing Large Language Models in Scholarly Peer Review",
+   "year": 2024,
+   "trace_engagement": "focus",
+   "trace_steps": [
+    3,
+    5,
+    6,
+    8
+   ],
+   "trace_in_answer": true
+  },
+  {
+   "id": "openalex:W4405561462::k00",
+   "paper_id": "openalex:W4405561462",
+   "label": "Llama-OpenReviewer-8B — an 8B-parameter language model fine-tuned on 79,000 expert peer reviews from top ML/AI conferenc",
+   "problem": "",
+   "method": "model",
+   "result": "Llama-OpenReviewer-8B — an 8B-parameter language model fine-tuned on 79,000 expert peer reviews from top ML/AI conferences (ICLR, NeurIPS) — generates structured, critical academic reviews that closely match human reviewer recommendation distributions.",
+   "paper": "OpenReviewer: A Specialized Large Language Model for Generating Critical Scientific Paper Reviews",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3,
+    5,
+    6
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4405561462::k02",
+   "paper_id": "openalex:W4405561462",
+   "label": "General-purpose LLMs (GPT-4o, Claude-3.5-Sonnet) are systematically too lenient as paper reviewers, producing recommenda",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "General-purpose LLMs (GPT-4o, Claude-3.5-Sonnet) are systematically too lenient as paper reviewers, producing recommendation distributions far more positive than human expert reviewers, while domain fine-tuning on expert review data substantially closes this gap.",
+   "paper": "OpenReviewer: A Specialized Large Language Model for Generating Critical Scientific Paper Reviews",
+   "year": 2024,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3,
+    5,
+    6
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4414827381::k00",
+   "paper_id": "openalex:W4414827381",
+   "label": "The AI Scientist-v2 — an end-to-end agentic system for automated scientific discovery that eliminates reliance on human-",
+   "problem": "",
+   "method": "framework",
+   "result": "The AI Scientist-v2 — an end-to-end agentic system for automated scientific discovery that eliminates reliance on human-authored code templates, uses a progressive agentic tree-search methodology managed by a dedicated experiment manager agent, and integrates VLM feedback for iterative figure refinement — can autonomously formulate hypotheses, design and execute experiments, analyze data, and author complete scientific manuscripts across diverse machine learning domains.",
+   "paper": "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1,
+    2
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4414827381::k02",
+   "paper_id": "openalex:W4414827381",
+   "label": "Comprehensive internal evaluation and analysis of peer-review feedback on AI-generated manuscripts reveals the strengths",
+   "problem": "",
+   "method": "analysis",
+   "result": "Comprehensive internal evaluation and analysis of peer-review feedback on AI-generated manuscripts reveals the strengths, weaknesses, and current status of fully autonomous scientific writing relative to human-authored publications.",
+   "paper": "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1,
+    2
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W4416035220::k00",
+   "paper_id": "openalex:W4416035220",
+   "label": "Agent Laboratory — an autonomous LLM-based pipeline that accepts a human-provided research idea and completes the full r",
+   "problem": "",
+   "method": "framework",
+   "result": "Agent Laboratory — an autonomous LLM-based pipeline that accepts a human-provided research idea and completes the full research cycle (literature review, experimentation, and report writing) to produce a code repository and research report, with optional human feedback at each stage.",
+   "paper": "Agent Laboratory: Using LLM Agents as Research Assistants",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W7126046125::k00",
+   "paper_id": "openalex:W7126046125",
+   "label": "An open-source framework enabling autonomous agent laboratories to collaboratively develop research by uploading and ret",
+   "problem": "",
+   "method": "framework",
+   "result": "An open-source framework enabling autonomous agent laboratories to collaboratively develop research by uploading and retrieving findings from a shared preprint server, allowing agents to iteratively build upon each other's discoveries.",
+   "paper": "AgentRxiv: Towards Collaborative Autonomous Research",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W7126046125::k03",
+   "paper_id": "openalex:W7126046125",
+   "label": "Parallelized execution mode for autonomous agent laboratories, allowing multiple agents to run simultaneously while shar",
+   "problem": "",
+   "method": "method",
+   "result": "Parallelized execution mode for autonomous agent laboratories, allowing multiple agents to run simultaneously while sharing research findings through a centralized platform, accelerates cumulative research progress compared to isolated agent development.",
+   "paper": "AgentRxiv: Towards Collaborative Autonomous Research",
+   "year": 2025,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W7140287209::k00",
+   "paper_id": "openalex:W7140287209",
+   "label": "The AI Scientist — a fully automated, end-to-end scientific research pipeline that autonomously generates research ideas",
+   "problem": "",
+   "method": "framework",
+   "result": "The AI Scientist — a fully automated, end-to-end scientific research pipeline that autonomously generates research ideas, writes and executes code, runs experiments, analyzes and plots results, writes complete machine-learning conference manuscripts, and performs automated peer review.",
+   "paper": "Towards end-to-end automation of AI research",
+   "year": 2026,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3,
+    4
+   ],
+   "trace_in_answer": false
+  },
+  {
+   "id": "openalex:W7140287209::k03",
+   "paper_id": "openalex:W7140287209",
+   "label": "AI-generated research manuscripts can pass the first round of peer review at a workshop of a top-tier machine learning c",
+   "problem": "",
+   "method": "empirical_finding",
+   "result": "AI-generated research manuscripts can pass the first round of peer review at a workshop of a top-tier machine learning conference, demonstrating that fully autonomous scientific output meets a non-trivial human-evaluated quality bar.",
+   "paper": "Towards end-to-end automation of AI research",
+   "year": 2026,
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3,
+    4
+   ],
+   "trace_in_answer": false
+  }
+ ],
+ "edges": [
+  {
+   "id": "arxiv:2510.26887v1::k01|supports|openalex:W4414827381::k02",
+   "source": "arxiv:2510.26887v1::k01",
+   "target": "openalex:W4414827381::k02",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W7126046125::k03|builds_on|openalex:W4416035220::k00",
+   "source": "openalex:W7126046125::k03",
+   "target": "openalex:W4416035220::k00",
+   "relation": "builds_on",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    1
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2502.12510v1::k02|supports|openalex:W4405035007::k01",
+   "source": "arxiv:2502.12510v1::k02",
+   "target": "openalex:W4405035007::k01",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3,
+    6
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2605.29468::k01|supports|openalex:W4405035007::k01",
+   "source": "arxiv:2605.29468::k01",
+   "target": "openalex:W4405035007::k01",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3,
+    6
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W7140287209::k03|builds_on|arxiv:2508.15126v2::k01",
+   "source": "openalex:W7140287209::k03",
+   "target": "arxiv:2508.15126v2::k01",
+   "relation": "builds_on",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W7140287209::k00|builds_on|openalex:W4402952666::k00",
+   "source": "openalex:W7140287209::k00",
+   "target": "openalex:W4402952666::k00",
+   "relation": "builds_on",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2508.15126v2::k03|supports|openalex:W7140287209::k03",
+   "source": "arxiv:2508.15126v2::k03",
+   "target": "openalex:W7140287209::k03",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2510.26887v1::k01|supports|openalex:W7140287209::k00",
+   "source": "arxiv:2510.26887v1::k01",
+   "target": "openalex:W7140287209::k00",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4402683796::k04|supports|openalex:W7140287209::k03",
+   "source": "openalex:W4402683796::k04",
+   "target": "openalex:W7140287209::k03",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3,
+    4
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4390784029::k03|builds_on|openalex:W4384261641::k00",
+   "source": "openalex:W4390784029::k03",
+   "target": "openalex:W4384261641::k00",
+   "relation": "builds_on",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4400734098::k00|builds_on|openalex:W4384261641::k00",
+   "source": "openalex:W4400734098::k00",
+   "target": "openalex:W4384261641::k00",
+   "relation": "builds_on",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3,
+    5
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4384261641::k00|supports|openalex:W4402683796::k04",
+   "source": "openalex:W4384261641::k00",
+   "target": "openalex:W4402683796::k04",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3,
+    4
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4384261641::k00|supports|openalex:W4405561462::k02",
+   "source": "openalex:W4384261641::k00",
+   "target": "openalex:W4405561462::k02",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2507.02694::k03|builds_on|openalex:W4402683796::k03",
+   "source": "arxiv:2507.02694::k03",
+   "target": "openalex:W4402683796::k03",
+   "relation": "builds_on",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    3,
+    4,
+    7
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4390784029::k01|supports|openalex:W4402683796::k04",
+   "source": "openalex:W4390784029::k01",
+   "target": "openalex:W4402683796::k04",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    4
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "arxiv:2507.02694::k00|mentions|openalex:W4402683796::k00",
+   "source": "arxiv:2507.02694::k00",
+   "target": "openalex:W4402683796::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    4,
+    7
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W4403006832::k04|builds_on|openalex:W4400734098::k01",
+   "source": "openalex:W4403006832::k04",
+   "target": "openalex:W4400734098::k01",
+   "relation": "builds_on",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4405561462::k02|builds_on|openalex:W4400734098::k01",
+   "source": "openalex:W4405561462::k02",
+   "target": "openalex:W4400734098::k01",
+   "relation": "builds_on",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4390784029::k00|refines|openalex:W4400734098::k02",
+   "source": "openalex:W4390784029::k00",
+   "target": "openalex:W4400734098::k02",
+   "relation": "refines",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4400734098::k01|contradicts|openalex:W4404782918::k02",
+   "source": "openalex:W4400734098::k01",
+   "target": "openalex:W4404782918::k02",
+   "relation": "contradicts",
+   "provenance": "text",
+   "confidence": 1.0,
+   "evidence": "Both contributions directly address the quality of LLM-generated peer reviews relative to human reviews, but arrive at meaningfully incompatible conclusions. Contribution A finds that LLM-generated feedback overlaps with individual human peer reviews at rates comparable to the overlap between two human reviewers (e.g., ~30.85% vs. ~28.58% for Nature journals; ~39.23% vs. ~35.25% for ICLR), framing LLM feedback as substantially similar to human feedback in coverage (AQ, A:002, A:009). Contribution B, by contrast, conducts a sentence-level analysis and finds that LLM-generated reviews contain more deficient segments than human reviews, are paper-unspecific, lack diversity, and lack constructive feedback — explicitly quantifying a gap between LLM and human reviewing quality (BQ, B:002). Evidence B:009 further shows that inter-LLM BERTScore similarity (70.33–71.17) is notably higher than inter-human similarity (59.15), indicating LLMs produce less diverse reviews than humans, which directly conflicts with Contribution A's framing of LLM reviews as comparable to human reviews. The two contributions study the same construct (LLM vs. human review quality) and reach genuinely incompatible ",
+   "trace_engagement": "read",
+   "trace_steps": [
+    5,
+    8
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4400734098::k01|contradicts|openalex:W4405035007::k03",
+   "source": "openalex:W4400734098::k01",
+   "target": "openalex:W4405035007::k03",
+   "relation": "contradicts",
+   "provenance": "text",
+   "confidence": 1.0,
+   "evidence": "Contribution A finds that LLM-generated reviews overlap with human reviews at rates comparable to inter-human overlap, implying LLMs can perform adequately as reviewers. Contribution B, while citing A's overlap finding, presents directly conflicting evidence: LLMs assign higher ratings to incomplete papers (title-only) than full papers and exhibit prestige bias in single-blind settings. These findings challenge A's positive framing by showing LLMs have inherent flaws that make them unreliable. The two contributions address the same construct (LLM suitability for peer review) and reach genuinely incompatible conclusions about LLM reliability and readiness.",
+   "trace_engagement": "read",
+   "trace_steps": [
+    5,
+    6,
+    8
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4390784029::k00|mentions|openalex:W4400734098::k00",
+   "source": "openalex:W4390784029::k00",
+   "target": "openalex:W4400734098::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W4400734098::k00|mentions|openalex:W4384261641::k00",
+   "source": "openalex:W4400734098::k00",
+   "target": "openalex:W4384261641::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    5
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W4404783497::k02|supports|openalex:W4405035007::k03",
+   "source": "openalex:W4404783497::k02",
+   "target": "openalex:W4405035007::k03",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4405035007::k03|supports|openalex:W4405561462::k02",
+   "source": "openalex:W4405035007::k03",
+   "target": "openalex:W4405561462::k02",
+   "relation": "supports",
+   "provenance": "text",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6
+   ],
+   "trace_kind": "semantic"
+  },
+  {
+   "id": "openalex:W4405035007::k00|mentions|openalex:W4404783497::k00",
+   "source": "openalex:W4405035007::k00",
+   "target": "openalex:W4404783497::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W4405035007::k00|mentions|openalex:W4402952666::k00",
+   "source": "openalex:W4405035007::k00",
+   "target": "openalex:W4402952666::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W4405035007::k00|mentions|openalex:W4400734098::k00",
+   "source": "openalex:W4405035007::k00",
+   "target": "openalex:W4400734098::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "openalex:W4405035007::k00|mentions|openalex:W4403006832::k00",
+   "source": "openalex:W4405035007::k00",
+   "target": "openalex:W4403006832::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    6
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2507.02694::k00|mentions|openalex:W4390784029::k00",
+   "source": "arxiv:2507.02694::k00",
+   "target": "openalex:W4390784029::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    7
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2507.02694::k00|mentions|openalex:W4404782918::k00",
+   "source": "arxiv:2507.02694::k00",
+   "target": "openalex:W4404782918::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    7
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2507.02694::k00|mentions|openalex:W4402952666::k00",
+   "source": "arxiv:2507.02694::k00",
+   "target": "openalex:W4402952666::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    7
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2507.02694::k00|mentions|openalex:W4403006832::k00",
+   "source": "arxiv:2507.02694::k00",
+   "target": "openalex:W4403006832::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    7
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  },
+  {
+   "id": "arxiv:2507.02694::k00|mentions|openalex:W4400734098::k00",
+   "source": "arxiv:2507.02694::k00",
+   "target": "openalex:W4400734098::k00",
+   "relation": "mentions",
+   "provenance": "both",
+   "confidence": 0.5,
+   "evidence": "",
+   "trace_engagement": "listed",
+   "trace_steps": [
+    7
+   ],
+   "trace_kind": "citation",
+   "paper_level": true
+  }
+ ],
+ "trace": {
+  "question_id": "q05",
+  "question": "I want to use an LLM to give feedback on my students' paper drafts. How well does that actually work in practice, and has anyone found that it doesn't?",
+  "family": "evidence-base",
+  "arm": "graph",
+  "n_calls": 9,
+  "steps": [
+   {
+    "step": 1,
+    "tool": "topic_structure",
+    "args": {
+     "query": "LLM feedback on student writing"
+    },
+    "surfaced": [
+     "arxiv:2505.18705v1",
+     "openalex:W4414827381",
+     "openalex:W4416035220",
+     "openalex:W4402683796",
+     "openalex:W4402683796"
+    ],
+    "note": ""
+   },
+   {
+    "step": 2,
+    "tool": "search_contributions",
+    "args": {
+     "query": "automated feedback on paper drafts"
+    },
+    "surfaced": [
+     "openalex:W4402683796",
+     "openalex:W4402683796",
+     "openalex:W4402683796",
+     "arxiv:2603.28589v1",
+     "openalex:W7165138641",
+     "openalex:W4414827381",
+     "openalex:W4414827381",
+     "openalex:W4416026872"
+    ],
+    "note": ""
+   },
+   {
+    "step": 3,
+    "tool": "topic_structure",
+    "args": {
+     "query": "LLM generated peer review quality limitations"
+    },
+    "surfaced": [
+     "openalex:W4404350150",
+     "openalex:W4405035007",
+     "openalex:W7140287209",
+     "openalex:W4384261641",
+     "arxiv:2507.02694"
+    ],
+    "note": ""
+   },
+   {
+    "step": 4,
+    "tool": "paper_neighbourhood",
+    "args": {
+     "paper_id": "openalex:W4402683796"
+    },
+    "surfaced": [
+     "arxiv:2507.02694"
+    ],
+    "note": ""
+   },
+   {
+    "step": 5,
+    "tool": "paper_neighbourhood",
+    "args": {
+     "paper_id": "openalex:W4400734098"
+    },
+    "surfaced": [
+     "openalex:W4390784029",
+     "openalex:W4405468016",
+     "openalex:W4384261641"
+    ],
+    "note": ""
+   },
+   {
+    "step": 6,
+    "tool": "paper_neighbourhood",
+    "args": {
+     "paper_id": "openalex:W4405035007"
+    },
+    "surfaced": [
+     "openalex:W4404783497",
+     "openalex:W4402952666",
+     "openalex:W4400734098",
+     "openalex:W4403006832"
+    ],
+    "note": ""
+   },
+   {
+    "step": 7,
+    "tool": "paper_neighbourhood",
+    "args": {
+     "paper_id": "arxiv:2507.02694"
+    },
+    "surfaced": [
+     "openalex:W4390784029",
+     "openalex:W4399555023",
+     "openalex:W4402683796",
+     "openalex:W4404782918",
+     "openalex:W4402952666",
+     "openalex:W4403795293",
+     "openalex:W4403586302",
+     "openalex:W4403006832",
+     "openalex:W4400734098",
+     "openalex:W4394647523"
+    ],
+    "note": ""
+   },
+   {
+    "step": 8,
+    "tool": "edge_reasons",
+    "args": {
+     "paper_id": "openalex:W4400734098",
+     "relation": "contradicts"
+    },
+    "surfaced": [
+     "openalex:W4404782918",
+     "openalex:W4405035007"
+    ],
+    "note": ""
+   },
+   {
+    "step": 9,
+    "tool": "get_contribution",
+    "args": {
+     "contribution_id": "arxiv:2507.02694::k04"
+    },
+    "surfaced": [],
+    "note": ""
+   }
+  ],
+  "papers_named": [
+   "Can Large Language Models Provide Useful Feedback on Research Papers? A Large-Scale Empirical Analysis",
+   "LLMs Assist NLP Researchers: Critique Paper (Meta-)Reviewing",
+   "Are We There Yet? Revealing the Risks of Utilizing Large Language Models in Scholarly Peer Review",
+   "Automated Focused Feedback Generation for Scientific Writing Assistance",
+   "Can LLMs Identify Critical Limitations within Scientific Research? A Systematic Evaluation on AI Research Papers",
+   "GPT4 is Slightly Helpful for Peer-Review Assistance: A Pilot Study"
+  ]
+ }
+}
