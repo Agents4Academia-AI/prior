@@ -25,8 +25,8 @@ around (labels in `paper_neighbourhood`, justifications only on request in
 `edge_reasons`), which is precisely why an honest exploration trace exists at
 all. See PLAN.md 2a.
 
-Edge colour is Prior's own relation palette (frontend/src/lib/colors.ts), so the
-figure reads the same way as the app. A gold halo marks papers that made it into
+Edge colour is the poster relation palette (REL_COLOR below), a darker,
+higher-contrast variant of the app's own. A gold halo marks papers that made it into
 the final answer.
 
 OUTPUTS (per question, into out/traces/)
@@ -98,17 +98,19 @@ from graph_tools import GraphAtlas, _pid, _tok            # noqa: E402
 OUT = HERE / "out"
 TRACES = OUT / "traces"
 
-# Prior's own palette — frontend/src/lib/colors.ts. Keep these in sync so the
-# poster figure and the app say the same thing with the same colours.
+# The poster palette. This diverges from frontend/src/lib/colors.ts, which still
+# carries the app's original pastels; the poster set is darker and higher
+# contrast so the relations survive being printed at A0 and read from a metre
+# away. `contrast` is unused by these figures and is left as the app has it.
 REL_COLOR = {
-    "builds_on": "#6ea8fe",
-    "refines": "#63e6be",
-    "contradicts": "#ff6b6b",
+    "builds_on": "#5b8fb0",
+    "refines": "#ca6702",
+    "contradicts": "#ae2012",
     "contrast": "#ffa94d",
-    "supports": "#b197fc",
-    "mentions": "#868e96",
+    "supports": "#0a9396",
+    "mentions": "#000000",
 }
-CITES = "mentions"                      # citation-layer edges use the grey
+CITES = "mentions"                      # citation-layer edges are black
 
 SYMMETRIC_NOTE = ("contradicts and supports are recorded symmetric — "
                   "no direction is claimed")

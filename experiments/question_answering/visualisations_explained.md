@@ -17,7 +17,7 @@ illustration.
 - **Rings = how hard the agent engaged.** Big and numbered in the middle: papers
   it *chose*. Middle ring: papers whose *evidence text* it read. Faint outer ring:
   papers that merely appeared in a list.
-- **Coloured lines = typed relations** from the graph, in Prior's own palette.
+- **Coloured lines = typed relations** from the graph, in the poster palette.
   Solid means the agent read that edge's justification; dashed means it only saw
   the label.
 - **Gold halo = the paper made it into the final answer.**
@@ -77,16 +77,17 @@ nodes.
 | small grey dot | listed — it appeared in a list only |
 | **gold halo** | the paper is named in the final answer |
 
-**Edges** — colours are Prior's own (`frontend/src/lib/colors.ts`), so the figure
-and the app say the same thing:
+**Edges** — colours come from `REL_COLOR` in `trace.py`, the poster palette:
+darker and higher contrast than the app's own so the relations survive being
+printed at A0 and read from a metre away.
 
-| colour | relation | arrow? |
-|---|---|---|
-| red | `contradicts` | no — recorded **symmetric** |
-| green | `refines` | yes |
-| blue | `builds_on` | yes |
-| purple | `supports` | no — recorded **symmetric** |
-| grey | citation layer (`cites`) | yes — citing → cited |
+| colour | hex | relation | arrow? |
+|---|---|---|---|
+| deep red | `#ae2012` | `contradicts` | no — recorded **symmetric** |
+| orange | `#ca6702` | `refines` | yes |
+| slate blue | `#5b8fb0` | `builds_on` | yes |
+| teal | `#0a9396` | `supports` | no — recorded **symmetric** |
+| black | `#000000` | citation layer (`cites`) | yes — citing → cited |
 
 - **Solid, thick** = the justification behind that edge was read.
 - **Dashed, faint** = the edge label was listed, nothing more.

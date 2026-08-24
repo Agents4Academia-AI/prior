@@ -19,7 +19,7 @@ task and a much smaller scale.*
 > (2) the graph tool surface was contribution-level while every question is
 > paper-level, so the graph arm ingested **1.7–2× more tokens than web search** —
 > the opposite of the compactness claim. Full diagnosis, measurements and
-> redesign: **[TOOL_SURFACE_V2.md](TOOL_SURFACE_V2.md)**.
+> redesign: **[notes/TOOL_SURFACE_V2.md](notes/TOOL_SURFACE_V2.md)**.
 >
 > **v3 — 2026-08-21.** v2 fixed the seal but *not* the compactness problem: across
 > the three clean triples the graph arm still pulled **1.27× more `tokens_in` and
@@ -34,6 +34,12 @@ task and a much smaller scale.*
 > reported side by side — `verbose=True` still reproduces the v2 payload, so the
 > comparison costs nothing. **The web and null rows were not re-run**: nothing
 > about those arms changed.
+
+> **Where things ended up.** This document is the *design* record — the
+> predictions were registered here before the run and are left as written. What
+> actually happened is in **[RESULTS.md](RESULTS.md)**; how the arms were built is
+> **[ARMS.md](ARMS.md)**; how the judging works is **[JUDGING.md](JUDGING.md)**;
+> the front door, including asking your own question, is **[README.md](README.md)**.
 
 ## Hard constraints (unchanged)
 - **No API key, no metered spend.** Claude Code **Pro subscription** via the Agent
@@ -179,7 +185,7 @@ purpose — c01 tests coverage honesty, c02 tests depth honesty.
 one the supervisor's challenge is about). Measured offline against the real atlas,
 the intended v2 path answers all 8 questions in **12 calls / 89,201 chars**, where
 v1 needed 24 calls / 98,433 chars for **two** (per question: 1.5 calls / 11.2k
-chars vs 12 calls / 49.2k chars; see TOOL_SURFACE_V2.md §5). So I predict:
+chars vs 12 calls / 49.2k chars; see notes/TOOL_SURFACE_V2.md §5). So I predict:
 
 - the graph arm's **`tokens_in` is now BELOW the web arm's** on q01–q06 — this is
   the compactness claim, and v1 falsified it;
@@ -363,6 +369,30 @@ the runs:
 noise floor, the defensible outputs are the per-axis means with their spread, the
 mechanical checks, and the worked examples.
 
+### Outcome of the repeated judging (2026-08-22) → **[notes/JUDGE_RUNS.md](notes/JUDGE_RUNS.md)**
+
+All 8 questions were judged 3 times, 24 judgements, 0 errors. Written up in full in
+`notes/JUDGE_RUNS.md`; the headline:
+
+- **Order balance is exact**, not approximate: arm × slot is 8/8/8 for all three
+  arms over the 24 judgements, because each repeat *rotates* the question's base
+  permutation rather than resampling one.
+- **8 of 8 questions had a unanimous winner.** No `split`.
+- **Median widest single-axis spread across runs is 1 pt**, worst 3 pt. The judge
+  called 19 of 24 margins `slight`.
+- Structural means, graph/web/null: groundedness **8.61 / 7.94 / 6.11**,
+  correctness 7.56 / 7.56 / 7.17, usefulness **8.28 / 8.06 / 5.56**.
+- **Lift over null on the structural set: graph +2.50, web +1.83** on
+  groundedness. Graph − web is 0.67, i.e. below the noise floor, which is why the
+  lift is the number to report and the win count is not.
+- `prediction_hit` on 21 of 24 rows; all three misses are q06, lost on a content
+  error (claiming AI Scientist v1 used AIDE-style tree search).
+
+One bug found writing that up: `report.py` summed the judging cost over the
+*consensus* rows, one per question, so it under-reported by a factor of three
+($1.62 against the true $4.53). Fixed. Cost never supports a claim here (§5), so
+nothing else moves.
+
 ### Two objections this design has to answer
 
 **"If `unrecognised` carries no penalty, can the judge still judge correctness?"**
@@ -497,7 +527,7 @@ serial with `--sleep`, run from **my** terminal only.
    browser", but with `bypassPermissions` a prompt is not a seal, and a judge that
    quietly looked papers up would make correctness scores depend on what it found
    rather than on the answers. *(live = subscription, my terminal)*
-6. ✅ `TOOL_SURFACE_V2.md` — the cost diagnosis, the seal bug, the redesign, and
+6. ✅ `notes/TOOL_SURFACE_V2.md` — the cost diagnosis, the seal bug, the redesign, and
    the offline efficiency projection. *(no LLM)*
 7. ✅ `check_fabrication.py` — resolves every judge `fabricated` / `unrecognised`
    title against the 152 papers and reports overturned vs upheld, so a flag on a
@@ -523,7 +553,7 @@ serial with `--sleep`, run from **my** terminal only.
    "listed" were the same thing and no honest trace existed. The figure is
    therefore evidence for the tool-surface argument, not just decoration for it.
 
-   Edge colour is Prior's own palette (`frontend/src/lib/colors.ts`); solid =
+   Edge colour is the poster palette (`REL_COLOR` in `trace.py`); solid =
    read, dashed = listed; a gold halo marks papers named in the final answer.
 
    **Arrowheads are drawn only where the graph records a direction**, read off the
@@ -559,9 +589,25 @@ serial with `--sleep`, run from **my** terminal only.
    `--queries`, `--spread`, `--width`, `--font-scale`, `--layout below`,
    `--no-timeline`. `--png` renders via headless Chrome if PowerPoint's SVG
    import is not wanted.
-9. ⬜ `RESULTS.md` — the 8-row table, predictions vs outcomes, lift over null,
-   fabrication + hedge rates, **the efficiency table** (§5), and the **v2 vs v3
-   tool-surface comparison** scored against `out_v2_graph/`. *(no LLM)*
+9. ✅ [`RESULTS.md`](RESULTS.md) — generated by `report.py`, so it cannot drift
+   from the data: headline block, the 8-row scoreboard, predictions vs outcomes,
+   per-axis means split structural/control, lift over null, judge reliability,
+   the efficiency table (§5) and full costs — then every question with all three
+   answers, all three judge runs' scores and reasons, and the graph arm's call
+   trace. *(no LLM)*
+10. ✅ [`ARMS.md`](ARMS.md) — how the answers were produced: every prompt
+   verbatim, the 12 tools and what each returns, the five atlas source files, the
+   seal, what each arm actually did call by call, and **§6 on why the compactness
+   prediction failed** and what survives of the claim. *(no LLM)*
+11. ✅ [`JUDGING.md`](JUDGING.md) — how the answers were scored: the judge's
+   system prompt and rubric verbatim, the schema, what the judge can and cannot
+   see, why existence is settled mechanically rather than by the judge, the order
+   rotation, the repeats, and the measured reliability. Absorbs and supersedes
+   `notes/JUDGE_RUNS.md`. *(no LLM)*
+12. ✅ [`README.md`](README.md) — the front door, and `ask.py`, which runs the
+   graph arm on **your own** question and draws the figure in one command.
+   `check_docs.py` re-checks that every prompt quoted in ARMS.md and JUDGING.md
+   still matches the code. *(no LLM)*
 
 **State on 2026-08-21.** The overnight run stopped at unit 13 on the Claude
 session limit (`"You've hit your session limit · resets 5am"` — recorded verbatim
@@ -582,7 +628,7 @@ python qa_gen.py                              # the rest (~$4.50)
 python verify_named.py                        # free: fabrication + specificity
 python qa_judge.py --limit 2                  # pilot the 3-way judge
 python qa_judge.py                            # the rest
-python report.py                              # free: renders out/REPORT.md
+python report.py                              # free: renders RESULTS.md
 ```
 
 On the v3 pilot, check three things before scaling, all on the graph row:

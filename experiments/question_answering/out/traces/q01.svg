@@ -1,12 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1900" height="1536" viewBox="0 0 1900 1536" font-family="Arial, Helvetica, sans-serif">
 <rect x="0" y="0" width="1900" height="1536" fill="#ffffff"/>
 <defs>
-<marker id="a_builds_on" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#6ea8fe"/></marker>
-<marker id="af_builds_on" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#6ea8fe" opacity="0.55"/></marker>
-<marker id="a_mentions" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#868e96"/></marker>
-<marker id="af_mentions" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#868e96" opacity="0.55"/></marker>
-<marker id="a_refines" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#63e6be"/></marker>
-<marker id="af_refines" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#63e6be" opacity="0.55"/></marker>
+<marker id="a_builds_on" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#5b8fb0"/></marker>
+<marker id="af_builds_on" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#5b8fb0" opacity="0.55"/></marker>
+<marker id="a_mentions" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#000000"/></marker>
+<marker id="af_mentions" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#000000" opacity="0.55"/></marker>
+<marker id="a_refines" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#ca6702"/></marker>
+<marker id="af_refines" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#ca6702" opacity="0.55"/></marker>
 </defs>
 <text x="24" y="56" font-size="37.4" font-weight="700" fill="#212529">Q01 · builds-on</text>
 <text x="24" y="84" font-size="24.8" fill="#495057">I'm writing a related-work section on The AI Scientist (Lu et al.). Which later papers actually extend its method, as opposed to just citing it in</text>
@@ -16,32 +16,32 @@
 <ellipse cx="0" cy="0" rx="696.9" ry="432.1" fill="none" stroke="#dee2e6" stroke-width="1.2" stroke-dasharray="2 8"/>
 <line x1="-1016.4" y1="0.0" x2="0.0" y2="0.0" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
 <line x1="-1016.4" y1="0.0" x2="-362.9" y2="0.0" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
-<path d="M -18.8 9.3 Q -215.3 106.8 -269.9 133.9" fill="none" stroke="#b197fc" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' />
-<path d="M -18.8 -9.3 Q -215.3 -106.8 -269.9 -133.9" fill="none" stroke="#b197fc" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' />
-<path d="M 359.7 360.3 Q 278.7 279.2 17.7 17.7" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
-<path d="M -347.9 0.0 Q -275.8 0.0 -25.0 0.0" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
-<path d="M -359.7 -360.3 Q -278.7 -279.2 -17.7 -17.7" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
-<path d="M 576.9 -229.9 Q 445.5 -177.5 23.2 -9.3" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
-<path d="M 359.7 -360.3 Q 278.7 -279.2 17.7 -17.7" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
-<path d="M -576.9 -229.9 Q -445.5 -177.5 -23.2 -9.3" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
-<path d="M 675.1 78.3 Q 520.6 60.4 24.8 2.9" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
-<path d="M -0.0 422.1 Q -0.0 328.4 -0.0 25.0" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
-<path d="M 0.0 -422.1 Q 0.0 -328.4 0.0 -25.0" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
-<path d="M -0.0 210.0 Q -0.0 171.0 -0.0 25.0" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
-<path d="M -675.1 -78.3 Q -520.6 -60.4 -24.8 -2.9" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
-<path d="M 576.9 229.9 Q 445.5 177.5 23.2 9.3" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
-<path d="M -359.7 360.3 Q -278.7 279.2 -17.7 17.7" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
-<path d="M 20.9 -2.4 Q 520.6 -60.4 671.1 -77.8" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
-<path d="M -20.9 2.4 Q -520.6 60.4 -671.1 77.8" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
-<path d="M -19.5 7.8 Q -445.5 177.5 -573.2 228.4" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
-<path d="M 268.1 133.0 Q 170.0 84.4 26.0 12.9" fill="none" stroke="#6ea8fe" stroke-width="4.2" opacity="0.95" marker-end="url(#a_builds_on)"/>
-<path d="M -0.0 208.0 Q -0.0 135.0 -0.0 29.0" fill="none" stroke="#6ea8fe" stroke-width="4.2" opacity="0.95" marker-end="url(#a_builds_on)"/>
-<path d="M -268.1 133.0 Q -170.0 84.4 -26.0 12.9" fill="none" stroke="#6ea8fe" stroke-width="4.2" opacity="0.95" marker-end="url(#a_builds_on)"/>
-<path d="M -345.9 0.0 Q -217.7 0.0 -29.0 0.0" fill="none" stroke="#6ea8fe" stroke-width="4.2" opacity="0.95" marker-end="url(#a_builds_on)"/>
-<path d="M -268.1 -133.0 Q -170.0 -84.4 -26.0 -12.9" fill="none" stroke="#6ea8fe" stroke-width="4.2" opacity="0.95" marker-end="url(#a_builds_on)"/>
-<path d="M 0.0 -208.0 Q 0.0 -135.0 0.0 -29.0" fill="none" stroke="#868e96" stroke-width="4.2" opacity="0.95" marker-end="url(#a_mentions)"/>
-<path d="M 345.9 -0.0 Q 217.7 -0.0 29.0 -0.0" fill="none" stroke="#868e96" stroke-width="4.2" opacity="0.95" marker-end="url(#a_mentions)"/>
-<path d="M 268.1 -133.0 Q 170.0 -84.4 26.0 -12.9" fill="none" stroke="#868e96" stroke-width="4.2" opacity="0.95" marker-end="url(#a_mentions)"/>
+<path d="M -18.8 9.3 Q -215.3 106.8 -269.9 133.9" fill="none" stroke="#0a9396" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' />
+<path d="M -18.8 -9.3 Q -215.3 -106.8 -269.9 -133.9" fill="none" stroke="#0a9396" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' />
+<path d="M 359.7 360.3 Q 278.7 279.2 17.7 17.7" fill="none" stroke="#000000" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M -347.9 0.0 Q -275.8 0.0 -25.0 0.0" fill="none" stroke="#000000" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M -359.7 -360.3 Q -278.7 -279.2 -17.7 -17.7" fill="none" stroke="#000000" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M 576.9 -229.9 Q 445.5 -177.5 23.2 -9.3" fill="none" stroke="#000000" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M 359.7 -360.3 Q 278.7 -279.2 17.7 -17.7" fill="none" stroke="#000000" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M -576.9 -229.9 Q -445.5 -177.5 -23.2 -9.3" fill="none" stroke="#000000" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M 675.1 78.3 Q 520.6 60.4 24.8 2.9" fill="none" stroke="#000000" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M -0.0 422.1 Q -0.0 328.4 -0.0 25.0" fill="none" stroke="#000000" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M 0.0 -422.1 Q 0.0 -328.4 0.0 -25.0" fill="none" stroke="#000000" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M -0.0 210.0 Q -0.0 171.0 -0.0 25.0" fill="none" stroke="#000000" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M -675.1 -78.3 Q -520.6 -60.4 -24.8 -2.9" fill="none" stroke="#000000" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M 576.9 229.9 Q 445.5 177.5 23.2 9.3" fill="none" stroke="#000000" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M -359.7 360.3 Q -278.7 279.2 -17.7 17.7" fill="none" stroke="#000000" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M 20.9 -2.4 Q 520.6 -60.4 671.1 -77.8" fill="none" stroke="#000000" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M -20.9 2.4 Q -520.6 60.4 -671.1 77.8" fill="none" stroke="#000000" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M -19.5 7.8 Q -445.5 177.5 -573.2 228.4" fill="none" stroke="#000000" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M 268.1 133.0 Q 170.0 84.4 26.0 12.9" fill="none" stroke="#5b8fb0" stroke-width="4.2" opacity="0.95" marker-end="url(#a_builds_on)"/>
+<path d="M -0.0 208.0 Q -0.0 135.0 -0.0 29.0" fill="none" stroke="#5b8fb0" stroke-width="4.2" opacity="0.95" marker-end="url(#a_builds_on)"/>
+<path d="M -268.1 133.0 Q -170.0 84.4 -26.0 12.9" fill="none" stroke="#5b8fb0" stroke-width="4.2" opacity="0.95" marker-end="url(#a_builds_on)"/>
+<path d="M -345.9 0.0 Q -217.7 0.0 -29.0 0.0" fill="none" stroke="#5b8fb0" stroke-width="4.2" opacity="0.95" marker-end="url(#a_builds_on)"/>
+<path d="M -268.1 -133.0 Q -170.0 -84.4 -26.0 -12.9" fill="none" stroke="#5b8fb0" stroke-width="4.2" opacity="0.95" marker-end="url(#a_builds_on)"/>
+<path d="M 0.0 -208.0 Q 0.0 -135.0 0.0 -29.0" fill="none" stroke="#000000" stroke-width="4.2" opacity="0.95" marker-end="url(#a_mentions)"/>
+<path d="M 345.9 -0.0 Q 217.7 -0.0 29.0 -0.0" fill="none" stroke="#000000" stroke-width="4.2" opacity="0.95" marker-end="url(#a_mentions)"/>
+<path d="M 268.1 -133.0 Q 170.0 -84.4 26.0 -12.9" fill="none" stroke="#000000" stroke-width="4.2" opacity="0.95" marker-end="url(#a_mentions)"/>
 <circle cx="0.0" cy="-432.1" r="11.0" fill="none" stroke="#f59f00" stroke-width="2.4"/>
 <circle cx="0.0" cy="-432.1" r="7.0" fill="#adb5bd"/>
 <text x="20.0" y="-436.8" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">Generative</text>
@@ -172,18 +172,18 @@
 <text x="61.6" y="1354.4" font-size="20.4" fill="#495057">named in the final answer</text>
 <rect x="24.2" y="1371.5" width="37.4" height="18.7" rx="9.4" fill="#f1f3f5" stroke="#ced4da" stroke-width="1.7"/>
 <text x="79.2" y="1389.0" font-size="20.4" fill="#495057">a search the agent typed (dotted lines → what it found)</text>
-<rect x="24.2" y="1406.1" width="37.4" height="18.7" rx="9.4" fill="#fff5f5" stroke="#ff6b6b" stroke-width="1.7" stroke-dasharray='5 4'/>
+<rect x="24.2" y="1406.1" width="37.4" height="18.7" rx="9.4" fill="#fff5f5" stroke="#ae2012" stroke-width="1.7" stroke-dasharray='5 4'/>
 <text x="79.2" y="1423.6" font-size="20.4" fill="#495057">“no match” — nothing in the corpus fit it</text>
 <text x="1024" y="1217" font-size="16.5" font-weight="700" fill="#495057" letter-spacing="0.8">RELATION</text>
-<path d="M 1024.1 1242.4 L 1061.5 1242.4" stroke="#ff6b6b" stroke-width="4.2" fill="none"/>
+<path d="M 1024.1 1242.4 L 1061.5 1242.4" stroke="#ae2012" stroke-width="4.2" fill="none"/>
 <text x="1083.5" y="1250.6" font-size="20.4" fill="#495057">contradicts (symmetric)</text>
-<path d="M 1024.1 1277.0 L 1061.5 1277.0" stroke="#63e6be" stroke-width="4.2" fill="none" marker-end="url(#a_refines)"/>
+<path d="M 1024.1 1277.0 L 1061.5 1277.0" stroke="#ca6702" stroke-width="4.2" fill="none" marker-end="url(#a_refines)"/>
 <text x="1083.5" y="1285.2" font-size="20.4" fill="#495057">refines</text>
-<path d="M 1024.1 1311.6 L 1061.5 1311.6" stroke="#6ea8fe" stroke-width="4.2" fill="none" marker-end="url(#a_builds_on)"/>
+<path d="M 1024.1 1311.6 L 1061.5 1311.6" stroke="#5b8fb0" stroke-width="4.2" fill="none" marker-end="url(#a_builds_on)"/>
 <text x="1083.5" y="1319.8" font-size="20.4" fill="#495057">builds on</text>
-<path d="M 1024.1 1346.2 L 1061.5 1346.2" stroke="#b197fc" stroke-width="4.2" fill="none"/>
+<path d="M 1024.1 1346.2 L 1061.5 1346.2" stroke="#0a9396" stroke-width="4.2" fill="none"/>
 <text x="1083.5" y="1354.4" font-size="20.4" fill="#495057">supports (symmetric)</text>
-<path d="M 1024.1 1380.8 L 1061.5 1380.8" stroke="#868e96" stroke-width="4.2" fill="none" marker-end="url(#a_mentions)"/>
+<path d="M 1024.1 1380.8 L 1061.5 1380.8" stroke="#000000" stroke-width="4.2" fill="none" marker-end="url(#a_mentions)"/>
 <text x="1083.5" y="1389.0" font-size="20.4" fill="#495057">cites (citation layer)</text>
 <text x="1024.1" y="1423.6" font-size="18.3" fill="#adb5bd">contradicts and supports are recorded symmetric — no direction is claimed</text>
 <text x="1024.1" y="1455.7" font-size="18.3" fill="#adb5bd">solid = read · dashed = listed only</text>

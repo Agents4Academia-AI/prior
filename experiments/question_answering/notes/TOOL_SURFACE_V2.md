@@ -1,5 +1,10 @@
 # Why the graph arm cost as much as web search — diagnosis and redesign
 
+> **Historical record.** This is the v1→v2 diagnosis. The v3 surface that was
+> actually used, and what happened to the compactness claim in the end, are in
+> [../ARMS.md](../ARMS.md) §3.4 and §6. Kept because it is where the seal bug
+> and the envelope measurements were first written down.
+
 *Written 2026-08-21, after the v1 pilot (q01, q02 × 3 arms). Prompted by a fair
 challenge: if Prior is a compact representation of the literature, why did the
 graph arm not cost less than a web search? The short answer is that it should

@@ -9,7 +9,7 @@ Three arms, identical task and blinding:
     The true null: whatever graph and web score, the honest question is how much
     either adds OVER the model answering closed-book.
 
-WHAT CHANGED IN v2 (see ../TOOL_SURFACE_V2.md for the measurements)
+WHAT CHANGED IN v2 (see notes/TOOL_SURFACE_V2.md for the measurements)
 -------------------------------------------------------------------
 1. THE ARMS ARE NOW SEALED. `allowed_tools` is a PERMISSION allowlist, not a
    tool-surface restriction — that is the separate `tools=` field. v1 set only the

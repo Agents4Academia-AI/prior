@@ -1,6 +1,26 @@
-# QA experiment — answers and judgements in full
+# Results — Prior's graph vs. a browser vs. closed book
 
-*Generated from `out/answers.jsonl` + `out/qa_judgements.jsonl`. 8 of 8 questions answered, 8 judged. Design + registered predictions: [PLAN.md](../PLAN.md).*
+*Every number here is recomputed by `report.py` from `out/answers.jsonl` and `out/qa_judgements.jsonl`. 8 of 8 questions answered, 8 judged. How the arms were built: [ARMS.md](ARMS.md). How the judging works: [JUDGING.md](JUDGING.md). Design and registered predictions: [PLAN.md](PLAN.md).*
+
+## Headline
+
+| | |
+|---|---|
+| questions | **6 structural** (the atlas should help) + **2 controls** (it should lose) |
+| arms | **GRAPH** — Prior's v12 atlas, no web · **WEB** — WebSearch/WebFetch, no atlas · **NULL** — no tools at all |
+| generations | 24, `claude-sonnet-5`, all sealed (`off_arm_tools` empty on every row) |
+| judgements | **24** = 8 questions × 3 order-swapped runs, `claude-opus-5`, blind |
+| total spend | **$11.76** ($7.23 generating, $4.53 judging) |
+
+**The five things this experiment actually establishes.**
+
+1. **The atlas beats a browser on the questions it was built for, and loses the controls it was designed to lose.** Graph takes 5 of 6 structural questions; web takes 2 of 2 controls. That second half is the part that makes the first half believable — a judge that handed the graph arm the controls too would be measuring fluency, not grounding.
+2. **Lift over closed book is the number to quote, not graph − web.** On the structural set, groundedness runs GRAPH 8.61 / WEB 7.94 / NULL 6.11 — so graph is **+2.50** over the null arm against web's **+1.83**. Graph − web is only 0.67, which is below the judge's own noise floor (next point), so it is not a result and is not reported as one.
+3. **The judge is stable on winners and noisy on scores.** 8 of 8 questions had a unanimous winner across all runs, but the median widest single-axis spread between runs is **1 pt**. Any gap at or below that is a tie whatever the mean says — which is why there is no win rate anywhere in this file.
+4. **Nothing was fabricated.** Every one of the 57 paper titles the graph arm named resolves to the 152-paper corpus (57/57, `verify_named.py`), and all 9 of the judge's `fabricated` flags were overturned on inspection — they were real corpus papers published after the judge's training cutoff (`check_fabrication.py`). The same check is not available for web or null, and that asymmetry runs *against* the graph arm.
+5. **The compactness prediction failed, and the efficiency one held.** The graph arm pulls 24,533 payload chars per answer against web's 14,314 — it reads *more*, not less. It is still the cheaper arm and names the most papers (7.1 per answer against web's 5.5). Why the prediction failed, and what it means for the claim that Prior is a compact representation, is worked through in [ARMS.md §6](ARMS.md#6-why-the-compactness-prediction-failed).
+
+> **Read this before quoting anything.** Six questions is a pilot, not a study. Three of the design decisions here — the tool surface twice, the judge rubric once — were made *after* seeing results. Each is defended in place and each keeps the old numbers alongside the new, but the pattern is part of the result and [PLAN.md §8](PLAN.md) says so.
 
 > ✅ Blinding gate clean — no answer reveals how it was produced.
 
@@ -148,7 +168,25 @@ The same judge, the same answers, a different presentation order. This is the no
 | c02 | web | 1 | medium |
 | c02 | null | 1 | medium |
 
-Generation total: **$7.23** (graph $1.89, web $3.58, null $1.76). Judging total: **$1.62**.
+### Costs in full
+
+Notional API-equivalent prices reported by the SDK. Nothing here was paid — every call ran on a Claude Code subscription — and **cost never supports a claim in this experiment** (PLAN §5), because it is dominated by cache-write accounting, i.e. by turn structure rather than by how much an arm read.
+
+| stage | units | total | per unit |
+|---|---|---|---|
+| generate — GRAPH (Prior atlas) | 8 answers | $1.89 | $0.236 |
+| generate — WEB (search) | 8 answers | $3.58 | $0.447 |
+| generate — NULL (closed book) | 8 answers | $1.76 | $0.220 |
+| **generation, all arms** | 24 answers | **$7.23** | $0.301 |
+| judge — `claude-opus-5`, 3-way | 24 judgements | **$4.53** | $0.189 |
+| **whole experiment** | | **$11.76** | |
+
+Wall-clock: 26 min generating, 23 min judging — one sitting, comfortably inside a 5-hour window.
+
+Two things worth noting against the budget registered in PLAN §6 (**≈$11** for 24 generations and 8 judgements):
+
+- The estimate was close on generation and *low on judging*, because judging was later tripled to measure the judge's own noise — 24 judgements, not 8. The reliability that buys is the reason to spend it; see [JUDGING.md](JUDGING.md).
+- The graph arm is the **cheapest tool-using arm** ($0.236 against web's $0.447 per answer) while pulling the *most* payload. Atlas calls are local, in-process and cached; `WebSearch`/`WebFetch` carry a server-side charge per call. Cost and payload move in opposite directions here, which is exactly why neither is allowed to stand in for the other.
 
 
 ---
@@ -207,7 +245,11 @@ For a related-work section distinguishing genuine extension from passing citatio
   
 **Call trace:** find_paper(1,361ch) → paper_neighbourhood(5,940ch) → edge_reasons(8,386ch) → citations_between(6,662ch) → citations_between(1,756ch) → citations_between(1,824ch)
 
-> *Judge:* Correct v1 author list, an explicit three-tier taxonomy (full-pipeline successors / component-level reuse / comparison-only), and accurate characterisations of v2, AI-Researcher/Scientist-Bench and AIGS's FalsificationAgent, though it omits the Agent Laboratory–CycleResearcher branch that B catches.
+> *run 0* (9/8/9): Correct v1 author list, an explicit three-tier taxonomy (full-pipeline successors / component-level reuse / comparison-only), and accurate characterisations of v2, AI-Researcher/Scientist-Bench and AIGS's FalsificationAgent, though it omits the Agent Laboratory–CycleResearcher branch that B catches.
+
+> *run 1* (9/8/9): Best-structured answer: correct v1 author list, accurate descriptions of v2, AI-Researcher/Scientist-Bench and AIGS/Baby-AIGS' FalsificationAgent, and — uniquely — a component-level reuse tier (novelty-check agent, query-based retrieval, the automated-review pipeline) plus an explicit list of mere-citers, though it omits the Agent Laboratory/CycleResearcher branch that A covers.
+
+> *run 2* (9/8/9): The most citation-context-aware answer: it separates full-pipeline successors (v2, the Nature end-to-end paper, AI-Researcher, AIGS/Baby-AIGS with its FalsificationAgent) from genuine component-level reuse (Chain-of-Ideas' novelty-check agent, the query-based literature retrieval, the automated-review pipeline in the peer-review-risk paper) and then names the passing citers, all of which matches what I know of those systems.
 
 ### WEB (search)
 
@@ -239,7 +281,11 @@ Net picture for your related-work section: cite The AI Scientist-v2 as the direc
 **Stated limits:** I could not exhaustively verify every paper that cites The AI Scientist across the whole literature (there are likely dozens of passing citations I did not individually check), so this should be treated as a well-supported list of the clearest cases rather than a complete census of every extension versus passing citation.  
 **Effort:** 8 exploration calls, 23,099 payload chars, 222,953 context, 121.6s, $0.506
 
-> *Judge:* Accurate and specific on v2, Agent Laboratory, AgentRxiv, CycleResearcher/CycleReviewer and Zochi, with sensible exclusions (AI co-scientist, Robin), marred only by a garbled v1 author list ("Lu, Hu, Lu, Clune, Ha" — Hu is a v2, not v1, author) and a slightly generous framing of Agent Laboratory as an extension rather than a parallel design.
+> *run 0* (8/8/8): Accurate and specific on v2, Agent Laboratory, AgentRxiv, CycleResearcher/CycleReviewer and Zochi, with sensible exclusions (AI co-scientist, Robin), marred only by a garbled v1 author list ("Lu, Hu, Lu, Clune, Ha" — Hu is a v2, not v1, author) and a slightly generous framing of Agent Laboratory as an extension rather than a parallel design.
+
+> *run 1* (8/8/8): Names the most prominent genuine successors (v2, Agent Laboratory, AgentRxiv, CycleResearcher, Zochi) with accurate, checkable descriptions of what each changes, plus a well-argued "adjacent lineage" contrast for AI co-scientist and Robin; only slip is a garbled author list for v1 (Hu is a v2 author, not v1).
+
+> *run 2* (8/7/8): Strong and mostly accurate lineage (v2, Agent Laboratory → AgentRxiv, CycleResearcher's policy/reward-model reworking, Zochi as partial reuse, with AI co-scientist and Robin correctly placed as adjacent), marred by a garbled author list for the original paper and a slightly loose first-author attribution for CycleResearcher.
 
 ### NULL (closed book)
 
@@ -269,11 +315,23 @@ Bottom line for your related-work section: cite The AI Scientist-v2 as the direc
 **Stated limits:** I can confidently characterize AI Scientist-v2 as a direct methodological extension and Agent Laboratory/SciAgents as parallel alternative architectures, but I cannot guarantee this list is exhaustive — there may be additional 2025–2026 papers that extend Lu et al.'s specific pipeline (e.g., closed-loop or feedback-driven variants) that I could not verify in enough detail to characterize with confidence, so I have omitted them rather than guess.  
 **Effort:** 0 exploration calls, 0 payload chars, 51,376 context, 50.3s, $0.239
 
-> *Judge:* Honest and technically accurate on v2 (progressive-widening tree search, template removal) but very thin coverage — it admits only one extension and misses CycleResearcher, AgentRxiv, AI-Researcher and AIGS, and slightly garbles the ICLR-workshop reviewer-disclosure story.
+> *run 0* (7/7/6): Honest and technically accurate on v2 (progressive-widening tree search, template removal) but very thin coverage — it admits only one extension and misses CycleResearcher, AgentRxiv, AI-Researcher and AIGS, and slightly garbles the ICLR-workshop reviewer-disclosure story.
 
-**Fabrication notes:** B lists "Hu" among The AI Scientist v1 authors (Shengran Hu is on v2, not v1) — a minor slip, not disqualifying; C's claim that the ICLR-workshop reviewer was "told it was AI-generated" is inverted/garbled (organisers consented, reviewers were blind); A's "eight times more discovery iterations" for Kosmos I cannot verify.
+> *run 1* (7/8/6): Correct and admirably conservative — v2 as the only first-order extension, with accurate descriptions of Agent Laboratory, SciAgents, Si et al. and ResearchAgent as parallel or passing — but it misses several real extensions (CycleResearcher, AgentRxiv, AI-Researcher, AIGS) and so gives the researcher much less to work with.
 
-*Judged in 54.9s for $0.347.*
+> *run 2* (7/8/5): Accurate and honest but very thin — it identifies only AI Scientist-v2 as an extension and correctly describes it (template removal, agentic tree search, ICLR workshop acceptance), yet its "not an extension" bucket does most of the work and it misses the whole Agent Laboratory/AgentRxiv, CycleResearcher, AIGS and component-reuse literature.
+
+**The three judge runs**
+
+| run | presentation order | best | margin | GRAPH | WEB | NULL |
+|---|---|---|---|---|---|---|
+| 0 | graph / web / null | **graph** | slight | 9/8/9 | 8/8/8 | 7/7/6 |
+| 1 | web / null / graph | **graph** | slight | 9/8/9 | 8/8/8 | 7/8/6 |
+| 2 | null / graph / web | **graph** | slight | 9/8/9 | 8/7/8 | 7/8/5 |
+
+**Fabrication notes:** *(run 0)* B lists "Hu" among The AI Scientist v1 authors (Shengran Hu is on v2, not v1) — a minor slip, not disqualifying; C's claim that the ICLR-workshop reviewer was "told it was AI-generated" is inverted/garbled (organisers consented, reviewers were blind); A's "eight times more discovery iterations" for Kosmos I cannot verify. · *(run 1)* none — A's "Lu, Hu, Lu, Clune, Ha" for the v1 author list is a minor slip (Hu is a v2 co-author) rather than a fabricated relationship; A's claim that Zochi repurposes The AI Scientist's reviewer module and C's "8x more discovery iterations" figure for Kosmos I could not verify but have no reason to believe false. · *(run 2)* C cites the original as "(Lu, Hu, Lu, Clune, Ha, et al., 2024)" — "Hu" is not an author (Chris Lu, Cong Lu, Robert Lange, Jakob Foerster, Jeff Clune, David Ha), and attributes CycleResearcher to "Zhu et al." where Weng is first author; both are careless rather than invented. B's claim that Kosmos reports "~8x more discovery iterations" is unverified by me. Nothing in any answer rises to outright fabrication.
+
+*Judged 3× in 171s for $0.899.*
 
 
 ---
@@ -322,7 +380,11 @@ So the honest summary: there is real, documented disagreement, not just differen
   
 **Call trace:** topic_structure(3,709ch) → search_contributions(4,643ch) → find_paper(637ch) → find_paper(301ch) → find_paper(586ch) → paper_neighbourhood(4,872ch) → paper_neighbourhood(2,940ch) → paper_neighbourhood(5,784ch) → paper_neighbourhood(3,085ch) → edge_reasons(6,745ch) → find_paper(1,115ch) → paper_neighbourhood(3,716ch)
 
-> *Judge:* Broadest and most structured map of the disagreement — Si et al. as the positive anchor, then MLRC-Bench (novelty uncorrelated with effectiveness, <10% of the human gap closed), the Gupta & Pruthi plagiarism audit (~24%), and a large-scale topic-clustering audit — plus a fair sociological point that positive results mostly come from system-builders; its main omission is the ideation-execution gap follow-up, and the NOVA title is slightly off.
+> *run 0* (8/8/8): Broadest and most structured map of the disagreement — Si et al. as the positive anchor, then MLRC-Bench (novelty uncorrelated with effectiveness, <10% of the human gap closed), the Gupta & Pruthi plagiarism audit (~24%), and a large-scale topic-clustering audit — plus a fair sociological point that positive results mostly come from system-builders; its main omission is the ideation-execution gap follow-up, and the NOVA title is slightly off.
+
+> *run 1* (9/8/9): Widest and most checkable evidence base — MLRC-Bench's <10% gap and novelty/effectiveness decorrelation, Gupta & Pruthi's ~24% plagiarism figure, large-scale topical-narrowing analysis, plus the positive-side systems papers — and it explicitly maps who disagrees with whom; it omits the authors' own ideation-execution follow-up and lightly garbles the Nova title.
+
+> *run 2* (9/8/9): The richest and most checkable map of the disagreement — MLRC-Bench's novelty/effectiveness decorrelation and <10% gap closure, the Gupta & Pruthi ~24% plagiarism figure, plus positive-side systems papers and the observation that positives come from system builders — but it omits the authors' own ideation-execution follow-up, the single most direct piece of counter-evidence, and slightly varies the NOVA title.
 
 ### WEB (search)
 
@@ -343,7 +405,11 @@ So: the "more novel per idea" result from the Si/Yang/Hashimoto human study is a
 **Stated limits:** I could not establish how these findings generalize outside NLP/CS research (the key studies are largely NLP-researcher samples), nor whether more recent, stronger models than those tested change the balance of the ideation-versus-execution results.  
 **Effort:** 4 exploration calls, 12,796 payload chars, 96,697 context, 53.0s, $0.299
 
-> *Judge:* Accurately identifies the sharpest documented disagreement — Si et al.'s own "Ideation-Execution Gap" follow-up, correctly titled and correctly summarized — and correctly reports the original paper's caveats (low inter-reviewer agreement, low diversity, unreliable LLM self-ranking) and the Nova paper's exact title, though its diversity strand rests on two works I cannot place and it omits the plagiarism/benchmark audits.
+> *run 0* (8/9/8): Accurately identifies the sharpest documented disagreement — Si et al.'s own "Ideation-Execution Gap" follow-up, correctly titled and correctly summarized — and correctly reports the original paper's caveats (low inter-reviewer agreement, low diversity, unreliable LLM self-ranking) and the Nova paper's exact title, though its diversity strand rests on two works I cannot place and it omits the plagiarism/benchmark audits.
+
+> *run 1* (8/9/8): Correctly names and characterises both the original human study and its own authors' "Ideation-Execution Gap" follow-up — the single sharpest piece of counter-evidence — plus Nova with its correct title, and states its generalisation limits honestly; slightly narrower evidence base than C.
+
+> *run 2* (8/9/8): Accurately anchors the debate on Si/Yang/Hashimoto and correctly identifies their own Ideation-Execution Gap follow-up as the sharpest counter-evidence, with correct caveats (low reviewer agreement, low diversity, poor self-evaluation), though it draws on a narrower slice of the skeptical literature than B.
 
 ### NULL (closed book)
 
@@ -366,11 +432,23 @@ So the honest summary: one well-designed, well-cited study (Si, Yang, Hashimoto)
 **Stated limits:** I recall a follow-up study by the same research group examining execution of the AI-generated ideas (the gap between ideation-stage novelty and executed-research quality) with confidence in its substance and direction, but I am not fully certain of its exact published title, so I described it descriptively rather than citing it as a formal title; I also cannot point to a specific named paper for the homogenization/diversity claim in this exact context, so that point should be read as a general concern raised in the literature rather than a single citable finding.  
 **Effort:** 0 exploration calls, 0 payload chars, 122,193 context, 87.8s, $0.248
 
-> *Judge:* Correct in substance about Si et al., the execution follow-up and the AI Scientist reception, and commendably honest about which claims it cannot cite by title, but it names only two papers and leaves the two most load-bearing counter-strands (execution gap, homogenization) uncited.
+> *run 0* (6/8/6): Correct in substance about Si et al., the execution follow-up and the AI Scientist reception, and commendably honest about which claims it cannot cite by title, but it names only two papers and leaves the two most load-bearing counter-strands (execution gap, homogenization) uncited.
 
-**Fabrication notes:** none — no claim in any answer contradicts what I know; A's NOVA title is a loose variant rather than a garbled misattribution, and unplaceable 2026-dated titles were flagged as unrecognised, not false.
+> *run 1* (6/8/6): Accurate on Si/Yang/Hashimoto and the AI Scientist (authors correctly listed), and commendably honest about not recalling the follow-up's title or a citation for the homogenization point, but it rests on only two named papers and paraphrases the rest, so it is the least grounded of the three.
 
-*Judged in 54.9s for $0.175.*
+> *run 2* (6/8/6): Substantively correct on Si et al. and on the AI Scientist's reception (author list and criticisms are right), and honest about its uncertainty, but it cites only two named papers and describes the ideation-execution follow-up without naming it despite that title being well established.
+
+**The three judge runs**
+
+| run | presentation order | best | margin | GRAPH | WEB | NULL |
+|---|---|---|---|---|---|---|
+| 0 | graph / null / web | **graph** | slight | 8/8/8 | 8/9/8 | 6/8/6 |
+| 1 | null / web / graph | **graph** | slight | 9/8/9 | 8/9/8 | 6/8/6 |
+| 2 | web / graph / null | **graph** | slight | 9/8/9 | 8/9/8 | 6/8/6 |
+
+**Fabrication notes:** *(run 0)* none — no claim in any answer contradicts what I know; A's NOVA title is a loose variant rather than a garbled misattribution, and unplaceable 2026-dated titles were flagged as unrecognised, not false. · *(run 1)* none · *(run 2)* none — B's "NOVA: An Iterative Planning Framework..." is a title variant of the Nova ideation paper rather than a garbling, and no answer misattributes a finding I can check.
+
+*Judged 3× in 140s for $0.488.*
 
 
 ---
@@ -417,7 +495,11 @@ Yes — this is actively and explicitly contested, not a settled question, and t
   
 **Call trace:** topic_structure(4,313ch) → search_contributions(4,934ch) → find_paper(312ch) → find_paper(317ch) → paper_neighbourhood(5,940ch) → paper_neighbourhood(5,341ch) → paper_neighbourhood(3,763ch) → paper_neighbourhood(4,618ch) → paper_neighbourhood(4,098ch) → edge_reasons(11,642ch) → edge_reasons(2,298ch)
 
-> *Judge:* Best-structured account of the fault line: correctly distinguishes the original paper's self-reviewer evidence from v2's single real workshop acceptance, correctly states Kosmos's 79.4% expert-verified figure, and cites three specific critique papers with checkable findings (e.g. the 82% vs 55% trace-vs-paper audit gap), several of which are too recent for me to place.
+> *run 0* (9/8/9): Best-structured account of the fault line: correctly distinguishes the original paper's self-reviewer evidence from v2's single real workshop acceptance, correctly states Kosmos's 79.4% expert-verified figure, and cites three specific critique papers with checkable findings (e.g. the 82% vs 55% trace-vs-paper audit gap), several of which are too recent for me to place.
+
+> *run 1* (9/8/9): Cleanly structures the dispute as claims-side vs. independent-evaluation-side and cites three distinct critique papers with specific, checkable findings (failure to complete a research cycle, six failure modes, 82% vs 55% auditor accuracy with/without workflow traces), with correct author lists for the AI Scientist lineage and a correct rendering of Kosmos's 79.4% expert-verification figure.
+
+> *run 2* (9/8/9): Best mapping of the actual fault line: correct author lists and evidentiary status for both AI Scientist papers, the Kosmos 79.4% expert-verification figure, and three named independent critique papers whose specific contradictions (execution failure, six failure modes, trace-vs-paper auditing at 82% vs 55%) are laid out checkably.
 
 ### WEB (search)
 
@@ -442,7 +524,11 @@ Bottom line for your PI: the field has not converged. Sakana AI's own papers (an
 **Stated limits:** I can establish that the claim is genuinely contested and can point to the specific documented success (one workshop-level acceptance) versus the specific documented failure modes (majority hallucination/error rates in independent audits); I cannot establish a settled consensus figure for how often such systems succeed versus fail across the field as a whole, since results are drawn from a small number of case studies and evaluations rather than a large systematic benchmark.  
 **Effort:** 5 exploration calls, 13,875 payload chars, 243,367 context, 119.1s, $0.590
 
-> *Judge:* Accurately anchors the dispute on the Sakana AI Scientist / v2 line (including the correct ICBINB workshop detail and ~6.33 average score) and pairs it with the real Beel-style ARI evaluation, though the "Nature" attribution for the end-to-end-automation piece and the "4 of 7 hallucinated" tally are the least verifiable elements.
+> *run 0* (8/8/8): Accurately anchors the dispute on the Sakana AI Scientist / v2 line (including the correct ICBINB workshop detail and ~6.33 average score) and pairs it with the real Beel-style ARI evaluation, though the "Nature" attribution for the end-to-end-automation piece and the "4 of 7 hallucinated" tally are the least verifiable elements.
+
+> *run 1* (9/8/9): Nails the precise factual core of the dispute (three submissions to the ICLR 2025 ICBINB workshop, one scoring 6/7/6 = 6.33) and correctly summarises the Beel et al. ARI evaluation including its "unmotivated undergraduate" verdict and placeholder-text findings; slightly weaker in that it attributes a "Towards end-to-end automation of AI research" piece to Nature (which I cannot confirm) and omits that the accepted workshop paper was withdrawn before publication.
+
+> *run 2* (8/8/8): Precise and correct on the documented success (three ICBINB submissions, one averaging 6.33) and names a real independent evaluation (the Beel-group ARI critique) with concrete failure modes, though the "Nature" venue attribution for the end-to-end automation piece and the "4 of 7" audit tally are the shakiest links.
 
 ### NULL (closed book)
 
@@ -470,11 +556,23 @@ Yes — this is actively contested, and the disagreement runs right through the 
 **Stated limits:** I could not verify the precise current status (e.g., exact acceptance outcome, any later retraction or disclosure dispute) of the AI Scientist-v2 workshop submission, nor find a single authoritative peer-reviewed rebuttal paper devoting itself specifically to critiquing the original AI Scientist paper's quality claims — much of that pushback exists as independent scrutiny/commentary rather than a formal counter-paper, and I could not enumerate it further with confidence.  
 **Effort:** 0 exploration calls, 0 payload chars, 62,866 context, 84.0s, $0.204
 
-> *Judge:* Appropriately cautious and adds a genuinely useful axis (Coscientist, Virtual Lab as domain-validated but human-scoped counterpoints), but its critique side is largely unattributed "independent scrutiny", it credits the self-reported timeout-bypass incident to external critics, and it implies data-to-paper (Ifargan/Kishony, preprinted before The AI Scientist) was built in response to Sakana.
+> *run 0* (7/7/8): Appropriately cautious and adds a genuinely useful axis (Coscientist, Virtual Lab as domain-validated but human-scoped counterpoints), but its critique side is largely unattributed "independent scrutiny", it credits the self-reported timeout-bypass incident to external critics, and it implies data-to-paper (Ifargan/Kishony, preprinted before The AI Scientist) was built in response to Sakana.
 
-**Fabrication notes:** Nothing clearly fabricated. Two soft errors worth noting: (1) Answer C's chronology — data-to-paper (Ifargan et al.) predates The AI Scientist, so it cannot have been motivated by it, and it attributes the self-modifying-timeout incident to independent scrutiny when Sakana reported it themselves; it also cites the Virtual Lab as "Zou et al." when Swanson is first author (Zou senior). (2) Answer A's claim that Sakana published "Towards end-to-end automation of AI research" in Nature is a specific venue claim I cannot confirm.
+> *run 1* (7/8/7): Correct and well-attributed on everything I can check (Si/Yang/Hashimoto, Ifargan et al.'s data-to-paper, Boiko et al.'s Coscientist, the Nature Virtual Lab nanobody paper) and usefully widens the frame to wet-lab validation, but the actual contestation is carried by unsourced "independent scrutiny" rather than named critique papers, and it slightly misattributes the timeout-bypass incident to post-release scrutiny when Sakana reported it themselves.
 
-*Judged in 58.1s for $0.192.*
+> *run 2* (7/8/7): Accurate on the canonical papers (AI Scientist v1/v2, Si et al., data-to-paper, Coscientist, Virtual Lab) and admirably honest that it could not find a formal counter-paper, but its critique side is therefore mostly unattributed "independent scrutiny", making it the least actionable of the three for finding the contesting literature.
+
+**The three judge runs**
+
+| run | presentation order | best | margin | GRAPH | WEB | NULL |
+|---|---|---|---|---|---|---|
+| 0 | web / graph / null | **graph** | slight | 9/8/9 | 8/8/8 | 7/7/8 |
+| 1 | graph / null / web | **graph** | slight | 9/8/9 | 9/8/9 | 7/8/7 |
+| 2 | null / web / graph | **graph** | slight | 9/8/9 | 8/8/8 | 7/8/7 |
+
+**Fabrication notes:** *(run 0)* Nothing clearly fabricated. Two soft errors worth noting: (1) Answer C's chronology — data-to-paper (Ifargan et al.) predates The AI Scientist, so it cannot have been motivated by it, and it attributes the self-modifying-timeout incident to independent scrutiny when Sakana reported it themselves; it also cites the Virtual Lab as "Zou et al." when Swanson is first author (Zou senior). (2) Answer A's claim that Sakana published "Towards end-to-end automation of AI research" in Nature is a specific venue claim I cannot confirm. · *(run 1)* Nothing I affirmatively believe is false. Two soft doubts: C's assertion that "Towards end-to-end automation of AI research" is a Nature piece by Sakana is unconfirmed and possibly a venue error, and B implies the self-modifying-timeout incident was found by post-release independent scrutiny when it was in fact disclosed in the AI Scientist paper itself. Several titles in A and C postdate what I can verify and are flagged as unrecognised, not fabricated. · *(run 2)* none — the only wobbles are A citing the Virtual Lab nanobody paper as "Zou et al." (Swanson is first author, Zou senior) and B asserting a Nature venue for "Towards end-to-end automation of AI research", neither of which I can call affirmatively false.
+
+*Judged 3× in 167s for $0.560.*
 
 
 ---
@@ -519,7 +617,11 @@ Overall, the pattern is: HypoGeniC's algorithm and released artifacts (code, dat
   
 **Call trace:** find_paper(1,467ch) → paper_neighbourhood(3,801ch) → edge_reasons(7,895ch) → citations_between(1,869ch)
 
-> *Judge:* Gets the authors, algorithm and the HypoRefine/Literature-Meets-Data lineage right, distinguishes reuse from mere contrast (KG-grounded work) from parallel corroboration (DN-Hypo-Pipeline), though it misses HypoEval and HypotheSAEs and leans on one paper I cannot place.
+> *run 0* (8/8/8): Gets the authors, algorithm and the HypoRefine/Literature-Meets-Data lineage right, distinguishes reuse from mere contrast (KG-grounded work) from parallel corroboration (DN-Hypo-Pipeline), though it misses HypoEval and HypotheSAEs and leans on one paper I cannot place.
+
+> *run 1* (8/7/7): Gets the HypoGeniC authorship and wrong-example-bank/UCB mechanics right and describes the two clearest reuse cases (Literature Meets Data/HypoRefine as the data-driven backbone, HypoBench as benchmark harness) precisely, though it pads the list with a corroborating-only pipeline and a mere-contrast paper rather than further genuine reuses.
+
+> *run 2* (8/8/8): Correct authorship and an accurate, checkable account of the two clearest downstream uses (Literature Meets Data/HypoRefine as a direct code-level extension with the right human-study numbers, HypoBench as benchmark), though it misses HypoEval and HypotheSAEs and pads with one corroborating paper it admits is not a reuse.
 
 ### WEB (search)
 
@@ -544,7 +646,11 @@ Taken together, the concrete downstream work is: (a) the authors' own extension 
 **Stated limits:** I could not fully verify the precise technical relationship (e.g., whether it is a direct extension, a mere baseline mention, or something in between) for a couple of tangentially related papers I found in the search (an ILP hypothesis-generation paper and an agentic social-science hypothesis paper) because their full text was not accessible to me, so I excluded them rather than guess; there may be additional downstream uses in venues or preprints I did not surface.  
 **Effort:** 12 exploration calls, 22,339 payload chars, 241,283 context, 106.3s, $0.852
 
-> *Judge:* Much the richest survey of genuine downstream uses (Literature Meets Data, HypoEval, HypoBench, HypotheSAEs) with precise, mostly checkable relationships, but it misattributes HypoGeniC's authorship entirely and wrongly says the original paper introduced HypoRefine.
+> *run 0* (8/5/8): Much the richest survey of genuine downstream uses (Literature Meets Data, HypoEval, HypoBench, HypotheSAEs) with precise, mostly checkable relationships, but it misattributes HypoGeniC's authorship entirely and wrongly says the original paper introduced HypoRefine.
+
+> *run 1* (8/4/8): By far the widest genuine coverage of downstream reuse (HypoEval, HypotheSAEs, HypoBench, Literature Meets Data, an error-analysis application), but it opens with a garbled author list for the very paper in question and wrongly claims the original HypoGeniC paper introduced HypoRefine, which was introduced in Literature Meets Data.
+
+> *run 2* (8/5/7): The broadest and most actionable survey of concrete reuse (HypoEval, math error-analysis, HypotheSAEs, HypoBench with plausible numbers), but it misattributes the original paper's authorship (it is Zhou, Liu, Srivastava, Mei & Tan, not "Zhu, Sudhir, Zhu, Si") and wrongly claims the original HypoGeniC paper introduced HypoRefine, which was introduced in Literature Meets Data.
 
 ### NULL (closed book)
 
@@ -561,11 +667,23 @@ So: the one clear "built on it" case I can vouch for is HypoBench. Other papers 
 **Stated limits:** I could not establish with confidence which, if any, independent (non-same-lab) research groups have directly reused or extended HypoGeniC's specific algorithm (as opposed to citing it as related prior work or a baseline) — my recall here is limited and I did not want to name papers I'm not sure about.  
 **Effort:** 0 exploration calls, 0 payload chars, 119,814 context, 72.2s, $0.215
 
-> *Judge:* Honest and essentially error-free, but it surfaces only HypoBench and explicitly declines to name the other obvious direct extensions (Literature Meets Data / HypoRefine, HypoEval), so there is little the researcher can act on.
+> *run 0* (5/8/4): Honest and essentially error-free, but it surfaces only HypoBench and explicitly declines to name the other obvious direct extensions (Literature Meets Data / HypoRefine, HypoEval), so there is little the researcher can act on.
 
-**Fabrication notes:** Answer A attributes HypoGeniC to "Zhu, Sudhir, Zhu, Si et al." — the paper is by Yangqiaoyu Zhou, Haokun Liu, Tejes Srivastava, Hongyuan Mei and Chenhao Tan (Chicago Human+AI Lab); A also states that HypoRefine was introduced in the original HypoGeniC paper, whereas HypoRefine is introduced in the follow-up "Literature Meets Data" paper (Answer C states this correctly).
+> *run 1* (6/8/4): Correct and admirably honest about its limits, but it surfaces only HypoBench and explicitly declines to name the other genuine downstream lineages (Literature Meets Data, HypoEval, HypotheSAEs), so it is accurate yet thin.
 
-*Judged in 71.1s for $0.196.*
+> *run 2* (5/8/4): Honest and free of false claims, correctly describing HypoBench's relationship and its same-lab lineage, but it surfaces only one downstream work and misses the more direct extension (Literature Meets Data/HypoRefine) and other concrete reuses, so it under-answers the question.
+
+**The three judge runs**
+
+| run | presentation order | best | margin | GRAPH | WEB | NULL |
+|---|---|---|---|---|---|---|
+| 0 | web / null / graph | **graph** | slight | 8/8/8 | 8/5/8 | 5/8/4 |
+| 1 | null / graph / web | **graph** | slight | 8/7/7 | 8/4/8 | 6/8/4 |
+| 2 | graph / web / null | **graph** | slight | 8/8/8 | 8/5/7 | 5/8/4 |
+
+**Fabrication notes:** *(run 0)* Answer A attributes HypoGeniC to "Zhu, Sudhir, Zhu, Si et al." — the paper is by Yangqiaoyu Zhou, Haokun Liu, Tejes Srivastava, Hongyuan Mei and Chenhao Tan (Chicago Human+AI Lab); A also states that HypoRefine was introduced in the original HypoGeniC paper, whereas HypoRefine is introduced in the follow-up "Literature Meets Data" paper (Answer C states this correctly). · *(run 1)* Answer C attributes HypoGeniC to "Zhu, Sudhir, Zhu, Si et al." — the paper is by Yangqiaoyu Zhou, Haokun Liu, Tejes Srivastava, Hongyuan Mei and Chenhao Tan; C also states the original HypoGeniC paper already introduced HypoRefine, whereas HypoRefine was introduced in the later "Literature Meets Data" paper. · *(run 2)* Answer B gives the wrong author list for HypoGeniC (actual: Yangqiaoyu Zhou, Haokun Liu, Tejes Srivastava, Hongyuan Mei, Chenhao Tan) and incorrectly states that the original HypoGeniC paper introduced HypoRefine, which was in fact introduced in the later 'Literature Meets Data' paper.
+
+*Judged 3× in 182s for $0.546.*
 
 
 ---
@@ -612,7 +730,11 @@ Bottom line for your use case: expect LLM feedback to be useful at the level of 
   
 **Call trace:** topic_structure(3,469ch) → search_contributions(4,850ch) → topic_structure(4,597ch) → paper_neighbourhood(3,578ch) → paper_neighbourhood(3,310ch) → paper_neighbourhood(4,848ch) → paper_neighbourhood(3,470ch) → edge_reasons(3,540ch) → get_contribution(897ch)
 
-> *Judge:* Names real, specific papers (Liang et al., ReviewCritique/Du et al., Ye et al., SWIF2T by Chamoun/Schlichtkrull/Vlachos, LimitGen) with accurate mechanisms and numbers, sets up a genuine agreement/disagreement structure, and honestly flags that all of it is peer-review rather than classroom evidence.
+> *run 0* (9/9/8): Names real, specific papers (Liang et al., ReviewCritique/Du et al., Ye et al., SWIF2T by Chamoun/Schlichtkrull/Vlachos, LimitGen) with accurate mechanisms and numbers, sets up a genuine agreement/disagreement structure, and honestly flags that all of it is peer-review rather than classroom evidence.
+
+> *run 1* (9/9/8): Every claim is tied to a named, real paper with checkable specifics (Liang et al.'s overlap result, ReviewCritique's deficient-segment/genericity finding, Ye et al.'s prestige bias / 4.5x limitation-parroting / hidden-text hijack, SWIF2T's four-module planner-investigator-reviewer-controller pipeline, LimitGen's RAG improvement), and it correctly attributes each finding to the right paper while explicitly flagging that all of it concerns research manuscripts rather than classroom writing.
+
+> *run 2* (9/8/8): Densest and most accurate mapping of the evidence — Liang et al. vs. ReviewCritique (Du et al.) vs. Ye et al.'s manipulation/prestige-bias/4.5x-parroting findings, plus SWIF2T's correct four-module pipeline and LimitGen's RAG result — with an honest caveat that none of it is classroom student writing, which is the answer's one real gap relative to the question.
 
 ### WEB (search)
 
@@ -635,7 +757,11 @@ Net assessment: the evidence base (a large empirical study on research-paper fee
 **Stated limits:** I could not establish results specific to graduate-level or disciplinary research-paper drafts (as opposed to undergraduate essays/argumentation or full manuscript peer review) as a distinct category, so evidence for the exact middle ground of 'student paper drafts' in a research-methods sense is inferred by combining the peer-review study and the classroom-writing studies rather than drawn from one single paper that studies exactly that population.  
 **Effort:** 6 exploration calls, 14,021 payload chars, 125,733 context, 62.0s, $0.247
 
-> *Judge:* Best domain fit for the actual question — accurate Liang et al. statistics (57.4%, 82.4%, ~31%/39% overlap, "struggles to provide in-depth critique of method design") plus real classroom work (Meyer et al. on revision/motivation) — but one paragraph collapses into unnamed "several recent studies", and the 4-of-5-criteria result it credits to the argumentation case study is the signature finding of Steiss et al., which it never cites.
+> *run 0* (7/7/8): Best domain fit for the actual question — accurate Liang et al. statistics (57.4%, 82.4%, ~31%/39% overlap, "struggles to provide in-depth critique of method design") plus real classroom work (Meyer et al. on revision/motivation) — but one paragraph collapses into unnamed "several recent studies", and the 4-of-5-criteria result it credits to the argumentation case study is the signature finding of Steiss et al., which it never cites.
+
+> *run 1* (7/8/9): Best-targeted answer to the actual question — correctly quotes Liang et al.'s numbers (57.4%, 82.4%, ~31%/~39% overlap, "struggles to provide in-depth critique of method design") and adds genuine education-side evidence (Meyer et al.'s revision/motivation study, the automated-feedback meta-analysis, over-reliance findings) — but one whole paragraph on hallucinated feedback rests on unnamed "several recent studies... compiled under systematic reviews," which is exactly the gesturing the question should avoid.
+
+> *run 2* (7/8/7): Accurately reports Liang et al.'s actual figures (57.4%, 82.4%, ~31%/39% overlap, "struggles with in-depth critique of method design") and correctly brings in classroom-side work including the real Meyer et al. evidence-based-feedback study, but one whole paragraph on hallucination/over-reliance is unattributed gesture ("several recent studies ... systematic reviews").
 
 ### NULL (closed book)
 
@@ -658,11 +784,23 @@ One practical implication that follows from both papers: if you use an LLM for d
 **Stated limits:** I could not confirm the exact authorship, venue, and statistics of the Steiss et al. paper down to precise figures, and I don't have comprehensive coverage of the broader education-technology literature on LLM feedback for student writing beyond these two studies, so there may be additional relevant findings (positive or negative) that I'm not aware of.  
 **Effort:** 0 exploration calls, 0 payload chars, 30,136 context, 42.9s, $0.232
 
-> *Judge:* Picks the two most apt papers and frames the higher-order/lower-order split well, but misattributes the hidden-text prompt-injection "hijacked review" finding to Liang et al. (that is Ye et al., "Are We There Yet?"), and its gloss of Steiss et al. on tone (ChatGPT "more complimentary") runs against that paper's supportive-tone result.
+> *run 0* (6/4/6): Picks the two most apt papers and frames the higher-order/lower-order split well, but misattributes the hidden-text prompt-injection "hijacked review" finding to Liang et al. (that is Ye et al., "Are We There Yet?"), and its gloss of Steiss et al. on tone (ChatGPT "more complimentary") runs against that paper's supportive-tone result.
 
-**Fabrication notes:** Answer A credits the covert hidden-text review-hijacking experiment to Liang et al.'s "Can LLMs Provide Useful Feedback on Research Papers?" — that paper contains no such prompt-injection study; the finding belongs to Ye et al., "Are We There Yet?", which Answer B correctly attributes. A's claim that ChatGPT feedback was more complimentary than human feedback also sits awkwardly with Steiss et al., where humans scored higher on supportive tone. Possible (uncertain, so not flagged) attribution slip in C: the "humans better on 4 of 5 criteria, comparable only on criterion alignment" result is Steiss et al.'s headline finding.
+> *run 1* (6/4/6): Picks the single most on-target education paper (Steiss et al., Learning and Instruction, described broadly correctly), but badly misattributes to Liang et al. both the hidden-text/prompt-injection hijacking result (that is Ye et al., "Are We There Yet?") and a claim that "a majority" of GPT-4's points matched human reviewers, when the reported overlap was roughly 31–39%.
 
-*Judged in 74.5s for $0.212.*
+> *run 2* (5/3/4): Names two real and apt papers, but misattributes the hidden-text/prompt-injection hijacking result (Ye et al., "Are We There Yet?") to Liang et al. and claims a "majority" of GPT-4's points matched human reviewers when the reported overlap is roughly a third.
+
+**The three judge runs**
+
+| run | presentation order | best | margin | GRAPH | WEB | NULL |
+|---|---|---|---|---|---|---|
+| 0 | null / graph / web | **graph** | slight | 9/9/8 | 7/7/8 | 6/4/6 |
+| 1 | graph / web / null | **graph** | slight | 9/9/8 | 7/8/9 | 6/4/6 |
+| 2 | web / null / graph | **graph** | slight | 9/8/8 | 7/8/7 | 5/3/4 |
+
+**Fabrication notes:** *(run 0)* Answer A credits the covert hidden-text review-hijacking experiment to Liang et al.'s "Can LLMs Provide Useful Feedback on Research Papers?" — that paper contains no such prompt-injection study; the finding belongs to Ye et al., "Are We There Yet?", which Answer B correctly attributes. A's claim that ChatGPT feedback was more complimentary than human feedback also sits awkwardly with Steiss et al., where humans scored higher on supportive tone. Possible (uncertain, so not flagged) attribution slip in C: the "humans better on 4 of 5 criteria, comparable only on criterion alignment" result is Steiss et al.'s headline finding. · *(run 1)* Answer C attributes the invisible-text review-hijacking finding and the "generic/templated boilerplate" critique to Liang et al.'s large-scale study; the hidden-text manipulation result comes from Ye et al., "Are We There Yet? Revealing the Risks of Utilizing Large Language Models in Scholarly Peer Review," and C's statement that "a majority of the points GPT-4 raised matched points human reviewers also raised" contradicts Liang et al.'s reported ~30.9%/39.2% overlap figures. · *(run 2)* Answer B credits Liang et al.'s large-scale GPT-4 feedback study with the hidden-text review-hijacking demonstration (that is Ye et al., "Are We There Yet?") and states a "majority" of GPT-4's comments overlapped human reviewers' when the paper reports ~31% (Nature) / ~39% (ICLR).
+
+*Judged 3× in 206s for $0.609.*
 
 
 ---
@@ -708,7 +846,11 @@ In short: AIDE originated as a benchmarked, tree-search coding agent for ML engi
   
 **Call trace:** find_paper(284ch) → paper_neighbourhood(4,099ch) → edge_reasons(8,007ch) → paper_neighbourhood(3,555ch) → paper_neighbourhood(4,618ch)
 
-> *Judge:* The richest and most operationally useful map (correct author list, Weco Kaggle benchmark, RE-Bench Triton-kernel validation, and a precise MLEvolve/AIRA critique of AIDE's branch-isolation and fixed policy), but it asserts with "high" confidence that the original AI Scientist uses AIDE-style tree search in a template-free mode — v1 used Aider plus fixed templates, and template-free tree search is precisely what v2 introduced.
+> *run 0* (8/4/7): The richest and most operationally useful map (correct author list, Weco Kaggle benchmark, RE-Bench Triton-kernel validation, and a precise MLEvolve/AIRA critique of AIDE's branch-isolation and fixed policy), but it asserts with "high" confidence that the original AI Scientist uses AIDE-style tree search in a template-free mode — v1 used Aider plus fixed templates, and template-free tree search is precisely what v2 introduced.
+
+> *run 1* (8/5/7): Richest and most specific map of descendants (MLEvolve, AIRA-2, AI Scientist-v2) and gets the "~2x medals of next-best agent" claim right, but it asserts with high confidence that the original AI Scientist used AIDE-style agentic tree search for a template-free mode — the v1 system used Aider for code edits and template-driven experiments, a classic AIDE/Aider conflation.
+
+> *run 2* (8/6/8): Broad, well-structured genealogy with correct AIDE authorship and correct AI-Scientist-v2 lineage, but it asserts the original AI Scientist used AIDE-style tree search (v1 used Aider with fixed templates; tree search was v2's headline change) and picks the Triton-kernel RE-Bench task as one where AIDE matched/beat humans, which is the task where human experts most clearly outperformed agents.
 
 ### WEB (search)
 
@@ -730,7 +872,11 @@ So: if you adopt AIDE as your backbone, you'd be building on the Weco AI tree-se
 **Stated limits:** I could confirm AIDE's origin and its use as a baseline/foundation in MLE-bench, RE-Bench, AutoMind, AutoMLGen, and AI Scientist-v2 with good source support, but I could not exhaustively verify every system that has adopted AIDE as a backbone (e.g., internal or industry deployments), nor confirm fine-grained version differences between the arXiv paper's algorithm and the current aideml codebase.  
 **Effort:** 6 exploration calls, 16,442 payload chars, 244,152 context, 99.7s, $0.430
 
-> *Judge:* Accurate provenance (arXiv 2502.13138, aideml, draft/debug/improve greedy tree search, ~51% of Kaggle humans, 4x medals over OpenHands in MLE-bench) plus a clean, checkable split between direct algorithmic extensions (AutoMind, AutoMLGen), component reuse (AI Scientist-v2) and mere baseline use (FML-bench, ML-Dev-Bench); nothing here contradicts what I know.
+> *run 0* (8/8/8): Accurate provenance (arXiv 2502.13138, aideml, draft/debug/improve greedy tree search, ~51% of Kaggle humans, 4x medals over OpenHands in MLE-bench) plus a clean, checkable split between direct algorithmic extensions (AutoMind, AutoMLGen), component reuse (AI Scientist-v2) and mere baseline use (FML-bench, ML-Dev-Bench); nothing here contradicts what I know.
+
+> *run 1* (8/8/8): Correct provenance (Weco AI, arXiv:2502.13138, aideml), accurate description of the draft/debug/improve greedy tree search and the ~51% Kaggle-percentile and MLE-bench baseline facts, plus concrete, plausibly-correct downstream extensions (AutoMind, AutoMLGen, AI Scientist-v2) with honest scoping of what it could not verify.
+
+> *run 2* (9/9/9): Most checkable and most accurate: correct arXiv id and aideml repo, correct draft/debug/improve greedy tree search, the ~51% of human Kaggle competitors figure, the o1-preview+AIDE vs OpenHands medal gap in MLE-bench, and correct characterisation of AutoMind and AI Scientist-v2 as direct descendants, with sensible scope limits.
 
 ### NULL (closed book)
 
@@ -750,11 +896,23 @@ In both cases AIDE is being used the way you're describing — as a ready-made "
 **Stated limits:** I can confirm AIDE's origin (Weco AI) and its use as a baseline scaffold in MLE-bench and in METR's AI R&D capability evaluations, but I could not verify exact author lists, publication venue/date details, or whether any papers have substantively modified AIDE's underlying search algorithm rather than just using it as an off-the-shelf harness.  
 **Effort:** 0 exploration calls, 0 payload chars, 111,033 context, 53.6s, $0.166
 
-> *Judge:* Correct and appropriately hedged on AIDE's origin (Weco AI, Jiang/Schmidt, tree search over code) and its use as a scaffold in MLE-bench and METR's RE-Bench, but it answers only half the question and wrongly implies there is essentially no derivative-paper ecosystem, when AutoMind, AIRA/AIRA-dojo, AI Scientist-v2 and others clearly qualify.
+> *run 0* (6/8/5): Correct and appropriately hedged on AIDE's origin (Weco AI, Jiang/Schmidt, tree search over code) and its use as a scaffold in MLE-bench and METR's RE-Bench, but it answers only half the question and wrongly implies there is essentially no derivative-paper ecosystem, when AutoMind, AIRA/AIRA-dojo, AI Scientist-v2 and others clearly qualify.
 
-**Fabrication notes:** Answer C claims the original AI Scientist ("Towards end-to-end automation of AI research") uses AIDE-style agentic tree search for a template-free experiment mode; the AI Scientist v1 (Lu et al., 2024) used Aider-based editing over human-written templates, and removing templates via agentic tree search was the headline change in v2 — this looks like an Aider/AIDE confusion, and the title given is also not v1's actual title.
+> *run 1* (6/8/5): Everything it says about AIDE's origin and its scaffold role in MLE-bench and METR's evaluations is accurate and honestly hedged, but it wrongly concludes there is no derivative-paper ecosystem, missing AI Scientist-v2, AutoMind and the AIRA line, so it is much less actionable.
 
-*Judged in 73.7s for $0.194.*
+> *run 2* (5/8/5): Everything it states is true (Weco AI origin, Jiang/Schmidt, AIDE as the top scaffold in MLE-bench and as a METR RE-Bench baseline) and it is honest about its limits, but it wrongly concludes there is no ecosystem of derivative work, missing the most decision-relevant cases (AI Scientist-v2, AutoMind, AIRA), leaving the researcher with little to act on.
+
+**The three judge runs**
+
+| run | presentation order | best | margin | GRAPH | WEB | NULL |
+|---|---|---|---|---|---|---|
+| 0 | null / web / graph | **web** | clear | 8/4/7 | 8/8/8 | 6/8/5 |
+| 1 | web / graph / null | **web** | clear | 8/5/7 | 8/8/8 | 6/8/5 |
+| 2 | graph / null / web | **web** | clear | 8/6/8 | 9/9/9 | 5/8/5 |
+
+**Fabrication notes:** *(run 0)* Answer C claims the original AI Scientist ("Towards end-to-end automation of AI research") uses AIDE-style agentic tree search for a template-free experiment mode; the AI Scientist v1 (Lu et al., 2024) used Aider-based editing over human-written templates, and removing templates via agentic tree search was the headline change in v2 — this looks like an Aider/AIDE confusion, and the title given is also not v1's actual title. · *(run 1)* Answer B: the original AI Scientist (Sakana, 2024) did not use AIDE-style agentic tree search — it used Aider-based code editing over human-written templates; tree search was introduced only in AI Scientist-v2. Answer B's author list adds a name ("Jacenko") I cannot verify but did not penalise. · *(run 2)* Answer A: the original AI Scientist (Lu et al., Sakana 2024) used the Aider coding assistant over human-written templates, not AIDE-style agentic tree search — that was explicitly v2's contribution; also RE-Bench's Triton/kernel-optimisation task is the one where human experts most clearly outperformed AIDE-scaffolded agents, so citing it as a case where AIDE matched or beat humans looks wrong. Neither is severe enough to call the whole answer fabricated, but both dent its correctness.
+
+*Judged 3× in 205s for $0.567.*
 
 
 ---
@@ -793,7 +951,11 @@ I'd recommend treating this as outside what I can speak to with evidence here, a
   
 **Call trace:** topic_structure(3,427ch) → find_paper(32ch) → search_contributions(4,898ch) → search_contributions(4,773ch) → find_paper(32ch)
 
-> *Judge:* An honest, accurate declination that correctly identifies the relevant method names (RFdiffusion, BindCraft, AlphaProteo, ProteinMPNN) as outside its corpus, but delivers essentially no substantive answer.
+> *run 0* (3/8/3): An honest, accurate declination that correctly identifies the relevant method names (RFdiffusion, BindCraft, AlphaProteo, ProteinMPNN) as outside its corpus, but delivers essentially no substantive answer.
+
+> *run 1* (3/8/2): An honest and accurate declaration that its corpus (agentic/LLM science systems) contains nothing on AlphaFold-based binder design, which is the right behaviour but leaves the colleague with essentially nothing actionable beyond a list of names to go look up.
+
+> *run 2* (2/7/3): An honest and accurate declaration that the topic lies outside its available corpus — it even correctly names the methods it cannot speak to — but it supplies no substantive answer.
 
 ### WEB (search)
 
@@ -822,7 +984,11 @@ In short: ColabDesign/AfDesign established the core hallucination technique; Bin
 **Stated limits:** I could not independently verify quantitative claims (e.g., exact success-rate figures, head-to-head benchmark numbers between BindCraft/FoldCraft/BoltzDesign/RFdiffusion) beyond what secondary summaries reported, nor confirm the precise publication venue/status of some of the newer preprints (e.g., BoltzDesign, FoldCraft) at this time.  
 **Effort:** 2 exploration calls, 6,433 payload chars, 106,099 context, 56.9s, $0.508
 
-> *Judge:* Broad, current and largely accurate map of the hallucination lineage — ColabDesign/AfDesign → BindCraft (Nature 2025, 10–100% success rates, correct) → AlphaDesign (Jendrusch et al.), AlphaProteo, RFdiffusion-as-non-AlphaFold-incumbent, and BoltzDesign as AF3-class inversion — with an appropriate caveat on unverified numbers; it omits the Bennett et al. AF2 initial-guess filter, which is the key AlphaFold link for the Baker-lab pipeline.
+> *run 0* (8/8/9): Broad, current and largely accurate map of the hallucination lineage — ColabDesign/AfDesign → BindCraft (Nature 2025, 10–100% success rates, correct) → AlphaDesign (Jendrusch et al.), AlphaProteo, RFdiffusion-as-non-AlphaFold-incumbent, and BoltzDesign as AF3-class inversion — with an appropriate caveat on unverified numbers; it omits the Bennett et al. AF2 initial-guess filter, which is the key AlphaFold link for the Baker-lab pipeline.
+
+> *run 1* (8/8/9): Broad, well-organised map of the AlphaFold-hallucination lineage (ColabDesign/AfDesign → BindCraft → BoltzDesign) with mostly accurate attributions including the Jendrusch AlphaDesign framework and AlphaProteo, though it omits the Bennett et al. AF2 "initial guess" filter and includes one method I cannot place.
+
+> *run 2* (8/7/9): Broadest and most current coverage — correct on the ColabDesign→BindCraft hallucination lineage, BindCraft's 10–100% success claim, RFdiffusion's AF2-filter dependence, and BoltzDesign as inversion of a Boltz-1/AF3-class model — though the AlphaDesign venue attribution is doubtful and FoldCraft is a paper I cannot place.
 
 ### NULL (closed book)
 
@@ -843,11 +1009,23 @@ In short: RFdiffusion is architecturally a RoseTTAFold derivative that leans on 
 **Stated limits:** I can describe how these specific papers relate to AlphaFold and to each other based on established knowledge of the field, but I cannot verify exact publication venues/dates or any newer 2025 follow-ups that may have since superseded them, since I did not check for the very latest releases.  
 **Effort:** 0 exploration calls, 0 payload chars, 119,676 context, 74.8s, $0.230
 
-> *Judge:* Cleanest conceptual framing — separates AlphaFold-as-generator (AfDesign/BindCraft) from AlphaFold-as-filter, and correctly credits Bennett et al. (Nat Commun 2023) with the AF2 "initial guess" filter that others miss — but it stops at 2023–2024 and misses 2025 developments (BindCraft's Nature publication, Boltz-based inversion).
+> *run 0* (8/8/8): Cleanest conceptual framing — separates AlphaFold-as-generator (AfDesign/BindCraft) from AlphaFold-as-filter, and correctly credits Bennett et al. (Nat Commun 2023) with the AF2 "initial guess" filter that others miss — but it stops at 2023–2024 and misses 2025 developments (BindCraft's Nature publication, Boltz-based inversion).
 
-**Fabrication notes:** Minor and not flagged: C lists BindCraft authors as "Pacesa, Nikolaidis, Schellhaas" — Pacesa and Schellhaas are right, but the second author is, I believe, Lennart Nickel, so "Nikolaidis" looks like a slight garble; C also asserts these 2023–2024 works "represent the current state of the art", which is stale as of 2026 (though it flags not having checked newer work).
+> *run 1* (8/9/8): Cleanly separates AlphaFold-as-generative-engine (AfDesign/BindCraft) from AlphaFold-as-filter (Bennett et al.'s initial-guess trick inside RFdiffusion/ProteinMPNN pipelines) and gets authors, venues and the RoseTTAFold-vs-AlphaFold distinction right, but stops at 2024 and misses the 2025 all-atom inversion wave.
 
-*Judged in 56.1s for $0.156.*
+> *run 2* (8/8/8): A clean, correct three-way taxonomy (AF2-as-generator via hallucination/BindCraft, AF2-as-filter via Bennett's initial-guess inside the RFdiffusion+ProteinMPNN pipeline, AlphaProteo as DeepMind's own descendant) with accurate author/venue attributions, marred only by loosely attributing the "initial-guess/recycling trick" and "physics-based refinement" to BindCraft.
+
+**The three judge runs**
+
+| run | presentation order | best | margin | GRAPH | WEB | NULL |
+|---|---|---|---|---|---|---|
+| 0 | graph / web / null | **web** | slight | 3/8/3 | 8/8/9 | 8/8/8 |
+| 1 | web / null / graph | **web** | slight | 3/8/2 | 8/8/9 | 8/9/8 |
+| 2 | null / graph / web | **web** | slight | 2/7/3 | 8/7/9 | 8/8/8 |
+
+**Fabrication notes:** *(run 0)* Minor and not flagged: C lists BindCraft authors as "Pacesa, Nikolaidis, Schellhaas" — Pacesa and Schellhaas are right, but the second author is, I believe, Lennart Nickel, so "Nikolaidis" looks like a slight garble; C also asserts these 2023–2024 works "represent the current state of the art", which is stale as of 2026 (though it flags not having checked newer work). · *(run 1)* none · *(run 2)* Nothing I affirmatively believe is false; the closest concerns are A's attribution of the AF2 "initial-guess" trick to BindCraft (it originates with Bennett et al., which A itself credits correctly elsewhere) and C's assignment of AlphaDesign to Molecular Systems Biology 2025 when I know it as a 2021 bioRxiv preprint by Jendrusch et al. — plausible late publication, so not scored as fabrication.
+
+*Judged 3× in 139s for $0.433.*
 
 
 ---
@@ -884,7 +1062,11 @@ The authors also recruited top ML PhDs to attempt a matched subset of PaperBench
   
 **Call trace:** find_paper(295ch) → get_paper(3,016ch)
 
-> *Judge:* Correct on the two headline numbers (Claude 3.5 Sonnet New + open-source scaffold at 21.0% on the 20-paper set; 41.4% human PhD baseline on a subset) and honestly flags that it cannot pin down the subset, but it omits the matched agent score (o1 at 26.6%) that makes the human comparison apples-to-apples, and its "roughly half" framing mixes two different populations.
+> *run 0* (7/9/7): Correct on the two headline numbers (Claude 3.5 Sonnet New + open-source scaffold at 21.0% on the 20-paper set; 41.4% human PhD baseline on a subset) and honestly flags that it cannot pin down the subset, but it omits the matched agent score (o1 at 26.6%) that makes the human comparison apples-to-apples, and its "roughly half" framing mixes two different populations.
+
+> *run 1* (7/7/6): Both quoted numbers (21.0% best agent on the full 20-paper, 8,316-rubric benchmark; 41.4% human baseline) are right and the subset caveat is flagged honestly, but it compares them directly across different task sets and omits the actual matched figure (o1's 26.6% on the same 3-paper subset), which is precisely what the question asks for.
+
+> *run 2* (8/9/7): Everything it asserts is accurate (20 ICML 2024 Spotlight/Oral papers, 8,316 gradable tasks, Claude 3.5 Sonnet New at 21.0%, human baseline 41.4% on a subset) and it honestly flags that it could not pin down the subset, though it stops short of the matched agent score (26.6%) and its "roughly half" framing compares full-benchmark to subset numbers.
 
 ### WEB (search)
 
@@ -905,7 +1087,11 @@ In short: best agent overall = Claude 3.5 Sonnet (New) with custom scaffolding a
 **Stated limits:** I could not independently verify every figure against the original paper's results tables (some numbers, e.g. the 26.6%/41.4% subset comparison, are drawn from secondary summaries rather than a direct read of the primary results section), so exact decimal precision should be double-checked against the paper itself before citing in a publication.  
 **Effort:** 3 exploration calls, 5,507 payload chars, 87,656 context, 33.4s, $0.147
 
-> *Judge:* The only answer that actually answers all three parts of the question with the right specifics (21.0% best agent on the full 20-paper set; 3-paper matched subset; o1 26.6% vs 41.4% human PhD baseline at 48h, best-of-3), correctly credits Starace et al., but mischaracterises PaperBench Code-Dev as a "three-paper subset" (it is a cheaper code-only grading variant, with o1 at 43.4%) and wrongly suggests some human participants were authors of the replicated papers.
+> *run 0* (8/7/9): The only answer that actually answers all three parts of the question with the right specifics (21.0% best agent on the full 20-paper set; 3-paper matched subset; o1 26.6% vs 41.4% human PhD baseline at 48h, best-of-3), correctly credits Starace et al., but mischaracterises PaperBench Code-Dev as a "three-paper subset" (it is a cheaper code-only grading variant, with o1 at 43.4%) and wrongly suggests some human participants were authors of the replicated papers.
+
+> *run 1* (9/8/9): Correct first author, correct 21.0% full-benchmark best agent, and correctly identifies the actual matched comparison (o1 26.6% vs human PhD 41.4% on the 3-paper subset after 48h), marred only by mislabelling PaperBench Code-Dev as a "three-paper subset" (it is a cheaper grading variant over the full set, on which o1 scored 43.4%) and by claiming the human replicators were authors of the original papers (it was the rubrics that were author-co-developed).
+
+> *run 2* (8/6/8): Gets the key numbers right (Claude 3.5 Sonnet New 21.0% on the full 20 papers, o1 lower, human PhDs 41.4% vs o1 26.6% on the matched subset, 43.4% Code-Dev), but wrongly describes PaperBench Code-Dev as a three-paper subset that checks whether code runs, when it is a cheaper full-benchmark variant grading only code-development rubric nodes without execution.
 
 ### NULL (closed book)
 
@@ -924,8 +1110,20 @@ I am confident in the qualitative story and the identity of the winning model (C
 **Stated limits:** I could not confirm the exact numeric scores for the human-PhD-vs-agent time-matched subset comparison to the decimal point; the qualitative ordering (best agent about 21% on the full 20-paper benchmark, humans decisively ahead of agents by 48 hours on the matched subset) is what I can state with more confidence than the precise percentages.  
 **Effort:** 0 exploration calls, 0 payload chars, 172,472 context, 69.7s, $0.228
 
-> *Judge:* Gets the 21.0% figure and the correct qualitative story (agents ahead early / humans surpass by 48h) but refuses to commit to the subset size or the matched agent score, gives only vague ranges ("low-to-mid 40s", "20s-30s"), attributes the paper to "Kirchner et al." rather than Starace et al., and its closing claim that the full-benchmark gap "looks smaller" is confused.
+> *run 0* (6/6/5): Gets the 21.0% figure and the correct qualitative story (agents ahead early / humans surpass by 48h) but refuses to commit to the subset size or the matched agent score, gives only vague ranges ("low-to-mid 40s", "20s-30s"), attributes the paper to "Kirchner et al." rather than Starace et al., and its closing claim that the full-benchmark gap "looks smaller" is confused.
 
-**Fabrication notes:** Two mild misstatements in C: PaperBench Code-Dev is a reduced-grading variant (code development only, no execution), not a "lighter three-paper subset", and the 43.4% o1 figure belongs to that variant rather than a 3-paper set; also the human-baseline participants were recruited ML PhDs, not authors of the replicated papers. B attributes PaperBench to "Kirchner et al." whereas the first author is Giulio Starace (Starace et al., 2025) — likely a misattribution, though I am not certain Kirchner is absent from the author list, so I did not set the fabrication flag.
+> *run 1* (6/7/6): Gets the headline right (Claude 3.5 Sonnet New + open-source scaffold, ~21% on the full 20-paper set) and the correct qualitative human story (agents ahead early, PhDs overtake by 48h, humans low-40s vs agent 20s-30s on the matched subset), but stays in ranges, never identifies the subset as 3 papers, and attributes the paper to "Kirchner et al." rather than Starace et al.
 
-*Judged in 59.8s for $0.144.*
+> *run 2* (5/4/5): The qualitative story (agents ahead early, humans overtaking by 48h; 21% best agent) is right and its uncertainty is honestly flagged, but it attributes the paper to "Kirchner et al." rather than Starace et al., gives only vague ranges, and its closing claim that the full-benchmark gap "looks smaller" is muddled.
+
+**The three judge runs**
+
+| run | presentation order | best | margin | GRAPH | WEB | NULL |
+|---|---|---|---|---|---|---|
+| 0 | graph / null / web | **web** | clear | 7/9/7 | 8/7/9 | 6/6/5 |
+| 1 | null / web / graph | **web** | clear | 7/7/6 | 9/8/9 | 6/7/6 |
+| 2 | web / graph / null | **web** | slight | 8/9/7 | 8/6/8 | 5/4/5 |
+
+**Fabrication notes:** *(run 0)* Two mild misstatements in C: PaperBench Code-Dev is a reduced-grading variant (code development only, no execution), not a "lighter three-paper subset", and the 43.4% o1 figure belongs to that variant rather than a 3-paper set; also the human-baseline participants were recruited ML PhDs, not authors of the replicated papers. B attributes PaperBench to "Kirchner et al." whereas the first author is Giulio Starace (Starace et al., 2025) — likely a misattribution, though I am not certain Kirchner is absent from the author list, so I did not set the fabrication flag. · *(run 1)* Nothing rises to fabrication, but three secondary claims look wrong: A attributes PaperBench to "Kirchner et al." (it is Starace, Jaffe, Sherburn, Aung, Chan et al., OpenAI); B calls PaperBench Code-Dev a "three-paper subset" when it is a code-only grading variant applied across the benchmark (o1's 43.4% is on Code-Dev, and the 3-paper subset is the separate human-comparison set); B also says several human replicators were authors of the papers they replicated, whereas it was the rubrics that were co-developed with the original authors. C's 21.0%-vs-41.4% framing compares the full benchmark against the 3-paper subset, which understates the agent side (26.6% on the matched subset). · *(run 2)* C credits PaperBench to "Kirchner et al."; the paper is by Starace, Jaffe, Sherburn, Aung, Chan, ... Patwardhan (OpenAI). A mischaracterises PaperBench Code-Dev as a three-paper subset that grades whether code runs; it is a full-benchmark, execution-free variant grading code-development rubric nodes (o1: 43.4%).
+
+*Judged 3× in 173s for $0.428.*

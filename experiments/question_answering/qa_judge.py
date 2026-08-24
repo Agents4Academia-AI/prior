@@ -208,7 +208,7 @@ async def judge_one(question: str, rendered: dict[str, str], *, model: str,
     # `allowed_tools` set, the judge could have reached WebSearch or Bash and quietly
     # looked papers up. That would make correctness scores depend on what it happened
     # to find rather than on the answers, and would not reproduce. See
-    # TOOL_SURFACE_V2.md — same bug the arms had in v1.
+    # notes/TOOL_SURFACE_V2.md — same bug the arms had in v1.
     from qa_arms import _BUILTINS
     opts = ClaudeAgentOptions(
         system_prompt=JUDGE_SYS,

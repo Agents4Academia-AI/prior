@@ -13,7 +13,7 @@ results. Two independent problems invalidate them for scoring:
 
 2. **The graph tool surface was contribution-level while every question is
    paper-level**, so the graph arm spent turns reassembling paper-level facts that
-   the atlas already holds. See ../TOOL_SURFACE_V2.md.
+   the atlas already holds. See ../notes/TOOL_SURFACE_V2.md.
 
 ## What v1 is still good for
 

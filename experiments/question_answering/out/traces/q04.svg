@@ -1,12 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1900" height="1365" viewBox="0 0 1900 1365" font-family="Arial, Helvetica, sans-serif">
 <rect x="0" y="0" width="1900" height="1365" fill="#ffffff"/>
 <defs>
-<marker id="a_builds_on" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#6ea8fe"/></marker>
-<marker id="af_builds_on" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#6ea8fe" opacity="0.55"/></marker>
-<marker id="a_mentions" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#868e96"/></marker>
-<marker id="af_mentions" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#868e96" opacity="0.55"/></marker>
-<marker id="a_refines" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#63e6be"/></marker>
-<marker id="af_refines" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#63e6be" opacity="0.55"/></marker>
+<marker id="a_builds_on" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#5b8fb0"/></marker>
+<marker id="af_builds_on" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#5b8fb0" opacity="0.55"/></marker>
+<marker id="a_mentions" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#000000"/></marker>
+<marker id="af_mentions" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#000000" opacity="0.55"/></marker>
+<marker id="a_refines" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#ca6702"/></marker>
+<marker id="af_refines" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#ca6702" opacity="0.55"/></marker>
 </defs>
 <text x="24" y="56" font-size="37.4" font-weight="700" fill="#212529">Q04 · uses-findings</text>
 <text x="24" y="84" font-size="24.8" fill="#495057">What research is actually being built on the findings from 'Hypothesis Generation with Large Language Models' (the HypoGeniC paper)? I want to know</text>
@@ -19,14 +19,14 @@
 <line x1="-1038.8" y1="278.8" x2="492.5" y2="332.3" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
 <line x1="-1038.8" y1="278.8" x2="-492.5" y2="332.3" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
 <line x1="-1038.8" y1="278.8" x2="-703.5" y2="-115.9" stroke="#dee2e6" stroke-width="1.5" stroke-dasharray="3 6"/>
-<path d="M 0.0 -21.0 Q 0.0 -343.0 0.0 -441.3" fill="none" stroke="#b197fc" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' />
-<path d="M 379.0 0.0 Q 299.4 0.0 25.0 0.0" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
-<path d="M -379.0 -0.0 Q -299.4 -0.0 -25.0 -0.0" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
-<path d="M 20.7 -3.4 Q 534.7 -88.1 689.7 -113.6" fill="none" stroke="#868e96" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
-<path d="M 377.0 0.0 Q 236.4 0.0 29.0 0.0" fill="none" stroke="#6ea8fe" stroke-width="4.2" opacity="0.95" marker-end="url(#a_builds_on)"/>
-<path d="M -377.0 -0.0 Q -236.4 -0.0 -29.0 -0.0" fill="none" stroke="#6ea8fe" stroke-width="4.2" opacity="0.95" marker-end="url(#a_builds_on)"/>
-<path d="M -0.0 227.3 Q -0.0 146.6 -0.0 23.0" fill="none" stroke="#b197fc" stroke-width="4.2" opacity="0.95" />
-<path d="M 0.0 -227.3 Q 0.0 -146.6 0.0 -29.0" fill="none" stroke="#868e96" stroke-width="4.2" opacity="0.95" marker-end="url(#a_mentions)"/>
+<path d="M 0.0 -21.0 Q 0.0 -343.0 0.0 -441.3" fill="none" stroke="#0a9396" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' />
+<path d="M 379.0 0.0 Q 299.4 0.0 25.0 0.0" fill="none" stroke="#000000" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M -379.0 -0.0 Q -299.4 -0.0 -25.0 -0.0" fill="none" stroke="#000000" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M 20.7 -3.4 Q 534.7 -88.1 689.7 -113.6" fill="none" stroke="#000000" stroke-width="1.6" opacity="0.30" stroke-dasharray='7 5' marker-end="url(#af_mentions)"/>
+<path d="M 377.0 0.0 Q 236.4 0.0 29.0 0.0" fill="none" stroke="#5b8fb0" stroke-width="4.2" opacity="0.95" marker-end="url(#a_builds_on)"/>
+<path d="M -377.0 -0.0 Q -236.4 -0.0 -29.0 -0.0" fill="none" stroke="#5b8fb0" stroke-width="4.2" opacity="0.95" marker-end="url(#a_builds_on)"/>
+<path d="M -0.0 227.3 Q -0.0 146.6 -0.0 23.0" fill="none" stroke="#0a9396" stroke-width="4.2" opacity="0.95" />
+<path d="M 0.0 -227.3 Q 0.0 -146.6 0.0 -29.0" fill="none" stroke="#000000" stroke-width="4.2" opacity="0.95" marker-end="url(#a_mentions)"/>
 <circle cx="0.0" cy="-451.3" r="7.0" fill="#adb5bd"/>
 <text x="20.0" y="-445.1" font-size="18.2" text-anchor="start" fill="#7c848c" font-weight="400">MOOSE-Chem</text>
 <circle cx="703.5" cy="-115.9" r="7.0" fill="#adb5bd"/>
@@ -92,18 +92,18 @@
 <text x="61.6" y="1183.5" font-size="20.4" fill="#495057">named in the final answer</text>
 <rect x="24.2" y="1200.6" width="37.4" height="18.7" rx="9.4" fill="#f1f3f5" stroke="#ced4da" stroke-width="1.7"/>
 <text x="79.2" y="1218.1" font-size="20.4" fill="#495057">a search the agent typed (dotted lines → what it found)</text>
-<rect x="24.2" y="1235.2" width="37.4" height="18.7" rx="9.4" fill="#fff5f5" stroke="#ff6b6b" stroke-width="1.7" stroke-dasharray='5 4'/>
+<rect x="24.2" y="1235.2" width="37.4" height="18.7" rx="9.4" fill="#fff5f5" stroke="#ae2012" stroke-width="1.7" stroke-dasharray='5 4'/>
 <text x="79.2" y="1252.7" font-size="20.4" fill="#495057">“no match” — nothing in the corpus fit it</text>
 <text x="1024" y="1046" font-size="16.5" font-weight="700" fill="#495057" letter-spacing="0.8">RELATION</text>
-<path d="M 1024.1 1071.5 L 1061.5 1071.5" stroke="#ff6b6b" stroke-width="4.2" fill="none"/>
+<path d="M 1024.1 1071.5 L 1061.5 1071.5" stroke="#ae2012" stroke-width="4.2" fill="none"/>
 <text x="1083.5" y="1079.7" font-size="20.4" fill="#495057">contradicts (symmetric)</text>
-<path d="M 1024.1 1106.1 L 1061.5 1106.1" stroke="#63e6be" stroke-width="4.2" fill="none" marker-end="url(#a_refines)"/>
+<path d="M 1024.1 1106.1 L 1061.5 1106.1" stroke="#ca6702" stroke-width="4.2" fill="none" marker-end="url(#a_refines)"/>
 <text x="1083.5" y="1114.3" font-size="20.4" fill="#495057">refines</text>
-<path d="M 1024.1 1140.7 L 1061.5 1140.7" stroke="#6ea8fe" stroke-width="4.2" fill="none" marker-end="url(#a_builds_on)"/>
+<path d="M 1024.1 1140.7 L 1061.5 1140.7" stroke="#5b8fb0" stroke-width="4.2" fill="none" marker-end="url(#a_builds_on)"/>
 <text x="1083.5" y="1148.9" font-size="20.4" fill="#495057">builds on</text>
-<path d="M 1024.1 1175.3 L 1061.5 1175.3" stroke="#b197fc" stroke-width="4.2" fill="none"/>
+<path d="M 1024.1 1175.3 L 1061.5 1175.3" stroke="#0a9396" stroke-width="4.2" fill="none"/>
 <text x="1083.5" y="1183.5" font-size="20.4" fill="#495057">supports (symmetric)</text>
-<path d="M 1024.1 1209.9 L 1061.5 1209.9" stroke="#868e96" stroke-width="4.2" fill="none" marker-end="url(#a_mentions)"/>
+<path d="M 1024.1 1209.9 L 1061.5 1209.9" stroke="#000000" stroke-width="4.2" fill="none" marker-end="url(#a_mentions)"/>
 <text x="1083.5" y="1218.1" font-size="20.4" fill="#495057">cites (citation layer)</text>
 <text x="1024.1" y="1252.7" font-size="18.3" fill="#adb5bd">contradicts and supports are recorded symmetric — no direction is claimed</text>
 <text x="1024.1" y="1284.8" font-size="18.3" fill="#adb5bd">solid = read · dashed = listed only</text>
