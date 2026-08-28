@@ -1,0 +1,210 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1900" height="1503" viewBox="0 0 1900 1503" font-family="Arial, Helvetica, sans-serif">
+<rect x="0" y="0" width="1900" height="1503" fill="#ffffff"/>
+<defs>
+<marker id="a_builds_on" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#5b8fb0"/></marker>
+<marker id="af_builds_on" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#5b8fb0" opacity="0.55"/></marker>
+<marker id="a_mentions" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#000000"/></marker>
+<marker id="af_mentions" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#000000" opacity="0.55"/></marker>
+<marker id="a_refines" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#ca6702"/></marker>
+<marker id="af_refines" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#ca6702" opacity="0.55"/></marker>
+</defs>
+<text x="28" y="64" font-size="42.5" font-weight="700" fill="#212529">Q03 · disagreement</text>
+<text x="28" y="95" font-size="28.1" fill="#495057">My PI thinks fully autonomous AI scientists already produce publishable research. Is that contested in the literature?</text>
+
+<ellipse cx="950" cy="643.8" rx="213.09" ry="132.13" fill="none" stroke="#dee2e6" stroke-width="0.84" stroke-dasharray="1.4 5.59"/>
+<ellipse cx="950" cy="643.8" rx="517.05" ry="320.61" fill="none" stroke="#dee2e6" stroke-width="0.84" stroke-dasharray="1.4 5.59"/>
+<ellipse cx="950" cy="643.8" rx="774.46" ry="480.14" fill="none" stroke="#dee2e6" stroke-width="0.84" stroke-dasharray="1.4 5.59"/>
+<path d="M 1142.88 603.11 Q 950 502.79 757.12 603.11" fill="none" stroke="#0a9396" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' />
+<path d="M 1456.99 641 Q 1392.81 623.04 1170.57 610.66" fill="none" stroke="#0a9396" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' />
+<path d="M 439.8 651.77 Q 827.17 1101.78 1350.65 1052.77" fill="none" stroke="#0a9396" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' />
+<path d="M 436.3 653.73 Q 557.04 1008.73 943.29 1121.98" fill="none" stroke="#0a9396" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' />
+<path d="M 1458.6 649.95 Q 1379.74 707 1111.49 739.02" fill="none" stroke="#5b8fb0" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_builds_on)"/>
+<path d="M 442.03 648.97 Q 595.42 736.29 1076.68 740.9" fill="none" stroke="#5b8fb0" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_builds_on)"/>
+<path d="M 1594.64 902.12 Q 1474.19 878.91 1110.58 747.06" fill="none" stroke="#5b8fb0" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_builds_on)"/>
+<path d="M 818.85 747.83 Q 950 816.06 1078.63 749.15" fill="none" stroke="#5b8fb0" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_builds_on)"/>
+<path d="M 958.04 329.97 Q 1084.44 435.61 1093.6 723.64" fill="none" stroke="#5b8fb0" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_builds_on)"/>
+<path d="M 1107.93 746.08 Q 1474.19 878.91 1594.64 902.12" fill="none" stroke="#0a9396" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' />
+<path d="M 1093.67 726.36 Q 1084.44 435.61 958.04 329.97" fill="none" stroke="#0a9396" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' />
+<path d="M 304.45 387.79 Q 480.41 493.49 1077.94 734.54" fill="none" stroke="#000000" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_mentions)"/>
+<path d="M 818.85 747.83 Q 950 816.06 1078.63 749.15" fill="none" stroke="#000000" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_mentions)"/>
+<path d="M 195.11 558.37 Q 401.14 651.77 1076.82 738.81" fill="none" stroke="#000000" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_mentions)"/>
+<path d="M 549.42 1051.79 Q 742.16 1042.64 1080.87 752.44" fill="none" stroke="#000000" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_mentions)"/>
+<path d="M 442.03 648.97 Q 595.42 736.29 1076.68 740.9" fill="none" stroke="#000000" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_mentions)"/>
+<path d="M 195.39 734.19 Q 415.96 804.38 1076.75 742.72" fill="none" stroke="#000000" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_mentions)"/>
+<path d="M 1080.31 746.01 Q 523.62 943.71 308.16 905.12" fill="none" stroke="#000000" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_mentions)"/>
+<path d="M 806.47 726.43 Q 823.39 307.53 943.57 171" fill="none" stroke="#5b8fb0" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_builds_on)"/>
+<path d="M 806.33 726.36 Q 815.56 435.61 939.79 331.72" fill="none" stroke="#5b8fb0" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_builds_on)"/>
+<path d="M 940.56 959.79 Q 855.41 918.06 809.83 755.24" fill="none" stroke="#0a9396" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' />
+<path d="M 806.33 726.36 Q 815.56 435.61 941.96 329.97" fill="none" stroke="#0a9396" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' />
+<path d="M 937.98 520.13 Q 809.48 609.82 806.33 723.57" fill="none" stroke="#000000" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_mentions)"/>
+<path d="M 441.4 649.95 Q 520.26 707 788.51 739.02" fill="none" stroke="#000000" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_mentions)"/>
+<path d="M 742.86 624.5 Q 737.89 682.18 792.63 729.65" fill="none" stroke="#000000" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_mentions)"/>
+<path d="M 944.83 1119.33 Q 852.2 1035.72 808.57 758.31" fill="none" stroke="#000000" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_mentions)"/>
+<path d="M 542.49 242.52 Q 545.01 415.47 794.94 727.41" fill="none" stroke="#000000" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_mentions)"/>
+<path d="M 806.47 726.43 Q 823.39 307.53 943.57 171" fill="none" stroke="#000000" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_mentions)"/>
+<path d="M 791.44 738.32 Q 329.76 649.95 196.86 560.96" fill="none" stroke="#000000" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_mentions)"/>
+<path d="M 819.48 735.59 Q 1419.59 493.49 1593.1 389.19" fill="none" stroke="#000000" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_mentions)"/>
+<path d="M 816.26 730.7 Q 1207.48 339.83 1349.54 241.12" fill="none" stroke="#000000" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_mentions)"/>
+<path d="M 817.03 750.62 Q 1157.84 1042.64 1347.79 1051.65" fill="none" stroke="#000000" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_mentions)"/>
+<path d="M 1705.52 728.11 Q 1536.34 610.03 967.27 514.61" fill="none" stroke="#5b8fb0" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_builds_on)"/>
+<path d="M 950 953.92 Q 950 855.77 950 526.35" fill="none" stroke="#0a9396" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' />
+<path d="M 964.61 512.86 Q 1099.12 523.55 1147.85 597.59" fill="none" stroke="#0a9396" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' />
+<path d="M 544.66 1045.5 Q 600.52 880.66 939.93 522.37" fill="none" stroke="#0a9396" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' />
+<path d="M 1705.52 728.11 Q 1536.34 610.03 967.27 514.61" fill="none" stroke="#000000" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_mentions)"/>
+<path d="M 961.19 502.16 Q 1230.9 271.39 1348.21 238.18" fill="none" stroke="#000000" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_mentions)"/>
+<path d="M 962.02 520.13 Q 1090.52 609.82 1093.67 723.57" fill="none" stroke="#000000" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_mentions)"/>
+<path d="M 964.68 510.83 Q 1521.09 478.46 1702.23 551.87" fill="none" stroke="#000000" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_mentions)"/>
+<path d="M 936.58 517.75 Q 430.29 745.52 304.73 895.9" fill="none" stroke="#000000" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_mentions)"/>
+<path d="M 542.08 1045.08 Q 535.36 896.8 735.45 621.71" fill="none" stroke="#0a9396" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' />
+<path d="M 543.05 242.45 Q 553.54 358.01 735.24 598.15" fill="none" stroke="#0a9396" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' />
+<path d="M 1350.58 236.01 Q 1128.41 252.65 754.81 599.9" fill="none" stroke="#0a9396" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' />
+<path d="M 195.18 729.44 Q 318.78 679.24 729.57 612.2" fill="none" stroke="#0a9396" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' />
+<path d="M 940.84 959.3 Q 784.87 873.66 746.35 624.37" fill="none" stroke="#0a9396" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' />
+<path d="M 1594.64 902.19 Q 1383.02 863.11 757.75 615.28" fill="none" stroke="#0a9396" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' />
+<path d="M 758.8 609.75 Q 1292.63 606.47 1454.05 641" fill="none" stroke="#000000" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_mentions)"/>
+<path d="M 757.82 604.58 Q 1365.27 370.17 1591.7 383.59" fill="none" stroke="#000000" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_mentions)"/>
+<path d="M 746.42 595.35 Q 799.55 268.1 941.96 169.18" fill="none" stroke="#000000" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_mentions)"/>
+<path d="M 730.69 603.88 Q 398.41 454.97 306.48 389.82" fill="none" stroke="#000000" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_mentions)"/>
+<path d="M 729.5 608.29 Q 322.49 564.52 198.47 556.2" fill="none" stroke="#000000" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_mentions)"/>
+<path d="M 758.66 608.22 Q 1473.7 528.59 1701.53 554.39" fill="none" stroke="#000000" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' marker-end="url(#af_mentions)"/>
+<path d="M 549.21 1050.54 Q 755.93 1004.12 1145.47 620.17" fill="none" stroke="#0a9396" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' />
+<path d="M 1704.82 729.44 Q 1581.22 679.24 1170.43 612.2" fill="none" stroke="#0a9396" stroke-width="1.12" opacity="0.30" stroke-dasharray='4.89 3.5' />
+<path d="M 444.06 639.54 Q 639.74 564.52 934.13 514.4" fill="none" stroke="#ae2012" stroke-width="2.94" opacity="0.95" />
+<path d="M 1455.31 642.05 Q 1342.75 625.34 1171.96 611.22" fill="none" stroke="#ae2012" stroke-width="2.94" opacity="0.95" />
+<path d="M 957.83 955.46 Q 1076.89 820.39 1150.29 624.92" fill="none" stroke="#ae2012" stroke-width="2.94" opacity="0.95" />
+<path d="M 444.76 642.75 Q 722.44 618.98 1139.81 610.24" fill="none" stroke="#ae2012" stroke-width="2.94" opacity="0.95" />
+<path d="M 1148.82 595.42 Q 1070.66 436.03 958.67 331.3" fill="none" stroke="#ae2012" stroke-width="2.94" opacity="0.95" />
+<circle cx="950" cy="163.66" r="4.89" fill="#adb5bd"/>
+<text x="963.98" y="151.21" font-size="14.4" text-anchor="start" fill="#7c848c" font-weight="400">AIDE: AI-Driven</text>
+<text x="963.98" y="168.55" font-size="14.4" text-anchor="start" fill="#7c848c" font-weight="400">Exploration in the</text>
+<text x="963.98" y="185.82" font-size="14.4" text-anchor="start" fill="#7c848c" font-weight="400">Space of Code</text>
+<circle cx="1357.58" cy="235.53" r="4.89" fill="#adb5bd"/>
+<text x="1371.56" y="240.42" font-size="14.4" text-anchor="start" fill="#7c848c" font-weight="400">Agent Laboratory</text>
+<circle cx="1601.49" cy="384.15" r="4.89" fill="#adb5bd"/>
+<text x="1615.47" y="380.45" font-size="14.4" text-anchor="start" fill="#7c848c" font-weight="400">Towards an AI</text>
+<text x="1615.47" y="397.72" font-size="14.4" text-anchor="start" fill="#7c848c" font-weight="400">co-scientist</text>
+<circle cx="1711.25" cy="555.5" r="4.89" fill="#adb5bd"/>
+<text x="1725.23" y="551.73" font-size="14.4" text-anchor="start" fill="#7c848c" font-weight="400">All That Glitters</text>
+<text x="1725.23" y="569.07" font-size="14.4" text-anchor="start" fill="#7c848c" font-weight="400">is Not Novel</text>
+<circle cx="1711.25" cy="732.1" r="4.89" fill="#adb5bd"/>
+<text x="1725.23" y="728.32" font-size="14.4" text-anchor="start" fill="#7c848c" font-weight="400">Jr. AI Scientist</text>
+<text x="1725.23" y="745.66" font-size="14.4" text-anchor="start" fill="#7c848c" font-weight="400">and Its Risk Report</text>
+<circle cx="1601.49" cy="903.45" r="4.89" fill="#adb5bd"/>
+<text x="1615.47" y="891" font-size="14.4" text-anchor="start" fill="#7c848c" font-weight="400">AIGS: Generating</text>
+<text x="1615.47" y="908.34" font-size="14.4" text-anchor="start" fill="#7c848c" font-weight="400">Science from</text>
+<text x="1615.47" y="925.61" font-size="14.4" text-anchor="start" fill="#7c848c" font-weight="400">AI-Powered</text>
+<circle cx="1357.58" cy="1052.07" r="4.89" fill="#adb5bd"/>
+<text x="1371.56" y="1039.7" font-size="14.4" text-anchor="start" fill="#7c848c" font-weight="400">AgentRxiv: Towards</text>
+<text x="1371.56" y="1057.04" font-size="14.4" text-anchor="start" fill="#7c848c" font-weight="400">Collaborative</text>
+<text x="1371.56" y="1074.31" font-size="14.4" text-anchor="start" fill="#7c848c" font-weight="400">Autonomous Research</text>
+<circle cx="950" cy="1123.94" r="4.89" fill="#adb5bd"/>
+<text x="963.98" y="1111.57" font-size="14.4" text-anchor="start" fill="#7c848c" font-weight="400">Orion: Towards Lab</text>
+<text x="963.98" y="1128.91" font-size="14.4" text-anchor="start" fill="#7c848c" font-weight="400">Automation with</text>
+<text x="963.98" y="1146.17" font-size="14.4" text-anchor="start" fill="#7c848c" font-weight="400">Computer-Using A…</text>
+<circle cx="542.42" cy="1052.07" r="4.89" fill="#adb5bd"/>
+<text x="528.44" y="1039.7" font-size="14.4" text-anchor="end" fill="#7c848c" font-weight="400">EXP-Bench: Can AI</text>
+<text x="528.44" y="1057.04" font-size="14.4" text-anchor="end" fill="#7c848c" font-weight="400">Conduct AI Research</text>
+<text x="528.44" y="1074.31" font-size="14.4" text-anchor="end" fill="#7c848c" font-weight="400">Experiments?</text>
+<circle cx="298.51" cy="903.45" r="4.89" fill="#adb5bd"/>
+<text x="284.53" y="891" font-size="14.4" text-anchor="end" fill="#7c848c" font-weight="400">MARG: Multi-Agent</text>
+<text x="284.53" y="908.34" font-size="14.4" text-anchor="end" fill="#7c848c" font-weight="400">Review Generation</text>
+<text x="284.53" y="925.61" font-size="14.4" text-anchor="end" fill="#7c848c" font-weight="400">for Scientific…</text>
+<circle cx="188.75" cy="732.1" r="4.89" fill="#adb5bd"/>
+<text x="174.77" y="736.99" font-size="14.4" text-anchor="end" fill="#7c848c" font-weight="400">MLR-Copilot</text>
+<circle cx="188.75" cy="555.5" r="4.89" fill="#adb5bd"/>
+<text x="174.77" y="543.13" font-size="14.4" text-anchor="end" fill="#7c848c" font-weight="400">Can LLMs Generate</text>
+<text x="174.77" y="560.4" font-size="14.4" text-anchor="end" fill="#7c848c" font-weight="400">Novel Research</text>
+<text x="174.77" y="577.74" font-size="14.4" text-anchor="end" fill="#7c848c" font-weight="400">Ideas? A Large-Sca…</text>
+<circle cx="298.51" cy="384.15" r="4.89" fill="#adb5bd"/>
+<text x="284.53" y="389.05" font-size="14.4" text-anchor="end" fill="#7c848c" font-weight="400">Chain of Ideas</text>
+<circle cx="542.42" cy="235.53" r="4.89" fill="#adb5bd"/>
+<text x="528.44" y="240.42" font-size="14.4" text-anchor="end" fill="#7c848c" font-weight="400">ResearchGym</text>
+<circle cx="950" cy="323.19" r="8.39" fill="#ffffff" stroke="#495057" stroke-width="2.1"/>
+<text x="967.48" y="307.81" font-size="17.9" text-anchor="start" fill="#495057" font-weight="400">Towards end-to-end</text>
+<text x="967.48" y="329.34" font-size="17.9" text-anchor="start" fill="#495057" font-weight="400">automation of AI</text>
+<text x="967.48" y="350.81" font-size="17.9" text-anchor="start" fill="#495057" font-weight="400">research</text>
+<circle cx="1467.05" cy="643.8" r="12.58" fill="none" stroke="#f59f00" stroke-width="2.38"/>
+<circle cx="1467.05" cy="643.8" r="8.39" fill="#ffffff" stroke="#495057" stroke-width="2.1"/>
+<text x="1484.53" y="628.42" font-size="17.9" text-anchor="start" fill="#495057" font-weight="400">AI-Researcher:</text>
+<text x="1484.53" y="649.88" font-size="17.9" text-anchor="start" fill="#495057" font-weight="400">Autonomous Scientific</text>
+<text x="1484.53" y="671.41" font-size="17.9" text-anchor="start" fill="#495057" font-weight="400">Innovation</text>
+<circle cx="950" cy="964.41" r="12.58" fill="none" stroke="#f59f00" stroke-width="2.38"/>
+<circle cx="950" cy="964.41" r="8.39" fill="#ffffff" stroke="#495057" stroke-width="2.1"/>
+<text x="932.52" y="970.49" font-size="17.9" text-anchor="end" fill="#495057" font-weight="400">OpenLens AI</text>
+<circle cx="432.95" cy="643.8" r="12.58" fill="none" stroke="#f59f00" stroke-width="2.38"/>
+<circle cx="432.95" cy="643.8" r="8.39" fill="#ffffff" stroke="#495057" stroke-width="2.1"/>
+<text x="415.47" y="628.42" font-size="17.9" text-anchor="end" fill="#495057" font-weight="400">Kosmos: An AI</text>
+<text x="415.47" y="649.88" font-size="17.9" text-anchor="end" fill="#495057" font-weight="400">Scientist for</text>
+<text x="415.47" y="671.41" font-size="17.9" text-anchor="end" fill="#495057" font-weight="400">Autonomous Discovery</text>
+<circle cx="950" cy="511.67" r="16.78" fill="none" stroke="#f59f00" stroke-width="2.38"/>
+<circle cx="950" cy="511.67" r="12.58" fill="#ffffff" stroke="#212529" stroke-width="2.66"/>
+<circle cx="950" cy="511.67" r="6.99" fill="#212529"/>
+<circle cx="931.82" cy="499.09" r="8.74" fill="#212529"/>
+<text x="931.82" y="502.58" font-size="11.19" text-anchor="middle" fill="#ffffff" font-weight="700">7</text>
+<text x="971.67" y="493.28" font-size="21.39" text-anchor="start" fill="#212529" font-weight="700">The More You</text>
+<text x="971.67" y="519.01" font-size="21.39" text-anchor="start" fill="#212529" font-weight="700">Automate, the Less</text>
+<text x="971.67" y="544.67" font-size="21.39" text-anchor="start" fill="#212529" font-weight="700">You See</text>
+<circle cx="1155.88" cy="609.89" r="16.78" fill="none" stroke="#f59f00" stroke-width="2.38"/>
+<circle cx="1155.88" cy="609.89" r="12.58" fill="#ffffff" stroke="#212529" stroke-width="2.66"/>
+<circle cx="1155.88" cy="609.89" r="6.99" fill="#212529"/>
+<circle cx="1137.71" cy="597.31" r="8.74" fill="#212529"/>
+<text x="1137.71" y="600.81" font-size="11.19" text-anchor="middle" fill="#ffffff" font-weight="700">9</text>
+<text x="1177.56" y="591.44" font-size="21.39" text-anchor="start" fill="#212529" font-weight="700">Can AI Conduct</text>
+<text x="1177.56" y="617.16" font-size="21.39" text-anchor="start" fill="#212529" font-weight="700">Autonomous Scientific</text>
+<text x="1177.56" y="642.82" font-size="21.39" text-anchor="start" fill="#212529" font-weight="700">Research? Case…</text>
+<circle cx="1094.15" cy="741.04" r="16.78" fill="none" stroke="#f59f00" stroke-width="2.38"/>
+<circle cx="1094.15" cy="741.04" r="12.58" fill="#ffffff" stroke="#212529" stroke-width="2.66"/>
+<circle cx="1094.15" cy="741.04" r="6.99" fill="#212529"/>
+<circle cx="1075.98" cy="728.46" r="8.74" fill="#212529"/>
+<text x="1075.98" y="731.96" font-size="11.19" text-anchor="middle" fill="#ffffff" font-weight="700">5</text>
+<text x="1115.83" y="748.39" font-size="21.39" text-anchor="start" fill="#212529" font-weight="700">The AI Scientist</text>
+<circle cx="805.85" cy="741.04" r="16.78" fill="none" stroke="#f59f00" stroke-width="2.38"/>
+<circle cx="805.85" cy="741.04" r="12.58" fill="#ffffff" stroke="#212529" stroke-width="2.66"/>
+<circle cx="805.85" cy="741.04" r="6.99" fill="#212529"/>
+<circle cx="824.02" cy="728.46" r="8.74" fill="#212529"/>
+<text x="824.02" y="731.96" font-size="11.19" text-anchor="middle" fill="#ffffff" font-weight="700">6</text>
+<text x="784.17" y="748.39" font-size="21.39" text-anchor="end" fill="#212529" font-weight="700">The AI Scientist-v2</text>
+<circle cx="744.12" cy="609.89" r="16.78" fill="none" stroke="#f59f00" stroke-width="2.38"/>
+<circle cx="744.12" cy="609.89" r="12.58" fill="#ffffff" stroke="#212529" stroke-width="2.66"/>
+<circle cx="744.12" cy="609.89" r="6.99" fill="#212529"/>
+<circle cx="762.29" cy="597.31" r="8.74" fill="#212529"/>
+<text x="762.29" y="600.81" font-size="11.19" text-anchor="middle" fill="#ffffff" font-weight="700">8</text>
+<text x="722.44" y="604.3" font-size="21.39" text-anchor="end" fill="#212529" font-weight="700">Why LLMs Aren't</text>
+<text x="722.44" y="630.03" font-size="21.39" text-anchor="end" fill="#212529" font-weight="700">Scientists Yet</text>
+
+<text x="28" y="1189" font-size="18.8" font-weight="700" fill="#495057" letter-spacing="0.8">WHAT IT DID, IN ORDER</text>
+<circle cx="42.5" cy="1217.4" r="15.0" fill="#adb5bd"/>
+<text x="42.5" y="1227.1" font-size="19.0" text-anchor="middle" fill="#ffffff" font-weight="700">1</text>
+<text x="65.0" y="1228.0" font-size="23.1" fill="#868e96">topic map “autonomous AI scientist generating re…”</text>
+<circle cx="693.8" cy="1217.4" r="15.0" fill="#adb5bd"/>
+<text x="693.8" y="1227.1" font-size="19.0" text-anchor="middle" fill="#ffffff" font-weight="700">2</text>
+<text x="716.2" y="1228.0" font-size="23.1" fill="#868e96">keyword search “AI scientist publishable research aut…”</text>
+<circle cx="42.5" cy="1257.9" r="15.0" fill="#adb5bd"/>
+<text x="42.5" y="1267.6" font-size="19.0" text-anchor="middle" fill="#ffffff" font-weight="700">3</text>
+<text x="65.0" y="1268.5" font-size="23.1" fill="#868e96">look up by name “Why LLMs Aren't Scientists Yet”</text>
+<circle cx="669.7" cy="1257.9" r="15.0" fill="#adb5bd"/>
+<text x="669.7" y="1267.6" font-size="19.0" text-anchor="middle" fill="#ffffff" font-weight="700">4</text>
+<text x="692.2" y="1268.5" font-size="23.1" fill="#868e96">look up by name “Can AI Conduct Autonomous Scientific…”</text>
+<circle cx="1381.1" cy="1257.9" r="15.0" fill="#212529"/>
+<text x="1381.1" y="1267.6" font-size="19.0" text-anchor="middle" fill="#ffffff" font-weight="700">5</text>
+<text x="1403.6" y="1268.5" font-size="23.1" fill="#212529">neighbourhood: The AI Scientist</text>
+<circle cx="42.5" cy="1298.3" r="15.0" fill="#212529"/>
+<text x="42.5" y="1308.0" font-size="19.0" text-anchor="middle" fill="#ffffff" font-weight="700">6</text>
+<text x="65.0" y="1309.0" font-size="23.1" fill="#212529">neighbourhood: The AI Scientist-v2</text>
+<circle cx="501.4" cy="1298.3" r="15.0" fill="#212529"/>
+<text x="501.4" y="1308.0" font-size="19.0" text-anchor="middle" fill="#ffffff" font-weight="700">7</text>
+<text x="523.9" y="1309.0" font-size="23.1" fill="#212529">neighbourhood: The More You Automate, the Le…</text>
+<circle cx="1092.5" cy="1298.3" r="15.0" fill="#212529"/>
+<text x="1092.5" y="1308.0" font-size="19.0" text-anchor="middle" fill="#ffffff" font-weight="700">8</text>
+<text x="1115.0" y="1309.0" font-size="23.1" fill="#212529">neighbourhood: Why LLMs Aren't Scientists Yet</text>
+<circle cx="42.5" cy="1338.8" r="15.0" fill="#212529"/>
+<text x="42.5" y="1348.5" font-size="19.0" text-anchor="middle" fill="#ffffff" font-weight="700">9</text>
+<text x="65.0" y="1349.4" font-size="23.1" fill="#212529">neighbourhood: Can AI Conduct Autonomous Sci…</text>
+<circle cx="633.6" cy="1338.8" r="15.0" fill="#212529"/>
+<text x="633.6" y="1348.5" font-size="19.0" text-anchor="middle" fill="#ffffff" font-weight="700">10</text>
+<text x="656.1" y="1349.4" font-size="23.1" fill="#212529">read justifications: Can AI Conduct Autonomous Sci… · contradicts</text>
+<circle cx="42.5" cy="1379.3" r="15.0" fill="#212529"/>
+<text x="42.5" y="1389.0" font-size="19.0" text-anchor="middle" fill="#ffffff" font-weight="700">11</text>
+<text x="65.0" y="1389.9" font-size="23.1" fill="#212529">read justifications: The More You Automate, the Le… · contradicts</text>
+<text x="28" y="1489" font-size="21.3" fill="#adb5bd">11 graph calls · 5 papers chosen · 4 read in depth · 14 listed · 32 typed edges · 8 papers in the answer</text>
+</svg>

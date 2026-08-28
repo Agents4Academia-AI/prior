@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" font-family="Arial, Helvetica, sans-serif">
+<rect x="0" y="0" width="1200" height="300" fill="#ffffff"/>
+<defs><marker id="m_ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.4" markerHeight="4.4" orient="auto-start-reverse"><path d="M 0 1 L 9.5 5 L 0 9 z" fill="#14181d"/></marker></defs>
+<rect x="0.0" y="50.0" width="196.0" height="150.0" rx="12" fill="#ffffff" stroke="#14181d" stroke-width="4"/>
+<text x="98.0" y="99.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="middle" font-weight="bold">arXiv</text>
+<text x="98.0" y="137.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="middle" font-weight="bold">LaTeX</text>
+<line x1="206.0" y1="125.0" x2="237.0" y2="125.0" stroke="#14181d" stroke-width="4" stroke-linecap="round" marker-end="url(#m_ink)"/>
+<rect x="251.0" y="50.0" width="196.0" height="150.0" rx="12" fill="#ffffff" stroke="#14181d" stroke-width="4"/>
+<text x="349.0" y="99.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="middle" font-weight="bold">resolve the</text>
+<text x="349.0" y="137.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="middle" font-weight="bold">reference</text>
+<line x1="457.0" y1="125.0" x2="488.0" y2="125.0" stroke="#14181d" stroke-width="4" stroke-linecap="round" marker-end="url(#m_ink)"/>
+<rect x="502.0" y="50.0" width="196.0" height="150.0" rx="12" fill="#ffffff" stroke="#14181d" stroke-width="4"/>
+<text x="600.0" y="99.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="middle" font-weight="bold">cut the</text>
+<text x="600.0" y="137.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="middle" font-weight="bold">passage</text>
+<line x1="708.0" y1="125.0" x2="739.0" y2="125.0" stroke="#14181d" stroke-width="4" stroke-linecap="round" marker-end="url(#m_ink)"/>
+<rect x="753.0" y="50.0" width="196.0" height="150.0" rx="12" fill="#ffffff" stroke="#14181d" stroke-width="4"/>
+<text x="851.0" y="99.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="middle" font-weight="bold">abstract +</text>
+<text x="851.0" y="137.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="middle" font-weight="bold">passage</text>
+<line x1="959.0" y1="125.0" x2="990.0" y2="125.0" stroke="#14181d" stroke-width="4" stroke-linecap="round" marker-end="url(#m_ink)"/>
+<rect x="1004.0" y="50.0" width="196.0" height="150.0" rx="12" fill="#eef7f7" stroke="#0a9396" stroke-width="4"/>
+<text x="1102.0" y="118.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="middle" font-weight="bold">judge</text>
+<text x="0.0" y="262.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="start">One verdict per citing passage, not per paper pair.</text>
+<text x="0.0" y="294.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#6b7686" text-anchor="start">809 passages across 525 edges.</text>
+</svg>

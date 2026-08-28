@@ -1,0 +1,167 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1900" height="1890" viewBox="0 0 1900 1890" font-family="Arial, Helvetica, sans-serif">
+<rect x="0" y="0" width="1900" height="1890" fill="#ffffff"/>
+<defs>
+<marker id="a_builds_on" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#5b8fb0"/></marker>
+<marker id="af_builds_on" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#5b8fb0" opacity="0.55"/></marker>
+<marker id="a_mentions" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#000000"/></marker>
+<marker id="af_mentions" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#000000" opacity="0.55"/></marker>
+<marker id="a_refines" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#ca6702"/></marker>
+<marker id="af_refines" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse"><path d="M 0 0.6 L 10 5 L 0 9.4 z" fill="#ca6702" opacity="0.55"/></marker>
+</defs>
+<text x="35" y="81" font-size="54.4" font-weight="700" fill="#212529">Q01 · builds-on</text>
+<text x="35" y="122" font-size="36.0" fill="#495057">I'm writing a related-work section on The AI Scientist (Lu et al.). Which later papers actually</text>
+<text x="35" y="168" font-size="36.0" fill="#495057">extend its method, as opposed to just citing it in passing?</text>
+
+<ellipse cx="1083.9" cy="652.2" rx="342.93" ry="212.61" fill="none" stroke="#dee2e6" stroke-width="0.8" stroke-dasharray="1.34 5.37"/>
+<ellipse cx="1083.9" cy="652.2" rx="643.47" ry="398.93" fill="none" stroke="#dee2e6" stroke-width="0.8" stroke-dasharray="1.34 5.37"/>
+<line x1="130.9" y1="652.2" x2="1083.9" y2="652.2" stroke="#dee2e6" stroke-width="1.01" stroke-dasharray="2.01 4.02"/>
+<line x1="130.9" y1="652.2" x2="740.97" y2="652.2" stroke="#dee2e6" stroke-width="1.01" stroke-dasharray="2.01 4.02"/>
+<path d="M 1071.29 658.44 Q 880.41 753.14 825.14 780.57" fill="none" stroke="#0a9396" stroke-width="1.07" opacity="0.30" stroke-dasharray='4.69 3.35' />
+<path d="M 1071.29 645.96 Q 880.41 551.26 825.14 523.83" fill="none" stroke="#0a9396" stroke-width="1.07" opacity="0.30" stroke-dasharray='4.69 3.35' />
+<path d="M 751.03 652.2 Q 823.27 652.2 1067.13 652.2" fill="none" stroke="#000000" stroke-width="1.07" opacity="0.30" stroke-dasharray='4.69 3.35' marker-end="url(#af_mentions)"/>
+<path d="M 447.14 652.2 Q 594.89 652.2 1067.13 652.2" fill="none" stroke="#000000" stroke-width="1.07" opacity="0.30" stroke-dasharray='4.69 3.35' marker-end="url(#af_mentions)"/>
+<path d="M 1580.29 405.92 Q 1465.73 462.73 1098.92 644.76" fill="none" stroke="#000000" stroke-width="1.07" opacity="0.30" stroke-dasharray='4.69 3.35' marker-end="url(#af_mentions)"/>
+<path d="M 1083.9 259.97 Q 1083.9 348.98 1083.9 635.43" fill="none" stroke="#000000" stroke-width="1.07" opacity="0.30" stroke-dasharray='4.69 3.35' marker-end="url(#af_mentions)"/>
+<path d="M 587.51 898.48 Q 702.07 841.67 1068.88 659.64" fill="none" stroke="#000000" stroke-width="1.07" opacity="0.30" stroke-dasharray='4.69 3.35' marker-end="url(#af_mentions)"/>
+<path d="M 1720.66 652.2 Q 1572.91 652.2 1100.67 652.2" fill="none" stroke="#000000" stroke-width="1.07" opacity="0.30" stroke-dasharray='4.69 3.35' marker-end="url(#af_mentions)"/>
+<path d="M 1580.29 898.48 Q 1465.73 841.67 1098.92 659.64" fill="none" stroke="#000000" stroke-width="1.07" opacity="0.30" stroke-dasharray='4.69 3.35' marker-end="url(#af_mentions)"/>
+<path d="M 587.51 405.92 Q 702.07 462.73 1068.88 644.76" fill="none" stroke="#000000" stroke-width="1.07" opacity="0.30" stroke-dasharray='4.69 3.35' marker-end="url(#af_mentions)"/>
+<path d="M 1083.9 854.75 Q 1083.9 813.77 1083.9 668.97" fill="none" stroke="#000000" stroke-width="1.07" opacity="0.30" stroke-dasharray='4.69 3.35' marker-end="url(#af_mentions)"/>
+<path d="M 1083.9 1044.43 Q 1083.9 955.42 1083.9 668.97" fill="none" stroke="#000000" stroke-width="1.07" opacity="0.30" stroke-dasharray='4.69 3.35' marker-end="url(#af_mentions)"/>
+<path d="M 1341.45 779.97 Q 1244.53 731.88 1101.34 660.85" fill="none" stroke="#5b8fb0" stroke-width="2.82" opacity="0.95" marker-end="url(#a_builds_on)"/>
+<path d="M 1083.9 853.41 Q 1083.9 779.77 1083.9 671.65" fill="none" stroke="#5b8fb0" stroke-width="2.82" opacity="0.95" marker-end="url(#a_builds_on)"/>
+<path d="M 826.35 779.97 Q 923.27 731.88 1066.46 660.85" fill="none" stroke="#5b8fb0" stroke-width="2.82" opacity="0.95" marker-end="url(#a_builds_on)"/>
+<path d="M 752.37 652.2 Q 878.13 652.2 1064.45 652.2" fill="none" stroke="#5b8fb0" stroke-width="2.82" opacity="0.95" marker-end="url(#a_builds_on)"/>
+<path d="M 826.35 524.43 Q 923.27 572.52 1066.46 643.55" fill="none" stroke="#5b8fb0" stroke-width="2.82" opacity="0.95" marker-end="url(#a_builds_on)"/>
+<path d="M 1083.9 450.99 Q 1083.9 524.63 1083.9 632.75" fill="none" stroke="#000000" stroke-width="2.82" opacity="0.95" marker-end="url(#a_mentions)"/>
+<path d="M 1415.43 652.2 Q 1289.67 652.2 1103.35 652.2" fill="none" stroke="#000000" stroke-width="2.82" opacity="0.95" marker-end="url(#a_mentions)"/>
+<path d="M 1341.45 524.43 Q 1244.53 572.52 1101.34 643.55" fill="none" stroke="#000000" stroke-width="2.82" opacity="0.95" marker-end="url(#a_mentions)"/>
+<circle cx="1083.9" cy="253.27" r="7.38" fill="none" stroke="#f59f00" stroke-width="1.61"/>
+<circle cx="1083.9" cy="253.27" r="4.69" fill="#adb5bd"/>
+<text x="1097.31" y="232.95" font-size="21.93" text-anchor="start" fill="#7c848c" font-weight="400">Automated</text>
+<text x="1097.31" y="259.24" font-size="21.93" text-anchor="start" fill="#7c848c" font-weight="400">Hypothesis</text>
+<text x="1097.31" y="285.6" font-size="21.93" text-anchor="start" fill="#7c848c" font-weight="400">Validation with</text>
+<circle cx="1586.25" cy="402.9" r="7.38" fill="none" stroke="#f59f00" stroke-width="1.61"/>
+<circle cx="1586.25" cy="402.9" r="4.69" fill="#adb5bd"/>
+<text x="1599.67" y="382.58" font-size="21.93" text-anchor="start" fill="#7c848c" font-weight="400">MLGym: A New</text>
+<text x="1599.67" y="408.94" font-size="21.93" text-anchor="start" fill="#7c848c" font-weight="400">Framework and</text>
+<text x="1599.67" y="435.3" font-size="21.93" text-anchor="start" fill="#7c848c" font-weight="400">Benchmark for</text>
+<circle cx="1727.37" cy="652.2" r="7.38" fill="none" stroke="#f59f00" stroke-width="1.61"/>
+<circle cx="1727.37" cy="652.2" r="4.69" fill="#adb5bd"/>
+<text x="1740.78" y="631.88" font-size="21.93" text-anchor="start" fill="#7c848c" font-weight="400">Curie: Toward</text>
+<text x="1740.78" y="658.24" font-size="21.93" text-anchor="start" fill="#7c848c" font-weight="400">Rigorous and</text>
+<text x="1740.78" y="684.59" font-size="21.93" text-anchor="start" fill="#7c848c" font-weight="400">Automated</text>
+<circle cx="1586.25" cy="901.5" r="7.38" fill="none" stroke="#f59f00" stroke-width="1.61"/>
+<circle cx="1586.25" cy="901.5" r="4.69" fill="#adb5bd"/>
+<text x="1599.67" y="881.18" font-size="21.93" text-anchor="start" fill="#7c848c" font-weight="400">EXP-Bench: Can AI</text>
+<text x="1599.67" y="907.47" font-size="21.93" text-anchor="start" fill="#7c848c" font-weight="400">Conduct AI Research</text>
+<text x="1599.67" y="933.83" font-size="21.93" text-anchor="start" fill="#7c848c" font-weight="400">Experiments?</text>
+<circle cx="1083.9" cy="1051.13" r="7.38" fill="none" stroke="#f59f00" stroke-width="1.61"/>
+<circle cx="1083.9" cy="1051.13" r="4.69" fill="#adb5bd"/>
+<text x="1070.49" y="1058.58" font-size="21.93" text-anchor="end" fill="#7c848c" font-weight="400">MLR-Copilot</text>
+<circle cx="581.55" cy="901.5" r="7.38" fill="none" stroke="#f59f00" stroke-width="1.61"/>
+<circle cx="581.55" cy="901.5" r="4.69" fill="#adb5bd"/>
+<text x="568.13" y="908.88" font-size="21.93" text-anchor="end" fill="#7c848c" font-weight="400">ScienceAgentBench</text>
+<circle cx="440.43" cy="652.2" r="7.38" fill="none" stroke="#f59f00" stroke-width="1.61"/>
+<circle cx="440.43" cy="652.2" r="4.69" fill="#adb5bd"/>
+<text x="427.02" y="631.88" font-size="21.93" text-anchor="end" fill="#7c848c" font-weight="400">Can LLMs Generate</text>
+<text x="427.02" y="658.24" font-size="21.93" text-anchor="end" fill="#7c848c" font-weight="400">Novel Research</text>
+<text x="427.02" y="684.59" font-size="21.93" text-anchor="end" fill="#7c848c" font-weight="400">Ideas? A Large-Sca…</text>
+<circle cx="581.55" cy="402.9" r="7.38" fill="none" stroke="#f59f00" stroke-width="1.61"/>
+<circle cx="581.55" cy="402.9" r="4.69" fill="#adb5bd"/>
+<text x="568.13" y="395.79" font-size="21.93" text-anchor="end" fill="#7c848c" font-weight="400">Generative</text>
+<text x="568.13" y="422.15" font-size="21.93" text-anchor="end" fill="#7c848c" font-weight="400">Adversarial Reviews</text>
+<circle cx="1083.9" cy="439.59" r="12.07" fill="none" stroke="#f59f00" stroke-width="2.28"/>
+<circle cx="1083.9" cy="439.59" r="8.05" fill="#ffffff" stroke="#495057" stroke-width="2.01"/>
+<text x="1100.67" y="448.17" font-size="25.29" text-anchor="start" fill="#495057" font-weight="400">Chain of Ideas</text>
+<circle cx="1351.64" cy="519.33" r="12.07" fill="none" stroke="#f59f00" stroke-width="2.28"/>
+<circle cx="1351.64" cy="519.33" r="8.05" fill="#ffffff" stroke="#495057" stroke-width="2.01"/>
+<text x="1368.41" y="496.46" font-size="25.29" text-anchor="start" fill="#495057" font-weight="400">Literature-Grounded</text>
+<text x="1368.41" y="526.85" font-size="25.29" text-anchor="start" fill="#495057" font-weight="400">Novelty Assessment of</text>
+<text x="1368.41" y="557.16" font-size="25.29" text-anchor="start" fill="#495057" font-weight="400">Scientifi…</text>
+<circle cx="1426.83" cy="652.2" r="12.07" fill="none" stroke="#f59f00" stroke-width="2.28"/>
+<circle cx="1426.83" cy="652.2" r="8.05" fill="#ffffff" stroke="#495057" stroke-width="2.01"/>
+<text x="1443.6" y="629.33" font-size="25.29" text-anchor="start" fill="#495057" font-weight="400">Are We There Yet?</text>
+<text x="1443.6" y="659.71" font-size="25.29" text-anchor="start" fill="#495057" font-weight="400">Revealing the Risks</text>
+<text x="1443.6" y="690.03" font-size="25.29" text-anchor="start" fill="#495057" font-weight="400">of Utilizing…</text>
+<circle cx="1351.64" cy="785.07" r="12.07" fill="none" stroke="#f59f00" stroke-width="2.28"/>
+<circle cx="1351.64" cy="785.07" r="8.05" fill="#ffffff" stroke="#495057" stroke-width="2.01"/>
+<text x="1368.41" y="762.19" font-size="25.29" text-anchor="start" fill="#495057" font-weight="400">AI-Researcher:</text>
+<text x="1368.41" y="792.51" font-size="25.29" text-anchor="start" fill="#495057" font-weight="400">Autonomous Scientific</text>
+<text x="1368.41" y="822.89" font-size="25.29" text-anchor="start" fill="#495057" font-weight="400">Innovation</text>
+<circle cx="1083.9" cy="864.81" r="12.07" fill="none" stroke="#f59f00" stroke-width="2.28"/>
+<circle cx="1083.9" cy="864.81" r="8.05" fill="#ffffff" stroke="#495057" stroke-width="2.01"/>
+<text x="1067.13" y="841.94" font-size="25.29" text-anchor="end" fill="#495057" font-weight="400">Kosmos: An AI</text>
+<text x="1067.13" y="872.26" font-size="25.29" text-anchor="end" fill="#495057" font-weight="400">Scientist for</text>
+<text x="1067.13" y="902.64" font-size="25.29" text-anchor="end" fill="#495057" font-weight="400">Autonomous Discovery</text>
+<circle cx="816.16" cy="785.07" r="12.07" fill="none" stroke="#f59f00" stroke-width="2.28"/>
+<circle cx="816.16" cy="785.07" r="8.05" fill="#ffffff" stroke="#495057" stroke-width="2.01"/>
+<text x="799.39" y="762.19" font-size="25.29" text-anchor="end" fill="#495057" font-weight="400">AIGS: Generating</text>
+<text x="799.39" y="792.51" font-size="25.29" text-anchor="end" fill="#495057" font-weight="400">Science from</text>
+<text x="799.39" y="822.89" font-size="25.29" text-anchor="end" fill="#495057" font-weight="400">AI-Powered Automated…</text>
+<circle cx="740.97" cy="652.2" r="12.07" fill="none" stroke="#f59f00" stroke-width="2.28"/>
+<circle cx="740.97" cy="652.2" r="8.05" fill="#ffffff" stroke="#495057" stroke-width="2.01"/>
+<text x="724.2" y="660.85" font-size="25.29" text-anchor="end" fill="#495057" font-weight="400">The AI Scientist-v2</text>
+<circle cx="816.16" cy="519.33" r="12.07" fill="none" stroke="#f59f00" stroke-width="2.28"/>
+<circle cx="816.16" cy="519.33" r="8.05" fill="#ffffff" stroke="#495057" stroke-width="2.01"/>
+<text x="799.39" y="496.46" font-size="25.29" text-anchor="end" fill="#495057" font-weight="400">Towards end-to-end</text>
+<text x="799.39" y="526.85" font-size="25.29" text-anchor="end" fill="#495057" font-weight="400">automation of AI</text>
+<text x="799.39" y="557.16" font-size="25.29" text-anchor="end" fill="#495057" font-weight="400">research</text>
+<circle cx="1083.9" cy="652.2" r="16.1" fill="none" stroke="#f59f00" stroke-width="2.28"/>
+<circle cx="1083.9" cy="652.2" r="12.07" fill="#ffffff" stroke="#212529" stroke-width="2.55"/>
+<circle cx="1083.9" cy="652.2" r="6.71" fill="#212529"/>
+<circle cx="1066.46" cy="640.13" r="8.38" fill="#212529"/>
+<text x="1066.46" y="643.48" font-size="10.73" text-anchor="middle" fill="#ffffff" font-weight="700">2</text>
+<text x="1104.69" y="662.19" font-size="29.44" text-anchor="start" fill="#212529" font-weight="700">The AI Scientist</text>
+<rect x="39.22" y="633.96" width="183.37" height="36.49" rx="18.24" fill="#f1f3f5" stroke="#ced4da" stroke-width="1.07"/>
+<text x="130.9" y="658.77" font-size="18.24" text-anchor="middle" fill="#495057">“The AI Scientist”</text>
+
+<text x="35" y="1111" font-size="24.0" font-weight="700" fill="#495057" letter-spacing="0.8">WHAT IT DID, IN ORDER</text>
+<circle cx="54.4" cy="1147.3" r="19.2" fill="#adb5bd"/>
+<text x="54.4" y="1159.7" font-size="24.3" text-anchor="middle" fill="#ffffff" font-weight="700">1</text>
+<text x="83.2" y="1160.9" font-size="29.6" fill="#868e96">look up by name “The AI Scientist”</text>
+<circle cx="641.7" cy="1147.3" r="19.2" fill="#212529"/>
+<text x="641.7" y="1159.7" font-size="24.3" text-anchor="middle" fill="#ffffff" font-weight="700">2</text>
+<text x="670.5" y="1160.9" font-size="29.6" fill="#212529">neighbourhood: The AI Scientist</text>
+<circle cx="54.4" cy="1199.1" r="19.2" fill="#212529"/>
+<text x="54.4" y="1211.5" font-size="24.3" text-anchor="middle" fill="#ffffff" font-weight="700">3</text>
+<text x="83.2" y="1212.7" font-size="29.6" fill="#212529">read justifications: The AI Scientist · builds_on</text>
+<circle cx="872.6" cy="1199.1" r="19.2" fill="#212529"/>
+<text x="872.6" y="1211.5" font-size="24.3" text-anchor="middle" fill="#ffffff" font-weight="700">4</text>
+<text x="901.4" y="1212.7" font-size="29.6" fill="#212529">citation detail: The AI Scientist → Chain of Ideas</text>
+<circle cx="54.4" cy="1250.9" r="19.2" fill="#212529"/>
+<text x="54.4" y="1263.3" font-size="24.3" text-anchor="middle" fill="#ffffff" font-weight="700">5</text>
+<text x="83.2" y="1264.5" font-size="29.6" fill="#212529">citation detail: The AI Scientist → Literature-Grounded Nov…</text>
+<circle cx="54.4" cy="1302.7" r="19.2" fill="#212529"/>
+<text x="54.4" y="1315.1" font-size="24.3" text-anchor="middle" fill="#ffffff" font-weight="700">6</text>
+<text x="83.2" y="1316.3" font-size="29.6" fill="#212529">citation detail: The AI Scientist → Are We There Yet? Revea…</text>
+<text x="35" y="1392" font-size="24.0" font-weight="700" fill="#495057" letter-spacing="0.8">HOW THE AGENT ENGAGED</text>
+<circle cx="56.0" cy="1428.1" r="14.4" fill="#fff" stroke="#212529" stroke-width="3.4"/><circle cx="56.0" cy="1428.1" r="7.9" fill="#212529"/>
+<text x="89.6" y="1439.9" font-size="29.6" fill="#495057">chose it — named as a call argument (n = step)</text>
+<circle cx="56.0" cy="1478.4" r="9.6" fill="#fff" stroke="#495057" stroke-width="2.8"/>
+<text x="89.6" y="1490.3" font-size="29.6" fill="#495057">read its evidence — justification pulled</text>
+<circle cx="56.0" cy="1528.7" r="5.6" fill="#adb5bd"/>
+<text x="89.6" y="1540.6" font-size="29.6" fill="#495057">listed only — delivered, not read</text>
+<circle cx="56.0" cy="1579.1" r="15.2" fill="none" stroke="#f59f00" stroke-width="3.4"/>
+<text x="89.6" y="1590.9" font-size="29.6" fill="#495057">named in the final answer</text>
+<rect x="35.2" y="1615.8" width="54.4" height="27.2" rx="13.6" fill="#f1f3f5" stroke="#ced4da" stroke-width="1.7"/>
+<text x="115.2" y="1641.2" font-size="29.6" fill="#495057">a search the agent typed (dotted lines → what it</text>
+<text x="115.2" y="1676.7" font-size="29.6" fill="#495057">found)</text>
+<rect x="35.2" y="1698.0" width="54.4" height="27.2" rx="13.6" fill="#fff5f5" stroke="#ae2012" stroke-width="1.7" stroke-dasharray='5 4'/>
+<text x="115.2" y="1723.5" font-size="29.6" fill="#495057">“no match” — nothing in the corpus fit it</text>
+<text x="1023" y="1392" font-size="24.0" font-weight="700" fill="#495057" letter-spacing="0.8">RELATION</text>
+<path d="M 1023.2 1428.1 L 1077.6 1428.1" stroke="#ae2012" stroke-width="4.2" fill="none"/>
+<text x="1109.6" y="1439.9" font-size="29.6" fill="#495057">contradicts (symmetric)</text>
+<path d="M 1023.2 1478.4 L 1077.6 1478.4" stroke="#ca6702" stroke-width="4.2" fill="none" marker-end="url(#a_refines)"/>
+<text x="1109.6" y="1490.3" font-size="29.6" fill="#495057">refines</text>
+<path d="M 1023.2 1528.7 L 1077.6 1528.7" stroke="#5b8fb0" stroke-width="4.2" fill="none" marker-end="url(#a_builds_on)"/>
+<text x="1109.6" y="1540.6" font-size="29.6" fill="#495057">builds on</text>
+<path d="M 1023.2 1579.1 L 1077.6 1579.1" stroke="#0a9396" stroke-width="4.2" fill="none"/>
+<text x="1109.6" y="1590.9" font-size="29.6" fill="#495057">supports (symmetric)</text>
+<path d="M 1023.2 1629.4 L 1077.6 1629.4" stroke="#000000" stroke-width="4.2" fill="none" marker-end="url(#a_mentions)"/>
+<text x="1109.6" y="1641.2" font-size="29.6" fill="#495057">cites (citation layer)</text>
+<text x="1023.2" y="1691.5" font-size="26.6" fill="#adb5bd">contradicts and supports are recorded symmetric — no</text>
+<text x="1023.2" y="1727.1" font-size="26.6" fill="#adb5bd">direction is claimed</text>
+<text x="1023.2" y="1773.8" font-size="26.6" fill="#adb5bd">solid = read · dashed = listed only</text>
+<text x="35" y="1872" font-size="27.2" fill="#adb5bd">6 graph calls · 1 paper chosen · 8 read in depth · 8 listed · 7 typed edges · 19 papers in the answer</text>
+</svg>

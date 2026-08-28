@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="232" viewBox="0 0 1200 232" font-family="Arial, Helvetica, sans-serif">
+<rect x="0" y="0" width="1200" height="232" fill="#ffffff"/>
+<defs><marker id="m_ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.4" markerHeight="4.4" orient="auto-start-reverse"><path d="M 0 1 L 9.5 5 L 0 9 z" fill="#9aa4b0"/></marker></defs>
+<text x="0.0" y="66.0" font-family="Arial, Helvetica, sans-serif" font-size="30" fill="#14181d" text-anchor="start" font-weight="bold">8 questions</text>
+<text x="0.0" y="106.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#6b7686" text-anchor="start">6 structural,</text>
+<text x="0.0" y="140.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#6b7686" text-anchor="start">2 controls</text>
+<line x1="240.0" y1="96.0" x2="292.0" y2="96.0" stroke="#9aa4b0" stroke-width="4" stroke-linecap="round" marker-end="url(#m_ink)"/>
+<rect x="316.0" y="22.0" width="186.0" height="148.0" rx="12" fill="#ffffff" stroke="#0a9396" stroke-width="5"/>
+<text x="409.0" y="74.0" font-family="Arial, Helvetica, sans-serif" font-size="30" fill="#0a9396" text-anchor="middle" font-weight="bold">GRAPH</text>
+<text x="409.0" y="128.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="middle">Prior atlas</text>
+<rect x="518.0" y="22.0" width="186.0" height="148.0" rx="12" fill="#ffffff" stroke="#bb3e03" stroke-width="5"/>
+<text x="611.0" y="74.0" font-family="Arial, Helvetica, sans-serif" font-size="30" fill="#bb3e03" text-anchor="middle" font-weight="bold">WEB</text>
+<text x="611.0" y="128.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="middle">web search</text>
+<rect x="720.0" y="22.0" width="186.0" height="148.0" rx="12" fill="#ffffff" stroke="#9aa4b0" stroke-width="5"/>
+<text x="813.0" y="74.0" font-family="Arial, Helvetica, sans-serif" font-size="30" fill="#9aa4b0" text-anchor="middle" font-weight="bold">NULL</text>
+<text x="813.0" y="128.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="middle">no tools</text>
+<line x1="938.0" y1="96.0" x2="990.0" y2="96.0" stroke="#9aa4b0" stroke-width="4" stroke-linecap="round" marker-end="url(#m_ink)"/>
+<text x="1200.0" y="66.0" font-family="Arial, Helvetica, sans-serif" font-size="30" fill="#14181d" text-anchor="end" font-weight="bold">blind judge</text>
+<text x="1200.0" y="106.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#6b7686" text-anchor="end">sees all three,</text>
+<text x="1200.0" y="140.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#6b7686" text-anchor="end">3 runs each</text>
+<text x="0.0" y="218.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="start">Same model, same question. Only the environment differs.</text>
+</svg>

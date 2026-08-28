@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="566" viewBox="0 0 1200 566" font-family="Arial, Helvetica, sans-serif">
+<rect x="0" y="0" width="1200" height="566" fill="#ffffff"/>
+<line x1="92.0" y1="281.2" x2="1200.0" y2="281.2" stroke="#d9dee4" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 9"/>
+<text x="74.0" y="290.2" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#9aa4b0" text-anchor="end">2</text>
+<line x1="92.0" y1="232.4" x2="1200.0" y2="232.4" stroke="#d9dee4" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 9"/>
+<text x="74.0" y="241.4" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#9aa4b0" text-anchor="end">4</text>
+<line x1="92.0" y1="183.6" x2="1200.0" y2="183.6" stroke="#d9dee4" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 9"/>
+<text x="74.0" y="192.6" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#9aa4b0" text-anchor="end">6</text>
+<line x1="92.0" y1="134.8" x2="1200.0" y2="134.8" stroke="#d9dee4" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 9"/>
+<text x="74.0" y="143.8" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#9aa4b0" text-anchor="end">8</text>
+<line x1="92.0" y1="86.0" x2="1200.0" y2="86.0" stroke="#d9dee4" stroke-width="2" stroke-linecap="round"/>
+<text x="74.0" y="95.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#9aa4b0" text-anchor="end">10</text>
+<text x="0.0" y="34.0" font-family="Arial, Helvetica, sans-serif" font-size="22" fill="#6b7686" text-anchor="start" font-weight="bold" letter-spacing="1.6">THE SIX STRUCTURAL QUESTIONS  ·  MEAN OF 3 ORDER-SWAPPED JUDGE RUNS</text>
+<rect x="138.0" y="120.2" width="62.0" height="209.8" rx="5" fill="#0a9396"/>
+<text x="169.0" y="106.2" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#0a9396" text-anchor="middle" font-weight="bold">8.6</text>
+<rect x="218.0" y="137.2" width="62.0" height="192.8" rx="5" fill="#bb3e03"/>
+<text x="249.0" y="123.2" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#bb3e03" text-anchor="middle" font-weight="bold">7.9</text>
+<rect x="298.0" y="181.2" width="62.0" height="148.8" rx="5" fill="#9aa4b0"/>
+<text x="329.0" y="167.2" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#9aa4b0" text-anchor="middle" font-weight="bold">6.1</text>
+<text x="276.7" y="376.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="middle" font-weight="bold">groundedness</text>
+<rect x="507.3" y="144.6" width="62.0" height="185.4" rx="5" fill="#0a9396"/>
+<text x="538.3" y="130.6" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#0a9396" text-anchor="middle" font-weight="bold">7.6</text>
+<rect x="587.3" y="144.6" width="62.0" height="185.4" rx="5" fill="#bb3e03"/>
+<text x="618.3" y="130.6" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#bb3e03" text-anchor="middle" font-weight="bold">7.6</text>
+<rect x="667.3" y="154.3" width="62.0" height="175.7" rx="5" fill="#9aa4b0"/>
+<text x="698.3" y="140.3" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#9aa4b0" text-anchor="middle" font-weight="bold">7.2</text>
+<text x="646.0" y="376.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="middle" font-weight="bold">correctness</text>
+<rect x="876.7" y="127.5" width="62.0" height="202.5" rx="5" fill="#0a9396"/>
+<text x="907.7" y="113.5" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#0a9396" text-anchor="middle" font-weight="bold">8.3</text>
+<rect x="956.7" y="132.4" width="62.0" height="197.6" rx="5" fill="#bb3e03"/>
+<text x="987.7" y="118.4" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#bb3e03" text-anchor="middle" font-weight="bold">8.1</text>
+<rect x="1036.7" y="193.4" width="62.0" height="136.6" rx="5" fill="#9aa4b0"/>
+<text x="1067.7" y="179.4" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#9aa4b0" text-anchor="middle" font-weight="bold">5.6</text>
+<text x="1015.3" y="376.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="middle" font-weight="bold">usefulness</text>
+<line x1="92.0" y1="330.0" x2="1200.0" y2="330.0" stroke="#14181d" stroke-width="3" stroke-linecap="round"/>
+<rect x="0.0" y="396.0" width="34.0" height="24.0" rx="5" fill="#0a9396"/>
+<text x="48.0" y="418.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="start">GRAPH</text>
+<rect x="300.0" y="396.0" width="34.0" height="24.0" rx="5" fill="#bb3e03"/>
+<text x="348.0" y="418.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="start">WEB</text>
+<rect x="600.0" y="396.0" width="34.0" height="24.0" rx="5" fill="#9aa4b0"/>
+<text x="648.0" y="418.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="start">NULL  closed book</text>
+<line x1="0.0" y1="452.0" x2="1200.0" y2="452.0" stroke="#d9dee4" stroke-width="2" stroke-linecap="round"/>
+<text x="0.0" y="508.0" font-family="Arial, Helvetica, sans-serif" font-size="64" fill="#0a9396" text-anchor="start" font-weight="bold">+2.5</text>
+<text x="150.0" y="498.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="start">the atlas gains over the closed-book arm.</text>
+<text x="150.0" y="532.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#6b7686" text-anchor="start">Web search gains +1.8.</text>
+<text x="700.0" y="508.0" font-family="Arial, Helvetica, sans-serif" font-size="64" fill="#bb3e03" text-anchor="start" font-weight="bold">2 / 2</text>
+<text x="852.0" y="498.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="start">controls lost to web,</text>
+<text x="852.0" y="532.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#6b7686" text-anchor="start">as predicted.</text>
+</svg>

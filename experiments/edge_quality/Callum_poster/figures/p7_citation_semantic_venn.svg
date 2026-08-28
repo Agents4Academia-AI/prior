@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="470" viewBox="0 0 1200 470" font-family="Arial, Helvetica, sans-serif">
+<rect x="0" y="0" width="1200" height="470" fill="#ffffff"/>
+<circle cx="400.0" cy="250.0" r="158.0" fill="#7b5fd1" opacity="0.32"/>
+<circle cx="605.0" cy="250.0" r="142.0" fill="#0a9396" opacity="0.32"/>
+<circle cx="400.0" cy="250.0" r="158.0" fill="none" stroke="#7b5fd1" stroke-width="4"/>
+<circle cx="605.0" cy="250.0" r="142.0" fill="none" stroke="#0a9396" stroke-width="4"/>
+<text x="150.0" y="66.0" font-family="Arial, Helvetica, sans-serif" font-size="30" fill="#7b5fd1" text-anchor="middle" font-weight="bold">the model's graph</text>
+<text x="890.0" y="66.0" font-family="Arial, Helvetica, sans-serif" font-size="30" fill="#0a9396" text-anchor="middle" font-weight="bold">the citation graph</text>
+<text x="334.0" y="256.0" font-family="Arial, Helvetica, sans-serif" font-size="64" fill="#14181d" text-anchor="middle" font-weight="bold">535</text>
+<text x="334.0" y="296.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#6b7686" text-anchor="middle">its own</text>
+<text x="669.0" y="256.0" font-family="Arial, Helvetica, sans-serif" font-size="64" fill="#14181d" text-anchor="middle" font-weight="bold">406</text>
+<text x="669.0" y="296.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#6b7686" text-anchor="middle">its own</text>
+<text x="510.5" y="248.0" font-family="Arial, Helvetica, sans-serif" font-size="46" fill="#14181d" text-anchor="middle" font-weight="bold" stroke="#ffffff" stroke-width="6" stroke-linejoin="round" paint-order="stroke fill">118</text>
+<text x="510.5" y="288.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#6b7686" text-anchor="middle" stroke="#ffffff" stroke-width="6" stroke-linejoin="round" paint-order="stroke fill">both</text>
+<text x="0.0" y="452.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="start">406 pairs the model never proposed. 118 where the two can be checked.</text>
+</svg>

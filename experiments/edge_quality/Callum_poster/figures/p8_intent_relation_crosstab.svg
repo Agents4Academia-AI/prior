@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="500" viewBox="0 0 1200 500" font-family="Arial, Helvetica, sans-serif">
+<rect x="0" y="0" width="1200" height="500" fill="#ffffff"/>
+<text x="0.0" y="32.0" font-family="Arial, Helvetica, sans-serif" font-size="22" fill="#6b7686" text-anchor="start" font-weight="bold" letter-spacing="1.6">THE 118 SHARED PAIRS: WHAT THE MODEL CALLED THEM</text>
+<line x1="442.0" y1="70.0" x2="522.0" y2="70.0" stroke="#0a9396" stroke-width="8" stroke-linecap="round"/>
+<text x="482.0" y="106.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="middle" font-weight="bold">supports</text>
+<line x1="726.0" y1="70.0" x2="806.0" y2="70.0" stroke="#5b8fb0" stroke-width="8" stroke-linecap="round"/>
+<text x="766.0" y="106.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="middle" font-weight="bold">builds_on</text>
+<line x1="1010.0" y1="70.0" x2="1090.0" y2="70.0" stroke="#ae2012" stroke-width="8" stroke-linecap="round"/>
+<text x="1050.0" y="106.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="middle" font-weight="bold">contradicts</text>
+<text x="312.0" y="190.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#8896a6" text-anchor="end" font-weight="bold">background</text>
+<rect x="346.0" y="134.0" width="272.0" height="92.0" rx="10" fill="#f5f7f9" stroke="#d9dee4" stroke-width="2"/>
+<text x="482.0" y="196.0" font-family="Arial, Helvetica, sans-serif" font-size="64" fill="#14181d" text-anchor="middle" font-weight="bold">57</text>
+<rect x="630.0" y="134.0" width="272.0" height="92.0" rx="10" fill="#f5f7f9" stroke="#d9dee4" stroke-width="2"/>
+<text x="766.0" y="196.0" font-family="Arial, Helvetica, sans-serif" font-size="64" fill="#14181d" text-anchor="middle" font-weight="bold">23</text>
+<rect x="914.0" y="134.0" width="272.0" height="92.0" rx="10" fill="#f5f7f9" stroke="#d9dee4" stroke-width="2"/>
+<text x="1050.0" y="196.0" font-family="Arial, Helvetica, sans-serif" font-size="64" fill="#14181d" text-anchor="middle" font-weight="bold">8</text>
+<text x="312.0" y="294.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#0a9396" text-anchor="end" font-weight="bold">uses_extends</text>
+<rect x="346.0" y="238.0" width="272.0" height="92.0" rx="10" fill="#f5f7f9" stroke="#d9dee4" stroke-width="2"/>
+<text x="482.0" y="300.0" font-family="Arial, Helvetica, sans-serif" font-size="64" fill="#14181d" text-anchor="middle" font-weight="bold">10</text>
+<rect x="630.0" y="238.0" width="272.0" height="92.0" rx="10" fill="#f5f7f9" stroke="#d9dee4" stroke-width="2"/>
+<text x="766.0" y="300.0" font-family="Arial, Helvetica, sans-serif" font-size="64" fill="#14181d" text-anchor="middle" font-weight="bold">9</text>
+<rect x="914.0" y="238.0" width="272.0" height="92.0" rx="10" fill="#f5f7f9" stroke="#d9dee4" stroke-width="2"/>
+<text x="1050.0" y="300.0" font-family="Arial, Helvetica, sans-serif" font-size="64" fill="#9aa4b0" text-anchor="middle" font-weight="bold">0</text>
+<text x="312.0" y="398.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#bb3e03" text-anchor="end" font-weight="bold">compares_contrasts</text>
+<rect x="346.0" y="342.0" width="272.0" height="92.0" rx="10" fill="#f5f7f9" stroke="#d9dee4" stroke-width="2"/>
+<text x="482.0" y="404.0" font-family="Arial, Helvetica, sans-serif" font-size="64" fill="#14181d" text-anchor="middle" font-weight="bold">19</text>
+<rect x="630.0" y="342.0" width="272.0" height="92.0" rx="10" fill="#f5f7f9" stroke="#d9dee4" stroke-width="2"/>
+<text x="766.0" y="404.0" font-family="Arial, Helvetica, sans-serif" font-size="64" fill="#14181d" text-anchor="middle" font-weight="bold">10</text>
+<rect x="914.0" y="342.0" width="272.0" height="92.0" rx="10" fill="#fdece4" stroke="#bb3e03" stroke-width="4"/>
+<text x="1050.0" y="404.0" font-family="Arial, Helvetica, sans-serif" font-size="64" fill="#14181d" text-anchor="middle" font-weight="bold">4</text>
+<text x="0.0" y="478.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#bb3e03" text-anchor="start" font-weight="bold">Only 4 of the 26 contrast pairs get a contradicts from the model.</text>
+</svg>

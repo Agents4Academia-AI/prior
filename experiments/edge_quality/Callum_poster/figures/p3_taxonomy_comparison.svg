@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="552" viewBox="0 0 1200 552" font-family="Arial, Helvetica, sans-serif">
+<rect x="0" y="0" width="1200" height="552" fill="#ffffff"/>
+<text x="0.0" y="32.0" font-family="Arial, Helvetica, sans-serif" font-size="22" fill="#6b7686" text-anchor="start" font-weight="bold" letter-spacing="1.6">OTHER SCHEMES CLASSIFY FOR THEIR OWN PURPOSES</text>
+<text x="0.0" y="84.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#9aa4b0" text-anchor="start" font-weight="bold">ACL-ARC</text>
+<text x="230.0" y="84.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#9aa4b0" text-anchor="start">6 classes, built for linguistics</text>
+<text x="0.0" y="126.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#9aa4b0" text-anchor="start" font-weight="bold">SciCite</text>
+<text x="230.0" y="126.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#9aa4b0" text-anchor="start">3 classes, built for scale</text>
+<text x="0.0" y="168.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#9aa4b0" text-anchor="start" font-weight="bold">RefWarden</text>
+<text x="230.0" y="168.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#9aa4b0" text-anchor="start">asks whether a citation is warranted</text>
+<line x1="0.0" y1="226.0" x2="1200.0" y2="226.0" stroke="#d9dee4" stroke-width="2" stroke-linecap="round"/>
+<text x="0.0" y="272.0" font-family="Arial, Helvetica, sans-serif" font-size="30" fill="#14181d" text-anchor="start" font-weight="bold">Ours: a class earns its place only if the graph acts on it.</text>
+<rect x="4.0" y="302.0" width="376.0" height="244.0" rx="12" fill="#ffffff" stroke="#8896a6" stroke-width="5"/>
+<text x="30.0" y="366.0" font-family="Arial, Helvetica, sans-serif" font-size="30" fill="#8896a6" text-anchor="start" font-weight="bold">background</text>
+<text x="30.0" y="434.0" font-family="Arial, Helvetica, sans-serif" font-size="64" fill="#14181d" text-anchor="start" font-weight="bold">82%</text>
+<text x="30.0" y="478.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="start">no relation implied</text>
+<rect x="412.0" y="302.0" width="376.0" height="244.0" rx="12" fill="#ffffff" stroke="#0a9396" stroke-width="5"/>
+<text x="438.0" y="366.0" font-family="Arial, Helvetica, sans-serif" font-size="30" fill="#0a9396" text-anchor="start" font-weight="bold">uses_extends</text>
+<text x="438.0" y="434.0" font-family="Arial, Helvetica, sans-serif" font-size="64" fill="#14181d" text-anchor="start" font-weight="bold">7%</text>
+<text x="438.0" y="478.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="start">evidence for builds_on,</text>
+<text x="438.0" y="511.8" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="start">plus the arrow</text>
+<rect x="820.0" y="302.0" width="376.0" height="244.0" rx="12" fill="#ffffff" stroke="#bb3e03" stroke-width="5"/>
+<text x="846.0" y="366.0" font-family="Arial, Helvetica, sans-serif" font-size="30" fill="#bb3e03" text-anchor="start" font-weight="bold">compares_contrasts</text>
+<text x="846.0" y="434.0" font-family="Arial, Helvetica, sans-serif" font-size="64" fill="#14181d" text-anchor="start" font-weight="bold">11%</text>
+<text x="846.0" y="478.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="start">evidence for</text>
+<text x="846.0" y="511.8" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="start">contradicts</text>
+</svg>

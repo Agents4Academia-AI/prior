@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="99" viewBox="0 0 2400 99" font-family="Arial, Helvetica, sans-serif">
+<rect x="0" y="0" width="2400" height="99" fill="#ffffff"/>
+<rect x="0.0" y="12.0" width="210.0" height="75.0" rx="12" fill="#f5f7f9" stroke="#d9dee4" stroke-width="2"/>
+<text x="105.0" y="59.9" font-family="Arial, Helvetica, sans-serif" font-size="29" fill="#14181d" text-anchor="middle" font-weight="bold">152 papers</text>
+<path d="M 223.20000000000002 34.5 L 253.20000000000002 49.5 L 223.20000000000002 64.5 z" fill="#6b7686" stroke="#6b7686" stroke-width="1" stroke-linecap="round"/>
+<rect x="266.4" y="12.0" width="279.6" height="75.0" rx="12" fill="#f5f7f9" stroke="#d9dee4" stroke-width="2"/>
+<text x="406.2" y="59.9" font-family="Arial, Helvetica, sans-serif" font-size="29" fill="#14181d" text-anchor="middle" font-weight="bold">Semantic graph</text>
+<path d="M 559.2 34.5 L 589.2 49.5 L 559.2 64.5 z" fill="#6b7686" stroke="#6b7686" stroke-width="1" stroke-linecap="round"/>
+<rect x="602.4" y="12.0" width="279.6" height="75.0" rx="12" fill="#f5f7f9" stroke="#d9dee4" stroke-width="2"/>
+<text x="742.2" y="59.9" font-family="Arial, Helvetica, sans-serif" font-size="29" fill="#14181d" text-anchor="middle" font-weight="bold">Mine citations</text>
+<path d="M 895.2000000000002 34.5 L 925.2000000000002 49.5 L 895.2000000000002 64.5 z" fill="#6b7686" stroke="#6b7686" stroke-width="1" stroke-linecap="round"/>
+<rect x="938.4" y="12.0" width="453.6" height="75.0" rx="12" fill="#f5f7f9" stroke="#d9dee4" stroke-width="2"/>
+<text x="1165.2" y="59.9" font-family="Arial, Helvetica, sans-serif" font-size="29" fill="#14181d" text-anchor="middle" font-weight="bold">Classify citation intent</text>
+<path d="M 1405.2 34.5 L 1435.2 49.5 L 1405.2 64.5 z" fill="#6b7686" stroke="#6b7686" stroke-width="1" stroke-linecap="round"/>
+<rect x="1448.4" y="12.0" width="244.8" height="75.0" rx="12" fill="#f5f7f9" stroke="#d9dee4" stroke-width="2"/>
+<text x="1570.8" y="59.9" font-family="Arial, Helvetica, sans-serif" font-size="29" fill="#14181d" text-anchor="middle" font-weight="bold">Enrich graph</text>
+<path d="M 1706.4 34.5 L 1736.4 49.5 L 1706.4 64.5 z" fill="#6b7686" stroke="#6b7686" stroke-width="1" stroke-linecap="round"/>
+<rect x="1749.6" y="12.0" width="279.6" height="75.0" rx="12" fill="#f5f7f9" stroke="#d9dee4" stroke-width="2"/>
+<text x="1889.4" y="59.9" font-family="Arial, Helvetica, sans-serif" font-size="29" fill="#14181d" text-anchor="middle" font-weight="bold">Graph QA agent</text>
+<path d="M 2042.4 34.5 L 2072.4 49.5 L 2042.4 64.5 z" fill="#6b7686" stroke="#6b7686" stroke-width="1" stroke-linecap="round"/>
+<rect x="2085.6" y="12.0" width="314.4" height="75.0" rx="12" fill="#f5f7f9" stroke="#d9dee4" stroke-width="2"/>
+<text x="2242.8" y="59.9" font-family="Arial, Helvetica, sans-serif" font-size="29" fill="#14181d" text-anchor="middle" font-weight="bold">Evaluate answers</text>
+</svg>

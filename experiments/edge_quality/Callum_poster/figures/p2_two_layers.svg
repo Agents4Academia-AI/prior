@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="494" viewBox="0 0 1200 494" font-family="Arial, Helvetica, sans-serif">
+<rect x="0" y="0" width="1200" height="494" fill="#ffffff"/>
+<defs><marker id="m_ue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.4" markerHeight="4.4" orient="auto-start-reverse"><path d="M 0 1 L 9.5 5 L 0 9 z" fill="#0a9396"/></marker><marker id="m_cc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.4" markerHeight="4.4" orient="auto-start-reverse"><path d="M 0 1 L 9.5 5 L 0 9 z" fill="#bb3e03"/></marker><marker id="m_bg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.4" markerHeight="4.4" orient="auto-start-reverse"><path d="M 0 1 L 9.5 5 L 0 9 z" fill="#8896a6"/></marker><marker id="m_b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.4" markerHeight="4.4" orient="auto-start-reverse"><path d="M 0 1 L 9.5 5 L 0 9 z" fill="#5b8fb0"/></marker><marker id="m_r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.4" markerHeight="4.4" orient="auto-start-reverse"><path d="M 0 1 L 9.5 5 L 0 9 z" fill="#ca6702"/></marker></defs>
+<rect x="0.0" y="0.0" width="578.0" height="494.0" rx="14" fill="#f5f7f9"/>
+<rect x="622.0" y="0.0" width="578.0" height="494.0" rx="14" fill="#f5f7f9"/>
+<text x="36.0" y="50.0" font-family="Arial, Helvetica, sans-serif" font-size="22" fill="#6b7686" text-anchor="start" font-weight="bold" letter-spacing="1.6">THE MODEL ASSERTS</text>
+<line x1="148.0" y1="148.0" x2="286.0" y2="196.0" stroke="#0a9396" stroke-width="7" stroke-linecap="round"/>
+<line x1="286.0" y1="196.0" x2="317.0" y2="142.5" stroke="#5b8fb0" stroke-width="7" stroke-linecap="round" marker-end="url(#m_b)"/>
+<line x1="286.0" y1="196.0" x2="200.0" y2="282.0" stroke="#0a9396" stroke-width="7" stroke-linecap="round"/>
+<line x1="330.0" y1="120.0" x2="424.0" y2="236.0" stroke="#ae2012" stroke-width="7" stroke-linecap="round"/>
+<line x1="424.0" y1="236.0" x2="311.0" y2="203.2" stroke="#5b8fb0" stroke-width="7" stroke-linecap="round" marker-end="url(#m_b)"/>
+<circle cx="148.0" cy="148.0" r="20.0" fill="#ffffff" stroke="#14181d" stroke-width="4"/>
+<circle cx="148.0" cy="148.0" r="7.0" fill="#14181d"/>
+<circle cx="330.0" cy="120.0" r="20.0" fill="#ffffff" stroke="#14181d" stroke-width="4"/>
+<circle cx="330.0" cy="120.0" r="7.0" fill="#14181d"/>
+<circle cx="424.0" cy="236.0" r="20.0" fill="#ffffff" stroke="#14181d" stroke-width="4"/>
+<circle cx="424.0" cy="236.0" r="7.0" fill="#14181d"/>
+<circle cx="200.0" cy="282.0" r="20.0" fill="#ffffff" stroke="#14181d" stroke-width="4"/>
+<circle cx="200.0" cy="282.0" r="7.0" fill="#14181d"/>
+<circle cx="286.0" cy="196.0" r="20.0" fill="#ffffff" stroke="#14181d" stroke-width="4"/>
+<circle cx="286.0" cy="196.0" r="7.0" fill="#14181d"/>
+<line x1="36.0" y1="344.0" x2="94.0" y2="344.0" stroke="#0a9396" stroke-width="7" stroke-linecap="round"/>
+<text x="110.0" y="353.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="start">supports 695</text>
+<line x1="312.0" y1="344.0" x2="370.0" y2="344.0" stroke="#5b8fb0" stroke-width="7" stroke-linecap="round" marker-end="url(#m_b)"/>
+<text x="386.0" y="353.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="start">builds on 212</text>
+<line x1="36.0" y1="384.0" x2="94.0" y2="384.0" stroke="#ae2012" stroke-width="7" stroke-linecap="round"/>
+<text x="110.0" y="393.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="start">contradicts 73</text>
+<line x1="312.0" y1="384.0" x2="370.0" y2="384.0" stroke="#ca6702" stroke-width="7" stroke-linecap="round" marker-end="url(#m_r)"/>
+<text x="386.0" y="393.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="start">refines 9</text>
+<text x="36.0" y="442.0" font-family="Arial, Helvetica, sans-serif" font-size="22" fill="#6b7686" text-anchor="start">arrows only where a direction is recorded</text>
+<text x="36.0" y="478.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="start">989 claim pairs, typed by a model.</text>
+<text x="658.0" y="50.0" font-family="Arial, Helvetica, sans-serif" font-size="22" fill="#6b7686" text-anchor="start" font-weight="bold" letter-spacing="1.6">A CITATION RECORDS</text>
+<text x="658.0" y="156.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#0a9396" text-anchor="start" font-weight="bold">uses_extends</text>
+<circle cx="962.0" cy="146.0" r="15.0" fill="#14181d"/>
+<line x1="986.0" y1="146.0" x2="1106.0" y2="236.0" stroke="#0a9396" stroke-width="6" stroke-linecap="round" marker-end="url(#m_ue)"/>
+<text x="658.0" y="246.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#bb3e03" text-anchor="start" font-weight="bold">compares_contrasts</text>
+<circle cx="962.0" cy="236.0" r="15.0" fill="#14181d"/>
+<line x1="986.0" y1="236.0" x2="1106.0" y2="236.0" stroke="#bb3e03" stroke-width="6" stroke-linecap="round" marker-end="url(#m_cc)"/>
+<text x="658.0" y="336.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#8896a6" text-anchor="start" font-weight="bold">background</text>
+<circle cx="962.0" cy="326.0" r="15.0" fill="#14181d"/>
+<line x1="986.0" y1="326.0" x2="1106.0" y2="236.0" stroke="#8896a6" stroke-width="6" stroke-linecap="round" marker-end="url(#m_bg)"/>
+<rect x="1122.0" y="210.0" width="52.0" height="52.0" rx="8" fill="#14181d"/>
+<text x="658.0" y="442.0" font-family="Arial, Helvetica, sans-serif" font-size="22" fill="#6b7686" text-anchor="start">every one carries a direction</text>
+<text x="658.0" y="478.0" font-family="Arial, Helvetica, sans-serif" font-size="26" fill="#14181d" text-anchor="start">1,103 citing passages, labelled.</text>
+</svg>
