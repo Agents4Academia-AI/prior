@@ -2,7 +2,7 @@
 
 Frozen workshop presentation: **Inspectable contribution maps for scientific synthesis**.
 
-[View the animated slides](https://prior-aiasci-2026.kaleb-klara97257971.chatgpt.site/) · [Download the PDF](https://prior-aiasci-2026.kaleb-klara97257971.chatgpt.site/PRIOR-AIASci-2026.pdf)
+[View the animated slides](https://agents4academia-ai.github.io/prior/talks/aiasci-2026/PRIOR.html) · [Download the PDF](https://agents4academia-ai.github.io/prior/talks/aiasci-2026/PRIOR-AIASci-2026.pdf)
 
 Ten main slides and one backup. Use the arrow keys or Space to advance through reveals; F enters full screen. The publication timeline has a Replay button. The graph animations use the retained corpus; they do not reconstruct when relationships were discovered.
 

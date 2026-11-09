@@ -193,7 +193,7 @@ Full detail in **[ROADMAP.md](ROADMAP.md)** — headlines:
 
 ## Presentations
 
-- [AIASci 2026: animated slides](https://prior-aiasci-2026.kaleb-klara97257971.chatgpt.site/) · [PDF](https://prior-aiasci-2026.kaleb-klara97257971.chatgpt.site/PRIOR-AIASci-2026.pdf) · [source](talks/aiasci-2026/)
+- [AIASci 2026: animated slides](https://agents4academia-ai.github.io/prior/talks/aiasci-2026/PRIOR.html) · [PDF](https://agents4academia-ai.github.io/prior/talks/aiasci-2026/PRIOR-AIASci-2026.pdf) · [source](talks/aiasci-2026/)
 
 ## Credits & links
 
