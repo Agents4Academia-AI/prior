@@ -191,6 +191,10 @@ Full detail in **[ROADMAP.md](ROADMAP.md)** — headlines:
 - **Structure & synthesis** — contribution roll-up + establishedness; gap surfacing.
 - **Distribution** — hosted demo; **MCP server** (the atlas as agent-queryable memory).
 
+## Presentations
+
+- [AIASci 2026: animated slides](https://agents4academia-ai.github.io/prior/talks/aiasci-2026/PRIOR.html) · [PDF](https://agents4academia-ai.github.io/prior/talks/aiasci-2026/PRIOR-AIASci-2026.pdf) · [source](talks/aiasci-2026/)
+
 ## Credits & links
 
 **Klara Kaleb · Harit Vishwakarma · Yee Whye Teh · Claude** (Claude Code, mostly
