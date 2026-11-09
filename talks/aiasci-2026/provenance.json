@@ -1,0 +1,45 @@
+{
+  "edition": "AIASci 2026, frozen November 2026",
+  "counts": {
+    "papers": 152,
+    "nodes": 581,
+    "candidateEdges": 989,
+    "substantiveRelations": 988,
+    "none": 1
+  },
+  "snapshot": "canonical_semantic_candidates_enriched_evidence_v12",
+  "graph_sha256": "3ff941950cf1f62f7233a18e4e54689728e5d452ecd987bfaef77910d85d1eb6",
+  "source_repository": "https://github.com/Agents4Academia-AI/prior",
+  "website": "https://askprior.ai",
+  "community": "https://www.agents4academia.org",
+  "community_dependencies": {
+    "peer_review": [
+      4,
+      4,
+      3,
+      2,
+      2,
+      2,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "hypothesis_generation": [
+      7,
+      5,
+      1,
+      1,
+      1
+    ]
+  },
+  "cocitation": {
+    "prior_candidates": "46/138",
+    "other_uncited_pairs": "554/2424",
+    "caveat": "Retrospective full-corpus comparison; not predictive validation or superiority over text similarity."
+  },
+  "logos": "University of Oxford, Leverhulme Centre for Nature Recovery, Agents4Academia, NUS, NTU, Anthropic. Original marks retained for affiliation and acknowledgement; rights remain with their owners."
+}
